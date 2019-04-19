@@ -1,0 +1,212 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="site-head">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="IE=10.000" http-equiv="X-UA-Compatible" />
+        <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+        <meta name="ctx_server" th:content="${#strings.replace(#httpServletRequest.requestURL,#httpServletRequest.requestURI,'')}" />
+        <meta name="localLang" th:content="${#locale}" />
+        <title th:text="#{app.title}">IS2</title>
+        <!-- Javascript -->
+        <script th:src="@{/js/jquery-3.1.1.min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/box.js}" type="text/javascript"></script>
+        <!-- CSS -->
+        <link th:href="@{/css/custom_bootstrap.css}" rel="stylesheet" />
+        <link th:href="@{/css/box.css}" rel="stylesheet" />
+        <link th:href="@{/css/fixed_menu.css}" rel="stylesheet" />
+        <!-- Fontawesome -->
+        <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="wrapper">
+            <!-- START HEADER -->
+            <header th:fragment="site-header" th:remove="tag">
+
+                <!-- MESSAGES CONTAINER-->
+                <div id="messages-container" th:if="${session['siteNotificationMessages']}">
+                    <ul id="messages" th:with="notifyMessages=${session['siteNotificationMessages']}">
+                        <th:block th:each="msg : ${notifyMessages}">
+                            <li style="list-style-type: none;" th:class="${'alert alert-'+#strings.toLowerCase(msg.type)+' fade in alert-dismissible'}">
+                                <strong th:text="${msg.type +'! '}">Danger!</strong>
+                                <span style="padding-left: 3px; padding-right: 10px;" th:text="${msg.text}"></span> 
+                                <a data-dismiss="alert" title="close" data-target="#messages-container" href="#messages-container">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </li>
+                        </th:block>
+                        <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove('siteNotificationMessages')}"> </span>
+                    </ul>
+                </div>
+
+                <div class="topnavbar-wrapper">
+                    <nav role="navigation" class="navbar navbar-default navbar-fixed-top topnavbar">
+                        <div class="navbar-brand">
+                            <span class="fa-stack" style="font-size: small">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rocket fa-stack-1x" style="color:#2189b4"></i>
+                            </span>
+                            <span class="small-screen-hide">IS<sup>2</sup></span>
+                            <span class="toggle-menu" onclick="toggleMenu()">
+                                <i id="toggle-menu" class="fa fa-bars"></i>
+                            </span>
+                        </div>
+                        <div class="nav pull-right small-screen">
+                            <div class="btn-group btn-group-xs">
+                                <a class="btn btn-primary navbar-btn" sec:authorize="isAuthenticated()" th:href="@{/users/logout}">
+                                    <i class="fa fa-sign-out fa-fw"></i> 
+                                    <span class="small-screen-hide">
+                                        <span th:text="#{Layout.signout}">Sign out</span>
+                                        <strong sec:authentication="name"><span th:text="#{Layout.user}">User</span></strong>
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="btn-group btn-group-xs">
+                                <a class="btn btn-primary" href="?language=en_US">ENG</a> 
+                                <a class="btn btn-primary" href="?language=it_IT">ITA</a>
+                            </div>
+                            <div class="btn-group btn-group-xs">
+                                <a class="btn btn-primary disabled" th:title="#{Layout.documenti.userguide}" th:href="@{'/files/User_guide.pdf'}"> 
+                                    <i class="fa fa-file-pdf-o"></i>
+                                </a>
+                                <a class="btn btn-primary" th:title="#{Layout.documenti.dataset}" th:href="@{'/files/Dataset_esempio_previsione.csv'}"> 
+                                    <i class="fa fa-table"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+                <div class="loading modal fade" id="loading" role="dialog">
+                    <div class="modal-content">
+                        <div class="loader">
+                            <i class="fa fa-spinner fa-spin fa-4x fa-fw"></i>
+                            <span><strong><span th:text="#{loading.data}">Loading data...</span></strong></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- END HEADER -->
+            </header>
+
+            <!-- START LEFT SIDE BAR -->
+            <aside th:fragment="site-aside" th:remove="tag">
+                <aside class="aside">
+                    <div id="sidebar-wrapper" class="aside-inner">
+                        <nav data-sidebar-anyclick-close="" class="sidebar navbar navbar-primary navbar-fixed-side">
+                            <ul class="nav">
+                                <li class="nav-body menu-line" >
+                                    <a title="Home" th:href="@{/sessione/mostraSessioni}"> 
+                                        <i class="fa fa-home"></i><span th:text="#{Layout.home}"></span>
+                                    </a>
+                                </li>
+                                <li class="nav-body menu-spacer">
+                                    <span th:text="#{label.sessione.lavoro}"></span>
+                                </li>
+                                <li class="nav-body">
+                                    <a th:title="${session.sessionelv.nome}" th:if="${session.sessionelv}" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
+                                        <i class="fa fa-folder-open"></i><span th:text="${session.sessionelv.nome}"></span>
+                                    </a>
+                                    <ul th:if="${session.sessionelv}" id="wf" class="nav sidebar-subnav " aria-expanded="false">
+                                        <li class="nav-body" th:if="${(session.sessionelv.datasetFiles != null) }">
+                                            <a title="Dati"  th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                                                <i class="fa fa-table"></i><span th:text="#{Layout.dati}"></span>
+                                                <span th:if="${session.sessionelv.datasetFiles}"  th:text="${'('+session.sessionelv.datasetFiles.size()+')'}" ></span>
+                                            </a>
+                                        </li>
+                                    </ul> 
+                                    <a title="Sessione lavoro" th:unless="${session.sessionelv}">
+                                        <i class="fa fa-folder"></i><span></span>
+                                    </a>
+                                    <li class="nav-body menu-line" ></li>
+                                </li>
+                                <li class="nav-body menu-spacer">
+                                    <span th:text="#{Layout.elaborazione}"></span>
+                                </li>
+                                <li class="nav-body">
+                                    <a th:title="${session.elaborazione.nome}" th:if="${session.elaborazione}" th:href="@{'/ws/home/'+${session.elaborazione.id}}"> 
+                                        <i class="fa fa-sitemap"></i><span th:text="${session.elaborazione.nome}">Elaborazione</span>
+                                    </a>
+                                    <ul th:if="${listaBP}" class="nav sidebar-subnav" aria-expanded="false">
+                                        <li class="nav-body li-spacer" th:each="bProcess : ${listaBP}">
+                                            <i class="fa fa-angle-right" style="margin-right: 0px!important"></i><span th:text="${bProcess.nome}">Descrizione</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-body" >
+                                    <a title="Elaborazione" th:unless="${session.elaborazione}">
+                                        <i class="fa fa-sitemap"></i><span></span>
+                                    </a>
+                                </li>
+                                <li class="nav-body menu-line" ></li>
+
+                                <li class="nav-body menu-spacer" sec:authorize="hasAuthority('ADMIN')">
+                                    <span th:text="#{Layout.administration}"></span>
+                                </li>
+                                <li class="nav-body" sec:authorize="hasAuthority('ADMIN')">
+                                    <a href="#admin" title="Administration" data-toggle="collapse" class="collapsed" aria-expanded="false">
+                                        <i class="fa fa-briefcase"></i><span th:text="#{Layout.users}"></span>
+                                    </a>
+                                    <ul id="admin" class="nav sidebar-subnav collapse" aria-expanded="false">
+                                        <li id="users-list">
+                                            <a title="Users List" th:href="@{/users/userlist}"> 
+                                                <i class="fa fa-users"></i>
+                                                <span th:text="#{Layout.userlist}">Users list</span>
+                                            </a>
+                                        </li>
+                                        <li id="edituser">
+                                            <a title="Edit User" th:href="@{/users/edituser}"> 
+                                                <i class="fa fa-pencil-square-o"></i> 
+                                                <span th:text="#{Layout.edituser}">Edit User</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>                                
+                            </ul>
+                        </nav>
+                    </div>
+                </aside>
+            </aside>
+            <!-- END LEFT SIDE BAR -->
+
+            <!-- START MAIN CONTAINER -->
+            <section>
+                <div class="content-wrapper">
+                    <div class="content-heading">
+                        Statistical Service - Layout
+                    </div>
+                </div>
+            </section>
+            <!-- END MAIN CONTAINER -->
+
+            <!-- START FOOTER -->
+            <footer th:fragment="site-footer">
+                <span  th:text="#{app.footer.text}">2019 - Istat Statistical Service (IS2)</span>
+            </footer>
+            <!-- END FOOTER -->
+        </div>
+    </body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+    <head th:include="layout :: site-head" th:remove="tag" />
+    <script th:src="@{/js/table/datatables.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
+
+    <script th:inline="javascript">
+        var _text_addUser = [[#{user.title.adduser}]];
+        var _text_editUser = [[#{user.title.edituser}]];
+        var _text_savinguser = [[#{user.button.savinguser}]];
+        var _text_saveUser = [[#{user.button.saveuser}]];
+    </script>
+    <script th:src="@{/js/usersList.js}"></script>
+</head>
+<body>
+    <!-- Body -->
+    <div class="wrapper">
+        <header th:replace="layout :: site-header" />
+        <aside th:replace="layout :: site-aside" />
+
+        <!-- START MAIN CONTAINER -->
+        <section>
+            <div class="content-wrapper">
+                <div class="content-heading">
+                    <span th:text="#{Userlist.userlist}">User List</span><small><span th:text="#{Userlist.list}">List</span></small>
+                </div>
+                <!-- START PANEL-->
+                <div class="panel panel-default">
+                    <!--div class="panel-heading">
+                        <h3><i class="fa  fa-users"></i> <span th:text="#{Userlist.users}">Users</span></h3>
+                    </div-->
+                    <div class="panel-body">
+                        <button class="btn btn-primary" 
+                                id="btnAddUser"
+                                onclick="add_user()" 
+                                style="margin-bottom: 10px">
+                            <i class="fa fa-user-plus"></i> <span th:text="#{Userlist.adduser}">Add User</span> </button>
+                        <input type="hidden" th:value="${#authentication.principal.userid}" id="myId" />
+
+                        <table id="userslist" class="table table-striped" cellspacing="0"
+                               width="100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th><span th:text="#{Userlist.name}">Name</span></th>
+                                    <th><span th:text="#{Userlist.surname}">Surname</span></th>
+                                    <th>Email</th>
+                                    <th><span th:text="#{Userlist.role}">Role</span></th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <!-- END PANEL-->
+
+            </div>
+        </section>
+        <!-- END MAIN CONTAINER -->
+        <footer th:replace="layout :: site-footer" />
+    </div>
+
+    <!-- wrapper -->    
+    <!-- Bootstrap modal -->       
+
+    <div class="modal fade" id="modal_user" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" 
+                            class="close" 
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title"><span th:text="#{user.user}">User</span></h3>
+                </div>                
+                <div class="modal-body form">
+                    <form action="#" 
+                          id="form" 
+                          class="form-horizontal">
+                        <input type="hidden" value="" name="userid" />
+                        <div class="form-body">
+                            <div id="msgs"></div>
+                            <div class="form-group row">
+                                <div class="col-lg-12">
+                                    <div class="col-lg-4">
+                                        <label class="control-label">Email*</label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <input name="email" 
+                                               placeholder="Email" 
+                                               class="form-control"
+                                               title="Email" 
+                                               type="email" 
+                                               id="email" />
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row password_group" 
+                                 id="password_group">
+                                <div class="col-lg-12">
+                                    <div class="col-lg-4">   
+                                        <label class="control-label">Password*</label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <input name="password" 
+                                               placeholder="Password"
+                                               data-toggle="tooltip" 
+                                               title="Password" 
+                                               id="form_password"
+                                               class="form-control" 
+                                               type="password" /> <span
+                                               class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row password_group" 
+                                 id="password_group1">
+                                <div class="col-lg-12">
+                                    <div class="col-lg-4">
+                                        <label class="control-label"><span th:text="#{Edituser.repeat}">Repeat Password*</span></label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <input name="password1" 
+                                               placeholder="Repeat Password"
+                                               data-toggle="tooltip" 
+                                               title="Password" 
+                                               id="form_password1"
+                                               class="form-control" 
+                                               type="password" /> 
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">                                 
+                                <div class="col-lg-12">
+                                    <div class="col-lg-4">                                
+                                        <label class="control-label"><span th:text="#{Userlist.name*}">Name*</span></label>
+                                    </div>            
+                                    <div class="col-lg-8">
+                                        <input name="name" 
+                                               placeholder="Name" 
+                                               class="form-control"
+                                               data-toggle="tooltip" 
+                                               title="Name" type="text" />
+                                        <span class="help-block"></span>
+                                    </div>        
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12">
+                                    <div class="col-lg-4">
+                                        <label class="control-label"><span th:text="#{Userlist.surname*}">Surname*</span></label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <input name="surname" 
+                                               placeholder="Surname" 
+                                               title="Surname"
+                                               class="form-control" 
+                                               type="text" /> 
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12">
+                                    <div class="col-lg-4">
+                                        <label class="control-label"><span th:text="#{Userlist.role}">Role</span></label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <select name="role" 
+                                                class="form-control">
+                                            <option th:each="rolei : ${allRoles}" 
+                                                    th:value="${rolei.id}"
+                                                    th:text="${rolei.role}">Role</option>
+                                        </select> 
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSave" onclick="save()"
+                            class="btn btn-primary"><span th:text="#{Userlist.save}">Save</span></button>
+                    <button type="button" id="btnClose" class="btn btn-danger"
+                            data-dismiss="modal" onclick="close()"><span th:text="#{Userlist.close}">Close</span></button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <!-- End Bootstrap modal -->
+
+    <!-- Bootstrap modal -->
+    <div class="modal fade" id="modalDelete_form" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" 
+                            class="close" 
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title"><i class="fa fa-trash-o"></i> <span th:text="#{Userlist.deleteUser}">Delete User</span> </h3>
+                </div>
+
+                <div class="modal-body  ">
+                    <div id="msgsDel"></div>
+                    <div id="question_delete" class="">
+                        <span th:text="#{Userlist.deleteUser}">Delete user</span> <strong>
+                            <span id="delEmail"></span></strong>
+                        <input type="hidden" id="delId" value="" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnDelete" onclick="delete_user()"
+                            class="btn btn-primary"><span th:text="#{Userlist.delete}">Delete</span></button>
+                    <button type="button" id="btnDeleteClose" class="btn btn-danger"
+                            data-dismiss="modal" onclick="close()"><span th:text="#{Userlist.close}">Close</span></button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <!-- End Bootstrap modal -->
+    <!-- Bootstrap modal change Password -->
+
+
+
+    <div class="modal fade" id="modalCp_form" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" 
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title"><i class="fa  fa-key"></i> <span th:text="#{Userlist.changepass}">Change Password</span> </h3>
+                </div>
+                <div class="modal-body">
+                    <div id="msgsCp" class="form-group"></div>
+                    <div class="form-group"><span th:text="#{Userlist.changepass4}">Change  password for:</span>
+                        <strong>
+                            <span id="cpEmail"></span>
+                        </strong>
+                        <input type="hidden" id="cpId" value="" />
+                    </div>
+                    <div id="change_password_group">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="col-lg-4">
+                                    <label class="control-label"><span th:text="#{Userlist.password}">Password*</span></label>
+                                </div>    
+                                <div class="col-lg-8">
+                                    <input id="passwordcp" 
+                                           placeholder="Password"
+                                           class="form-control" 
+                                           type="password" 
+                                           title="Password" />
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="col-lg-4">
+                                    <label class="control-label"><span th:text="#{Userlist.repeat}">Repeat Password*</span></label>
+                                </div>    
+                                <div class="col-lg-8">
+                                    <input id="passwordcp1" 
+                                           placeholder="Repeat Password"
+                                           title="Repeat Password" 
+                                           class="form-control" 
+                                           type="password" />
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" 
+                            id="btnChangePassword"
+                            class="btn  btn-primary" 
+                            disabled="disabled"
+                            onclick="update_password()"><span th:text="#{Userlist.change}">Change</span></button>
+                    <button type="button" id="btnCpClose"
+                            class="btn btn-danger"
+                            data-dismiss="modal"><span th:text="#{Userlist.close}">Close</span></button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <!-- End Bootstrap modal -->
+
+</body>
+</html>
+

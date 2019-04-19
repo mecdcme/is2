@@ -1,0 +1,148 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+        <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+        <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
+        <script th:inline="javascript">
+            var _idfile = [[${idfile}]];
+            var _variabili = "";
+        </script>
+        <script th:src="@{/js/table/datatables.js}"></script>
+        <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
+        <script th:src="@{/js/datasetpreview.js}"></script>
+    </head>
+    <body>
+        <!-- Body -->
+        <div class="wrapper">
+            <header th:replace="layout :: site-header"></header>
+            <aside th:replace="layout :: site-aside"></aside>
+            <!-- START MAIN CONTAINER -->
+            <section>
+                <!-- Begin breadcrumb -->
+                <div class="content-wrapper">
+                    <!-- Begin breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{/sessione/mostraSessioni}">
+                                    <span th:text="#{sessionewf.lista.title}"></span>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                                    <span th:if="${session.sessionelv}">
+                                        <span th:text="${session.sessionelv.nome}"></span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                <span th:text="#{sessionewf.dataset}"></span>
+                            </li>
+                            <div class="btn-group pull-right" role="group">
+                                <th:block th:if="${session.elaborazione}">
+                                    <a class="" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
+                                        <i class="fa fa-pencil-square-o"></i><span th:text="#{sessionewf.metadati}"></span>
+                                    </a>
+                                </th:block>
+                                <th:block th:unless="${session.elaborazione}">
+                                    <a class="" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
+                                        <i class="fa fa-pencil-square-o"></i><span th:text="#{sessionewf.metadati}"></span>
+                                    </a>
+                                    <a class="" id="btn_delete" title="Elimina Dataset" th:onclick="${'javascript:eliminaDataset()'}">
+                                        <i class="fa fa-trash"></i><span th:text="#{dataset.lista.elimina}"></span>
+                                    </a>
+                                </th:block>
+                            </div>
+                        </ol>
+                    </nav>
+                    <!-- End breadcrumb -->
+                    
+                    <div class="container-fluid">
+                        <div class="row" >
+                            <div class="col-lg-12">
+                                <fieldset class="well">
+                                    <legend class="well-legend secondary-fieldset">Filtri di ricerca</legend>
+                                    <span id="no_filters_msg"></span>
+                                    <div class="form-inline">
+                                        <div class="form-group" th:each="col : ${colonne}" th:if="${col.filtro}" style="margin-right: 10px">
+                                            <th:block>
+                                                <label style="margin-right: 5px"> 
+                                                    <span th:text="${col.nome + ' :'}"></span> 
+                                                    <input type="text" class="form-control param-filter" th:id="${col.nome}" style="font-weight: normal;" />
+                                                </label>
+                                            </th:block>
+                                        </div>
+                                        <div class="form-group" style=" margin-right: 10px">
+                                            <button id="bottoneRicerca" type="button" onclick="ricercaByParams()" class="btn btn-primary">Cerca</button>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset class="well">
+                                    <legend class="well-legend secondary-fieldset">DataSet</legend>
+                                    <table id="dataview" class="table table-bordered table-striped " cellspacing="0" width="auto" style="overflow: auto;">
+                                        <thead>
+                                            <tr>
+                                                <th th:each="varname: ${colonne}" th:text="${varname.nome}">
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END MAIN CONTAINER -->
+            <footer th:replace="layout :: site-footer" />
+        </div>
+        <div class="modal fade" id="modalCancellaDataset" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel">
+                            <i class="fa fa-trash"></i>Conferma eliminazione
+                        </h4>
+                    </div>
+                    <div class="modal-body">Eliminare il dataset selezionato ?</div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="" id="id_dataset_del" value="" />
+                        <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
+                        <button type="button" id="btn_delete_dataset" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+
+
+
