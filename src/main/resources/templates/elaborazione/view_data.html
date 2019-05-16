@@ -1,0 +1,227 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+        <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+        <script th:src="@{/js/table/datatables.js}"></script>
+        <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
+        <script th:src="@{/js/elaborazionewf.js}"></script>
+        <script th:src="@{/js/chart/Chart.min.js}"></script>
+        <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
+        <link rel="stylesheet" th:href="@{/css/edit_ws.css}" />
+
+        <script th:inline="javascript">
+            var _idElaborazione = [[${session.elaborazione.id}]];   
+            var _tipoCampo = [[${tipoCampo}]];   
+        </script>
+    </head>
+    <body>
+        <!-- Body -->
+        <div class="wrapper">
+            <header th:replace="layout :: site-header"></header>
+            <aside th:replace="layout :: site-aside"></aside>
+            <!-- START MAIN CONTAINER -->
+            <section>
+                <div class="content-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><span th:text="#{sessionewf.title}"> Workflow</span></li>
+                            <li class="breadcrumb-item active">
+                                <span th:text="#{sessionewf.home}"></span>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                <span th:text="#{visualizza.dati.label}"></span>
+                            </li>
+
+                            <small class="pull-right">
+                                <span th:if="${session.sessionelv}">
+                                    <strong>Sessione:</strong>
+                                    <span th:text="${session.sessionelv.nome}"></span>
+                                    <span th:if="${session.elaborazione}">
+                                        - <strong>Elaborazione:</strong>
+                                        <span th:text="${session.elaborazione.nome}"></span>
+                                    </span>
+
+                                </span>
+
+                            </small>
+                        </ol>
+                    </nav>
+
+
+                    <div class="navbar-default background-wf">
+                        <div class="btn-group btn-xs" role="group"
+                             aria-label="Basic example">
+
+                            <a class='btn btn-secondary towait background-wf '
+                               title="Home Elaborazione"
+                               th:href="@{'/ws/home/'+${elaborazione.id}}"> <i
+                                    class="fa fa-sitemap" aria-hidden="true"></i> <span>Home
+                                    elaborazione</span>
+                            </a> 
+                            <a class='btn btn-secondary towait background-wf'
+                               title="Torna in home"
+                               th:href="@{'/ws/editworkingset/'+${elaborazione.id}}">
+                                <i class="fa fa-pencil-square-o"></i> <span>Prepara</span>
+                            </a>
+                            <a class='btn btn-secondary  background-wf disabled' title="Vedi grafico"
+                               onclick="javascript:openDlgChart();" > <i
+                                    class="fa fa-area-chart"></i> <span>Visualizza grafico</span>
+                            </a> <a class='btn btn-secondary towait background-wf'
+                                    title="Torna in home"
+                                    th:href="@{'/ws/chiudiElab/'+${elaborazione.id}}"> <i
+                                    class="fa fa-times"></i> <span>Chiudi Elaborazione</span>
+                            </a>						
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+
+                        <div class="row">
+
+                            <div class="col-lg-12">
+                                <fieldset class="well" th:if="${not #lists.isEmpty(stepVList)}">
+                                    <legend class="well-legend secondary-fieldset">Filtri
+                                        di ricerca</legend>
+
+                                    <div id="form_ricerca">
+                                        <span id="no_filters_msg"></span>
+                                        <div id="form-ricerca-per-params" class="form-inline">
+                                            <div class="form-group" th:each="step, i: ${stepVList}"
+                                                 style="margin-right: 10px">
+
+                                                <th:block th:if="${step.flagRicerca == 1}">
+                                                    <label th:for="${step.sxWorkset.nome}"
+                                                           style="margin-right: 5px"><span
+                                                            th:text="${step.sxWorkset.nome+' : '}"></span></label>
+                                                    <input type="text" class="form-control param-filter" 
+                                                           th:id="${step.sxWorkset.nome}" />
+
+                                                </th:block>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div id="btn_filters_ricerca">
+                                        <button id="btn_filtri_cerca" type="submit" onclick="ricercaByParams()" class="btn btn-primary">Cerca</button>
+                                    </div>
+
+                                </fieldset>
+
+                                <fieldset class="well">
+                                    <legend class="well-legend secondary-fieldset">Dati
+                                        Elaborazione</legend>
+                                    <table id="worksetTab" th:if="${not #lists.isEmpty(stepVList)}"
+                                           class="table table-bordered table-striped table-condensed"
+                                           cellspacing="0" width="auto" style="overflow: auto;">
+                                        <thead>
+
+                                            <tr>
+                                                <th th:each="stepV: ${stepVList}"
+                                                    th:text="${stepV.sxWorkset.nome}"></th>
+                                            </tr>
+                                            <tr>
+                                                <th th:each="stepV: ${stepVList}"
+                                                    th:text="${stepV.sxRuoli.nome}"></th>
+                                            </tr>
+                                        </thead>
+
+                                    </table>
+
+                                    <span th:unless="${not #lists.isEmpty(stepVList)}">
+                                        Nessuna associazione trovata. Seleziona <a
+                                            class='btn btn-secondary towait background-wf'
+                                            title="Modifica"
+                                            th:href="@{'/ws/editworkingset/'+${elaborazione.id}}">
+                                            <i class="fa fa-pencil-square-o"></i> <span>Prepara
+                                                Workset</span>
+                                        </a> per eseguire una nuova associazione
+                                    </span>
+
+
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <!-- row -->
+
+                    </div>
+
+                </div>
+            </section>
+            <!-- END MAIN CONTAINER -->
+            <footer th:replace="layout :: site-footer" />
+        </div>
+
+
+
+
+
+
+        <!-- Bootstrap modal -->
+        <div class="modal fade" id="chartLine-modal" role="dialog">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content ">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h3 class="modal-title">
+                            <i class="fa fa-area-chart"></i>
+                            <span>Grafico</span>
+                        </h3>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <canvas id="myChart"></canvas>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnClose" class="btn  btn btn-primary"
+                                data-dismiss="modal" onclick="close()">
+                            <span th:text="#{Layout.Close}">Cancel</span>
+                        </button>
+
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        <!-- End Bootstrap modal -->
+
+
+
+
+
+
+
+
+    </body>
+</html>

@@ -1,0 +1,260 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+        <script th:src="@{/js/table/datatables.js}"></script>
+        <script th:src="@{/js/sessioni.js}"></script>
+        <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
+    </head>
+    <body>
+        <!-- Body -->
+        <div class="wrapper">
+            <header th:replace="layout :: site-header"></header>
+            <aside th:replace="layout :: site-aside"></aside>
+            <!-- START MAIN CONTAINER -->
+            <section>
+                <div class="content-wrapper">
+                    <!-- Begin breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <span th:text="#{label.sessione.lavoro}"></span>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span th:if="${session.sessionelv}">
+                                    <span th:text="${session.sessionelv.nome}"></span>
+                                </span>
+                            </li>
+                            <div class="btn-group pull-right" role="group">
+                                <a class="bar-right" title="Area dati" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                                    <i class="fa fa-database"></i><span th:text="#{sessionewf.areadati}"></span>
+                                </a>
+                                 <a class="" title="Chiudi sessione" th:href="@{'/sessione/chiudisessione/'}">
+                                    <i class="fa fa-close"></i><span th:text="#{session.button.close}"></span>
+                                </a>
+                            </div>
+                        </ol>
+                    </nav>
+                    <!-- End breadcrumb -->
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <fieldset class="well ">
+                                    <legend class="well-legend secondary-fieldset">
+                                        <span>Dettaglio sessione di lavoro</span>
+                                    </legend>
+                                    <ul class="list-group list-group-horizontal">
+                                        <li class="list-group-item no-border">
+                                            <span>
+                                                <strong>Nome: </strong>
+                                                <span th:text="${session.sessionelv.nome }">nome</span>
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item no-border">
+                                            <span>
+                                                <strong>Descrizione: </strong>
+                                                <span th:text="${session.sessionelv.descrizione }">Descrizione</span>
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item no-border">
+                                            <span>
+                                                <strong>Data creazione: </strong>
+                                                <span th:text="${session.sessionelv.dataCreazione }">data creazione</span>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <input id="idsessionelv" type="hidden" value="${session.sessionelv.id}" />
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <fieldset class="well ">
+                                    <legend class="well-legend secondary-fieldset">
+                                        <span th:text="#{lista.elaborazioni.legend}">Lista elaborazioni</span>
+                                    </legend>
+                                    <a title="Nuova elaborazione" onclick="javascript:openNuovaElaborazione();"> 
+                                        <span th:if="${session.sessionelv.datasetFiles }">
+                                            <button class="btn btn-light" style="margin-bottom: 10px">
+                                                <i class="fa fa-plus"></i>
+                                                <span th:text="#{label.button.nuova.elaborazione}">Nuova elaborazione</span>
+                                            </button>
+                                        </span>
+                                    </a> 
+                                    <a title="Nuova elaborazione"> 
+                                        <span th:unless="${session.sessionelv.datasetFiles }">
+                                            <button class="btn btn-light disabled" style="margin-bottom: 10px">
+                                                <i class="fa fa-plus"></i>
+                                                <span th:text="#{label.button.nuova.elaborazione}">Nuova elaborazione</span>
+                                            </button>
+                                        </span>
+                                    </a>
+                                    <table id="outputR" class="table table-striped table-condensed"
+                                           th:if="${listaElaborazioni}" cellspacing="0" style="overflow: auto;">
+                                        <thead>
+                                            <tr th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
+                                                <th><span th:text="#{listasessioni.codice}">codice</span></th>
+                                                <th><span th:text="#{listasessioni.nome}">nome</span></th>
+                                                <th><span th:text="#{listasessioni.descrizione}">Funzione</span></th>
+                                                <th><span th:text="#{listasessioni.funzione}">descrizione</span></th>
+                                                <th><span th:text="#{listasessioni.data.creazione}">data creazione</span></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="elaborazione : ${listaElaborazioni}"
+                                                th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
+                                                <td th:id="${'elabid_'+ elaborazione.id}" th:text="${elaborazione.id}"></td>
+                                                <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.nome}"></td>
+                                                <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.descrizione}"></td>
+                                                <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${elaborazione.sxBusinessFunction.nome}"></td>
+                                                <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${elaborazione.dataElaborazione}"></td>
+                                                <td style="width: 1%">
+                                                    <a class='towait' title="Visualizza elaborazione" th:href="@{'/ws/home/'+${elaborazione.id}}"> 
+                                                        <i class="fa fa-folder-open"></i>
+                                                    </a>
+                                                </td>
+                                                <td style="width: 1%">
+                                                    <a title="Elimina elaborazione" role="button" th:onclick="${'javascript:eliminaElaborazione(' + elaborazione.id + ',' + session.sessionelv.id + ')'}">												
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <!-- row -->
+                    </div>
+                </div>
+            </section>
+            <!-- END MAIN CONTAINER -->
+            <footer th:replace="layout :: site-footer" />
+        </div>
+        <!-- wrapper -->
+        <!-- Bootstrap modal -->
+        <div class="modal fade" id="nuova-elaborazione-modal" role="dialog">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content ">
+                    <form th:action="@{/sessione/nuovoworkingset}" id="form" class="form-horizontal" method="post">
+                        <input type="hidden" th:name="idsessione" th:value="${session.sessionelv.id}" />
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h3 class="modal-title">
+                                <i class="fa fa-navicon"></i>
+                                <span th:text="#{nuova.elaborazione.dialog.title}">Nuova Elaborazione</span>
+                            </h3>
+                        </div>
+                        <div class="modal-body 	">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <label class="control-label" th:text="#{nuova.sessione.nome}+'*:'"> <span>nome</span></label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input name="nome" id="nome-elab" title="Descrizione" class="form-control" type="text" />
+                                        <span class="help-block"><small class="text-danger" id="nomesesserror"></small></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <label class="control-label" th:text="#{nuova.sessione.descrizione}+':'  ">
+                                            <span>Descrizione</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input name="descrizione" title="note" class="form-control" type="text" />
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <label class="control-label"> <span id="funzione">Funzione*:</span></label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <select name="idfunzione" id="funzioni" class="form-control">
+                                            <option th:each="funzione : ${listaFunzioni}" th:value="${funzione.id}" th:text="${funzione.nome}"></option>
+                                        </select>
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <label class="control-label"> <span>Descrizione:</span></label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <span th:class="${'el_'+funzione.id+' els hide'} " th:each="funzione : ${listaFunzioni}">
+                                            <span th:text="${funzione.descr}"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <span th:text="#{Layout.Close}">Annulla</span>
+                        </button>
+                        <button type="button" id="btn-submit-ne" class="btn btn-primary">
+                            <span th:text="#{session.button.save}">Salva</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        <!-- Modal elimina elaborazione -->
+        <div class="modal fade" id="modalCancellaElaborazione" tabindex="-1"
+             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h3 class="modal-title" id="exampleModalLabel">
+                            <i class="fa fa-trash"></i>Conferma eliminazione
+                        </h3>
+                    </div>
+                    <div class="modal-body"><span id="msg_elaboraz"></span></div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="" id="id_sessione_del" value="" /> 
+                        <input type="hidden" name="" id="id_elaborazione_del" value="" />
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                        <button type="button" id="btn_delete_elab" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- fine modal elimina -->
+    </body>
+</html>

@@ -1,0 +1,160 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+        <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+        <script th:src="@{/js/table/datatables.js}"></script>
+        <script th:src="@{/js/papaParse/papaparse.min.js}"></script>
+        <script th:src="@{/js/fileinput.min.js}"></script>
+        <script th:src="@{/js/rservice.js}"></script>
+        <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
+        <link rel="stylesheet" th:href="@{/css/rserve.css}" />
+        <link rel="stylesheet" th:href="@{/css/fileinput.min.css}" />
+    </head>
+    <body>
+        <!-- Body -->
+        <div class="wrapper">
+            <header th:replace="layout :: site-header"></header>
+            <aside th:replace="layout :: site-aside"></aside>
+            <!-- START MAIN CONTAINER -->
+            <section>
+                <div class="content-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <span th:text="#{sessionewf.title}"></span>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a title="Sessione lavoro" th:if="${session.sessionelv}" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
+                                    <span th:text="${session.sessionelv.nome}"></span>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                <span th:text="#{sessionewf.caricafile}">
+                                    <span>Caricamento file</span>
+                                </span>
+                            </li>
+                        </ol>
+                    </nav>
+                    <div class="container-fluid">
+                        <fieldset class="well">
+                            <legend class="well-legend">
+                                <span id="titolo" th:text="#{load.input.file.legend}">Carica file di input:</span>
+                            </legend>
+                            <form id="inputFileForm" th:action="@{'/loadInputData'}" method="post" enctype="multipart/form-data">
+                                <input type="hidden" value="" name="descrizione" id="desc" /> <input type="hidden" th:value="${idsessione}" th:name="idsessione" />
+                                <input type="hidden" value="" name="delimiter" id="delimiter" />
+                                <div id="upload" class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="control-label"
+                                                   th:text="#{selection.file.legend}">Seleziona un file da caricare (txt o csv) </label>
+                                            <!-- Impostare data-show-preview a true per avere la preview del file -->
+                                            <input id="file" accept=".csv,.txt" class="file" type="file" name="fileName"
+                                                   data-show-preview="false" data-show-caption="true"
+                                                   data-show-upload="false" data-toggle="tooltip"
+                                                   data-placement="top" data-show-remove="false" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </fieldset>
+                        <br></br> <br></br>
+                        <!-- Chiude div panel-body -->
+                    </div>
+                    <!-- END PANEL-->
+                </div>
+            </section>
+
+            <!-- Bootstrap modal -->
+            <div class="modal fade" id="errorUplodFile" role="dialog">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content ">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">
+                                <i class="fa fa-times-circle"></i>
+                                <span th:text="#{upload.error.modal.title}">Errore upload</span>
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{upload.error.modal.message}">Nessun file selezionato.</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                <span th:text="#{Index.button.ok}">Ok</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+            </div>
+
+            <div class="modal fade" id="previewModal" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h3 class="modal-title">
+                                <i class="fa fa-binoculars"></i>
+                                <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
+                            </h3>
+                        </div>
+
+                        <div class="modal-body">
+                            <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{delimiter.file.legend}">Separatore:</span> &nbsp;&nbsp;&nbsp; 
+                            <select id="delimiter_sel">
+                                <option value=','>,</option>
+                                <option value=';'>;</option>
+                                <option value='0'>tab</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                <span th:text="#{Layout.Close}">Annulla</span>
+                            </button>
+                            <button type="button" class="btn btn-primary towait"
+                                    onclick="inviaFormFile();" th:title="#{submit.button.title}"
+                                    th:text="#{submit.button}" data-dismiss="modal">Invia</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTAINER -->
+            <footer th:replace="layout :: site-footer"></footer>
+        </div>
+        <!-- wrapper -->
+    </body>
+</html>
