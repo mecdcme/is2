@@ -22,14 +22,14 @@ You’ll build a template web application that will provide out of the box :
   * Search filters;
   
 ## How to build
-Download and unzip the source code in your workspace `ISS_PATH`.
+Download and unzip the source code in your workspace `IS2_PATH`.
 Before building the application you must create a MySQL database. From the command line go to MySQL installation directory `MYSQL_PATH`:
 ```
 cd MYSQL_PATH\bin;
 mysql -u db_username -p
 mysql> create database iss;
 ```
-Then create the tables needed to run the application, using the script `iss.sql` stored in the `ISS_PATH/db` folder:
+Then create the tables needed to run the application, using the script `iss.sql` stored in the `IS2_PATH/db` folder:
 ```
 mysql> use iss;
 mysql> source iss.sql
@@ -57,7 +57,7 @@ based Applications, with an embedded Tomcat, that you can "just run".
 ```
 java –jar  iss.jar
 ```
-In the docs folder you will find a complete userguide with useful information that will help you to understand mecbox project.
+In the docs folder you will find a complete userguide with useful information that will help you to understand is2 project.
 
 ## License
-Mecbox is EUPL-licensed
+IS2 is EUPL-licensed
