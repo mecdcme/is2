@@ -142,7 +142,7 @@ public class UserController {
 		return "users/newuser";
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/users/userlist")
 	public String userslist(Model model) {
 		List<User> users = userService.findAll();

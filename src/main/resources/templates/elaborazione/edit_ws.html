@@ -67,7 +67,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <fieldset class="well">
-                                    <legend class="well-legend">Configurazione variabili Workset </legend>
+                                    <legend class="well-legend"><span th:text="#{process.varWorkset}">Configurazione variabili Workset </span></legend>
                                     <div class="row" style="padding: 5px;">
                                         <form th:action="@{/ws/associavariabile}" id="formAssociaRuolo" class="form-horizontal" method="post">										
                                             <span id="associazione_vars"></span>
@@ -76,10 +76,10 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 8%"><span></span></th>												
-                                                    <th><span>Ruolo</span></th>
-                                                    <th><span>Nome Variabile</span></th>
+                                                    <th><span th:text="#{process.ruolo}">Ruolo</span></th>
+                                                    <th><span th:text="#{process.varName}">Nome Variabile</span></th>
                                                     <th><span>I/O</span></th>
-                                                    <th style="width: 1%">Filtro ricerca</th>
+                                                    <th style="width: 1%"><span th:text="#{process.filterSearch}">Filtro ricerca</span></th>
                                                     <th style="width: 1%"></th>
                                                     <th style="width: 1%"></th>
                                                 </tr>
@@ -119,16 +119,16 @@
                             </div>
                             <div class="col-lg-6">
                                 <fieldset class="well">
-                                    <legend class="well-legend">Configurazione parametri </legend>
+                                    <legend class="well-legend"><span th:text="#{process.parConfig}">Configurazione parametri</span> </legend>
                                     <div class="row" style="padding: 5px;">
                                         <table id="parametriTabList" class="table table-striped table-bordered table-hover">
                                             <thead>
                                                 <tr>
                                                     <th style="width: 1%"></th>												
-                                                    <th><span>Nome Parametro</span></th>
-                                                    <th><span>Valore</span></th>
-                                                    <th><span>Ruolo</span></th>
-                                                    <th><span>I/O</span></th>												
+                                                    <th><span th:text="#{process.parName}">Nome Parametro</span></th>
+                                                    <th><span th:text="#{process.parValue}">Valore</span></th>
+                                                    <th><span th:text="#{process.ruolo}">Ruolo</span></th>
+                                                    <th><span th:text="#{process.io}">I/O</span></th>												
                                                     <th style="width: 1%"></th>
                                                     <th style="width: 1%"></th>
                                                 </tr>
@@ -178,7 +178,7 @@
                             </button>
                             <h4 class="modal-title">
                                 <i class="fa fa-plus"></i>
-                                <span>Nuova associazione variabile</span>
+                                <span th:text="#{process.newAssociationVar}">Nuova associazione variabile</span>
                             </h4>
                         </div>
                         <div class="modal-body form">
@@ -186,7 +186,7 @@
                                 <div th:if="${colonne.size()>0}">
                                     <div class="row">
                                         <div class="col-lg-12 sottotitolo">
-                                            <span>Seleziona una variabile dal Dataset ed il ruolo da
+                                            <span th:text="#{process.newVarRoleSelect}">Seleziona una variabile dal Dataset ed il ruolo da
                                                 associare</span>
                                         </div>
                                     </div>
@@ -194,7 +194,7 @@
                                     <div class="row" style="display: none;">
                                         <div class="col-lg-1" />
                                         <div class="col-lg-3">
-                                            <label> <span>Variabile selezionata:</span></label>
+                                            <label> <span th:text="#{process.VarSelected}">Variabile selezionata:</span></label>
                                         </div>
                                         <div class="col">
                                             <span id="varSelectedName"></span>
@@ -204,7 +204,7 @@
                                     <div class="row" style="display: none;">
                                         <div class="col-lg-1" />
                                         <div class="col-lg-3">
-                                            <label> <span>Ruolo selezionato:</span></label>
+                                            <label> <span th:text="#{process.roleSelected}">Ruolo selezionato:</span></label>
                                         </div>
                                         <div class="col">
                                             <span id="roleSelectedName"></span>
@@ -221,7 +221,7 @@
 
                                                     <fieldset class="well"
                                                               style="height: 250px; overflow-y: auto;">
-                                                        <legend class="well-legend"> Variabili Dataset</legend>
+                                                        <legend class="well-legend"> <span th:text="#{process.varDataset}">Variabili Dataset</span></legend>
                                                         <div id="div_variabili_dataset" class="list-group "
                                                              th:if="${colonne}">
                                                             <a th:each="element, y: ${colonne}"
@@ -261,7 +261,7 @@
                                     </div>
                                 </div>
                                 <div th:unless="${colonne.size()>0}">
-                                    <span>Nessuna variabile disponibile per l'associazione</span>
+                                     <span th:text="#{process.varNope}">Nessuna variabile disponibile per l'associazione</span>
                                 </div>
 
                             </div>
@@ -275,7 +275,7 @@
                             <span th:if="${colonne.size()>0}">
                                 <button id="btn_dlg_assoc" type="button"
                                         class="btn btn-primary disabled towait" onclick="inserisciRuoloVar()"
-                                        data-dismiss="modal">Inserisci</button>
+                                        data-dismiss="modal"><span th:text="#{process.Insert}">Inserisci</button>
                             </span>
                         </div>
                     </div>
@@ -305,7 +305,7 @@
                                 </button>
                                 <h4 class="modal-title">
                                     <i class="fa fa-cog"></i>
-                                    <span>Modifica associazione variabile</span>
+                                    <span th:text="#{process.ModifyVar}">Modifica associazione variabile</span>
                                 </h4>
                             </div>
                             <div class="modal-body 	">
@@ -358,7 +358,7 @@
 
                             <button id="btn_dlg_assoc_mod" type="button"
                                     class="btn btn-primary disabled towait" onclick="modificaRuoloVar()"
-                                    data-dismiss="modal">Salva</button>
+                                    data-dismiss="modal"><span th:text="#{process.save}">Salva</span></button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -384,13 +384,13 @@
                                 </button>
                                 <h4 class="modal-title">
                                     <i class="fa fa-plus"></i>
-                                    <span>Nuovo Parametro</span>
+                                    <span th:text="#{process.newPar}">Nuovo Parametro</span>
                                 </h4>
                             </div>
                             <div class="modal-body">
 
                                 <div class="form-group">
-                                    <label for="select-param" class="col-form-label">Parametro:</label>
+                                    <label for="select-param" class="col-form-label"><span th:text="#{process.parameter}">Parametro:</span></label>
                                     <select class="form-control" name="parametri" id="select-param">
                                         <option
                                             th:value="${param.nome+'|'+param.id+'|'+param.sxRuoli.id}"
@@ -443,13 +443,13 @@
                                 </button>
                                 <h4 class="modal-title">
                                     <i class="fa fa-plus"></i>
-                                    <span>Modifica Parametro</span>
+                                    <span><span th:text="#{process.parMod}">Modifica Parametro</span></span>
                                 </h4>
                             </div>
                             <div class="modal-body">
 
                                 <div class="form-group">
-                                    <label for="select-param" class="col-form-label">Parametro:</label>
+                                    <label for="select-param" class="col-form-label"><span th:text="#{process.parameter}">Parametro:</span></label>
                                     <select class="form-control" name="parametri" id="select-param-mod">
                                         <option
                                             th:value="${param.nome+'|'+param.id+'|'+param.sxRuoli.id}"
@@ -460,7 +460,7 @@
                                 <div class="form-group">
                                     <label for="value-text-mod" class="col-form-label">Valore*:</label> 
                                     <textarea class="form-control" type="text" value="" id="value-text-mod" ></textarea>
-                                    <span class="nota_param">* Inserendo pi&uacute; valori separarli da uno spazio</span>
+                                    <span class="nota_param" th:text="#{process.insertSpacedValues}">* Inserendo pi&uacute; valori separarli da uno spazio</span>
                                 </div>
 
 
@@ -475,7 +475,7 @@
 
                                 <button id="btn_dlg_mod_assoc_param" type="button"
                                         class="btn btn-primary " onclick="modificaParam()"
-                                        data-dismiss="modal">Salva</button>
+                                        data-dismiss="modal"><span th:text="#{process.save}">Salva</span></button>
                             </div>
                         </div>
                         <!-- /.modal-content -->
@@ -510,8 +510,8 @@
                                     <div class="col-lg-16 contenitore_dialog_ass_var">
                                         <!-- Contenitore -->
                                         <div class="col-lg-8">
-                                            <div class="col-lg-4 well-legend label_title">Variabile</div>
-                                            <div class="col-lg-4 well-legend label_title">Ruolo</div>
+                                            <div class="col-lg-4 well-legend label_title"><span th:text="#{process.var}">Variabile</span></div>
+                                            <div class="col-lg-4 well-legend label_title"><span th:text="#{process.ruolo}">Ruolo</span></div>
                                         </div>
 
                                         <div class="col-lg-8 contenuto_var_ass">
@@ -558,11 +558,11 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <h4 class="modal-title" id="exampleModalLabel">
-                                <i class="fa fa-trash"></i>Conferma eliminazione
+                                <i class="fa fa-trash"></i><span th:text="#{process.delConfirm}">Conferma eliminazione</span>
                             </h4>
                         </div>
-                        <div class="modal-body">
-                            Eliminare l'associazione per la variabile
+                        <div class="modal-body"><span th:text="#{process.delAssoc}">
+                            Eliminare l'associazione per la variabile</span>
                             <span id="nomeStepVar"></span>
                             ?
                         </div>
@@ -571,7 +571,7 @@
                             <button type="button" class="btn btn-secondary"
                                     data-dismiss="modal">Chiudi</button>
                             <button type="button" id="btn_delete"
-                                    class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
+                                    class="btn btn-primary towait" data-dismiss="modal"> <span th:text="${process.delete}">Elimina</span></button>
                         </div>
                     </div>
                 </div>
@@ -588,7 +588,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <h4 class="modal-title" id="exampleModalLabel">
-                                <i class="fa fa-trash"></i>Conferma eliminazione
+                                <i class="fa fa-trash"></i><span th:text="${process.delConfirm}">Conferma eliminazione</span>
                             </h4>
                         </div>
                         <div class="modal-body">
@@ -599,9 +599,9 @@
                         <div class="modal-footer">
 
                             <button type="button" class="btn btn-secondary"
-                                    data-dismiss="modal">Chiudi</button>
+                                    data-dismiss="modal"><span th:text="${process.close}">Chiudi</span></button>
                             <button type="button" id="btn_delete_param"
-                                    class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
+                                    class="btn btn-primary towait" data-dismiss="modal"><span th:text="${process.delete}">Elimina</span></button>
                         </div>
                     </div>
                 </div>

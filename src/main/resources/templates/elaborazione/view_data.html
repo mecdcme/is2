@@ -35,7 +35,7 @@
 
         <script th:inline="javascript">
             var _idElaborazione = [[${session.elaborazione.id}]];   
-            var _tipoCampo = [[${tipoCampo}]];   
+            var _tipoCampo = [[${tipoCampo.id}]];   
         </script>
     </head>
     <body>
@@ -132,8 +132,8 @@
                                 </fieldset>
 
                                 <fieldset class="well">
-                                    <legend class="well-legend secondary-fieldset">Dati
-                                        Elaborazione</legend>
+                                    <legend class="well-legend secondary-fieldset"><span  th:text="#{process.data.ws}" >Dati
+                                        Elaborazione</span>&nbsp; <span  th:text="${tipoCampo.nome}" >Dati</span> </legend>
                                     <table id="worksetTab" th:if="${not #lists.isEmpty(stepVList)}"
                                            class="table table-bordered table-striped table-condensed"
                                            cellspacing="0" width="auto" style="overflow: auto;">

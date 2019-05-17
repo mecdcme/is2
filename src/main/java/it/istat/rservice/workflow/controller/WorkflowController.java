@@ -268,8 +268,7 @@ public class WorkflowController {
 			@PathVariable("tipoCampo") Integer tipoCampo) {
 		notificationService.removeAllMessages();
 
-		SXTipoCampo sxTipoCampo = new SXTipoCampo();
-		sxTipoCampo.setId(tipoCampo);
+		SXTipoCampo sxTipoCampo = workflowService.getTipoCampoById(tipoCampo);
 		List<SxStepVariable> listaSV = workflowService.getSxStepVariablesTipoCampoNoValori(idelaborazione,
 				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE), sxTipoCampo);
 		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
@@ -277,7 +276,7 @@ public class WorkflowController {
 
 		model.addAttribute("stepVList", listaSV);
 		model.addAttribute("elaborazione", elaborazione);
-		model.addAttribute("tipoCampo", tipoCampo);
+		model.addAttribute("tipoCampo", sxTipoCampo);
 		model.addAttribute("bProcess", listaBp);
 		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
 
@@ -320,9 +319,8 @@ public class WorkflowController {
 			notificationService.addErrorMessage("Error: " + e.getMessage());
 		}
 
-		SXTipoCampo sxTipoCampo = new SXTipoCampo();
-		sxTipoCampo.setId(IS2Const.TIPO_CAMPO_ELABORATO);
-		
+		SXTipoCampo sxTipoCampo =workflowService.getTipoCampoById(IS2Const.TIPO_CAMPO_ELABORATO); 
+ 
 		List<SxStepVariable> listaSV = workflowService.getSxStepVariablesTipoCampoNoValori(idelaborazione,
 				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE), new SXTipoCampo(IS2Const.TIPO_CAMPO_ELABORATO));
 		List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
@@ -333,7 +331,7 @@ public class WorkflowController {
 		model.addAttribute("bProcess", bProcess);
 		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
 		model.addAttribute("elaborazione", elaborazione);
-		model.addAttribute("tipoCampo",sxTipoCampo.getId());
+		model.addAttribute("tipoCampo",sxTipoCampo);
 
 		return "elaborazione/view_data";
 	}

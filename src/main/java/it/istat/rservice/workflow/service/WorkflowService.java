@@ -55,6 +55,7 @@ import it.istat.rservice.workflow.dao.StepVariableDao;
 import it.istat.rservice.workflow.dao.SxBusinessStepDao;
 import it.istat.rservice.workflow.dao.SxParPatternDao;
 import it.istat.rservice.workflow.dao.SxStepInstanceDao;
+import it.istat.rservice.workflow.dao.SxTipoCampoDao;
 import it.istat.rservice.workflow.dao.WorkSetDao;
 import it.istat.rservice.workflow.domain.SXTipoCampo;
 import it.istat.rservice.workflow.domain.SxBusinessFunction;
@@ -69,8 +70,8 @@ import it.istat.rservice.workflow.domain.SxTipoIO;
 import it.istat.rservice.workflow.domain.SxTipoVar;
 import it.istat.rservice.workflow.domain.SxWorkset;
 import it.istat.rservice.workflow.engine.EngineFactory;
-import it.istat.rservice.workflow.engine.EngineR;
 import it.istat.rservice.workflow.engine.EngineService;
+
 
 @Service
 public class WorkflowService {
@@ -95,6 +96,8 @@ public class WorkflowService {
     SxStepInstanceDao sxStepInstanceDao;
     @Autowired
     SxParPatternDao sxParPatternDao;
+    @Autowired
+    SxTipoCampoDao sxTipoCampoDao;
     @Autowired
     SqlGenericDao sqlGenericDao;
     @Autowired
@@ -646,4 +649,13 @@ public class WorkflowService {
         workSetDao.delete(workset.getId());
         return true;
     }
+
+	/**
+	 * @param tipoCampo
+	 * @return
+	 */
+	public SXTipoCampo getTipoCampoById(Integer tipoCampo) {
+		// TODO Auto-generated method stub
+		return sxTipoCampoDao.findOne(tipoCampo);
+	}
 }

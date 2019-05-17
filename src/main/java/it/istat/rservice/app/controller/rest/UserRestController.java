@@ -77,6 +77,7 @@ public class UserRestController {
         return user;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/users")
     public List<NotificationMessage> newUser(@Valid @ModelAttribute("userCreateForm") UserCreateForm form,
             BindingResult bindingResult) {
@@ -98,7 +99,8 @@ public class UserRestController {
         }
         return notificationService.getNotificationMessages();
     }
-
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/users")
     public List<NotificationMessage> updateUser(@Valid @ModelAttribute("userCreateForm") UserCreateForm form,
             BindingResult bindingResult) {
@@ -120,7 +122,8 @@ public class UserRestController {
         }
         return notificationService.getNotificationMessages();
     }
-
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/users/{id}")
     public List<NotificationMessage> deleteUser(@PathVariable Long id) {
 
@@ -155,7 +158,7 @@ public class UserRestController {
         return notificationService.getNotificationMessages();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/users/reset_password/{id}" )
     public List<NotificationMessage> updatePassword(@RequestParam("passw") String password, @PathVariable String id) {
 

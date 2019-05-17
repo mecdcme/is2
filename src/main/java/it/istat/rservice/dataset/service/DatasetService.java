@@ -39,6 +39,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import it.istat.rservice.app.bean.DataTableBean;
 import it.istat.rservice.app.dao.SessioneDao;
@@ -54,7 +55,7 @@ import it.istat.rservice.workflow.domain.SxTipoDato;
 
 @Service
 public class DatasetService {
-
+	
     @Autowired
     private DatasetFileDao datasetFileDao;
     @Autowired
@@ -65,6 +66,8 @@ public class DatasetService {
     private SessioneDao sessioneLavoroDao;
     @Autowired
     private TipoVariabileSumDao variabileSumDao;
+    @Autowired
+    private DatasetColonnaDao datasetColonna;
 
     public DatasetFile salva(HashMap<String, ArrayList<String>> campi, HashMap<Integer, String> valoriHeaderNum, String labelFile, Integer tipoDato, String separatore, String desc, String idsessione) throws Exception {
 
@@ -229,7 +232,152 @@ public class DatasetService {
         }
         return ret;
     }
+    
+    public DatasetFile createField(String idfile, String idColonna, String commandField, String charOrString,  String upperLower, String newField, String columnOrder) {
+    	
+    	
+    	
+    	DatasetColonna nuovaColonna = new DatasetColonna();
+    	DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
+    	List<String> datiColonna = colonna.getDatiColonna();
+    	//cambia i valori della colonna
+    	List<String> datiColonnaTemp = new ArrayList();
+    	//cambia i valori della colonna
+    	switch (commandField) 
+    	{ 
+    		case "0001":
+    			if(upperLower.equals("low")){
+    			     datiColonna.forEach((item)->datiColonnaTemp.add(item.toLowerCase())); 
+    			}else{
+    				datiColonna.forEach((item)->datiColonnaTemp.add(item.toUpperCase())); 
+    			}
+    				
+    			
 
+    		     break; 
+    		case "0010": 
+    			if(!charOrString.equals("")){
+	   			     datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(charOrString, ""))); 
+	   			}
+    		     break;
+    		case "0100": 
+    			
+    				datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll("[^a-zA-Z0-9]", ""))); 
+	   			
+    		  	break; 
+    		case "1000":  
+    				datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(" ","")));
+ 		     	break;
+    		case "0011":
+    			if(upperLower.equals("low")){
+		   			datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(charOrString, "").toLowerCase())); 
+		   		}else{
+		   			datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(charOrString, "").toUpperCase())); 
+		   		}
+    			
+   		     	break; 
+    		case "0101":
+    			
+    				
+    			if(upperLower.equals("low")){
+       			   datiColonna.forEach((item)->datiColonnaTemp.add(item.toLowerCase().replaceAll("[^a-zA-Z0-9]", ""))); 
+    			}else{
+	       				datiColonna.forEach((item)->datiColonnaTemp.add(item.toUpperCase().replaceAll("[^a-zA-Z0-9]", ""))); 
+	       		}
+    				
+	   			
+   		     	break;
+    		case "1001":
+    			if(upperLower.equals("low")){
+	   			     datiColonna.forEach((item)->datiColonnaTemp.add(item.toLowerCase().replaceAll(" ",""))); 
+	   			}else{
+	   				datiColonna.forEach((item)->datiColonnaTemp.add(item.toUpperCase().replaceAll(" ",""))); 
+	   			}
+    			
+   		  		break; 
+    		case "0111":
+    			if(!charOrString.equals("")){
+    				if(upperLower.equals("low")){
+	       			     datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(charOrString, "").toLowerCase().replaceAll("[^a-zA-Z0-9]", ""))); 
+	       			}else{
+	       				datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(charOrString, "").toUpperCase().replaceAll(charOrString, ""))); 
+	       			}
+	   			    
+	   			}
+		     	break;
+    		case "1011":
+    			if(!charOrString.equals("")){
+    				if(upperLower.equals("low")){
+	       			     datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(charOrString, "").toLowerCase().replaceAll(" ",""))); 
+	       			}else{
+	       				datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(charOrString, "").toUpperCase().replaceAll(" ",""))); 
+	       			}
+	   			    
+	   			}
+		     	break;
+    		case "0110":
+    			if(!charOrString.equals("")){
+	   			     datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(charOrString, "").replaceAll("[^a-zA-Z0-9]", ""))); 
+	   			}
+		     	break;
+    		case "1010":
+    			if(!charOrString.equals("")){
+	   			     datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(charOrString, "").replaceAll(" ",""))); 
+	   			}
+		     	break;
+    		case "1100":
+    			datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(" ","").replaceAll("[^a-zA-Z0-9]", "")));
+		     	break;
+    		case "1101": 
+    			if(upperLower.equals("low")){
+	   			     datiColonna.forEach((item)->datiColonnaTemp.add(item.toLowerCase().replaceAll(" ","").replaceAll("[^a-zA-Z0-9]", ""))); 
+	   			}else{
+	   				datiColonna.forEach((item)->datiColonnaTemp.add(item.toUpperCase().replaceAll(" ","").replaceAll("[^a-zA-Z0-9]", ""))); 
+	   			}
+		     	break;
+    		case "1111":
+    			if(!charOrString.equals("")){
+    				if(upperLower.equals("low")){
+	   	   			     datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(charOrString, "").toLowerCase().replaceAll(" ","").replaceAll("[^a-zA-Z0-9]", ""))); 
+	   	   			}else{
+	   	   				datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(charOrString, "").toUpperCase().replaceAll(" ","").replaceAll("[^a-zA-Z0-9]", ""))); 
+	   	   			} 
+	   			}
+		     	break;
+    		case "1110":
+    			if(!charOrString.equals("")){
+	   			     datiColonna.forEach((item)->datiColonnaTemp.add(item.replaceAll(charOrString, "").replaceAll(" ","").replaceAll("[^a-zA-Z0-9]", ""))); 
+	   			}
+		     	break;
+    		case "0000":  
+    			datiColonna.forEach((item)->datiColonnaTemp.add(item));
+    			
+    			break; 	
+		     	
+ 		     
+    	  default: 
+    		   datiColonna.forEach((item)->datiColonnaTemp.add(item));
+    	};
+    	
+    	//DatasetFile dFile = datasetService.findDataSetFile(idfile);
+    	DatasetFile dFile = new DatasetFile();
+    	dFile.setId(Long.parseLong(idfile));
+    	nuovaColonna.setDatasetFile(dFile);
+    	nuovaColonna.setNome(newField);
+    	nuovaColonna.setOrdine( (short) Integer.parseInt(columnOrder) );
+    	nuovaColonna.setValoriSize(datiColonna.size());
+  
+    	nuovaColonna.setDatiColonna(datiColonnaTemp);
+    	datasetColonna.save(nuovaColonna);
+    	
+        return dFile;
+    }
+    
+    
+    
+    
+    
+    
     @Transactional
     public Boolean deleteDataset(Long idFile) {
         DatasetFile datasetFile = findDataSetFile(idFile);

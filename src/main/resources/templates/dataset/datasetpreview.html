@@ -29,7 +29,7 @@
       
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
-            var _variabili = "";
+            var _variabili = [[${colonne.size()}]];
         </script>
         <script th:src="@{/js/table/datatables.js}"></script>
         
@@ -149,7 +149,7 @@
                             <i class="fa fa-trash"></i>Conferma eliminazione
                         </h4>
                     </div>
-                    <div class="modal-body">Eliminare il dataset selezionato ?</div>
+                    <div class="modal-body"><span th:text="#{dataset.confirm.text}"></span></div>
                     <div class="modal-footer">
                         <input type="hidden" name="" id="id_dataset_del" value="" />
                         <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
@@ -172,7 +172,7 @@
                         
                         <div class="custom-control custom-checkbox">
                         <hr class="style1"></hr>
-                        <label class="form-check-label" for="removeSpace">Variabile:</label>
+                        <span class="form-check-label" for="removeSpace">Variabile:</span>
                         <select id="selectedVar" class="dropdown" title= "Elenco Variabili">
 
         					<option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
@@ -185,27 +185,27 @@
 	                    <div class="custom-control custom-checkbox">
 						  
 						  <input type="checkbox" class="custom-control-input" id="removeSpace"></input>
-						  <label class="form-check-label" for="removeSpace">Rimuovi spazi</label>
+						  <span class="form-check-label" for="removeSpace">Rimuovi spazi</span>
 						</div>
 						<div class="custom-control custom-checkbox">
 						  <input type="checkbox" class="custom-control-input" id="removeSpecial"></input>
-						  <label class="form-check-label" for="removeSpecial">Rimuovi caratteri speciali (.,:;\/'")</label>
+						  <span class="form-check-label" for="removeSpecial">Rimuovi caratteri speciali (.,:;\/'")</span>
 						</div>
 						<div class="custom-control custom-checkbox">
 						  <input type="checkbox" class="custom-control-input" id="removeChar"></input>
-						  <label class="form-check-label" for="removeSpecial">Rimuovi carattere o stringa:</label>
+						  <span class="form-check-label" for="removeSpecial">Rimuovi carattere o stringa:</span>
 						   <input type="text" class="custom-control-input" id="charValue"></input>
 						</div>
 						<div class="custom-control custom-checkbox">
 						  <input type="checkbox" class="custom-control-input" id="upperCase"></input>
-						  <label class="form-check-label" for="removeSpecial">UPPER/lower case</label>
+						  <span class="form-check-label" for="removeSpecial">UPPER/lower case</span>
 						</div>
 						<div id="upperRadio" class="form-check form-check-inline">
 						      <input name="gruppo3" type="radio" id="up" checked="true"></input>
-						      <label for="up">Maiuscolo</label>
+						      <span for="up">Maiuscolo</span>
 						    
 						      <input name="gruppo3" type="radio" id="low"></input>
-						      <label for="low">Minuscolo</label>
+						      <span for="low">Minuscolo</span>
 						 </div> 
 						
 						<div class="custom-control custom-checkbox">
@@ -242,7 +242,7 @@
                         
                         <div class="custom-control custom-checkbox">
                         <hr class="style1"></hr>
-                        <label class="form-check-label" for="removeSpace">Variabile:</label>
+                        <span class="form-check-label" for="removeSpace">Variabile:</span>
                         <select  class="dropdown" title= "Elenco Variabili">
 
         					<option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
@@ -254,14 +254,14 @@
    						 <button type="button" class="btn btn-secondary">Add</button>
                         </div>
 	                    <div class="custom-control custom-checkbox">
-						  <label class="form-check-label" for="removeSpace">Separatore:</label>
+						  <span class="form-check-label" for="removeSpace">Separatore:</span>
 						  <input type="text" class="custom-control-input" id="sepvalue"></input>
 						  <button type="button" class="btn btn-secondary">Add</button>
 						</div>
 						
 						<div class="custom-control custom-checkbox">
 							<hr class="style1"></hr>
-						  <label class="form-check-label" for="removeSpecial">Lista dei campi da concatenare:</label>
+						  <span class="form-check-label" for="removeSpecial">Lista dei campi da concatenare:</span>
 						  <textarea class="form-control rounded-0" id="Textarea" rows="3"></textarea>
 						  
 						</div>
@@ -274,7 +274,7 @@
 	                    <div class="modal-footer">
 	                        <input type="hidden" name="" id="id_dataset_del" value="" />
 	                        <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
-	                        <button type="button" id="btn_Merge_field" class="btn btn-primary towait" data-dismiss="modal">Salva</button>
+	                        <button type="button" id="btn_Merge_field" class="btn btn-primary towait" data-dismiss="modal" disabled="true">Salva</button>
 	                    </div>
                     
                     
@@ -298,7 +298,7 @@
                         
                         <div class="custom-control custom-checkbox">
                         <hr class="style1"></hr>
-                        <label class="form-check-label" for="removeSpace">Variabile:</label>
+                        <span class="form-check-label" for="removeSpace">Variabile:</span>
                         <select  class="dropdown" title= "Elenco Variabili">
 
         					<option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
@@ -311,14 +311,15 @@
                         </div>
 	                   <div>
 	                    <hr class="style1"></hr>
-						<div class="form-check">
+						<div class="form-check col-md-offset-0" >
 						    <input name="gruppo1" type="radio" id="radio1" checked="true"></input>
-						    <label for="radio1">Separatore:</label>
+						    <span for="radio1">Separatore:</span>
 						    <input type="text" class="custom-control-input" id="newfield"></input>
 						  </div>
-						  <div class="form-check">
+						  
+						  <div class="form-check col-md-offset-0">
 						    <input name="gruppo1" type="radio" id="radio2"></input>
-						    <label for="radio2">Lunghezza:</label>
+						    <span for="radio2">Lunghezza:</span>
 						    <input type="text" class="custom-control-input" id="newfield"></input>
 						  </div>
 						</div>
@@ -327,10 +328,10 @@
 						    <hr class="style1"></hr>
 						    <div class="form-check form-check-inline">
 						      <input name="gruppo2" type="radio" id="radio4" checked="true"></input>
-						      <label for="radio4">Inizio</label>
+						      <span for="radio4">Inizio</span>
 						    
 						      <input name="gruppo2" type="radio" id="radio5"></input>
-						      <label for="radio5">Fine</label>
+						      <span for="radio5">Fine</span>
 						    </div>
 					
 						 </div>
@@ -349,7 +350,7 @@
 	                    <div class="modal-footer">
 	                        <input type="hidden" name="" id="id_dataset_del" value="" />
 	                        <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
-	                        <button type="button" id="btn_Parse_field" class="btn btn-primary towait" data-dismiss="modal">Salva</button>
+	                        <button type="button" id="btn_Parse_field" class="btn btn-primary towait" data-dismiss="modal" disabled="true">Salva</button>
 	                    </div>
                     
                     
@@ -373,7 +374,7 @@
                         
                         <div class="custom-control custom-checkbox">
                         <hr class="style1"></hr>
-                        <label class="form-check-label" for="removeSpace">Variabile:</label>
+                        <span class="form-check-label" for="removeSpace">Variabile:</span>
                         <select  class="dropdown" title= "Elenco Variabili">
 
         					<option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
@@ -387,10 +388,10 @@
 	                    <form>
 						  <div class="form-group">
 						  	<hr class="style1"></hr>
-						    <label for="exampleFormControlFile1">File csv:</label>
+						    <span for="exampleFormControlFile1">File csv:</span>
 						    <input type="file" class="form-control-file" id="exampleFormControlFile1"></input>
 						  </div>
-						    <label class="form-check-label" for="removeSpace">Separatore:</label>
+						    <span class="form-check-label" for="removeSpace">Separatore:</span>
 						    <input type="text" class="custom-control-input" id="sepvalue"></input>
 						  <div class="form-group">  
 							<div class="custom-control custom-checkbox">
@@ -403,7 +404,7 @@
 		                  <div class="modal-footer">
 		                        <input type="hidden" name="" id="id_dataset_del" value="" />
 		                        <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
-		                        <button type="button" id="btn_Repair_field" class="btn btn-primary towait" data-dismiss="modal">Salva</button>
+		                        <button type="button" id="btn_Repair_field" class="btn btn-primary towait" data-dismiss="modal" disabled="true">Salva</button>
 		                  </div>
 							
 						

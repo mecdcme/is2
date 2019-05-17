@@ -21,29 +21,20 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
+package it.istat.rservice.workflow.dao;
 
-package it.istat.rservice;
+ 
 
-import org.springframework.boot.SpringApplication;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.PropertySource;
+import it.istat.rservice.workflow.domain.SXTipoCampo;
+ 
 
-@PropertySource(value = { "classpath:application.properties" })
-@SpringBootApplication
 
-public class RServiceApplication extends SpringBootServletInitializer {
+@Repository
+public interface SxTipoCampoDao extends CrudRepository<SXTipoCampo, Integer> {
 
-	public static void main(String[] args) {
+	 
 
-		SpringApplication.run(RServiceApplication.class, args);
-	}
-
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-
-		return application.sources(RServiceApplication.class);
-	}
 }

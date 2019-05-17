@@ -140,7 +140,7 @@ $(document).ready(function () {
 	   	
    	
 	   	$("btn_Standardization_field").addClass("towait");
-       window.location = _ctx + '/createField/' + _idfile + "/" +  idColonna + "/" + commandField + "/" +  charOrString + "/" + upperLower + "/" + newField;
+       window.location = _ctx + '/createField/' + _idfile + "/" +  idColonna + "/" + commandField + "/" +  charOrString + "/" + upperLower + "/" + newField + "/" + _variabili ;
        
    	
    	

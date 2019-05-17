@@ -157,11 +157,10 @@
                                     </a>
                                 </li>
                                 <li class="nav-body menu-line" ></li>
-
-                                <li class="nav-body menu-spacer" sec:authorize="hasRole('ADMIN')">
+                                <li class="nav-body menu-spacer" sec:authorize="hasAuthority('ADMIN')">
                                     <span th:text="#{Layout.administration}"></span>
                                 </li>
-                                <li class="nav-body" sec:authorize="hasRole('ADMIN')">
+                                <li class="nav-body" sec:authorize="hasAuthority('ADMIN')">
                                     <a  title="Administration" th:href="@{/users/userlist}">
                                         <i class="fa fa-briefcase"></i><span th:text="#{Layout.users}"></span>
                                     </a>
