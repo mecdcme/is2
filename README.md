@@ -1,9 +1,9 @@
-# is2
+# IS2
 A runtime environment to execute statistical services
 
 ## What you’ll need
 
-In order to build the mecbox application, your environment should fulfill the following requirements:
+In order to build the IS2 application, your environment should fulfill the following requirements:
 
 * A favorite text editor or IDE
 * JDK 1.8 or later
@@ -27,17 +27,22 @@ Before building the application you must create a MySQL database. From the comma
 ```
 cd MYSQL_PATH\bin;
 mysql -u db_username -p
-mysql> create database iss;
+mysql> create database is2;
 ```
-Then create the tables needed to run the application, using the script `iss.sql` stored in the `IS2_PATH/db` folder:
+Then create the tables needed to run the application, using the script `is2.sql` stored in the `IS2_PATH/db` folder:
 ```
-mysql> use iss;
-mysql> source iss.sql
+mysql> use is2;
+mysql> source is2.sql
 ```
- 
+
+The script will populate the `USER/ROLES` tables with the user:
+```
+Username: admin@is2.it
+Password: istat
+``` 
+
 After DB installation, you need to increase the `max_allowed_packet` parameter  in the `my.ini` configuration file and restart the MySQL Sever:
 ```
- 
 max_allowed_packet=256M
 ```
 
@@ -45,7 +50,7 @@ From your IDE select and open the unzipped maven project.
 As a first step check the content of the application.properties file, located in the path `Other Sources > src/main/resources`:
 
 ```
-spring.datasource.url = jdbc:mysql://localhost:3306/ISS?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+spring.datasource.url = jdbc:mysql://localhost:3306/IS2?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
 spring.datasource.username = db_username
 spring.datasource.password = db_password
 ```
@@ -55,7 +60,7 @@ The application is built using the open source framework Spring Boot, which gene
 executable jar (that can be run from the command line). Spring Boot creates a stand-alone Spring 
 based Applications, with an embedded Tomcat, that you can "just run".
 ```
-java –jar  iss.jar
+java –jar  is2.jar
 ```
 In the docs folder you will find a complete userguide with useful information that will help you to understand is2 project.
 
