@@ -106,7 +106,7 @@ public class RelaisGenericDao {
 
 		});
 		
-		System.out.println(query);
+	
 		List<Object[]> risList = q.getResultList();
 		
 		for (Iterator iterator = risList.iterator(); iterator.hasNext();) {
@@ -125,38 +125,5 @@ public class RelaisGenericDao {
 		return worksetOut;
 	}
 
-	// Return a Map Values
-	public Map<?, ?> crossTable1(Long idelaborazione) throws Exception {
-
-		HashMap<String, ArrayList<String>> worksetOut = new HashMap<>();
-
-		ArrayList<String> va_list = new ArrayList<>();
-		ArrayList<String> vb_list = new ArrayList<>();
-		String query = " select   a.v as va,  b.v as vb " + "  FROM "
-				+ "  (select  ss.nome, sv.ruolo, t.r,t.v, sv.elaborazione from  SX_WORKSET ss, SX_STEP_VARIABLE sv, json_table(ss.valori, '$.valori[*]'  columns ( idx FOR ORDINALITY,r integer path '$.r', v varchar2 path '$.v') ) t "
-				+ "         where  sv.elaborazione=:idelaborazione  and sv.var=ss.id and ss.TIPO_VAR=1 and sv.ruolo=104   ) a "
-				+ "         join  "
-				+ "       (select ss.nome, sv.ruolo, t.r,t.v, sv.elaborazione  from SX_WORKSET ss, SX_STEP_VARIABLE sv, json_table(ss.valori, '$.valori[*]'  columns ( idx FOR ORDINALITY,r integer path '$.r', v varchar2 path '$.v') ) t "
-				+ "         where  sv.elaborazione=:idelaborazione  and sv.var=ss.id and ss.TIPO_VAR=1 and sv.ruolo=105  ) b "
-				+ "         on         a.elaborazione =b.elaborazione ";
-
-		
-		Query q = em.createNativeQuery(query);
 	
-		q.setParameter("idelaborazione", idelaborazione);
-		
-		List<Object[]> risList = q.getResultList();
-	
-		for (Iterator iterator = risList.iterator(); iterator.hasNext();) {
-			Object[] ris = (Object[]) iterator.next();
-			va_list.add(ris[0].toString());
-			vb_list.add(ris[1].toString());
-
-		}
-		worksetOut.put("va", va_list);
-		worksetOut.put("vb", vb_list);
-
-		return worksetOut;
-	}
-
 }
