@@ -60,9 +60,15 @@ The application is built using the open source framework Spring Boot, which gene
 executable jar (that can be run from the command line). Spring Boot creates a stand-alone Spring 
 based Applications, with an embedded Tomcat, that you can "just run".
 ```
-java –jar  is2.jar
+java –jar is2.jar
 ```
 In the docs folder you will find a complete userguide with useful information that will help you to understand is2 project.
+
+Dockerize the MySQL database
+```
+docker build -t i3s-essnet/is2-mysql .
+docker run -p 3306:3306 i3s-essnet/is2-mysql
+```
 
 Dockerize the web application
 ```
