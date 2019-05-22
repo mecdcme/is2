@@ -66,13 +66,13 @@ In the docs folder you will find a complete userguide with useful information th
 
 Dockerize the MySQL database
 ```
-docker build -t i3s-essnet/is2-mysql .
+docker build -t i3s-essnet/is2-mysql . -f db.Dockerfile
 docker run -p 3306:3306 i3s-essnet/is2-mysql
 ```
 
 Dockerize the web application
 ```
-docker build -t i3s-essnet/is2 .
+docker build -t i3s-essnet/is2 . -f app.Dockerfile
 docker run --rm  i3s-essnet/is2 
 ```
 
