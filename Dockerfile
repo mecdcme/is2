@@ -1,8 +1,3 @@
-#FROM openjdk:8-jdk-alpine
-#VOLUME /tmp
-#COPY target/*.jar is2.jar
-#ENTRYPOINT ["java","-jar","/is2.jar"]
-
 FROM maven:3.5.2-jdk-8 AS build
 COPY src /usr/src/app/src
 COPY pom.xml /usr/src/app
