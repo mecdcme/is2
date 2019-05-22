@@ -64,5 +64,11 @@ java –jar  is2.jar
 ```
 In the docs folder you will find a complete userguide with useful information that will help you to understand is2 project.
 
+Dockerize the web application
+```
+docker build -t i3s-essnet/is2 .
+docker run --rm  i3s-essnet/is2 
+```
+
 ## License
 IS2 is EUPL-licensed
