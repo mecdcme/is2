@@ -8,5 +8,6 @@ FROM openjdk:8-jdk-alpine
 ENV SPRING_DATASOURCE_URL jdbc:mysql://localhost:3306/IS2?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
 
 COPY --from=build /usr/src/app/target/is2.jar /usr/app/is2.jar
+COPY wait-for /usr/app/wait-for
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/usr/app/is2.jar"]

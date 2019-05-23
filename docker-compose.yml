@@ -1,12 +1,16 @@
 version: '3'
 services:
   app:
-    image: i3s-essnet/is2
+    image: i3sessnet/is2
+    #build:
+    #  context: .
+    #  dockerfile: app.Dockerfile
+    entrypoint: ["/usr/app/wait-for", "db:3306", "--", "java", "-jar", "/usr/app/is2.jar"]
     ports:
       - 8080:8080
     depends_on:
       - db
   db:
-    image: i3s-essnet/is2-mysql
+    image: i3sessnet/is2-mysql
 
 
