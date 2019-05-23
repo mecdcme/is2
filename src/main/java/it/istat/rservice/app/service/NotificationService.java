@@ -63,8 +63,7 @@ public class NotificationService {
 
     @SuppressWarnings("unchecked")
     private void addNotificationMessage(NotificationMessageType type, String msg, String details) {
-        List<NotificationMessage> notifyMessages = (List<NotificationMessage>) httpSession
-                .getAttribute(NOTIFY_MSG_SESSION_KEY);
+        List<NotificationMessage> notifyMessages = (List<NotificationMessage>) httpSession.getAttribute(NOTIFY_MSG_SESSION_KEY);
         if (notifyMessages == null) {
             notifyMessages = new ArrayList<NotificationMessage>();
         }
@@ -74,8 +73,7 @@ public class NotificationService {
 
     @SuppressWarnings("unchecked")
     public List<NotificationMessage> getNotificationMessages() {
-        List<NotificationMessage> notifyMessages = (List<NotificationMessage>) httpSession
-                .getAttribute(NOTIFY_MSG_SESSION_KEY);
+        List<NotificationMessage> notifyMessages = (List<NotificationMessage>) httpSession.getAttribute(NOTIFY_MSG_SESSION_KEY);
         if (notifyMessages == null) {
             notifyMessages = new ArrayList<NotificationMessage>();
         }
@@ -87,7 +85,7 @@ public class NotificationService {
     }
 
     public class NotificationMessage {
-
+        
         NotificationMessageType type;
         String text;
         String details;

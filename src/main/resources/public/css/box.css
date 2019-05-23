@@ -23,7 +23,7 @@
  */
 body {
     min-height: 100%;
-    font-family: -apple-system,BlinkMacSystemFont,segoe ui,Roboto,helvetica neue,Arial,sans-serif,apple color emoji,segoe ui emoji,segoe ui symbol,noto color emoji;
+    font-family: segoe ui,Roboto,helvetica neue,Arial,sans-serif;
     color: #333;
     background-color: transparent !important; /*#f5f7fa;*/
 }
@@ -419,30 +419,6 @@ section, footer {
 .shadow-effect {
     box-shadow: 0 6px 6px -6px #777;
 }
-
-/* home page 
-
-.brand {
-    font-size: 2em;
-}
-
-.brand {
-    font-family: 'Arial', cursive;
-}
-
-.brand-sub {
-    font-size: 1.2em;
-}
-
-.div{
-    display: table;
-    content: " ";
-}
-
-.div li {
-    display: list-item;
-}
-*/
 .stacks {
     margin: 0 auto;
     list-style: none;
@@ -525,7 +501,7 @@ section, footer {
 }
 
 .well-legend {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -602,6 +578,14 @@ fieldset {
 
 .table>tbody>tr>td {
     padding: 6px !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: white;
+}
+
+.table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #f9f9f9;
 }
 
 .my-row {
@@ -744,13 +728,12 @@ fieldset {
 }
 
 .well-app {
+    font-size: 16px;
     margin-top: 23px !important;
-    background-color: #f5f5f5 !important;
+    background-color: #fafbfc !important;
     color: #2189b4 !important;
-    padding-top: 5px !important;
-    padding-bottom: 25px !important;
-    font-weight: bold !important;
-    min-height: 180px !important;
+    padding: 15px;
+    border:1px solid #ededed;
 }
 
 .well-note {
@@ -795,6 +778,12 @@ fieldset {
     text-decoration: none;
 }
 
+.breadcrumb-item a{
+    color: #155873!important;
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
 .navbar-default {
     border-color: #1c7498;
     border-bottom: 1px solid #1c7498 !important;
@@ -810,6 +799,10 @@ fieldset {
 .alert {
     padding: 10px 15px;
     margin-bottom: 0px !important;
+}
+
+table.dataTable{
+    font-size: 12px;
 }
 
 table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child,

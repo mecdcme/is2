@@ -55,8 +55,8 @@ public class SessioneLavoroService {
     }
 
     public SessioneLavoro getSessioneByIdFile(Long id) {
-        Optional<DatasetFile> dataset = datasetService.findDataSetFile(id);
-        return dataset.get().getSessioneLavoro();
+        DatasetFile dataset = datasetService.findDataSetFile(id);
+        return dataset.getSessioneLavoro();
     }
 
     public List<SessioneLavoro> getSessioneList(User user) {

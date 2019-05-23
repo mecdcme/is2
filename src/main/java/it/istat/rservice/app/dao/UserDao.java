@@ -30,12 +30,11 @@ import org.springframework.stereotype.Repository;
 
 import it.istat.rservice.app.domain.User;
 
-
 @Repository
 public interface UserDao extends CrudRepository<User, Long> {
 
     public User findByEmail(String email);
 
-	public void save(Optional<User> user);
+    public void save(Optional<User> user);
 
 }

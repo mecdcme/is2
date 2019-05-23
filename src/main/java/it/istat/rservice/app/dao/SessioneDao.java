@@ -36,7 +36,7 @@ import it.istat.rservice.app.domain.User;
 @Repository
 public interface SessioneDao extends CrudRepository<SessioneLavoro, Long> {
 
-	List<SessioneLavoro> findByUserOrderByDataCreazioneDesc(@Param("user") User user);
+    List<SessioneLavoro> findByUserOrderByDataCreazioneDesc(@Param("user") User user);
 
-	Optional<SessioneLavoro> findById(@Param("id") Long id);
+    Optional<SessioneLavoro> findById(@Param("id") Long id);
 }

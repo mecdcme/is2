@@ -60,8 +60,8 @@ public class DatasetControllerRest {
 
     @GetMapping("/datasetfile/{id}")
     @ResponseBody
-    public Optional<DatasetFile> loadDataSetFile(@PathVariable("id") Long id) throws IOException {
-        Optional<DatasetFile> df = datasetService.findDataSetFile(id);
+    public DatasetFile loadDataSetFile(@PathVariable("id") Long id) throws IOException {
+        DatasetFile df = datasetService.findDataSetFile(id);
         return df;
     }
 

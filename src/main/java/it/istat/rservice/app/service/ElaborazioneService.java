@@ -47,7 +47,7 @@ public class ElaborazioneService {
         return elaborazioneDao.save(elaborazione);
     }
 
-    public Optional<Elaborazione> findElaborazione(Long idelaborazione) {
-        return elaborazioneDao.findById(idelaborazione);
+    public Elaborazione findElaborazione(Long idelaborazione) {
+        return elaborazioneDao.findById(idelaborazione).orElse(null);
     }
 }

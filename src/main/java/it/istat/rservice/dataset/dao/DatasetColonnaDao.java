@@ -76,10 +76,7 @@ public interface DatasetColonnaDao extends JpaRepository<DatasetColonna, Long> {
 			+ " where  ss.dataset_file=:dFile "
 			+ "	group by ss.idcol,ss.nome, ss.ORDINE , ss.DATASET_FILE, ss.TIPO_VARIABILE ", nativeQuery = true)
 	List<DatasetColonna> findDatasetColonnabyQueryAll(@Param("dFile") Long dFile);
-
-	/**
-	 * @param datasetFile
-	 */
+        
 	@Transactional
 	@Modifying
 	@Query(value = "delete from DatasetColonna dc   where dc.datasetFile=:dFile ")

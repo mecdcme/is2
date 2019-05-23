@@ -67,6 +67,8 @@ public class SessioneLavoroController {
 
     @GetMapping(value = "/sessione/mostraSessioni")
     public String mostraSessioni(HttpSession session, Model model, @AuthenticationPrincipal User user) {
+        notificationService.removeAllMessages();
+        
         List<SessioneLavoro> listasessioni = sessioneLavoroService.getSessioneList(user);
         model.addAttribute("listasessioni", listasessioni);
 

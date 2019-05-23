@@ -75,7 +75,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         Authentication request = new UsernamePasswordAuthenticationToken(name, password);
         Authentication result = am.authenticate(request);
         SecurityContextHolder.getContext().setAuthentication(result);
-
     }
 
 }

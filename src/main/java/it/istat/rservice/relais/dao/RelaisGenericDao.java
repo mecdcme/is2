@@ -39,91 +39,88 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RelaisGenericDao {
 
-	@Autowired
-	private EntityManager em;
+    @Autowired
+    private EntityManager em;
 
-	// Return a Map Values
-	public Map<?, ?> crossTable(Long idelaborazione, LinkedHashMap<String, ArrayList<String>> ruoliVariabileNome)
-			throws Exception {
+    // Return a Map Values
+    public Map<?, ?> crossTable(Long idelaborazione, LinkedHashMap<String, ArrayList<String>> ruoliVariabileNome) throws Exception {
 
-		Map<String, ArrayList<String>> worksetOut = new LinkedHashMap<String, ArrayList<String>>();
-		// <codRuolo,[namevar1,namevar2..]
+        Map<String, ArrayList<String>> worksetOut = new LinkedHashMap<String, ArrayList<String>>();
+        // <codRuolo,[namevar1,namevar2..]
 
-		ArrayList<String> variabileNomeList = new ArrayList<>();
+        ArrayList<String> variabileNomeList = new ArrayList<>();
 
-		final StringBuilder selectFieldsbuilder = new StringBuilder();
-		ruoliVariabileNome.values().forEach((list) -> {
-			selectFieldsbuilder.append(String.join(",", list));
-			selectFieldsbuilder.append(",");
-			variabileNomeList.addAll(list);
-		});
+        final StringBuilder selectFieldsbuilder = new StringBuilder();
+        ruoliVariabileNome.values().forEach((list) -> {
+            selectFieldsbuilder.append(String.join(",", list));
+            selectFieldsbuilder.append(",");
+            variabileNomeList.addAll(list);
+        });
 
-		String selectFields = selectFieldsbuilder.substring(0, selectFieldsbuilder.length()-1);
+        String selectFields = selectFieldsbuilder.substring(0, selectFieldsbuilder.length() - 1);
 
-		// init worksetOut
-		variabileNomeList.forEach(name -> {
-			worksetOut.put(name, new ArrayList<>());
-		});
+        // init worksetOut
+        variabileNomeList.forEach(name -> {
+            worksetOut.put(name, new ArrayList<>());
+        });
 
-		HashMap<String, Object> paramsQuery = new HashMap<>();
-		paramsQuery.put("idelaborazione", idelaborazione);
+        HashMap<String, Object> paramsQuery = new HashMap<>();
+        paramsQuery.put("idelaborazione", idelaborazione);
 
-		String query = " SELECT  " + selectFields + " FROM  ";
-		int indexRole = 0;
-		for (Iterator iterator = ruoliVariabileNome.keySet().iterator(); iterator.hasNext();) {
-			String codRole = (String) iterator.next();
-			indexRole++;
-			String paramCodRole = "codRole" + indexRole;
-			paramsQuery.put(paramCodRole, codRole);
+        String query = " SELECT  " + selectFields + " FROM  ";
+        int indexRole = 0;
+        for (Iterator iterator = ruoliVariabileNome.keySet().iterator(); iterator.hasNext();) {
+            String codRole = (String) iterator.next();
+            indexRole++;
+            String paramCodRole = "codRole" + indexRole;
+            paramsQuery.put(paramCodRole, codRole);
 
-			ArrayList<String> variableList = ruoliVariabileNome.get(codRole);
-			query += " ( SELECT " + String.join(",", variableList) + " FROM  ";
-			int indexVariableName = 0;
-			for (Iterator iterator2 = variableList.iterator(); iterator2.hasNext();) {
-				String variableName = (String) iterator2.next();
-				indexVariableName++;
-				String paramVariableName = "variabilename" +indexRole+"_"+ indexVariableName;
-				paramsQuery.put(paramVariableName, variableName);
-				query += " ( SELECT t.r, t.v as " + variableName
-						+ " FROM  SX_WORKSET ss, SX_STEP_VARIABLE sv,SX_RUOLI sr,  json_table(CONVERT(  ss.valori USING utf8), '$.valori[*]'  columns ( idx FOR ORDINALITY,r int path '$.r', v varchar(100) path '$.v') ) t "
-						+ "  where  sv.elaborazione=:idelaborazione  and sv.var=ss.id and ss.TIPO_VAR=1 and sv.ruolo=sr.id and sr.cod=:"
-						+ paramCodRole + " and ss.nome=:" + paramVariableName + "   ) subqvn" + indexVariableName;
-				if (variableList.size() > 1 && indexVariableName < variableList.size() )	query += ",";
-				
-			}
-			query += " ) subqr" + indexRole;
-			if (ruoliVariabileNome.size() > 1 && indexRole < ruoliVariabileNome.size() )
-				query += ",";
-			
-		}
+            ArrayList<String> variableList = ruoliVariabileNome.get(codRole);
+            query += " ( SELECT " + String.join(",", variableList) + " FROM  ";
+            int indexVariableName = 0;
+            for (Iterator iterator2 = variableList.iterator(); iterator2.hasNext();) {
+                String variableName = (String) iterator2.next();
+                indexVariableName++;
+                String paramVariableName = "variabilename" + indexRole + "_" + indexVariableName;
+                paramsQuery.put(paramVariableName, variableName);
+                query += " ( SELECT t.r, t.v as " + variableName
+                        + " FROM  SX_WORKSET ss, SX_STEP_VARIABLE sv,SX_RUOLI sr,  json_table(CONVERT(  ss.valori USING utf8), '$.valori[*]'  columns ( idx FOR ORDINALITY,r int path '$.r', v varchar(100) path '$.v') ) t "
+                        + "  where  sv.elaborazione=:idelaborazione  and sv.var=ss.id and ss.TIPO_VAR=1 and sv.ruolo=sr.id and sr.cod=:"
+                        + paramCodRole + " and ss.nome=:" + paramVariableName + "   ) subqvn" + indexVariableName;
+                if (variableList.size() > 1 && indexVariableName < variableList.size()) {
+                    query += ",";
+                }
 
-		
-		Query q = em.createNativeQuery(query);
-		
-		paramsQuery.forEach((key, value) -> {
+            }
+            query += " ) subqr" + indexRole;
+            if (ruoliVariabileNome.size() > 1 && indexRole < ruoliVariabileNome.size()) {
+                query += ",";
+            }
 
-			q.setParameter(key, value);
+        }
 
-		});
-		
-	
-		List<Object[]> risList = q.getResultList();
-		
-		for (Iterator iterator = risList.iterator(); iterator.hasNext();) {
-			Object[] ris = (Object[]) iterator.next();
-			int indexValues = 0;
-		for (Iterator iterator2 = variabileNomeList.iterator(); iterator2.hasNext();) {
-			String  name =  (String) iterator2.next();
-		 		ArrayList<String> valueList = worksetOut.get(name);
-				valueList.add(ris[indexValues].toString());
-				indexValues++;
-				worksetOut.put(name, valueList);
-		}
+        Query q = em.createNativeQuery(query);
 
-		}
-	
-		return worksetOut;
-	}
+        paramsQuery.forEach((key, value) -> {
+            q.setParameter(key, value);
+        });
 
-	
+        List<Object[]> risList = q.getResultList();
+
+        for (Iterator iterator = risList.iterator(); iterator.hasNext();) {
+            Object[] ris = (Object[]) iterator.next();
+            int indexValues = 0;
+            for (Iterator iterator2 = variabileNomeList.iterator(); iterator2.hasNext();) {
+                String name = (String) iterator2.next();
+                ArrayList<String> valueList = worksetOut.get(name);
+                valueList.add(ris[indexValues].toString());
+                indexValues++;
+                worksetOut.put(name, valueList);
+            }
+
+        }
+
+        return worksetOut;
+    }
+
 }
