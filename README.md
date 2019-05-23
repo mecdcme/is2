@@ -76,7 +76,12 @@ docker run -p 3306:3306 i3sessnet/is2-mysql
 Dockerize the web application
 ```
 docker build -t i3sessnet/is2 . -f app.Dockerfile
-docker run --rm  i3sessnet/is2 
+docker run -p 8080:8080 i3sessnet/is2 
+```
+
+Docker compose
+```
+docker-compose up
 ```
 
 ## License
