@@ -14,5 +14,9 @@ services:
       - db
   db:
     image: i3sessnet/is2-mysql:latest
-
-
+    command: mysqld --default-authentication-plugin=mysql_native_password
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
