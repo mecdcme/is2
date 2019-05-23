@@ -24,6 +24,8 @@
 package it.istat.rservice.workflow.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +44,7 @@ public class StepVariableService {
         return stepVariableDao.findByElaborazione(new Elaborazione(idelab));
     }
 
-    public SxStepVariable findById(Long idstep) {
+    public Optional<SxStepVariable> findById(Long idstep) {
         return stepVariableDao.findById(idstep);
     }
 
@@ -51,7 +53,7 @@ public class StepVariableService {
     }
 
     public void removeStepVarById(Long idstep) {
-        stepVariableDao.delete(idstep);
+        stepVariableDao.deleteById(idstep);
     }
 
     public void updateStepVar(SxStepVariable stepV) {

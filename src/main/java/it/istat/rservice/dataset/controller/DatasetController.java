@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -78,7 +80,7 @@ public class DatasetController {
     private SessioneLavoroService sessioneLavoroService;
 
     @RequestMapping("/loadInputFileSessione/{idsessione}")
-    public String carica(Model model, @PathVariable Long idsessione) {
+    public String carica(Model model, @PathVariable("idsessione") Long idsessione) {
         model.addAttribute("idsessione", idsessione);
         return "dataset/loadFile";
     }
@@ -118,11 +120,11 @@ public class DatasetController {
     @RequestMapping(value = "/associaVarSum", method = RequestMethod.POST)
     public String caricaMetadati(Model model, String idfile, String idvar, String filtro, String idsum) {
 
-        DatasetColonna dcol = datasetService.findOneColonna(Long.parseLong(idvar));
+        Optional<DatasetColonna> dcol = datasetService.findOneColonna(Long.parseLong(idvar));
         TipoVariabileSum sum = new TipoVariabileSum(Integer.parseInt(idsum));
 
-        dcol.setTipoVariabile(sum);
-        dcol.setFiltro(new Short(filtro));
+        dcol.get().setTipoVariabile(sum);
+        dcol.get().setFiltro(new Short(filtro));
         try {
             datasetService.salvaColonna(dcol);
             notificationService.addInfoMessage("Salvataggio avvenuto con successo!");

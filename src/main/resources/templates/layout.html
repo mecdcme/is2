@@ -9,7 +9,7 @@
  http://ec.europa.eu/idabc/eupl5
 
  Unless required by applicable law or agreed to in writing, software
- distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUTse
  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  Licence for the specific language governing permissions and limitations under
  the Licence.
@@ -60,7 +60,7 @@
                                 </a>
                             </li>
                         </th:block>
-                        <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove('siteNotificationMessages')}"> </span>
+                        <span th:if="${notifyMessages}" th:remove="all" th:text="'session.remove(${siteNotificationMessages})'"> </span>
                     </ul>
                 </div>
 

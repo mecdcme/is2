@@ -26,23 +26,38 @@ package it.istat.rservice;
 
 import java.util.Locale;
 
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
-import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring5.ISpringTemplateEngine;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @Configuration
-public class AppConfiguration extends WebMvcConfigurerAdapter {
+
+public class AppConfiguration implements WebMvcConfigurer {
+
+	 
 
 	@Bean
 	public LocaleChangeInterceptor localeChangeInterceptor() {
@@ -76,28 +91,67 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public SpringTemplateEngine temp() {
-
-		SpringTemplateEngine st = new SpringTemplateEngine();
-		st.setTemplateResolver(templateResolver());
-		st.addTemplateModeHandler(SkipSpaceLineTemplateModeHandlers.getITemplateModeHandlerHTML5());
-		st.addDialect(securityDialect());
-		return st;
-	}
-
-	@Bean
 	public SpringSecurityDialect securityDialect() {
 		return new SpringSecurityDialect();
 	}
 
-	@Bean
-	public TemplateResolver templateResolver() {
-		TemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-		templateResolver.setPrefix("templates/");
-		templateResolver.setCacheable(false);
-		templateResolver.setSuffix(".html");
-		templateResolver.setTemplateMode("HTML5");
-
-		return templateResolver;
-	}
+	
+	  
+	  @Bean public ClassLoaderTemplateResolver templateResolver() {
+	  
+	  ClassLoaderTemplateResolver templateResolver = new
+	  ClassLoaderTemplateResolver();
+	  
+	  templateResolver.setPrefix("templates/");
+	  templateResolver.setCacheable(false); templateResolver.setSuffix(".html");
+	  templateResolver.setTemplateMode("HTML5");
+	  templateResolver.setCharacterEncoding("UTF-8");
+	  
+	  return templateResolver; }
+	  
+	  @Bean public SpringTemplateEngine templateEngine() {
+	  
+	  SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+	  templateEngine.setTemplateResolver(templateResolver());
+	  templateEngine.addDialect(securityDialect()); return templateEngine; }
+	  
+	  @Bean public ViewResolver viewResolver() {
+	  
+	  ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+	  
+	  viewResolver.setTemplateEngine(templateEngine());
+	  viewResolver.setCharacterEncoding("UTF-8");
+	  
+	  return viewResolver; }
+	  
+	 
+	/*
+	 * STEP 1 - Create SpringResourceTemplateResolver
+	 * 
+	 * @Bean public SpringResourceTemplateResolver templateResolver() {
+	 * SpringResourceTemplateResolver templateResolver = new
+	 * SpringResourceTemplateResolver();
+	 * templateResolver.setApplicationContext(applicationContext);
+	 * templateResolver.setPrefix("templates/");
+	 * templateResolver.setSuffix(".html"); return templateResolver; }
+	 * 
+	 * 
+	 * STEP 2 - Create SpringTemplateEngine
+	 * 
+	 * @Bean public SpringTemplateEngine templateEngine() { SpringTemplateEngine
+	 * templateEngine = new SpringTemplateEngine();
+	 * templateEngine.setTemplateResolver(templateResolver());
+	 * templateEngine.setEnableSpringELCompiler(true); return templateEngine; }
+	 * 
+	 * 
+	 * STEP 3 - Register ThymeleafViewResolver
+	 * 
+	 * @Bean public ThymeleafViewResolver viewResolver() { ThymeleafViewResolver
+	 * resolver = new ThymeleafViewResolver();
+	 * resolver.setTemplateEngine(templateEngine()); return resolver;
+	 * 
+	 * }
+	 * 
+	 * 
+	 */
 }

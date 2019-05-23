@@ -119,7 +119,7 @@
                                                     </a>
                                                 </td>
                                                 <td style="width: 1%">
-                                                    <a title="Elimina dataset" role="button" th:onclick="${'javascript:eliminaDataset(' + dataset.id + ')'}">												
+                                                    <a title="Elimina dataset" role="button" th:onclick="'javascript:eliminaDataset(\'' + ${dataset.id} + '\')'">												
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>

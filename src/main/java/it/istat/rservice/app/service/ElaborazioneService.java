@@ -24,6 +24,8 @@
 package it.istat.rservice.app.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +47,7 @@ public class ElaborazioneService {
         return elaborazioneDao.save(elaborazione);
     }
 
-    public Elaborazione findElaborazione(Long idelaborazione) {
-        return elaborazioneDao.findOne(idelaborazione);
+    public Optional<Elaborazione> findElaborazione(Long idelaborazione) {
+        return elaborazioneDao.findById(idelaborazione);
     }
 }

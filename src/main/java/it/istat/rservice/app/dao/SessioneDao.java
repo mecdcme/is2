@@ -24,6 +24,7 @@
 package it.istat.rservice.app.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -37,5 +38,5 @@ public interface SessioneDao extends CrudRepository<SessioneLavoro, Long> {
 
 	List<SessioneLavoro> findByUserOrderByDataCreazioneDesc(@Param("user") User user);
 
-	SessioneLavoro findById(@Param("id") Long id);
+	Optional<SessioneLavoro> findById(@Param("id") Long id);
 }

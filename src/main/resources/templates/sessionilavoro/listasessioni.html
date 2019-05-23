@@ -143,7 +143,7 @@
                                                     <a class="towait" title="Visualizza elaborazioni" th:href="@{'/sessione/apri/'+${sessione.id}}"> <i class="fa fa-folder-open"></i></a>
                                                 </td>
                                                 <td style="width: 1%">
-                                                    <a title="Cancella elaborazioni" role="button" th:onclick="${'javascript:eliminaSessioneLavoro(' + sessione.id + ')'}"><i class="fa fa-trash"></i></a>
+                                                    <a title="Cancella elaborazioni" role="button" th:onclick="'javascript:eliminaSessioneLavoro(\'' + ${sessione.id} + '\')'"><i class="fa fa-trash"></i></a>
                                                 </td>
                                             </tr>
                                         </tbody>

@@ -25,6 +25,7 @@ package it.istat.rservice.workflow.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class BusinessStepService {
         return businessStepDao.findBySxBusinessProcesses(businessProcesses);
     }
 
-    public SxBusinessStep findBusinessStep(Long idbstep) {
-        return businessStepDao.findOne(idbstep);
+    public Optional<SxBusinessStep> findBusinessStep(Long idbstep) {
+        return businessStepDao.findById(idbstep);
     }
 }

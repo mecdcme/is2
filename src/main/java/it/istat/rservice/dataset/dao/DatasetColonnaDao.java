@@ -24,6 +24,7 @@
 package it.istat.rservice.dataset.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -82,6 +83,8 @@ public interface DatasetColonnaDao extends JpaRepository<DatasetColonna, Long> {
 	@Transactional
 	@Modifying
 	@Query(value = "delete from DatasetColonna dc   where dc.datasetFile=:dFile ")
-	void deleteByDatasetFile(@Param("dFile") DatasetFile dFile);
+	void deleteByDatasetFile(@Param("dFile") DatasetFile datasetFile);
+
+	Optional<DatasetColonna> save(Optional<DatasetColonna> dcol);
 
 }

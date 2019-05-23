@@ -23,6 +23,8 @@
  */
 package it.istat.rservice.workflow.dao;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -31,5 +33,5 @@ import it.istat.rservice.workflow.domain.SxBusinessFunction;
 public interface BusinessFunctionDao extends CrudRepository<SxBusinessFunction,Long> {
 
 	List<SxBusinessFunction> findAll();
-	SxBusinessFunction findById(Long idfunction);
+	Optional<SxBusinessFunction> findById(Long idfunction);
 }

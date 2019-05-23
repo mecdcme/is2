@@ -25,6 +25,8 @@ package it.istat.rservice.app.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,13 +50,13 @@ public class SessioneLavoroService {
         return sessioneDao.findByUserOrderByDataCreazioneDesc(user);
     }
 
-    public SessioneLavoro getSessione(Long id) {
+    public Optional<SessioneLavoro> getSessione(Long id) {
         return sessioneDao.findById(id);
     }
 
     public SessioneLavoro getSessioneByIdFile(Long id) {
-        DatasetFile dataset = datasetService.findDataSetFile(id);
-        return dataset.getSessioneLavoro();
+        Optional<DatasetFile> dataset = datasetService.findDataSetFile(id);
+        return dataset.get().getSessioneLavoro();
     }
 
     public List<SessioneLavoro> getSessioneList(User user) {
@@ -72,7 +74,7 @@ public class SessioneLavoroService {
     }
 
     public boolean eliminaSessioneLavoro(Long idsessione) {
-        sessioneDao.delete(idsessione);
+        sessioneDao.deleteById(idsessione);
         return true;
     }
 }

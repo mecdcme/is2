@@ -107,7 +107,7 @@
                                             </li>
                                         </th:block>
                                     </ul>
-                                    <span th:if="${notifyMessages}" th:remove="all" th:text="${session.remove('siteNotificationMessages')}">
+                                    <span th:if="${notifyMessages}" th:remove="all" th:text="'session.remove(${siteNotificationMessages})'">
                                     </span>
                                 </div>
                                 <div th:if="${exception}" th:text="${exception}">${exception}</div>

@@ -71,9 +71,9 @@ public class UserRestController {
     }
 
     @GetMapping("/users/{id}")
-    public User getUser(@PathVariable Long id) {
+    public User getUser(@PathVariable("id") Long id) {
 
-        User user = userService.findOne(id);
+        User user = userService.findOne(id).get();
         return user;
     }
 
@@ -125,7 +125,7 @@ public class UserRestController {
     
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/users/{id}")
-    public List<NotificationMessage> deleteUser(@PathVariable Long id) {
+    public List<NotificationMessage> deleteUser(@PathVariable("id") Long id) {
 
         notificationService.removeAllMessages();
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -160,7 +160,7 @@ public class UserRestController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/users/reset_password/{id}" )
-    public List<NotificationMessage> updatePassword(@RequestParam("passw") String password, @PathVariable String id) {
+    public List<NotificationMessage> updatePassword(@RequestParam("passw") String password, @PathVariable("id") String id) {
 
         notificationService.removeAllMessages();
         try {

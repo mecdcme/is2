@@ -23,6 +23,8 @@
  */
 package it.istat.rservice.app.dao;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -35,5 +37,5 @@ public interface ElaborazioneDao extends CrudRepository<Elaborazione,Long> {
 
 	List<Elaborazione> findBySessioneLavoroOrderByIdDesc(@Param("ses_elaborazione")SessioneLavoro sessioneLavoro);	
 	
-	Elaborazione findById(@Param("idelaborazione")Long idelaborazione);
+	Optional<Elaborazione> findById(@Param("idelaborazione")Long idelaborazione);
 }

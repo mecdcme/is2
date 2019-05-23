@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -77,7 +78,7 @@ public class DatasetService {
         SxTipoDato tipoD = new SxTipoDato();
         tipoD.setId(tipoDato);
         dFile.setTipoDato(tipoD);
-        dFile.setSessioneLavoro(sessioneLavoroDao.findById(Long.parseLong(idsessione)));
+        dFile.setSessioneLavoro(sessioneLavoroDao.findById(Long.parseLong(idsessione)).get());
         dFile.setNomeFile(desc);
         dFile.setFormatoFile("CSV");
         dFile.setSeparatore(separatore);
@@ -104,11 +105,11 @@ public class DatasetService {
         return dFile;
     }
 
-    public DatasetColonna salvaColonna(DatasetColonna dCol) throws Exception {
+    public Optional<DatasetColonna> salvaColonna(Optional<DatasetColonna> dcol) throws Exception {
 
-        DatasetColonna dC;
+        Optional<DatasetColonna> dC;
         try {
-            dC = datasetColonnaDao.save(dCol);
+            dC = datasetColonnaDao.save(dcol);
         } catch (Exception e) {
             return null;
         }
@@ -122,7 +123,7 @@ public class DatasetService {
     }
 
     public DatasetFile findDataSetFile(Long id) {
-        return datasetFileDao.findOne(id);
+        return datasetFileDao.findById(id).get();
     }
 
     public  List<DatasetFile> findDatasetFilesByIdSessioneLavoro(Long id) {
@@ -152,8 +153,8 @@ public class DatasetService {
         return datasetColonnaDao.findNomebyfile(dFile);
     }
 
-    public DatasetColonna findOneColonna(Long dFile) {
-        return datasetColonnaDao.findOne(dFile);
+    public Optional<DatasetColonna> findOneColonna(Long dFile) {
+        return datasetColonnaDao.findById(dFile);
     }
 
     public Integer findNumeroRighe(Long dFile) {
@@ -226,7 +227,7 @@ public class DatasetService {
         DatasetFile datasetFile = findDataSetFile(idfile);
 
         Map<String, List<String>> ret = new LinkedHashMap<>();
-        for (Iterator<?> iterator = datasetFile.getColonne().iterator(); iterator.hasNext();) {
+		for (Iterator<?> iterator = datasetFile.getColonne().iterator(); iterator.hasNext();) {
             DatasetColonna dc = (DatasetColonna) iterator.next();
             ret.put(dc.getNome(), dc.getDatiColonna());
         }
@@ -238,8 +239,8 @@ public class DatasetService {
     	
     	
     	DatasetColonna nuovaColonna = new DatasetColonna();
-    	DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
-    	List<String> datiColonna = colonna.getDatiColonna();
+    	Optional<DatasetColonna> colonna = findOneColonna(Long.parseLong(idColonna));
+    	List<String> datiColonna = colonna.get().getDatiColonna();
     	//cambia i valori della colonna
     	List<String> datiColonnaTemp = new ArrayList();
     	//cambia i valori della colonna

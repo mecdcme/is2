@@ -24,6 +24,8 @@
 package it.istat.rservice.app.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -51,8 +53,8 @@ public class UserService {
         return (List<UserRole>) this.userRolesDao.findAll();
     }
 
-    public User findOne(Long id) {
-        return this.userDao.findOne(id);
+    public Optional<User> findOne(Long id) {
+        return this.userDao.findById(id);
     }
 
     public User findByEmail(String email) {
@@ -72,16 +74,16 @@ public class UserService {
         return user;
     }
 
-    public User update(UserCreateForm uf) throws Exception {
-        User user = userDao.findOne(uf.getUserid());
+    public Optional<User> update(UserCreateForm uf) throws Exception {
+        Optional<User> user = (Optional<User>) userDao.findById(uf.getUserid());
         if (user == null) {
             throw new Exception("User not found");
         }
-        user.setEmail(uf.getEmail());
-        user.setName(uf.getName());
-        user.setSurname(uf.getSurname());  
+        user.get().setEmail(uf.getEmail());
+        user.get().setName(uf.getName());
+        user.get().setSurname(uf.getSurname());  
         UserRole ur = new UserRole(uf.getRole());
-        user.setRole(ur);
+        user.get().setRole(ur);
         userDao.save(user);
         
         return user;
@@ -99,20 +101,20 @@ public class UserService {
         return user;
     }
 
-    public User updatePasswordById(Long id, String password) throws Exception {
-        User user = userDao.findOne(id);
+    public Optional<User> updatePasswordById(Long id, String password) throws Exception {
+        Optional<User> user = userDao.findById(id);
         if (user == null) {
             throw new Exception("User not found");
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(passwordEncoder.encode(password));
+        user.get().setPassword(passwordEncoder.encode(password));
         userDao.save(user);
         return user;
     }
 
     public void delete(Long id) {
-        userDao.delete(id);
+        userDao.deleteById(id);
 
     }
 }

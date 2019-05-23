@@ -25,6 +25,7 @@ package it.istat.rservice.workflow.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 import org.rosuda.REngine.REngineException;
@@ -91,7 +92,7 @@ public class WorkflowController {
 	public String homeWS(HttpSession session, Model model, @PathVariable("id") Long id) {
 		notificationService.removeAllMessages();
 
-		Elaborazione elaborazione = workflowService.findElaborazione(id);
+		Elaborazione elaborazione = workflowService.findElaborazione(id).get();
 		List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
 		SxBusinessProcess bProcess = listaBp.get(0);
 		List<SxStepVariable> listaSV = workflowService.getSxStepVariablesNoValori(elaborazione.getId(),
@@ -113,7 +114,7 @@ public class WorkflowController {
 			@PathVariable("idelaborazione") Long idelaborazione, @PathVariable("idvar") Long idvar) {
 		notificationService.removeAllMessages();
 
-		SxStepVariable stepVar = stepVariableService.findById(idvar);
+		SxStepVariable stepVar = stepVariableService.findById(idvar).get();
 		List<SxStepVariable> listaVars = stepVar.getSxWorkset().getSxStepVariables();
 
 		if (listaVars.size() == 1) {
@@ -134,7 +135,7 @@ public class WorkflowController {
 			@PathVariable("idelaborazione") Long idelaborazione, @PathVariable("idparametro") Long idparametro) {
 		notificationService.removeAllMessages();
 
-		SxStepVariable stepVar = stepVariableService.findById(idparametro);
+		SxStepVariable stepVar = stepVariableService.findById(idparametro).get();
 		List<SxStepVariable> listaVars = stepVar.getSxWorkset().getSxStepVariables();
 
 		if (listaVars.size() == 1) {
@@ -155,13 +156,13 @@ public class WorkflowController {
 			@PathVariable("idelaborazione") Long idElaborazione) {
 		session.setAttribute(IS2Const.WORKINGSET, "workingset");
 
-		Elaborazione elaborazione = elaborazioneService.findElaborazione(idElaborazione);
+		Optional<Elaborazione> elaborazione = elaborazioneService.findElaborazione(idElaborazione);
 
-		SessionBean elaSession = new SessionBean(elaborazione.getId().toString(), elaborazione.getNome());
+		SessionBean elaSession = new SessionBean(elaborazione.get().getId().toString(), elaborazione.get().getNome());
 		session.setAttribute(IS2Const.SESSION_ELABORAZIONE, elaSession);
 
 		List<DatasetFile> datasetfiles = datasetService
-				.findDatasetFilesByIdSessioneLavoro(elaborazione.getSessioneLavoro().getId());
+				.findDatasetFilesByIdSessioneLavoro(elaborazione.get().getSessioneLavoro().getId());
 		DatasetFile datasetfile = datasetfiles.get(0);
 		model.addAttribute("idfile", datasetfile.getId());
 
@@ -171,14 +172,14 @@ public class WorkflowController {
 		List<SxStepVariable> listaSP = workflowService.getSxStepVariablesParametri(idElaborazione);
 		List<SxBusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
 
-		SxBusinessFunction businessFunction = elaborazione.getSxBusinessFunction();
+		SxBusinessFunction businessFunction = elaborazione.get().getSxBusinessFunction();
 
 		// Carica i Ruoli di input
 		List<SxRuoli> listaRuoliInput = workflowService.findRuoliByFunction(businessFunction, 0);
 		// Carica i Ruoli di input e output
 		List<SxRuoli> listaRuoliInOut = workflowService.findRuoliByFunction(businessFunction, 1);
 		List<SxParPattern> listaParametri = workflowService.findParametriByFunction(businessFunction);
-		List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
+		List<SxBusinessProcess> listaBp = elaborazione.get().getSxBusinessFunction().getSxBusinessProcesses();
 
 		model.addAttribute("bProcess", listaBp);
 		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
@@ -216,13 +217,13 @@ public class WorkflowController {
 
 		session.setAttribute(IS2Const.WORKINGSET, "workingset");
 
-		Elaborazione elaborazione = elaborazioneService.findElaborazione(idElaborazione);
+		Optional<Elaborazione> elaborazione = elaborazioneService.findElaborazione(idElaborazione);
 
-		SessionBean elaSession = new SessionBean(elaborazione.getId().toString(), elaborazione.getNome());
+		SessionBean elaSession = new SessionBean(elaborazione.get().getId().toString(), elaborazione.get().getNome());
 		session.setAttribute(IS2Const.SESSION_ELABORAZIONE, elaSession);
 
 		List<DatasetFile> datasetfiles = datasetService
-				.findDatasetFilesByIdSessioneLavoro(elaborazione.getSessioneLavoro().getId());
+				.findDatasetFilesByIdSessioneLavoro(elaborazione.get().getSessioneLavoro().getId());
 
 		datasetfiles.forEach(datasetfile -> {
 			// retrieve DatasetColonna without data
@@ -236,14 +237,14 @@ public class WorkflowController {
 		List<SxStepVariable> listaSP = workflowService.getSxStepVariablesParametri(idElaborazione);
 		List<SxBusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
 
-		SxBusinessFunction businessFunction = elaborazione.getSxBusinessFunction();
+		SxBusinessFunction businessFunction = elaborazione.get().getSxBusinessFunction();
 
 		// Carica i Ruoli di input
 		List<SxRuoli> listaRuoliInput = workflowService.findRuoliByFunction(businessFunction, 0);
 		// Carica i Ruoli di input e output
 		List<SxRuoli> listaRuoliInOut = workflowService.findRuoliByFunction(businessFunction, 1);
 		List<SxParPattern> listaParametri = workflowService.findParametriByFunction(businessFunction);
-		List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
+		List<SxBusinessProcess> listaBp = elaborazione.get().getSxBusinessFunction().getSxBusinessProcesses();
 
 		model.addAttribute("bProcess", listaBp);
 		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
@@ -271,7 +272,7 @@ public class WorkflowController {
 		SXTipoCampo sxTipoCampo = workflowService.getTipoCampoById(tipoCampo);
 		List<SxStepVariable> listaSV = workflowService.getSxStepVariablesTipoCampoNoValori(idelaborazione,
 				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE), sxTipoCampo);
-		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
+		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione).get();
 		List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
 
 		model.addAttribute("stepVList", listaSV);
@@ -288,7 +289,7 @@ public class WorkflowController {
 	public String chiudiWS(HttpSession session, Model model, @PathVariable("id") Long id) {
 		notificationService.removeAllMessages();
 
-		Elaborazione elaborazione = workflowService.findElaborazione(id);
+		Elaborazione elaborazione = workflowService.findElaborazione(id).get();
 		session.removeAttribute(IS2Const.SESSION_ELABORAZIONE);
 
 		return "redirect:/sessione/apri/" + elaborazione.getSessioneLavoro().getId();
@@ -311,7 +312,7 @@ public class WorkflowController {
 			@PathVariable("idBProc") Long idBProc) throws REngineException {
 		notificationService.removeAllMessages();
 
-		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
+		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione).get();
 		try {
 			elaborazione = workflowService.doBusinessProc(elaborazione, idBProc);
 			notificationService.addInfoMessage(messages.getMessage("run.ok", null, LocaleContextHolder.getLocale()));
@@ -339,7 +340,7 @@ public class WorkflowController {
 	@RequestMapping(value = "/associavariabile", method = RequestMethod.POST)
 	public String associavariabileWS(HttpSession session, Model model,
 			@ModelAttribute("associazioneVarFormBean") AssociazioneVarFormBean form) {
-		Elaborazione elaborazione = workflowService.findElaborazione(Long.parseLong(form.getElaborazione()[0]));
+		Elaborazione elaborazione = workflowService.findElaborazione(Long.parseLong(form.getElaborazione()[0])).get();
 		workflowService.creaAssociazioni(form, elaborazione);
 		model.addAttribute("elaborazione", elaborazione);
 		notificationService.addInfoMessage("L'associazione è stata aggiunta");
@@ -351,7 +352,7 @@ public class WorkflowController {
 	public String associavariabileSum(HttpSession session, Model model, @RequestParam("idvar") Long idVar,
 			@RequestParam("idvarsum") Long idVarSum,
 			@ModelAttribute("associazioneVarFormBean") AssociazioneVarFormBean form) {
-		Elaborazione elaborazione = workflowService.findElaborazione(Long.parseLong(form.getElaborazione()[0]));
+		Elaborazione elaborazione = workflowService.findElaborazione(Long.parseLong(form.getElaborazione()[0])).get();
 		workflowService.creaAssociazioni(form, elaborazione);
 		model.addAttribute("elaborazione", elaborazione);
 		notificationService.addInfoMessage("L'associazione è stata aggiunta");
@@ -362,7 +363,7 @@ public class WorkflowController {
 	@RequestMapping(value = "/updateassociavariabile", method = RequestMethod.POST)
 	public String updateAssociavariabileWS(HttpSession session, Model model,
 			@ModelAttribute("associazioneVarFormBean") AssociazioneVarFormBean form) {
-		Elaborazione elaborazione = workflowService.findElaborazione(Long.parseLong(form.getElaborazione()[0]));
+		Elaborazione elaborazione = workflowService.findElaborazione(Long.parseLong(form.getElaborazione()[0])).get();
 		workflowService.updateAssociazione(form, elaborazione);
 		model.addAttribute("elaborazione", elaborazione);
 		notificationService.addInfoMessage("L'associazione è stata modificata");
@@ -382,7 +383,7 @@ public class WorkflowController {
 		form2.setParametri(params);
 		String[] valori = { valoreParam };
 		form2.setValore(valori);
-		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
+		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione).get();
 		workflowService.associaParametri(form2, elaborazione);
 		notificationService.addInfoMessage("Parametro inserito correttamente");
 
@@ -405,7 +406,7 @@ public class WorkflowController {
 		String[] valori = { valoreParam };
 		form2.setValore(valori);
 
-		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
+		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione).get();
 
 		workflowService.updateParametri(form2, elaborazione);
 		notificationService.addInfoMessage("Parametro modificato");

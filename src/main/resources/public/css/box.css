@@ -747,8 +747,8 @@ fieldset {
     margin-top: 23px !important;
     background-color: #f5f5f5 !important;
     color: #2189b4 !important;
-    padding-top: 20px !important;
-    padding-bottom: 40px !important;
+    padding-top: 5px !important;
+    padding-bottom: 25px !important;
     font-weight: bold !important;
     min-height: 180px !important;
 }

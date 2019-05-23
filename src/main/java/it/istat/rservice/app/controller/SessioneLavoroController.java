@@ -88,7 +88,7 @@ public class SessioneLavoroController {
     @GetMapping(value = "/sessione/apriseselab/{idSessione}/{idElaborazione}")
     public String apriSesElab(HttpSession session, Model model, @AuthenticationPrincipal User user, @PathVariable("idSessione") Long idSessione, @PathVariable("idElaborazione") Long idElaborazione) {
 
-        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(idSessione);
+        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(idSessione).get();
         if (sessionelv.getDatasetFiles() != null) {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
         }
@@ -99,7 +99,7 @@ public class SessioneLavoroController {
     @GetMapping(value = "/sessione/mostradataset/{id}")
     public String mostradataset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
-        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(id);
+        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(id).get();
         if (sessionelv.getDatasetFiles() != null) {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
         }
@@ -116,8 +116,10 @@ public class SessioneLavoroController {
     
     @GetMapping(value = "/sessione/apri/{id}")
     public String apriSessione(HttpSession session, Model model, @PathVariable("id") Long id) {
+    	
+    	notificationService.removeAllMessages();
 
-        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(id);
+        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(id).get();
         if (sessionelv.getDatasetFiles() != null) {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
         }
@@ -136,14 +138,14 @@ public class SessioneLavoroController {
         notificationService.removeAllMessages();
 
         session.setAttribute(IS2Const.WORKINGSET, "workingset");
-        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(form.getIdsessione());
+        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(form.getIdsessione()).get();
         try {
             Elaborazione elaborazione = new Elaborazione();
             elaborazione.setSessioneLavoro(sessionelv);
             elaborazione.setDescrizione(form.getDescrizione());
             elaborazione.setNome(form.getNome());
             elaborazione.setDataElaborazione(new Date());
-            elaborazione.setSxBusinessFunction(businessFunctionService.findBFunctionById(form.getIdfunzione()));
+            elaborazione.setSxBusinessFunction(businessFunctionService.findBFunctionById(form.getIdfunzione()).get());
 
             elaborazioneService.salvaElaborazione(elaborazione);
             notificationService.addInfoMessage("Elaborazione creata.");

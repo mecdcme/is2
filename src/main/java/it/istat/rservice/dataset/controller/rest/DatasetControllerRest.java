@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,8 +60,8 @@ public class DatasetControllerRest {
 
     @GetMapping("/datasetfile/{id}")
     @ResponseBody
-    public DatasetFile loadDataSetFile(@PathVariable Long id) throws IOException {
-        DatasetFile df = datasetService.findDataSetFile(id);
+    public Optional<DatasetFile> loadDataSetFile(@PathVariable("id") Long id) throws IOException {
+        Optional<DatasetFile> df = datasetService.findDataSetFile(id);
         return df;
     }
 
@@ -73,7 +74,7 @@ public class DatasetControllerRest {
 
     @GetMapping("/datasetfilesql/{id}")
     @ResponseBody
-    public DatasetFile loadDataSetFileSql(@PathVariable Long id) throws IOException {
+    public DatasetFile loadDataSetFileSql(@PathVariable("id") Long id) throws IOException {
         DatasetFile df = datasetService.findDataSetFileSQL(id);
         return df;
     }
@@ -87,7 +88,7 @@ public class DatasetControllerRest {
 
     @GetMapping("/datasetcolonnasql/{dfile}/{rigainf}/{rigasup}")
     @ResponseBody
-    public List<DatasetColonna> loadDataSetColonnaSql(@PathVariable Long dfile, @PathVariable Integer rigainf, @PathVariable Integer rigasup) throws IOException {
+    public List<DatasetColonna> loadDataSetColonnaSql(@PathVariable("dfile") Long dfile, @PathVariable("rigainf") Integer rigainf, @PathVariable("rigasup") Integer rigasup) throws IOException {
         List<DatasetColonna> df = datasetService.findAllDatasetColonnaSQL(dfile, rigainf, rigasup);
         return df;
     }
@@ -126,11 +127,11 @@ public class DatasetControllerRest {
     }
 
     @RequestMapping(value = "/rest/setvariabilesum/{idcol}/{idvar}", method = RequestMethod.POST)
-    public DatasetColonna setVarSum(HttpServletRequest request, Model model, @PathVariable("idcol") Long idcol, @PathVariable("idvar") Integer idvar) throws IOException {
+    public Optional<DatasetColonna> setVarSum(HttpServletRequest request, Model model, @PathVariable("idcol") Long idcol, @PathVariable("idvar") Integer idvar) throws IOException {
 
-        DatasetColonna dcol = datasetService.findOneColonna(idcol);
+        Optional<DatasetColonna> dcol = datasetService.findOneColonna(idcol);
         TipoVariabileSum sum = new TipoVariabileSum(idvar);
-        dcol.setTipoVariabile(sum);
+        dcol.get().setTipoVariabile(sum);
         try {
             dcol = datasetService.salvaColonna(dcol);
         } catch (Exception e) {
