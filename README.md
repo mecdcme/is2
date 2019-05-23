@@ -83,6 +83,8 @@ Docker compose
 ```
 docker-compose up
 ```
+The application will be at http://localhost:8080/ If you want to inspect the database you can use the 
+Admin application at http://localhost:8081/ 
 
 ## License
 IS2 is EUPL-licensed
