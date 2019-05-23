@@ -5,7 +5,7 @@ services:
     #build:
     #  context: .
     #  dockerfile: app.Dockerfile
-    entrypoint: ["/usr/app/wait-for", "db:3306", "--", "java", "-jar", "/usr/app/is2.jar"]
+    entrypoint: ["/usr/app/wait-for", "--timeout=60", "db:3306", "--", "java", "-jar", "/usr/app/is2.jar"]
     ports:
       - 8080:8080
     environment:
