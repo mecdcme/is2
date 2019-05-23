@@ -1,3 +1,5 @@
+[![Docker hub](https://img.shields.io/docker/cloud/automated/i3sessnet/is2.svg?label=is2%20docker)](https://cloud.docker.com/u/i3sessnet/repository/docker/i3sessnet/is2) [![Docker hub](https://img.shields.io/docker/cloud/automated/i3sessnet/is2-mysql.svg?label=is2-mysql%20docker)](https://cloud.docker.com/u/i3sessnet/repository/docker/i3sessnet/is2-mysql)
+
 # IS2
 A runtime environment to execute statistical services
 
@@ -64,16 +66,17 @@ java –jar is2.jar
 ```
 In the docs folder you will find a complete userguide with useful information that will help you to understand is2 project.
 
+
 Dockerize the MySQL database
 ```
-docker build -t i3s-essnet/is2-mysql .
-docker run -p 3306:3306 i3s-essnet/is2-mysql
+docker build -t i3sessnet/is2-mysql . -f db.Dockerfile
+docker run -p 3306:3306 i3sessnet/is2-mysql
 ```
 
 Dockerize the web application
 ```
-docker build -t i3s-essnet/is2 .
-docker run --rm  i3s-essnet/is2 
+docker build -t i3sessnet/is2 . -f app.Dockerfile
+docker run --rm  i3sessnet/is2 
 ```
 
 ## License
