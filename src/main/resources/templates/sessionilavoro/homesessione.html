@@ -141,7 +141,7 @@
                                                     </a>
                                                 </td>
                                                 <td style="width: 1%">
-                                                    <a title="Elimina elaborazione" role="button" th:onclick="${'javascript:eliminaElaborazione(' + elaborazione.id + ',' + session.sessionelv.id + ')'}">												
+                                                    <a title="Elimina elaborazione" role="button" th:onclick="'javascript:eliminaElaborazione(\'' + ${elaborazione.id} + '\', \'' + ${session.sessionelv.id} + '\')'">												
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>
