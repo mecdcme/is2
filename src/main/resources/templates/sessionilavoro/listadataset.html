@@ -45,14 +45,16 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <span th:text="#{sessionewf.title}"></span>
+                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{/sessione/mostraSessioni}">
+                                    <span th:text="#{sessionewf.lista.title}"></span>
+                                </a>
                             </li>
                             <li class="breadcrumb-item">
                                 <a title="Sessione lavoro" th:if="${session.sessionelv}" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
                                     <span th:text="${session.sessionelv.nome}"></span>
                                 </a>
                             </li>
-                            <li class="breadcrumb-item active">
+                            <li class="breadcrumb-item">
                                 <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
                             </li> 
 
@@ -119,7 +121,7 @@
                                                     </a>
                                                 </td>
                                                 <td style="width: 1%">
-                                                    <a title="Elimina dataset" role="button" th:onclick="${'javascript:eliminaDataset(' + dataset.id + ')'}">												
+                                                    <a title="Elimina dataset" role="button" th:onclick="'javascript:eliminaDataset(\'' + ${dataset.id} + '\')'">												
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>

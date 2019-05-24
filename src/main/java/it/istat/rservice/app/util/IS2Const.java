@@ -38,4 +38,5 @@ public interface IS2Const {
     public static final String SESSION_DATASET = "sessionelavdataset";
     public static final int TIPO_CAMPO_INPUT = 1;
     public static final int TIPO_CAMPO_ELABORATO = 2;
+    
 }

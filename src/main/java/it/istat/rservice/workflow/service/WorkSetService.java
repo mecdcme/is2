@@ -35,6 +35,6 @@ public class WorkSetService {
     WorkSetDao workSetDao;
 
     public void removeStepVarByWorkSet(Long idstep) {
-        workSetDao.delete(idstep);
+        workSetDao.deleteById(idstep);
     }
 }

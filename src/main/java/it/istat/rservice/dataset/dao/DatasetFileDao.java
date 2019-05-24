@@ -42,7 +42,7 @@ import it.istat.rservice.dataset.domain.DatasetFile;
 public interface DatasetFileDao extends JpaRepository<DatasetFile, Long> {
 
 	@Query(value="SELECT u FROM DatasetFile u.id = 1", nativeQuery = true)
-	DatasetFile findQuiery();
+	DatasetFile findQuery();
 	
 	@Query(value="SELECT df.numerorighe from DatasetFile df where df.id =:dFile")
 	Integer findNumeroRighe(@Param("dFile") Long dFile);

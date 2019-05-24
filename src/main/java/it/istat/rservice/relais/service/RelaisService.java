@@ -19,12 +19,11 @@
  * @version 0.1.1
  */
 /**
- * 
+ *
  */
 package it.istat.rservice.relais.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -39,13 +38,12 @@ import it.istat.rservice.relais.dao.RelaisGenericDao;
  */
 @Service
 public class RelaisService {
-	
-	@Autowired
-	private RelaisGenericDao  relaisGenericDao;
-	
-	
-	public Map<?,?> crossTable(Long idelaborazione,Map ruoliVariabileNome) throws Exception {
-		return relaisGenericDao.crossTable(idelaborazione,(LinkedHashMap<String, ArrayList<String>>) ruoliVariabileNome);
-	}
+
+    @Autowired
+    private RelaisGenericDao relaisGenericDao;
+
+    public Map<?, ?> crossTable(Long idelaborazione, Map ruoliVariabileNome) throws Exception {
+        return relaisGenericDao.crossTable(idelaborazione, (LinkedHashMap<String, ArrayList<String>>) ruoliVariabileNome);
+    }
 
 }

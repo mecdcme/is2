@@ -329,11 +329,6 @@ public class Utility {
         return headerValuesSelected;
     }
 
-    /**
-     * @param sxTipoVar
-     * @param dataList
-     * @return
-     */
     public static HashMap<String, ArrayList<String>> getMapWorkSetValues(Map<String, SxStepVariable> dataMap,
             SxTipoVar sxTipoVar) {
 
@@ -374,10 +369,6 @@ public class Utility {
         return ret;
     }
 
-    /**
-     * @param ruoliAll
-     * @return
-     */
     public static Map<String, SxRuoli> getMapRuoliByCod(List<SxRuoli> ruoliAll) {
 
         HashMap<String, SxRuoli> ret = new HashMap<>();
@@ -404,16 +395,11 @@ public class Utility {
     public static Map<Long, SxRuoli> getMapRuoliById(List<SxRuoli> ruoliAll) {
         HashMap<Long, SxRuoli> ret = new HashMap<>();
         for (SxRuoli sxRuoli : ruoliAll) {
-
             ret.put(sxRuoli.getId(), sxRuoli);
         }
         return ret;
     }
 
-    /**
-     * @param listaBp
-     * @return
-     */
     public static SxBusinessProcess getSxBusinessProcess(List<SxBusinessProcess> listaBp, Long idprocesso) {
 
         for (SxBusinessProcess bP : listaBp) {

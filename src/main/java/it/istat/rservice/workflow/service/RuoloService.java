@@ -24,6 +24,7 @@
 package it.istat.rservice.workflow.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class RuoloService {
         return ruoloDao.findAll();
     }
 
-    public SxRuoli findRuolo(Long idruolo) {
-        return ruoloDao.findOne(idruolo);
+    public Optional<SxRuoli> findRuolo(Long idruolo) {
+        return ruoloDao.findById(idruolo);
     }
 }

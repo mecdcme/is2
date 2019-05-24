@@ -55,7 +55,7 @@ public class DatasetColonna implements Serializable {
     private static final long serialVersionUID = 3059519218117628717L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IDCOL")
     private Long id;
     @Column(name = "NOME")

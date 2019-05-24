@@ -21,7 +21,6 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-
 package it.istat.rservice;
 
 import java.util.Locale;
@@ -32,72 +31,86 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
-import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
 
 @Configuration
-public class AppConfiguration extends WebMvcConfigurerAdapter {
+public class AppConfiguration implements WebMvcConfigurer {
 
-	@Bean
-	public LocaleChangeInterceptor localeChangeInterceptor() {
-		LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-		lci.setParamName("language");
-		return lci;
-	}
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+        lci.setParamName("language");
+        return lci;
+    }
 
-	@Bean
-	public LocaleResolver localeResolver() {
-		SessionLocaleResolver slr = new SessionLocaleResolver();
-		slr.setDefaultLocale(new Locale("it", "IT"));
-		return slr;
-	}
+    @Bean
+    public LocaleResolver localeResolver() {
+        SessionLocaleResolver slr = new SessionLocaleResolver();
+        slr.setDefaultLocale(new Locale("it", "IT"));
+        return slr;
+    }
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(localeChangeInterceptor());
-	}
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(localeChangeInterceptor());
+    }
 
-	@Bean
-	public ResourceBundleMessageSource messageSource() {
-		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBasename("i18n/messages");
-		return messageSource;
-	}
+    @Bean
+    public ResourceBundleMessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("i18n/messages");
+        return messageSource;
+    }
 
-	@Bean(name = "multipartResolver")
-	public MultipartResolver multipartResolver() {
-		return new StandardServletMultipartResolver();
-	}
+    @Bean(name = "multipartResolver")
+    public MultipartResolver multipartResolver() {
+        return new StandardServletMultipartResolver();
+    }
 
-	@Bean
-	public SpringTemplateEngine temp() {
+    @Bean
+    public SpringSecurityDialect securityDialect() {
+        return new SpringSecurityDialect();
+    }
 
-		SpringTemplateEngine st = new SpringTemplateEngine();
-		st.setTemplateResolver(templateResolver());
-		st.addTemplateModeHandler(SkipSpaceLineTemplateModeHandlers.getITemplateModeHandlerHTML5());
-		st.addDialect(securityDialect());
-		return st;
-	}
+    @Bean
+    public ClassLoaderTemplateResolver templateResolver() {
 
-	@Bean
-	public SpringSecurityDialect securityDialect() {
-		return new SpringSecurityDialect();
-	}
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
 
-	@Bean
-	public TemplateResolver templateResolver() {
-		TemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-		templateResolver.setPrefix("templates/");
-		templateResolver.setCacheable(false);
-		templateResolver.setSuffix(".html");
-		templateResolver.setTemplateMode("HTML5");
+        templateResolver.setPrefix("templates/");
+        templateResolver.setCacheable(false);
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("HTML5");
+        templateResolver.setCharacterEncoding("UTF-8");
 
-		return templateResolver;
-	}
+        return templateResolver;
+    }
+
+    @Bean
+    public SpringTemplateEngine templateEngine() {
+
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver());
+        templateEngine.addDialect(securityDialect());
+        return templateEngine;
+    }
+
+    @Bean
+    public ViewResolver viewResolver() {
+
+        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+
+        viewResolver.setTemplateEngine(templateEngine());
+        viewResolver.setCharacterEncoding("UTF-8");
+
+        return viewResolver;
+    }
 }

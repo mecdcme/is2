@@ -25,6 +25,7 @@ package it.istat.rservice.workflow.dao;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -42,7 +43,7 @@ public interface StepVariableDao extends CrudRepository<SxStepVariable, Long> {
 
 	List<SxStepVariable> findByElaborazione(Elaborazione elaborazione);
 
-	SxStepVariable findById(Long idvar);
+	Optional<SxStepVariable> findById(Long idvar);
 
 	List<SxStepVariable> findBySxRuoli(SxRuoli ruolo);
 
@@ -76,4 +77,6 @@ public interface StepVariableDao extends CrudRepository<SxStepVariable, Long> {
 	@Query("SELECT st from SxStepVariable st  where st.elaborazione=:elab and st.sxWorkset.sxTipoVar!=:tipoVar ORDER BY st.ordine ASC ")
 	List<SxStepVariable> findSxStepVariablesParametri(@Param("elab") Elaborazione elaborazione,
 			@Param("tipoVar") SxTipoVar sxTipoVar);
+
+	
 }

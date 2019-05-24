@@ -41,7 +41,9 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <span th:text="#{label.sessione.lavoro}"></span>
+                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{/sessione/mostraSessioni}">
+                                    <span th:text="#{sessionewf.lista.title}"></span>
+                                </a>
                             </li>
                             <li class="breadcrumb-item">
                                 <span th:if="${session.sessionelv}">
@@ -50,10 +52,10 @@
                             </li>
                             <div class="btn-group pull-right" role="group">
                                 <a class="bar-right" title="Area dati" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
-                                    <i class="fa fa-database"></i><span th:text="#{sessionewf.areadati}"></span>
+                                    <i class="fa fa-table"></i>&nbsp;<span th:text="#{sessionewf.areadati}"></span>
                                 </a>
                                  <a class="" title="Chiudi sessione" th:href="@{'/sessione/chiudisessione/'}">
-                                    <i class="fa fa-close"></i><span th:text="#{session.button.close}"></span>
+                                     <i class="fa fa-close"></i>&nbsp;<span th:text="#{session.button.close}"></span>
                                 </a>
                             </div>
                         </ol>
@@ -139,7 +141,7 @@
                                                     </a>
                                                 </td>
                                                 <td style="width: 1%">
-                                                    <a title="Elimina elaborazione" role="button" th:onclick="${'javascript:eliminaElaborazione(' + elaborazione.id + ',' + session.sessionelv.id + ')'}">												
+                                                    <a title="Elimina elaborazione" role="button" th:onclick="'javascript:eliminaElaborazione(\'' + ${elaborazione.id} + '\', \'' + ${session.sessionelv.id} + '\')'">												
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>

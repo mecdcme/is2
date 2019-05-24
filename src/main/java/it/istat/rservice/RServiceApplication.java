@@ -21,29 +21,25 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-
 package it.istat.rservice;
 
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.PropertySource;
 
-@PropertySource(value = { "classpath:application.properties" })
 @SpringBootApplication
-
+@PropertySource(value = {"classpath:application.properties"})
 public class RServiceApplication extends SpringBootServletInitializer {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
+        SpringApplication.run(RServiceApplication.class, args);
+    }
 
-		SpringApplication.run(RServiceApplication.class, args);
-	}
-
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-
-		return application.sources(RServiceApplication.class);
-	}
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(RServiceApplication.class);
+    }
 }

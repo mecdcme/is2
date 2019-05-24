@@ -24,6 +24,7 @@
 package it.istat.rservice.workflow.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class BusinessFunctionService {
         return businessFunctionDao.findAll();
     }
 
-    public SxBusinessFunction findBFunctionById(long idfunction) {
+    public Optional<SxBusinessFunction> findBFunctionById(long idfunction) {
         return businessFunctionDao.findById(idfunction);
     }
 }

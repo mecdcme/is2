@@ -161,7 +161,7 @@ public class WorkflowRestController {
 			}
 			Long idstep = Long.parseLong(idstepvar);
 			Short ordineS = Short.parseShort(ordine);
-			stepVariable = stepVariableService.findById(idstep);
+			stepVariable = stepVariableService.findById(idstep).get();
 			stepVariable.setOrdine(ordineS);
 			stepVariableService.updateStepVar(stepVariable);
 		}
