@@ -83,7 +83,7 @@ Docker compose
 ```
 docker-compose up
 ```
-The application will be at http://localhost:8080/ If you want to inspect the database you can use the 
+The application will be at http://localhost:8080/is2 If you want to inspect the database you can use the 
 [Adminer](https://hub.docker.com/_/adminer/) application at http://localhost:8081/ 
 
 ## License
