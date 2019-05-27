@@ -23,9 +23,10 @@
  */
 package it.istat.is2.app.forms;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.Email;
+
 
 public class LoginForm {
 
