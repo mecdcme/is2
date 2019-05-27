@@ -36,6 +36,7 @@ import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +119,7 @@ public class WorkflowService {
         elaborazioneDao.deleteById(id);
     }
 
-    public String loadWorkSetValori(Long idelaborazione, Integer length, Integer start, Integer draw) {
+    public String loadWorkSetValori(Long idelaborazione, Integer length, Integer start, Integer draw) throws JSONException {
         List<SxWorkset> dataList = workSetDao.findWorkSetDatasetColonnabyQuery(idelaborazione, start, start + length);
         Integer numRighe = 0;
         if (!dataList.isEmpty()) {
@@ -143,7 +144,7 @@ public class WorkflowService {
         return obj.toString();
     }
 
-    public String loadWorkSetValoriByElaborazione(Long idelaborazione, Integer tipoCampo, Integer length, Integer start, Integer draw, HashMap<String, String> paramsFilter) {
+    public String loadWorkSetValoriByElaborazione(Long idelaborazione, Integer tipoCampo, Integer length, Integer start, Integer draw, HashMap<String, String> paramsFilter) throws JSONException {
 
         List<SxWorkset> dataList = sqlGenericDao.findWorkSetDatasetColonnaByElaborazioneQuery(idelaborazione,tipoCampo, start, start + length, paramsFilter);
         // start, start + length, query_filter);

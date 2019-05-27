@@ -33,6 +33,8 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -97,7 +99,7 @@ public class DatasetControllerRest {
     public String loadDatasetValori2(HttpServletRequest request, Model model, @PathVariable("dfile") Long dfile,
             @PathVariable("parametri") String parametri, @RequestParam("length") Integer length,
             @RequestParam("start") Integer start, @RequestParam("draw") Integer draw,
-            @RequestParam Map<String, String> allParams) throws IOException {
+            @RequestParam Map<String, String> allParams) throws IOException, JSONException {
 
         String indexColunmToOrder = allParams.get("order[0][column]");
         String nameColumnToOrder = allParams.get("columns[" + indexColunmToOrder + "][data]");

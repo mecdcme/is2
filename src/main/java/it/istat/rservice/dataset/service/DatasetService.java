@@ -36,6 +36,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -183,7 +184,7 @@ public class DatasetService {
         return db;
     }
 
-    public String loadDatasetValori1(Long dfile, Integer length, Integer start, Integer draw, HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) {
+    public String loadDatasetValori1(Long dfile, Integer length, Integer start, Integer draw, HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) throws JSONException {
         List<DatasetColonna> dataList = sqlgenericDao.findDatasetColonnaParamsbyQuery(dfile, start, start + length, parametri, nameColumnToOrder, dirColumnOrder);
 
         Integer numRighe = 0;

@@ -31,6 +31,8 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,7 +67,7 @@ public class WorkflowRestController {
 	public String loadDatasetValori2(HttpServletRequest request, Model model,
 			@PathVariable("idelaborazione") Long idelaborazione, @PathVariable("tipoCampo") Integer tipoCampo,
 			@PathVariable("paramsFilter") String paramsFilter, @RequestParam("length") Integer length,
-			@RequestParam("start") Integer start, @RequestParam("draw") Integer draw) throws IOException {
+			@RequestParam("start") Integer start, @RequestParam("draw") Integer draw) throws IOException, JSONException {
 
 		HashMap<String, String> parameters = null;
 		String noparams = "noparams";
