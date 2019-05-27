@@ -11,8 +11,8 @@
         <relativePath/> 
     </parent>
 
-    <groupId>it.istat.rservice</groupId>
-    <artifactId>rService</artifactId>
+    <groupId>it.istat.is2</groupId>
+    <artifactId>is2</artifactId>
     <version>0.9</version>
     <packaging>${packaging.type}</packaging>
     <name>IS2</name>

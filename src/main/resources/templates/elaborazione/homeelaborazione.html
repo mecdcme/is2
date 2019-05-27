@@ -139,7 +139,7 @@
                                                             <td th:if="${stats.index==0}"
                                                                 th:rowspan="${bProcess.sxBusinessSteps.size()}"><a
                                                                     class=' towait' title="Visualizza Workset"
-                                                                    th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.rservice.app.util.IS2Const).VARIABILE_TIPO_INPUT}}">
+                                                                    th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.is2.app.util.IS2Const).VARIABILE_TIPO_INPUT}}">
                                                                     <i class="fa fa-table" aria-hidden="true"></i> <span th:text="#{Layout.Visualize}">Visualizza
                                                                     </span>
                                                                 </a></td>
@@ -152,7 +152,7 @@
                                                             <td th:if="${stats.index==0}"
                                                                 th:rowspan="${bProcess.sxBusinessSteps.size()}"><a th:name="link"
                                                                                                                class=' towait' title="Visualizza Workset"
-                                                                                                               th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.rservice.app.util.IS2Const).VARIABILE_TIPO_OUTPUT}}">
+                                                                                                               th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.is2.app.util.IS2Const).VARIABILE_TIPO_OUTPUT}}">
                                                                     <i class="fa fa-table" aria-hidden="true"></i> <span th:text="#{Layout.Visualize}">Visualizza
                                                                     </span>
                                                                 </a></td>

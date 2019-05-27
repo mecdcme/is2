@@ -56,7 +56,7 @@
                                                         <div class="alert alert-danger panel-danger" 
                                                              th:if="${#fields.hasErrors()}">Error</div>                                        
                                                         <div>
-                                                            <ul id="messages"  th:with="notifyMessages=${session[T(it.istat.rservice.app.service.NotificationService).NOTIFY_MSG_SESSION_KEY]}">
+                                                            <ul id="messages"  th:with="notifyMessages=${session[T(it.istat.is2.app.service.NotificationService).NOTIFY_MSG_SESSION_KEY]}">
                                                                 <li th:each="msg : ${notifyMessages}" 
                                                                     th:text="${msg.text}" 
                                                                     class="alert" 
@@ -65,7 +65,7 @@
                                                                 </li>
                                                                 <span th:if="${notifyMessages}" 
                                                                       th:remove="all" 
-                                                                      th:text="${session.remove(T(it.istat.rservice.app.service.NotificationService).NOTIFY_MSG_SESSION_KEY)}"></span>
+                                                                      th:text="${session.remove(T(it.istat.is2.app.service.NotificationService).NOTIFY_MSG_SESSION_KEY)}"></span>
                                                             </ul>
                                                         </div>
                                                     </div>
