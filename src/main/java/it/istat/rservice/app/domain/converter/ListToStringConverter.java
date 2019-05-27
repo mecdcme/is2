@@ -49,16 +49,11 @@ public class ListToStringConverter implements AttributeConverter<List<String>, S
 
 			for (int index = 0; index < data.size(); index++) {
 				eachData = new JSONObject();
-
 				eachData.put("r", new Integer(index));
-
 				eachData.put("v", data.get(index) != null ? data.get(index) : "");
-
 				allDataArray.put(eachData);
 			}
-
 			obj.put("valori", allDataArray);
-
 			value = obj.toString();
 		} catch (JSONException e) {
 
