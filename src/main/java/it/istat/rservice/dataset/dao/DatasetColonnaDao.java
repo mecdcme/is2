@@ -82,6 +82,6 @@ public interface DatasetColonnaDao extends JpaRepository<DatasetColonna, Long> {
 	@Query(value = "delete from DatasetColonna dc   where dc.datasetFile=:dFile ")
 	void deleteByDatasetFile(@Param("dFile") DatasetFile datasetFile);
 
-	Optional<DatasetColonna> save(Optional<DatasetColonna> dcol);
+	 DatasetColonna save(DatasetColonna dcol);
 
 }

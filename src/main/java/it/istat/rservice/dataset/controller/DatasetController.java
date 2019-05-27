@@ -115,11 +115,11 @@ public class DatasetController {
     @RequestMapping(value = "/associaVarSum", method = RequestMethod.POST)
     public String caricaMetadati(Model model, String idfile, String idvar, String filtro, String idsum) {
 
-        Optional<DatasetColonna> dcol = datasetService.findOneColonna(Long.parseLong(idvar));
+        DatasetColonna dcol = datasetService.findOneColonna(Long.parseLong(idvar));
         TipoVariabileSum sum = new TipoVariabileSum(Integer.parseInt(idsum));
 
-        dcol.get().setTipoVariabile(sum);
-        dcol.get().setFiltro(new Short(filtro));
+        dcol.setTipoVariabile(sum);
+        dcol.setFiltro(new Short(filtro));
         try {
             datasetService.salvaColonna(dcol);
             notificationService.addInfoMessage("Salvataggio avvenuto con successo!");

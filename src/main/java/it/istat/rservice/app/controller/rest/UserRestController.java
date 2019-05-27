@@ -73,7 +73,7 @@ public class UserRestController {
     @GetMapping("/users/{id}")
     public User getUser(@PathVariable("id") Long id) {
 
-        User user = userService.findOne(id).get();
+        User user = userService.findOne(id);
         return user;
     }
 

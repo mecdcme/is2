@@ -129,11 +129,11 @@ public class DatasetControllerRest {
     }
 
     @RequestMapping(value = "/rest/setvariabilesum/{idcol}/{idvar}", method = RequestMethod.POST)
-    public Optional<DatasetColonna> setVarSum(HttpServletRequest request, Model model, @PathVariable("idcol") Long idcol, @PathVariable("idvar") Integer idvar) throws IOException {
+    public DatasetColonna setVarSum(HttpServletRequest request, Model model, @PathVariable("idcol") Long idcol, @PathVariable("idvar") Integer idvar) throws IOException {
 
-        Optional<DatasetColonna> dcol = datasetService.findOneColonna(idcol);
+        DatasetColonna dcol = datasetService.findOneColonna(idcol);
         TipoVariabileSum sum = new TipoVariabileSum(idvar);
-        dcol.get().setTipoVariabile(sum);
+        dcol.setTipoVariabile(sum);
         try {
             dcol = datasetService.salvaColonna(dcol);
         } catch (Exception e) {

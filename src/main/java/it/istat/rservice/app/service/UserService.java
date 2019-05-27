@@ -53,8 +53,8 @@ public class UserService {
         return (List<UserRole>) this.userRolesDao.findAll();
     }
 
-    public Optional<User> findOne(Long id) {
-        return this.userDao.findById(id);
+    public User findOne(Long id) {
+        return this.userDao.findById(id).orElse(null);
     }
 
     public User findByEmail(String email) {
@@ -74,16 +74,16 @@ public class UserService {
         return user;
     }
 
-    public Optional<User> update(UserCreateForm uf) throws Exception {
-        Optional<User> user = (Optional<User>) userDao.findById(uf.getUserid());
+    public User update(UserCreateForm uf) throws Exception {
+        User user =  userDao.findById(uf.getUserid()).orElse(null);
         if (user == null) {
             throw new Exception("User not found");
         }
-        user.get().setEmail(uf.getEmail());
-        user.get().setName(uf.getName());
-        user.get().setSurname(uf.getSurname());  
+        user.setEmail(uf.getEmail());
+        user.setName(uf.getName());
+        user.setSurname(uf.getSurname());  
         UserRole ur = new UserRole(uf.getRole());
-        user.get().setRole(ur);
+        user.setRole(ur);
         userDao.save(user);
         
         return user;
@@ -101,14 +101,14 @@ public class UserService {
         return user;
     }
 
-    public Optional<User> updatePasswordById(Long id, String password) throws Exception {
-        Optional<User> user = userDao.findById(id);
+    public User updatePasswordById(Long id, String password) throws Exception {
+        User user = userDao.findById(id).orElse(null);
         if (user == null) {
             throw new Exception("User not found");
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.get().setPassword(passwordEncoder.encode(password));
+        user.setPassword(passwordEncoder.encode(password));
         userDao.save(user);
         return user;
     }

@@ -97,11 +97,11 @@
                                                     </td>
                                                     <td align="center">
                                                         <a href="javascript:void(0)"  th:if="${cols.tipoVariabile}"
-                                                           th:onclick="|associaVarSum('${cols.id}','${cols.tipoVariabile.tipoVariabile}','${cols.nome}','${cols.filtro}')|"
+                                                           th:attr="onclick='javascript:associaVarSum('+${cols.id}+','+${cols.tipoVariabile.tipoVariabile}+',\''+${cols.nome}+'\','+${cols.filtro}+')'"
                                                            title="Associa"><i class="fa fa-pencil"></i>
                                                         </a>
                                                         <a href="javascript:void(0)"   th:unless="${cols.tipoVariabile}"
-                                                           th:onclick="|associaVarSum('${cols.id}','null','${cols.nome}','${cols.filtro}')|"
+                                                           th:attr="onclick='javascript:associaVarSum('+${cols.id}+',null,\''+${cols.nome}+'\','+${cols.filtro}+')'"
                                                            title="Associa"> <i class="fa fa-pencil"></i>
                                                         </a>
                                                     </td>

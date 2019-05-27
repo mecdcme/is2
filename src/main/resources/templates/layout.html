@@ -60,7 +60,7 @@
                                 </a>
                             </li>
                         </th:block>
-                        <span th:if="${notifyMessages}" th:remove="all" th:text="'session.remove(${siteNotificationMessages})'"> </span>
+                        <span th:if="${notifyMessages}" th:remove="all" th:text="${#session.removeAttribute('siteNotificationMessages')}"> </span>
                     </ul>
                 </div>
 

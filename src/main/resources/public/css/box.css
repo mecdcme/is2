@@ -801,10 +801,6 @@ fieldset {
     margin-bottom: 0px !important;
 }
 
-table.dataTable{
-    font-size: 12px;
-}
-
 table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child,
 table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child
 {

@@ -93,27 +93,7 @@
 				</div>
 				<div class="container-fluid">
 
-					<div class="row">
-						<div class="col-lg-3"></div>
-						<div class="col-lg-6">
-							<div style="margin-top: 10px;">
-								<ul id="messages"
-									th:with="notifyMessages=${session['siteNotificationMessages']}">
-									<th:block th:each="msg : ${notifyMessages}">
-										<li style="list-style-type: none;"
-											th:class="${'alert msg-'+#strings.toLowerCase(msg.type)}">
-											<span th:text="${msg.text} "></span>
-										</li>
-									</th:block>
-									<span th:if="${notifyMessages}" th:remove="all"
-										th:text="${session.remove('siteNotificationMessages')}">
-									</span>
-								</ul>
-							</div>
-						</div>
-						<div class="col-lg-3"></div>
-					</div>
-					<!-- TEST WORKSET -->
+				 
 
 					<input id="idelaborazione" type="hidden" name="elaborazione"
 						th:value="${elaborazione.id}" />
@@ -164,12 +144,12 @@
 														</span>
 												</a></td>
 												<td><a href="javascript:void(0)"
-													th:onclick="'javascript:mostraDialogModificaAssociazione(\'' + ${elaborazione.id} + '\', \'' + ${stepV.id} + '\', \'' + ${stepV.sxWorkset.nome} + '\', \'' + ${stepV.sxRuoli.id} + '\', \'' + ${stepV.flagRicerca} + '\')'"
+												th:attr="onclick='javascript:mostraDialogModificaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.sxWorkset.nome} + '\', ' + ${stepV.sxRuoli.id} + ', ' + ${stepV.flagRicerca} + ')'"
 													title="Modifica associazione" class="disabled"> <i
 														class="fa fa-pencil"></i>
 												</a></td>
 												<td><a href="javascript:void(0)" 
-													th:onclick="'javascript:mostraDialogEliminaAssociazione(\'' + ${elaborazione.id} + '\', \'' + ${stepV.id} + '\', \'' + ${stepV.sxWorkset.nome} + '\')'"
+													th:attr="onclick='javascript:mostraDialogEliminaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.sxWorkset.nome} + '\')'"
 													title="Elimina associazione"> <i class="fa fa-trash-o"></i>
 												</a> <input type="hidden" name="stepid" th:value="${stepV.id}" />
 												</td>
@@ -270,22 +250,26 @@
 									<div class="col-lg-12">
 
 										<div class="row">
-
+												
 											<div class="col-lg-6">
 
 												<fieldset class="well"
 													style="height: 250px; overflow-y: auto;">
 													<legend class="well-legend"> Variabili Dataset</legend>
+													
+													<input type="hidden" id="varSelectedName"/>
+													<input type="hidden" id="varSelectedId" />
+													
 													<div id="div_variabili_dataset" class="list-group ">
 														
 														<th:block th:each="datasetfile ,iter: ${datasetfiles}" >
  
 															<a th:each="element, y: ${datasetfile.colonne}"
 																th:id="${'var_'+element.id}" class="list-group-item varlist"
-													  			th:onclick="'javascript:setSelectedVar(' + ${element.ordine} + ', ' + ${element.id} + ')'"
+													  			th:attr="onclick='javascript:setSelectedVar(' + ${element.ordine} + ',\'' + ${element.nome} + '\', ' + ${element.id} + ')'"
 													 			title="Associa variabile">
 																<span th:text="${datasetfile.labelFile+ ' - '+ element.nome}"></span>
-																<input type="hidden" th:id="${'varname_'+element.id}" th:value="${element.nome}" />
+																 
 															</a>
   
 
@@ -301,15 +285,15 @@
 												<fieldset class="well"
 													style="height: 250px; overflow-y: auto;">
 													<legend class="well-legend"> Ruoli </legend>
-
-
+	                                            	<input type="hidden" id="roleSelectedId" />
+													<input type="hidden" id="roleSelectedName" />
 													<div class="list-group" id="div_lista_ruoli">
 			
 														<a th:each="ruolo, y: ${listaRuoliInput}"
 															class="list-group-item rolelist"
 															th:id="${'role_'+ruolo.id}"
-															th:onclick="'javascript:setSelectedRole(' + ${ruolo.id} + ')'"
-															title="Scelta ruolo"> <span th:text="${ruolo.nome}"></span><input type="hidden" th:id="${'rolename_'+ruolo.id}" th:value="${ruolo.nome}" />
+															th:attr="onclick='javascript:setSelectedRole(\'' + ${ruolo.nome} + '\',' + ${ruolo.id} + ')'"
+															title="Scelta ruolo"> <span th:text="${ruolo.nome}"></span> 
 														</a>
 		
 													</div>

@@ -105,9 +105,9 @@ public class DatasetService {
         return dFile;
     }
 
-    public Optional<DatasetColonna> salvaColonna(Optional<DatasetColonna> dcol) throws Exception {
+    public DatasetColonna salvaColonna(DatasetColonna dcol) throws Exception {
 
-        Optional<DatasetColonna> dC;
+        DatasetColonna dC;
         try {
             dC = datasetColonnaDao.save(dcol);
         } catch (Exception e) {
@@ -153,8 +153,8 @@ public class DatasetService {
         return datasetColonnaDao.findNomebyfile(dFile);
     }
 
-    public Optional<DatasetColonna> findOneColonna(Long dFile) {
-        return datasetColonnaDao.findById(dFile);
+    public DatasetColonna findOneColonna(Long dFile) {
+        return datasetColonnaDao.findById(dFile).orElse(null);
     }
 
     public Integer findNumeroRighe(Long dFile) {
@@ -237,8 +237,8 @@ public class DatasetService {
     public DatasetFile createField(String idfile, String idColonna, String commandField, String charOrString, String upperLower, String newField, String columnOrder) {
 
         DatasetColonna nuovaColonna = new DatasetColonna();
-        Optional<DatasetColonna> colonna = findOneColonna(Long.parseLong(idColonna));
-        List<String> datiColonna = colonna.get().getDatiColonna();
+        DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
+        List<String> datiColonna = colonna.getDatiColonna();
         //cambia i valori della colonna
         List<String> datiColonnaTemp = new ArrayList();
         //cambia i valori della colonna

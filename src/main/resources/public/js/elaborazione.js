@@ -231,9 +231,9 @@ function openDlgAddVariabileWorkset() {
     $(".rolelist").removeClass('active');
     $(".varlist").removeClass('active');
     $("#varSelectedId").val('');
-    $("#varSelectedName").text('Nessuna variabile selezionata');
+    $("#varSelectedName").val('Nessuna variabile selezionata');
     $("#roleSelectedId").val('');
-    $("#roleSelectedName").text('Nessun ruolo selezionato');
+    $("#roleSelectedName").val('Nessun ruolo selezionato');
     $("#btn_dlg_assoc").addClass('disabled');
     $("#btn_dlg_assoc").attr("disabled", "disabled");
     $("#add-viarabile-workset-modal").modal('show');
@@ -246,9 +246,9 @@ function openDlgAddParametriWorkset() {
     $(".rolelist").removeClass('active');
     $(".varlist").removeClass('active');
     $("#varSelectedId").val('');
-    $("#varSelectedName").text('Nessuna variabile selezionata');
+    $("#varSelectedName").val('Nessuna variabile selezionata');
     $("#roleSelectedId").val('');
-    $("#roleSelectedName").text('Nessun ruolo selezionato');
+    $("#roleSelectedName").val('Nessun ruolo selezionato');
     $("#add-parametri-workset-modal").modal('show');
 }
 
@@ -274,7 +274,7 @@ function setSelectedVar(ordine, nome, id) {
     $(".varlist").removeClass('active');
     $("#var_" + id).addClass('active');
     $("#varSelectedId").val(id);
-    $("#varSelectedName").text(nome);
+    $("#varSelectedName").val(nome);
     if ($("#varSelectedId").val().length > 0 && $("#roleSelectedId").val().length > 0) {
         $("#btn_dlg_assoc").removeClass('disabled');
         $("#btn_dlg_assoc").attr("disabled", false);
@@ -296,7 +296,7 @@ function setSelectedRole(nomeR, idR) {
     $(".rolelist").removeClass('active');
     $("#role_" + idR).addClass('active');
     $("#roleSelectedId").val(idR);
-    $("#roleSelectedName").text(nomeR);
+    $("#roleSelectedName").val(nomeR);
     if ($("#varSelectedId").val().length > 0 && $("#roleSelectedId").val().length > 0) {
         $("#btn_dlg_assoc").removeClass('disabled');
         $("#btn_dlg_assoc").attr("disabled", false);
@@ -315,9 +315,9 @@ function setModSelectedRole(nomeR, idR) {
 
 function inserisciRuoloVar() {
     var var_id = $("#varSelectedId").val();
-    var var_nome = $("#varSelectedName").text();
+    var var_nome = $("#varSelectedName").val();
     var role_id = $("#roleSelectedId").val();
-    var role_nome = $("#roleSelectedName").text();
+    var role_nome = $("#roleSelectedName").val();
     var id_elaborazione = $("#idelaborazione").val();
     var content = $("#vars_content").html();
     var input_content = $("#associazione_vars").html();
