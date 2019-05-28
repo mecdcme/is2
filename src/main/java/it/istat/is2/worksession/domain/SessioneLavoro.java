@@ -21,7 +21,7 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.app.domain;
+package it.istat.is2.worksession.domain;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -39,6 +39,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import it.istat.is2.app.domain.Elaborazione;
+import it.istat.is2.app.domain.User;
 import it.istat.is2.dataset.domain.DatasetFile;
 import lombok.Data;
 

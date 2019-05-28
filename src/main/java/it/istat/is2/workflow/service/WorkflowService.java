@@ -43,10 +43,8 @@ import org.springframework.stereotype.Service;
 
 import it.istat.is2.app.bean.AssociazioneVarFormBean;
 import it.istat.is2.app.dao.ElaborazioneDao;
-import it.istat.is2.app.dao.SessioneDao;
 import it.istat.is2.app.dao.SqlGenericDao;
 import it.istat.is2.app.domain.Elaborazione;
-import it.istat.is2.app.domain.SessioneLavoro;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.dao.DatasetColonnaDao;
@@ -73,6 +71,8 @@ import it.istat.is2.workflow.domain.SxTipoVar;
 import it.istat.is2.workflow.domain.SxWorkset;
 import it.istat.is2.workflow.engine.EngineFactory;
 import it.istat.is2.workflow.engine.EngineService;
+import it.istat.is2.worksession.dao.SessioneDao;
+import it.istat.is2.worksession.domain.SessioneLavoro;
 
 
 @Service

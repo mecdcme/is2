@@ -44,6 +44,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.istat.is2.workflow.domain.SxBusinessFunction;
 import it.istat.is2.workflow.domain.SxStepVariable;
+import it.istat.is2.worksession.domain.SessioneLavoro;
 import lombok.Data;
 
 @Data

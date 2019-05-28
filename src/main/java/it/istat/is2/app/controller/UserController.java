@@ -94,7 +94,7 @@ public class UserController {
 		List<UserRole> allRoles = userService.findAllRoles();
 		model.addAttribute("allRoles", allRoles);
 
-		return "users/edituser";
+		return "users/edit";
 	}
 
 	@RequestMapping(value = "/users/edituser", method = RequestMethod.POST)
@@ -105,7 +105,7 @@ public class UserController {
 		model.addAttribute("allRoles", allRoles);
 
 		if (bindingResult.hasErrors()) {
-			return "users/edituser";
+			return "users/edit";
 		}
 
 		try {
@@ -114,9 +114,9 @@ public class UserController {
 					.addInfoMessage(messages.getMessage("user.updated", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
 			notificationService.addErrorMessage("Error: " + e.getMessage());
-			return "users/edituser";
+			return "users/edit";
 		}
-		return "users/edituser";
+		return "users/edit";
 	}
 
 	@RequestMapping(value = "/users/newuser", method = RequestMethod.POST)
@@ -150,6 +150,6 @@ public class UserController {
 		List<UserRole> allRoles = userService.findAllRoles();
 		model.addAttribute("allRoles", allRoles);
 
-		return "users/userlist";
+		return "users/list";
 	}
 }

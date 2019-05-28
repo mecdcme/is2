@@ -21,7 +21,7 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.app.dao;
+package it.istat.is2.worksession.dao;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,8 +30,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import it.istat.is2.app.domain.SessioneLavoro;
 import it.istat.is2.app.domain.User;
+import it.istat.is2.worksession.domain.SessioneLavoro;
 
 @Repository
 public interface SessioneDao extends CrudRepository<SessioneLavoro, Long> {

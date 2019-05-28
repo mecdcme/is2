@@ -35,8 +35,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import it.istat.is2.app.domain.SessioneLavoro;
 import it.istat.is2.dataset.domain.DatasetFile;
+import it.istat.is2.worksession.domain.SessioneLavoro;
 
 @Repository
 public interface DatasetFileDao extends JpaRepository<DatasetFile, Long> {

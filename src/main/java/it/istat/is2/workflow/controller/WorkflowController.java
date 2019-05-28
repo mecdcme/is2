@@ -44,11 +44,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import it.istat.is2.app.bean.AssociazioneVarFormBean;
 import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Elaborazione;
-import it.istat.is2.app.domain.SessioneLavoro;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.ElaborazioneService;
 import it.istat.is2.app.service.NotificationService;
-import it.istat.is2.app.service.SessioneLavoroService;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.domain.DatasetColonna;
@@ -65,6 +63,8 @@ import it.istat.is2.workflow.domain.SxWorkset;
 import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.workflow.service.StepVariableService;
 import it.istat.is2.workflow.service.WorkflowService;
+import it.istat.is2.worksession.domain.SessioneLavoro;
+import it.istat.is2.worksession.service.SessioneLavoroService;
 
 @RequestMapping("/ws")
 @Controller

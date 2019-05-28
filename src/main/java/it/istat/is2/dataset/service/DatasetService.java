@@ -43,9 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.istat.is2.app.bean.DataTableBean;
-import it.istat.is2.app.dao.SessioneDao;
 import it.istat.is2.app.dao.SqlGenericDao;
-import it.istat.is2.app.domain.SessioneLavoro;
 import it.istat.is2.dataset.dao.DatasetColonnaDao;
 import it.istat.is2.dataset.dao.DatasetFileDao;
 import it.istat.is2.dataset.dao.TipoVariabileSumDao;
@@ -53,6 +51,8 @@ import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.domain.TipoVariabileSum;
 import it.istat.is2.workflow.domain.SxTipoDato;
+import it.istat.is2.worksession.dao.SessioneDao;
+import it.istat.is2.worksession.domain.SessioneLavoro;
 
 @Service
 public class DatasetService {

@@ -21,7 +21,7 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.app.controller;
+package it.istat.is2.worksession.controller;
 
 import java.util.Date;
 import java.util.List;
@@ -39,17 +39,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import it.istat.is2.app.bean.ElaborazioneFormBean;
 import it.istat.is2.app.domain.Elaborazione;
-import it.istat.is2.app.domain.SessioneLavoro;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.ElaborazioneService;
 import it.istat.is2.app.service.NotificationService;
-import it.istat.is2.app.service.SessioneLavoroService;
 import it.istat.is2.app.util.IS2Const;
-import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.workflow.domain.SxBusinessFunction;
-import it.istat.is2.workflow.domain.SxTipoDato;
 import it.istat.is2.workflow.service.BusinessFunctionService;
-import it.istat.is2.workflow.service.TipoDatoService;
+import it.istat.is2.worksession.domain.SessioneLavoro;
+import it.istat.is2.worksession.service.SessioneLavoroService;
+
 
 @Controller
 public class SessioneLavoroController {
@@ -62,8 +60,7 @@ public class SessioneLavoroController {
     private ElaborazioneService elaborazioneService;
     @Autowired
     private BusinessFunctionService businessFunctionService;
-    @Autowired
-    private TipoDatoService tipoDatoService;
+ 
 
     @GetMapping(value = "/sessione/mostraSessioni")
     public String mostraSessioni(HttpSession session, Model model, @AuthenticationPrincipal User user) {
@@ -72,7 +69,7 @@ public class SessioneLavoroController {
         List<SessioneLavoro> listasessioni = sessioneLavoroService.getSessioneList(user);
         model.addAttribute("listasessioni", listasessioni);
 
-        return "sessionilavoro/listasessioni";
+        return "worksession/list";
     }
 
     @RequestMapping(value = "/sessione/nuovasessione")
@@ -98,23 +95,7 @@ public class SessioneLavoroController {
         return "redirect:/ws/home/" + idElaborazione;
     }
 
-    @GetMapping(value = "/sessione/mostradataset/{id}")
-    public String mostradataset(HttpSession session, Model model, @PathVariable("id") Long id) {
-
-        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(id).get();
-        if (sessionelv.getDatasetFiles() != null) {
-            session.setAttribute(IS2Const.SESSION_DATASET, true);
-        }
-        
-        List<DatasetFile> listaDataset = sessionelv.getDatasetFiles();
-        List<SxTipoDato> listaTipoDato = tipoDatoService.findListTipoDato();
-
-        session.setAttribute(IS2Const.SESSION_LV, sessionelv);
-
-        model.addAttribute("listaTipoDato", listaTipoDato);
-        model.addAttribute("listaDataset", listaDataset);
-        return "sessionilavoro/listadataset";
-    }
+   
     
     @GetMapping(value = "/sessione/apri/{id}")
     public String apriSessione(HttpSession session, Model model, @PathVariable("id") Long id) {
@@ -132,7 +113,7 @@ public class SessioneLavoroController {
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 
         model.addAttribute("listaElaborazioni", listaElaborazioni);
-        return "sessionilavoro/homesessione";
+        return "worksession/home";
     }
 
     @RequestMapping(value = "/sessione/nuovoworkingset", method = RequestMethod.POST)

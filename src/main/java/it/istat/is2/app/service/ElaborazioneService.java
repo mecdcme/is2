@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 
 import it.istat.is2.app.dao.ElaborazioneDao;
 import it.istat.is2.app.domain.Elaborazione;
-import it.istat.is2.app.domain.SessioneLavoro;
+import it.istat.is2.worksession.domain.SessioneLavoro;
 
 @Service
 public class ElaborazioneService {

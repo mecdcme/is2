@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +38,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,14 +46,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import it.istat.is2.app.bean.InputFormBean;
-import it.istat.is2.app.domain.SessioneLavoro;
 import it.istat.is2.app.service.NotificationService;
-import it.istat.is2.app.service.SessioneLavoroService;
 import it.istat.is2.app.util.FileHandler;
+import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.domain.TipoVariabileSum;
 import it.istat.is2.dataset.service.DatasetService;
+import it.istat.is2.workflow.domain.SxTipoDato;
+import it.istat.is2.workflow.service.TipoDatoService;
+import it.istat.is2.worksession.domain.SessioneLavoro;
+import it.istat.is2.worksession.service.SessioneLavoroService;
 
 @Controller
 public class DatasetController {
@@ -71,6 +75,9 @@ public class DatasetController {
 
     @Autowired
     private SessioneLavoroService sessioneLavoroService;
+    
+    @Autowired
+    private TipoDatoService tipoDatoService;
 
     @RequestMapping("/loadInputFileSessione/{idsessione}")
     public String carica(Model model, @PathVariable("idsessione") Long idsessione) {
@@ -112,6 +119,25 @@ public class DatasetController {
         return "dataset/edit_dataset";
     }
 
+    @GetMapping(value = "/sessione/mostradataset/{id}")
+    public String mostradataset(HttpSession session, Model model, @PathVariable("id") Long id) {
+
+        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(id).get();
+        if (sessionelv.getDatasetFiles() != null) {
+            session.setAttribute(IS2Const.SESSION_DATASET, true);
+        }
+        
+        List<DatasetFile> listaDataset = sessionelv.getDatasetFiles();
+        List<SxTipoDato> listaTipoDato = tipoDatoService.findListTipoDato();
+
+        session.setAttribute(IS2Const.SESSION_LV, sessionelv);
+
+        model.addAttribute("listaTipoDato", listaTipoDato);
+        model.addAttribute("listaDataset", listaDataset);
+        return "dataset/listadataset";
+    }
+    
+    
     @RequestMapping(value = "/associaVarSum", method = RequestMethod.POST)
     public String caricaMetadati(Model model, String idfile, String idvar, String filtro, String idsum) {
 

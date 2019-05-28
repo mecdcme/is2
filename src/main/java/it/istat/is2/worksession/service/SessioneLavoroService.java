@@ -21,7 +21,7 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.app.service;
+package it.istat.is2.worksession.service;
 
 import java.util.Date;
 import java.util.List;
@@ -30,11 +30,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.app.dao.SessioneDao;
-import it.istat.is2.app.domain.SessioneLavoro;
 import it.istat.is2.app.domain.User;
+import it.istat.is2.app.service.UserService;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
+import it.istat.is2.worksession.dao.SessioneDao;
+import it.istat.is2.worksession.domain.SessioneLavoro;
 
 @Service
 public class SessioneLavoroService {

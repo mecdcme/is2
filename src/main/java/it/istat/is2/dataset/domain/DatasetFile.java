@@ -45,8 +45,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import it.istat.is2.app.domain.SessioneLavoro;
 import it.istat.is2.workflow.domain.SxTipoDato;
+import it.istat.is2.worksession.domain.SessioneLavoro;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
