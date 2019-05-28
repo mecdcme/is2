@@ -21,7 +21,7 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.relais.dao;
+package it.istat.is2.catalogue.relais.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -21,7 +21,7 @@
 /**
  *
  */
-package it.istat.is2.relais.service;
+package it.istat.is2.catalogue.relais.service;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -30,7 +30,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.relais.dao.RelaisGenericDao;
+import it.istat.is2.catalogue.relais.dao.RelaisGenericDao;
 
 /**
  * @author framato

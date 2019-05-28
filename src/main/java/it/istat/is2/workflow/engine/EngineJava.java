@@ -41,7 +41,7 @@ import org.springframework.util.ReflectionUtils;
 
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
-import it.istat.is2.relais.service.RelaisService;
+import it.istat.is2.catalogue.relais.service.RelaisService;
 import it.istat.is2.workflow.dao.RuoloDao;
 import it.istat.is2.workflow.dao.StepVariableDao;
 import it.istat.is2.workflow.domain.Elaborazione;

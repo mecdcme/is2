@@ -76,6 +76,13 @@
                                 <i id="toggle-menu" class="fa fa-bars"></i>
                             </span>
                         </div>
+                        <ul class="nav navbar-nav navbar-style">
+                            <li sec:authorize="hasAuthority('ADMIN')">
+                                    <a  title="Administration" th:href="@{/users/userlist}">
+                                        <span th:text="#{Layout.users}"></span>
+                                    </a>
+                                </li>        
+                        </ul>
                         <ul class="nav navbar-nav navbar-right navbar-style">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -156,15 +163,7 @@
                                         <i class="fa fa-sitemap"></i><span></span>
                                     </a>
                                 </li>
-                                <li class="nav-body menu-line" ></li>
-                                <li class="nav-body menu-spacer" sec:authorize="hasAuthority('ADMIN')">
-                                    <span th:text="#{Layout.administration}"></span>
-                                </li>
-                                <li class="nav-body" sec:authorize="hasAuthority('ADMIN')">
-                                    <a  title="Administration" th:href="@{/users/userlist}">
-                                        <i class="fa fa-briefcase"></i><span th:text="#{Layout.users}"></span>
-                                    </a>
-                                </li>                                
+                                <li class="nav-body menu-line" ></li>                     
                             </ul>
                         </nav>
                     </div>
