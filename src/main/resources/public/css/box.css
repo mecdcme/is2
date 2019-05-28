@@ -135,6 +135,10 @@ box-shadow: none !important;
     margin-right: 5px;
 }
 
+.navbar-default .navbar-nav > li > a {
+    color: #fff;
+}
+
 .navbar-style>li>a:hover, .navbar-style>li>a:focus{
     color: white!important;
 }
@@ -272,7 +276,7 @@ box-shadow: none !important;
 }
 
 .nav>li>a {
-    padding: 6px 3px !important;
+    padding: 4px 2px 4px 3px !important;
 }
 
 .nav > li.disabled > a {
@@ -760,7 +764,7 @@ fieldset {
     border-radius: 0px !important;
     background-color: #fafbfc !important;
     padding-top: 16px;
-    padding-bottom: 15px;
+    padding-bottom: 12px;
     padding-right:25px;
 }
 

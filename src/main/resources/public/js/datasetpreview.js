@@ -25,7 +25,6 @@ var _ctx = $("meta[name='ctx']").attr("content");
 var ID = _idfile;
 var table;
 
-
 function eliminaDataset() {
     $('#modalCancellaDataset').modal('show');
 };
@@ -46,109 +45,89 @@ function openRepairModal() {
 };
 
 
-
 $(document).ready(function () {
 	
+    if($('#upperCase').is(':checked')){
+	$('#upperRadio').show();
+    }else{
+        $('#upperRadio').hide();
+    };
 	
-	
-	if($('#upperCase').is(':checked')){
-	     $('#upperRadio').show();
-  }else{
-		$('#upperRadio').hide();
-	};
-	
-  if($('#removeChar').is(':checked')){
-	     $('#charValue').show();
-	}else{
-		$('#charValue').hide();
-	};
+    if($('#removeChar').is(':checked')){
+	$('#charValue').show();
+    }else{
+        $('#charValue').hide();
+    };
 
-  $('#upperCase').on('click',function(){
-  	   $('#upperRadio').hide();
-  	   if(this.checked){
+    $('#upperCase').on('click',function(){
+        $('#upperRadio').hide();
+  	if(this.checked){
   	     $('#upperRadio').show();
-  	   }
-  	});
+  	}
+    });
  
-  $('#removeChar').on('click',function(){
-	   $('#charValue').hide();
-	   if(this.checked){
-	     $('#charValue').show();
-	   }
-	});
+    $('#removeChar').on('click',function(){
+        $('#charValue').hide();
+	if(this.checked){
+            $('#charValue').show();
+        }
+    });
 	
-	$('#btn_delete_dataset').click(function () {
+    $('#btn_delete_dataset').click(function () {
        window.location = _ctx + '/deleteDataset/' + _idfile;
-   });
-   
-	
-	
-	
-	
-  $('#btn_Standardization_field').click(function () {
+    });
    	
-   
+    $('#btn_Standardization_field').click(function () {
+  
 	var commandField="";
   	var charOrString="_";
   	var upperLower="_";
   	var newField="";
   	var idColonna="";
 
-
    	idColonna= $('#selectedVar').val();
    	if($("#removeSpace").is(':checked')){
-   		commandField= commandField + "1";
-	      }else{
-	    	  commandField= commandField + "0";
-	   	};
+            commandField= commandField + "1";
+	}else{
+	    commandField= commandField + "0";
+        };
    	
    	if($('#removeSpecial').is(':checked')){
-   		commandField= commandField + "1";
-	      }else{
-	    	  commandField= commandField + "0";
-	   	};
-	   	
-	   	if($('#newField').val()!=""){
-		   		newField=$('#newField').val();
-			}else{
-				alert("Inserire il nome della nuova variabile");
-				return;
-			
-		}
+            commandField= commandField + "1";
+	}else{
+            commandField= commandField + "0";
+        };
+	if($('#newField').val()!=""){
+            newField=$('#newField').val();
+	}else{
+            alert("Inserire il nome della nuova variabile");
+            return;
+	}
   	
    	if($('#removeChar').is(':checked')){
-   		commandField= commandField +"1";
-   		if($('#charValue').val()!=""){
-   			charOrString=$('#charValue').val();
-   		}else{
-   			alert("inserire la stringa o il carattere da rimuovere");
-   			return;
-   			
-   		}
-	      }else{
-	    	  commandField= commandField + "0";
-	   	};
+            commandField= commandField +"1";
+            if($('#charValue').val()!=""){
+                charOrString=$('#charValue').val();
+            }else{
+                alert("inserire la stringa o il carattere da rimuovere");
+   		return;
+            }
+	}else{
+            commandField= commandField + "0";
+	};
   	
-	   	if($('#upperCase').is(':checked')){
-	   		commandField= commandField + "1";
-	   		upperLower=$('input:radio[name=gruppo3]:checked')[0].id;
-	    
-	   	}else{
-	   		commandField= commandField + "0";
-	   	};
-	   	
-	   	
-   	
-	   	$("btn_Standardization_field").addClass("towait");
-       window.location = _ctx + '/createField/' + _idfile + "/" +  idColonna + "/" + commandField + "/" +  charOrString + "/" + upperLower + "/" + newField + "/" + _variabili ;
-       
-   	
-   	
+        if($('#upperCase').is(':checked')){
+            commandField= commandField + "1";
+            upperLower=$('input:radio[name=gruppo3]:checked')[0].id;
+        }else{
+            commandField= commandField + "0";
+        };
+	
+	$("btn_Standardization_field").addClass("towait");
+        window.location = _ctx + '/createField/' + _idfile + "/" +  idColonna + "/" + commandField + "/" +  charOrString + "/" + upperLower + "/" + newField + "/" + _variabili ;
 
    });
    
-      
-    
    table=  $("#dataview").DataTable({
 
         drawCallback: function () {

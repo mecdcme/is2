@@ -45,19 +45,18 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{/sessione/mostraSessioni}">
-                                    <span th:text="#{sessionewf.lista.title}"></span>
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item">
                                 <a title="Sessione lavoro" th:if="${session.sessionelv}" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
                                     <span th:text="${session.sessionelv.nome}"></span>
                                 </a>
                             </li>
                             <li class="breadcrumb-item">
                                 <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
-                            </li> 
-
+                            </li>
+                            <div class="btn-group pull-right" role="group">
+                                <a class="" title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{dataset.button.close}"></span>
+                                </a>
+                            </div>
                         </ol>
                     </nav>
 
@@ -112,7 +111,7 @@
                                                 <td th:text="${dataset.labelFile}"></td>
                                                 <td th:text="${dataset.formatoFile}"></td>
                                                 <td th:text="${dataset.numerorighe}"></td>
-                                                 <td th:if="${dataset.tipoDato != null}" th:text="${dataset.tipoDato.nome}"></td>
+                                                <td th:if="${dataset.tipoDato != null}" th:text="${dataset.tipoDato.nome}"></td>
                                                 <td th:unless="${dataset.tipoDato != null}" th:text="null"></td>
                                                 <td th:text="${dataset.note}"></td>
                                                 <td style="width: 1%">
@@ -187,10 +186,10 @@
                         <div class="modal-body">
                             <span th:text="#{file.data.type}">Tipo dato:</span> &nbsp;&nbsp;&nbsp;
                             <select id="tipo_dato" >
-                            	<option th:each="tipod : ${listaTipoDato}"
-									th:value="${tipod.id}"
-									th:text="${tipod.nome}">
-								</option>
+                                <option th:each="tipod : ${listaTipoDato}"
+                                        th:value="${tipod.id}"
+                                        th:text="${tipod.nome}">
+                                </option>
                             </select>                              
                         </div>
                         <div class="modal-body">
