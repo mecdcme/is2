@@ -55,8 +55,8 @@ import it.istat.is2.dataset.domain.TipoVariabileSum;
 import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.workflow.domain.SxTipoDato;
 import it.istat.is2.workflow.service.TipoDatoService;
-import it.istat.is2.worksession.domain.SessioneLavoro;
-import it.istat.is2.worksession.service.SessioneLavoroService;
+import it.istat.is2.worksession.domain.WorkSession;
+import it.istat.is2.worksession.service.WorkSessionService;
 
 @Controller
 public class DatasetController {
@@ -74,7 +74,7 @@ public class DatasetController {
     private MessageSource messages;
 
     @Autowired
-    private SessioneLavoroService sessioneLavoroService;
+    private WorkSessionService sessioneLavoroService;
     
     @Autowired
     private TipoDatoService tipoDatoService;
@@ -82,7 +82,7 @@ public class DatasetController {
     @RequestMapping("/loadInputFileSessione/{idsessione}")
     public String carica(Model model, @PathVariable("idsessione") Long idsessione) {
         model.addAttribute("idsessione", idsessione);
-        return "dataset/loadFile";
+        return "dataset/load_file";
     }
 
     @RequestMapping("/viewDataset/{idfile}")
@@ -100,7 +100,7 @@ public class DatasetController {
         model.addAttribute("variabili", variabiliSum);
         model.addAttribute("dfile", dfile);
 
-        return "dataset/datasetpreview";
+        return "dataset/preview";
     }
 
     @RequestMapping("/metadatiDataset/{idfile}")
@@ -116,13 +116,13 @@ public class DatasetController {
         model.addAttribute("variabili", variabiliSum);
         model.addAttribute("dfile", dfile);
 
-        return "dataset/edit_dataset";
+        return "dataset/edit";
     }
 
     @GetMapping(value = "/sessione/mostradataset/{id}")
     public String mostradataset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
-        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(id).get();
+        WorkSession sessionelv = sessioneLavoroService.getSessione(id).get();
         if (sessionelv.getDatasetFiles() != null) {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
         }
@@ -134,7 +134,7 @@ public class DatasetController {
 
         model.addAttribute("listaTipoDato", listaTipoDato);
         model.addAttribute("listaDataset", listaDataset);
-        return "dataset/listadataset";
+        return "dataset/list";
     }
     
     
@@ -161,7 +161,7 @@ public class DatasetController {
         model.addAttribute("idfile", idfile);
         model.addAttribute("variabili", variabiliSum);
 
-        return "dataset/edit_dataset";
+        return "dataset/edit";
     }
 
     @RequestMapping(value = "/loadInputData", method = RequestMethod.POST)
@@ -220,7 +220,7 @@ public class DatasetController {
         model.addAttribute("variabili", variabiliSum);
         model.addAttribute("dfile", dFile);
 
-        return "dataset/datasetpreview";
+        return "dataset/preview";
     }
 
     @RequestMapping(value = "/deleteDataset", method = RequestMethod.POST)
@@ -228,7 +228,7 @@ public class DatasetController {
 
         notificationService.removeAllMessages();
 
-        SessioneLavoro sessionelv = sessioneLavoroService.getSessioneByIdFile(idDataset);
+        WorkSession sessionelv = sessioneLavoroService.getSessioneByIdFile(idDataset);
         datasetService.deleteDataset(idDataset);
         notificationService.addInfoMessage("Eliminazione avvenuta con successo");
 

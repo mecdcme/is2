@@ -31,12 +31,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import it.istat.is2.app.domain.User;
-import it.istat.is2.worksession.domain.SessioneLavoro;
+import it.istat.is2.worksession.domain.WorkSession;
 
 @Repository
-public interface SessioneDao extends CrudRepository<SessioneLavoro, Long> {
+public interface WorkSessionDao extends CrudRepository<WorkSession, Long> {
 
-    List<SessioneLavoro> findByUserOrderByDataCreazioneDesc(@Param("user") User user);
+    List<WorkSession> findByUserOrderByDataCreazioneDesc(@Param("user") User user);
 
-    Optional<SessioneLavoro> findById(@Param("id") Long id);
+    Optional<WorkSession> findById(@Param("id") Long id);
 }

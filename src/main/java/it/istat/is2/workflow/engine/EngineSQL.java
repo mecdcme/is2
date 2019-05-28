@@ -26,7 +26,7 @@ package it.istat.is2.workflow.engine;
 
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.app.domain.Elaborazione;
+import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.SxStepInstance;
 
 @Service

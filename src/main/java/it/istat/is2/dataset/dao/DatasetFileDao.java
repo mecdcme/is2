@@ -36,7 +36,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import it.istat.is2.dataset.domain.DatasetFile;
-import it.istat.is2.worksession.domain.SessioneLavoro;
+import it.istat.is2.worksession.domain.WorkSession;
 
 @Repository
 public interface DatasetFileDao extends JpaRepository<DatasetFile, Long> {
@@ -47,7 +47,7 @@ public interface DatasetFileDao extends JpaRepository<DatasetFile, Long> {
 	@Query(value="SELECT df.numerorighe from DatasetFile df where df.id =:dFile")
 	Integer findNumeroRighe(@Param("dFile") Long dFile);
 	
-	List<DatasetFile> findDatasetFilesBySessioneLavoro(SessioneLavoro sessioneLavoro);
+	List<DatasetFile> findDatasetFilesBySessioneLavoro(WorkSession sessioneLavoro);
 	
 	@Transactional
 	@Modifying

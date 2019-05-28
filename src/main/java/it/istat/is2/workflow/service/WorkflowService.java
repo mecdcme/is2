@@ -42,9 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.istat.is2.app.bean.AssociazioneVarFormBean;
-import it.istat.is2.app.dao.ElaborazioneDao;
 import it.istat.is2.app.dao.SqlGenericDao;
-import it.istat.is2.app.domain.Elaborazione;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.dao.DatasetColonnaDao;
@@ -57,6 +55,8 @@ import it.istat.is2.workflow.dao.SxParPatternDao;
 import it.istat.is2.workflow.dao.SxStepInstanceDao;
 import it.istat.is2.workflow.dao.SxTipoCampoDao;
 import it.istat.is2.workflow.dao.WorkSetDao;
+import it.istat.is2.workflow.dao.WorkflowDao;
+import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.SXTipoCampo;
 import it.istat.is2.workflow.domain.SxBusinessFunction;
 import it.istat.is2.workflow.domain.SxBusinessProcess;
@@ -71,17 +71,17 @@ import it.istat.is2.workflow.domain.SxTipoVar;
 import it.istat.is2.workflow.domain.SxWorkset;
 import it.istat.is2.workflow.engine.EngineFactory;
 import it.istat.is2.workflow.engine.EngineService;
-import it.istat.is2.worksession.dao.SessioneDao;
-import it.istat.is2.worksession.domain.SessioneLavoro;
+import it.istat.is2.worksession.dao.WorkSessionDao;
+import it.istat.is2.worksession.domain.WorkSession;
 
 
 @Service
 public class WorkflowService {
 
     @Autowired
-    SessioneDao sessioneDao;
+    WorkSessionDao sessioneDao;
     @Autowired
-    ElaborazioneDao elaborazioneDao;
+    WorkflowDao elaborazioneDao;
     @Autowired
     WorkSetDao workSetDao;
     @Autowired
@@ -106,7 +106,7 @@ public class WorkflowService {
     EngineFactory engineFactory;
 
   
-    public SessioneLavoro findSessioneLavoro(Long id) {
+    public WorkSession findSessioneLavoro(Long id) {
         return sessioneDao.findById(id).get();
     }
 

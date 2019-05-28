@@ -43,7 +43,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import it.istat.is2.app.bean.AssociazioneVarFormBean;
 import it.istat.is2.app.bean.SessionBean;
-import it.istat.is2.app.domain.Elaborazione;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.ElaborazioneService;
 import it.istat.is2.app.service.NotificationService;
@@ -52,6 +51,7 @@ import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
+import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.SXTipoCampo;
 import it.istat.is2.workflow.domain.SxBusinessFunction;
 import it.istat.is2.workflow.domain.SxBusinessProcess;
@@ -63,8 +63,8 @@ import it.istat.is2.workflow.domain.SxWorkset;
 import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.workflow.service.StepVariableService;
 import it.istat.is2.workflow.service.WorkflowService;
-import it.istat.is2.worksession.domain.SessioneLavoro;
-import it.istat.is2.worksession.service.SessioneLavoroService;
+import it.istat.is2.worksession.domain.WorkSession;
+import it.istat.is2.worksession.service.WorkSessionService;
 
 @RequestMapping("/ws")
 @Controller
@@ -77,7 +77,7 @@ public class WorkflowController {
     @Autowired
     private MessageSource messages;
     @Autowired
-    private SessioneLavoroService sessioneLavoroService;
+    private WorkSessionService sessioneLavoroService;
     @Autowired
     private ElaborazioneService elaborazioneService;
     @Autowired
@@ -105,7 +105,7 @@ public class WorkflowController {
         model.addAttribute("elaborazione", elaborazione);
         model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
 
-        return "elaborazione/homeelaborazione";
+        return "workflow/home";
     }
 
     @GetMapping(value = "/eliminaAssociazione/{idelaborazione}/{idvar}")
@@ -150,65 +150,7 @@ public class WorkflowController {
         return "redirect:/ws/editworkingset/" + idelaborazione;
     }
 
-    @GetMapping(value = "/newworkingset/{idelaborazione}")
-    public String createWorkingSet(HttpSession session, Model model,
-            @PathVariable("idelaborazione") Long idElaborazione) {
-        session.setAttribute(IS2Const.WORKINGSET, "workingset");
-
-        Elaborazione elaborazione = elaborazioneService.findElaborazione(idElaborazione);
-
-        SessionBean elaSession = new SessionBean(elaborazione.getId().toString(), elaborazione.getNome());
-        session.setAttribute(IS2Const.SESSION_ELABORAZIONE, elaSession);
-
-        List<DatasetFile> datasetfiles = datasetService
-                .findDatasetFilesByIdSessioneLavoro(elaborazione.getSessioneLavoro().getId());
-        DatasetFile datasetfile = datasetfiles.get(0);
-        model.addAttribute("idfile", datasetfile.getId());
-
-        List<DatasetColonna> colonne = datasetService.findAllNomeColonne(datasetfile);
-        List<SxStepVariable> listaSV = workflowService.getSxStepVariablesNoValori(idElaborazione,
-                new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
-        List<SxStepVariable> listaSP = workflowService.getSxStepVariablesParametri(idElaborazione);
-        List<SxBusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
-
-        SxBusinessFunction businessFunction = elaborazione.getSxBusinessFunction();
-
-        // Carica i Ruoli di input
-        List<SxRuoli> listaRuoliInput = workflowService.findRuoliByFunction(businessFunction, 0);
-        // Carica i Ruoli di input e output
-        List<SxRuoli> listaRuoliInOut = workflowService.findRuoliByFunction(businessFunction, 1);
-        List<SxParPattern> listaParametri = workflowService.findParametriByFunction(businessFunction);
-        List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
-
-        model.addAttribute("bProcess", listaBp);
-        model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
-        model.addAttribute("stepVList", listaSV);
-
-        ArrayList<String> listaNomiSV = new ArrayList<String>();
-        for (int i = 0; i < listaSV.size(); i++) {
-            String nomeStepVariable = listaSV.get(i).getSxWorkset().getNome();
-            listaNomiSV.add(nomeStepVariable);
-            for (int y = 0; y < colonne.size(); y++) {
-                String nomeCol = colonne.get(y).getNome();
-                if (listaNomiSV.contains(nomeCol)) {
-                    colonne.remove(colonne.get(y));
-                }
-            }
-        }
-
-        model.addAttribute("stepParamList", listaSP);
-        model.addAttribute("colonne", colonne);
-        model.addAttribute("listaRuoliInput", listaRuoliInput);
-        model.addAttribute("listaRuoliInOut", listaRuoliInOut);
-        model.addAttribute("listaParametri", listaParametri);
-        model.addAttribute("listaFunzioni", listaFunzioni);
-        model.addAttribute("datasetfile", datasetfile);
-        model.addAttribute("elaborazione", elaborazione);
-        model.addAttribute("businessFunction", businessFunction);
-
-        return "elaborazione/edit_ws";
-
-    }
+ 
 
     @GetMapping(value = "/editworkingset/{idelaborazione}")
     public String editWorkingSet(HttpSession session, Model model,
@@ -259,7 +201,7 @@ public class WorkflowController {
         model.addAttribute("elaborazione", elaborazione);
         model.addAttribute("businessFunction", businessFunction);
 
-        return "elaborazione/new_ws";
+        return "workflow/edit";
 
     }
 
@@ -280,7 +222,7 @@ public class WorkflowController {
         model.addAttribute("bProcess", listaBp);
         model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
 
-        return "elaborazione/view_data";
+        return "workflow/view_data";
 
     }
 
@@ -300,7 +242,7 @@ public class WorkflowController {
         notificationService.removeAllMessages();
         notificationService.addInfoMessage("L'elaborazione è stata rimossa.");
         workflowService.eliminaElaborazione(idelaborazione);
-        List<SessioneLavoro> listasessioni = sessioneLavoroService.getSessioneList(user);
+        List<WorkSession> listasessioni = sessioneLavoroService.getSessioneList(user);
         model.addAttribute("listasessioni", listasessioni);
 
         return "redirect:/sessione/apri/" + idsessione;
@@ -333,7 +275,7 @@ public class WorkflowController {
         model.addAttribute("elaborazione", elaborazione);
         model.addAttribute("tipoCampo", sxTipoCampo);
 
-        return "elaborazione/view_data";
+        return "workflow/view_data";
     }
 
     @RequestMapping(value = "/associavariabile", method = RequestMethod.POST)

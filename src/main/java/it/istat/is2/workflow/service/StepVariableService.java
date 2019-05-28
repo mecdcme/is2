@@ -29,8 +29,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.app.domain.Elaborazione;
 import it.istat.is2.workflow.dao.StepVariableDao;
+import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.SxRuoli;
 import it.istat.is2.workflow.domain.SxStepVariable;
 

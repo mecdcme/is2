@@ -46,7 +46,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import it.istat.is2.workflow.domain.SxTipoDato;
-import it.istat.is2.worksession.domain.SessioneLavoro;
+import it.istat.is2.worksession.domain.WorkSession;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -85,7 +85,7 @@ public class DatasetFile implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "sessione_lavoro")
-    private SessioneLavoro sessioneLavoro;
+    private WorkSession sessioneLavoro;
     
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, mappedBy = "datasetFile", orphanRemoval = true)
     @JsonManagedReference

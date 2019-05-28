@@ -32,7 +32,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import it.istat.is2.app.domain.Elaborazione;
+import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.SXTipoCampo;
 import it.istat.is2.workflow.domain.SxRuoli;
 import it.istat.is2.workflow.domain.SxStepVariable;

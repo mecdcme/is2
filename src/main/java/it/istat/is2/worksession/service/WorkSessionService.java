@@ -34,39 +34,39 @@ import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.UserService;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
-import it.istat.is2.worksession.dao.SessioneDao;
-import it.istat.is2.worksession.domain.SessioneLavoro;
+import it.istat.is2.worksession.dao.WorkSessionDao;
+import it.istat.is2.worksession.domain.WorkSession;
 
 @Service
-public class SessioneLavoroService {
+public class WorkSessionService {
 
     @Autowired
-    private SessioneDao sessioneDao;
+    private WorkSessionDao sessioneDao;
     @Autowired
     private UserService userService;
     @Autowired
     private DatasetService datasetService;
 
-    public List<SessioneLavoro> getSessioni(User user) {
+    public List<WorkSession> getSessioni(User user) {
         return sessioneDao.findByUserOrderByDataCreazioneDesc(user);
     }
 
-    public Optional<SessioneLavoro> getSessione(Long id) {
+    public Optional<WorkSession> getSessione(Long id) {
         return sessioneDao.findById(id);
     }
 
-    public SessioneLavoro getSessioneByIdFile(Long id) {
+    public WorkSession getSessioneByIdFile(Long id) {
         DatasetFile dataset = datasetService.findDataSetFile(id);
         return dataset.getSessioneLavoro();
     }
 
-    public List<SessioneLavoro> getSessioneList(User user) {
+    public List<WorkSession> getSessioneList(User user) {
         return sessioneDao.findByUserOrderByDataCreazioneDesc(user);
     }
 
-    public SessioneLavoro nuovaSessioneLavoro(String username, String descrizione, String nome) {
+    public WorkSession nuovaSessioneLavoro(String username, String descrizione, String nome) {
         User user = userService.findByEmail(username);
-        SessioneLavoro sl = new SessioneLavoro();
+        WorkSession sl = new WorkSession();
         sl.setDataCreazione(new Date());
         sl.setDescrizione(descrizione);
         sl.setNome(nome);

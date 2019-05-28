@@ -38,22 +38,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import it.istat.is2.app.bean.ElaborazioneFormBean;
-import it.istat.is2.app.domain.Elaborazione;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.ElaborazioneService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
+import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.SxBusinessFunction;
 import it.istat.is2.workflow.service.BusinessFunctionService;
-import it.istat.is2.worksession.domain.SessioneLavoro;
-import it.istat.is2.worksession.service.SessioneLavoroService;
+import it.istat.is2.worksession.domain.WorkSession;
+import it.istat.is2.worksession.service.WorkSessionService;
 
 
 @Controller
-public class SessioneLavoroController {
+public class WorkSessionController {
 
     @Autowired
-    private SessioneLavoroService sessioneLavoroService;
+    private WorkSessionService sessioneLavoroService;
     @Autowired
     private NotificationService notificationService;
     @Autowired
@@ -66,7 +66,7 @@ public class SessioneLavoroController {
     public String mostraSessioni(HttpSession session, Model model, @AuthenticationPrincipal User user) {
         notificationService.removeAllMessages();
         
-        List<SessioneLavoro> listasessioni = sessioneLavoroService.getSessioneList(user);
+        List<WorkSession> listasessioni = sessioneLavoroService.getSessioneList(user);
         model.addAttribute("listasessioni", listasessioni);
 
         return "worksession/list";
@@ -76,7 +76,7 @@ public class SessioneLavoroController {
     public String nuovaSessione(HttpSession session, Model model, @AuthenticationPrincipal User user, @RequestParam("descrizione") String descrizione, @RequestParam("nome") String nome) {
         notificationService.removeAllMessages();
         try {
-            SessioneLavoro sessionelv = sessioneLavoroService.nuovaSessioneLavoro(user.getEmail(), descrizione, nome);
+            WorkSession sessionelv = sessioneLavoroService.nuovaSessioneLavoro(user.getEmail(), descrizione, nome);
             notificationService.addInfoMessage("Sessione creata con ID:" + sessionelv.getId());
         } catch (Exception e) {
             notificationService.addErrorMessage("Errore creazione nuova sessione.", e.getMessage());
@@ -87,7 +87,7 @@ public class SessioneLavoroController {
     @GetMapping(value = "/sessione/apriseselab/{idSessione}/{idElaborazione}")
     public String apriSesElab(HttpSession session, Model model, @AuthenticationPrincipal User user, @PathVariable("idSessione") Long idSessione, @PathVariable("idElaborazione") Long idElaborazione) {
 
-        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(idSessione).get();
+        WorkSession sessionelv = sessioneLavoroService.getSessione(idSessione).get();
         if (sessionelv.getDatasetFiles() != null) {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
         }
@@ -102,7 +102,7 @@ public class SessioneLavoroController {
     	
     	notificationService.removeAllMessages();
 
-        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(id).get();
+        WorkSession sessionelv = sessioneLavoroService.getSessione(id).get();
         if (sessionelv.getDatasetFiles() != null) {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
         }
@@ -121,7 +121,7 @@ public class SessioneLavoroController {
         notificationService.removeAllMessages();
 
         session.setAttribute(IS2Const.WORKINGSET, "workingset");
-        SessioneLavoro sessionelv = sessioneLavoroService.getSessione(form.getIdsessione()).get();
+        WorkSession sessionelv = sessioneLavoroService.getSessione(form.getIdsessione()).get();
         try {
             Elaborazione elaborazione = new Elaborazione();
             elaborazione.setSessioneLavoro(sessionelv);

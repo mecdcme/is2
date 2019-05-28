@@ -21,7 +21,7 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.app.dao;
+package it.istat.is2.workflow.dao;
 
 import java.util.List;
 
@@ -29,12 +29,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import it.istat.is2.app.domain.Elaborazione;
-import it.istat.is2.worksession.domain.SessioneLavoro;
+import it.istat.is2.workflow.domain.Elaborazione;
+import it.istat.is2.worksession.domain.WorkSession;
 
 @Repository
-public interface ElaborazioneDao extends CrudRepository<Elaborazione, Long> {
+public interface WorkflowDao extends CrudRepository<Elaborazione, Long> {
 
-    List<Elaborazione> findBySessioneLavoroOrderByIdDesc(@Param("ses_elaborazione") SessioneLavoro sessioneLavoro);
+    List<Elaborazione> findBySessioneLavoroOrderByIdDesc(@Param("ses_elaborazione") WorkSession sessioneLavoro);
 
 }

@@ -21,7 +21,7 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.app.domain;
+package it.istat.is2.worksession.domain;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -35,22 +35,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import javax.persistence.OrderBy;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import it.istat.is2.workflow.domain.SxBusinessFunction;
-import it.istat.is2.workflow.domain.SxStepVariable;
-import it.istat.is2.worksession.domain.SessioneLavoro;
+import it.istat.is2.app.domain.User;
+import it.istat.is2.dataset.domain.DatasetFile;
+import it.istat.is2.workflow.domain.Elaborazione;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "SX_ELABORAZIONE")
-public class Elaborazione implements Serializable {
+@Table(name = "SX_SESSIONE_LAVORO")
+public class WorkSession implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,35 +56,29 @@ public class Elaborazione implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "DATAELABORAZIONE")
-    private Date dataElaborazione;
-    @Column(name = "DESCRIZIONE")
+    @OneToOne
+    @JoinColumn(name = "id_utente")
+    private User user;
+
+    @Column(name = "data_creazione")
+    private Date dataCreazione;
+    @Column(name = "descrizione")
     private String descrizione;
-    @Column(name = "PARAMETRI")
-    private String parametri;
     @Column(name = "nome")
     private String nome;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ses_elaborazione", nullable = false)
-    @JsonIgnore
-    private SessioneLavoro sessioneLavoro;
+    @OneToMany(mappedBy = "sessioneLavoro", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Elaborazione> listaElaborazioni;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "BFUNCTION", nullable = false)
-    private SxBusinessFunction sxBusinessFunction;
+    @OneToMany(mappedBy = "sessioneLavoro", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<DatasetFile> datasetFiles;
 
-    @OneToMany(mappedBy = "elaborazione", cascade = CascadeType.ALL)
-    @OrderBy(value = "ordine ASC")
-    private List<SxStepVariable> sxStepVariables;
-
-    public Elaborazione(Long id) {
+    public WorkSession(Long id) {
         super();
         this.id = id;
     }
 
-    public Elaborazione() {
+    public WorkSession() {
         super();
-
     }
 }

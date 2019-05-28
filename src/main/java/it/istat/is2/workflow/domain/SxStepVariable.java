@@ -28,7 +28,6 @@ import java.util.ArrayList;
 
 import javax.persistence.*;
 
-import it.istat.is2.app.domain.Elaborazione;
 import lombok.Data;
 
 /**

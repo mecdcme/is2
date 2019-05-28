@@ -40,11 +40,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.app.domain.Elaborazione;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.workflow.dao.RuoloDao;
 import it.istat.is2.workflow.dao.StepVariableDao;
+import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.SXTipoCampo;
 import it.istat.is2.workflow.domain.SxRuoli;
 import it.istat.is2.workflow.domain.SxStepInstance;

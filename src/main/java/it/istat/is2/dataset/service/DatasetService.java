@@ -51,8 +51,8 @@ import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.domain.TipoVariabileSum;
 import it.istat.is2.workflow.domain.SxTipoDato;
-import it.istat.is2.worksession.dao.SessioneDao;
-import it.istat.is2.worksession.domain.SessioneLavoro;
+import it.istat.is2.worksession.dao.WorkSessionDao;
+import it.istat.is2.worksession.domain.WorkSession;
 
 @Service
 public class DatasetService {
@@ -64,7 +64,7 @@ public class DatasetService {
     @Autowired
     private SqlGenericDao sqlgenericDao;
     @Autowired
-    private SessioneDao sessioneLavoroDao;
+    private WorkSessionDao sessioneLavoroDao;
     @Autowired
     private TipoVariabileSumDao variabileSumDao;
     @Autowired
@@ -127,7 +127,7 @@ public class DatasetService {
     }
 
     public List<DatasetFile> findDatasetFilesByIdSessioneLavoro(Long id) {
-        return datasetFileDao.findDatasetFilesBySessioneLavoro(new SessioneLavoro(id));
+        return datasetFileDao.findDatasetFilesBySessioneLavoro(new WorkSession(id));
     }
 
     public DatasetFile findDataSetFileSQL(Long id) {
