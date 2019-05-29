@@ -92,7 +92,16 @@ public class RelaisGenericDao {
                 }
 
             }
-            query += " ) subqr" + indexRole;
+            if (variableList.size() > 1) {
+                query += " where ";
+               for (int i = 1; i < variableList.size(); i++) {
+            	   query += " subqvn"+i+".r=subqvn"+(i+1)+".r ";
+            	   if (i<variableList.size()-1)     query += " and ";
+			}
+                
+            }
+
+              query += " ) subqr" + indexRole;
             if (ruoliVariabileNome.size() > 1 && indexRole < ruoliVariabileNome.size()) {
                 query += ",";
             }
