@@ -40,11 +40,8 @@
                 <div class="content-wrapper">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <span th:text="#{Layout.elaborazione}"></span>
-                            </li>
                             <li class="breadcrumb-item ">
-                                <span th:if="${session.elaborazione}" th:text="${session.elaborazione.nome}"></span>
+                                <span th:if="${session.sessioneBean.nomeElaborazione}" th:text="${session.sessioneBean.nomeElaborazione}"></span>
                             </li>
                             <div class="btn-group pull-right" role="group">
                                 <a class="bar-right" title="Workset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}">

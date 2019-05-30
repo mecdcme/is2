@@ -120,6 +120,9 @@ public class WorkSessionController {
         SessionBean sessionBean;
         if (session.getAttribute(IS2Const.SESSION_BEAN) != null) {
             sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+            if(!sessionBean.getId().equals(id)){
+                sessionBean = new SessionBean(id, sessionelv.getNome());
+            }
         } else {
             sessionBean = new SessionBean(id, sessionelv.getNome());
         }

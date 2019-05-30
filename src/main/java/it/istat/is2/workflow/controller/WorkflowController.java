@@ -268,6 +268,11 @@ public class WorkflowController {
         workflowService.eliminaElaborazione(idelaborazione);
         List<WorkSession> listasessioni = sessioneLavoroService.getSessioneList(user);
         model.addAttribute("listasessioni", listasessioni);
+        
+        //Create session DTO
+        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+        sessionBean.setBusinessFunction(null);
+        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
         return "redirect:/sessione/apri/" + idsessione;
     }

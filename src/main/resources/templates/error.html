@@ -82,24 +82,17 @@
                         <div class="col-lg-6">
                             <fieldset class="well">
                                 <div>
-                                    <h1 class="indigo-text center">
+                                    <h3>
                                         <i class="fa fa-exclamation-triangle"></i>
                                         <span th:text="#{Error.page.legend}">System Error</span>
-                                    </h1>
+                                    </h3>
                                 </div>
                                 <div style="margin-left: 10px; margin-right: 10px;">
                                     <ul id="messages" th:with="notifyMessages=${session['siteNotificationMessages']}">
                                         <th:block th:each="msg : ${notifyMessages}">
-                                            <li>					
+                                            <li>				
                                                 <span th:text="${msg.text} "></span> 
-                                                <div th:if="${msg.details}">	
-                                                    <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                        <small>
-                                                            <span class=" menu__icon--close"> <i  class="fa fa-chevron-circle-down" aria-hidden="true"></i></span>
-                                                            <span class=" menu__icon--open"> <i  class="fa fa-chevron-circle-right" aria-hidden="true"></i></span>
-                                                            <span th:text="#{Layout.details}"></span> 
-                                                        </small>
-                                                    </a>
+                                                <div th:if="${msg.details}">
                                                     <div class="collapse" id="collapseExample">
                                                         <div class="well"><span th:text="${msg.details}"></span> </div>
                                                     </div>
@@ -110,7 +103,7 @@
                                     <span th:if="${notifyMessages}" th:remove="all" th:text="'session.remove(${siteNotificationMessages})'">
                                     </span>
                                 </div>
-                                <div th:if="${exception}" th:text="${exception}">${exception}</div>
+                                <div style="margin:15px 0px" th:if="${exception}" th:text="${exception}">${exception}</div>
                                 <p>
                                     <span th:text="#{Error.goto}">Go to</span>
                                     <a href="index.html" title="Home" th:href="@{/}" class="active"><i class="fa fa-home"></i> <span>Home</span></a>
@@ -123,9 +116,9 @@
             <!-- END MAIN CONTAINER -->
 
             <!-- START FOOTER-->
-            <div class="p-lg text-center">
+            <footer>
                 <span th:text="#{app.footer.text}">2019 - Istat Statistical Service (IS2)</span><br/>
-            </div>
+            </footer>
             <!-- END FOOTER-->
         </div>
     </body>
