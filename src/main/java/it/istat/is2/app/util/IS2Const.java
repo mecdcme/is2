@@ -25,6 +25,7 @@ package it.istat.is2.app.util;
 
 public interface IS2Const {
 
+    public static final String SESSION_BEAN = "sessioneBean";
     public static final String SESSION_LV = "sessionelv";
     public static final String SESSION_ELABORAZIONE = "elaborazione";
     public static final String WORKINGSET = "workingset";

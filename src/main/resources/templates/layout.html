@@ -128,18 +128,18 @@
                                     <span th:text="#{label.sessione.lavoro}"></span>
                                 </li>
                                 <li class="nav-body">
-                                    <a th:title="${session.sessionelv.nome}" th:if="${session.sessionelv}" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
-                                        <i class="fa fa-folder-open"></i><span th:text="${session.sessionelv.nome}"></span>
+                                    <a th:title="${session.sessioneBean.nome}" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
+                                        <i class="fa fa-folder-open"></i><span th:text="${session.sessioneBean.nome}"></span>
                                     </a>
-                                    <ul th:if="${session.sessionelv}" id="wf" class="nav sidebar-subnav " aria-expanded="false">
-                                        <li class="nav-body" th:if="${(session.sessionelv.datasetFiles != null) }">
-                                            <a title="Dati"  th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                                    <ul th:if="${session.sessioneBean}" id="wf" class="nav sidebar-subnav" aria-expanded="false">
+                                        <li class="nav-body" th:if="${(session.sessioneBean.file != null) }">
+                                            <a title="Dati"  th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                                 <i class="fa fa-table"></i><span th:text="#{Layout.dati}"></span>
-                                                <span th:if="${session.sessionelv.datasetFiles}"  th:text="${'('+session.sessionelv.datasetFiles.size()+')'}" ></span>
+                                                <span th:if="${session.sessioneBean.file}"  th:text="${'('+session.sessioneBean.file.size()+')'}" ></span>
                                             </a>
                                         </li>
                                     </ul> 
-                                    <a title="Sessione lavoro" th:unless="${session.sessionelv}">
+                                    <a title="Sessione lavoro" th:unless="${session.sessioneBean}">
                                         <i class="fa fa-folder"></i><span></span>
                                     </a>
                                     <li class="nav-body menu-line" ></li>
@@ -147,18 +147,22 @@
                                 <li class="nav-body menu-spacer">
                                     <span th:text="#{Layout.elaborazione}"></span>
                                 </li>
-                                <li class="nav-body">
-                                    <a th:title="${session.elaborazione.nome}" th:if="${session.elaborazione}" th:href="@{'/ws/home/'+${session.elaborazione.id}}"> 
-                                        <i class="fa fa-sitemap"></i><span th:text="${session.elaborazione.nome}">Elaborazione</span>
+                                <li class="nav-body" th:if="${session.sessioneBean}">
+                                    <a th:title="${session.sessioneBean.nomeElaborazione}" th:if="${session.sessioneBean.businessFunction != null}" 
+                                       th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}"> 
+                                        <i class="fa fa-sitemap"></i><span th:text="${session.sessioneBean.nomeElaborazione}">Elaborazione</span>
                                     </a>
-                                    <ul th:if="${listaBP}" class="nav sidebar-subnav" aria-expanded="false">
-                                        <li class="nav-body li-spacer" th:each="bProcess : ${listaBP}">
-                                            <i class="fa fa-angle-right" style="margin-right: 0px!important"></i><span th:text="${bProcess.nome}">Descrizione</span>
+                                     <a title="Elaborazione" th:unless="${session.sessioneBean.businessFunction != null}">
+                                        <i class="fa fa-sitemap"></i><span></span>
+                                    </a>
+                                    <ul th:if="${session.sessioneBean.businessFunction != null}" class="nav sidebar-subnav" aria-expanded="false">
+                                        <li class="nav-body" th:each="bProcess : ${session.sessioneBean.businessFunction.processes}">
+                                            <i class="fa fa-angle-right" ></i>&nbsp;<span th:text="${bProcess.name}">Descrizione</span>
                                         </li>
                                     </ul>
                                 </li>
                                 <li class="nav-body" >
-                                    <a title="Elaborazione" th:unless="${session.elaborazione}">
+                                    <a title="Elaborazione" th:unless="${session.sessioneBean}">
                                         <i class="fa fa-sitemap"></i><span></span>
                                     </a>
                                 </li>

@@ -38,16 +38,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import it.istat.is2.app.bean.ElaborazioneFormBean;
+import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.ElaborazioneService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
+import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.SxBusinessFunction;
 import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
-
+import java.util.ArrayList;
 
 @Controller
 public class WorkSessionController {
@@ -60,12 +62,11 @@ public class WorkSessionController {
     private ElaborazioneService elaborazioneService;
     @Autowired
     private BusinessFunctionService businessFunctionService;
- 
 
     @GetMapping(value = "/sessione/mostraSessioni")
     public String mostraSessioni(HttpSession session, Model model, @AuthenticationPrincipal User user) {
         notificationService.removeAllMessages();
-        
+
         List<WorkSession> listasessioni = sessioneLavoroService.getSessioneList(user);
         model.addAttribute("listasessioni", listasessioni);
 
@@ -92,26 +93,40 @@ public class WorkSessionController {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
         }
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
+        
+        session.setAttribute(IS2Const.SESSION_BEAN, new SessionBean(idSessione, sessionelv.getNome()));
+        
         return "redirect:/ws/home/" + idElaborazione;
     }
 
-   
-    
     @GetMapping(value = "/sessione/apri/{id}")
     public String apriSessione(HttpSession session, Model model, @PathVariable("id") Long id) {
-    	
-    	notificationService.removeAllMessages();
+
+        notificationService.removeAllMessages();
 
         WorkSession sessionelv = sessioneLavoroService.getSessione(id).get();
+        List<String> files = new ArrayList();
         if (sessionelv.getDatasetFiles() != null) {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
+            for (DatasetFile datasetFile : sessionelv.getDatasetFiles()) {
+                files.add(datasetFile.getNomeFile());
+            }
         }
         List<Elaborazione> listaElaborazioni = elaborazioneService.getElaborazioneList(sessionelv);
         List<SxBusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
-        model.addAttribute("listaFunzioni", listaFunzioni);
 
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 
+        SessionBean sessionBean;
+        if (session.getAttribute(IS2Const.SESSION_BEAN) != null) {
+            sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+        } else {
+            sessionBean = new SessionBean(id, sessionelv.getNome());
+        }
+        sessionBean.setFile(files);
+        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+
+        model.addAttribute("listaFunzioni", listaFunzioni);
         model.addAttribute("listaElaborazioni", listaElaborazioni);
         return "worksession/home";
     }
@@ -147,6 +162,7 @@ public class WorkSessionController {
     @GetMapping(value = "/sessione/chiudisessione")
     public String chiudiSessione(HttpSession session, @AuthenticationPrincipal User user) {
         session.removeAttribute(IS2Const.SESSION_LV);
+        session.removeAttribute(IS2Const.SESSION_BEAN);
         session.removeAttribute(IS2Const.SESSION_DATASET);
         session.removeAttribute(IS2Const.SESSION_ELABORAZIONE);
         return "redirect:/sessione/mostraSessioni";

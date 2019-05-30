@@ -24,6 +24,7 @@
 package it.istat.is2.app.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 
@@ -32,11 +33,14 @@ public class SessionBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String id;
+	private Long id;
 	private String nome;
-
-        public SessionBean(String id, String nome) {
-		super();
+        private List<String> file;
+        private Long idElaborazione;
+        private String nomeElaborazione;
+        private BusinessFunctionBean businessFunction;
+        
+        public SessionBean(Long id, String nome) {
 		this.id = id;
 		this.nome = nome;
 	}

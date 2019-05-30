@@ -42,6 +42,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import it.istat.is2.app.bean.AssociazioneVarFormBean;
+import it.istat.is2.app.bean.BusinessFunctionBean;
+import it.istat.is2.app.bean.BusinessProcessBean;
+import it.istat.is2.app.bean.ProcessStepBean;
 import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.ElaborazioneService;
@@ -55,6 +58,7 @@ import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.SXTipoCampo;
 import it.istat.is2.workflow.domain.SxBusinessFunction;
 import it.istat.is2.workflow.domain.SxBusinessProcess;
+import it.istat.is2.workflow.domain.SxBusinessStep;
 import it.istat.is2.workflow.domain.SxParPattern;
 import it.istat.is2.workflow.domain.SxRuoli;
 import it.istat.is2.workflow.domain.SxStepVariable;
@@ -93,14 +97,32 @@ public class WorkflowController {
 
         Elaborazione elaborazione = workflowService.findElaborazione(id);
         List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
-        List<SxStepVariable> listaSV = workflowService.getSxStepVariablesNoValori(elaborazione.getId(),
-                new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+        List<BusinessProcessBean> businessProcessBeans = new ArrayList<BusinessProcessBean>();
+        List<SxStepVariable> listaSV = workflowService.getSxStepVariablesNoValori(elaborazione.getId(), new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
         model.addAttribute("stepVList", listaSV);
 
-        SessionBean elaSession = new SessionBean(elaborazione.getId().toString(), elaborazione.getNome());
-        session.setAttribute(IS2Const.SESSION_ELABORAZIONE, elaSession);
+        //Create session DTO
+        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+        sessionBean.setIdElaborazione(elaborazione.getId());
+        sessionBean.setNomeElaborazione(elaborazione.getNome());
+        BusinessFunctionBean businessFunction = new BusinessFunctionBean();
+        businessFunction.setId(elaborazione.getSxBusinessFunction().getId());
+        businessFunction.setName(elaborazione.getSxBusinessFunction().getNome());
+        for (SxBusinessProcess sbp : listaBp) {
+            BusinessProcessBean businessProcessBean = new BusinessProcessBean();
+            businessProcessBean.setId(sbp.getId());
+            businessProcessBean.setName(sbp.getNome());
+            List<ProcessStepBean> processStepBeans = new ArrayList<ProcessStepBean>();
+            for (SxBusinessStep bpStep : sbp.getSxBusinessSteps()) {
+                processStepBeans.add(new ProcessStepBean(bpStep.getId(), bpStep.getNome()));
+            }
+            businessProcessBean.setSteps(processStepBeans);
+            businessProcessBeans.add(businessProcessBean);
+        }
+        businessFunction.setProcesses(businessProcessBeans);
+        sessionBean.setBusinessFunction(businessFunction);
+        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
-       
         model.addAttribute("elaborazione", elaborazione);
         model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
 
@@ -149,8 +171,6 @@ public class WorkflowController {
         return "redirect:/ws/editworkingset/" + idelaborazione;
     }
 
- 
-
     @GetMapping(value = "/editworkingset/{idelaborazione}")
     public String editWorkingSet(HttpSession session, Model model,
             @PathVariable("idelaborazione") Long idElaborazione) {
@@ -159,7 +179,7 @@ public class WorkflowController {
 
         Elaborazione elaborazione = elaborazioneService.findElaborazione(idElaborazione);
 
-        SessionBean elaSession = new SessionBean(elaborazione.getId().toString(), elaborazione.getNome());
+        SessionBean elaSession = new SessionBean(elaborazione.getId(), elaborazione.getNome());
         session.setAttribute(IS2Const.SESSION_ELABORAZIONE, elaSession);
 
         List<DatasetFile> datasetfiles = datasetService
@@ -229,8 +249,13 @@ public class WorkflowController {
     public String chiudiWS(HttpSession session, Model model, @PathVariable("id") Long id) {
         notificationService.removeAllMessages();
 
-        Elaborazione elaborazione = workflowService.findElaborazione(id) ;
+        Elaborazione elaborazione = workflowService.findElaborazione(id);
         session.removeAttribute(IS2Const.SESSION_ELABORAZIONE);
+        
+        //Create session DTO
+        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+        sessionBean.setBusinessFunction(null);
+        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
         return "redirect:/sessione/apri/" + elaborazione.getSessioneLavoro().getId();
     }

@@ -103,6 +103,16 @@ box-shadow: none !important;
     overflow-x: hidden;
 }
 
+#logbox{
+    height: 150px;
+    overflow-y: auto;
+    padding-top: 5px;
+}
+
+#logbox p{
+    padding-left: 4px;
+}
+
 /* START HEADER */
 .topnavbar {
     margin-bottom: 0px;
@@ -127,7 +137,7 @@ box-shadow: none !important;
 }
 
 .navbar-style{
-    padding: 6px 2px !important;
+    padding: 8px 7px 6px 4px!important;
     margin-right: 15px;
 }
 
@@ -216,7 +226,7 @@ box-shadow: none !important;
 
 .menu-spacer{
     margin-top: 20px;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 .menu-line{
@@ -272,7 +282,7 @@ box-shadow: none !important;
 
 .sidebar-subnav>li{
     padding-left: 12px;
-    padding-top: 2px;
+    padding-top: 5px;
 }
 
 .nav>li>a {
@@ -283,9 +293,10 @@ box-shadow: none !important;
     color: #555;
 }
 
-.sidebar-subnav>li>a {
-    padding-left: 5px !important;
+.sidebar-subnav>li {
+    padding-left: 25px !important;
     padding-top: 2px !important;
+    color: #155873;
     
 }
 .nav-body a{
