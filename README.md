@@ -1,5 +1,5 @@
 # IS2
-A runtime environment to execute statistical services
+A runtime environment to execute statistical services. IS2 is a workbench that offers a set of tools for data analysis and processing. 
 
 ## What you’ll need
 
@@ -12,14 +12,6 @@ In order to build the IS2 application, your environment should fulfill the follo
 
 ## What you’ll build
 
-You’ll build a template web application that will provide out of the box :
-* Authentication & authorization;
-* Responsive graphical interface (html, css, js):
-  * Tables with enhanced interaction controls (search, export, sorting, etc.);
-  * Charts;
-* Server side components:
-  * CRUD (insert, delete, update);
-  * Search filters;
   
 ## How to build
 Download and unzip the source code in your workspace `IS2_PATH`.
@@ -62,7 +54,7 @@ based Applications, with an embedded Tomcat, that you can "just run".
 ```
 java –jar  is2.jar
 ```
-In the docs folder you will find a complete userguide with useful information that will help you to understand is2 project.
+In the [docs folder](other_file.md)  you will find a complete userguide with useful information that will help you to understand is2 project.
 
 ## License
 IS2 is EUPL-licensed
