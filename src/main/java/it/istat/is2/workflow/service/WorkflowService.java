@@ -204,7 +204,7 @@ public class WorkflowService {
           
            
         } catch (Exception e) {
-            Logger.getRootLogger().debug("Dostep error: Something just exploded!");
+            Logger.getRootLogger().debug(e.getMessage());
           
             throw (e);
         }finally {

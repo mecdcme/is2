@@ -104,10 +104,10 @@ public class EngineJava implements EngineService {
 	public void doAction() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		String fname = stepInstance.getFname();
 		// Method method = RelaisService.class.getDeclaredMethod(fname);
-		Method method = ReflectionUtils.findMethod(RelaisService.class, fname, Long.class, Map.class);
+		Method method = ReflectionUtils.findMethod(RelaisService.class, fname, Long.class, Map.class,Map.class);
 
 		worksetOut = (HashMap<String, ArrayList<String>>) method.invoke(relaisService, elaborazione.getId(),
-				ruoliVariabileNome);
+				ruoliVariabileNome,worksetVariabili);
 	}
 
 	public void prepareEnv() {

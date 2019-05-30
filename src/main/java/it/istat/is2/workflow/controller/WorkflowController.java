@@ -93,7 +93,6 @@ public class WorkflowController {
 
         Elaborazione elaborazione = workflowService.findElaborazione(id);
         List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
-        SxBusinessProcess bProcess = listaBp.get(0);
         List<SxStepVariable> listaSV = workflowService.getSxStepVariablesNoValori(elaborazione.getId(),
                 new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
         model.addAttribute("stepVList", listaSV);
@@ -101,7 +100,7 @@ public class WorkflowController {
         SessionBean elaSession = new SessionBean(elaborazione.getId().toString(), elaborazione.getNome());
         session.setAttribute(IS2Const.SESSION_ELABORAZIONE, elaSession);
 
-        model.addAttribute("bProcess", bProcess);
+       
         model.addAttribute("elaborazione", elaborazione);
         model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
 
