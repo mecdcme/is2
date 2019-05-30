@@ -54,7 +54,7 @@ based Applications, with an embedded Tomcat, that you can "just run".
 ```
 java –jar  is2.jar
 ```
-In the [docs folder](other_file.md)  you will find a complete userguide with useful information that will help you to understand is2 project.
+In the [IS2_PATH/db](db/is2.sql)  you will find a complete userguide with useful information that will help you to understand is2 project.
 
 ## License
 IS2 is EUPL-licensed
