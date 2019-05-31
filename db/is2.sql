@@ -18,6 +18,7 @@
 --
 -- Table structure for table `sx_app_instance`
 --
+USE IS2;
 
 DROP TABLE IF EXISTS `sx_app_instance`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
