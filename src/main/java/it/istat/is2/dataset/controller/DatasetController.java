@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -46,6 +45,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import it.istat.is2.app.bean.InputFormBean;
+import it.istat.is2.app.domain.Log;
+import it.istat.is2.app.domain.User;
+import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.app.util.IS2Const;
@@ -57,27 +59,25 @@ import it.istat.is2.workflow.domain.SxTipoDato;
 import it.istat.is2.workflow.service.TipoDatoService;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Controller
 public class DatasetController {
 
     @Autowired
     private DatasetService datasetService;
-
     @Autowired
     ServletContext context;
-
     @Autowired
     private NotificationService notificationService;
-
     @Autowired
     private MessageSource messages;
-
     @Autowired
     private WorkSessionService sessioneLavoroService;
-    
     @Autowired
     private TipoDatoService tipoDatoService;
+    @Autowired
+    private LogService logService;
 
     @RequestMapping("/loadInputFileSessione/{idsessione}")
     public String carica(Model model, @PathVariable("idsessione") Long idsessione) {
@@ -122,11 +122,13 @@ public class DatasetController {
     @GetMapping(value = "/sessione/mostradataset/{id}")
     public String mostradataset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
-        WorkSession sessionelv = sessioneLavoroService.getSessione(id).get();
+        List<Log> logs = logService.findByIdSessione(id);
+
+        WorkSession sessionelv = sessioneLavoroService.getSessione(id);
         if (sessionelv.getDatasetFiles() != null) {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
         }
-        
+
         List<DatasetFile> listaDataset = sessionelv.getDatasetFiles();
         List<SxTipoDato> listaTipoDato = tipoDatoService.findListTipoDato();
 
@@ -134,10 +136,10 @@ public class DatasetController {
 
         model.addAttribute("listaTipoDato", listaTipoDato);
         model.addAttribute("listaDataset", listaDataset);
+        model.addAttribute("logs", logs);
         return "dataset/list";
     }
-    
-    
+
     @RequestMapping(value = "/associaVarSum", method = RequestMethod.POST)
     public String caricaMetadati(Model model, String idfile, String idvar, String filtro, String idsum) {
 
@@ -166,7 +168,7 @@ public class DatasetController {
 
     @RequestMapping(value = "/loadInputData", method = RequestMethod.POST)
     public String loadInputData(HttpSession session, HttpServletRequest request,
-            Model model, @ModelAttribute("inputFormBean") InputFormBean form) throws IOException {
+            Model model, @AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") InputFormBean form) throws IOException {
 
         notificationService.removeAllMessages();
 
@@ -195,6 +197,7 @@ public class DatasetController {
 
         try {
             datasetService.salva(campiL, valoriHeaderNum, labelFile, tipoDato, separatore, form.getDescrizione(), idsessione);
+            logService.save("File " + labelFile + " salvato con successo", user.getUserid(), Long.parseLong(idsessione));
             notificationService.addInfoMessage("Salvataggio avvenuto con successo.");
         } catch (Exception e) {
             notificationService.addErrorMessage("Errore nel salvataggio del file.");
@@ -224,12 +227,13 @@ public class DatasetController {
     }
 
     @RequestMapping(value = "/deleteDataset", method = RequestMethod.POST)
-    public String deleteDataset(Model model, @RequestParam("idDataset") Long idDataset) {
+    public String deleteDataset(Model model, @AuthenticationPrincipal User user, @RequestParam("idDataset") Long idDataset) {
 
         notificationService.removeAllMessages();
 
         WorkSession sessionelv = sessioneLavoroService.getSessioneByIdFile(idDataset);
         datasetService.deleteDataset(idDataset);
+        logService.save("File " + idDataset + " eliminato con successo", user.getUserid(), sessionelv.getId());
         notificationService.addInfoMessage("Eliminazione avvenuta con successo");
 
         return "redirect:/sessione/mostradataset/" + sessionelv.getId();

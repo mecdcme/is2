@@ -59,7 +59,7 @@
 
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-lg-7">
+                            <div class="col-lg-6">
                                 <fieldset class="well ">
                                     <legend class="well-legend secondary-fieldset">
                                         <span>Dettaglio sessione di lavoro</span>
@@ -80,13 +80,13 @@
                                         <li class="list-group-item no-border">
                                             <span>
                                                 <strong>Data creazione: </strong>
-                                                <span th:text="${session.sessionelv.dataCreazione }">data creazione</span>
+                                                <span th:text="${#dates.format(session.sessionelv.dataCreazione, 'dd/MM/yyyy')}">data creazione</span>
                                             </span>
                                         </li>
                                     </ul>
                                 </fieldset>
                             </div>
-                            <div class="col-lg-5">
+                            <div class="col-lg-6">
                                 <fieldset class="well ">
                                     <legend class="well-legend secondary-fieldset">
                                         <span th:text="#{Layout.log.panel}">Log panel</span>
@@ -152,7 +152,7 @@
                                                 <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.nome}"></td>
                                                 <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.descrizione}"></td>
                                                 <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${elaborazione.sxBusinessFunction.nome}"></td>
-                                                <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${elaborazione.dataElaborazione}"></td>
+                                                <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${#dates.format(elaborazione.dataElaborazione, 'dd/MM/yyyy')}"></td>
                                                 <td style="width: 1%">
                                                     <a class='towait' title="Visualizza elaborazione" th:href="@{'/ws/home/'+${elaborazione.id}}"> 
                                                         <i class="fa fa-folder-open"></i>
@@ -261,9 +261,9 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h3 class="modal-title" id="exampleModalLabel">
-                            <i class="fa fa-trash"></i>Conferma eliminazione
-                        </h3>
+                        <h4 class="modal-title" id="exampleModalLabel">
+                            <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
+                        </h4>
                     </div>
                     <div class="modal-body"><span id="msg_elaboraz"></span></div>
                     <div class="modal-footer">

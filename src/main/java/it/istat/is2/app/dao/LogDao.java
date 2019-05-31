@@ -34,9 +34,9 @@ public interface LogDao extends CrudRepository<Log, Long>{
     
      public void save(Optional<Log> log);
      
-     public List<Log> findByIdUtente(Long idUtente);
+     public List<Log> findByIdUtenteOrderByIdDesc(Long idUtente);
      
-     public List<Log> findByIdSessione(Long idSessione);
+     public List<Log> findByIdSessioneOrderByIdDesc(Long idSessione);
      
      public long deleteByIdSessione(Long idSessione);
     

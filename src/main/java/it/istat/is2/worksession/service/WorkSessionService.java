@@ -25,7 +25,6 @@ package it.istat.is2.worksession.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,8 +50,8 @@ public class WorkSessionService {
         return sessioneDao.findByUserOrderByDataCreazioneDesc(user);
     }
 
-    public Optional<WorkSession> getSessione(Long id) {
-        return sessioneDao.findById(id);
+    public WorkSession getSessione(Long id) {
+        return sessioneDao.findById(id).orElse(null);
     }
 
     public WorkSession getSessioneByIdFile(Long id) {

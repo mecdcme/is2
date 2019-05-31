@@ -48,6 +48,7 @@ import it.istat.is2.app.bean.ProcessStepBean;
 import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.ElaborazioneService;
+import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
@@ -90,6 +91,8 @@ public class WorkflowController {
     private DatasetService datasetService;
     @Autowired
     private StepVariableService stepVariableService;
+    @Autowired
+    private LogService logService;
 
     @GetMapping(value = "/home/{id}")
     public String homeWS(HttpSession session, Model model, @PathVariable("id") Long id) {
@@ -268,6 +271,8 @@ public class WorkflowController {
         workflowService.eliminaElaborazione(idelaborazione);
         List<WorkSession> listasessioni = sessioneLavoroService.getSessioneList(user);
         model.addAttribute("listasessioni", listasessioni);
+        
+        logService.save("Elaborazione " + idelaborazione + " Eliminata con successo", user.getUserid(), idsessione);
         
         //Create session DTO
         SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);

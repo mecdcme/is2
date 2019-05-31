@@ -80,7 +80,7 @@
                                         <tbody>
                                             <th:block th:each="i: ${#numbers.sequence(0,3)}">
                                                 <tr th:if="${(not #lists.isEmpty(listasessioni)) and (i &lt; listasessioni.size() )}">
-                                                    <td th:text="${#dates.format(listasessioni[i].dataCreazione, 'dd/MM/yyyy HH:mm')}"></td>
+                                                    <td th:text="${#dates.format(listasessioni[i].dataCreazione, 'dd/MM/yyyy')}"></td>
                                                     <td th:text="${listasessioni[i].nome}">FATT</td>
                                                     <td><span th:if="${not #lists.isEmpty(listasessioni[i].listaElaborazioni) }" th:text="${listasessioni[i].listaElaborazioni[0].nome}"></span></td>
                                                     <td><span th:if="${not #lists.isEmpty(listasessioni[i].listaElaborazioni)} and ${not #lists.isEmpty(listasessioni[i].listaElaborazioni[0].sxBusinessFunction.sxBusinessProcesses)}"
@@ -134,7 +134,7 @@
                                                 <td th:id="${'sesid_'+ sessione.id}" th:text="${sessione.id}"></td>
                                                 <td th:id="${'sesnome_'+ sessione.id}" th:text="${sessione.nome}"></td>
                                                 <td th:id="${'sesdesc_'+ sessione.id}" th:text="${sessione.descrizione}"></td>
-                                                <td th:id="${'sesdata_'+ sessione.dataCreazione}" th:text="${#dates.format(sessione.dataCreazione, 'dd/MM/yyyy HH:mm')}"></td>
+                                                <td th:id="${'sesdata_'+ sessione.dataCreazione}" th:text="${#dates.format(sessione.dataCreazione, 'dd/MM/yyyy')}"></td>
                                                 <td th:if="${(sessione.datasetFiles!=null) and (sessione.datasetFiles.size()>0)}" th:text="${sessione.datasetFiles.size()}"></td>
                                                 <td th:unless="${(sessione.datasetFiles!=null) and (sessione.datasetFiles.size()>0)}">-</td>
                                                 <td th:if="${(sessione.listaElaborazioni!=null) and (sessione.listaElaborazioni.size()>0)}" th:text="${sessione.listaElaborazioni.size()}"></td>
@@ -224,7 +224,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <h4 class="modal-title" id="exampleModalLabel">
-                                <i class="fa fa-trash"></i>Conferma eliminazione
+                                <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
                             </h4>
                         </div>
                         <div class="modal-body">Eliminare la sessione selezionata e il suo contenuto?</div>

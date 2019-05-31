@@ -84,7 +84,7 @@ public class WorkSessionController {
         try {
             WorkSession sessionelv = sessioneLavoroService.nuovaSessioneLavoro(user.getEmail(), descrizione, nome);
             notificationService.addInfoMessage("Sessione creata con ID:" + sessionelv.getId());
-            logService.save("Sessione creata con ID:" + sessionelv.getId(), user.getUserid(), sessionelv.getId());
+            logService.save("Sessione " + sessionelv.getNome() + " creata con successo", user.getUserid(), sessionelv.getId());
         } catch (Exception e) {
             notificationService.addErrorMessage("Errore creazione nuova sessione.", e.getMessage());
         }
@@ -94,7 +94,7 @@ public class WorkSessionController {
     @GetMapping(value = "/sessione/apriseselab/{idSessione}/{idElaborazione}")
     public String apriSesElab(HttpSession session, Model model, @AuthenticationPrincipal User user, @PathVariable("idSessione") Long idSessione, @PathVariable("idElaborazione") Long idElaborazione) {
 
-        WorkSession sessionelv = sessioneLavoroService.getSessione(idSessione).get();
+        WorkSession sessionelv = sessioneLavoroService.getSessione(idSessione);
         if (sessionelv.getDatasetFiles() != null) {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
         }
@@ -112,7 +112,7 @@ public class WorkSessionController {
 
         List<Log> logs = logService.findByIdSessione(id);
         
-        WorkSession sessionelv = sessioneLavoroService.getSessione(id).get();
+        WorkSession sessionelv = sessioneLavoroService.getSessione(id);
         List<String> files = new ArrayList();
         if (sessionelv.getDatasetFiles() != null) {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
@@ -149,16 +149,17 @@ public class WorkSessionController {
         notificationService.removeAllMessages();
 
         session.setAttribute(IS2Const.WORKINGSET, "workingset");
-        WorkSession sessionelv = sessioneLavoroService.getSessione(form.getIdsessione()).get();
+        WorkSession sessionelv = sessioneLavoroService.getSessione(form.getIdsessione());
         try {
             Elaborazione elaborazione = new Elaborazione();
             elaborazione.setSessioneLavoro(sessionelv);
             elaborazione.setDescrizione(form.getDescrizione());
             elaborazione.setNome(form.getNome());
             elaborazione.setDataElaborazione(new Date());
-            elaborazione.setSxBusinessFunction(businessFunctionService.findBFunctionById(form.getIdfunzione()).get());
+            elaborazione.setSxBusinessFunction(businessFunctionService.findBFunctionById(form.getIdfunzione()));
 
             elaborazioneService.salvaElaborazione(elaborazione);
+            logService.save("Elaborazione " + elaborazione.getNome() + " creata con successo", user.getUserid(), sessionelv.getId());
             notificationService.addInfoMessage("Elaborazione creata.");
         } catch (Exception e) {
             notificationService.addErrorMessage("Errore creazione elaborazione", e.getMessage());

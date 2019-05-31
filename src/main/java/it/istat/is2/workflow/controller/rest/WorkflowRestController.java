@@ -54,121 +54,121 @@ import it.istat.is2.workflow.service.WorkflowService;
 @RestController
 public class WorkflowRestController {
 
-	@Autowired
-	private WorkflowService workflowService;
-	@Autowired
-	private BusinessProcessService businessProcessService;
-	@Autowired
-	private BusinessStepService businessStepService;
-	@Autowired
-	StepVariableService stepVariableService;
+    @Autowired
+    private WorkflowService workflowService;
+    @Autowired
+    private BusinessProcessService businessProcessService;
+    @Autowired
+    private BusinessStepService businessStepService;
+    @Autowired
+    StepVariableService stepVariableService;
 
-	@RequestMapping(value = "/worksetvalori/{idelaborazione}/{tipoCampo}/{paramsFilter:.+}", method = RequestMethod.GET)
-	public String loadDatasetValori2(HttpServletRequest request, Model model,
-			@PathVariable("idelaborazione") Long idelaborazione, @PathVariable("tipoCampo") Integer tipoCampo,
-			@PathVariable("paramsFilter") String paramsFilter, @RequestParam("length") Integer length,
-			@RequestParam("start") Integer start, @RequestParam("draw") Integer draw) throws IOException, JSONException {
+    @RequestMapping(value = "/worksetvalori/{idelaborazione}/{tipoCampo}/{paramsFilter:.+}", method = RequestMethod.GET)
+    public String loadDatasetValori2(HttpServletRequest request, Model model,
+            @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("tipoCampo") Integer tipoCampo,
+            @PathVariable("paramsFilter") String paramsFilter, @RequestParam("length") Integer length,
+            @RequestParam("start") Integer start, @RequestParam("draw") Integer draw) throws IOException, JSONException {
 
-		HashMap<String, String> parameters = null;
-		String noparams = "noparams";
-		if (!noparams.equals(paramsFilter)) {
-			StringTokenizer st = new StringTokenizer(paramsFilter, "&");
-			StringTokenizer st2 = null;
-			parameters = new HashMap<String, String>();
-			ArrayList<String> nomeValore = null;
-			while (st.hasMoreTokens()) {
-				st2 = new StringTokenizer(st.nextToken(), "=");
-				nomeValore = new ArrayList<String>();
-				while (st2.hasMoreTokens()) {
-					nomeValore.add(st2.nextToken());
-				}
-				parameters.put(nomeValore.get(0), nomeValore.get(1));
-			}
-		} 
-		String dtb = workflowService.loadWorkSetValoriByElaborazione(idelaborazione, tipoCampo,length, start, draw, parameters);
+        HashMap<String, String> parameters = null;
+        String noparams = "noparams";
+        if (!noparams.equals(paramsFilter)) {
+            StringTokenizer st = new StringTokenizer(paramsFilter, "&");
+            StringTokenizer st2 = null;
+            parameters = new HashMap<String, String>();
+            ArrayList<String> nomeValore = null;
+            while (st.hasMoreTokens()) {
+                st2 = new StringTokenizer(st.nextToken(), "=");
+                nomeValore = new ArrayList<String>();
+                while (st2.hasMoreTokens()) {
+                    nomeValore.add(st2.nextToken());
+                }
+                parameters.put(nomeValore.get(0), nomeValore.get(1));
+            }
+        }
+        String dtb = workflowService.loadWorkSetValoriByElaborazione(idelaborazione, tipoCampo, length, start, draw, parameters);
 
-		return dtb;
-	}
+        return dtb;
+    }
 
-	@RequestMapping(value = "/loadBProcess/{idfunction}", method = RequestMethod.GET)
-	public List<SxBusinessProcess> loadComboBProcess(HttpServletRequest request, Model model,
-			@PathVariable("idfunction") Long idfunction) throws IOException {
+    @RequestMapping(value = "/loadBProcess/{idfunction}", method = RequestMethod.GET)
+    public List<SxBusinessProcess> loadComboBProcess(HttpServletRequest request, Model model,
+            @PathVariable("idfunction") Long idfunction) throws IOException {
 
-		List<SxBusinessProcess> listaProcess = businessProcessService.findBProcessByIdFunction(idfunction);
+        List<SxBusinessProcess> listaProcess = businessProcessService.findBProcessByIdFunction(idfunction);
 
-		return listaProcess;
-	}
+        return listaProcess;
+    }
 
-	@RequestMapping(value = "/loadBSteps/{idprocess}", method = RequestMethod.GET)
-	public List<SxBusinessStep> loadComboBSteps(HttpServletRequest request, Model model,
-			@PathVariable("idprocess") Long idprocess) throws IOException {
+    @RequestMapping(value = "/loadBSteps/{idprocess}", method = RequestMethod.GET)
+    public List<SxBusinessStep> loadComboBSteps(HttpServletRequest request, Model model,
+            @PathVariable("idprocess") Long idprocess) throws IOException {
 
-		List<SxBusinessStep> listaBStep = businessStepService.findBStepByIdProcess(idprocess);
+        List<SxBusinessStep> listaBStep = businessStepService.findBStepByIdProcess(idprocess);
 
-		return listaBStep;
-	}
+        return listaBStep;
+    }
 
-	@RequestMapping(value = "/loadVarsByStep/{idelab}/{idstep}", method = RequestMethod.GET)
-	public List<SxStepVariable> loadVarsByStep(HttpServletRequest request, Model model,
-			@PathVariable("idelab") Long idelab, @PathVariable("idstep") Long idstep) throws IOException {
+    @RequestMapping(value = "/loadVarsByStep/{idelab}/{idstep}", method = RequestMethod.GET)
+    public List<SxStepVariable> loadVarsByStep(HttpServletRequest request, Model model,
+            @PathVariable("idelab") Long idelab, @PathVariable("idstep") Long idstep) throws IOException {
 
-		List<SxStepVariable> listaVarAssociate = stepVariableService.findBStepByIdProcess(idelab, idstep);
+        List<SxStepVariable> listaVarAssociate = stepVariableService.findBStepByIdProcess(idelab, idstep);
 
-		return listaVarAssociate;
-	}
+        return listaVarAssociate;
+    }
 
-	@RequestMapping(value = "/download/workset/{tipoFile}/{idelab}", method = RequestMethod.GET)
-	public void downloadWorkset(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable("tipoFile") String tipoFile, @PathVariable("idelab") Long idelab) throws Exception {
+    @RequestMapping(value = "/download/workset/{tipoFile}/{idelab}", method = RequestMethod.GET)
+    public void downloadWorkset(HttpServletRequest request, HttpServletResponse response,
+            @PathVariable("tipoFile") String tipoFile, @PathVariable("idelab") Long idelab) throws Exception {
 
-		String fileName = "";
-		String contentType = "";
-		switch (tipoFile) {
-		case "csv":
-			fileName = "workset.csv";
-			contentType = "text/csv";
-			break;
-		case "pdf":
-			fileName = "workset.pdf";
-			contentType = "application/pdf";
-			break;
-		case "excel":
-			fileName = "workset.xlsx";
-			contentType = "application/vnd.ms-excel";
-			break;
-		}
+        String fileName = "";
+        String contentType = "";
+        switch (tipoFile) {
+            case "csv":
+                fileName = "workset.csv";
+                contentType = "text/csv";
+                break;
+            case "pdf":
+                fileName = "workset.pdf";
+                contentType = "application/pdf";
+                break;
+            case "excel":
+                fileName = "workset.xlsx";
+                contentType = "application/vnd.ms-excel";
+                break;
+        }
 
-		response.setHeader("charset", "utf-8");
-		response.setHeader("Content-Type", contentType);
-		response.setHeader("Content-disposition", "attachment; filename=" + fileName);
-		Map<String, List<String>> dataMap = workflowService.loadWorkSetValoriByElaborazioneMap(idelab);
-		Utility.writeObjectToCSV(response.getWriter(), dataMap);
-	}
+        response.setHeader("charset", "utf-8");
+        response.setHeader("Content-Type", contentType);
+        response.setHeader("Content-disposition", "attachment; filename=" + fileName);
+        Map<String, List<String>> dataMap = workflowService.loadWorkSetValoriByElaborazioneMap(idelab);
+        Utility.writeObjectToCSV(response.getWriter(), dataMap);
+    }
 
-	@RequestMapping(value = "/updaterowlist", method = RequestMethod.POST)
-	public String updateOrdineRighe(HttpServletRequest request, Model model,
-			@RequestParam("ordineIds") String ordineIds) throws IOException {
+    @RequestMapping(value = "/updaterowlist", method = RequestMethod.POST)
+    public String updateOrdineRighe(HttpServletRequest request, Model model,
+            @RequestParam("ordineIds") String ordineIds) throws IOException {
 
-		StringTokenizer stringTokenizerElements = new StringTokenizer(ordineIds, "|");
-		String element = null;
-		String ordine = null;
-		String idstepvar = null;
-		SxStepVariable stepVariable = new SxStepVariable();
-		while (stringTokenizerElements.hasMoreElements()) {
-			element = stringTokenizerElements.nextElement().toString();
-			StringTokenizer stringTokenizerValues = new StringTokenizer(element, "=");
-			while (stringTokenizerValues.hasMoreElements()) {
-				ordine = stringTokenizerValues.nextElement().toString();
-				idstepvar = stringTokenizerValues.nextElement().toString();
-			}
-			Long idstep = Long.parseLong(idstepvar);
-			Short ordineS = Short.parseShort(ordine);
-			stepVariable = stepVariableService.findById(idstep).get();
-			stepVariable.setOrdine(ordineS);
-			stepVariableService.updateStepVar(stepVariable);
-		}
+        StringTokenizer stringTokenizerElements = new StringTokenizer(ordineIds, "|");
+        String element = null;
+        String ordine = null;
+        String idstepvar = null;
+        SxStepVariable stepVariable = new SxStepVariable();
+        while (stringTokenizerElements.hasMoreElements()) {
+            element = stringTokenizerElements.nextElement().toString();
+            StringTokenizer stringTokenizerValues = new StringTokenizer(element, "=");
+            while (stringTokenizerValues.hasMoreElements()) {
+                ordine = stringTokenizerValues.nextElement().toString();
+                idstepvar = stringTokenizerValues.nextElement().toString();
+            }
+            Long idstep = Long.parseLong(idstepvar);
+            Short ordineS = Short.parseShort(ordine);
+            stepVariable = stepVariableService.findById(idstep).get();
+            stepVariable.setOrdine(ordineS);
+            stepVariableService.updateStepVar(stepVariable);
+        }
 
-		return "success";
-	}
+        return "success";
+    }
 
 }

@@ -42,7 +42,7 @@ public class BusinessFunctionService {
         return businessFunctionDao.findAll();
     }
 
-    public Optional<SxBusinessFunction> findBFunctionById(long idfunction) {
-        return businessFunctionDao.findById(idfunction);
+    public SxBusinessFunction findBFunctionById(long idfunction) {
+        return businessFunctionDao.findById(idfunction).orElse(null);
     }
 }

@@ -43,11 +43,11 @@ public class LogService {
     }
     
     public List<Log> findByIdUtente(Long idUtente) {
-        return (List<Log>) this.logDao.findByIdUtente(idUtente);
+        return (List<Log>) this.logDao.findByIdUtenteOrderByIdDesc(idUtente);
     }
     
     public List<Log> findByIdSessione(Long idSessione) {
-        return (List<Log>) this.logDao.findByIdSessione(idSessione);
+        return (List<Log>) this.logDao.findByIdSessioneOrderByIdDesc(idSessione);
     }
     
     public long deleteByIdSessione(Long idSessione) {

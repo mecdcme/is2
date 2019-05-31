@@ -135,13 +135,21 @@
                                         <span th:text="#{Layout.log.panel}">Log panel</span>
                                     </legend>
                                     <div id="logbox">
-                                        <!-- Log goes here-->
-                                        <!-- Content will be loaded dynamically-->
-                                        <p>Creata elaborazione Ciaone</p>
-                                        <p>Caricato con successo file Prova1</p>
-                                        <p>Caricato con successo file Prova2</p>
-                                        <p>Creata elaborazione Ciaone</p>
+                                        <span th:if="${logs}">
+                                            <ul th:each="log : ${logs}">
+                                                <li th:text="${log.msg}"></li>
+                                            </ul>
+                                        </span>
+                                        <span th:unless="${logs}">
+                                            No message available
+                                        </span>
                                     </div>
+                                    <a href="javascript:void(0)" th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
+                                        <button class="btn btn-light" style="margin-bottom: 10px">
+                                            <i class="fa fa-trash"></i>
+                                            <span>Clear</span>
+                                        </button>
+                                    </a>
                                 </fieldset>
                             </div>
                         </div>

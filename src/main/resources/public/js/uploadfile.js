@@ -39,12 +39,11 @@ $(document).ready(function () {
         $("#delimiter").val($("#delimiter_sel").val());
     });
 
-
     $("#file").change(function () { // bCheck is a input type button
         filename = $("div.file-caption-name").text();
         $("#delimiter").val($("#delimiter_sel").val());
-        preview();       
-       if (filename) { // returns true if the string is not empty
+        preview();
+        if (filename) { // returns true if the string is not empty
             $("#desc").val(filename);
             $("#previewModal").modal('show');
             return true;
@@ -53,25 +52,27 @@ $(document).ready(function () {
             return false;
         };
     });
+    
     $('#label_file').on("keyup", function (e) {
     	controllaInputText();
     });
 });
 
 function controllaInputText() {	
-	if ($("#label_file").val().length > 0 && $("#label_file").val() != '') {		
+    if ($("#label_file").val().length > 0 && $("#label_file").val() != '') {		
         $("#btn-invia-file").removeClass('disabled');
         $("#btn-invia-file").removeAttr('disabled');
-	}else{
-		$("#btn-invia-file").addClass('disabled');
+    }else{
+	$("#btn-invia-file").addClass('disabled');
         $("#btn-invia-file").attr("disabled", "disabled");
-	}
+    }
 }
 	
 function eliminaDataset(idDataset) {
-	$("#idDataset").val(idDataset);	
-   $("#deleteDsFileForm").submit();
+    $("#idDataset").val(idDataset);
+    $("#deleteDsFileForm").submit();
 }
+
 function creaContenuto(data, delimiter) {
     // La lista dei tipi dovrà essere dinamica
     var list = [
@@ -104,7 +105,6 @@ function creaContenuto(data, delimiter) {
     $("#titolo").html("Intestazione file:");
 }
 
-
 function parsingStep(results, parser) {
     console.log("Row data:", results.data);
     previewString += results.data.toString() + "\n";
@@ -136,63 +136,6 @@ function preview() {
     }, function onComplete() {
         console.log('Read all lines');
         $("#PreviewTextarea").val(previewString);
-    });
-}
-
-
-function preview2() {
-    stepped = 0;
-    rowCount = 0;
-    errorCount = 0;
-    firstError = undefined;
-    var input = $('#file');
-    if (input.val() == "") {
-        alert("Errore: Caricare un file");
-    }
-    //configobj = buildConfig();
-
-    previewdata = $('#file').parse({
-        config: {
-            delimiter: delimiterValue, // auto-detect
-            newline: "", // auto-detect
-            quoteChar: '"',
-            escapeChar: '"',
-            header: false,
-            transformHeader: undefined,
-            dynamicTyping: false,
-            preview: 15,
-            encoding: "",
-            worker: false,
-            comments: false,
-            step: undefined,
-            complete: undefined,
-            error: undefined,
-            download: false,
-            skipEmptyLines: false,
-            chunk: parsingStep,
-            fastMode: undefined,
-            beforeFirstChunk: undefined,
-            withCredentials: undefined,
-            transform: undefined
-        },
-
-        before: function (file, inputElem)
-        {
-            //start = now();
-            previewString = "";
-            console.log("Parsing file...", file);
-        },
-        error: function (err, file, inputElem, reason)
-        {
-            console.log("ERROR:", err, file);
-            firstError = firstError || err;
-            errorCount++;
-        },
-        complete: function () {
-            console.log("completato");
-            $("#PreviewTextarea").val(previewString);
-        }
-
     });
 }
 
