@@ -1,5 +1,3 @@
-package it.istat.is2.app.controller.rest;
-
 /**
  * Copyright 2017 ISTAT
  *
@@ -23,6 +21,8 @@ package it.istat.is2.app.controller.rest;
  * @author Paolo Pizzo <papizzo @ istat.it>
  * @version 1.0
  */
+package it.istat.is2.app.controller.rest;
+
 import java.security.Principal;
 import java.util.List;
 import javax.validation.Valid;
@@ -48,8 +48,6 @@ import it.istat.is2.app.forms.UserCreateForm;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.service.UserService;
 import it.istat.is2.app.service.NotificationService.NotificationMessage;
-
-
 
 @RestController
 public class UserRestController {

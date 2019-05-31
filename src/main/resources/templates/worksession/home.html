@@ -59,7 +59,7 @@
 
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-7">
                                 <fieldset class="well ">
                                     <legend class="well-legend secondary-fieldset">
                                         <span>Dettaglio sessione di lavoro</span>
@@ -86,18 +86,27 @@
                                     </ul>
                                 </fieldset>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-5">
                                 <fieldset class="well ">
                                     <legend class="well-legend secondary-fieldset">
                                         <span th:text="#{Layout.log.panel}">Log panel</span>
                                     </legend>
                                     <div id="logbox">
-                                        <!-- Content will be loaded dynamically-->
-                                        <p>Creata elaborazione Ciaone</p>
-                                        <p>Caricato con successo file Prova1</p>
-                                        <p>Caricato con successo file Prova2</p>
-                                        <p>Creata elaborazione Ciaone</p>
+                                        <span th:if="${logs}">
+                                            <ul th:each="log : ${logs}">
+                                                <li th:text="${log.msg}"></li>
+                                            </ul>
+                                        </span>
+                                        <span th:unless="${logs}">
+                                            No message available
+                                        </span>
                                     </div>
+                                    <a href="javascript:void(0)" th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
+                                        <button class="btn btn-light" style="margin-bottom: 10px">
+                                            <i class="fa fa-trash"></i>
+                                            <span>Clear</span>
+                                        </button>
+                                    </a>
                                 </fieldset>
                             </div>
                         </div>

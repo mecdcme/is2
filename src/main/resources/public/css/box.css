@@ -109,7 +109,8 @@ box-shadow: none !important;
     padding-top: 5px;
 }
 
-#logbox p{
+#logbox ul{
+    list-style-type: none;
     padding-left: 4px;
 }
 
@@ -860,6 +861,16 @@ button.btn-secondary:hover
 
 .dataTables_length{
     padding-top: 10px;
+}
+
+.btn:hover, .btn:focus, .btn.focus {
+    color: #155873;
+    text-decoration: none;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary.focus {
+    color: #fff;
+    text-decoration: none;
 }
 
 .btn-light{

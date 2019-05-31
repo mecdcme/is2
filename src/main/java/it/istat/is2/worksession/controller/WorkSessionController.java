@@ -39,8 +39,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import it.istat.is2.app.bean.ElaborazioneFormBean;
 import it.istat.is2.app.bean.SessionBean;
+import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.ElaborazioneService;
+import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.dataset.domain.DatasetFile;
@@ -62,6 +64,8 @@ public class WorkSessionController {
     private ElaborazioneService elaborazioneService;
     @Autowired
     private BusinessFunctionService businessFunctionService;
+    @Autowired
+    private LogService logService;
 
     @GetMapping(value = "/sessione/mostraSessioni")
     public String mostraSessioni(HttpSession session, Model model, @AuthenticationPrincipal User user) {
@@ -76,9 +80,11 @@ public class WorkSessionController {
     @RequestMapping(value = "/sessione/nuovasessione")
     public String nuovaSessione(HttpSession session, Model model, @AuthenticationPrincipal User user, @RequestParam("descrizione") String descrizione, @RequestParam("nome") String nome) {
         notificationService.removeAllMessages();
+        
         try {
             WorkSession sessionelv = sessioneLavoroService.nuovaSessioneLavoro(user.getEmail(), descrizione, nome);
             notificationService.addInfoMessage("Sessione creata con ID:" + sessionelv.getId());
+            logService.save("Sessione creata con ID:" + sessionelv.getId(), user.getUserid(), sessionelv.getId());
         } catch (Exception e) {
             notificationService.addErrorMessage("Errore creazione nuova sessione.", e.getMessage());
         }
@@ -104,6 +110,8 @@ public class WorkSessionController {
 
         notificationService.removeAllMessages();
 
+        List<Log> logs = logService.findByIdSessione(id);
+        
         WorkSession sessionelv = sessioneLavoroService.getSessione(id).get();
         List<String> files = new ArrayList();
         if (sessionelv.getDatasetFiles() != null) {
@@ -131,6 +139,8 @@ public class WorkSessionController {
 
         model.addAttribute("listaFunzioni", listaFunzioni);
         model.addAttribute("listaElaborazioni", listaElaborazioni);
+        model.addAttribute("logs", logs);
+        
         return "worksession/home";
     }
 

@@ -23,61 +23,42 @@
  */
 package it.istat.is2.app.domain;
 
-import lombok.Data;
-
 import java.io.Serializable;
-
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Data
 @Entity
-@Table(name = "sx_user_roles")
-public class UserRole implements Serializable {
-
-    private static final long serialVersionUID = 12233L;
+@Table(name = "sx_log")
+@DynamicUpdate
+public class Log implements Serializable{
+    
+    private static final long serialVersionUID = 1223454566;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Short id;
-
-    @Column(name = "role")
-    private String role;
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (!(o instanceof UserRole)) {
-            return false;
-        }
-        UserRole userRole = (UserRole) o;
-        return userRole.getId().equals(this.id);
-    }
-
-    public UserRole(Short id) {
-        super();
-        this.id = id;
-    }
-
-    public UserRole() {
-        super();
-
-    }
-
+    private Long id;
+    
+    @Column(name = "msg")
+    private String msg;
+    
+    @Column(name = "msg_time")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date msgtime;
+    
+    @Column(name = "id_utente")
+    private Long idUtente;
+    
+    @Column(name = "id_sessione")
+    private Long idSessione;
+    
 }
