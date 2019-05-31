@@ -77,7 +77,7 @@ public class SqlGenericDao {
 
                 query += " and t.r in( select f.r from SX_WORKSET si, SX_STEP_VARIABLE ssv,json_table( CONVERT(  si.valori USING utf8), '$.valori[*]'  columns "
                         + "(  idx FOR ORDINALITY,r int path '$.r', v varchar(100) path '$.v') ) f "
-                        + " where  ssv.elaborazione=:idelaborazione and sv.tipo_campo=:tipoCampo and ssv.var=si.id  and si.nome=:n_" + key
+                        + " where  ssv.elaborazione=:idelaborazione and ssv.tipo_campo=:tipoCampo and ssv.var=si.id  and si.nome=:n_" + key
                         + " and f.v=:v_" + key + " ) ";
             }
         }

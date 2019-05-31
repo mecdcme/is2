@@ -74,6 +74,7 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 8%"><span></span></th>
+                                                      <th style="width: 8%"><span></span></th>
                                                     <th><span>Ruolo</span></th>
                                                     <th><span>Nome Variabile</span></th>
                                                     <th><span>I/O</span></th>
@@ -87,6 +88,9 @@
                                                     th:unless="${(stepVList == null) or (stepVList.size() == 0) }"
                                                     data-th-attr="stepid=${stepV.id}">
                                                     <td>
+                                                        <i class="fa fa-sort"></i><span th:text="${stats.index+1}"></span>
+                                                    </td>
+                                                     <td>
                                                         <i class="fa fa-sort"></i><span th:text="${stats.index+1}"></span>
                                                     </td>
                                                     <td th:text="${stepV.sxRuoli.nome}"></td>
