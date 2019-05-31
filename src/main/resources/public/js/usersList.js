@@ -195,7 +195,9 @@ function save() {
                     var div = $('<div class="' + classs + '"><strong>'
                             + msg.type + '</strong>: ' + msg.text
                             + ' </div>"');
-                    $("#msgs").append(div);
+                    if (save_method == 'update') {
+                    	$("#msgs").append(div);
+                    }
                 });
             }
             $('#btnSave').text(_text_saveUser); // change button text
@@ -218,8 +220,7 @@ function open_delete(id, email) {
     $('#btnDelete').show(); // set button enable
     $('#delEmail').text(email); // change button text
     $('#delId').val(id);
-    $('#modalDelete_form').modal('show'); // show bootstrap modal
-    $('#msgsDel').empty();
+    $('#modalDelete_form').modal('show'); // show bootstrap modal    
 }
 
 function delete_user() {
@@ -229,7 +230,7 @@ function delete_user() {
         type: "DELETE",
         dataType: "JSON",
         success: function (data) {
-            $("#msgsDel").empty();
+            
             if (data) {
                 $.each(data,
                         function (index, msg) {
@@ -241,7 +242,7 @@ function delete_user() {
                             var div = $('<div class="' + classs + '"><strong>'
                                     + msg.type + '</strong>: ' + msg.text
                                     + ' </div>"');
-                            $("#msgsDel").append(div);
+                           
                         });
             }
 
