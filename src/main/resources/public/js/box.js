@@ -144,28 +144,15 @@ function callBackShow() {
 }
 
 function clearLog(idSessione) {
-
     $.ajax({
         url: _ctx + "/logs/" + idSessione,
         type: "DELETE",
         dataType: "JSON",
-        success: function (data) {
-
-            $("#msgs").empty();
-
-            if (data) {
-                writeMsgs(data, "msgs");
-                $('#password').val('');
-                $('#password1').val('');
-                $("#btnChangePassword").prop("disabled", true);
-            }
-
+        success: function () {
+            $("#logbox").text("No message available");
         },
         error: function (jqXHR, textStatus, errorThrown) {
             writeMsgsError('Error deleting data', 'msgs');
         }
     });
-
-
-
 }
