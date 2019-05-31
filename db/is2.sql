@@ -870,4 +870,13 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+DROP TABLE IF EXISTS `sx_log`;
 -- Dump completed on 2019-05-17 18:10:52
+CREATE TABLE `sx_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `msg` text,
+  `msg_time` date DEFAULT NULL,
+  `id_utente` int(20) NOT NULL,
+  `id_sessione` int(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
