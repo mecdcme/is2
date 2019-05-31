@@ -38,7 +38,7 @@ $(document).ready(function () {
         columnDefs: [{
                 orderable: false,
                 className: 'reorder',
-                targets: [0]
+                targets: [1]
             }],
         buttons: [{
                 className: 'btn-extenal-function',
