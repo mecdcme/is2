@@ -118,6 +118,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!--Xmx to specify the maximum heap size,  -Xms to specify the initial Java heap size-->
+                    <jvmArguments>-Xms512m -Xmx1g</jvmArguments>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
