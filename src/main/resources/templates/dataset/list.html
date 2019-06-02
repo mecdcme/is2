@@ -63,78 +63,80 @@
                         <input id="idsessionelv" type="hidden" value="${session.sessionelv.id}" />
                         <div class="row">
                             <div class="col-lg-7">
-                                <fieldset class="well ">
-                                    <legend class="well-legend secondary-fieldset">
+                                <div class="card">
+                                    <div class="card-header">
                                         <span th:text="#{lista.dataset.legend}">Lista dataset</span>
-                                    </legend>
-                                    <form id="inputFileForm" th:action="@{'/loadInputData'}" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" value="" name="descrizione" id="desc" /> 
-                                        <input type="hidden" th:value="${session.sessionelv.id}" th:name="idsessione" />
-                                        <input type="hidden" value="" name="delimiter" id="delimiter" />
-                                        <input type="hidden" value="" name="labelFile" id="label_f" />
-                                        <input type="hidden" value="" name="tipoDato" id="tipo_dat" />
-                                        <div id="upload" class="row">
-                                            <div class="col-lg-8">
-                                                <div class="form-group">
-                                                    <label class="control-label"
-                                                           th:text="#{selection.file.legend}">Seleziona un file da caricare (txt o csv) </label>
-                                                    <!-- Impostare data-show-preview a true per avere la preview del file -->
-                                                    <input id="file" accept=".csv,.txt" class="file" type="file" name="fileName"
-                                                           data-show-preview="false" data-show-caption="true"
-                                                           data-show-upload="false" data-toggle="tooltip"
-                                                           data-placement="top" data-show-remove="false" />
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="inputFileForm" th:action="@{'/loadInputData'}" method="post" enctype="multipart/form-data">
+                                            <input type="hidden" value="" name="descrizione" id="desc" /> 
+                                            <input type="hidden" th:value="${session.sessionelv.id}" th:name="idsessione" />
+                                            <input type="hidden" value="" name="delimiter" id="delimiter" />
+                                            <input type="hidden" value="" name="labelFile" id="label_f" />
+                                            <input type="hidden" value="" name="tipoDato" id="tipo_dat" />
+                                            <div id="upload" class="row">
+                                                <div class="col-lg-8">
+                                                    <div class="form-group">
+                                                        <label class="control-label"
+                                                               th:text="#{selection.file.legend}">Seleziona un file da caricare (txt o csv) </label>
+                                                        <!-- Impostare data-show-preview a true per avere la preview del file -->
+                                                        <input id="file" accept=".csv,.txt" class="file" type="file" name="fileName"
+                                                               data-show-preview="false" data-show-caption="true"
+                                                               data-show-upload="false" data-toggle="tooltip"
+                                                               data-placement="top" data-show-remove="false" />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </form> 
-                                    <form id="deleteDsFileForm" th:action="@{'/deleteDataset'}" method="post">
-                                        <input type="hidden" id="idDataset" th:name="idDataset" />
-                                    </form>
-                                    <table id="datasetList" class="table table-striped table-condensed"
-                                           th:if="${listaDataset}" cellspacing="0" style="overflow: auto;">
-                                        <thead>
-                                            <tr th:unless="${(listaDataset == null) or (listaDataset.size() == 0) }">                                                
-                                                <th><span th:text="#{listaDataset.nome}">Nome</span></th>
-                                                <th><span th:text="#{listaDataset.label}">Label</span></th>
-                                                <th><span th:text="#{listaDataset.formatofile}">Formato</span></th>
-                                                <th><span th:text="#{listaDataset.numerorighe}">N. Righe</span></th>
-                                                <th><span th:text="#{listaDataset.tipodato}">Tipo dato</span></th>
-                                                <th><span th:text="#{listaDataset.note}">Note</span></th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="dataset : ${listaDataset}"
-                                                th:unless="${(listaDataset == null) or (listaDataset.size() == 0) }">
-                                                <td th:text="${dataset.nomeFile}"></td>
-                                                <td th:text="${dataset.labelFile}"></td>
-                                                <td th:text="${dataset.formatoFile}"></td>
-                                                <td th:text="${dataset.numerorighe}"></td>
-                                                <td th:if="${dataset.tipoDato != null}" th:text="${dataset.tipoDato.nome}"></td>
-                                                <td th:unless="${dataset.tipoDato != null}" th:text="null"></td>
-                                                <td th:text="${dataset.note}"></td>
-                                                <td style="width: 1%">
-                                                    <a class='towait' title="Visualizza dataset" th:href="@{'/viewDataset/'+${dataset.id}}"> 
-                                                        <i class="fa fa-search"></i>
-                                                    </a>
-                                                </td>
-                                                <td style="width: 1%">
-                                                    <a title="Elimina dataset" role="button" th:onclick="'javascript:eliminaDataset(\'' + ${dataset.id} + '\')'">												
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <span th:if="${(listaDataset == null) or (listaDataset.size() == 0)}">Non sono presenti dataset per la sessione di lavoro.</span>
-                                </fieldset>
+                                        </form> 
+                                        <form id="deleteDsFileForm" th:action="@{'/deleteDataset'}" method="post">
+                                            <input type="hidden" id="idDataset" th:name="idDataset" />
+                                        </form>
+                                        <table id="datasetList" class="table table-striped table-condensed"
+                                               th:if="${listaDataset}" cellspacing="0" style="overflow: auto;">
+                                            <thead>
+                                                <tr th:unless="${(listaDataset == null) or (listaDataset.size() == 0) }">                                                
+                                                    <th><span th:text="#{listaDataset.nome}">Nome</span></th>
+                                                    <th><span th:text="#{listaDataset.label}">Label</span></th>
+                                                    <th><span th:text="#{listaDataset.formatofile}">Formato</span></th>
+                                                    <th><span th:text="#{listaDataset.numerorighe}">N. Righe</span></th>
+                                                    <th><span th:text="#{listaDataset.tipodato}">Tipo dato</span></th>
+                                                    <th><span th:text="#{listaDataset.note}">Note</span></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="dataset : ${listaDataset}"
+                                                    th:unless="${(listaDataset == null) or (listaDataset.size() == 0) }">
+                                                    <td th:text="${dataset.nomeFile}"></td>
+                                                    <td th:text="${dataset.labelFile}"></td>
+                                                    <td th:text="${dataset.formatoFile}"></td>
+                                                    <td th:text="${dataset.numerorighe}"></td>
+                                                    <td th:if="${dataset.tipoDato != null}" th:text="${dataset.tipoDato.nome}"></td>
+                                                    <td th:unless="${dataset.tipoDato != null}" th:text="null"></td>
+                                                    <td th:text="${dataset.note}"></td>
+                                                    <td style="width: 1%">
+                                                        <a class='towait' title="Visualizza dataset" th:href="@{'/viewDataset/'+${dataset.id}}"> 
+                                                            <i class="fa fa-search"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td style="width: 1%">
+                                                        <a title="Elimina dataset" role="button" th:onclick="'javascript:eliminaDataset(\'' + ${dataset.id} + '\')'">												
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <span th:if="${(listaDataset == null) or (listaDataset.size() == 0)}">Non sono presenti dataset per la sessione di lavoro.</span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-lg-5">
-                                <fieldset class="well ">
-                                    <legend class="well-legend secondary-fieldset">
+                                <div class="card">
+                                    <div class="card-header">
                                         <span th:text="#{Layout.log.panel}">Log panel</span>
-                                    </legend>
-                                    <div id="logbox">
+                                    </div>
+                                    <div id="logbox" class="card-body">
                                         <span th:if="${logs}">
                                             <ul th:each="log : ${logs}">
                                                 <li th:text="${log.msg}"></li>
@@ -144,13 +146,14 @@
                                             No message available
                                         </span>
                                     </div>
-                                    <a href="javascript:void(0)" th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
+                                    <a href="javascript:void(0)" style="padding-left: 8px;" 
+                                       th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
                                         <button class="btn btn-light" style="margin-bottom: 10px">
                                             <i class="fa fa-trash"></i>
                                             <span>Clear</span>
                                         </button>
                                     </a>
-                                </fieldset>
+                                </div>
                             </div>
                         </div>
                         <!-- row -->

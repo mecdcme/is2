@@ -25,6 +25,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head th:fragment="site-head">
         <meta charset="utf-8" />
+        <link rel="icon" th:href="@{/img/favicon.ico}" type="image/x-icon"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="IE=10.000" http-equiv="X-UA-Compatible" />
@@ -40,16 +41,16 @@
         <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
     </head>
     <body>
-        <div class="wrapper">
+        <div id="login" class="wrapper">
             <div class="block-center mt-xl wd-xl">
                 <!-- START LOGIN PANEL-->
                 <div class="panel panel-primary">
-                    <div class="panel-heading text-center">
+                    <div class="panel-heading text-center" style="padding: 6px">
                         <span class="fa-stack fa-lg">
                             <i class="fa fa-circle fa-stack-2x"></i>
                             <i class="fa fa-rocket fa-stack-1x" style="color:#2189b4"></i>
                         </span>
-                        <span th:text="#{app.name}">IS2</span>
+                        <span>IS<sup>2</sup> Workbench</span>
                     </div>
                     <div class="panel-body">
                         <form method="post" th:object="${loginForm}" role="form" class="mb-lg">
@@ -79,9 +80,9 @@
                 <!-- END LOGIN PANEL-->
             </div>
             <!-- START FOOTER-->
-            <footer>
-                <span th:text="#{app.footer.text}">2019 - Istat Statistical Service (IS2)</span><br/>
-            </footer>
+            <div class="text-center">
+                <span>2019 - Developed by Istat</span>
+            </div>
             <!-- END FOOTER-->
         </div>
     </body>

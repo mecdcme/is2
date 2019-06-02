@@ -31,6 +31,7 @@
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
         <meta name="ctx_server" th:content="${#strings.replace(#httpServletRequest.requestURL,#httpServletRequest.requestURI,'')}" />
         <meta name="localLang" th:content="${#locale}" />
+        <link rel="icon" th:href="@{/img/favicon.ico}" type="image/x-icon"/>
         <title th:text="#{app.title}">IS2</title>
         <!-- Javascript -->
         <script th:src="@{/js/jquery-3.1.1.min.js}" type="text/javascript"></script>
@@ -77,10 +78,10 @@
                         </div>
                         <ul class="nav navbar-nav navbar-style">
                             <li sec:authorize="hasAuthority('ADMIN')">
-                                    <a  title="Administration" th:href="@{/users/userlist}">
-                                        <span th:text="#{Layout.users}"></span>
-                                    </a>
-                                </li>        
+                                <a  title="Administration" th:href="@{/users/userlist}">
+                                    <span th:text="#{Layout.users}"></span>
+                                </a>
+                            </li>        
                         </ul>
                         <ul class="nav navbar-nav navbar-right navbar-style">
                             <li class="dropdown">
@@ -152,7 +153,7 @@
                                        th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}"> 
                                         <i class="fa fa-sitemap"></i><span th:text="${session.sessioneBean.nomeElaborazione}">Elaborazione</span>
                                     </a>
-                                     <a title="Elaborazione" th:unless="${session.sessioneBean.businessFunction != null}">
+                                    <a title="Elaborazione" th:unless="${session.sessioneBean.businessFunction != null}">
                                         <i class="fa fa-sitemap"></i><span></span>
                                     </a>
                                     <ul th:if="${session.sessioneBean.businessFunction != null}" class="nav sidebar-subnav" aria-expanded="false">
@@ -186,7 +187,7 @@
 
             <!-- START FOOTER -->
             <footer th:fragment="site-footer">
-                <span  th:text="#{app.footer.text}">2019 - Istat Statistical Service (IS2)</span>
+                <span th:text="#{app.footer.text}">2019 - Developed by Istat</span>
             </footer>
             <!-- END FOOTER -->
         </div>
