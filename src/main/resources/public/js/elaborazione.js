@@ -33,8 +33,11 @@ $(document).ready(function () {
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         responsive: true,
-        paging: false,
-        rowReorder: true,
+        paging: false,        
+        
+        "rowReorder":  {
+        	selector: 'td:nth-child(2)'        	  
+        }, 
         columnDefs: [{
                 orderable: false,
                 className: 'reorder',
