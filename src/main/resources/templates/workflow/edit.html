@@ -73,8 +73,7 @@
                                         <table id="worksetTabList" class="table table-striped table-bordered table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 8%"><span></span></th>
-                                                      <th style="width: 8%"><span></span></th>
+                                                    <th style="width: 8%"><span></span></th>                                                      
                                                     <th><span>Ruolo</span></th>
                                                     <th><span>Nome Variabile</span></th>
                                                     <th><span>I/O</span></th>
@@ -86,10 +85,7 @@
                                             <tbody>
                                                 <tr th:each="stepV,stats: ${stepVList}"
                                                     th:unless="${(stepVList == null) or (stepVList.size() == 0) }"
-                                                    data-th-attr="stepid=${stepV.id}">
-                                                    <td>
-                                                        <i class="fa fa-sort"></i><span th:text="${stats.index+1}"></span>
-                                                    </td>
+                                                    data-th-attr="stepid=${stepV.id}">                                                    
                                                      <td>
                                                         <i class="fa fa-sort"></i><span th:text="${stats.index+1}"></span>
                                                     </td>
