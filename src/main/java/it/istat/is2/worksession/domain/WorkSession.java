@@ -42,6 +42,7 @@ import javax.persistence.Table;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.workflow.domain.Elaborazione;
+import javax.persistence.Temporal;
 import lombok.Data;
 
 @Data
@@ -61,6 +62,7 @@ public class WorkSession implements Serializable {
     private User user;
 
     @Column(name = "data_creazione")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataCreazione;
     @Column(name = "descrizione")
     private String descrizione;

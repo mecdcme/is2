@@ -43,6 +43,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.istat.is2.worksession.domain.WorkSession;
+import javax.persistence.Temporal;
 import lombok.Data;
 
 @Data
@@ -58,6 +59,7 @@ public class Elaborazione implements Serializable {
     private Long id;
 
     @Column(name = "DATAELABORAZIONE")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataElaborazione;
     @Column(name = "DESCRIZIONE")
     private String descrizione;

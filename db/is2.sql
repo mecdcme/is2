@@ -272,7 +272,7 @@ CREATE TABLE `sx_dataset_file` (
   `TIPOFILE` varchar(255) DEFAULT NULL,
   `SEPARATORE` varchar(255) DEFAULT NULL,
   `NUMERO_RIGHE` int(20) DEFAULT NULL,
-  `DATACARICAMENTO` date DEFAULT NULL,
+  `DATACARICAMENTO` datetime DEFAULT NULL,
   `NOTE` varchar(255) DEFAULT NULL,
   `SESSIONE_LAVORO` int(20) DEFAULT NULL,
   `formatofile` varchar(45) DEFAULT NULL,
@@ -300,7 +300,7 @@ DROP TABLE IF EXISTS `sx_elaborazione`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `sx_elaborazione` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `DATAELABORAZIONE` date DEFAULT NULL,
+  `DATAELABORAZIONE` datetime DEFAULT NULL,
   `NOME` varchar(255) DEFAULT NULL,
   `PARAMETRI` varchar(255) DEFAULT NULL,
   `DESCRIZIONE` varchar(255) DEFAULT NULL,
@@ -494,7 +494,7 @@ DROP TABLE IF EXISTS `sx_sessione_lavoro`;
 CREATE TABLE `sx_sessione_lavoro` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_UTENTE` int(20) DEFAULT NULL,
-  `DATA_CREAZIONE` date DEFAULT NULL,
+  `DATA_CREAZIONE` datetime DEFAULT NULL,
   `NOME` varchar(255) DEFAULT NULL,
   `DESCRIZIONE` varchar(2000) DEFAULT NULL,
   PRIMARY KEY (`ID`),
@@ -876,7 +876,7 @@ DROP TABLE IF EXISTS `sx_log`;
 CREATE TABLE `sx_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `msg` text,
-  `msg_time` date DEFAULT NULL,
+  `msg_time` datetime DEFAULT NULL,
   `id_utente` int(20) NOT NULL,
   `id_sessione` int(20) NOT NULL,
   PRIMARY KEY (`id`)

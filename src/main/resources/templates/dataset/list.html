@@ -135,24 +135,23 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:text="#{Layout.log.panel}">Log panel</span>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action" href="javascript:void(0)" 
+                                               th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
+                                                <i class="fa fa-trash"></i>&nbsp;Clear
+                                            </a>
+                                        </div>
                                     </div>
                                     <div id="logbox" class="card-body">
-                                        <span th:if="${logs}">
-                                            <ul th:each="log : ${logs}">
-                                                <li th:text="${log.msg}"></li>
-                                            </ul>
-                                        </span>
+                                        <ul th:if="${logs}">
+                                            <li th:each="log : ${logs}">
+                                                <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
+                                            </li>
+                                        </ul>
                                         <span th:unless="${logs}">
                                             No message available
                                         </span>
                                     </div>
-                                    <a href="javascript:void(0)" style="padding-left: 8px;" 
-                                       th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
-                                        <button class="btn btn-light" style="margin-bottom: 10px">
-                                            <i class="fa fa-trash"></i>
-                                            <span>Clear</span>
-                                        </button>
-                                    </a>
                                 </div>
                             </div>
                         </div>

@@ -1,7 +1,7 @@
 /**
  * Copyright 2019 ISTAT
  *
- * Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
@@ -30,7 +30,7 @@ body {
 
 body, html {
     height: 100%;
-    background-color: #e4e5e6;
+    background-color: #eef3f8;
 }
 
 /* login */
@@ -108,13 +108,17 @@ box-shadow: none !important;
 }
 
 #logbox{
-    height: 150px;
+    height: 170px;
     overflow-y: auto;
 }
 
 #logbox ul{
     list-style-type: none;
     padding-left: 4px;
+}
+
+#logbox ul > li{
+    padding: 5px 0px;
 }
 
 /* START HEADER */
@@ -904,7 +908,7 @@ button.btn-secondary:hover
     background-clip: border-box;
     border: 1px solid #c8ced3;
     border-radius: .25rem;
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 .card>hr {
@@ -950,10 +954,11 @@ button.btn-secondary:hover
 }
 
 .card-header {
-    padding: .75rem 1.25rem;
+    padding: 1rem 1.25rem;
     margin-bottom: 0;
     background-color: #f0f3f5;
-    border-bottom: 1px solid #c8ced3
+    border-bottom: 1px solid #c8ced3;
+    font-weight: bold;
 }
 
 .card-header:first-child {
@@ -984,6 +989,26 @@ button.btn-secondary:hover
 .card-header-pills {
     margin-right: -.625rem;
     margin-left: -.625rem
+}
+
+.card-header-actions {
+    display: inline-block;
+    float: right;
+    font-weight: normal;
+}
+
+.card-header-actions a:hover,.card-header-actions a:focus{
+    text-decoration: none;
+} 
+
+.card-header-action {
+    padding-left: 5px
+}
+
+.card-header-action-border {
+    padding-right: 5px;
+    padding-left: 5px;
+    border-right: 1px solid #c8ced3;
 }
 
 .card-img-overlay {
@@ -1022,106 +1047,3 @@ button.btn-secondary:hover
 .card-deck .card {
     margin-bottom: 15px
 }
-
-@media(min-width: 576px) {
-    .card-deck {
-        -ms-flex-flow:row wrap;
-        flex-flow: row wrap;
-        margin-right: -15px;
-        margin-left: -15px
-    }
-
-    .card-deck .card {
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex: 1 0 0%;
-        flex: 1 0 0%;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        margin-right: 15px;
-        margin-bottom: 0;
-        margin-left: 15px
-    }
-}
-
-.card-group {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column
-}
-
-.card-group>.card {
-    margin-bottom: 15px
-}
-
-@media(min-width: 576px) {
-    .card-group {
-        -ms-flex-flow:row wrap;
-        flex-flow: row wrap
-    }
-
-    .card-group>.card {
-        -ms-flex: 1 0 0%;
-        flex: 1 0 0%;
-        margin-bottom: 0
-    }
-
-    .card-group>.card+.card {
-        margin-left: 0;
-        border-left: 0
-    }
-
-    .card-group>.card:first-child {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0
-    }
-
-    .card-group>.card:first-child .card-img-top,.card-group>.card:first-child .card-header {
-        border-top-right-radius: 0
-    }
-
-    .card-group>.card:first-child .card-img-bottom,.card-group>.card:first-child .card-footer {
-        border-bottom-right-radius: 0
-    }
-
-    .card-group>.card:last-child {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0
-    }
-
-    .card-group>.card:last-child .card-img-top,.card-group>.card:last-child .card-header {
-        border-top-left-radius: 0
-    }
-
-    .card-group>.card:last-child .card-img-bottom,.card-group>.card:last-child .card-footer {
-        border-bottom-left-radius: 0
-    }
-
-    .card-group>.card:only-child {
-        border-radius: .25rem
-    }
-
-    .card-group>.card:only-child .card-img-top,.card-group>.card:only-child .card-header {
-        border-top-left-radius: .25rem;
-        border-top-right-radius: .25rem
-    }
-
-    .card-group>.card:only-child .card-img-bottom,.card-group>.card:only-child .card-footer {
-        border-bottom-right-radius: .25rem;
-        border-bottom-left-radius: .25rem
-    }
-
-    .card-group>.card:not(:first-child):not(:last-child):not(:only-child) {
-        border-radius: 0
-    }
-
-    .card-group>.card:not(:first-child):not(:last-child):not(:only-child) .card-img-top,.card-group>.card:not(:first-child):not(:last-child):not(:only-child) .card-img-bottom,.card-group>.card:not(:first-child):not(:last-child):not(:only-child) .card-header,.card-group>.card:not(:first-child):not(:last-child):not(:only-child) .card-footer {
-        border-radius: 0
-    }
-}
-
-.card-columns .card {
-    margin-bottom: .75rem
-}
-
