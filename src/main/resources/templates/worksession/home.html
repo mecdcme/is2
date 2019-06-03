@@ -1,7 +1,7 @@
 <!-- 
  Copyright 2019 ISTAT
 
- Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
  the European Commission - subsequent versions of the EUPL (the "Licence");
  You may not use this work except in compliance with the Licence. You may
  obtain a copy of the Licence at:
@@ -65,7 +65,7 @@
                                         <span>Dettaglio sessione di lavoro</span>
                                     </div>
                                     <div class="card-body">
-                                        <table class="table table-striped table-condensed table-bordered">
+                                        <table class="table table-condensed table-bordered">
                                             <tbody>
                                                 <tr>
                                                     <td width="25%"><span th:text="#{Layout.Name}">Nome: </span></td>
@@ -91,7 +91,7 @@
                                         <div class="card-header-actions">
                                             <a class="card-header-action" href="javascript:void(0)" 
                                                th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
-                                                <i class="fa fa-trash"></i>&nbsp;Clear
+                                                <i class="fa fa-trash-o"></i>&nbsp;<span th:text="#{Layout.log.clear}"></span>
                                             </a>
                                         </div>
                                     </div>
@@ -116,7 +116,7 @@
                                         <span th:text="#{lista.elaborazioni.legend}">Lista elaborazioni</span>
                                         <div class="card-header-actions">
                                             <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaElaborazione();" title="Nuova elaborazione"> 
-                                                <i class="fa fa-plus"></i>
+                                                <i class="fa fa-plus-square-o"></i>
                                                 <span th:text="#{label.button.nuova.elaborazione}">Nuova elaborazione</span>
                                             </a>
                                         </div>

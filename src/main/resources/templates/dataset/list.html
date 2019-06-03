@@ -1,7 +1,7 @@
 <!-- 
  Copyright 2019 ISTAT
 
- Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
  the European Commission - subsequent versions of the EUPL (the "Licence");
  You may not use this work except in compliance with the Licence. You may
  obtain a copy of the Licence at:
@@ -100,7 +100,6 @@
                                                     <th><span th:text="#{listaDataset.formatofile}">Formato</span></th>
                                                     <th><span th:text="#{listaDataset.numerorighe}">N. Righe</span></th>
                                                     <th><span th:text="#{listaDataset.tipodato}">Tipo dato</span></th>
-                                                    <th><span th:text="#{listaDataset.note}">Note</span></th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -113,7 +112,6 @@
                                                     <td th:text="${dataset.numerorighe}"></td>
                                                     <td th:if="${dataset.tipoDato != null}" th:text="${dataset.tipoDato.nome}"></td>
                                                     <td th:unless="${dataset.tipoDato != null}" th:text="null"></td>
-                                                    <td th:text="${dataset.note}"></td>
                                                     <td style="width: 1%">
                                                         <a class='towait' title="Visualizza dataset" th:href="@{'/viewDataset/'+${dataset.id}}"> 
                                                             <i class="fa fa-search"></i>
@@ -138,7 +136,7 @@
                                         <div class="card-header-actions">
                                             <a class="card-header-action" href="javascript:void(0)" 
                                                th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
-                                                <i class="fa fa-trash"></i>&nbsp;Clear
+                                                <i class="fa fa-trash-o"></i>&nbsp;<span th:text="#{Layout.log.clear}"></span>
                                             </a>
                                         </div>
                                     </div>
@@ -194,10 +192,10 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <h3 class="modal-title">
-                                <i class="fa fa-binoculars"></i>
+                            <h4 class="modal-title">
+                                <i class="fa fa-binoculars"></i>&nbsp;
                                 <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
-                            </h3>
+                            </h4>
                         </div>
 
                         <div class="modal-body">
@@ -239,7 +237,5 @@
             <footer th:replace="layout :: site-footer" />
         </div>
         <!-- wrapper -->        
-
-
     </body>
 </html>
