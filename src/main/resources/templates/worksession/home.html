@@ -114,24 +114,14 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:text="#{lista.elaborazioni.legend}">Lista elaborazioni</span>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaElaborazione();" title="Nuova elaborazione"> 
+                                                <i class="fa fa-plus"></i>
+                                                <span th:text="#{label.button.nuova.elaborazione}">Nuova elaborazione</span>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="card-body">
-                                        <a title="Nuova elaborazione" onclick="javascript:openNuovaElaborazione();"> 
-                                            <span th:if="${session.sessionelv.datasetFiles }">
-                                                <button class="btn btn-light" style="margin-bottom: 10px">
-                                                    <i class="fa fa-plus"></i>
-                                                    <span th:text="#{label.button.nuova.elaborazione}">Nuova elaborazione</span>
-                                                </button>
-                                            </span>
-                                        </a> 
-                                        <a title="Nuova elaborazione"> 
-                                            <span th:unless="${session.sessionelv.datasetFiles }">
-                                                <button class="btn btn-light disabled" style="margin-bottom: 10px">
-                                                    <i class="fa fa-plus"></i>
-                                                    <span th:text="#{label.button.nuova.elaborazione}">Nuova elaborazione</span>
-                                                </button>
-                                            </span>
-                                        </a>
                                         <table id="outputR" class="table table-striped table-condensed"
                                                th:if="${listaElaborazioni}" cellspacing="0" style="overflow: auto;">
                                             <thead>

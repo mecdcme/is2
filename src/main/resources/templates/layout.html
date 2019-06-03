@@ -158,7 +158,9 @@
                                     </a>
                                     <ul th:if="${session.sessioneBean.businessFunction != null}" class="nav sidebar-subnav" aria-expanded="false">
                                         <li class="nav-body" th:each="bProcess : ${session.sessioneBean.businessFunction.processes}">
-                                            <i class="fa fa-angle-right" ></i>&nbsp;<span th:text="${bProcess.name}">Descrizione</span>
+                                            <a th:title="${bProcess.name}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
+                                                <i class="fa fa-angle-right" ></i>&nbsp;<span th:text="${bProcess.name}">Descrizione</span>
+                                            </a>
                                         </li>
                                     </ul>
                                 </li>

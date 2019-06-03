@@ -312,7 +312,7 @@ box-shadow: none !important;
 }
 .nav-body a{
     display: inline-block;
-    width: 180px;
+    width: 160px;
     white-space: nowrap;
     overflow: hidden !important;
     text-overflow: ellipsis;
