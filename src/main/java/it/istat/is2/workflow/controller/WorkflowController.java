@@ -46,6 +46,7 @@ import it.istat.is2.app.bean.BusinessFunctionBean;
 import it.istat.is2.app.bean.BusinessProcessBean;
 import it.istat.is2.app.bean.ProcessStepBean;
 import it.istat.is2.app.bean.SessionBean;
+import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.ElaborazioneService;
 import it.istat.is2.app.service.LogService;
@@ -128,6 +129,9 @@ public class WorkflowController {
 
         model.addAttribute("elaborazione", elaborazione);
         model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
+        
+        List<Log> logs = logService.findByIdSessione(sessionBean.getId());
+        model.addAttribute("logs", logs);
 
         return "workflow/home";
     }

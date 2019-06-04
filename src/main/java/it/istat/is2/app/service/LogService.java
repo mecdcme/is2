@@ -25,8 +25,11 @@ package it.istat.is2.app.service;
 
 import it.istat.is2.app.dao.LogDao;
 import it.istat.is2.app.domain.Log;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,9 +59,11 @@ public class LogService {
     
     public void save(String msg, Long idUtente, Long idSessione){
         
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"), Locale.ITALY);
+        
         Log log = new Log();
         log.setMsg(msg);
-        log.setMsgtime(new Date());
+        log.setMsgTime(new Date());
         log.setIdUtente(idUtente);
         log.setIdSessione(idSessione);
         

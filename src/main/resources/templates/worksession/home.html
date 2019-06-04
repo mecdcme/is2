@@ -1,7 +1,7 @@
 <!-- 
  Copyright 2019 ISTAT
 
- Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
  the European Commission - subsequent versions of the EUPL (the "Licence");
  You may not use this work except in compliance with the Licence. You may
  obtain a copy of the Licence at:
@@ -65,20 +65,22 @@
                                         <span>Dettaglio sessione di lavoro</span>
                                     </div>
                                     <div class="card-body">
-                                        <ul class="list-group">
-                                            <li class="list-group-item no-border">
-                                                <span>Nome:</span>
-                                                <strong th:text="${session.sessionelv.nome }">nome</strong>
-                                            </li>
-                                            <li class="list-group-item no-border">
-                                                <span>Descrizione:</span>
-                                                <strong th:text="${session.sessionelv.descrizione }">Descrizione</strong>
-                                            </li>
-                                            <li class="list-group-item no-border">
-                                                <span>Data creazione:</span>
-                                                <strong th:text="${#dates.format(session.sessionelv.dataCreazione, 'dd/MM/yyyy')}">data creazione</strong>
-                                            </li>
-                                        </ul>
+                                        <table class="table table-condensed table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="25%"><span th:text="#{Layout.Name}">Nome: </span></td>
+                                                    <td><strong th:text="${session.sessionelv.nome }">nome</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="25%"><span th:text="#{Layout.Description}">Descrizione:</span></td>
+                                                    <td><span th:text="${session.sessionelv.descrizione }">Descrizione</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="25%"><span th:text="#{Layout.Date}">Data:</span></td>
+                                                    <td><span th:text="${#dates.format(session.sessionelv.dataCreazione, 'dd/MM/yyyy HH:mm')}">data creazione</span</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -86,24 +88,23 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:text="#{Layout.log.panel}">Log panel</span>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action" href="javascript:void(0)" 
+                                               th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
+                                                <i class="fa fa-trash-o"></i>&nbsp;<span th:text="#{Layout.log.clear}"></span>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div id="logbox" class="card-body">
-                                        <span th:if="${logs}">
-                                            <ul th:each="log : ${logs}">
-                                                <li th:text="${log.msg}"></li>
-                                            </ul>
-                                        </span>
+                                        <ul th:if="${logs}">
+                                            <li th:each="log : ${logs}">
+                                                <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
+                                            </li>
+                                        </ul>
                                         <span th:unless="${logs}">
                                             No message available
                                         </span>
                                     </div>
-                                    <a href="javascript:void(0)" style="padding-left: 8px;" 
-                                       th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
-                                        <button class="btn btn-light" style="margin-bottom: 10px">
-                                            <i class="fa fa-trash"></i>
-                                            <span>Clear</span>
-                                        </button>
-                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -113,24 +114,14 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:text="#{lista.elaborazioni.legend}">Lista elaborazioni</span>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaElaborazione();" title="Nuova elaborazione"> 
+                                                <i class="fa fa-plus-square-o"></i>
+                                                <span th:text="#{label.button.nuova.elaborazione}">Nuova elaborazione</span>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="card-body">
-                                        <a title="Nuova elaborazione" onclick="javascript:openNuovaElaborazione();"> 
-                                            <span th:if="${session.sessionelv.datasetFiles }">
-                                                <button class="btn btn-light" style="margin-bottom: 10px">
-                                                    <i class="fa fa-plus"></i>
-                                                    <span th:text="#{label.button.nuova.elaborazione}">Nuova elaborazione</span>
-                                                </button>
-                                            </span>
-                                        </a> 
-                                        <a title="Nuova elaborazione"> 
-                                            <span th:unless="${session.sessionelv.datasetFiles }">
-                                                <button class="btn btn-light disabled" style="margin-bottom: 10px">
-                                                    <i class="fa fa-plus"></i>
-                                                    <span th:text="#{label.button.nuova.elaborazione}">Nuova elaborazione</span>
-                                                </button>
-                                            </span>
-                                        </a>
                                         <table id="outputR" class="table table-striped table-condensed"
                                                th:if="${listaElaborazioni}" cellspacing="0" style="overflow: auto;">
                                             <thead>
@@ -150,7 +141,7 @@
                                                     <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.nome}"></td>
                                                     <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.descrizione}"></td>
                                                     <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${elaborazione.sxBusinessFunction.nome}"></td>
-                                                    <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${#dates.format(elaborazione.dataElaborazione, 'dd/MM/yyyy')}"></td>
+                                                    <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${#dates.format(elaborazione.dataElaborazione, 'dd/MM/yyyy HH:mm')}"></td>
                                                     <td style="width: 1%">
                                                         <a class='towait' title="Visualizza elaborazione" th:href="@{'/ws/home/'+${elaborazione.id}}"> 
                                                             <i class="fa fa-folder-open"></i>

@@ -47,6 +47,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import it.istat.is2.workflow.domain.SxTipoDato;
 import it.istat.is2.worksession.domain.WorkSession;
+import javax.persistence.Temporal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -74,6 +75,7 @@ public class DatasetFile implements Serializable {
     @Column(name = "NOMEFILE")
     private String nomeFile;
     @Column(name = "DATACARICAMENTO")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataCaricamento;
     @Column(name = "NOTE")
     private String note;
