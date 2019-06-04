@@ -14,7 +14,6 @@
     <groupId>it.istat.is2</groupId>
     <artifactId>is2</artifactId>
     <version>0.9</version>
-    <packaging>${packaging.type}</packaging>
     <name>IS2</name>
     <description>Statistical Service Workbench</description>
 

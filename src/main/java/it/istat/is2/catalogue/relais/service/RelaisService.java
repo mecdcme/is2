@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.istat.is2.app.util.IS2Const;
+import it.istat.is2.app.util.Utility;
 import it.istat.is2.catalogue.relais.dao.RelaisGenericDao;
 import it.istat.is2.workflow.dao.RuoloDao;
 import it.istat.is2.workflow.dao.StepVariableDao;
@@ -52,14 +53,16 @@ import it.istat.is2.workflow.domain.SxWorkset;
 @Service
 public class RelaisService {
 
-	final int stepService=250;
+	final int stepService = 250;
+	final int sizeFlush = 100000;
+
 	@Autowired
 	private RelaisGenericDao relaisGenericDao;
 	@Autowired
 	RuoloDao ruoloDao;
 	@Autowired
 	StepVariableDao stepVariableDao;
-	
+
 	private Map<String, SxRuoli> ruoliAllMap;
 
 	@Autowired
@@ -125,23 +128,22 @@ public class RelaisService {
 					worksetOut.get(key).add(value);
 
 				});
-				
-			//	worksetOut.get("PATTERN").add(contingencyService.getPattern(valuesI));
-				
+
+				// worksetOut.get("PATTERN").add(contingencyService.getPattern(valuesI));
+
 			}
 
-		} 
+		}
 
 		return worksetOut;
 	}
 
 	public Map<?, ?> crossTable(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
 			Map<String, ArrayList<String>> worksetVariabili) throws Exception {
-	 
- 
+
 		Map<String, ArrayList<String>> worksetOut = new LinkedHashMap<String, ArrayList<String>>();
-		
-	 	// <codRuolo,[namevar1,namevar2..]
+
+		// <codRuolo,[namevar1,namevar2..]
 
 		String codeMatchingA = "X1";
 		String codeMatchingB = "X2";
@@ -163,131 +165,134 @@ public class RelaisService {
 
 		String firstFiledMA = ruoliVariabileNome.get(codeMatchingA).get(0);
 		String firstFiledMB = ruoliVariabileNome.get(codeMatchingB).get(0);
-		int sizeA =worksetVariabili.get(firstFiledMA).size();
-		int sizeB =worksetVariabili.get(firstFiledMB).size();
+		int sizeA = worksetVariabili.get(firstFiledMA).size();
+		int sizeB = worksetVariabili.get(firstFiledMB).size();
+		long indexItems = 0;
+		long indexItemsUpdate = 0;
 
 		// init worksetOut
 		variabileNomeListOut.forEach(name -> {
 			worksetOut.put(name, new ArrayList<>());
 		});
 		worksetOut.put("PATTERN", new ArrayList<>());
-		
-		HashMap<String,Long>  worksetID=	saveOutputDB( idelaborazione, worksetOut);
-		
-       	contingencyService.init();
+
+		HashMap<String, Long> worksetID = saveOutputDB(idelaborazione, worksetOut);
+
+		contingencyService.init();
 		// contingencyService.getMetricMatchingVariableVector().forEach(metricsm-> {
 		// worksetOut.put(metricsm.getMatchingVariable(), new ArrayList<>());
 		// });
 
-	
-		
-	//	saveEmptyWorkset(worksetOut);
-		
-		
+		// saveEmptyWorkset(worksetOut);
 
 		for (int iA = 0; iA < sizeA; iA++) {
 			Map<String, String> valuesI = new HashMap<>();
-			final Integer innerIA = new Integer(iA);
-			variabileNomeListMA.forEach(varnameMA -> {
-				valuesI.put(varnameMA, innerIA.toString());
-			});
+			for (String varnameMA : variabileNomeListMA) {
+				valuesI.put(varnameMA, String.valueOf(iA));
+				
+			}
 
 			for (int iB = 0; iB < sizeB; iB++) {
-			//	ArrayList<String> valueIB = new ArrayList<>();
-				final Integer innerIB = new Integer(iB);
-				variabileNomeListMB.forEach(varnameMB -> {
-					valuesI.put(varnameMB, innerIB.toString());
-				});
-
-				// write to worksetout
+				// ArrayList<String> valueIB = new ArrayList<>();
+			
+				for (String varnameMB : variabileNomeListMB) {
+					valuesI.put(varnameMB, String.valueOf(iB));
+				}
+             	// write to worksetout
 				valuesI.forEach((key, value) -> {
 					worksetOut.get(key).add(value);
 
 				});
-				
-			 	worksetOut.get("PATTERN").add(contingencyService.getPattern(valuesI));
-				
+             	worksetOut.get("PATTERN").add(contingencyService.getPattern(valuesI));
+             	
+             	
+    			// appendWorkset(worksetOut);
+    			if (((indexItems+1 % sizeFlush) == 0) || ((iA == (sizeA - 1))&&((iB == (sizeB - 1))))) {
+    				System.out.println("Total item :" + indexItems + "- Flushing from");
+    				indexItemsUpdate += updateValuesWorksetOutToDB(worksetID, worksetOut, indexItemsUpdate);
+    				cleanValuesWorksetOut(worksetOut);
+    				System.out.println(indexItems + " Item - Flushing...");
+    			}
+            	
+             	indexItems++;
 			}
-System.out.println(innerIA);
-//appendWorkset(worksetOut);
-
-       updateValuesWorksetOutToDB(worksetID,worksetOut);
-       cleanValuesWorksetOut(worksetOut);
-
-		} 
+			System.out.println(iA);
+		}
 		System.out.println("fine");
-		
-	
-		
+
+		worksetOut.clear();
 		return worksetOut;
 	}
 
-	
-	 
-
-	
 	/**
 	 * @param worksetOut
 	 */
 	private void cleanValuesWorksetOut(Map<String, ArrayList<String>> worksetOut) {
 		// TODO Auto-generated method stub
-		
+		worksetOut.values().forEach(value -> {
+			value.clear();
+		});
+
 	}
 
 	/**
 	 * @param worksetID
 	 * @param worksetOut
+	 * @param indexItemsUpdate
 	 */
-	private void updateValuesWorksetOutToDB(HashMap<String, Long> worksetID,
-			Map<String, ArrayList<String>> worksetOut) {
+	private long updateValuesWorksetOutToDB(HashMap<String, Long> worksetID, Map<String, ArrayList<String>> worksetOut,
+			long indexItemsUpdate) {
 		// TODO Auto-generated method stub
+		long rowUpdates = indexItemsUpdate;
 		for (Map.Entry<String, ArrayList<String>> entry : worksetOut.entrySet()) {
 			String nomeW = entry.getKey();
 			ArrayList<String> values = entry.getValue();
-			String jvalues="";
-			Long idWorKsetDB=worksetID.get(nomeW);
-			
-			relaisGenericDao.appendValuesWorkset(idWorKsetDB,jvalues);
-			 
-		}
+			final StringBuilder selectFieldsbuilder = new StringBuilder();
+			if (indexItemsUpdate > 0)
+				selectFieldsbuilder.append(",");
+			selectFieldsbuilder.append(Utility.convertToJsonString(values, rowUpdates));
+			rowUpdates += values.size();
+			String jvalues = selectFieldsbuilder.substring(0, selectFieldsbuilder.length() - 1);
+			Long idWorKsetDB = worksetID.get(nomeW);
+			relaisGenericDao.appendValuesWorkset(idWorKsetDB, jvalues);
 
-		
+		}
+		return rowUpdates;
 	}
 
-	private HashMap<String,Long> saveOutputDB(Long idelaborazione,Map<String, ArrayList<String>> worksetOut) {
+	private HashMap<String, Long> saveOutputDB(Long idelaborazione, Map<String, ArrayList<String>> worksetOut) {
 		// TODO Auto-generated method stub
-	 
-		ruoliAllMap=ruoloDao.findByServiceAsCodMap(new SxAppService(stepService));
-		HashMap<String,Long>  worksetIDMap=new HashMap<>();
+
+		ruoliAllMap = ruoloDao.findByServiceAsCodMap(new SxAppService(stepService));
+		HashMap<String, Long> worksetIDMap = new HashMap<>();
 		// salva output su DB
 		for (Map.Entry<String, ArrayList<String>> entry : worksetOut.entrySet()) {
 			String nomeW = entry.getKey();
 			ArrayList<String> value = entry.getValue();
 			SxStepVariable sxStepVariable;
-			 
-			SxRuoli sxRuolo =  ruoliAllMap.get("R");
-		 
-				sxStepVariable = new SxStepVariable();
-				sxStepVariable.setElaborazione(new Elaborazione(idelaborazione));
-				sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_ELABORATO));
 
-				sxStepVariable.setSxRuoli(sxRuolo);
-				sxStepVariable.setOrdine(sxRuolo.getOrdine());
-				SxWorkset sxWorkset = new SxWorkset();
-				sxWorkset.setNome(nomeW.replaceAll("\\.", "_"));
-				sxWorkset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
-				ArrayList<SxStepVariable> l = new ArrayList<>();
-				l.add(sxStepVariable);
-				sxWorkset.setSxStepVariables(l);
-				sxWorkset.setValori(value);
-				sxWorkset.setValoriSize(sxWorkset.getValori().size());
-				sxStepVariable.setSxWorkset(sxWorkset);
-			    sxStepVariable=	stepVariableDao.save(sxStepVariable);
-			    worksetIDMap.put(nomeW, sxStepVariable.getSxWorkset().getId());
+			SxRuoli sxRuolo = ruoliAllMap.get("R");
+
+			sxStepVariable = new SxStepVariable();
+			sxStepVariable.setElaborazione(new Elaborazione(idelaborazione));
+			sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_ELABORATO));
+
+			sxStepVariable.setSxRuoli(sxRuolo);
+			sxStepVariable.setOrdine(sxRuolo.getOrdine());
+			SxWorkset sxWorkset = new SxWorkset();
+			sxWorkset.setNome(nomeW.replaceAll("\\.", "_"));
+			sxWorkset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+			ArrayList<SxStepVariable> l = new ArrayList<>();
+			l.add(sxStepVariable);
+			sxWorkset.setSxStepVariables(l);
+			sxWorkset.setValori(value);
+			sxWorkset.setValoriSize(sxWorkset.getValori().size());
+			sxStepVariable.setSxWorkset(sxWorkset);
+			sxStepVariable = stepVariableDao.save(sxStepVariable);
+			worksetIDMap.put(nomeW, sxStepVariable.getSxWorkset().getId());
 		}
 
-      return worksetIDMap;
+		return worksetIDMap;
 	}
 
-	
 }

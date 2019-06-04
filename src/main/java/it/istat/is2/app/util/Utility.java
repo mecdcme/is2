@@ -39,6 +39,9 @@ import java.util.TimeZone;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import it.istat.is2.app.bean.InputFormBean;
 import it.istat.is2.workflow.domain.SxBusinessProcess;
@@ -444,4 +447,33 @@ public class Utility {
 
         }
     }
+
+	/**
+	 * @param values
+	 * @param rowUpdates
+	 */
+	public static String convertToJsonString(ArrayList<String> values, long offset) {
+		 	 
+		 	 StringBuilder valuebuilder = new StringBuilder();
+		 
+			JSONObject eachData = null;
+			try {
+
+				for (int index = 0; index < values.size(); index++) {
+					eachData = new JSONObject();
+					eachData.put("r", new Long(offset+index));
+					eachData.put("v", values.get(index) != null ? values.get(index) : "");
+					valuebuilder.append(eachData.toString());
+					valuebuilder.append(",");
+				 
+				}
+		 
+			} catch (JSONException e) {
+
+			 
+			}
+			return valuebuilder.substring(0,valuebuilder.length()-1);
+		}
+		
+	
 }

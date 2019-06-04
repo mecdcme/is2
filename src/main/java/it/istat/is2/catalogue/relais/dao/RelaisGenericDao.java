@@ -32,6 +32,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -128,7 +129,7 @@ public class RelaisGenericDao {
             }
 
         }
-
+      
         return worksetOut;
     }
 
@@ -136,9 +137,14 @@ public class RelaisGenericDao {
 	 * @param idWorKsetDB
 	 * @param values
 	 */
-	public void appendValuesWorkset(Long idWorKsetDB, String jsonValues) {
+    @Transactional
+	public int appendValuesWorkset(Long idWorKsetDB, String jsonValues) {
 		// TODO Auto-generated method stub
-		
+		String valuesToAppend= jsonValues+"]} ";
+		  String query = "UPDATE SX_WORKSET sw  SET sw.valori= CONCAT( SUBSTRING(sw.valori,1,LENGTH(sw.valori)-2 ), :valuesToAppend) where sw.id=:idWorKsetDB ";
+		 
+		return  em.createNativeQuery(query).setParameter("valuesToAppend", valuesToAppend).setParameter("idWorKsetDB", idWorKsetDB).executeUpdate();
+		  
 	}
 
 }
