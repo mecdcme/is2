@@ -65,5 +65,8 @@ public class SxAppService implements Serializable {
 
     public SxAppService() {
     }
-
+    
+    public SxAppService(Integer id) {
+    	this.id=id;
+    }
 }

@@ -132,4 +132,13 @@ public class RelaisGenericDao {
         return worksetOut;
     }
 
+	/**
+	 * @param idWorKsetDB
+	 * @param values
+	 */
+	public void appendValuesWorkset(Long idWorKsetDB, String jsonValues) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
