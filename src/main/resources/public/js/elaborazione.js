@@ -36,7 +36,7 @@ $(document).ready(function () {
         paging: false,        
         
         "rowReorder":  {
-        	selector: 'td:nth-child(2)'        	  
+        	selector: 'td:nth-child(2)'        	   
         }, 
         columnDefs: [{
                 orderable: false,
