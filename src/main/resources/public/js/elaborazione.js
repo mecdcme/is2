@@ -40,7 +40,7 @@ $(document).ready(function () {
         }, 
         columnDefs: [{
                 orderable: false,
-                className: 'reorder',
+                className: 'reorder', 
                 targets: [1]
             }],
         buttons: [{
