@@ -29,7 +29,7 @@
 
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
-            var _variabili = [[${colonne.size()}]];        
+            var _variabili = [[${colonne.size()}]];
         </script>
         <script th:src="@{/js/table/datatables.js}"></script>
         <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
@@ -97,34 +97,39 @@
                     <div class="container-fluid">
                         <div class="row" >
                             <div class="col-lg-12">
-                                <fieldset class="well">
-                                    <legend class="well-legend secondary-fieldset">Filtri di ricerca</legend>
-                                    <span id="no_filters_msg"></span>
-                                    <div class="form-inline">
-                                        <div class="form-group" th:each="col : ${colonne}" th:if="${col.filtro}" style="margin-right: 10px">
-                                            <th:block>
-                                                <label style="margin-right: 5px"> 
-                                                    <span th:text="${col.nome + ' :'}"></span> 
-                                                    <input type="text" class="form-control param-filter" th:id="${col.nome}" style="font-weight: normal;" />
-                                                </label>
-                                            </th:block>
-                                        </div>
-                                        <div class="form-group" style=" margin-right: 10px">
-                                            <button id="bottoneRicerca" type="button" onclick="ricercaByParams()" class="btn btn-primary">Cerca</button>
+                                <div class="card">
+                                    <div class="card-header">Filtri di ricerca</div>
+                                    <div class="card-body">
+                                        <span id="no_filters_msg"></span>
+                                        <div class="form-inline">
+                                            <div class="form-group" th:each="col : ${colonne}" th:if="${col.filtro}" style="margin-right: 10px">
+                                                <th:block>
+                                                    <label style="margin-right: 5px"> 
+                                                        <span th:text="${col.nome + ' :'}"></span> 
+                                                        <input type="text" class="form-control param-filter" th:id="${col.nome}" style="font-weight: normal;" />
+                                                    </label>
+                                                </th:block>
+                                            </div>
+                                            <div class="form-group" style=" margin-right: 10px">
+                                                <button id="bottoneRicerca" type="button" onclick="ricercaByParams()" class="btn btn-primary">Cerca</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </fieldset>
-                                <fieldset class="well">
-                                    <legend class="well-legend secondary-fieldset">DataSet: <span th:text="${dfile.nomeFile}"></span> </legend>
-                                    <table id="dataview" class="table table-bordered table-striped " cellspacing="0" width="auto" style="overflow: auto;">
-                                        <thead>
-                                            <tr>
-                                                <th th:each="varname: ${colonne}" th:text="${varname.nome}">
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </fieldset>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <span th:text="#{sessionewf.dataset}"></span>:&nbsp;<span th:text="${dfile.nomeFile}"></span> 
+                                    </div>
+                                    <div class="card-body">
+                                        <table id="dataview" class="table table-bordered table-striped " cellspacing="0" width="auto" style="overflow: auto;">
+                                            <thead>
+                                                <tr>
+                                                    <th th:each="varname: ${colonne}" th:text="${varname.nome}"></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

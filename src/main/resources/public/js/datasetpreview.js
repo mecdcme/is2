@@ -133,31 +133,32 @@ $(document).ready(function () {
         drawCallback: function () {
             $(".loading").hide();
         },
-        dom: "<'row'<'col-sm-12'<'pull-left'B>>>"
-                + "<'row'<'col-sm-12'<'pull-left'l>>>"
-                + "<'row'<'col-sm-12'tr>>"
-                + "<'row'<'col-sm-12'<'pull-left'p>>>"
-                + "<'row'<'col-sm-12'<'pull-left'i>>>",
+        dom: "<'row'<'col-sm-5'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        autoWidth: false,
         responsive: true,
         ordering: true,
         searching: false,
         lengthChange: true,
         lengthMenu: [[10, 15, 25, 50], [10, 15, 25, 50]],
-        pageLength: 15,
+        pageLength: 20,
+        processing: true,
         serverSide: true,
         ajax: {url: _ctx + "/rest/datasetvalori/" + ID + "/" + getParams(),
             type: "POST"
         },
         columns: eval(getHeaders('dataview')),
-        processing: true,
         buttons: [{
             extend: 'colvis',
-            text: 'Seleziona colonne'
+            text: 'Seleziona colonne',
+            className: 'btn-light'
         },
         {
             extend: 'csvHtml5',
             filename: 'download',
             title: 'download',
+            className: 'btn-light',
             action: function (e, dt, node, config) {
                 scaricaDataset(e, 'csv', ID);
             }
@@ -166,7 +167,7 @@ $(document).ready(function () {
 
     $("#datapreview").DataTable({
         responsive: true,
-        "ordering": false,
+        ordering: false,
         searching: false
     });
 
