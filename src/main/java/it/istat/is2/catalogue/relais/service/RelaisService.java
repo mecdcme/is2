@@ -54,7 +54,7 @@ import it.istat.is2.workflow.domain.SxWorkset;
 public class RelaisService {
 
 	final int stepService = 250;
-	final int sizeFlush = 100000;
+//	final int sizeFlush = 100000;
 
 	@Autowired
 	private RelaisGenericDao relaisGenericDao;
@@ -96,7 +96,7 @@ public class RelaisService {
 		String firstFiledMB = ruoliVariabileNome.get(codeMatchingB).get(0);
 		int sizeA = worksetVariabili.get(firstFiledMA).size();
 		int sizeB = worksetVariabili.get(firstFiledMB).size();
-
+	
 		// init worksetOut
 		variabileNomeListOut.forEach(name -> {
 			worksetOut.put(name, new ArrayList<>());
@@ -167,6 +167,7 @@ public class RelaisService {
 		String firstFiledMB = ruoliVariabileNome.get(codeMatchingB).get(0);
 		int sizeA = worksetVariabili.get(firstFiledMA).size();
 		int sizeB = worksetVariabili.get(firstFiledMB).size();
+		int sizeFlush = sizeA*sizeB/10;
 		long indexItems = 0;
 		long indexItemsUpdate = 0;
 
@@ -207,16 +208,16 @@ public class RelaisService {
              	
              	
     			// appendWorkset(worksetOut);
-    			if (((indexItems+1 % sizeFlush) == 0) || ((iA == (sizeA - 1))&&((iB == (sizeB - 1))))) {
+    			if ((((indexItems+1) % sizeFlush) == 0) || ((iA == (sizeA - 1))&&((iB == (sizeB - 1))))) {
     				System.out.println("Total item :" + indexItems + "- Flushing from");
-    				indexItemsUpdate += updateValuesWorksetOutToDB(worksetID, worksetOut, indexItemsUpdate);
+    				indexItemsUpdate += updateValuesWorksetOutToDB(worksetID, worksetOut, indexItemsUpdate,indexItems+1);
     				cleanValuesWorksetOut(worksetOut);
     				System.out.println(indexItems + " Item - Flushing...");
     			}
             	
              	indexItems++;
 			}
-			System.out.println(iA);
+		
 		}
 		System.out.println("fine");
 
@@ -238,23 +239,24 @@ public class RelaisService {
 	/**
 	 * @param worksetID
 	 * @param worksetOut
+	 * @param indexAll 
 	 * @param indexItemsUpdate
 	 */
 	private long updateValuesWorksetOutToDB(HashMap<String, Long> worksetID, Map<String, ArrayList<String>> worksetOut,
-			long indexItemsUpdate) {
+			long offset, long indexAllItems) {
 		// TODO Auto-generated method stub
-		long rowUpdates = indexItemsUpdate;
+		long rowUpdates = 0;
 		for (Map.Entry<String, ArrayList<String>> entry : worksetOut.entrySet()) {
-			String nomeW = entry.getKey();
+			rowUpdates = 0;
+		    String nomeW = entry.getKey();
 			ArrayList<String> values = entry.getValue();
 			final StringBuilder selectFieldsbuilder = new StringBuilder();
-			if (indexItemsUpdate > 0)
-				selectFieldsbuilder.append(",");
-			selectFieldsbuilder.append(Utility.convertToJsonString(values, rowUpdates));
-			rowUpdates += values.size();
-			String jvalues = selectFieldsbuilder.substring(0, selectFieldsbuilder.length() - 1);
-			Long idWorKsetDB = worksetID.get(nomeW);
-			relaisGenericDao.appendValuesWorkset(idWorKsetDB, jvalues);
+			if (offset > 0) 	selectFieldsbuilder.append(",");
+			selectFieldsbuilder.append(Utility.convertToJsonString(values, offset));
+			rowUpdates=values.size();
+		 	Long idWorKsetDB = worksetID.get(nomeW);
+		 	relaisGenericDao.appendValuesWorkset(idWorKsetDB,selectFieldsbuilder.toString(),indexAllItems);
+			
 
 		}
 		return rowUpdates;
