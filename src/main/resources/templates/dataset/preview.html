@@ -237,34 +237,35 @@
 
                         <div class="custom-control custom-checkbox">
                             <hr class="style1"></hr>
-                            <span class="form-check-label" for="removeSpace">Variabile:</span>
-                            <select  class="dropdown" title= "Elenco Variabili">
+                                                  <span class="form-check-label" for="removeSpace">Variabile:</span>
+                        <select id="selectedVariable" class="dropdown" title= "Elenco Variabili">
 
-                                <option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
-                                        th:value="${cols.id}"
-                                        th:text="${cols.id} != null? ${cols.nome}: ''">
-                                </option>
+        					<option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
+                					th:value="${cols.id}"
+                					th:text="${cols.id} != null? ${cols.nome}: ''">
+        					</option>
 
-                            </select>
-                            <button type="button" class="btn btn-secondary">Add</button>
+   						 </select>
+   						 <button type="button"  id="addVariable" class="btn btn-secondary">Add</button>
                         </div>
-                        <div class="custom-control custom-checkbox">
-                            <span class="form-check-label" for="removeSpace">Separatore:</span>
-                            <input type="text" class="custom-control-input" id="sepvalue"></input>
-                            <button type="button" class="btn btn-secondary">Add</button>
-                        </div>
-
-                        <div class="custom-control custom-checkbox">
-                            <hr class="style1"></hr>
-                            <span class="form-check-label" for="removeSpecial">Lista dei campi da concatenare:</span>
-                            <textarea class="form-control rounded-0" id="Textarea" rows="3"></textarea>
-
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <hr class="style1"></hr>
-                            <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
-                            <input type="text" class="custom-control-input" id="newfield"></input>
-
+	                    <div class="custom-control custom-checkbox">
+						  <span class="form-check-label" for="removeSpace">Separatore:</span>
+						  <input type="text" class="custom-control-input" id="sepValue"></input>
+						  <button type="button" id="addSeparator" class="btn btn-secondary">Add</button>
+						</div>
+						
+						<div class="custom-control custom-checkbox">
+							<hr class="style1"></hr>
+						  <span class="form-check-label" for="removeSpecial">Lista dei campi da concatenare:</span>
+						  <textarea class="form-control rounded-0" id="textArea" rows="3" readonly="true"></textarea>
+						  <button type="button" style="float:right" id="clearTextArea" class="btn btn-secondary">Clear</button>
+						  
+						</div>
+						<div class="custom-control custom-checkbox">
+							<hr class="style1"></hr>
+						  <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
+						  <input type="text" class="custom-control-input" id="newfieldMerge"></input>
+						
                         </div>
                         <div class="modal-footer">
                             <input type="hidden" name="" id="id_dataset_del" value="" />

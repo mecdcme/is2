@@ -24,7 +24,13 @@
 var _ctx = $("meta[name='ctx']").attr("content");
 var ID = _idfile;
 var table;
-
+var selVar;
+var fusionField="";
+var commandField="";
+var charOrString="_";
+var upperLower="_";
+var newField="";
+var idColonna="";
 function eliminaDataset() {
     $('#modalCancellaDataset').modal('show');
 };
@@ -45,89 +51,153 @@ function openRepairModal() {
 };
 
 
+
+
+
 $(document).ready(function () {
 	
-    if($('#upperCase').is(':checked')){
-	$('#upperRadio').show();
-    }else{
-        $('#upperRadio').hide();
-    };
+	fusionField="";
+	commandField="";
+	charOrString="_";
+	upperLower="_";
+	newField="";
+	idColonna="";
 	
-    if($('#removeChar').is(':checked')){
-	$('#charValue').show();
-    }else{
-        $('#charValue').hide();
-    };
+	
+	
+	selVar= $("#selectedVar option:selected").text();
+	
+	if($('#upperCase').is(':checked')){
+	     $('#upperRadio').show();
+  }else{
+		$('#upperRadio').hide();
+	};
+	
+  if($('#removeChar').is(':checked')){
+	     $('#charValue').show();
+	}else{
+		$('#charValue').hide();
+	};
 
-    $('#upperCase').on('click',function(){
-        $('#upperRadio').hide();
-  	if(this.checked){
+  $('#upperCase').on('click',function(){
+  	   $('#upperRadio').hide();
+  	   if(this.checked){
   	     $('#upperRadio').show();
-  	}
-    });
- 
-    $('#removeChar').on('click',function(){
-        $('#charValue').hide();
-	if(this.checked){
-            $('#charValue').show();
-        }
-    });
-	
-    $('#btn_delete_dataset').click(function () {
-       window.location = _ctx + '/deleteDataset/' + _idfile;
-    });
-   	
-    $('#btn_Standardization_field').click(function () {
+  	   }
+  	});
   
-	var commandField="";
-  	var charOrString="_";
-  	var upperLower="_";
-  	var newField="";
-  	var idColonna="";
+  $('#selectedVariable').on('change', function() {
+	  selVar = $(this).children("option:selected").text();
+	});
+  
+  
+  $('#removeChar').on('click',function(){
+	   $('#charValue').hide();
+	   if(this.checked){
+	     $('#charValue').show();
+	   }
+	});
+	
+	$('#btn_delete_dataset').click(function () {
+       window.location = _ctx + '/deleteDataset/' + _idfile;
+   });
+   
+	$('#addVariable').click(function () {
+		$('#textArea').text($('#textArea').text() + selVar )
+		fusionField = fusionField + "{...(id)" + selVar + "...}";
+	   });
+	
+	
+	
+	$('#addSeparator').click(function () {
+		if ($('#sepValue').val()!=""){
+			$('#textArea').text($('#textArea').text() + $('#sepValue').val() )
+			fusionField = fusionField + "{...(se)" + $('#sepValue').val() + "...}";
+			 $('#sepValue').val("");
+		}else{
+			alert("Insert valid Separator!")
+//			alert(fusionField)
+		}
+		   
+		 
+		});
+	
+	$('#clearTextArea').click(function () {
+		$('#textArea').text("");
+		fusionField = "";  
+		 alert(fusionField)
+		});
+	
+	
+  $('#btn_Standardization_field').click(function () {
+   	
+   
+
 
    	idColonna= $('#selectedVar').val();
    	if($("#removeSpace").is(':checked')){
-            commandField= commandField + "1";
-	}else{
-	    commandField= commandField + "0";
-        };
+   		commandField= commandField + "1";
+	      }else{
+	    	  commandField= commandField + "0";
+	   	};
    	
    	if($('#removeSpecial').is(':checked')){
-            commandField= commandField + "1";
-	}else{
-            commandField= commandField + "0";
-        };
-	if($('#newField').val()!=""){
-            newField=$('#newField').val();
-	}else{
-            alert("Inserire il nome della nuova variabile");
-            return;
-	}
+   		commandField= commandField + "1";
+	      }else{
+	    	  commandField= commandField + "0";
+	   	};
+	   	
+	   	if($('#newFieldMerge').val()!=""){
+		   		newField=$('#newField').val();
+			}else{
+				alert("Inserire il nome della nuova variabile");
+				return;
+			
+		}
+	   	
+//	   	Abilitare il pulsante salva
   	
+//	   	if($('#newFieldUnion').val()!=""){
+//	   		newField=$('#newField').val();
+//		}else{
+//			alert("Inserire il nome della nuova variabile");
+//			return;
+//		
+//		}
+	   	
    	if($('#removeChar').is(':checked')){
-            commandField= commandField +"1";
-            if($('#charValue').val()!=""){
-                charOrString=$('#charValue').val();
-            }else{
-                alert("inserire la stringa o il carattere da rimuovere");
-   		return;
-            }
-	}else{
-            commandField= commandField + "0";
-	};
+   		commandField= commandField +"1";
+   		if($('#charValue').val()!=""){
+   			charOrString=$('#charValue').val();
+   		}else{
+   			alert("inserire la stringa o il carattere da rimuovere");
+   			return;
+   			
+   		}
+	      }else{
+	    	  commandField= commandField + "0";
+	   	};
   	
-        if($('#upperCase').is(':checked')){
-            commandField= commandField + "1";
-            upperLower=$('input:radio[name=gruppo3]:checked')[0].id;
-        }else{
-            commandField= commandField + "0";
-        };
-	
-	$("btn_Standardization_field").addClass("towait");
-        window.location = _ctx + '/createField/' + _idfile + "/" +  idColonna + "/" + commandField + "/" +  charOrString + "/" + upperLower + "/" + newField + "/" + _variabili ;
+	   	if($('#upperCase').is(':checked')){
+	   		commandField= commandField + "1";
+	   		upperLower=$('input:radio[name=gruppo3]:checked')[0].id;
+	    
+	   	}else{
+	   		commandField= commandField + "0";
+	   	};
+	   	
+	   	
+   	
+	   	$("btn_Standardization_field").addClass("towait");
+       window.location = _ctx + '/createField/' + _idfile + "/" +  idColonna + "/" + commandField + "/" +  charOrString + "/" + upperLower + "/" + newField + "/" + _variabili ;
+       
+   	
+   	
 
    });
    
+      
+    
    table=  $("#dataview").DataTable({
 
         drawCallback: function () {
