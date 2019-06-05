@@ -110,6 +110,8 @@ box-shadow: none !important;
 #logbox{
     height: 170px;
     overflow-y: auto;
+    font-family: monospace;
+    font-size: 12px;
 }
 
 #logbox ul{
@@ -118,7 +120,7 @@ box-shadow: none !important;
 }
 
 #logbox ul > li{
-    padding: 5px 0px;
+    padding: 2px 0px;
 }
 
 /* START HEADER */
