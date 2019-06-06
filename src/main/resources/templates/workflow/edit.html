@@ -32,8 +32,7 @@
         <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
         <link rel="stylesheet" th:href="@{/css/table/rowReorder.dataTables.min.css}" />
         <script th:inline="javascript">
-            var _idfile = [[${idfile}]];
-        </script>
+            var _idfile = [[${idfile}]];</script>
     </head>
     <body>
         <!-- Body -->
@@ -67,15 +66,14 @@
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        Configurazione variabili Workset
-                                        <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaSessioneWF();" title="Nuova elaborazione"> 
-                                                <i class="fa fa fa-angle-right"></i>
-                                                <span>Parametri</span>
-                                            </a>
-                                        </div>
+                                        <span id="header-variabili" href="javascript:void(0)" onclick="javascript:showVariabili();" title="Variabili"> 
+                                            <span class="header-strong">Variabili</span>
+                                        </span>
+                                        <span id="header-parametri" href="javascript:void(0)" onclick="javascript:showParametri();" title="Parametri"> 
+                                            <span>Parametri</span>
+                                        </span>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body" id="card-variabili">
                                         <form th:action="@{/ws/associavariabile}" id="formAssociaRuolo" class="form-horizontal" method="post">
                                             <span id="associazione_vars"></span>
                                         </form>
@@ -86,7 +84,7 @@
                                                     <th><span>Ruolo</span></th>
                                                     <th><span>Nome Variabile</span></th>
                                                     <th><span>I/O</span></th>
-                                                    <th style="width: 1%">Filtro ricerca</th>
+                                                    <th style="width: 8%">Filtro</th>
                                                     <th style="width: 1%"></th>
                                                     <th style="width: 1%"></th>
                                                 </tr>
@@ -95,7 +93,7 @@
                                                 <tr th:each="stepV,stats: ${stepVList}"
                                                     th:unless="${(stepVList == null) or (stepVList.size() == 0) }"
                                                     data-th-attr="stepid=${stepV.id}">                                                    
-                                                     <td>
+                                                    <td>
                                                         <i class="fa fa-sort"></i><span th:text="${stats.index+1}"></span> 
                                                     </td>
                                                     <td th:text="${stepV.sxRuoli.nome}"></td>
@@ -124,17 +122,10 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <input type="hidden" id="idelab" name="idelab" value="" /> 
+                                        <input type="hidden" id="idstepvar" name="idstepvar" value="" />
                                     </div>
-                                    <input type="hidden" id="idelab" name="idelab" value="" /> 
-                                    <input type="hidden" id="idstepvar" name="idstepvar" value="" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <fieldset class="well">
-                                    <legend class="well-legend">Configurazione parametri </legend>
-                                    <div class="row" style="padding: 5px;">
+                                    <div class="card-body" id="card-parametri" style="display: none">
                                         <table id="parametriTabList" class="table table-striped table-bordered table-hover">
                                             <thead>
                                                 <tr>
@@ -174,9 +165,9 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <input type="hidden" id="idparam" name="idparam" value="" />
                                     </div>
-                                    <input type="hidden" id="idparam" name="idparam" value="" />
-                                </fieldset>
+                                </div>
                             </div>
                         </div>
                     </div>

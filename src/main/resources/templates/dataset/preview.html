@@ -120,14 +120,18 @@
                                 </div>
                                 <div class="card">
                                     <div class="card-header">
-                                        <span th:text="${dfile.nomeFile}"></span>
+                                        <span th:text="#{listasessioni.nome.file}"></span>:&nbsp;<span th:text="${dfile.nomeFile}"></span>
+                                        <div class="card-header-actions" th:if="${nextFile}">
+                                            <a class="card-header-action" th:href="@{'/viewDataset/'+${nextFile.id}}" title="Nuova elaborazione"> 
+                                                <i class="fa fa-file-text-o"></i>&nbsp;<span th:text="${nextFile.nomeFile}"></span>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <table id="dataview" class="table table-bordered table-striped " cellspacing="0" width="auto" style="overflow: auto;">
                                             <thead>
                                                 <tr>
-                                                    <th th:each="varname: ${colonne}" th:text="${varname.nome}">
-                                                    </th>
+                                                    <th th:each="varname: ${colonne}" th:text="${varname.nome}"></th>
                                                 </tr>
                                             </thead>
                                         </table>

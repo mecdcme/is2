@@ -45,6 +45,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import it.istat.is2.app.bean.InputFormBean;
+import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.LogService;
@@ -59,6 +60,7 @@ import it.istat.is2.workflow.domain.SxTipoDato;
 import it.istat.is2.workflow.service.TipoDatoService;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
+import java.util.Objects;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Controller
@@ -86,19 +88,24 @@ public class DatasetController {
     }
 
     @RequestMapping("/viewDataset/{idfile}")
-    public String caricafile(Model model, @PathVariable("idfile") Long idfile) {
+    public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Long idfile) {
 
         notificationService.removeAllMessages();
 
         DatasetFile dfile = datasetService.findDataSetFile(idfile);
+        DatasetFile dfileNext = getNextFile(session, idfile);
 
         List<DatasetColonna> colonne = datasetService.findAllNomeColonne(idfile);
         List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();
+
+        Long nextFileId;
+        String nextFileName;
 
         model.addAttribute("colonne", colonne);
         model.addAttribute("idfile", idfile);
         model.addAttribute("variabili", variabiliSum);
         model.addAttribute("dfile", dfile);
+        model.addAttribute("nextFile", dfileNext);
 
         return "dataset/preview";
     }
@@ -199,6 +206,10 @@ public class DatasetController {
             datasetService.salva(campiL, valoriHeaderNum, labelFile, tipoDato, separatore, form.getDescrizione(), idsessione);
             logService.save("File " + labelFile + " salvato con successo", user.getUserid(), Long.parseLong(idsessione));
             notificationService.addInfoMessage("Salvataggio avvenuto con successo.");
+
+            SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+            sessionBean.getFile().add(form.getDescrizione());
+            session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
         } catch (Exception e) {
             notificationService.addErrorMessage("Errore nel salvataggio del file.");
             return "redirect:/sessione/mostradataset/" + idsessione;
@@ -227,7 +238,7 @@ public class DatasetController {
     }
 
     @RequestMapping(value = "/deleteDataset", method = RequestMethod.POST)
-    public String deleteDataset(Model model, @AuthenticationPrincipal User user, @RequestParam("idDataset") Long idDataset) {
+    public String deleteDataset(HttpSession session, Model model, @AuthenticationPrincipal User user, @RequestParam("idDataset") Long idDataset) {
 
         notificationService.removeAllMessages();
 
@@ -236,6 +247,33 @@ public class DatasetController {
         logService.save("File " + idDataset + " eliminato con successo", user.getUserid(), sessionelv.getId());
         notificationService.addInfoMessage("Eliminazione avvenuta con successo");
 
+        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+        sessionBean.getFile().remove(0);
+        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+
         return "redirect:/sessione/mostradataset/" + sessionelv.getId();
+    }
+
+    private DatasetFile getNextFile(HttpSession session, Long idFile) {
+        DatasetFile nextFile = new DatasetFile();
+        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+        if (sessionBean != null) {
+            List<DatasetFile> files = datasetService.findDatasetFilesByIdSessioneLavoro(sessionBean.getId());
+            int counter = 0;
+            if (files.size() == 1) {
+                return nextFile;
+            }
+            for (DatasetFile file : files) {
+                if (file.getId().equals(idFile) && (counter + 1) < files.size()) {
+                    nextFile = files.get(counter + 1);
+                    break;
+                } else if (file.getId().equals(idFile) && (counter + 1) == files.size()) {
+                    nextFile = files.get(0);
+                    break;
+                }
+                counter++;
+            }
+        }
+        return nextFile;
     }
 }

@@ -108,7 +108,7 @@ box-shadow: none !important;
 }
 
 #logbox{
-    height: 170px;
+    height: 178px;
     overflow-y: auto;
     font-family: monospace;
     font-size: 12px;
@@ -1013,7 +1013,8 @@ button.btn-secondary:hover
 } 
 
 .card-header-action {
-    padding-left: 5px
+    padding-left: 5px;
+    padding-right: 5px
 }
 
 .card-header-action-border {
@@ -1057,4 +1058,24 @@ button.btn-secondary:hover
 
 .card-deck .card {
     margin-bottom: 15px
+}
+
+#header-variabili{
+    font-weight: normal;
+    border-right: 1px solid #c8ced3;
+    padding-right: 7px;
+}
+
+#header-parametri{
+    font-weight: normal;
+    padding-left: 7px;
+}
+
+#header-variabili:hover, #header-parametri:hover{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.header-strong{
+    font-weight: bold !important;
 }

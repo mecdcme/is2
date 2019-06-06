@@ -22,6 +22,7 @@
  * @version 1.0
  */
 var _ctx = $("meta[name='ctx']").attr("content");
+var toggle = true;
 
 $(document).ready(function () {
 
@@ -39,9 +40,9 @@ $(document).ready(function () {
             selector: 'td:nth-child(2)'
         },
         columnDefs: [{
-                orderable: false,
+                "orderable": false,
                 className: 'reorder',
-                targets: [1]
+                "targets": [1,2,3,4,5,6]
             }],
         buttons: [{
                 className: 'btn-extenal-function btn-light',
@@ -601,4 +602,17 @@ function mostraDialogModificaAssociazione(idelab, idstepvar, nomestepvar, idruol
     $("#roleModSelectedId").val('');
     $("#roleModSelectedName").text('Nessun ruolo selezionato');
     $("#modifica-viarabile-workset-modal").modal('show');
+}
+
+function showVariabili(){
+    $("#card-variabili").show();
+    $("#header-variabili span").addClass("header-strong");
+    $("#card-parametri").hide();
+    $("#header-parametri span").removeClass("header-strong");
+}
+function showParametri(){
+    $("#card-variabili").hide();
+    $("#header-variabili span").removeClass("header-strong");
+    $("#card-parametri").show();
+    $("#header-parametri span").addClass("header-strong");
 }
