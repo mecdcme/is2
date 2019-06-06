@@ -33,24 +33,23 @@ $(document).ready(function () {
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         responsive: true,
-        paging: false,        
-        
-        "rowReorder":  {
-        	selector: 'td:nth-child(2)'        	   
-        }, 
+        paging: false,
+        rowReorder: {
+            selector: 'td:nth-child(2)'
+        },
         columnDefs: [{
                 orderable: false,
-                className: 'reorder', 
+                className: 'reorder',
                 targets: [1]
             }],
         buttons: [{
-                className: 'btn-extenal-function',
+                className: 'btn-extenal-function btn-light',
                 text: '<i class="fa fa-plus"></i><span> Variabile</span>',
                 action: function (e, dt, node, config) {
                     openDlgAddVariabileWorkset();
                 }
             }],
-        'createdRow': function (row, data, dataIndex) {
+        createdRow: function (row, data, dataIndex) {
             $(row).attr('id', 'row-' + dataIndex);
         }
     });
@@ -572,8 +571,8 @@ function controllaCampoParam() {
     }
 }
 
-function mostraDialogModificaAssociazione(idelab, idstepvar, nomestepvar,idruolo, flagricerca) {
-    
+function mostraDialogModificaAssociazione(idelab, idstepvar, nomestepvar, idruolo, flagricerca) {
+
     $("#nome-var").val(nomestepvar);
     if (($("#filtro1").is(':checked') == true || $("#filtro0").is(':checked') == true) && $("#nome-var").val().length > 0) {
         $("#btn_dlg_assoc_mod").removeClass('disabled');

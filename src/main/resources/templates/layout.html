@@ -36,6 +36,7 @@
         <!-- Javascript -->
         <script th:src="@{/js/jquery-3.1.1.min.js}" type="text/javascript"></script>
         <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/switch/switch.js}" type="text/javascript"></script>
         <script th:src="@{/js/box.js}" type="text/javascript"></script>
         <!-- CSS -->
         <link th:href="@{/css/custom_bootstrap.css}" rel="stylesheet" />
@@ -118,7 +119,7 @@
             <aside th:fragment="site-aside" th:remove="tag">
                 <aside class="aside">
                     <div id="sidebar-wrapper" class="aside-inner">
-                        <nav data-sidebar-anyclick-close="" class="sidebar navbar navbar-primary navbar-fixed-side">
+                        <nav class="sidebar navbar navbar-primary navbar-fixed-side">
                             <ul class="nav">
                                 <li class="nav-body menu-line" >
                                     <a title="Home" th:href="@{/sessione/mostraSessioni}"> 
@@ -143,8 +144,8 @@
                                     <a title="Sessione lavoro" th:unless="${session.sessioneBean}">
                                         <i class="fa fa-folder"></i><span></span>
                                     </a>
-                                    <li class="nav-body menu-line" ></li>
                                 </li>
+                                <li class="nav-body menu-line" ></li>
                                 <li class="nav-body menu-spacer">
                                     <span th:text="#{Layout.elaborazione}"></span>
                                 </li>

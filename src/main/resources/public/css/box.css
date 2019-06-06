@@ -919,7 +919,7 @@ button.btn-secondary:hover
     background-clip: border-box;
     border: 1px solid #c8ced3;
     border-radius: .25rem;
-    margin-top: 25px;
+    margin-top: 20px;
 }
 
 .card>hr {

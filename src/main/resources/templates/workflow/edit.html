@@ -32,7 +32,8 @@
         <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
         <link rel="stylesheet" th:href="@{/css/table/rowReorder.dataTables.min.css}" />
         <script th:inline="javascript">
-            var _idfile = [[${idfile}]];</script>
+            var _idfile = [[${idfile}]];
+        </script>
     </head>
     <body>
         <!-- Body -->
@@ -64,9 +65,11 @@
                         <input id="idelaborazione" type="hidden" name="elaborazione" th:value="${elaborazione.id}" />
                         <div class="row">
                             <div class="col-lg-12">
-                                <fieldset class="well">
-                                    <legend class="well-legend">Configurazione variabili Workset</legend>
-                                    <div class="row" style="padding: 5px;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        Configurazione variabili Workset
+                                    </div>
+                                    <div class="card-body">
                                         <form th:action="@{/ws/associavariabile}" id="formAssociaRuolo" class="form-horizontal" method="post">
                                             <span id="associazione_vars"></span>
                                         </form>
@@ -118,7 +121,7 @@
                                     </div>
                                     <input type="hidden" id="idelab" name="idelab" value="" /> 
                                     <input type="hidden" id="idstepvar" name="idstepvar" value="" />
-                                </fieldset>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
