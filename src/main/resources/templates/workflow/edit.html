@@ -68,6 +68,12 @@
                                 <div class="card">
                                     <div class="card-header">
                                         Configurazione variabili Workset
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaSessioneWF();" title="Nuova elaborazione"> 
+                                                <i class="fa fa fa-angle-right"></i>
+                                                <span>Parametri</span>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <form th:action="@{/ws/associavariabile}" id="formAssociaRuolo" class="form-horizontal" method="post">
