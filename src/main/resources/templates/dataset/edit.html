@@ -104,6 +104,7 @@
                                                            th:attr="onclick='javascript:associaVarSum('+${cols.id}+',null,\''+${cols.nome}+'\','+${cols.filtro}+')'"
                                                            title="Associa"> <i class="fa fa-pencil"></i>
                                                         </a>
+                                                        <input type="hidden" name="colsid" th:value="${cols.id}" />
                                                     </td>
                                                 </tr>
                                             </tbody>

@@ -169,4 +169,31 @@ public class DatasetControllerRest {
         Map<String, List<String>> dataMap = datasetService.loadDatasetValori(dfile);
         Utility.writeObjectToCSV(response.getWriter(), dataMap);
     }
+    
+    @RequestMapping(value = "/rest/dataset/updaterowlist", method = RequestMethod.POST)
+    public String updateOrdineRighe(HttpServletRequest request, Model model,
+            @RequestParam("ordineIds") String ordineIds) throws Exception {
+
+        StringTokenizer stringTokenizerElements = new StringTokenizer(ordineIds, "|");
+        String element = null;
+        String ordine = null;
+        String idcol = null;
+        DatasetColonna datasetCol = new DatasetColonna();
+        while (stringTokenizerElements.hasMoreElements()) {
+            element = stringTokenizerElements.nextElement().toString();
+            StringTokenizer stringTokenizerValues = new StringTokenizer(element, "=");
+            while (stringTokenizerValues.hasMoreElements()) {
+                ordine = stringTokenizerValues.nextElement().toString();
+                idcol = stringTokenizerValues.nextElement().toString();
+            }
+            Long idc = Long.parseLong(idcol);
+            Short ordineC = Short.parseShort(ordine);
+            datasetCol = datasetService.findOneColonna(idc);
+            		
+            datasetCol.setOrdine(ordineC);            
+			datasetService.salvaColonna(datasetCol);		
+        }
+
+        return "success";
+    }
 }
