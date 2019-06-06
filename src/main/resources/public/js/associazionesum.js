@@ -25,22 +25,37 @@ var _ctx = $("meta[name='ctx']").attr("content");
 
 $(document).ready(function () {
 
-    $("#metadataTab").DataTable({
+	var table = $("#metadataTab").DataTable({
         dom: "<'row'<'col-sm-12'<'pull-left'f>>>"
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         responsive: true,
         lengthChange: true,
         pageLength: 25,
-        paging: true,
+        paging: true,        
         columnDefs: [{
-            orderable: true,
-            className: 'reorder',
-            targets: [0, 1, 2]
+            orderable: false,
+            className: 'reorder', 
+            targets: [1]
         }],
         'createdRow': function (row, data, dataIndex) {
             $(row).attr('id', 'row-' + dataIndex);
+        },
+        "rowReorder":  {
+        	selector: 'td:nth-child(2)'        	   
         }
+    });
+    table.on('row-reorder', function (e, diff, edit) {
+        var result = 'Reorder started on row: ' + edit.triggerRow.data()[1] + '<br>';
+
+        for (var i = 0, ien = diff.length; i < ien; i++) {
+            var rowData = table.row(diff[i].node).data();
+            result += rowData[1]
+                    + ' updated to be in position '
+                    + diff[i].newData + ' (was '
+                    + diff[i].oldData + ')<br>';
+        }
+        cambiaPosizione();
     });
 
     $("#sumSelection").on("change", function () {
@@ -72,6 +87,29 @@ $(document).ready(function () {
     });
 
 });
+
+function cambiaPosizione() {
+    var ordineIds = "";
+    var ids = $("#metadataTab").find(
+            "input[name='colsid']");
+    for (var i = 0; i < ids.length; i++) {
+        ordineIds += i + "=" + ids[i].value + "|";
+    }
+    ordineIds = ordineIds.slice(0, -1);
+    updateOrdineRighe(ordineIds);
+}
+function updateOrdineRighe(ordineIds) {
+    $.ajax({
+        url: _ctx + "/rest/dataset/updaterowlist",
+        type: "POST",
+        data: "ordineIds=" + ordineIds,
+        success: function (data) {
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error loading data');
+        }
+    });
+}
 
 function attivaBottone() {
     var contenuto = $("#vars_content").text();
