@@ -451,13 +451,14 @@ public class Utility {
 	/**
 	 * @param values
 	 * @param rowUpdates
+	 * @throws JSONException 
 	 */
-	public static String convertToJsonString(ArrayList<String> values, long offset) {
+	public static String convertToJsonString(ArrayList<String> values, long offset) throws JSONException {
 		 	 
 		 	 StringBuilder valuebuilder = new StringBuilder();
 		 
 			JSONObject eachData = null;
-			try {
+			 
 
 				for (int index = 0; index < values.size(); index++) {
 					eachData = new JSONObject();
@@ -468,12 +469,34 @@ public class Utility {
 				 
 				}
 		 
-			} catch (JSONException e) {
-
 			 
-			}
 			return valuebuilder.substring(0,valuebuilder.length()-1);
 		}
 		
+	
+	/**
+	 * @param values
+	 * @param rowUpdates
+	 * @throws JSONException 
+	 */
+	public static String convertToJsonStringArray(ArrayList<String> values, long offset) throws JSONException {
+		 	 
+		 
+		 
+			JSONObject eachData = null;
+			JSONArray allDataArray = new JSONArray();
+		 
+				for (int index = 0; index < values.size(); index++) {
+					eachData = new JSONObject();
+					eachData.put("r", new Long(offset+index));
+					eachData.put("v", values.get(index) != null ? values.get(index) : "");
+					allDataArray.put(eachData);
+				 
+				 
+				}
+		 
+			 
+			return allDataArray.toString();
+		}
 	
 }

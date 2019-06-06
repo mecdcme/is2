@@ -137,11 +137,31 @@ public class RelaisGenericDao {
 
 	/**
 	 * @param idWorKsetDB
-	 * @param indexAllItems
+	 * @param indexAllItems JSON_MERGE_PRESERVE('["a", 1]', '{"key": "value"}');
 	 * @param values
 	 */
 	@Transactional
-	public int appendValuesWorkset(Long idWorKsetDB, String jsonValues, long indexAllItems) {
+	public int appendValuesWorkset(Long idWorKsetDB, String valuesToAppend, long indexAllItems) {
+		// TODO Auto-generated method stub
+	 
+		int ret = 0;
+//		System.out.println("idWorKsetDB: " + idWorKsetDB + " valuesToAppend  " + valuesToAppend);
+		String query = "UPDATE SX_WORKSET sw  SET  sw.valori_size=:indexAllItems, sw.valori= JSON_MERGE_PRESERVE(sw.valori, :valuesToAppend) where sw.id=:idWorKsetDB ";
+		em.clear();
+
+		Query q = em.createNativeQuery(query);
+		q.setParameter("indexAllItems", new Long(indexAllItems));
+		q.setParameter("valuesToAppend", valuesToAppend);
+		q.setParameter("idWorKsetDB", idWorKsetDB);
+
+		ret = q.executeUpdate();
+
+		return ret;
+
+	}
+
+	@Transactional
+	public int appendValuesWorkset_old(Long idWorKsetDB, String jsonValues, long indexAllItems) {
 		// TODO Auto-generated method stub
 		String valuesToAppend = jsonValues + "]}";
 		int ret = 0;
@@ -159,5 +179,4 @@ public class RelaisGenericDao {
 		return ret;
 
 	}
-
 }

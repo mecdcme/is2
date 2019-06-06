@@ -64,18 +64,17 @@ public class SqlGenericDao {
 			Integer riga_inf, Integer riga_sup, HashMap<String, String> paramsFilter) {
 
 		String query = " SELECT  rs1.id as id,rs1.nome as nome,  rs1.ORDINE as ordine, rs1.tipo_var as tipo_var, rs1.paginationTotalRows as valori_size,   "
-				+ "   concat('{\"valori\":',    concat('[', group_concat(  concat('{\"r\":\"',rs1.r,'\",\"v\":\"',rs1.v,'\"}')      ORDER BY rs1.r ASC   )    ,    ']' )   ,    '}'  ) "
-				+ "     " + " AS valori from "
+				+ "      JSON_ARRAYAGG( json_object( 'r', rs1.r ,'v', rs1.v )  )      AS valori from "
 				+ "  (  select rs.*,   max(rs.adx) OVER( PARTITION BY rs.id)  as paginationTotalRows  from "
 				+ " (select  ss.id as id,ss.nome as nome,  ss.ordine,  ss.tipo_var as tipo_var,   ss.valori_size,t.r,t.v,"
 				+ " DENSE_RANK() OVER(ORDER BY t.idx) as adx  from " + " SX_WORKSET ss, SX_STEP_VARIABLE sv, "
-				+ " json_table( CONVERT(  ss.valori USING utf8), '$.valori[*]'  columns ( idx FOR ORDINALITY,r int path '$.r', v varchar(100)  path '$.v')"
+				+ " json_table(  ss.valori , '$[*]'  columns ( idx FOR ORDINALITY,r int path '$.r', v varchar(100)  path '$.v')"
 				+ " ) t"
 				+ "	where  sv.elaborazione=:idelaborazione  and sv.tipo_campo=:tipoCampo and sv.var=ss.id and ss.TIPO_VAR=1 ";
 		if (paramsFilter != null) {
 			for (String key : paramsFilter.keySet()) {
 
-				query += " and t.r in( select f.r from SX_WORKSET si, SX_STEP_VARIABLE ssv,json_table( CONVERT(  si.valori USING utf8), '$.valori[*]'  columns "
+				query += " and t.r in( select f.r from SX_WORKSET si, SX_STEP_VARIABLE ssv,json_table( si.valori, '$[*]'  columns "
 						+ "(  idx FOR ORDINALITY,r int path '$.r', v varchar(100) path '$.v') ) f "
 						+ " where  ssv.elaborazione=:idelaborazione and ssv.tipo_campo=:tipoCampo and ssv.var=si.id  and si.nome=:n_"
 						+ key + " and f.v=:v_" + key + " ) ";
@@ -103,6 +102,50 @@ public class SqlGenericDao {
 		return resultList;
 	}
 
+	public List<SxWorkset> findWorkSetDatasetColonnaByElaborazioneQuery_old(Long idelaborazione, Integer tipoCampo,
+			Integer riga_inf, Integer riga_sup, HashMap<String, String> paramsFilter) {
+
+		String query = " SELECT  rs1.id as id,rs1.nome as nome,  rs1.ORDINE as ordine, rs1.tipo_var as tipo_var, rs1.paginationTotalRows as valori_size,   "
+				+ "   concat('{\"valori\":',    concat('[', group_concat(  concat('{\"r\":\"',rs1.r,'\",\"v\":\"',rs1.v,'\"}')      ORDER BY rs1.r ASC   )    ,    ']' )   ,    '}'  ) "
+				+ "     " + " AS valori from "
+				+ "  (  select rs.*,   max(rs.adx) OVER( PARTITION BY rs.id)  as paginationTotalRows  from "
+				+ " (select  ss.id as id,ss.nome as nome,  ss.ordine,  ss.tipo_var as tipo_var,   ss.valori_size,t.r,t.v,"
+				+ " DENSE_RANK() OVER(ORDER BY t.idx) as adx  from " + " SX_WORKSET ss, SX_STEP_VARIABLE sv, "
+				+ " json_table( CONVERT(  ss.valori USING utf8), '$.[*]'  columns ( idx FOR ORDINALITY,r int path '$.r', v varchar(100)  path '$.v')"
+				+ " ) t"
+				+ "	where  sv.elaborazione=:idelaborazione  and sv.tipo_campo=:tipoCampo and sv.var=ss.id and ss.TIPO_VAR=1 ";
+		if (paramsFilter != null) {
+			for (String key : paramsFilter.keySet()) {
+
+				query += " and t.r in( select f.r from SX_WORKSET si, SX_STEP_VARIABLE ssv,json_table( CONVERT(  si.valori USING utf8), '$.[*]'  columns "
+						+ "(  idx FOR ORDINALITY,r int path '$.r', v varchar(100) path '$.v') ) f "
+						+ " where  ssv.elaborazione=:idelaborazione and ssv.tipo_campo=:tipoCampo and ssv.var=si.id  and si.nome=:n_"
+						+ key + " and f.v=:v_" + key + " ) ";
+			}
+		}
+		query += "  order by t.idx asc " + "  ) rs " + " ) rs1 "
+				+ "  where  rs1.adx    >:riga_inf     and  rs1.adx <= :riga_sup"
+				+ "	   group by rs1.id,rs1.nome, rs1.ORDINE  , rs1.tipo_var  , rs1.paginationTotalRows ";
+
+		Query q = em.createNativeQuery(query, SxWorkset.class);
+		q.setParameter("idelaborazione", idelaborazione);
+		q.setParameter("tipoCampo", tipoCampo);
+		q.setParameter("riga_inf", riga_inf);
+		q.setParameter("riga_sup", riga_sup);
+		if (paramsFilter != null) {
+			for (String key : paramsFilter.keySet()) {
+				String value = paramsFilter.get(key);
+				q.setParameter("n_" + key, key);
+				q.setParameter("v_" + key, value);
+			}
+		}
+
+		@SuppressWarnings("unchecked")
+		List<SxWorkset> resultList = (List<SxWorkset>) q.getResultList();
+		return resultList;
+	}
+
+	
 	public List<DatasetColonna> findDatasetColonnaParamsbyQuery(@Param("dFile") Long dFile,
 			@Param("riga_inf") Integer rigaInf, @Param("riga_sup") Integer rigaSup,
 			HashMap<String, String> paramsFilter, @Param("nameColumnToOrder") String nameColumnToOrder,

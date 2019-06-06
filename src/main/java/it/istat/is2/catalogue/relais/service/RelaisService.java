@@ -30,6 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -167,7 +168,7 @@ public class RelaisService {
 		String firstFiledMB = ruoliVariabileNome.get(codeMatchingB).get(0);
 		int sizeA = worksetVariabili.get(firstFiledMA).size();
 		int sizeB = worksetVariabili.get(firstFiledMB).size();
-		int sizeFlush = sizeA*sizeB/10;
+		int sizeFlush = (sizeA*sizeB)/10;
 		long indexItems = 0;
 		long indexItemsUpdate = 0;
 
@@ -241,9 +242,10 @@ public class RelaisService {
 	 * @param worksetOut
 	 * @param indexAll 
 	 * @param indexItemsUpdate
+	 * @throws JSONException 
 	 */
 	private long updateValuesWorksetOutToDB(HashMap<String, Long> worksetID, Map<String, ArrayList<String>> worksetOut,
-			long offset, long indexAllItems) {
+			long offset, long indexAllItems) throws JSONException {
 		// TODO Auto-generated method stub
 		long rowUpdates = 0;
 		for (Map.Entry<String, ArrayList<String>> entry : worksetOut.entrySet()) {
@@ -251,8 +253,8 @@ public class RelaisService {
 		    String nomeW = entry.getKey();
 			ArrayList<String> values = entry.getValue();
 			final StringBuilder selectFieldsbuilder = new StringBuilder();
-			if (offset > 0) 	selectFieldsbuilder.append(",");
-			selectFieldsbuilder.append(Utility.convertToJsonString(values, offset));
+		
+			selectFieldsbuilder.append(Utility.convertToJsonStringArray(values, offset));
 			rowUpdates=values.size();
 		 	Long idWorKsetDB = worksetID.get(nomeW);
 		 	relaisGenericDao.appendValuesWorkset(idWorKsetDB,selectFieldsbuilder.toString(),indexAllItems);
