@@ -262,6 +262,7 @@ public class WorkflowController {
         //Create session DTO
         SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
         sessionBean.setBusinessFunction(null);
+        sessionBean.setIdElaborazione(Long.valueOf("-1"));
         session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
         return "redirect:/sessione/apri/" + elaborazione.getSessioneLavoro().getId();

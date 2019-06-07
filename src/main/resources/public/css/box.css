@@ -1061,8 +1061,8 @@ button.btn-secondary:hover
     flex-direction: column
 }
 
-.card-deck .card {
-    margin-bottom: 15px
+.card-danger{
+    border-color: #f86c6b!important;
 }
 
 #header-variabili{

@@ -149,13 +149,11 @@
                                     <span th:text="#{Layout.elaborazione}"></span>
                                 </li>
                                 <li class="nav-body" th:if="${session.sessioneBean}">
-                                    <a th:title="${session.sessioneBean.nomeElaborazione}" th:if="${session.sessioneBean.businessFunction != null}" 
+                                    <a th:title="${session.sessioneBean.nomeElaborazione}" th:if="${session.sessioneBean.idElaborazione > 0}" 
                                        th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}"> 
                                         <i class="fa fa-sitemap"></i><span th:text="${session.sessioneBean.nomeElaborazione}">Elaborazione</span>
                                     </a>
-                                    <a title="Elaborazione" th:unless="${session.sessioneBean.businessFunction != null}">
-                                        <i class="fa fa-sitemap"></i><span></span>
-                                    </a>
+                                    
                                     <ul th:if="${session.sessioneBean.businessFunction != null}" class="nav sidebar-subnav" aria-expanded="false">
                                         <li class="nav-body" th:each="bProcess : ${session.sessioneBean.businessFunction.processes}">
                                             <a th:title="${bProcess.name}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
@@ -164,12 +162,6 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="nav-body" >
-                                    <a title="Elaborazione" th:unless="${session.sessioneBean}">
-                                        <i class="fa fa-sitemap"></i><span></span>
-                                    </a>
-                                </li>
-                                <li class="nav-body menu-line" ></li>                     
                             </ul>
                         </nav>
                     </div>
