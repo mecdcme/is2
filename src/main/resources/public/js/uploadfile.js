@@ -56,6 +56,10 @@ $(document).ready(function () {
     $('#label_file').on("keyup", function (e) {
     	controllaInputText();
     });
+    $('#btn_delete_dataset').click(function () {
+    	var datasetid = $('#idDataset').val();      
+        window.location = _ctx + '/deleteDataset/' + datasetid;
+    });
 });
 
 function controllaInputText() {	
@@ -68,9 +72,16 @@ function controllaInputText() {
     }
 }
 	
-function eliminaDataset(idDataset) {
-    $("#idDataset").val(idDataset);
-    $("#deleteDsFileForm").submit();
+function eliminaDataset(idDataset, nomeFile) {	
+    $("#idDataset").val(idDataset);    
+    $('#msg_elim_dataset').text("Eliminare il dataset " + nomeFile + "?");
+    $('#modalCancellaDataset').modal('show');    
+}
+function eliminaElaborazione(ide, ids) {
+    $('#id_elaborazione_del').val(ide);
+    $('#id_sessione_del').val(ids);
+    $('#msg_elaboraz').text("Eliminare l'elaborazione con id " + ide + "?");
+    $('#modalCancellaElaborazione').modal('show');
 }
 
 function creaContenuto(data, delimiter) {
