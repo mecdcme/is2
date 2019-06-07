@@ -90,20 +90,21 @@ $(document).ready(function () {
                 + "/" + idparam;
     });
 
-    var tableP = $("#parametriTabList").DataTable({
+    $("#parametriTabList").DataTable({
         dom: "<'row'<'col-sm-6'B><'col-sm-6'f>>"
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        autoWidth: false,
         responsive: true,
         paging: false,
         rowReorder: true,
         columnDefs: [{
-                orderable: false,
+                "orderable": false,
                 className: 'reorder',
-                targets: [0]
+                targets: [1,2,3,4,5,6]
             }],
         buttons: [{
-                className: 'btn-extenal-function',
+                className: 'btn-extenal-function btn-light',
                 text: '<i class="fa fa-plus"></i><span> Parametro</span>',
                 action: function (e, dt, node, config) {
                     openDlgAddParametriWorkset();
@@ -122,7 +123,7 @@ $(document).ready(function () {
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         responsive: true,
-        "ordering": false,
+        ordering: false,
         searching: false,
         lengthChange: true,
         pageLength: 25,
