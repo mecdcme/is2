@@ -42,7 +42,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import it.istat.is2.app.bean.InputFormBean;
 import it.istat.is2.app.bean.SessionBean;
@@ -60,7 +59,6 @@ import it.istat.is2.workflow.domain.SxTipoDato;
 import it.istat.is2.workflow.service.TipoDatoService;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
-import java.util.Objects;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Controller
@@ -237,8 +235,8 @@ public class DatasetController {
         return "dataset/preview";
     }
 
-    @RequestMapping(value = "/deleteDataset", method = RequestMethod.POST)
-    public String deleteDataset(HttpSession session, Model model, @AuthenticationPrincipal User user, @RequestParam("idDataset") Long idDataset) {
+    @GetMapping(value = "/deleteDataset/{datasetid}")
+    public String deleteDataset(HttpSession session, Model model, @AuthenticationPrincipal User user, @PathVariable("datasetid") Long idDataset) {
 
         notificationService.removeAllMessages();
 
@@ -252,7 +250,7 @@ public class DatasetController {
         session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
         return "redirect:/sessione/mostradataset/" + sessionelv.getId();
-    }
+    }   
 
     private DatasetFile getNextFile(HttpSession session, Long idFile) {
         DatasetFile nextFile = new DatasetFile();
