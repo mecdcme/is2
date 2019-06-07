@@ -33,6 +33,11 @@ body, html {
     background-color: #f1f3f7;
 }
 
+.row{
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
 /* login */
 #login {
     background-color: #f1f3f7;
@@ -403,7 +408,7 @@ aside.toggle-off .active {
     padding: 12px;
     z-index: 109;
     color: #333;
-    background: #f0f3f5;
+    background: #fff;
     border-top: 1px solid #c8ced3;
 }
 /* END FOOTER */
