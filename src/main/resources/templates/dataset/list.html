@@ -111,7 +111,12 @@
                                                     <td th:if="${dataset.tipoDato != null}" th:text="${dataset.tipoDato.nome}"></td>
                                                     <td th:unless="${dataset.tipoDato != null}" th:text="null"></td>
                                                     <td style="width: 1%">
-                                                        <a class='towait' title="Visualizza dataset" th:href="@{'/viewDataset/'+${dataset.id}}"> 
+                                                        <a th:if="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza dataset" 
+                                                           th:href="@{'/viewDataset/'+${dataset.id}}"> 
+                                                            <i class="fa fa-search"></i>
+                                                        </a>
+                                                        <a th:unless="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza ruleset" 
+                                                           th:href="@{'/viewRuleset/'+${dataset.id}}"> 
                                                             <i class="fa fa-search"></i>
                                                         </a>
                                                     </td>

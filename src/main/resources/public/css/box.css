@@ -112,7 +112,7 @@ box-shadow: none !important;
     overflow-x: hidden;
 }
 
-#logbox{
+#logbox, #rbox{
     height: 178px;
     overflow-y: auto;
     font-family: monospace;
@@ -836,6 +836,10 @@ fieldset {
     margin-bottom: 0px !important;
 }
 
+table.dataTable thead th, table.dataTable thead td {
+    padding: 5px 10px 5px 3px!important;
+}
+
 table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child,
 table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child
 {
@@ -853,7 +857,7 @@ table.dataTable thead th, table.dataTable thead td{
 }
 
 .pagination > li > a, .pagination > li > span{
-    padding: 4px 12px;
+    padding: 4px 8px;
 }
 
 .list-group-horizontal
