@@ -227,8 +227,8 @@
                             <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
                         </div>
                         <div class="modal-body">
-                            <span th:text="#{file.logical.name}">Etichetta:</span> &nbsp;&nbsp;&nbsp; 
-                            <input id="label_file" type="text"/>                                
+                            <span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
+                            <input id="label_file" th:value="DS+${etichetta}" type="text"/>                                
                         </div>
                         <div class="modal-body">
                             <span th:text="#{file.data.type}">Tipo dato:</span> &nbsp;&nbsp;&nbsp;
