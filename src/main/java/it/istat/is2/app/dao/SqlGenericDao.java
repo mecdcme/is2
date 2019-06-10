@@ -161,7 +161,7 @@ public class SqlGenericDao {
 				query += "  and t.idx in( select f.idx  FROM   SX_DATASET_COLONNA si, json_table( CONVERT( si.daticolonna USING utf8), '$[*]' columns ( idx FOR ORDINALITY, v text path '$[0]'))f "
 						+ "  where si.dataset_file=:dFile   and si.nome=:n_" + key + " and f.v=:v_" + key + ")";
 
-			}
+			} 
 		}
 
 		query += "  order by adx asc " + "  ) rs " + " ) ss1 "
