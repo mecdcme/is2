@@ -52,7 +52,7 @@ $(document).ready(function () {
             return false;
         };
     });
-    
+    controllaInputText();
     $('#label_file').on("keyup", function (e) {
     	controllaInputText();
     });
