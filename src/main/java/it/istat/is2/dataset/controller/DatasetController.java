@@ -96,8 +96,7 @@ public class DatasetController {
         List<DatasetColonna> colonne = datasetService.findAllNomeColonne(idfile);
         List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();
 
-        Long nextFileId;
-        String nextFileName;
+      
 
         model.addAttribute("colonne", colonne);
         model.addAttribute("idfile", idfile);

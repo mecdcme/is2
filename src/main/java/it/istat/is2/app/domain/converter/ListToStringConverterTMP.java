@@ -35,13 +35,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 @Converter
-public class ListToStringConverterWorkset implements AttributeConverter<List<String>, String> {
-	final static Logger logger = Logger.getLogger(ListToStringConverterWorkset.class);
+public class ListToStringConverter implements AttributeConverter<List<String>, String> {
+	final static Logger logger = Logger.getLogger(ListToStringConverter.class);
 
 	@Override
 	public String convertToDatabaseColumn(List<String> data) {
 		String value = "";
- 
+		JSONObject obj = new JSONObject();
 		JSONArray allDataArray = new JSONArray();
 
 		JSONObject eachData = null;
@@ -53,8 +53,8 @@ public class ListToStringConverterWorkset implements AttributeConverter<List<Str
 				eachData.put("v", data.get(index) != null ? data.get(index) : "");
 				allDataArray.put(eachData);
 			}
-	 
-			value = allDataArray.toString();
+			obj.put("valori", allDataArray);
+			value = obj.toString();
 		} catch (JSONException e) {
 
 			logger.error(e);
@@ -66,8 +66,8 @@ public class ListToStringConverterWorkset implements AttributeConverter<List<Str
 	public List<String> convertToEntityAttribute(String data) {
 		List<String> listValue = new ArrayList<String>();
 		try {
-			 
-			JSONArray jsonArray =new JSONArray(data);
+			JSONObject jsonObj = new JSONObject(data);
+			JSONArray jsonArray = (JSONArray) jsonObj.get("valori");
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject obj = jsonArray.getJSONObject(i);
 				listValue.add(obj.getString("v"));

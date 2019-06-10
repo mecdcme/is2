@@ -254,7 +254,7 @@ public class RelaisService {
 			ArrayList<String> values = entry.getValue();
 			final StringBuilder selectFieldsbuilder = new StringBuilder();
 		
-			selectFieldsbuilder.append(Utility.convertToJsonStringArray(values, offset));
+			selectFieldsbuilder.append(Utility.convertToJsonStringArray(values));
 			rowUpdates=values.size();
 		 	Long idWorKsetDB = worksetID.get(nomeW);
 		 	relaisGenericDao.appendValuesWorkset(idWorKsetDB,selectFieldsbuilder.toString(),indexAllItems);
