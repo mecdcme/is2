@@ -137,11 +137,18 @@ public class DatasetController {
         List<DatasetFile> listaDataset = sessionelv.getDatasetFiles();
         List<SxTipoDato> listaTipoDato = tipoDatoService.findListTipoDato();
 
+        DatasetFile lastDS = listaDataset.get(listaDataset.size()-1);
+        
+        Long etichetta = lastDS.getId();
+        etichetta = etichetta++;        
+        
+        
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 
         model.addAttribute("listaTipoDato", listaTipoDato);
         model.addAttribute("listaDataset", listaDataset);
         model.addAttribute("logs", logs);
+        model.addAttribute("etichetta", etichetta);
         return "dataset/list";
     }
 
