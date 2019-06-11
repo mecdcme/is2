@@ -69,6 +69,10 @@ public class SxRule implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "RULESET")
 	private SxRuleset sxRuleset;
+    
+    @ManyToOne
+    @JoinColumn(name = "CLASSIFICAZIONE")
+    private SxRulesClassificazioni sxRulesClassificazioni;
 
 	public SxRule() {
 	}
