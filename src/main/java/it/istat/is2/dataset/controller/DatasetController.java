@@ -42,9 +42,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import it.istat.is2.app.bean.InputFormBean;
+import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.LogService;
@@ -86,19 +86,26 @@ public class DatasetController {
     }
 
     @RequestMapping("/viewDataset/{idfile}")
-    public String caricafile(Model model, @PathVariable("idfile") Long idfile) {
+    public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Long idfile) {
 
         notificationService.removeAllMessages();
 
         DatasetFile dfile = datasetService.findDataSetFile(idfile);
+        DatasetFile dfileNext = getNextFile(session, idfile);
 
         List<DatasetColonna> colonne = datasetService.findAllNomeColonne(idfile);
         List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();
+        
+        Integer numRighe= dfile.getNumerorighe();
+        
+      
 
         model.addAttribute("colonne", colonne);
         model.addAttribute("idfile", idfile);
         model.addAttribute("variabili", variabiliSum);
         model.addAttribute("dfile", dfile);
+        model.addAttribute("numRighe", numRighe.toString());
+        model.addAttribute("nextFile", dfileNext);
 
         return "dataset/preview";
     }
@@ -132,11 +139,18 @@ public class DatasetController {
         List<DatasetFile> listaDataset = sessionelv.getDatasetFiles();
         List<SxTipoDato> listaTipoDato = tipoDatoService.findListTipoDato();
 
+        DatasetFile lastDS = listaDataset.get(listaDataset.size()-1);
+        
+        Long etichetta = lastDS.getId();
+        etichetta = etichetta++;        
+        
+        
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 
         model.addAttribute("listaTipoDato", listaTipoDato);
         model.addAttribute("listaDataset", listaDataset);
         model.addAttribute("logs", logs);
+        model.addAttribute("etichetta", etichetta);
         return "dataset/list";
     }
 
@@ -199,6 +213,10 @@ public class DatasetController {
             datasetService.salva(campiL, valoriHeaderNum, labelFile, tipoDato, separatore, form.getDescrizione(), idsessione);
             logService.save("File " + labelFile + " salvato con successo", user.getUserid(), Long.parseLong(idsessione));
             notificationService.addInfoMessage("Salvataggio avvenuto con successo.");
+
+            SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+            sessionBean.getFile().add(form.getDescrizione());
+            session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
         } catch (Exception e) {
             notificationService.addErrorMessage("Errore nel salvataggio del file.");
             return "redirect:/sessione/mostradataset/" + idsessione;
@@ -207,13 +225,13 @@ public class DatasetController {
         return "redirect:/sessione/mostradataset/" + idsessione;
     }
 
-    @RequestMapping("/createField/{idfile}/{idColonna}/{commandField}/{charOrString}/{upperLower}/{newField}/{columnOrder}")
+    @RequestMapping("/createField/{idfile}/{idColonna}/{commandField}/{charOrString}/{upperLower}/{newField}/{columnOrder}/{numRows}")
     public String createField(Model model, @PathVariable("idfile") String idfile, @PathVariable("idColonna") String idColonna,
             @PathVariable("commandField") String commandField, @PathVariable("charOrString") String charOrString,
             @PathVariable("upperLower") String upperLower, @PathVariable("newField") String newField,
-            @PathVariable("columnOrder") String columnOrder) {
+            @PathVariable("columnOrder") String columnOrder,  @PathVariable("numRows") String numRows) {
 
-        DatasetFile dFile = datasetService.createField(idfile, idColonna, commandField, charOrString, upperLower, newField, columnOrder);
+        DatasetFile dFile = datasetService.createField(idfile, idColonna, commandField, charOrString, upperLower, newField, columnOrder, numRows);
 
         List<DatasetColonna> colonne = datasetService.findAllNomeColonne(Long.parseLong(idfile));
         List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();
@@ -222,12 +240,31 @@ public class DatasetController {
         model.addAttribute("idfile", idfile);
         model.addAttribute("variabili", variabiliSum);
         model.addAttribute("dfile", dFile);
+        model.addAttribute("numRighe", numRows);
 
         return "dataset/preview";
     }
+    
+    @RequestMapping("/createMergedField/{idfile}/{columnOrder}/{numRows}/{fieldsToMerge}/{newField}")
+    public String createMergedField(Model model, @PathVariable("idfile") String idfile,  @PathVariable("columnOrder") String columnOrder, @PathVariable("numRows") String numRows,
+            @PathVariable("fieldsToMerge") String fieldsToMerge, @PathVariable("newField") String newField) {
 
-    @RequestMapping(value = "/deleteDataset", method = RequestMethod.POST)
-    public String deleteDataset(Model model, @AuthenticationPrincipal User user, @RequestParam("idDataset") Long idDataset) {
+        DatasetFile dFile = datasetService.createMergedField(idfile, columnOrder, numRows, fieldsToMerge, newField);
+
+        List<DatasetColonna> colonne = datasetService.findAllNomeColonne(Long.parseLong(idfile));
+        List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();
+
+        model.addAttribute("colonne", colonne);
+        model.addAttribute("idfile", idfile);
+        model.addAttribute("variabili", variabiliSum);
+        model.addAttribute("dfile", dFile);
+        model.addAttribute("numRighe", numRows);
+        
+        return "dataset/preview";
+    }
+    
+    @GetMapping(value = "/deleteDataset/{datasetid}")
+    public String deleteDataset(HttpSession session, Model model, @AuthenticationPrincipal User user, @PathVariable("datasetid") Long idDataset) {
 
         notificationService.removeAllMessages();
 
@@ -236,6 +273,33 @@ public class DatasetController {
         logService.save("File " + idDataset + " eliminato con successo", user.getUserid(), sessionelv.getId());
         notificationService.addInfoMessage("Eliminazione avvenuta con successo");
 
+        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+        sessionBean.getFile().remove(0);
+        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+
         return "redirect:/sessione/mostradataset/" + sessionelv.getId();
+    }   
+
+    private DatasetFile getNextFile(HttpSession session, Long idFile) {
+        DatasetFile nextFile = new DatasetFile();
+        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+        if (sessionBean != null) {
+            List<DatasetFile> files = datasetService.findDatasetFilesByIdSessioneLavoro(sessionBean.getId());
+            int counter = 0;
+            if (files.size() == 1) {
+                return nextFile;
+            }
+            for (DatasetFile file : files) {
+                if (file.getId().equals(idFile) && (counter + 1) < files.size()) {
+                    nextFile = files.get(counter + 1);
+                    break;
+                } else if (file.getId().equals(idFile) && (counter + 1) == files.size()) {
+                    nextFile = files.get(0);
+                    break;
+                }
+                counter++;
+            }
+        }
+        return nextFile;
     }
 }
