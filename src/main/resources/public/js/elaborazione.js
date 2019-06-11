@@ -36,13 +36,13 @@ $(document).ready(function () {
         autoWidth: false,
         responsive: true,
         paging: false,
-        rowReorder: {
+        rowReorder: {        	
             selector: 'td:nth-child(2)'
         },
         columnDefs: [{
                 "orderable": false,
                 className: 'reorder',
-                "targets": [1,2,3,4,5,6]
+                "targets": [1]
             }],
         buttons: [{
                 className: 'btn-extenal-function btn-light',
