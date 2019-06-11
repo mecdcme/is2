@@ -29,13 +29,9 @@
 
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
-<<<<<<< HEAD
             var _variabili = [[${colonne.size()}]];  
             var _righe = [[${numRighe}]];  
-            
-=======
-            var _variabili = [[${colonne.size()}]];
->>>>>>> branch 'master' of https://github.com/mecdcme/is2
+
         </script>
         <script th:src="@{/js/table/datatables.js}"></script>
         <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
@@ -253,7 +249,7 @@
    						 </select>
    						 <button type="button"  id="addVariable" class="btn btn-secondary">Add</button>
                         </div>
-<<<<<<< HEAD
+
 	                    <div class="custom-control custom-checkbox">
 						  <span class="form-check-label" for="removeSpace">Separatore:</span>
 						  <input type="text" class="custom-control-input" id="sepValue"></input>
@@ -271,26 +267,7 @@
 							<hr class="style1"></hr>
 							 <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
 							 <input type="text" class="custom-control-input" id="newfieldMerge"></input>
-						
-=======
-                        <div class="custom-control custom-checkbox">
-                            <span class="form-check-label" for="removeSpace">Separatore:</span>
-                            <input type="text" class="custom-control-input" id="sepvalue"></input>
-                            <button type="button" class="btn btn-secondary">Add</button>
-                        </div>
 
-                        <div class="custom-control custom-checkbox">
-                            <hr class="style1"></hr>
-                            <span class="form-check-label" for="removeSpecial">Lista dei campi da concatenare:</span>
-                            <textarea class="form-control rounded-0" id="Textarea" rows="3"></textarea>
-
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <hr></hr>
-                            <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
-                            <input type="text" class="custom-control-input" id="newfield"></input>
-
->>>>>>> branch 'master' of https://github.com/mecdcme/is2
                         </div>
                         <div class="modal-footer">
                             <input type="hidden" name="" id="id_dataset_del" value="" />
