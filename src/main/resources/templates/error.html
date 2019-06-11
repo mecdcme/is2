@@ -33,9 +33,15 @@
         <script th:src="@{/js/jquery-3.1.1.min.js}" type="text/javascript"></script>
         <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
         <script th:src="@{/js/box.js}" type="text/javascript"></script>
+        <script type="text/javascript">
+           $(document).ready(function () {
+               toggleMenu();
+            });        
+         </script>
         <!-- CSS -->
         <link th:href="@{/css/custom_bootstrap.css}" rel="stylesheet" />
         <link th:href="@{/css/box.css}" rel="stylesheet" />
+        <link th:href="@{/css/error.css}" rel="stylesheet" />
         <!-- Fontawesome -->
         <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
     </head>
@@ -70,8 +76,8 @@
                 <div class="content-wrapper">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item active" aria-current="page">
-                                <span th:text="#{Error.page}"> Error page </span>
+                            <li class="breadcrumb-item">
+                                <strong th:text="#{Error.page.legend}"></strong>
                             </li>
                         </ol>
                     </nav>
@@ -79,37 +85,51 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-2"></div>
-                        <div class="col-lg-6">
-                            <fieldset class="well">
-                                <div>
-                                    <h3>
-                                        <i class="fa fa-exclamation-triangle"></i>
-                                        <span th:text="#{Error.page.legend}">System Error</span>
-                                    </h3>
+
+                        <div class="col-lg-8">
+                            <div class="card card-danger">
+                                <div class="card-header">
+                                    <span>IS<sup>2</sup> error page...</span>
                                 </div>
-                                <div style="margin-left: 10px; margin-right: 10px;">
-                                    <ul id="messages" th:with="notifyMessages=${session['siteNotificationMessages']}">
-                                        <th:block th:each="msg : ${notifyMessages}">
-                                            <li>				
-                                                <span th:text="${msg.text} "></span> 
-                                                <div th:if="${msg.details}">
-                                                    <div class="collapse" id="collapseExample">
-                                                        <div class="well"><span th:text="${msg.details}"></span> </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </th:block>
-                                    </ul>
-                                    <span th:if="${notifyMessages}" th:remove="all" th:text="'session.remove(${siteNotificationMessages})'">
-                                    </span>
+                                <div class="card-body">
+                                    <table class="table table-condensed table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td width="15%"><span>Date: </span></td>
+                                                <td><span th:text="${#dates.format(timestamp, 'dd/MM/yyyy HH:mm')}"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="15%"><span>Status: </span></td>
+                                                <td><strong th:text="${status}"></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="15%"><span>Error: </span></td>
+                                                <td><strong th:text="${error}"></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="15%"><span>Path: </span></td>
+                                                <td><span th:text="${path}"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="15%"><span>Message: </span></td>
+                                                <td><span th:text="${message}"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="15%"><span>Exception: </span></td>
+                                                <td><span th:text="${exception}"></span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div>
+                                        Please contact the system administrator or try to go back 
+                                        <a href="index.html" title="Home" th:href="@{/}"> <i class="fa fa-home"></i> 
+                                            <span th:text="#{Layout.home}">Home</span>
+                                        </a>
+                                    </div>
                                 </div>
-                                <div style="margin:15px 0px" th:if="${exception}" th:text="${exception}">${exception}</div>
-                                <p>
-                                    <span th:text="#{Error.goto}">Go to</span>
-                                    <a href="index.html" title="Home" th:href="@{/}" class="active"><i class="fa fa-home"></i> <span>Home</span></a>
-                                </p>
-                            </fieldset>
+                            </div>
                         </div>
+                        <div class="col-lg-2"></div>
                     </div>
                 </div>
             </section>

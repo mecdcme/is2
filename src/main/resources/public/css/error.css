@@ -1,0 +1,14 @@
+.navbar-default {
+    border-color: #f86c6b!important;
+    border-bottom: 1px solid #f86c6b!important;
+    background-color: #e35153;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+.fa-stack-1x{
+    color:#e35153!important;
+}

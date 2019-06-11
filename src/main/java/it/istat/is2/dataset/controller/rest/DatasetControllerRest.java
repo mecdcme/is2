@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -96,7 +95,7 @@ public class DatasetControllerRest {
     }
 
     @RequestMapping(value = "/rest/datasetvalori/{dfile}/{parametri:.+}", method = RequestMethod.POST)
-    public String loadDatasetValori2(HttpServletRequest request, Model model, @PathVariable("dfile") Long dfile,
+    public String loadDatasetValori(HttpServletRequest request, Model model, @PathVariable("dfile") Long dfile,
             @PathVariable("parametri") String parametri, @RequestParam("length") Integer length,
             @RequestParam("start") Integer start, @RequestParam("draw") Integer draw,
             @RequestParam Map<String, String> allParams) throws IOException, JSONException {
@@ -123,7 +122,7 @@ public class DatasetControllerRest {
                 parameters.put(nomeValore.get(0), nomeValore.get(1));
             }
         }
-        String dtb = datasetService.loadDatasetValori1(dfile, length, start, draw, parameters, nameColumnToOrder, dirColumnOrder);
+        String dtb = datasetService.loadDatasetValori(dfile, length, start, draw, parameters, nameColumnToOrder, dirColumnOrder);
 
         return dtb;
     }
@@ -168,5 +167,32 @@ public class DatasetControllerRest {
         response.setHeader("Content-disposition", "attachment; filename=" + fileName);
         Map<String, List<String>> dataMap = datasetService.loadDatasetValori(dfile);
         Utility.writeObjectToCSV(response.getWriter(), dataMap);
+    }
+    
+    @RequestMapping(value = "/rest/dataset/updaterowlist", method = RequestMethod.POST)
+    public String updateOrdineRighe(HttpServletRequest request, Model model,
+            @RequestParam("ordineIds") String ordineIds) throws Exception {
+
+        StringTokenizer stringTokenizerElements = new StringTokenizer(ordineIds, "|");
+        String element = null;
+        String ordine = null;
+        String idcol = null;
+        DatasetColonna datasetCol = new DatasetColonna();
+        while (stringTokenizerElements.hasMoreElements()) {
+            element = stringTokenizerElements.nextElement().toString();
+            StringTokenizer stringTokenizerValues = new StringTokenizer(element, "=");
+            while (stringTokenizerValues.hasMoreElements()) {
+                ordine = stringTokenizerValues.nextElement().toString();
+                idcol = stringTokenizerValues.nextElement().toString();
+            }
+            Long idc = Long.parseLong(idcol);
+            Short ordineC = Short.parseShort(ordine);
+            datasetCol = datasetService.findOneColonna(idc);
+            		
+            datasetCol.setOrdine(ordineC);            
+			datasetService.salvaColonna(datasetCol);		
+        }
+
+        return "success";
     }
 }

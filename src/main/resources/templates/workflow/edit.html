@@ -53,7 +53,7 @@
                                 <span>Edit workset</span>
                             </li>
                             <div class="btn-group pull-right" role="group">
-                                <a class="" title="Chiudi workset" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}"> 
+                                <a class="" title="Chiudi workset" th:if="${session.sessionelv}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}"> 
                                     <i class="fa fa-times"></i>&nbsp;<span th:text="#{close.workset.tab}"></span>
                                 </a>
                             </div>
@@ -64,9 +64,16 @@
                         <input id="idelaborazione" type="hidden" name="elaborazione" th:value="${elaborazione.id}" />
                         <div class="row">
                             <div class="col-lg-12">
-                                <fieldset class="well">
-                                    <legend class="well-legend">Configurazione variabili Workset</legend>
-                                    <div class="row" style="padding: 5px;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <span id="header-variabili" href="javascript:void(0)" onclick="javascript:showVariabili();" title="Variabili"> 
+                                            <span class="header-strong">Variabili</span>
+                                        </span>
+                                        <span id="header-parametri" href="javascript:void(0)" onclick="javascript:showParametri();" title="Parametri"> 
+                                            <span>Parametri</span>
+                                        </span>
+                                    </div>
+                                    <div class="card-body" id="card-variabili">
                                         <form th:action="@{/ws/associavariabile}" id="formAssociaRuolo" class="form-horizontal" method="post">
                                             <span id="associazione_vars"></span>
                                         </form>
@@ -77,7 +84,7 @@
                                                     <th><span>Ruolo</span></th>
                                                     <th><span>Nome Variabile</span></th>
                                                     <th><span>I/O</span></th>
-                                                    <th style="width: 1%">Filtro ricerca</th>
+                                                    <th style="width: 8%">Filtro</th>
                                                     <th style="width: 1%"></th>
                                                     <th style="width: 1%"></th>
                                                 </tr>
@@ -86,7 +93,7 @@
                                                 <tr th:each="stepV,stats: ${stepVList}"
                                                     th:unless="${(stepVList == null) or (stepVList.size() == 0) }"
                                                     data-th-attr="stepid=${stepV.id}">                                                    
-                                                     <td>
+                                                    <td>
                                                         <i class="fa fa-sort"></i><span th:text="${stats.index+1}"></span> 
                                                     </td>
                                                     <td th:text="${stepV.sxRuoli.nome}"></td>
@@ -115,21 +122,14 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <input type="hidden" id="idelab" name="idelab" value="" /> 
+                                        <input type="hidden" id="idstepvar" name="idstepvar" value="" />
                                     </div>
-                                    <input type="hidden" id="idelab" name="idelab" value="" /> 
-                                    <input type="hidden" id="idstepvar" name="idstepvar" value="" />
-                                </fieldset>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <fieldset class="well">
-                                    <legend class="well-legend">Configurazione parametri </legend>
-                                    <div class="row" style="padding: 5px;">
+                                    <div class="card-body" id="card-parametri" style="display: none">
                                         <table id="parametriTabList" class="table table-striped table-bordered table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 1%"></th>
+                                                    <th style="width: 8%"><span></span></th>                                                      
                                                     <th><span>Nome Parametro</span></th>
                                                     <th><span>Valore</span></th>
                                                     <th><span>Ruolo</span></th>
@@ -165,9 +165,9 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <input type="hidden" id="idparam" name="idparam" value="" />
                                     </div>
-                                    <input type="hidden" id="idparam" name="idparam" value="" />
-                                </fieldset>
+                                </div>
                             </div>
                         </div>
                     </div>

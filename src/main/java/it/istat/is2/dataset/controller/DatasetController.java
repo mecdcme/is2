@@ -95,10 +95,13 @@ public class DatasetController {
 
         List<DatasetColonna> colonne = datasetService.findAllNomeColonne(idfile);
         List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();
+<<<<<<< HEAD
         
         Integer numRighe= dfile.getNumerorighe();
         
       
+=======
+>>>>>>> branch 'master' of https://github.com/mecdcme/is2
 
       
 
@@ -106,7 +109,10 @@ public class DatasetController {
         model.addAttribute("idfile", idfile);
         model.addAttribute("variabili", variabiliSum);
         model.addAttribute("dfile", dfile);
+<<<<<<< HEAD
         model.addAttribute("numRighe", numRighe.toString());
+=======
+>>>>>>> branch 'master' of https://github.com/mecdcme/is2
         model.addAttribute("nextFile", dfileNext);
 
         return "dataset/preview";
@@ -251,6 +257,7 @@ public class DatasetController {
     public String createMergedField(Model model, @PathVariable("idfile") String idfile,  @PathVariable("columnOrder") String columnOrder, @PathVariable("numRows") String numRows,
             @PathVariable("fieldsToMerge") String fieldsToMerge, @PathVariable("newField") String newField) {
 
+<<<<<<< HEAD
         DatasetFile dFile = datasetService.createMergedField(idfile, columnOrder, numRows, fieldsToMerge, newField);
 
         List<DatasetColonna> colonne = datasetService.findAllNomeColonne(Long.parseLong(idfile));
@@ -265,6 +272,8 @@ public class DatasetController {
         return "dataset/preview";
     }
     
+=======
+>>>>>>> branch 'master' of https://github.com/mecdcme/is2
     @GetMapping(value = "/deleteDataset/{datasetid}")
     public String deleteDataset(HttpSession session, Model model, @AuthenticationPrincipal User user, @PathVariable("datasetid") Long idDataset) {
 
@@ -296,7 +305,11 @@ public class DatasetController {
                     nextFile = files.get(counter + 1);
                     break;
                 } else if (file.getId().equals(idFile) && (counter + 1) == files.size()) {
+<<<<<<< HEAD
                     nextFile = files.get(0); 
+=======
+                    nextFile = files.get(0);
+>>>>>>> branch 'master' of https://github.com/mecdcme/is2
                     break;
                 }
                 counter++;

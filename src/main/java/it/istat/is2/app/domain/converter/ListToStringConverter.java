@@ -32,7 +32,6 @@ import javax.persistence.Converter;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 @Converter
 public class ListToStringConverter implements AttributeConverter<List<String>, String> {
@@ -41,24 +40,16 @@ public class ListToStringConverter implements AttributeConverter<List<String>, S
 	@Override
 	public String convertToDatabaseColumn(List<String> data) {
 		String value = "";
-		JSONObject obj = new JSONObject();
+
 		JSONArray allDataArray = new JSONArray();
 
-		JSONObject eachData = null;
-		try {
+		for (int index = 0; index < data.size(); index++) {
 
-			for (int index = 0; index < data.size(); index++) {
-				eachData = new JSONObject();
-				eachData.put("r", new Integer(index));
-				eachData.put("v", data.get(index) != null ? data.get(index) : "");
-				allDataArray.put(eachData);
-			}
-			obj.put("valori", allDataArray);
-			value = obj.toString();
-		} catch (JSONException e) {
-
-			logger.error(e);
+			allDataArray.put(data.get(index) != null ? data.get(index) : "");
 		}
+
+		value = allDataArray.toString();
+
 		return value;
 	}
 
@@ -66,11 +57,10 @@ public class ListToStringConverter implements AttributeConverter<List<String>, S
 	public List<String> convertToEntityAttribute(String data) {
 		List<String> listValue = new ArrayList<String>();
 		try {
-			JSONObject jsonObj = new JSONObject(data);
-			JSONArray jsonArray = (JSONArray) jsonObj.get("valori");
+
+			JSONArray jsonArray = new JSONArray(data);
 			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject obj = jsonArray.getJSONObject(i);
-				listValue.add(obj.getString("v"));
+		  	listValue.add(jsonArray.get(i).toString());
 			}
 		} catch (JSONException e) {
 

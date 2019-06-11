@@ -1,0 +1,153 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+        <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+
+        <script th:inline="javascript">
+            var _idfile = [[${idfile}]];
+            var _variabili = [[${colonne.size()}]];
+        </script>
+        <script th:src="@{/js/table/datatables.js}"></script>
+        <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
+        <script th:src="@{/js/rulesetpreview.js}"></script>
+        <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
+    </head>
+    <body>
+        <!-- Body -->
+        <div class="wrapper">
+            <header th:replace="layout :: site-header"></header>
+            <aside th:replace="layout :: site-aside"></aside>
+            <!-- START MAIN CONTAINER -->
+            <section>
+                <!-- Begin breadcrumb -->
+                <div class="content-wrapper">
+                    <!-- Begin breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                                    <span th:if="${session.sessionelv}">
+                                        <span th:text="${session.sessionelv.nome}"></span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                                    <span th:if="${session.sessionelv}">
+                                        <span th:text="#{sessionewf.listadataset}"></span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span th:text="#{sessionewf.ruleset}"></span>
+                            </li>
+
+                            <div class="btn-group pull-right" role="group">
+                                <a class="bar-right" title="Run validate" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                                    <i class="fa fa-cog"></i>&nbsp;<span th:text="#{ruleset.package.validate}"></span>
+                                </a>
+                                <a class="" title="Chiudi sessione" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{ruleset.button.close}"></span>
+                                </a>
+                            </div>
+                        </ol>
+                    </nav>
+                    <!-- End breadcrumb -->
+
+                    <div class="container-fluid">
+                        <div class="row" >
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <span th:text="#{ruleset.label}"></span>&nbsp;<span th:text="${dfile.nomeFile}"></span>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:newRule();" 
+                                               title="Nuova regola"> 
+                                                <i class="fa fa-plus-square-o"></i>
+                                                <span th:text="#{ruleset.new}"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <table id="dataview" class="table table-striped " cellspacing="0" width="auto" style="overflow: auto;">
+                                            <thead>
+                                                <tr>
+                                                    <th width="90%">EDIT</th>
+                                                    <th width="10%"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <span th:text="#{Layout.log.panel}">Log panel</span>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action" href="javascript:void(0)" 
+                                               th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="logbox" class="card-body">
+                                        <ul th:if="${logs}">
+                                            <li th:each="log : ${logs}">
+                                                <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
+                                            </li>
+                                        </ul>
+                                        <span th:unless="${logs}">
+                                            No message available
+                                        </span>
+                                    </div>
+                                </div>
+                                 <div class="card">
+                                    <div class="card-header">
+                                        <span>Report</span>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action" href="javascript:void(0)" 
+                                               th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="rbox" class="card-body">
+                                        <span>Validate execution reports!</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END MAIN CONTAINER -->
+            <footer th:replace="layout :: site-footer" />
+        </div>
+    </body>
+</html>

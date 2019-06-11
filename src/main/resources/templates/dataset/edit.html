@@ -48,7 +48,7 @@
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
                                 <a class="" title="chiudi sessione lavoro workflow" th:href="@{/sessione/mostraSessioni}">
-                                    <span th:text="#{sessionewf.lista.title}"></span>
+                                    <span th:text="#{sessionewf.title}"></span>
                                 </a>
                             </li>
                             <li class="breadcrumb-item">
@@ -104,6 +104,7 @@
                                                            th:attr="onclick='javascript:associaVarSum('+${cols.id}+',null,\''+${cols.nome}+'\','+${cols.filtro}+')'"
                                                            title="Associa"> <i class="fa fa-pencil"></i>
                                                         </a>
+                                                        <input type="hidden" name="colsid" th:value="${cols.id}" />
                                                     </td>
                                                 </tr>
                                             </tbody>

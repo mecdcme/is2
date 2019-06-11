@@ -26,6 +26,7 @@ package it.istat.is2.workflow.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 
+
 import it.istat.is2.app.domain.converter.ListToStringConverter;
 import lombok.Data;
 import lombok.Getter;

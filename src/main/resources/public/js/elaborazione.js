@@ -22,6 +22,7 @@
  * @version 1.0
  */
 var _ctx = $("meta[name='ctx']").attr("content");
+var toggle = true;
 
 $(document).ready(function () {
 
@@ -32,25 +33,25 @@ $(document).ready(function () {
         dom: "<'row'<'col-sm-5'B><'col-sm-7'f>>"
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        autoWidth: false,
         responsive: true,
-        paging: false,        
-        
-        "rowReorder":  {
-        	selector: 'td:nth-child(2)'        	   
-        }, 
+        paging: false,
+        rowReorder: {
+            selector: 'td:nth-child(2)'
+        },
         columnDefs: [{
-                orderable: false,
-                className: 'reorder', 
-                targets: [1]
+                "orderable": false,
+                className: 'reorder',
+                "targets": [1,2,3,4,5,6]
             }],
         buttons: [{
-                className: 'btn-extenal-function',
+                className: 'btn-extenal-function btn-light',
                 text: '<i class="fa fa-plus"></i><span> Variabile</span>',
                 action: function (e, dt, node, config) {
                     openDlgAddVariabileWorkset();
                 }
             }],
-        'createdRow': function (row, data, dataIndex) {
+        createdRow: function (row, data, dataIndex) {
             $(row).attr('id', 'row-' + dataIndex);
         }
     });
@@ -89,20 +90,21 @@ $(document).ready(function () {
                 + "/" + idparam;
     });
 
-    var tableP = $("#parametriTabList").DataTable({
+    $("#parametriTabList").DataTable({
         dom: "<'row'<'col-sm-6'B><'col-sm-6'f>>"
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        autoWidth: false,
         responsive: true,
         paging: false,
         rowReorder: true,
         columnDefs: [{
-                orderable: false,
+                "orderable": false,
                 className: 'reorder',
-                targets: [0]
+                targets: [1,2,3,4,5,6]
             }],
         buttons: [{
-                className: 'btn-extenal-function',
+                className: 'btn-extenal-function btn-light',
                 text: '<i class="fa fa-plus"></i><span> Parametro</span>',
                 action: function (e, dt, node, config) {
                     openDlgAddParametriWorkset();
@@ -121,7 +123,7 @@ $(document).ready(function () {
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         responsive: true,
-        "ordering": false,
+        ordering: false,
         searching: false,
         lengthChange: true,
         pageLength: 25,
@@ -572,8 +574,8 @@ function controllaCampoParam() {
     }
 }
 
-function mostraDialogModificaAssociazione(idelab, idstepvar, nomestepvar,idruolo, flagricerca) {
-    
+function mostraDialogModificaAssociazione(idelab, idstepvar, nomestepvar, idruolo, flagricerca) {
+
     $("#nome-var").val(nomestepvar);
     if (($("#filtro1").is(':checked') == true || $("#filtro0").is(':checked') == true) && $("#nome-var").val().length > 0) {
         $("#btn_dlg_assoc_mod").removeClass('disabled');
@@ -601,4 +603,17 @@ function mostraDialogModificaAssociazione(idelab, idstepvar, nomestepvar,idruolo
     $("#roleModSelectedId").val('');
     $("#roleModSelectedName").text('Nessun ruolo selezionato');
     $("#modifica-viarabile-workset-modal").modal('show');
+}
+
+function showVariabili(){
+    $("#card-variabili").show();
+    $("#header-variabili span").addClass("header-strong");
+    $("#card-parametri").hide();
+    $("#header-parametri span").removeClass("header-strong");
+}
+function showParametri(){
+    $("#card-variabili").hide();
+    $("#header-variabili span").removeClass("header-strong");
+    $("#card-parametri").show();
+    $("#header-parametri span").addClass("header-strong");
 }
