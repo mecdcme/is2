@@ -26,8 +26,8 @@ package it.istat.is2.workflow.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 
+
 import it.istat.is2.app.domain.converter.ListToStringConverter;
-import it.istat.is2.app.domain.converter.ListToStringConverterWorkset;
 import lombok.Data;
 import lombok.Getter;
 import lombok.AccessLevel;
@@ -57,7 +57,7 @@ public class SxWorkset implements Serializable {
     private Integer valoriSize;
 
     @Column(name = "valori")
-    @Convert(converter = ListToStringConverterWorkset.class)
+    @Convert(converter = ListToStringConverter.class)
     private List<String> valori;
     @Transient
     @Getter(AccessLevel.NONE)
