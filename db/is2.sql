@@ -414,6 +414,7 @@ CREATE TABLE `sx_rule` (
   `ACTION` varchar(500) DEFAULT NULL,
   `ECCEZIONE` varchar(500) DEFAULT NULL,
   `RULESET` int(20) DEFAULT NULL,
+  `CLASSIFICAZIONE` int(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `SYS_C0014188` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
@@ -881,3 +882,23 @@ CREATE TABLE `sx_log` (
   `id_sessione` int(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Table structure for table `sx_rules_classificazioni`
+--
+
+DROP TABLE IF EXISTS `sx_rules_classificazioni`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `sx_rules_classificazioni` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NOME` varchar(50) DEFAULT NULL,
+  `DESCR` varchar(50) DEFAULT NULL,  
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `SYS_C0014198` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sx_rules_classificazioni`
+-- 

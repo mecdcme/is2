@@ -26,7 +26,10 @@ package it.istat.is2.workflow.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
+import java.util.List;
 
 /**
  * The persistent class for the SX_RULE database table.
@@ -34,48 +37,30 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name = "SX_RULE")
-@NamedQuery(name = "SxRule.findAll", query = "SELECT s FROM SxRule s")
-public class SxRule implements Serializable {
+@Table(name = "SX_RULES_CLASSIFICAZIONI")
+@NamedQuery(name = "SxRuleClassificazioni.findAll", query = "SELECT s FROM SxRulesClassificazioni s")
+public class SxRulesClassificazioni implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	private Integer id;
+    @Id
+    private long id;
 
-	@Column(name = "ACTION")
-	private String action;
-
-	private Short active;
-
-	private Short blockrule;
-
-	private String descr;
-
-	private String eccezione;
-
-	private Short errcode;
-
-	private String nome;
-
-	private String rule;
-
-	private Short rtype;
-
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "TIPODATO", nullable = true)
-	private SxRuleType ruleType;
-
-	@ManyToOne
-	@JoinColumn(name = "RULESET")
-	private SxRuleset sxRuleset;
+    @Column(name = "nome")
+    private String nome;    
     
- 
+    @Column(name = "descr")
+    private String descr;
     
-   
-    @JoinColumn(name = "CLASSIFICAZIONE")
-    private SxRulesClassificazioni sxRulesClassificazioni;
+    @Column(name = "id_regola")
+    private String idRegola;
+    
 
-	public SxRule() {
-	}
+ // bi-directional many-to-one association to SxRule
+    @OneToMany(mappedBy = "sxRulesClassificazioni")
+    @JsonBackReference
+    private List<SxRule> sxRules;
+
+    public SxRulesClassificazioni() {
+    }
 }
