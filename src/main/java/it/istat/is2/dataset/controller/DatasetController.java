@@ -296,7 +296,7 @@ public class DatasetController {
                     nextFile = files.get(counter + 1);
                     break;
                 } else if (file.getId().equals(idFile) && (counter + 1) == files.size()) {
-                    nextFile = files.get(0);
+                    nextFile = files.get(0); 
                     break;
                 }
                 counter++;
