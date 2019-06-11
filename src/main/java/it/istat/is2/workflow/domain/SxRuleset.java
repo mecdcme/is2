@@ -28,6 +28,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import it.istat.is2.worksession.domain.WorkSession;
 import lombok.Data;
 
 import java.util.List;
@@ -42,26 +43,28 @@ import java.util.List;
 @NamedQuery(name = "SxRuleset.findAll", query = "SELECT s FROM SxRuleset s")
 public class SxRuleset implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    private Long id;
+	@Id
+	private Integer id;
 
-    private String descr;
+	private String descr;
 
-    private String nome;
+	private String nome;
 
-    // bi-directional many-to-one association to SxBusinessStep
-    @OneToMany(mappedBy = "sxRuleset")
-    @JsonBackReference
-    private List<SxBusinessStep> sxBusinessSteps;
+	@OneToOne
+	@JoinColumn(name = "SESSIONE_LAVORO")
+	private WorkSession sessioneLavoro;
 
-    // bi-directional many-to-one association to SxRule
-    @OneToMany(mappedBy = "sxRuleset")
-    @JsonBackReference
-    private List<SxRule> sxRules;
+	@OneToMany(mappedBy = "sxRuleset")
+	@JsonBackReference
+	private List<SxBusinessStep> sxBusinessSteps;
 
-    public SxRuleset() {
-    }
+	@OneToMany(mappedBy = "sxRuleset")
+	@JsonBackReference
+	private List<SxRule> sxRules;
+
+	public SxRuleset() {
+	}
 
 }

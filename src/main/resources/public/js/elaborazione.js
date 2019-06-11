@@ -246,8 +246,7 @@ function openDlgAddVariabileWorkset() {
 
 function openDlgAddParametriWorkset() {
     controllaCampoParam();
-    var size = $("#sizeParam").val();
-    alert($("#sizeParam").val());
+   
     $(".rolelist").removeClass('active');
     $(".varlist").removeClass('active');
     $("#varSelectedId").val('');

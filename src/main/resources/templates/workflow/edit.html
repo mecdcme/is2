@@ -405,8 +405,8 @@
                                     <label for="select-param" class="col-form-label">Parametro:</label>
                                     <select class="form-control" name="parametri" id="select-param">
                                         <option
-                                            th:value="${param.nome+'|'+param.id+'|'+param.sxRuoli.id}"
-                                            th:each="param, y: ${listaParametri}" th:text="${param.nome}">
+                                            th:value="${parameter.nome+'|'+parameter.id+'|'+parameter.sxRuoli.id}"
+                                            th:each="parameter, y: ${listaParametri}" th:text="${parameter.nome}">
                                         </option>
                                     </select>
                                 </div>
@@ -466,8 +466,8 @@
                                     <select class="form-control" name="parametri"
                                             id="select-param-mod">
                                         <option
-                                            th:value="${param.nome+'|'+param.id+'|'+param.sxRuoli.id}"
-                                            th:each="param, y: ${listaParametri}" th:text="${param.nome}">
+                                            th:value="${parameter.nome+'|'+parameter.id+'|'+parameter.sxRuoli.id}"
+                                            th:each="parameter, y: ${listaParametri}" th:text="${parameter.nome}">
                                         </option>
                                     </select>
                                 </div>

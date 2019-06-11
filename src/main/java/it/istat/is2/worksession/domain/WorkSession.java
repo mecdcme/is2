@@ -42,6 +42,8 @@ import javax.persistence.Table;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.workflow.domain.Elaborazione;
+import it.istat.is2.workflow.domain.SxRuleset;
+
 import javax.persistence.Temporal;
 import lombok.Data;
 
@@ -74,6 +76,9 @@ public class WorkSession implements Serializable {
 
     @OneToMany(mappedBy = "sessioneLavoro", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DatasetFile> datasetFiles;
+
+    @OneToMany(mappedBy = "sessioneLavoro", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SxRuleset> ruleSets;
 
     public WorkSession(Long id) {
         super();

@@ -25,51 +25,38 @@ package it.istat.is2.workflow.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;
-
 import lombok.Data;
 
+
 /**
- * The persistent class for the SX_RULE database table.
+ * The persistent class for the SX_TIPO_DATO database table.
  *
  */
 @Data
 @Entity
-@Table(name = "SX_RULE")
-@NamedQuery(name = "SxRule.findAll", query = "SELECT s FROM SxRule s")
-public class SxRule implements Serializable {
+@Table(name = "SX_RULE_TYPE")
+@NamedQuery(name = "SxRuleType.findAll", query = "SELECT s FROM SxRuleType s")
+public class SxRuleType implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	private Integer id;
+    @Id 
+    @Column(name = "ID")
+    private Integer id;
+    @Column(name = "DESCRIZIONE")
+    private String descrizione;
+    @Column(name = "NOME")
+    private String nome;
+   
 
-	@Column(name = "ACTION")
-	private String action;
+    public SxRuleType() {
+        super();
+    }
 
-	private Short active;
+    public SxRuleType(Integer id) {
+        super();
+        this.id = id;
+    }
 
-	private Short blockrule;
 
-	private String descr;
-
-	private String eccezione;
-
-	private Short errcode;
-
-	private String nome;
-
-	private String rule;
-
-	private Short rtype;
-
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "TIPODATO", nullable = true)
-	private SxRuleType ruleType;
-
-	@ManyToOne
-	@JoinColumn(name = "RULESET")
-	private SxRuleset sxRuleset;
-
-	public SxRule() {
-	}
 }

@@ -24,6 +24,7 @@
 package it.istat.is2.catalogue.relais.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -55,7 +56,7 @@ import it.istat.is2.workflow.domain.SxWorkset;
 public class RelaisService {
 
 	final int stepService = 250;
-//	final int sizeFlush = 100000;
+	final int sizeFlushed = 20;
 
 	@Autowired
 	private RelaisGenericDao relaisGenericDao;
@@ -68,7 +69,7 @@ public class RelaisService {
 
 	@Autowired
 	private ContingencyService contingencyService;
-
+ 
 	public Map<?, ?> crossTableSQL(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
 			Map<String, ArrayList<String>> worksetVariabili) throws Exception {
 		Map<String, ArrayList<String>> worksetOut = new LinkedHashMap<String, ArrayList<String>>();
@@ -225,6 +226,90 @@ public class RelaisService {
 		worksetOut.clear();
 		return worksetOut;
 	}
+	
+	
+	public Map<?, ?> contengencyTable(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+			Map<String, ArrayList<String>> worksetVariabili) throws Exception {
+
+		Map<String, ArrayList<String>> worksetOut = new LinkedHashMap<String, ArrayList<String>>();
+		Map<String, Integer> contengencyTable = new HashMap<String,Integer>();
+		// <codRuolo,[namevar1,namevar2..]
+
+		String codeMatchingA = "X1";
+		String codeMatchingB = "X2";
+		int indexItems=0;
+		ArrayList<String> variabileNomeListMA = new ArrayList<>();
+		ArrayList<String> variabileNomeListMB = new ArrayList<>();
+
+		ArrayList<String> variabileNomeListOut = new ArrayList<>();
+
+		ruoliVariabileNome.get(codeMatchingA).forEach((varname) -> {
+			variabileNomeListMA.add(varname);
+		});
+		ruoliVariabileNome.get(codeMatchingB).forEach((varname) -> {
+			variabileNomeListMB.add(varname);
+		});
+
+		ruoliVariabileNome.values().forEach((list) -> {
+			variabileNomeListOut.addAll(list);
+		});
+
+		String firstFiledMA = ruoliVariabileNome.get(codeMatchingA).get(0);
+		String firstFiledMB = ruoliVariabileNome.get(codeMatchingB).get(0);
+		int sizeA = worksetVariabili.get(firstFiledMA).size();
+		int sizeB = worksetVariabili.get(firstFiledMB).size();
+	 
+		 
+		worksetOut.put("PATTERN", new ArrayList<>());
+
+	
+		contingencyService.init();
+	    Integer item;
+
+		for (int iA = 0; iA < sizeA; iA++) {
+			Map<String, String> valuesI = new HashMap<>();
+			for (String varnameMA : variabileNomeListMA) {
+				valuesI.put(varnameMA, String.valueOf(iA));
+				
+			}
+
+			for (int iB = 0; iB < sizeB; iB++) {
+				// ArrayList<String> valueIB = new ArrayList<>();
+			
+				for (String varnameMB : variabileNomeListMB) {
+					valuesI.put(varnameMB, String.valueOf(iB));
+				}
+				
+				String pattern=contingencyService.getPattern(valuesI);
+				item=contengencyTable.get(pattern);
+				if(item==null)
+					item=new Integer(0);
+				else {
+				     item++;
+				 
+				}
+			 	contengencyTable.put(pattern,item);
+			 	indexItems++;
+	  			}
+    		 	
+		}
+		worksetOut.put("PATTERN", new ArrayList<>());
+		worksetOut.put("FREQ", new ArrayList<>());
+
+		// write to worksetout
+		contengencyTable.forEach((key, value) -> {
+			worksetOut.get("PATTERN").add(key);
+			worksetOut.get("FREQ").add(value.toString());
+
+		});
+      	System.out.println("fine total: "+indexItems);
+      	
+    	System.out.println(worksetOut);
+ 
+		return worksetOut;
+	}
+	
+	
 
 	/**
 	 * @param worksetOut

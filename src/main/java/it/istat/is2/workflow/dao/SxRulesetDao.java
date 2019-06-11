@@ -21,55 +21,14 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.workflow.domain;
+package it.istat.is2.workflow.dao;
 
-import java.io.Serializable;
-import javax.persistence.*;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-import lombok.Data;
+import it.istat.is2.workflow.domain.SxRuleset;
 
-/**
- * The persistent class for the SX_RULE database table.
- *
- */
-@Data
-@Entity
-@Table(name = "SX_RULE")
-@NamedQuery(name = "SxRule.findAll", query = "SELECT s FROM SxRule s")
-public class SxRule implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	private Integer id;
-
-	@Column(name = "ACTION")
-	private String action;
-
-	private Short active;
-
-	private Short blockrule;
-
-	private String descr;
-
-	private String eccezione;
-
-	private Short errcode;
-
-	private String nome;
-
-	private String rule;
-
-	private Short rtype;
-
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "TIPODATO", nullable = true)
-	private SxRuleType ruleType;
-
-	@ManyToOne
-	@JoinColumn(name = "RULESET")
-	private SxRuleset sxRuleset;
-
-	public SxRule() {
-	}
+@Repository
+public interface SxRulesetDao extends CrudRepository<SxRuleset,Integer> {
+ 
 }
