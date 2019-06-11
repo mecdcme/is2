@@ -25,13 +25,14 @@ package it.istat.is2.dataset.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
 
 import javax.transaction.Transactional;
 
@@ -161,7 +162,7 @@ public class DatasetService {
         return datasetFileDao.findNumeroRighe(dFile);
     }
 
-    public DataTableBean loadDatasetValori(Long dfile, Integer length, Integer start, Integer draw, HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) {
+    public DataTableBean loadDatasetValoriTest(Long dfile, Integer length, Integer start, Integer draw, HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) {
         List<DatasetColonna> dataList = sqlgenericDao.findDatasetColonnaParamsbyQuery(dfile, start, start + length, parametri, nameColumnToOrder, dirColumnOrder);
         Integer numRighe = 1;
 
@@ -184,7 +185,7 @@ public class DatasetService {
         return db;
     }
 
-    public String loadDatasetValori1(Long dfile, Integer length, Integer start, Integer draw, HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) throws JSONException {
+    public String loadDatasetValori(Long dfile, Integer length, Integer start, Integer draw, HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) throws JSONException {
         List<DatasetColonna> dataList = sqlgenericDao.findDatasetColonnaParamsbyQuery(dfile, start, start + length, parametri, nameColumnToOrder, dirColumnOrder);
 
         Integer numRighe = 0;
@@ -234,7 +235,7 @@ public class DatasetService {
         return ret;
     }
 
-    public DatasetFile createField(String idfile, String idColonna, String commandField, String charOrString, String upperLower, String newField, String columnOrder) {
+    public DatasetFile createField(String idfile, String idColonna, String commandField, String charOrString, String upperLower, String newField, String columnOrder, String numRows) {
 
         DatasetColonna nuovaColonna = new DatasetColonna();
         DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
@@ -350,6 +351,94 @@ public class DatasetService {
         nuovaColonna.setValoriSize(datiColonna.size());
 
         nuovaColonna.setDatiColonna(datiColonnaTemp);
+        datasetColonna.save(nuovaColonna);
+
+        return dFile;
+    }
+    
+    
+    public DatasetFile createMergedField(String idfile, String columnOrder, String numRows, String fieldsToMerge, String newField) {
+
+    	List<String> campiDaConcatenare =new ArrayList<String>();
+    	List<String> naturaDeiCampi =new ArrayList<String>();
+    	List<String> campoConcatenato =new ArrayList<String>();
+    	ArrayList<List<String>> originalFields = new ArrayList<List<String>>();
+    	
+    	
+    	int lastIndex = 0;
+    	int nextIndex=0;
+    	
+    	while (lastIndex < fieldsToMerge.length()) {
+    	    lastIndex = fieldsToMerge.indexOf("{...",lastIndex);
+    	    if( lastIndex == -1)
+    	        break;
+
+    	    nextIndex = fieldsToMerge.indexOf("...}",lastIndex);
+    	    String result = fieldsToMerge.substring(lastIndex + "{...".length() + 4, nextIndex);
+    	    campiDaConcatenare.add(result);
+    	    
+    	   
+    	    lastIndex += "{...".length();
+    	};
+    	
+    	lastIndex = 0;
+    	nextIndex=0;
+    	
+    	while (lastIndex < fieldsToMerge.length()) {
+    	    lastIndex = fieldsToMerge.indexOf("{...(",lastIndex);
+    	    if( lastIndex == -1)
+    	        break;
+    	    nextIndex = fieldsToMerge.indexOf(")",lastIndex);
+    	    String result = fieldsToMerge.substring(lastIndex + "{...(".length(), nextIndex);
+    	    naturaDeiCampi.add(result);
+    	   
+    	  
+    	    lastIndex += "{...(".length();
+    	}
+    	
+    	for (int i = 0; i < naturaDeiCampi.size(); i++) {
+    		
+    		if (naturaDeiCampi.get(i).equals("id")){
+    	        DatasetColonna colonna = findOneColonna(Long.parseLong(campiDaConcatenare.get(i)));
+    	        originalFields.add(colonna.getDatiColonna());
+    	        
+    			
+    		}
+    		if (naturaDeiCampi.get(i).equals("se")){
+    			List<String> separatore = Collections.nCopies(Integer.parseInt(numRows), campiDaConcatenare.get(i));
+    			originalFields.add(separatore);
+    			
+    		}
+		}
+       
+    	
+    	
+    	
+    	
+    	
+    	DatasetColonna nuovaColonna = new DatasetColonna();
+    	
+    	for (int i = 0; i < Integer.parseInt(numRows); i++) {
+    		String temp="";
+    		for (int j = 0; j < naturaDeiCampi.size(); j++) {
+        		
+    			temp= temp + originalFields.get(j).get(i);
+    		}
+    		campoConcatenato.add(temp);
+		}
+    	nuovaColonna.setDatiColonna(campoConcatenato);
+
+//      
+
+        //DatasetFile dFile = datasetService.findDataSetFile(idfile);
+        DatasetFile dFile = new DatasetFile();
+        dFile.setId(Long.parseLong(idfile));
+        nuovaColonna.setDatasetFile(dFile);
+        nuovaColonna.setNome(newField);
+        nuovaColonna.setOrdine((short) Integer.parseInt(columnOrder));
+        nuovaColonna.setValoriSize(Integer.parseInt(numRows));
+
+  //      nuovaColonna.setDatiColonna(datiColonnaTemp);
         datasetColonna.save(nuovaColonna);
 
         return dFile;

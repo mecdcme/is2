@@ -29,7 +29,9 @@
 
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
-            var _variabili = [[${colonne.size()}]];        
+            var _variabili = [[${colonne.size()}]];  
+            var _righe = [[${numRighe}]];  
+            
         </script>
         <script th:src="@{/js/table/datatables.js}"></script>
         <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
@@ -263,14 +265,14 @@
 						</div>
 						<div class="custom-control custom-checkbox">
 							<hr class="style1"></hr>
-						  <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
-						  <input type="text" class="custom-control-input" id="newfieldMerge"></input>
+							 <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
+							 <input type="text" class="custom-control-input" id="newfieldMerge"></input>
 						
                         </div>
                         <div class="modal-footer">
                             <input type="hidden" name="" id="id_dataset_del" value="" />
                             <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
-                            <button type="button" id="btn_Merge_field" class="btn btn-primary towait" data-dismiss="modal" disabled="true">Salva</button>
+                            <button type="button" id="btn_Merge_field" class="btn btn-primary" data-dismiss="modal" disabled="true">Salva</button>
                         </div>
 
 

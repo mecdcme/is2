@@ -25,7 +25,7 @@ var _ctx = $("meta[name='ctx']").attr("content");
 var ID = _idfile;
 var table;
 var selVar;
-var fusionField="";
+var mergeField="";
 var commandField="";
 var charOrString="_";
 var upperLower="_";
@@ -56,7 +56,7 @@ function openRepairModal() {
 
 $(document).ready(function () {
 	
-	fusionField="";
+	mergeField="";
 	commandField="";
 	charOrString="_";
 	upperLower="_";
@@ -65,8 +65,8 @@ $(document).ready(function () {
 	
 	
 	
-	selVar= $("#selectedVar option:selected").text();
-	
+	selVar= $("#selectedVar").val();
+	selVarName= $("#selectedVar option:selected").text();
 	if($('#upperCase').is(':checked')){
 	     $('#upperRadio').show();
   }else{
@@ -87,7 +87,23 @@ $(document).ready(function () {
   	});
   
   $('#selectedVariable').on('change', function() {
-	  selVar = $(this).children("option:selected").text();
+	  selVarName = $(this).children("option:selected").text();
+	  selVar = $(this).val();
+	});
+  
+  $('#newfieldMerge').on('keyup', function() {
+	  if ( $('#textArea').val()!=""){
+		  $("#btn_Merge_field").attr("disabled", false);
+		  if ($(this).val() == ""){
+			  $("#btn_Merge_field").attr("disabled", true);
+		  }
+	  }else{
+		 
+			  $("#btn_Merge_field").attr("disabled", true);
+		
+		 
+	  }
+		  
 	});
   
   
@@ -103,8 +119,11 @@ $(document).ready(function () {
    });
    
 	$('#addVariable').click(function () {
-		$('#textArea').text($('#textArea').text() + selVar )
-		fusionField = fusionField + "{...(id)" + selVar + "...}";
+		$('#textArea').text($('#textArea').text() + selVarName )
+		mergeField = mergeField + "{...(id)" + selVar + "...}";
+		if ($('#newfieldMerge').val() != ""){
+			  $("#btn_Merge_field").attr("disabled", false);
+		}
 	   });
 	
 	
@@ -112,21 +131,25 @@ $(document).ready(function () {
 	$('#addSeparator').click(function () {
 		if ($('#sepValue').val()!=""){
 			$('#textArea').text($('#textArea').text() + $('#sepValue').val() )
-			fusionField = fusionField + "{...(se)" + $('#sepValue').val() + "...}";
+			mergeField = mergeField + "{...(se)" + $('#sepValue').val() + "...}";
 			 $('#sepValue').val("");
 		}else{
 			alert("Insert valid Separator!")
 //			alert(fusionField)
 		}
 		   
-		 
+		if ($('#newfieldMerge').val() != ""){
+			  $("#btn_Merge_field").attr("disabled", false);
+		  } 
 		});
 	
 	$('#clearTextArea').click(function () {
+		alert(mergeField);
 		$('#textArea').text("");
-		fusionField = "";  
-		 alert(fusionField)
-		});
+		mergeField = "";  
+		$("#btn_Merge_field").attr("disabled", true);
+		
+	});
 	
 	
   $('#btn_Standardization_field').click(function () {
@@ -145,25 +168,16 @@ $(document).ready(function () {
    		commandField= commandField + "1";
 	      }else{
 	    	  commandField= commandField + "0";
-	   	};
+	   };
 	   	
-	   	if($('#newFieldMerge').val()!=""){
+	if($('#newField').val()!=""){
 		   		newField=$('#newField').val();
 			}else{
 				alert("Inserire il nome della nuova variabile");
 				return;
 			
-		}
+	}
 	   	
-//	   	Abilitare il pulsante salva
-  	
-//	   	if($('#newFieldUnion').val()!=""){
-//	   		newField=$('#newField').val();
-//		}else{
-//			alert("Inserire il nome della nuova variabile");
-//			return;
-//		
-//		}
 	   	
    	if($('#removeChar').is(':checked')){
    		commandField= commandField +"1";
@@ -189,13 +203,31 @@ $(document).ready(function () {
 	   	
    	
 	   	$("btn_Standardization_field").addClass("towait");
-       window.location = _ctx + '/createField/' + _idfile + "/" +  idColonna + "/" + commandField + "/" +  charOrString + "/" + upperLower + "/" + newField + "/" + _variabili ;
+       window.location = _ctx + '/createField/' + _idfile + "/" +  idColonna + "/" + commandField + "/" +  charOrString + "/" + upperLower + "/" + newField + "/" + _variabili + "/" + _righe ;
        
    	
    	
 
    });
    
+  
+  
+  $('#btn_Merge_field').click(function () {
+	   	
+	   
+
+
+	   	
+		   	
+	   	
+		   $("btn_Merge_field").addClass("towait");
+	       window.location = _ctx + '/createMergedField/' + _idfile + "/" + _variabili + "/" + _righe + "/" + mergeField  + "/" + $('#newfieldMerge').val();
+	       
+	   	
+	   	
+
+	   });
+  
       
     
    table=  $("#dataview").DataTable({
@@ -203,31 +235,32 @@ $(document).ready(function () {
         drawCallback: function () {
             $(".loading").hide();
         },
-        dom: "<'row'<'col-sm-12'<'pull-left'B>>>"
-                + "<'row'<'col-sm-12'<'pull-left'l>>>"
-                + "<'row'<'col-sm-12'tr>>"
-                + "<'row'<'col-sm-12'<'pull-left'p>>>"
-                + "<'row'<'col-sm-12'<'pull-left'i>>>",
+        dom: "<'row'<'col-sm-5'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        autoWidth: false,
         responsive: true,
         ordering: true,
         searching: false,
         lengthChange: true,
         lengthMenu: [[10, 15, 25, 50], [10, 15, 25, 50]],
-        pageLength: 15,
+        pageLength: 20,
+        processing: true,
         serverSide: true,
         ajax: {url: _ctx + "/rest/datasetvalori/" + ID + "/" + getParams(),
             type: "POST"
         },
         columns: eval(getHeaders('dataview')),
-        processing: true,
         buttons: [{
             extend: 'colvis',
-            text: 'Seleziona colonne'
+            text: 'Seleziona colonne',
+            className: 'btn-light'
         },
         {
             extend: 'csvHtml5',
             filename: 'download',
             title: 'download',
+            className: 'btn-light',
             action: function (e, dt, node, config) {
                 scaricaDataset(e, 'csv', ID);
             }
@@ -236,7 +269,7 @@ $(document).ready(function () {
 
     $("#datapreview").DataTable({
         responsive: true,
-        "ordering": false,
+        ordering: false,
         searching: false
     });
 

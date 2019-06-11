@@ -100,6 +100,8 @@ public class DatasetController {
         
       
 
+      
+
         model.addAttribute("colonne", colonne);
         model.addAttribute("idfile", idfile);
         model.addAttribute("variabili", variabiliSum);
