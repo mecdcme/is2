@@ -95,7 +95,7 @@ public class DatasetControllerRest {
     }
 
     @RequestMapping(value = "/rest/datasetvalori/{dfile}/{parametri:.+}", method = RequestMethod.POST)
-    public String loadDatasetValori2(HttpServletRequest request, Model model, @PathVariable("dfile") Long dfile,
+    public String loadDatasetValori(HttpServletRequest request, Model model, @PathVariable("dfile") Long dfile,
             @PathVariable("parametri") String parametri, @RequestParam("length") Integer length,
             @RequestParam("start") Integer start, @RequestParam("draw") Integer draw,
             @RequestParam Map<String, String> allParams) throws IOException, JSONException {
@@ -122,7 +122,7 @@ public class DatasetControllerRest {
                 parameters.put(nomeValore.get(0), nomeValore.get(1));
             }
         }
-        String dtb = datasetService.loadDatasetValori1(dfile, length, start, draw, parameters, nameColumnToOrder, dirColumnOrder);
+        String dtb = datasetService.loadDatasetValori(dfile, length, start, draw, parameters, nameColumnToOrder, dirColumnOrder);
 
         return dtb;
     }

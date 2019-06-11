@@ -161,7 +161,7 @@ public class DatasetService {
         return datasetFileDao.findNumeroRighe(dFile);
     }
 
-    public DataTableBean loadDatasetValori(Long dfile, Integer length, Integer start, Integer draw, HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) {
+    public DataTableBean loadDatasetValoriTest(Long dfile, Integer length, Integer start, Integer draw, HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) {
         List<DatasetColonna> dataList = sqlgenericDao.findDatasetColonnaParamsbyQuery(dfile, start, start + length, parametri, nameColumnToOrder, dirColumnOrder);
         Integer numRighe = 1;
 
@@ -184,7 +184,7 @@ public class DatasetService {
         return db;
     }
 
-    public String loadDatasetValori1(Long dfile, Integer length, Integer start, Integer draw, HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) throws JSONException {
+    public String loadDatasetValori(Long dfile, Integer length, Integer start, Integer draw, HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) throws JSONException {
         List<DatasetColonna> dataList = sqlgenericDao.findDatasetColonnaParamsbyQuery(dfile, start, start + length, parametri, nameColumnToOrder, dirColumnOrder);
 
         Integer numRighe = 0;
