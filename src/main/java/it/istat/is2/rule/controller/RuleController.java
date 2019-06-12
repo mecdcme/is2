@@ -34,9 +34,9 @@ import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
+import it.istat.is2.rule.service.RuleService;
+import it.istat.is2.workflow.domain.SxRuleType;
 import it.istat.is2.workflow.domain.SxRuleset;
-import it.istat.is2.workflow.domain.SxTipoDato;
-import it.istat.is2.workflow.service.TipoDatoService;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
 
@@ -74,7 +74,7 @@ public class RuleController {
     @Autowired
     private WorkSessionService sessioneLavoroService;
     @Autowired
-    private TipoDatoService tipoDatoService;
+    private RuleService ruleService;
     @Autowired
     private LogService logService;
 
@@ -129,7 +129,7 @@ public class RuleController {
 		return "redirect:/sessione/mostradataset/" + idsessione;
 	}
     @GetMapping(value = "/roles/viewRoleset/{id}")
-	public String mostradataset(HttpSession session, Model model, @PathVariable("id") Long id) {
+	public String mostraroleset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
 		List<Log> logs = logService.findByIdSessione(id);
 
@@ -138,23 +138,23 @@ public class RuleController {
 			session.setAttribute(IS2Const.SESSION_DATASET, true);
 		}
 
-		List<SxRuleset> listaRuleSet = sessionelv.getRuleSets();
-		List<DatasetFile> listaDataset = sessionelv.getDatasetFiles();
-		//List<SxTipoDato> listaTipoDato = tipoDatoService.findListTipoDato();
+		List<SxRuleset> listaRuleSet = sessionelv.getRuleSets();		
+		
+		List<SxRuleType> listaRuleType = ruleService.findAllRuleType();
 
-		Long etichetta = new Long(0);
+		Integer etichetta = new Integer(0);
 
-		if (listaDataset != null && !listaDataset.isEmpty()) {
-			DatasetFile lastDS = listaDataset.get(listaDataset.size() - 1);
+		if (listaRuleSet != null && !listaRuleSet.isEmpty()) {
+			SxRuleset lastDS = listaRuleSet.get(listaRuleSet.size() - 1);
 
 			etichetta = lastDS.getId() + 1;
 
 		}
 
 		session.setAttribute(IS2Const.SESSION_LV, sessionelv);
-
-		//model.addAttribute("listaTipoDato", listaTipoDato);
+		
 		model.addAttribute("listaRuleSet", listaRuleSet);
+		model.addAttribute("listaRuleType", listaRuleType);
 		model.addAttribute("logs", logs);
 		model.addAttribute("etichetta", etichetta);
 		return "ruleset/list";
