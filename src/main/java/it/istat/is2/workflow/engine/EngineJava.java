@@ -195,7 +195,7 @@ public class EngineJava implements EngineService {
 	private void getGenericoOutput(HashMap<String, ArrayList<String>> ruoliOutputStep2) {
 		// TODO Auto-generated method stub
 		ArrayList<String> listValue = new ArrayList<String>(worksetOut.keySet());
-		ruoliOutputStep2.put("R", listValue);
+		ruoliOutputStep2.put("CT", listValue);
 	}
 
 	/**

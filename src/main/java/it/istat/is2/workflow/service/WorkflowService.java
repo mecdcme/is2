@@ -475,18 +475,21 @@ public class WorkflowService {
 		for (int i = 0; i < form.getElaborazione().length; i++) {
 			String[] all_parametri = form.getParametri();
 			String parametri = all_parametri[i];
-			String[] stringTokenizer = parametri.split("|");
+		//	String[] stringTokenizer = parametri.split("|");
+			StringTokenizer stringTokenizer = new StringTokenizer(parametri, "|");
+			 
 			SxRuoli sxruolo = null;
 			String idparam = null;
 			String nomeparam = null;
 			String ruoloparam = null;
 			SxWorkset sxWorkset = new SxWorkset();
-
+				
+			while (stringTokenizer.hasMoreTokens()) {
 			// ordine: nomeParam, idParam, ruolo
-			nomeparam = stringTokenizer[0];
-			idparam = stringTokenizer[1];
-			ruoloparam = stringTokenizer[2];
-
+			nomeparam = stringTokenizer.nextToken(); 
+			idparam = stringTokenizer.nextToken(); 
+			ruoloparam =stringTokenizer.nextToken(); 
+		}
 			sxruolo = ruoliAllMap.get(new Long(ruoloparam));
 			SxStepVariable sxStepVariable = new SxStepVariable();
 			sxStepVariable.setElaborazione(elaborazione);

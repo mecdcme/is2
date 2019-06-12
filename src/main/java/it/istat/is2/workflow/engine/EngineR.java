@@ -147,7 +147,7 @@ public class EngineR implements EngineService {
 		} else {
 			connection = new RConnection(server, port);
 		}
-		connection.eval("setwd('" + pathR + "')");
+	//	connection.eval("setwd('" + pathR + "')");
 		connection.eval("source('" + fileScriptR + "')");
 		Logger.getRootLogger().debug("Script Loaded");
 	}

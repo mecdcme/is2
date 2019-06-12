@@ -26,6 +26,7 @@ package it.istat.is2.catalogue.relais.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
@@ -255,26 +256,30 @@ public class RelaisService {
 		String firstFiledMB = ruoliVariabileNome.get(codeMatchingB).get(0);
 		int sizeA = worksetVariabili.get(firstFiledMA).size();
 		int sizeB = worksetVariabili.get(firstFiledMB).size();
-	 
+
+	contingencyService.init();
+		 List <String> nameMatchingVariables=new ArrayList<>();
 		 
-	 
+		 contingencyService.getMetricMatchingVariableVector().forEach(metricsm-> {
+				 worksetOut.put(metricsm.getMatchingVariable(), new ArrayList<>());
+				 nameMatchingVariables.add(metricsm.getMatchingVariable());
+			});
 	
-		contingencyService.init();
-		Map<String, Integer> contengencyTable = contingencyService.getEmptyContengencyTable();
-	      Integer item;
+		 Map<String, Integer> contengencyTable = contingencyService.getEmptyContengencyTable();
+	     
      	for (int iA = 0; iA < sizeA; iA++) {
-			Map<String, String> valuesI = new HashMap<>();
-			for (String varnameMA : variabileNomeListMA) {
-				valuesI.put(varnameMA, String.valueOf(iA));
-				
-			}
+     		Map<String, String> valuesI = new HashMap<>();
+			final Integer innerIA = new Integer(iA);
+			variabileNomeListMA.forEach(varnameMA -> {
+				valuesI.put(varnameMA, worksetVariabili.get(varnameMA).get(innerIA));
+			});
 
 			for (int iB = 0; iB < sizeB; iB++) {
-				// ArrayList<String> valueIB = new ArrayList<>();
-			
-				for (String varnameMB : variabileNomeListMB) {
-					valuesI.put(varnameMB, String.valueOf(iB));
-				}
+				ArrayList<String> valueIB = new ArrayList<>();
+				final Integer innerIB = new Integer(iB);
+				variabileNomeListMB.forEach(varnameMB -> {
+					valuesI.put(varnameMB, worksetVariabili.get(varnameMB).get(innerIB));
+				});
 				
 				String pattern=contingencyService.getPattern(valuesI);
 		 		 contengencyTable.put(pattern,contengencyTable.get(pattern)+1);
@@ -287,6 +292,9 @@ public class RelaisService {
 
 		// write to worksetout
 		contengencyTable.forEach((key, value) -> {
+			
+			int idx = 0;
+			for (String nameMatchingVariable : nameMatchingVariables)   worksetOut.get(nameMatchingVariable).add(String.valueOf(key.charAt(idx++)));
 			worksetOut.get("PATTERN").add(key);
 			worksetOut.get("FREQ").add(value.toString());
 

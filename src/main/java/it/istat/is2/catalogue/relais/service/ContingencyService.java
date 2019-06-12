@@ -23,13 +23,14 @@
  */
 package it.istat.is2.catalogue.relais.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import it.istat.is2.catalogue.relais.decision.contingencyTable.BlockPatternFreqVector;
-import it.istat.is2.catalogue.relais.matchingVariables.MatchingVariables;
+
 import it.istat.is2.catalogue.relais.metrics.DiceSimilarity;
 import it.istat.is2.catalogue.relais.metrics.Jaro;
 import it.istat.is2.catalogue.relais.metrics.JaroWinkler;
@@ -66,9 +67,9 @@ public class ContingencyService {
 	
 	public void init() {
 		metricMatchingVariableVector = new MetricMatchingVariableVector();
-		MetricMatchingVariable mm1 = new MetricMatchingVariable("SURNAME", "DSa_SURNAME", "DSb_SURNAME", "Jaro", 0.8, 0);
-		MetricMatchingVariable mm2 = new MetricMatchingVariable("NAME", "DSa_NAME", "DSb_NAME", "Jaro", 0.8, 0);
-		MetricMatchingVariable mm3 = new MetricMatchingVariable("LASTCODE", "DSa_LASTCODE", "DSb_LASTCODE", "Jaro", 0.8, 0);
+		MetricMatchingVariable mm1 = new MetricMatchingVariable("VIA", "DSA_VIA", "DSB_VIA", "Jaro", 0.8, 0);
+		MetricMatchingVariable mm2 = new MetricMatchingVariable("DENOMINAZIONE", " 	DSA_DENOMINAZIONE", "DSB_DENOMINAZIONE", "Jaro", 0.8, 0);
+		MetricMatchingVariable mm3 = new MetricMatchingVariable("CITTA", "DSA_CITTA", "DSB_CITTA", "Jaro", 0.8, 0);
 		// MetricMatchingVariable mm3=new
 		// MetricMatchingVariable("LASTCODE","da_LASTCODE","db_LASTCODE","Equality",1,0);
 		metricMatchingVariableVector.add(mm1);
@@ -106,6 +107,20 @@ public class ContingencyService {
 	}
 
 
+	
+	/**
+	 * @param valuesI
+	 * @return
+	 */
+	public  ArrayList<String> getNameMatchingVariables( ) {
+		// TODO Auto-generated method stub
+		 ArrayList<String> ret=new ArrayList<>();
+	 	 metricMatchingVariableVector.forEach(item->{ret.add(item.getMatchingVariable()); });
+	 	return ret;
+	}
+	
+	
+	
 	/**
 	 * @param valuesI
 	 * @return
