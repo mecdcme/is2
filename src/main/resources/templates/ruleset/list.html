@@ -1,7 +1,7 @@
 <!-- 
  Copyright 2019 ISTAT
 
- Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
  the European Commission - subsequent versions of the EUPL (the "Licence");
  You may not use this work except in compliance with the Licence. You may
  obtain a copy of the Licence at:
@@ -26,304 +26,226 @@
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
         <script th:src="@{/js/table/datatables.js}"></script>
-        <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
-
-        <script th:inline="javascript">
-            var _text_addUser = [[#{user.title.adduser}]];
-            var _text_editUser = [[#{user.title.edituser}]];
-            var _text_savinguser = [[#{user.button.savinguser}]];
-            var _text_saveUser = [[#{user.button.saveuser}]];
-        </script>
-        <script th:src="@{/js/usersList.js}"></script>
+        <script th:src="@{/js/sessioni.js}"></script>
+        <script th:src="@{/js/papaParse/papaparse.min.js}"></script>
+        <script th:src="@{/js/fileinput.min.js}"></script>
+        <script th:src="@{/js/uploadfile.js}"></script>
+        <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/fileinput.min.css}" />
     </head>
     <body>
         <!-- Body -->
         <div class="wrapper">
-            <header th:replace="layout :: site-header" />
-            <aside th:replace="layout :: site-aside" />
+            <header th:replace="layout :: site-header"></header>
+            <aside th:replace="layout :: site-aside"></aside>
             <!-- START MAIN CONTAINER -->
             <section>
                 <div class="content-wrapper">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <span th:text="#{Userlist.userlist}"></span>
+                                <a title="Sessione lavoro" th:if="${session.sessionelv}" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
+                                    <span th:text="${session.sessionelv.nome}"></span>
+                                </a>
                             </li>
+                            <li class="breadcrumb-item">
+                                <span th:text="#{ruleset.list.label}"> Lista file di regole</span>
+                            </li>
+                            <div class="btn-group pull-right" role="group">
+                                <a class="" title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{dataset.button.close}"></span>
+                                </a>
+                            </div>
                         </ol>
                     </nav>
-                    <!-- START PANEL-->
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <fieldset class="well">
-                                <legend class="well-legend secondary-fieldset">
-                                    <span th:text="#{Userlist.userlist}">Lista sessioni</span>
-                                </legend>
-                                <button class="btn btn-light" id="btnAddUser" onclick="add_user()" style="margin-bottom: 10px">
-                                    <i class="fa fa-user-plus"></i> <span th:text="#{Userlist.adduser}">Add User</span> 
-                                </button>
-                                <input type="hidden" th:value="${#authentication.principal.userid}" id="myId" />
-                                <table id="userslist" class="table table-striped" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th><span th:text="#{Userlist.name}">Name</span></th>
-                                            <th><span th:text="#{Userlist.surname}">Surname</span></th>
-                                            <th>Email</th>
-                                            <th><span th:text="#{Userlist.role}">Role</span></th>
-                                            <th>&nbsp;</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </fieldset>
+
+                    <div class="container-fluid">
+                        <input id="idsessionelv" type="hidden" value="${session.sessionelv.id}" />
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <span th:text="#{ruleset.list.label}">Lista file di regole</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="inputFileForm" th:action="@{'/loadRulesFile'}" method="post" enctype="multipart/form-data">
+                                            <input type="hidden" value="" name="descrizione" id="desc" /> 
+                                            <input type="hidden" th:value="${session.sessionelv.id}" th:name="idsessione" />
+                                            <input type="hidden" value="" name="delimiter" id="delimiter" />
+                                            <input type="hidden" value="" name="labelFile" id="label_f" />
+                                            <input type="hidden" value="" name="tipoDato" id="tipo_dat" />
+                                            <div id="upload" class="row">
+                                                <div class="col-lg-8">
+                                                    <div class="form-group">
+                                                        <label class="control-label"
+                                                               th:text="#{selection.file.legend}">Seleziona un file da caricare (txt o csv) </label>
+                                                        <!-- Impostare data-show-preview a true per avere la preview del file -->
+                                                        <input id="file" accept=".csv,.txt" class="file" type="file" name="fileName"
+                                                               data-show-preview="false" data-show-caption="true"
+                                                               data-show-upload="false" data-toggle="tooltip"
+                                                               data-placement="top" data-show-remove="false" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form> 
+                                        
+                                        <table id="datasetList" class="table table-striped table-condensed"
+                                               th:if="${listaDataset}" cellspacing="0" style="overflow: auto;">
+                                            <thead>
+                                                <tr th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">                                                
+                                                    <th><span th:text="#{generic.label.id}">Id</span></th>                                                    
+                                                    <th><span th:text="#{generic.label.name}">Nome</span></th>
+                                                    <th><span th:text="#{generic.label.description}">Descrizione</span></th>                                                    
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="ruleset : ${listaRuleSet}"
+                                                    th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
+                                                    <td th:text="${ruleset.id}"></td>
+                                                    <td th:text="${ruleset.nome}"></td>
+                                                    <td th:text="${ruleset.descrizione}"></td>                                                    
+                                                    <td style="width: 1%">
+                                                        <a href="javascript:void(0)" title="Elimina ruleset" role="button" th:attr="onclick='javascript:eliminaDataset(' + ${ruleset.id} + ', \'' + ${ruleset.nome} + '\')'">												
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <span th:if="${(listaRuleSet == null) or (listaRuleSet.size() == 0)}">Non sono presenti file di regole per la sessione di lavoro.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <span th:text="#{Layout.log.panel}">Log panel</span>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action" href="javascript:void(0)" 
+                                               th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="logbox" class="card-body">
+                                        <ul th:if="${logs}">
+                                            <li th:each="log : ${logs}">
+                                                <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
+                                            </li>
+                                        </ul>
+                                        <span th:unless="${logs}">
+                                            No message available
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <!-- row -->
                     </div>
                 </div>
             </section>
+            <!-- Bootstrap modal -->
+            <div class="modal fade" id="errorUplodFile" role="dialog">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content ">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">
+                                <i class="fa fa-times-circle"></i>
+                                <span th:text="#{upload.error.modal.title}">Errore upload</span>
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{upload.error.modal.message}">Nessun file selezionato.</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                <span th:text="#{Index.button.ok}">Ok</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+            </div>
+		<!-- Modal elimina dataset -->
+        <div class="modal fade" id="modalCancellaDataset" tabindex="-1"
+             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel">
+                            <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
+                        </h4>
+                    </div>
+                    <div class="modal-body"><span id="msg_elim_dataset"></span></div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="idDataset" th:name="idDataset" />                        
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                        <button type="button" id="btn_delete_dataset" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- fine modal elimina -->
+            <div class="modal fade" id="previewModal" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">
+                                <i class="fa fa-binoculars"></i>&nbsp;
+                                <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
+                            </h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{generic.label.name.colon}" >Nome:</span> &nbsp;&nbsp;&nbsp; 
+                            <input id="label_file" th:value="FILERULESSET+${etichetta}" type="text"/>                                
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{rules.classification.type}">Classificazione:</span> &nbsp;&nbsp;&nbsp;
+                            <select id="tipo_dato" >
+                                <option th:each="tipod : ${listaTipoDato}"
+                                        th:value="${tipod.id}"
+                                        th:text="${tipod.nome}">
+                                </option>
+                            </select>                              
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{delimiter.file.legend}">Separatore:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <select id="delimiter_sel">
+                                <option value=','>,</option>
+                                <option value=';'>;</option>
+                                <option value='0'>tab</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                <span th:text="#{Layout.Close}">Annulla</span>
+                            </button>
+                            <button type="button" id="btn-invia-file" class="btn btn-primary towait disabled"
+                                    onclick="inviaFormFile();" th:title="#{submit.button.title}"
+                                    th:text="#{submit.button}" data-dismiss="modal">Invia</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- END MAIN CONTAINER -->
             <footer th:replace="layout :: site-footer" />
         </div>
-
-        <!-- wrapper -->    
-        <!-- Bootstrap modal -->       
-
-        <div class="modal fade" id="modal_user" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" 
-                                class="close" 
-                                data-dismiss="modal"
-                                aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title"><span th:text="#{user.user}">User</span></h4>
-                    </div>                
-                    <div class="modal-body form">
-                        <form action="#" id="form" class="form-horizontal">
-                            <input type="hidden" value="" name="userid" />
-                            <div class="form-body">
-                                <div id="msgs"></div>
-                                <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <div class="col-lg-4 text-right">
-                                            <label class="control-label">Email*</label>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <input name="email" 
-                                                   placeholder="Email" 
-                                                   class="form-control"
-                                                   title="Email" 
-                                                   type="email" 
-                                                   id="email" />
-                                            <span class="help-block"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row password_group" 
-                                     id="password_group">
-                                    <div class="col-lg-12">
-                                        <div class="col-lg-4 text-right">   
-                                            <label class="control-label">Password*</label>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <input name="password" 
-                                                   placeholder="Password"
-                                                   data-toggle="tooltip" 
-                                                   title="Password" 
-                                                   id="form_password"
-                                                   class="form-control" 
-                                                   type="password" /> <span
-                                                   class="help-block"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row password_group" 
-                                     id="password_group1">
-                                    <div class="col-lg-12">
-                                        <div class="col-lg-4 text-right">
-                                            <label class="control-label"><span th:text="#{Edituser.repeat}">Repeat Password*</span></label>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <input name="password1" 
-                                                   placeholder="Repeat Password"
-                                                   data-toggle="tooltip" 
-                                                   title="Password" 
-                                                   id="form_password1"
-                                                   class="form-control" 
-                                                   type="password" /> 
-                                            <span class="help-block"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">                                 
-                                    <div class="col-lg-12">
-                                        <div class="col-lg-4 text-right">                                
-                                            <label class="control-label"><span th:text="#{Userlist.name*}">Name*</span></label>
-                                        </div>            
-                                        <div class="col-lg-8">
-                                            <input name="name" 
-                                                   placeholder="Name" 
-                                                   class="form-control"
-                                                   data-toggle="tooltip" 
-                                                   title="Name" type="text" />
-                                            <span class="help-block"></span>
-                                        </div>        
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <div class="col-lg-4 text-right">
-                                            <label class="control-label"><span th:text="#{Userlist.surname*}">Surname*</span></label>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <input name="surname" 
-                                                   placeholder="Surname" 
-                                                   title="Surname"
-                                                   class="form-control" 
-                                                   type="text" /> 
-                                            <span class="help-block"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <div class="col-lg-4 text-right">
-                                            <label class="control-label"><span th:text="#{Userlist.role}">Role</span></label>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <select name="role" 
-                                                    class="form-control">
-                                                <option th:each="rolei : ${allRoles}" 
-                                                        th:value="${rolei.id}"
-                                                        th:text="${rolei.role}">Role</option>
-                                            </select> 
-                                            <span class="help-block"></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="btnSave" onclick="save()"
-                                class="btn btn-primary"><span th:text="#{Userlist.save}">Save</span></button>
-                        <button type="button" id="btnClose" class="btn btn-danger"
-                                data-dismiss="modal" onclick="close()"><span th:text="#{Userlist.close}">Close</span></button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-        <!-- End Bootstrap modal -->
-
-        <!-- Bootstrap modal -->
-        <div class="modal fade" id="modalDelete_form" role="dialog">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" 
-                                class="close" 
-                                data-dismiss="modal"
-                                aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h3 class="modal-title"><i class="fa fa-trash-o"></i> <span th:text="#{Userlist.deleteUser}">Delete User</span> </h3>
-                    </div>
-
-                    <div class="modal-body  ">                       
-                        <div id="question_delete" class="">
-                            <span th:text="#{Userlist.deleteUser}">Delete user</span> <strong>
-                                <span id="delEmail"></span></strong>
-                            <input type="hidden" id="delId" value="" />
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="btnDelete" onclick="delete_user()"
-                                class="btn btn-primary"><span th:text="#{Userlist.delete}">Delete</span></button>
-                        <button type="button" id="btnDeleteClose" class="btn btn-danger"
-                                data-dismiss="modal" onclick="close()"><span th:text="#{Userlist.close}">Close</span></button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-        <!-- End Bootstrap modal -->
-        <!-- Bootstrap modal change Password -->
-        <div class="modal fade" id="modalCp_form" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" 
-                                data-dismiss="modal"
-                                aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h3 class="modal-title"><i class="fa  fa-key"></i> <span th:text="#{Userlist.changepass}">Change Password</span> </h3>
-                    </div>
-                    <div class="modal-body">
-                        <div id="msgsCp" class="form-group"></div>
-                        <div class="form-group"><span th:text="#{Userlist.changepass4}">Change  password for:</span>
-                            <strong>
-                                <span id="cpEmail"></span>
-                            </strong>
-                            <input type="hidden" id="cpId" value="" />
-                        </div>
-                        <div id="change_password_group">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="col-lg-4">
-                                        <label class="control-label"><span th:text="#{Userlist.password}">Password*</span></label>
-                                    </div>    
-                                    <div class="col-lg-8">
-                                        <input id="passwordcp" 
-                                               placeholder="Password"
-                                               class="form-control" 
-                                               type="password" 
-                                               title="Password" />
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="col-lg-4">
-                                        <label class="control-label"><span th:text="#{Userlist.repeat}">Repeat Password*</span></label>
-                                    </div>    
-                                    <div class="col-lg-8">
-                                        <input id="passwordcp1" 
-                                               placeholder="Repeat Password"
-                                               title="Repeat Password" 
-                                               class="form-control" 
-                                               type="password" />
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" 
-                                id="btnChangePassword"
-                                class="btn  btn-primary" 
-                                disabled="disabled"
-                                onclick="update_password()"><span th:text="#{Userlist.change}">Change</span></button>
-                        <button type="button" id="btnCpClose"
-                                class="btn btn-danger"
-                                data-dismiss="modal"><span th:text="#{Userlist.close}">Close</span></button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-        <!-- End Bootstrap modal -->
+        <!-- wrapper -->        
     </body>
 </html>
-
