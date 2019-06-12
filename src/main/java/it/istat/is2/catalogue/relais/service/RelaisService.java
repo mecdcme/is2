@@ -232,7 +232,7 @@ public class RelaisService {
 			Map<String, ArrayList<String>> worksetVariabili) throws Exception {
 
 		Map<String, ArrayList<String>> worksetOut = new LinkedHashMap<String, ArrayList<String>>();
-		Map<String, Integer> contengencyTable = new HashMap<String,Integer>();
+	
 		// <codRuolo,[namevar1,namevar2..]
 
 		String codeMatchingA = "X1";
@@ -264,6 +264,7 @@ public class RelaisService {
 
 	
 		contingencyService.init();
+		Map<String, Integer> contengencyTable = new HashMap<String,Integer>();
 	    Integer item;
 
 		for (int iA = 0; iA < sizeA; iA++) {

@@ -106,6 +106,49 @@ $(document).ready(function () {
 		  
 	});
   
+$('#newfieldMerge').on('keypress', function(event) {
+	  
+	  if( event.key == "."){
+		   return (false);
+		};
+	   if( event.key == "\\"){
+		   return (false);
+		};
+	   if( event.key == "\/"){
+		   return (false);
+		};
+	   if( event.key == "\'"){
+		   return (false);
+		};
+		if( event.key == "\""){
+			return (false);
+		};
+	  
+		  
+	});
+  
+  $('#sepValue').on('keypress', function(event) {
+	  
+	   if( event.key == "."){
+		   return (false);
+		};
+	   if( event.key == "\\"){
+		   return (false);
+		};
+	   if( event.key == "\/"){
+		   return (false);
+		};
+	   if( event.key == "\'"){
+		   return (false);
+		};
+		if( event.key == "\""){
+			return (false);
+		};
+	   
+	   
+		  
+	});
+  
   
   $('#removeChar').on('click',function(){
 	   $('#charValue').hide();
@@ -277,6 +320,9 @@ $(document).ready(function () {
         $("#bottoneRicerca").hide();
         $("#no_filters_msg").text("Non ci sono filtri di ricerca impostati.");
     }
+    
+    
+    
 });
 
 function getParams() {

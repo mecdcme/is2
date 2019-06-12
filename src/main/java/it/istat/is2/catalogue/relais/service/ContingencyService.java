@@ -23,6 +23,7 @@
  */
 package it.istat.is2.catalogue.relais.service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -142,5 +143,34 @@ public class ContingencyService {
            }			
 		return pattern;
 	}
+	
+	/**
+	 * @param valuesI
+	 * @return
+	 */
+	public Map<String, Integer> getEmptyContengencyTable( ) {
+		// TODO Auto-generated method stub
+		Map<String, Integer> contengencyTable = new HashMap<String,Integer>();
+		  int mask1 =  (int)Math.pow(2, numVar); 
+		  StringBuffer sb=new StringBuffer();
+			for (int i=0;i<mask1;i++){
+				sb=new StringBuffer();
+			int	 mask = mask1;
+			    while (mask > 0){
+			        if ((mask & i) == 0){
+			        	sb.append("0");
+			      
+			        } else {
+			        	sb.append("1");
+			        }
+			        mask = mask >> 1;
+			    }
+			    contengencyTable.put(sb.toString(),0);
+			    
+			}
+		 
+		return contengencyTable;
+	}
+	
 
 }
