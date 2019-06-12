@@ -40,7 +40,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
- 
+
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -79,16 +79,15 @@ public class DatasetFile implements Serializable {
     private Date dataCaricamento;
     @Column(name = "NOTE")
     private String note;
-    
+
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "TIPODATO", nullable = true)
     private SxTipoDato tipoDato;
-    
 
     @OneToOne
     @JoinColumn(name = "sessione_lavoro")
     private WorkSession sessioneLavoro;
-    
+
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, mappedBy = "datasetFile", orphanRemoval = true)
     @JsonManagedReference
     @OrderBy(value = "ordine ASC")
@@ -104,8 +103,8 @@ public class DatasetFile implements Serializable {
 
     }
 
-	public Short getNumCol() {
-		// TODO Auto-generated method stub
-		return  (short) colonne.size();
-	}
+    public Short getNumCol() {
+        // TODO Auto-generated method stub
+        return (short) colonne.size();
+    }
 }

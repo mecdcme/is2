@@ -47,7 +47,6 @@ import org.springframework.web.bind.annotation.RestController;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.domain.DatasetColonna;
-import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.domain.TipoVariabileSum;
 import it.istat.is2.dataset.service.DatasetService;
 
@@ -58,34 +57,6 @@ public class DatasetControllerRest {
     private DatasetService datasetService;
     @Autowired
     private NotificationService notificationService;
-
-    @GetMapping("/datasetfile/{id}")
-    @ResponseBody
-    public DatasetFile loadDataSetFile(@PathVariable("id") Long id) throws IOException {
-        DatasetFile df = datasetService.findDataSetFile(id);
-        return df;
-    }
-
-    @GetMapping("/datasetfile")
-    @ResponseBody
-    public List<DatasetFile> loadDataSetFile() throws IOException {
-        List<DatasetFile> df = datasetService.findAllDatasetFile();
-        return df;
-    }
-
-    @GetMapping("/datasetfilesql/{id}")
-    @ResponseBody
-    public DatasetFile loadDataSetFileSql(@PathVariable("id") Long id) throws IOException {
-        DatasetFile df = datasetService.findDataSetFileSQL(id);
-        return df;
-    }
-
-    @GetMapping("/datasetfilesql")
-    @ResponseBody
-    public List<DatasetFile> loadDataSetFileSql() throws IOException {
-        List<DatasetFile> df = datasetService.findAllDatasetFileSQL();
-        return df;
-    }
 
     @GetMapping("/datasetcolonnasql/{dfile}/{rigainf}/{rigasup}")
     @ResponseBody
@@ -168,7 +139,7 @@ public class DatasetControllerRest {
         Map<String, List<String>> dataMap = datasetService.loadDatasetValori(dfile);
         Utility.writeObjectToCSV(response.getWriter(), dataMap);
     }
-    
+
     @RequestMapping(value = "/rest/dataset/updaterowlist", method = RequestMethod.POST)
     public String updateOrdineRighe(HttpServletRequest request, Model model,
             @RequestParam("ordineIds") String ordineIds) throws Exception {
@@ -188,9 +159,9 @@ public class DatasetControllerRest {
             Long idc = Long.parseLong(idcol);
             Short ordineC = Short.parseShort(ordine);
             datasetCol = datasetService.findOneColonna(idc);
-            		
-            datasetCol.setOrdine(ordineC);            
-			datasetService.salvaColonna(datasetCol);		
+
+            datasetCol.setOrdine(ordineC);
+            datasetService.salvaColonna(datasetCol);
         }
 
         return "success";
