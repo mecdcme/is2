@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -38,10 +37,9 @@ import it.istat.is2.workflow.domain.SxRuoli;
 @Repository
 public interface RuoloDao extends CrudRepository<SxRuoli, Long> {
 
-	List<SxRuoli> findAll();
+    List<SxRuoli> findAll();
 
- 
-	List<SxRuoli> findBySxAppService(@Param("sxAppService") SxAppService sxAppService);
+    List<SxRuoli> findBySxAppService(@Param("sxAppService") SxAppService sxAppService);
 
     default Map<String, SxRuoli> findByServiceAsCodMap(SxAppService sxAppService) {
         return findBySxAppService(sxAppService).stream().collect(Collectors.toMap(SxRuoli::getCod, v -> v));

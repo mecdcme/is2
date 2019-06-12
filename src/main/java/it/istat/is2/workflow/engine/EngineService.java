@@ -47,6 +47,7 @@ public interface EngineService {
 
 
 	public void init(Elaborazione elaborazione, SxStepInstance stepInstance) throws Exception;
+        public void init() throws Exception;
 	public void doAction()throws Exception;
 	public void processOutput() throws Exception;
 	public void destroy();

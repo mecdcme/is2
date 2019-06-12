@@ -28,8 +28,11 @@ import org.springframework.stereotype.Repository;
 
  
 import it.istat.is2.workflow.domain.SxRule;
+import java.util.List;
 
 @Repository
 public interface SxRuleDao extends CrudRepository<SxRule,Integer> {
+    
+  List<SxRule> findBySxRuleset(Integer idRuleset); 
  
 }

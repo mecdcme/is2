@@ -28,16 +28,17 @@ import it.istat.is2.rule.service.RuleService;
 import it.istat.is2.workflow.domain.SxRule;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class RuleRestController {
- 
+
     @Autowired
     private LogService logService;
-    
+
     @Autowired
     private RuleService ruleService;
 
@@ -48,5 +49,11 @@ public class RuleRestController {
         return rules;
     }
 
-    
+    @GetMapping("/runvalidate/{idRuleset}")
+    public void runValidate(@PathVariable("idRuleset") Integer idRuleset) {
+
+        ruleService.runValidate(idRuleset);
+
+    }
+
 }
