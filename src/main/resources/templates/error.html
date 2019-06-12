@@ -49,78 +49,47 @@
     <body>
         <div class="wrapper">
             <!-- START HEADER -->
-            <header th:replace="layout :: site-header"></header>
-            <aside th:replace="layout :: site-aside"></aside>
-            <!-- START LEFT SIDE BAR -->
-
-            <aside th:fragment="site-aside" th:remove="tag">
-                <aside class="aside">
-                    <div id="sidebar-wrapper" class="aside-inner">
-                        <nav data-sidebar-anyclick-close=""
-                             class="sidebar navbar navbar-primary navbar-fixed-side">
-                            <ul class="nav">
-                                <li id="home" class="nav-body">
-                                    <a href="index.html" title="Home" th:href="@{/}"> <i class="fa fa-home"></i> 
-                                        <span th:text="#{Layout.home}">Home</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </aside>
-            </aside>
-            <!-- END LEFT SIDE BAR -->
-
+           
+           
             <!-- START MAIN CONTAINER -->
             <section>
                 <div class="content-wrapper">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <strong th:text="#{Error.page.legend}"></strong>
+                                <strong>Oops... Si è verificato un errore!</strong>
                             </li>
                         </ol>
                     </nav>
                 </div>
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-lg-2"></div>
+                        <div class="col-lg-3"></div>
 
-                        <div class="col-lg-8">
-                            <div class="card card-danger">
-                                <div class="card-header">
-                                    <span>IS<sup>2</sup> error page...</span>
-                                </div>
+                        <div class="col-lg-6">
+                            <div class="card">
+                                
                                 <div class="card-body">
-                                    <table class="table table-condensed table-bordered">
+                                    <table class="table borderless text-center">
                                         <tbody>
                                             <tr>
-                                                <td width="15%"><span>Date: </span></td>
-                                                <td><span th:text="${#dates.format(timestamp, 'dd/MM/yyyy HH:mm')}"></span></td>
+                                                <td class="error-status"><span th:text="${status}"></span></td>
                                             </tr>
                                             <tr>
-                                                <td width="15%"><span>Status: </span></td>
-                                                <td><strong th:text="${status}"></strong></td>
+                                                <td class="error-msg"><span>PAGE NOT FOUND</span></td>
                                             </tr>
                                             <tr>
-                                                <td width="15%"><span>Error: </span></td>
-                                                <td><strong th:text="${error}"></strong></td>
+                                                <td><strong th:text="${path}"></strong></td>
                                             </tr>
                                             <tr>
-                                                <td width="15%"><span>Path: </span></td>
-                                                <td><span th:text="${path}"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="15%"><span>Message: </span></td>
                                                 <td><span th:text="${message}"></span></td>
                                             </tr>
                                             <tr>
-                                                <td width="15%"><span>Exception: </span></td>
                                                 <td><span th:text="${exception}"></span></td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <div>
+                                    <div class="text-center">
                                         Please contact the system administrator or try to go back 
                                         <a href="index.html" title="Home" th:href="@{/}"> <i class="fa fa-home"></i> 
                                             <span th:text="#{Layout.home}">Home</span>
@@ -129,7 +98,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-2"></div>
+                        <div class="col-lg-3"></div>
                     </div>
                 </div>
             </section>
