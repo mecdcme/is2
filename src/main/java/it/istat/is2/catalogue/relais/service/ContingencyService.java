@@ -165,7 +165,7 @@ public class ContingencyService {
 			        }
 			        mask = mask >> 1;
 			    }
-			    contengencyTable.put(sb.toString(),0);
+			    contengencyTable.put(sb.substring(1),0);
 			    
 			}
 		 

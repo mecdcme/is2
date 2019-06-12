@@ -24,11 +24,8 @@
 package it.istat.is2.catalogue.relais.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
@@ -260,14 +257,12 @@ public class RelaisService {
 		int sizeB = worksetVariabili.get(firstFiledMB).size();
 	 
 		 
-		worksetOut.put("PATTERN", new ArrayList<>());
-
+	 
 	
 		contingencyService.init();
-		Map<String, Integer> contengencyTable = new HashMap<String,Integer>();
-	    Integer item;
-
-		for (int iA = 0; iA < sizeA; iA++) {
+		Map<String, Integer> contengencyTable = contingencyService.getEmptyContengencyTable();
+	      Integer item;
+     	for (int iA = 0; iA < sizeA; iA++) {
 			Map<String, String> valuesI = new HashMap<>();
 			for (String varnameMA : variabileNomeListMA) {
 				valuesI.put(varnameMA, String.valueOf(iA));
@@ -282,14 +277,7 @@ public class RelaisService {
 				}
 				
 				String pattern=contingencyService.getPattern(valuesI);
-				item=contengencyTable.get(pattern);
-				if(item==null)
-					item=new Integer(0);
-				else {
-				     item++;
-				 
-				}
-			 	contengencyTable.put(pattern,item);
+		 		 contengencyTable.put(pattern,contengencyTable.get(pattern)+1);
 			 	indexItems++;
 	  			}
     		 	
@@ -303,10 +291,7 @@ public class RelaisService {
 			worksetOut.get("FREQ").add(value.toString());
 
 		});
-      	System.out.println("fine total: "+indexItems);
-      	
-    	System.out.println(worksetOut);
- 
+
 		return worksetOut;
 	}
 	
