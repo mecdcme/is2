@@ -23,9 +23,11 @@
  */
 package it.istat.is2.rule.service;
 
-import it.istat.is2.app.service.LogService;
 import it.istat.is2.workflow.dao.SxRuleDao;
+import it.istat.is2.workflow.dao.SxRuleTypeDao;
 import it.istat.is2.workflow.domain.SxRule;
+import it.istat.is2.workflow.domain.SxRuleType;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,14 +35,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class RuleService {
     
-    @Autowired
-    private LogService logService;
     
     @Autowired
     private SxRuleDao sxRuleDao;
+    @Autowired
+    private SxRuleTypeDao sxRuleTypeDao;
     
      public List<SxRule> findAll() {
         return (List<SxRule>) this.sxRuleDao.findAll();
     }
+     public List<SxRuleType> findAllRuleType() {
+         return (List<SxRuleType>) sxRuleTypeDao.findAll();
+     }
     
 }
