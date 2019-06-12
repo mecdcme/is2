@@ -29,7 +29,7 @@
         <script th:src="@{/js/sessioni.js}"></script>
         <script th:src="@{/js/papaParse/papaparse.min.js}"></script>
         <script th:src="@{/js/fileinput.min.js}"></script>
-        <script th:src="@{/js/uploadfile.js}"></script>
+        <script th:src="@{/js/uploadroleset.js}"></script>
         <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
         <link rel="stylesheet" th:href="@{/css/fileinput.min.css}" />
     </head>
@@ -218,9 +218,9 @@
                         <div class="modal-body">
                             <span th:text="#{rules.classification.type}">Classificazione:</span> &nbsp;&nbsp;&nbsp;
                             <select id="tipo_dato" >
-                                <option th:each="tipod : ${listaTipoDato}"
-                                        th:value="${tipod.id}"
-                                        th:text="${tipod.nome}">
+                                <option th:each="ruleType : ${listaRuleType}"
+                                        th:value="${ruleType.id}"
+                                        th:text="${ruleType.nome}">
                                 </option>
                             </select>                               
                         </div>
