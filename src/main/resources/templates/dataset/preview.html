@@ -28,9 +28,14 @@
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
 
         <script th:inline="javascript">
-            var _idfile = [[${idfile}]];
-            var _variabili = [[${colonne.size()}]];  
-            var _righe = [[${numRighe}]];  
+            var _idfile = [[${
+                idfile
+            }
+            ]];
+                    var _variabili = [[${colonne.size()}
+                    ]];
+                    var _righe = [[${numRighe}
+                    ]];
 
         </script>
         <script th:src="@{/js/table/datatables.js}"></script>
@@ -65,7 +70,7 @@
                                 </a>
                             </li>
                             <li class="breadcrumb-item">
-                                <span th:text="#{sessionewf.dataset}"></span>
+                                <span th:text="${dfile.nomeFile}"></span>
                             </li>
 
                             <div class="btn-group pull-right" role="group">
@@ -80,23 +85,12 @@
                                         <li><a class="dropdown-item" th:onclick="'javascript:openRepairModal()'" href="#"><span th:text="#{dataset.fieldRepair}"></span></a></li>
                                     </ul>
                                 </span>
-
-                                <th:block th:unless="${session.elaborazione}">                               	 
-                                    <a class="" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDatasetGrafici/'+${idfile}}">
-                                        <i class="fa fa-image"></i>&nbsp;<span th:text="#{sessionewf.image}"></span>
-                                    </a>
-                                </th:block>
-                                
-                                <th:block th:if="${session.elaborazione}">
-                                    <a class="" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
-                                        <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>
-                                    </a>
-                                </th:block>
-                                <th:block th:unless="${session.elaborazione}">                               	 
-                                    <a class="" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
-                                        <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>
-                                    </a>
-                                </th:block>
+                                <a class="bar-right" id="btn_graph" title="Data analytics" th:href="@{'/graph/home/'+${idfile}}">
+                                    <i class="fa fa-image"></i>&nbsp;<span th:text="#{sessionewf.graph}"></span>
+                                </a>
+                                <a class="" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
+                                    <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>
+                                </a>
                             </div>
                         </ol>
                     </nav>
@@ -244,35 +238,35 @@
                         </h4>
                         <div class="custom-control custom-checkbox">
                             <hr class="style1"></hr>
-                                                  <span class="form-check-label" for="removeSpace">Variabile:</span>
-                        <select id="selectedVariable" class="dropdown" title= "Elenco Variabili">
+                            <span class="form-check-label" for="removeSpace">Variabile:</span>
+                            <select id="selectedVariable" class="dropdown" title= "Elenco Variabili">
 
-        					<option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
-                					th:value="${cols.id}"
-                					th:text="${cols.id} != null? ${cols.nome}: ''">
-        					</option>
+                                <option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
+                                        th:value="${cols.id}"
+                                        th:text="${cols.id} != null? ${cols.nome}: ''">
+                                </option>
 
-   						 </select>
-   						 <button type="button"  id="addVariable" class="btn btn-secondary">Add</button>
+                            </select>
+                            <button type="button"  id="addVariable" class="btn btn-secondary">Add</button>
                         </div>
 
-	                    <div class="custom-control custom-checkbox">
-						  <span class="form-check-label" for="removeSpace">Separatore:</span>
-						  <input type="text" class="custom-control-input" id="sepValue"></input>
-						  <button type="button" id="addSeparator" class="btn btn-secondary">Add</button>
-						</div>
-						
-						<div class="custom-control custom-checkbox">
-							<hr class="style1"></hr>
-						  <span class="form-check-label" for="removeSpecial">Lista dei campi da concatenare:</span>
-						  <textarea class="form-control rounded-0" id="textArea" rows="3" readonly="true"></textarea>
-						  <button type="button" style="float:right" id="clearTextArea" class="btn btn-secondary">Clear</button>
-						  
-						</div>
-						<div class="custom-control custom-checkbox">
-							<hr class="style1"></hr>
-							 <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
-							 <input type="text" class="custom-control-input" id="newfieldMerge"></input>
+                        <div class="custom-control custom-checkbox">
+                            <span class="form-check-label" for="removeSpace">Separatore:</span>
+                            <input type="text" class="custom-control-input" id="sepValue"></input>
+                            <button type="button" id="addSeparator" class="btn btn-secondary">Add</button>
+                        </div>
+
+                        <div class="custom-control custom-checkbox">
+                            <hr class="style1"></hr>
+                            <span class="form-check-label" for="removeSpecial">Lista dei campi da concatenare:</span>
+                            <textarea class="form-control rounded-0" id="textArea" rows="3" readonly="true"></textarea>
+                            <button type="button" style="float:right" id="clearTextArea" class="btn btn-secondary">Clear</button>
+
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <hr class="style1"></hr>
+                            <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
+                            <input type="text" class="custom-control-input" id="newfieldMerge"></input>
 
                         </div>
                         <div class="modal-footer">

@@ -40,9 +40,9 @@ $(document).ready(function () {
             selector: 'td:nth-child(2)'
         },
         columnDefs: [{
-                "orderable": false,
+                orderable: false,
                 className: 'reorder',
-                "targets": [1]
+                targets: [1]
             }],
         buttons: [{
                 className: 'btn-extenal-function btn-light',
@@ -99,7 +99,7 @@ $(document).ready(function () {
         paging: false,
         rowReorder: true,
         columnDefs: [{
-                "orderable": false,
+                orderable: false,
                 className: 'reorder',
                 targets: [1,2,3,4,5,6]
             }],
@@ -129,7 +129,7 @@ $(document).ready(function () {
         pageLength: 25,
         serverSide: true,
         ajax: _ctx + "/rest/datasetvalori/" + ID,
-        "columns": eval(getHeaders('dataFile')),
+        columns: eval(getHeaders('dataFile')),
         processing: true,
         buttons: [{
                 extend: 'csvHtml5',
@@ -151,13 +151,13 @@ $(document).ready(function () {
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         responsive: true,
-        "ordering": false,
+        ordering: false,
         searching: false,
         lengthChange: true,
         pageLength: 25,
         serverSide: true,
         ajax: _ctx + "/rest/ws/worksetvalori/" + idElaborazione,
-        "columns": eval(getHeaders('worksetTab')),
+        columns: eval(getHeaders('worksetTab')),
         processing: true,
         buttons: [{
                 extend: 'csvHtml5',

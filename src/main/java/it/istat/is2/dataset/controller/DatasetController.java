@@ -125,22 +125,6 @@ public class DatasetController {
         return "dataset/edit";
     }
 
-    @RequestMapping("/metadatiDatasetGrafici/{idfile}")
-    public String caricaGraph(Model model, @PathVariable("idfile") Long idfile) {
-
-        DatasetFile dfile = datasetService.findDataSetFile(idfile);
-
-        /*        
-         List<DatasetColonna> colonne = datasetService.findAllNomeColonne(idfile);
-         List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();       
-         model.addAttribute("colonne", colonne);
-         model.addAttribute("idfile", idfile);
-         model.addAttribute("variabili", variabiliSum);
-         model.addAttribute("dfile", dfile);
-         */
-        return "dataset/graph3";
-    }
-
     @GetMapping(value = "/sessione/mostradataset/{id}")
     public String mostradataset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
@@ -175,6 +159,7 @@ public class DatasetController {
     @RequestMapping(value = "/associaVarSum", method = RequestMethod.POST)
     public String caricaMetadati(Model model, String idfile, String idvar, String filtro, String idsum) {
 
+        DatasetFile dfile = datasetService.findDataSetFile(new Long(idfile));
         DatasetColonna dcol = datasetService.findOneColonna(Long.parseLong(idvar));
         TipoVariabileSum sum = new TipoVariabileSum(Integer.parseInt(idsum));
 
@@ -193,6 +178,7 @@ public class DatasetController {
 
         model.addAttribute("colonne", colonne);
         model.addAttribute("idfile", idfile);
+        model.addAttribute("dfile", dfile);
         model.addAttribute("variabili", variabiliSum);
 
         return "dataset/edit";

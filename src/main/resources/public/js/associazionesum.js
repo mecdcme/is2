@@ -29,10 +29,12 @@ $(document).ready(function () {
         dom: "<'row'<'col-sm-12'<'pull-left'f>>>"
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        autoWidth: false,
         responsive: true,
-        lengthChange: true,
-        pageLength: 25,
-        paging: true,        
+        paging: false,
+        rowReorder:  {
+        	selector: 'td:nth-child(2)'        	   
+        },
         columnDefs: [{
             orderable: false,
             className: 'reorder', 
@@ -40,10 +42,8 @@ $(document).ready(function () {
         }],
         'createdRow': function (row, data, dataIndex) {
             $(row).attr('id', 'row-' + dataIndex);
-        },
-        "rowReorder":  {
-        	selector: 'td:nth-child(2)'        	   
         }
+        
     });
     table.on('row-reorder', function (e, diff, edit) {
         var result = 'Reorder started on row: ' + edit.triggerRow.data()[1] + '<br>';

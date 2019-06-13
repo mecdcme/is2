@@ -1087,3 +1087,8 @@ button.btn-secondary:hover
 .header-strong{
     font-weight: bold !important;
 }
+
+/* Charts */
+#chartContainer .card-body{
+    min-height: 250px;
+}
