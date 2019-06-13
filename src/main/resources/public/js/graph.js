@@ -25,71 +25,34 @@ var _ctx = $("meta[name='ctx']").attr("content");
 
 $(document).ready(function () {
 
-    var table = $("#variableTable").DataTable({
-        dom: "<'row'<'col-sm-12'tr>>"
-                + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        autoWidth: false,
-        responsive: true,
-        paging: false,
-        ordering: false,
-        rowReorder: {
-            selector: 'td:nth-child(2)'
-        },
-        columnDefs: [{
-                orderable: false,
-                className: 'reorder',
-                targets: [1]
-            }],
-        createdRow: function (row, data, dataIndex) {
-            $(row).attr('id', 'row-' + dataIndex);
+    $(".sortable").sortable({
+        items: 'tbody > tr',
+        connectWith: ".sortable",
+        receive: function (event, ui) {
+            $(this).find("tbody").append(ui.item);
+            hideOrShowDropRow();
         }
     });
-    table.on('row-reorder', function (e, diff, edit) {
-        var result = 'Reorder started on row: ' + edit.triggerRow.data()[1] + '<br>';
-        for (var i = 0, ien = diff.length; i < ien; i++) {
-            var rowData = table.row(diff[i].node).data();
-            result += rowData[1]
-                    + ' updated to be in position '
-                    + diff[i].newData + ' (was '
-                    + diff[i].oldData + ')<br>';
-        }
-        cambiaPosizione();
-    });
 
-
+    hideOrShowDropRow();
 });
 
-function cambiaPosizione() {
-    var ordineIds = "";
-    var ids = $("#variableTable").find(
-            "input[name='colsid']");
-    for (var i = 0; i < ids.length; i++) {
-        ordineIds += i + "=" + ids[i].value + "|";
-    }
-    ordineIds = ordineIds.slice(0, -1);
-    updateOrdineRighe(ordineIds);
-}
 
-function updateOrdineRighe(ordineIds) {
-    $.ajax({
-        url: _ctx + "/rest/dataset/updaterowlist",
-        type: "POST",
-        data: "ordineIds=" + ordineIds,
-        success: function (data) {
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error loading data');
-        }
+function hideOrShowDropRow() {
+    $(".sortable").each(function () {
+        var dropRow = $(this).find(".drop-row"),
+                hasRows = $(this).find("tbody tr").length;
+
+        hasRows ? dropRow.hide() : dropRow.show();
     });
 }
 
 function getChartData() {
-    
+
     $.ajax({
-        url: _ctx + "/rest/graph/getColumns/57,56",
+        url: _ctx + "/rest/graph/getColumns/" + getColumnIds(),
         type: "GET",
         success: function (data) {
-            alert("Working");
             $.each(data, function (i, column) {
                 console.log("Column name: " + column.nome);
                 console.log("Column data: " + column.datiColonna);
@@ -101,24 +64,24 @@ function getChartData() {
     });
 }
 
-function getColumnIds(){
-    
+function getColumnIds() {
+
     var ids = "";
     isfirst = true;
 
-    $("#variableTable tr").each(function (rowIndex, r){
-        
+    $("#targetTable tr").each(function (rowIndex, r) {
+
         id = $(this).find("td").last().text();
 
-        if(id > 0 && isfirst){
+        if (id > 0 && isfirst) {
             ids = id;
             isfirst = false;
-        } else if (id > 0 && !isfirst){
+        } else if (id > 0 && !isfirst) {
             ids = ids + "," + id;
         }
     });
-    
+
     console.log(ids);
-    
+
     return ids;
 }

@@ -1092,3 +1092,5 @@ button.btn-secondary:hover
 #chartContainer .card-body{
     min-height: 250px;
 }
+
+.drop-row { visibility: hidden; }
