@@ -124,7 +124,7 @@ public class DatasetService {
     }
 
     public DatasetFile findDataSetFile(Long id) {
-        return datasetFileDao.findById(id).get();
+        return datasetFileDao.findById(id).orElse(null);
     }
 
     public List<DatasetFile> findDatasetFilesByIdSessioneLavoro(Long id) {

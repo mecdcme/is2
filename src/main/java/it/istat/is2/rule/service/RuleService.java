@@ -23,10 +23,16 @@
  */
 package it.istat.is2.rule.service;
 
-import it.istat.is2.app.service.LogService;
+import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.workflow.dao.SxRuleDao;
+import it.istat.is2.workflow.dao.SxRuleTypeDao;
 import it.istat.is2.workflow.domain.SxRule;
+import it.istat.is2.workflow.domain.SxRuleType;
+import it.istat.is2.workflow.engine.EngineFactory;
+import it.istat.is2.workflow.engine.EngineService;
+
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,13 +40,35 @@ import org.springframework.stereotype.Service;
 public class RuleService {
     
     @Autowired
-    private LogService logService;
+    private EngineFactory engineFactory;
     
     @Autowired
     private SxRuleDao sxRuleDao;
+    @Autowired
+    private SxRuleTypeDao sxRuleTypeDao;
     
      public List<SxRule> findAll() {
         return (List<SxRule>) this.sxRuleDao.findAll();
     }
+     public List<SxRuleType> findAllRuleType() {
+         return (List<SxRuleType>) sxRuleTypeDao.findAll();
+     }
     
+     public void runValidate(Integer idRuleset) {
+        //List<SxRule> rules = sxRuleDao.findBySxRuleset(idRuleset);
+
+        EngineService engine = engineFactory.getEngine(IS2Const.ENGINE_R_LIGHT);
+        
+        try {
+            engine.init();
+            //engine.doAction();
+            //engine.processOutput();
+
+        } catch (Exception e) {
+            Logger.getRootLogger().debug(e.getMessage());
+        } finally {
+            engine.destroy();
+        }
+
+    }
 }

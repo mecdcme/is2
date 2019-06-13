@@ -265,6 +265,7 @@ public class RelaisService {
 				 nameMatchingVariables.add(metricsm.getMatchingVariable());
 			});
 	
+
 		 Map<String, Integer> contengencyTable = contingencyService.getEmptyContengencyTable();
 	     
      	for (int iA = 0; iA < sizeA; iA++) {
@@ -273,6 +274,7 @@ public class RelaisService {
 			variabileNomeListMA.forEach(varnameMA -> {
 				valuesI.put(varnameMA, worksetVariabili.get(varnameMA).get(innerIA));
 			});
+
 
 			for (int iB = 0; iB < sizeB; iB++) {
 				ArrayList<String> valueIB = new ArrayList<>();

@@ -94,11 +94,12 @@ public class EngineJava implements EngineService {
 
 	}
 
-	/**
-	 * @param worksetVariabili2
-	 * @param selemixWorkset
-	 */
-
+        @Override
+        public void init() throws Exception{
+            //do nothing
+        
+        }
+        	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void doAction() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -173,11 +174,6 @@ public class EngineJava implements EngineService {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see it.istat.is2.workflow.engine.EngineService#processOutput()
-	 */
 	@Override
 	public void processOutput() throws Exception {
 
@@ -187,20 +183,12 @@ public class EngineJava implements EngineService {
 
 	}
 
-	/**
-	 * @param ruoliOutputStep2
-	 * @param selemixResultset
-	 * @param selemixResultRuoli
-	 */
 	private void getGenericoOutput(HashMap<String, ArrayList<String>> ruoliOutputStep2) {
 		// TODO Auto-generated method stub
 		ArrayList<String> listValue = new ArrayList<String>(worksetOut.keySet());
 		ruoliOutputStep2.put("CT", listValue);
 	}
 
-	/**
-	 * 
-	 */
 	private void saveOutputDB() {
 		// TODO Auto-generated method stub
 
@@ -285,15 +273,10 @@ public class EngineJava implements EngineService {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see it.istat.is2.workflow.engine.EngineService#destroy()
-	 */
+	
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-
+            // TODO Auto-generated method stub
 	}
 
 }

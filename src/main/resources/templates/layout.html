@@ -139,6 +139,12 @@
                                                 <span th:if="${session.sessioneBean.file}"  th:text="${'('+session.sessioneBean.file.size()+')'}" ></span>
                                             </a>
                                         </li>
+                                        <li class="nav-body" th:if="${(session.sessioneBean.file != null) }">
+                                            <a title="Regole"  th:href="@{'/roles/viewRoleset/'+${session.sessioneBean.id}}">
+                                                <i class="fa fa-table"></i><span th:text="#{Layout.Rules}"></span>
+                                                <span th:if="${session.sessioneBean.file}"  th:text="${'('+session.sessioneBean.file.size()+')'}" ></span>
+                                            </a>
+                                        </li> 
                                     </ul> 
                                     <a title="Sessione lavoro" th:unless="${session.sessioneBean}">
                                         <i class="fa fa-folder"></i><span></span>

@@ -19,39 +19,47 @@
  * @version 0.1.1
  */
 /**
- * 
+ *
  */
 package it.istat.is2.workflow.engine;
 
+import it.istat.is2.app.util.IS2Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 @Service
 public class EngineFactory {
 
-	@Autowired
+    @Autowired
     private EngineR engineR;
+    
+    @Autowired
+    private EngineRlight engineRlight;
 
     @Autowired
     private EngineJava engineJava;
-   
+
     @Autowired
     private EngineSQL engineSQL;
-    
-	// use getEngine method to get object of type engine
-	public EngineService getEngine(String engineType) {
-		if (engineType == null) {
-			return null;
-		}
-		if (engineType.equalsIgnoreCase("R")) {
-			return engineR;
 
-		} else if (engineType.equalsIgnoreCase("JAVA")) {
-			return engineJava;
+    // use getEngine method to get object of type engine
+    public EngineService getEngine(String engineType) {
+        if (engineType == null) {
+            return null;
+        }
+        if (engineType.equalsIgnoreCase(IS2Const.ENGINE_R)) {
+            return engineR;
 
-		} else if (engineType.equalsIgnoreCase("SQL")) {
-			return engineSQL;
-		}
+        } else if (engineType.equalsIgnoreCase(IS2Const.ENGINE_JAVA)) {
+            return engineJava;
 
-		return null;
-	}
+        } else if (engineType.equalsIgnoreCase(IS2Const.ENGINE_SQL)) {
+            return engineSQL;
+            
+        }else if (engineType.equalsIgnoreCase(IS2Const.ENGINE_R_LIGHT)) {
+            return engineRlight;
+        }
+
+        return null;
+    }
 }

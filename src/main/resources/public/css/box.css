@@ -978,7 +978,6 @@ button.btn-secondary:hover
     margin-bottom: 0;
     background-color: #f9f9f9;
     border-bottom: 1px solid #c8ced3;
-    font-weight: bold;
 }
 
 .card-header:first-child {

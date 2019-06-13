@@ -1,0 +1,209 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+        <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+        <script th:src="@{/js/d3/d3.js}"></script>
+
+        <script th:inline="javascript">
+            var _idfile = [[${idfile}]];</script>
+
+
+        <style>
+            .axis text {
+                font: 10px sans-serif;
+            }
+
+            .axis path, .axis line {
+                fill: none;
+                stroke: #000;
+                shape-rendering: crispEdges;
+            }
+
+            .line {
+                fill: none;
+                stroke-width: 1.5px;
+            }
+
+            .dot {
+                fill: #fff;
+                stroke: #000;
+            }
+        </style>
+
+
+    </head>
+    <body>
+        <!-- Body -->
+        <div class="wrapper">
+            <header th:replace="layout :: site-header"></header>
+            <aside th:replace="layout :: site-aside"></aside>
+            <!-- START MAIN CONTAINER -->
+            <section>
+                <div class="content-wrapper">
+                    <!-- Begin breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{/sessione/mostraSessioni}">
+                                    <span th:text="#{sessionewf.lista.title}"></span>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                                    <span th:if="${session.sessionelv}">
+                                        <span th:text="${session.sessionelv.nome}"></span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/viewDataset/'+${idfile}}">
+                                    <span th:text="#{sessionewf.dataset}"></span>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                <span th:text="#{sessionewf.metadati}"></span>
+                            </li>
+                        </ol>
+                    </nav>
+                    <!-- End breadcrumb -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <fieldset class="well">
+                                    <legend class="well-legend">Grafico Plot</legend>
+                                    grafico d3
+                                    <div id="datagraph" class="row" style="padding: 5px;">                                        
+                                        <script>
+
+                                                    function callChart()
+                                                    {
+
+                                                        var margin = {top: 40, right: 40, bottom: 40, left: 40},
+                                                        width = 960 - margin.left - margin.right,
+                                                                height = 500 - margin.top - margin.bottom;
+
+
+                                                        var x = d3.scale.linear()
+                                                                .domain([0, 1])
+                                                                .range([0, width]);
+
+                                                        var y = d3.scale.linear()
+                                                                .domain([0, 1])
+                                                                .range([height, 0]);
+
+                                                        var z = d3.scale.linear()
+                                                                .domain([2 / 3, 1]) // D3 3.x tension is buggy!
+                                                                .range(["brown", "steelblue"]);
+
+                                                        var xAxis = d3.svg.axis()
+                                                                .scale(x)
+                                                                .orient("bottom");
+
+                                                        var yAxis = d3.svg.axis()
+                                                                .scale(y)
+                                                                .orient("left");
+
+                                                        var line = d3.svg.line()
+                                                                .interpolate("cardinal")
+                                                                .x(function (d) {
+                                                                    return x(d.x);
+                                                                })
+                                                                .y(function (d) {
+                                                                    return y(d.y);
+                                                                });
+
+                                                        var svg = d3.select("#datagraph").append("svg")
+                                                                .attr("width", width + margin.left + margin.right)
+                                                                .attr("height", height + margin.top + margin.bottom)
+                                                                .append("g")
+                                                                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//d3.tsv("data.tsv", type, function(error, data) {
+// if (error) throw error;
+
+//var test_data=d3.select("body").selectAll("test_data");
+//data=test_data.html;
+                                                        var data = [{x: 0, y: 0.5}, {x: 0.1, y: 0.8}, {x: 0.2, y: 1.1}, {x: 1.3, y: 1.5}, {x: 0.4, y: 2.5}, {x: 0.5, y: 3.4}, {x: 0.6, y: 4.3}];
+                                                        x.domain(data.map(function (d) {
+                                                            return d.x;
+                                                        }));
+                                                        y.domain(data.map(function (d) {
+                                                            return d.y;
+                                                        }));
+                                                        svg.append("g")
+                                                                .attr("class", "axis axis--x")
+                                                                .attr("transform", "translate(0," + height + ")")
+                                                                .call(xAxis);
+
+                                                        svg.append("g")
+                                                                .attr("class", "axis axis--y")
+                                                                .call(yAxis);
+
+                                                        svg.selectAll(".line")
+                                                                .data(z.ticks(6))
+                                                                .enter().append("path")
+                                                                .attr("class", "line")
+                                                                .attr("d", function (d) {
+                                                                    return line.tension(d)(data);
+                                                                })
+                                                                .style("stroke", z);
+
+                                                        svg.selectAll(".dot")
+                                                                .data(data)
+                                                                .enter().append("circle")
+                                                                .attr("class", "dot")
+                                                                .attr("cx", function (d) {
+                                                                    return x(d.x);
+                                                                })
+                                                                .attr("cy", function (d) {
+                                                                    return y(d.y);
+                                                                })
+                                                                .attr("r", 3.5);
+//});
+
+                                                        function type(d) {
+                                                            d.x = +d.x;
+                                                            d.y = +d.y;
+                                                            return d;
+                                                        }
+
+
+                                                    }
+
+                                        </script>                                
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- container fluid -->
+                </div>
+            </section>
+            <footer th:replace="layout :: site-footer" />
+        </div>
+    </body>
+</html>

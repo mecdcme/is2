@@ -23,50 +23,37 @@
  */
 package it.istat.is2.workflow.engine;
 
-
 import org.springframework.stereotype.Service;
 
 import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.SxStepInstance;
 
 @Service
-public  class EngineSQL implements EngineService {
+public class EngineSQL implements EngineService {
 
-	/* (non-Javadoc)
-	 * @see it.istat.is2.workflow.engine.EngineService#init(it.istat.is2.app.domain.Elaborazione, it.istat.is2.workflow.domain.SxStepInstance)
-	 */
-	@Override
-	public void init(Elaborazione elaborazione, SxStepInstance stepInstance) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void init(Elaborazione elaborazione, SxStepInstance stepInstance) throws Exception {
+        // TODO	
+    }
 
-	/* (non-Javadoc)
-	 * @see it.istat.is2.workflow.engine.EngineService#eseguiStringaIstruzione()
-	 */
-	@Override
-	public void doAction() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void init() throws Exception {
+        // TO DO
+    }
 
-	/* (non-Javadoc)
-	 * @see it.istat.is2.workflow.engine.EngineService#processOutput()
-	 */
-	@Override
-	public void processOutput() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void doAction() throws Exception {
+        // TODO
+    }
 
-	/* (non-Javadoc)
-	 * @see it.istat.is2.workflow.engine.EngineService#destroy()
-	 */
-	@Override
-	public void destroy() {
-		// TODO Auto-generated method stub
-		
-	}
- 
- 
+    @Override
+    public void processOutput() throws Exception {
+        // TODO
+    }
+
+    @Override
+    public void destroy() {
+        // TODO 
+    }
+
 }

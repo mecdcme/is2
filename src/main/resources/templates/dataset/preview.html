@@ -81,6 +81,12 @@
                                     </ul>
                                 </span>
 
+                                <th:block th:unless="${session.elaborazione}">                               	 
+                                    <a class="" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDatasetGrafici/'+${idfile}}">
+                                        <i class="fa fa-image"></i>&nbsp;<span th:text="#{sessionewf.image}"></span>
+                                    </a>
+                                </th:block>
+                                
                                 <th:block th:if="${session.elaborazione}">
                                     <a class="" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
                                         <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>

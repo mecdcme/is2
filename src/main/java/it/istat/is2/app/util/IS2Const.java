@@ -40,4 +40,9 @@ public interface IS2Const {
     public static final int TIPO_CAMPO_INPUT = 1;
     public static final int TIPO_CAMPO_ELABORATO = 2;
     
+    public static final String ENGINE_R = "R";
+    public static final String ENGINE_JAVA = "JAVA";
+    public static final String ENGINE_SQL = "SQL";
+    public static final String ENGINE_R_LIGHT = "R-LIGHT";
+    
 }

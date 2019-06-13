@@ -1,3 +1,4 @@
+package it.istat.is2.workflow.dao;
 /**
  * Copyright 2019 ISTAT
  *
@@ -21,39 +22,16 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.rule.controller.rest;
 
-import it.istat.is2.app.service.LogService;
-import it.istat.is2.rule.service.RuleService;
-import it.istat.is2.workflow.domain.SxRule;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class RuleRestController {
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+import it.istat.is2.workflow.domain.SxRuleType;
 
-    @Autowired
-    private LogService logService;
 
-    @Autowired
-    private RuleService ruleService;
-
-    @GetMapping("/rules")
-    public List<SxRule> ruleslist(Model model) {
-
-        List<SxRule> rules = ruleService.findAll();
-        return rules;
-    }
-
-    @GetMapping("/runvalidate/{idRuleset}")
-    public void runValidate(@PathVariable("idRuleset") Integer idRuleset) {
-
-        ruleService.runValidate(idRuleset);
-
-    }
-
+@Repository
+public interface SxRuleTypeDao extends CrudRepository<SxRuleType,Integer> {
+ 
+	List<SxRuleType> findAll();
 }

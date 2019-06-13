@@ -64,11 +64,11 @@ public class ContingencyService {
 	private ReconciledSchema rsc;
 	private AbstractStringMetric[] metrics;
 
-	
 	public void init() {
 		metricMatchingVariableVector = new MetricMatchingVariableVector();
 		MetricMatchingVariable mm1 = new MetricMatchingVariable("VIA", "DSA_VIA", "DSB_VIA", "Jaro", 0.8, 0);
-		MetricMatchingVariable mm2 = new MetricMatchingVariable("DENOMINAZIONE", " 	DSA_DENOMINAZIONE", "DSB_DENOMINAZIONE", "Jaro", 0.8, 0);
+		MetricMatchingVariable mm2 = new MetricMatchingVariable("DENOMINAZIONE", " 	DSA_DENOMINAZIONE",
+				"DSB_DENOMINAZIONE", "Jaro", 0.8, 0);
 		MetricMatchingVariable mm3 = new MetricMatchingVariable("CITTA", "DSA_CITTA", "DSB_CITTA", "Jaro", 0.8, 0);
 		// MetricMatchingVariable mm3=new
 		// MetricMatchingVariable("LASTCODE","da_LASTCODE","db_LASTCODE","Equality",1,0);
@@ -106,86 +106,86 @@ public class ContingencyService {
 
 	}
 
-
-	
 	/**
 	 * @param valuesI
 	 * @return
 	 */
-	public  ArrayList<String> getNameMatchingVariables( ) {
+	public ArrayList<String> getNameMatchingVariables() {
 		// TODO Auto-generated method stub
-		 ArrayList<String> ret=new ArrayList<>();
-	 	 metricMatchingVariableVector.forEach(item->{ret.add(item.getMatchingVariable()); });
-	 	return ret;
+		ArrayList<String> ret = new ArrayList<>();
+		metricMatchingVariableVector.forEach(item -> {
+			ret.add(item.getMatchingVariable());
+		});
+		return ret;
 	}
-	
-	
-	
+
 	/**
 	 * @param valuesI
 	 * @return
 	 */
 	public String getPattern(Map<String, String> valuesI) {
 		// TODO Auto-generated method stub
-		 String pattern="";
-			
-          /* evaluation of patternd */
- 
-		 
-           for (int ii=0; ii< numVar; ii++) {
-        	   MetricMatchingVariable   metricMatchingVariable =  metricMatchingVariableVector.get(ii);
-            String matchingVariableNameVariableA=valuesI.get(metricMatchingVariable.getMatchingVariableNameVariableA());
-            String matchingVariableNameVariableB=valuesI.get(metricMatchingVariable.getMatchingVariableNameVariableB());
-        	   
-        	   if (matchingVariableNameVariableA==null || matchingVariableNameVariableB==null || matchingVariableNameVariableA.equals("")) {
-                                                   
-               pattern=pattern+"0";
-              }
-	      //Equality
-	       else if (metrics[ii]==null) {
-		   if (matchingVariableNameVariableA.equals(matchingVariableNameVariableB))
-			pattern=pattern+"1";
-		   else
-			pattern=pattern+"0";
-	       }
-	       else {
-                  
-		   if (metrics[ii].getSimilarity(matchingVariableNameVariableA,matchingVariableNameVariableB)>=metricMatchingVariable.getMetricThreshold())
-			pattern=pattern+"1";
-		   else
-			pattern=pattern+"0";
-	       }
-           }			
+		String pattern = "";
+
+		/* evaluation of patternd */
+
+		for (int ii = 0; ii < numVar; ii++) {
+			MetricMatchingVariable metricMatchingVariable = metricMatchingVariableVector.get(ii);
+			String matchingVariableNameVariableA = valuesI
+					.get(metricMatchingVariable.getMatchingVariableNameVariableA());
+			String matchingVariableNameVariableB = valuesI
+					.get(metricMatchingVariable.getMatchingVariableNameVariableB());
+
+			if (matchingVariableNameVariableA == null || matchingVariableNameVariableB == null
+					|| matchingVariableNameVariableA.equals("")) {
+
+				pattern = pattern + "0";
+			}
+			// Equality
+			else if (metrics[ii] == null) {
+				if (matchingVariableNameVariableA.equals(matchingVariableNameVariableB))
+					pattern = pattern + "1";
+				else
+					pattern = pattern + "0";
+			} else {
+
+				if (metrics[ii].getSimilarity(matchingVariableNameVariableA,
+						matchingVariableNameVariableB) >= metricMatchingVariable.getMetricThreshold())
+					pattern = pattern + "1";
+				else
+					pattern = pattern + "0";
+			}
+		}
 		return pattern;
 	}
-	
+
 	/**
 	 * @param valuesI
 	 * @return
 	 */
-	public Map<String, Integer> getEmptyContengencyTable( ) {
+	public Map<String, Integer> getEmptyContengencyTable() {
 		// TODO Auto-generated method stub
-		Map<String, Integer> contengencyTable = new HashMap<String,Integer>();
-		  int mask1 =  (int)Math.pow(2, numVar); 
-		  StringBuffer sb=new StringBuffer();
-			for (int i=0;i<mask1;i++){
-				sb=new StringBuffer();
-			int	 mask = mask1;
-			    while (mask > 0){
-			        if ((mask & i) == 0){
-			        	sb.append("0");
-			      
-			        } else {
-			        	sb.append("1");
-			        }
-			        mask = mask >> 1;
-			    }
-			    contengencyTable.put(sb.substring(1),0);
-			    
+		Map<String, Integer> contengencyTable = new HashMap<String, Integer>();
+		int mask1 = (int) Math.pow(2, numVar);
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < mask1; i++) {
+			sb = new StringBuffer();
+			int mask = mask1;
+			while (mask > 0) {
+				if ((mask & i) == 0) {
+					sb.append("0");
+
+				} else {
+					sb.append("1");
+				}
+				mask = mask >> 1;
 			}
-		 
+
+			contengencyTable.put(sb.substring(1), 0);
+
+		}
+
 		return contengencyTable;
 	}
-	
 
 }
