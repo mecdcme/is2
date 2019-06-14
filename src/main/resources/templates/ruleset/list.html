@@ -29,7 +29,7 @@
         <script th:src="@{/js/sessioni.js}"></script>
         <script th:src="@{/js/papaParse/papaparse.min.js}"></script>
         <script th:src="@{/js/fileinput.min.js}"></script>
-        <script th:src="@{/js/uploadroleset.js}"></script>
+        <script th:src="@{/js/uploadruleset.js}"></script>
         <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
         <link rel="stylesheet" th:href="@{/css/fileinput.min.css}" />
     </head>
@@ -68,12 +68,14 @@
                                         <span th:text="#{ruleset.list.label}">Lista file di regole</span>
                                     </div>
                                     <div class="card-body">
-                                        <form id="inputFileForm" th:action="@{'/loadRulesFile'}" method="post" enctype="multipart/form-data">
+                                        <form id="inputFileRulesetForm" th:action="@{'/loadRulesFile'}" method="post" enctype="multipart/form-data">
                                             <input type="hidden" value="" name="descrizione" id="desc" /> 
                                             <input type="hidden" th:value="${session.sessionelv.id}" th:name="idsessione" />
                                             <input type="hidden" value="" name="delimiter" id="delimiter" />
-                                            <input type="hidden" value="" name="labelFile" id="label_f" />
-                                            <input type="hidden" value="" name="tipoDato" id="tipo_dat" />
+                                            <input type="hidden" value="" name="descrizione" id="descrizione_f" />                                            
+                                            <!-- Il file ruleset ha tipo 2 --> 
+                                            <input type="hidden" value="2" name="tipoDato" id="tipo_dat" />                       
+                                            <input type="hidden" value="" name="classificazione" id="classificazione_f" />
                                             <div id="upload" class="row">
                                                 <div class="col-lg-8">
                                                     <div class="form-group">
@@ -212,12 +214,12 @@
                             <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
                         </div>
                         <div class="modal-body">
-                            <span th:text="#{generic.label.name.colon}" >Nome:</span> &nbsp;&nbsp;&nbsp; 
-                            <input id="label_file" th:value="FILERULESSET+${etichetta}" type="text"/>                                
+                            <span th:text="#{generic.label.description}" >Descrizione file:</span> &nbsp;&nbsp;&nbsp; 
+                            <input id="descrizione_file" type="text"/>                                
                         </div>
                         <div class="modal-body">
                             <span th:text="#{rules.classification.type}">Classificazione:</span> &nbsp;&nbsp;&nbsp;
-                            <select id="tipo_dato" >
+                            <select id="classificazione_file" >
                                 <option th:each="ruleType : ${listaRuleType}"
                                         th:value="${ruleType.id}"
                                         th:text="${ruleType.nome}">
@@ -236,8 +238,8 @@
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">
                                 <span th:text="#{Layout.Close}">Annulla</span>
                             </button>
-                            <button type="button" id="btn-invia-file" class="btn btn-primary towait disabled"
-                                    onclick="inviaFormFile();" th:title="#{submit.button.title}"
+                            <button type="button" id="btn-invia-file" class="btn btn-primary towait"
+                                    onclick="inviaFormRulesetFile();" th:title="#{submit.button.title}"
                                     th:text="#{submit.button}" data-dismiss="modal">Invia</button>
                         </div>
                     </div>

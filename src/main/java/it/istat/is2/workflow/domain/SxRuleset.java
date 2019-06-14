@@ -31,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import it.istat.is2.worksession.domain.WorkSession;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,7 +47,9 @@ public class SxRuleset implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;	
 
 	private String descr;
 
@@ -65,6 +68,7 @@ public class SxRuleset implements Serializable {
 	private List<SxRule> sxRules;
 
 	public SxRuleset() {
+		//this.sxRules = new ArrayList<SxRule>();
 	}
 
 }

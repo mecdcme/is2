@@ -41,7 +41,9 @@ public class SxRule implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;	
 
 	@Column(name = "ACTION")
 	private String action;

@@ -48,4 +48,5 @@ public class InputFormBean implements Serializable {
 	private String covariata;
 	private String outlier;
 	private String idsessione;
+	private String classificazione;
 }
