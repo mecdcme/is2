@@ -8,15 +8,21 @@ rm(list=ls())
 #muTableName=nome della tabella che contenente i parametri stimati, nel caso di stima **affidabile** del modello
 #percorso_fail=path del file contenete le condizionate alla variabile latente, nel caso di stima ** non affidabile** del modello
 #eps,iter parametri del modello EM con valori di default
- 
+print("ok")
+
+percorso_fail="FSFail.Rout"
+percorso_allert="FSAllert.Rout"
+
 fellegisunter <- function(workset,ct, nvar=3, ...) {
 
   print(workset)
 
-#yy <- matrix(as.numeric(workset[,ct]),ncol=length(ct),nrow=nrow(workset))
-yy<-  workset
+
+yy <-  as.data.frame(matrix(as.numeric(workset[,ct]),ncol=length(ct),nrow=nrow(workset)))
+colnames(yy)<- ct
+
 print(yy)
-str(yy)
+
 print("....................... ")
 muTableName="muTable"
 varmuTableName="varmuTable"
@@ -38,9 +44,15 @@ variabili<-paste('Freq',paste(paste('V',nvar:1,sep=''),collapse='+'),sep='~')
 
 nomimatvar = names(yy)[1:nvar]
 print( names(yy))
+print( "----------------------------")
 #aggiorno i valori di frequency a o
+
+
+
 if(nrow(yy[yy$FREQUENCY==0,])>0)
   yy[yy$FREQUENCY==0,]$FREQUENCY<-0.0001
+
+
 print("worksetaaaaaaaaaaaaaaaaaa")
 #legge i dati come data frame
 names(yy) [nvar+1] = 'Freq'
@@ -165,9 +177,14 @@ names(r_out)[1:nvar]=nomimatvar
 var_est <- data.frame(rep(nomimatvar, rep(2,length(nomimatvar))),rep(c("1","0"),length(nomimatvar)),mvar,uvar,rep(p,2*length(nomimatvar)),stringsAsFactors=FALSE)
 names(var_est)=c("variable","comparison","m","u","p")
 ##sqlSave(con, var_est, varmuTableName, rownames = FALSE)
- 
+print(var_est) 
+
+
  roles <- list ( muTableName, varmuTableName)
  result <-list( out=r_out, roles= roles, var_est = var_est)
+ 
+ print(".........RESULT.............. ")
+ print(result)
   return(result)
  
 }

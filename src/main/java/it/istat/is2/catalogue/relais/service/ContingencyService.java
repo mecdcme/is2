@@ -25,6 +25,7 @@ package it.istat.is2.catalogue.relais.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -71,7 +72,7 @@ public class ContingencyService {
 //		MetricMatchingVariable mm3 = new MetricMatchingVariable("CITTA", "DSA_CITTA", "DSB_CITTA", "Jaro", 0.8, 0);
 		
 		MetricMatchingVariable mm1 = new MetricMatchingVariable("SURNAME", "DSa_SURNAME", "DSb_SURNAME", "Jaro", 0.8, 0);
-		MetricMatchingVariable mm2 = new MetricMatchingVariable("NAME", " 	DSa_NAME",	"DSb_NAME", "Jaro", 0.8, 0);
+		MetricMatchingVariable mm2 = new MetricMatchingVariable("NAME", "DSa_NAME",	"DSb_NAME", "Jaro", 0.8, 0);
 		MetricMatchingVariable mm3 = new MetricMatchingVariable("LASTCODE", "DSa_LASTCODE", "DSb_LASTCODE", "Jaro", 0.8, 0);
 		// MetricMatchingVariable mm3=new
 		// MetricMatchingVariable("LASTCODE","da_LASTCODE","db_LASTCODE","Equality",1,0);
@@ -168,7 +169,7 @@ public class ContingencyService {
 	 */
 	public Map<String, Integer> getEmptyContengencyTable() {
 		// TODO Auto-generated method stub
-		Map<String, Integer> contengencyTable = new HashMap<String, Integer>();
+		Map<String, Integer> contengencyTable = new  LinkedHashMap<String, Integer>();
 		int mask1 = (int) Math.pow(2, numVar);
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < mask1; i++) {
