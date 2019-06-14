@@ -24,7 +24,6 @@
 package it.istat.is2.rule.controller;
 
 import it.istat.is2.app.bean.InputFormBean;
-import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.LogService;
@@ -35,22 +34,26 @@ import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.rule.service.RuleService;
+import it.istat.is2.workflow.domain.SxRule;
 import it.istat.is2.workflow.domain.SxRuleType;
 import it.istat.is2.workflow.domain.SxRuleset;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
-
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,19 +82,71 @@ public class RuleController {
     private LogService logService;
 
     @RequestMapping(value = "/loadRulesFile", method = RequestMethod.POST)
-	public String loadInputData(HttpSession session, HttpServletRequest request, Model model,
+	public String loadInputRulesData(HttpSession session, HttpServletRequest request, Model model,
 			@AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") InputFormBean form)
 			throws IOException {
 
 		notificationService.removeAllMessages();
 
-		String labelFile = form.getLabelFile();
-		Integer tipoDato = form.getTipoDato();
+		String descrizione = form.getDescrizione();
+		String classificazione = form.getClassificazione();
 		String separatore = form.getDelimiter();
 		String idsessione = form.getIdsessione();
 
 		File f = FileHandler.convertMultipartFileToFile(form.getFileName());
 		String pathTmpFile = f.getAbsolutePath().replace("\\", "/");
+				
+		
+		
+		SxRuleset fileRegole = new SxRuleset();
+		List<SxRule> regole = new ArrayList<SxRule>();
+        
+        Reader in = null;
+        char delimiter = 9;
+        try {
+            in = new FileReader(pathTmpFile);
+            delimiter = FileHandler.checkDelimiter(separatore.toCharArray()[0]);
+        } catch (FileNotFoundException e) {
+            Logger.getRootLogger().error("Errore: ", e);
+        }
+        Iterable<CSVRecord> records = null;
+        try {
+            records = CSVFormat.RFC4180.withDelimiter(delimiter).parse(in);
+        } catch (IOException e) {
+            Logger.getRootLogger().error("Errore: ", e);
+        }
+      
+        String riga = null;
+        WorkSession sessionelv = sessioneLavoroService.getSessione(Long.parseLong(idsessione));
+        while (records.iterator().hasNext()) {
+        	
+            CSVRecord rec = records.iterator().next();
+            riga = rec.toString();
+            SxRule regola = new SxRule();
+            
+            regola.setActive((short) 1);
+            regola.setRule(riga);
+            regola.setRtype(Short.parseShort(classificazione));           
+            regola.setSxRuleset(fileRegole);
+            regole.add(regola);  
+            
+            //fileRegole.getSxRules().add(regola);
+            regola.setSxRuleset(fileRegole);
+            
+            }
+        
+        fileRegole.setDescr(descrizione);
+        fileRegole.setSessioneLavoro(sessionelv);
+        fileRegole.setSxRules(regole);
+        try {
+        	ruleService.saveRuleset(fileRegole);
+        } catch (Exception e) {
+			notificationService.addErrorMessage("Errore nel salvataggio del file di regole.");
+			return "redirect:/roles/viewRoleset/" + idsessione;
+		}
+		
+		
+		/*
 
 		HashMap<Integer, String> valoriHeaderNum = null;
 		try {
@@ -125,9 +180,11 @@ public class RuleController {
 			notificationService.addErrorMessage("Errore nel salvataggio del file.");
 			return "redirect:/sessione/mostradataset/" + idsessione;
 		}
-
-		return "redirect:/sessione/mostradataset/" + idsessione;
+*/
+		return "redirect:/roles/viewRoleset/" + idsessione;
 	}
+
+
     @GetMapping(value = "/roles/viewRoleset/{id}")
 	public String mostraroleset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
@@ -142,21 +199,13 @@ public class RuleController {
 		
 		List<SxRuleType> listaRuleType = ruleService.findAllRuleType();
 
-		Integer etichetta = new Integer(0);
-
-		if (listaRuleSet != null && !listaRuleSet.isEmpty()) {
-			SxRuleset lastDS = listaRuleSet.get(listaRuleSet.size() - 1);
-
-			etichetta = lastDS.getId() + 1;
-
-		}
 
 		session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 		
 		model.addAttribute("listaRuleSet", listaRuleSet);
 		model.addAttribute("listaRuleType", listaRuleType);
 		model.addAttribute("logs", logs);
-		model.addAttribute("etichetta", etichetta);
+		
 		return "ruleset/list";
 	}
     @RequestMapping("/viewRuleset/{idfile}")

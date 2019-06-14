@@ -26,48 +26,54 @@ package it.istat.is2.rule.service;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.workflow.dao.SxRuleDao;
 import it.istat.is2.workflow.dao.SxRuleTypeDao;
+import it.istat.is2.workflow.dao.SxRulesetDao;
 import it.istat.is2.workflow.domain.SxRule;
 import it.istat.is2.workflow.domain.SxRuleType;
+import it.istat.is2.workflow.domain.SxRuleset;
 import it.istat.is2.workflow.engine.EngineFactory;
-import it.istat.is2.workflow.engine.EngineService;
 
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class RuleService {
-    
+
     @Autowired
-    private EngineFactory engineFactory;
-    
-    @Autowired
+ //   private EngineValidate engine;
+
+  
     private SxRuleDao sxRuleDao;
     @Autowired
     private SxRuleTypeDao sxRuleTypeDao;
-    
-     public List<SxRule> findAll() {
+    @Autowired
+    private SxRulesetDao sxRulesetDao;
+
+    public List<SxRule> findAll() {
         return (List<SxRule>) this.sxRuleDao.findAll();
     }
-     public List<SxRuleType> findAllRuleType() {
-         return (List<SxRuleType>) sxRuleTypeDao.findAll();
-     }
-    
-     public void runValidate(Integer idRuleset) {
-        //List<SxRule> rules = sxRuleDao.findBySxRuleset(idRuleset);
+    public void saveRuleset(SxRuleset ruleset) {
+   	 sxRulesetDao.save(ruleset);
+    } 
 
-        EngineService engine = engineFactory.getEngine(IS2Const.ENGINE_R_LIGHT);
-        
+    public List<SxRuleType> findAllRuleType() {
+        return (List<SxRuleType>) sxRuleTypeDao.findAll();
+    }
+
+    public void runValidate(Integer idRuleset) {
+       //List<SxRule> rules = sxRuleDao.findBySxRuleset(idRuleset);
+
         try {
-            engine.init();
-            //engine.doAction();
-            //engine.processOutput();
+   //         engine.init();
+   //         engine.loadRules(null);
+    //        engine.processOutput();
 
         } catch (Exception e) {
             Logger.getRootLogger().debug(e.getMessage());
         } finally {
-            engine.destroy();
+      //      engine.destroy();
         }
 
     }

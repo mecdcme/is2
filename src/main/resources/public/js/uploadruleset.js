@@ -52,10 +52,10 @@ $(document).ready(function () {
             return false;
         };
     });
-    controllaInputText();
+    /*controllaInputText();
     $('#label_file').on("keyup", function (e) {
     	controllaInputText();
-    });
+    });*/
     $('#btn_delete_dataset').click(function () {
     	var datasetid = $('#idDataset').val();      
         window.location = _ctx + '/deleteDataset/' + datasetid;
@@ -150,12 +150,12 @@ function preview() {
     });
 }
 
-function inviaFormFile() {
+function inviaFormRulesetFile() {
     var fileName = document.getElementById('file').files[0];
     if (fileName) { // returns true if the string is not empty
-    	var a = $("#label_f").val($("#label_file").val());
-    	var b = $("#tipo_dat").val($("#tipo_dato").val());    	
-        $("#inputFileForm").submit();
+    	var a = $("#descrizione").val($("#descrizione_file").val());
+    	var b = $("#classificazione_f").val($("#classificazione_file").val());    	
+        $("#inputFileRulesetForm").submit();
     } else { // no file was selected        	
         $("#errorUplodFile").modal('toggle');
         return false;

@@ -408,7 +408,7 @@ public class FileHandler {
     }
 
     // Inposta il tab (\t) come delimiter se da form arriva il valore 0
-    private static char checkDelimiter(char delimiter) {
+    public static char checkDelimiter(char delimiter) {
         if (delimiter == '0') {
             delimiter = '\t';
         }
