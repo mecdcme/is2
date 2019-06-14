@@ -53,7 +53,7 @@
                             </li>
                             <div class="btn-group pull-right" role="group">
                                 <a class="" title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
-                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{dataset.button.close}"></span>
+                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                                 </a>
                             </div>
                         </ol>
@@ -97,7 +97,6 @@
                                                     <th><span th:text="#{listaDataset.label}">Label</span></th>
                                                     <th><span th:text="#{listaDataset.formatofile}">Formato</span></th>
                                                     <th><span th:text="#{listaDataset.numerorighe}">N. Righe</span></th>
-                                                    <th><span th:text="#{listaDataset.tipodato}">Tipo dato</span></th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -108,7 +107,6 @@
                                                     <td th:text="${dataset.labelFile}"></td>
                                                     <td th:text="${dataset.formatoFile}"></td>
                                                     <td th:text="${dataset.numerorighe}"></td>
-                                                    <td th:if="${dataset.tipoDato != null}" th:text="${dataset.tipoDato.nome}"></td>
                                                     <td th:unless="${dataset.tipoDato != null}" th:text="null"></td>
                                                     <td style="width: 1%">
                                                         <a th:if="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza dataset" 
@@ -118,6 +116,11 @@
                                                         <a th:unless="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza ruleset" 
                                                            th:href="@{'/viewRuleset/'+${dataset.id}}"> 
                                                             <i class="fa fa-search"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td style="width: 1%">
+                                                        <a th:href="@{'/graph/home/'+${dataset.id}}" title="Analytics">												
+                                                            <i class="fa fa-image"></i>
                                                         </a>
                                                     </td>
                                                     <td style="width: 1%">
@@ -228,7 +231,7 @@
                         </div>
                         <div class="modal-body">
                             <span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
-                            <input id="label_file" th:value="DS+${etichetta}" type="text"/>                                
+                            <input id="label_file" value="" type="text"/>                                
                         </div>
                         <div class="modal-body">
                             <span th:text="#{file.data.type}">Tipo dato:</span> &nbsp;&nbsp;&nbsp;

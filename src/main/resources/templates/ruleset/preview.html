@@ -63,15 +63,15 @@
                                 </a>
                             </li>
                             <li class="breadcrumb-item">
-                                <span th:text="#{sessionewf.ruleset}"></span>
+                                <span th:text="${dfile.nomeFile}"></span>
                             </li>
 
                             <div class="btn-group pull-right" role="group">
                                 <a class="bar-right" title="Run validate" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
-                                    <i class="fa fa-cog"></i>&nbsp;<span th:text="#{ruleset.package.validate}"></span>
+                                    <i class="fa fa-caret-square-o-right"></i>&nbsp;<span th:text="#{ruleset.package.validate}"></span>
                                 </a>
                                 <a class="" title="Chiudi sessione" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
-                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{ruleset.button.close}"></span>
+                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                                 </a>
                             </div>
                         </ol>
@@ -80,7 +80,7 @@
 
                     <div class="container-fluid">
                         <div class="row" >
-                            <div class="col-lg-6">
+                            <div class="col-lg-7">
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:text="#{ruleset.label}"></span>&nbsp;<span th:text="${dfile.nomeFile}"></span>
@@ -105,7 +105,7 @@
                                     </div>
                                 </div>
                             </div>
-                             <div class="col-lg-6">
+                             <div class="col-lg-5">
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:text="#{Layout.log.panel}">Log panel</span>

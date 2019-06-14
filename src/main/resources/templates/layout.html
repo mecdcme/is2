@@ -134,14 +134,14 @@
                                     </a>
                                     <ul th:if="${session.sessioneBean}" id="wf" class="nav sidebar-subnav" aria-expanded="false">
                                         <li class="nav-body" th:if="${(session.sessioneBean.file != null) }">
-                                            <a title="Dati"  th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                            <a title="Dati" class="nav-child" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                                 <i class="fa fa-table"></i><span th:text="#{Layout.dati}"></span>
                                                 <span th:if="${session.sessioneBean.file}"  th:text="${'('+session.sessioneBean.file.size()+')'}" ></span>
                                             </a>
                                         </li>
                                         <li class="nav-body" th:if="${(session.sessioneBean.file != null) }">
-                                            <a title="Regole"  th:href="@{'/roles/viewRoleset/'+${session.sessioneBean.id}}">
-                                                <i class="fa fa-table"></i><span th:text="#{Layout.Rules}"></span>
+                                            <a title="Regole" class="nav-child" th:href="@{'/roles/viewRoleset/'+${session.sessioneBean.id}}">
+                                                <i class="fa fa-wrench"></i><span th:text="#{Layout.Rules}"></span>
                                                 <span th:if="${session.sessioneBean.file}"  th:text="${'('+session.sessioneBean.file.size()+')'}" ></span>
                                             </a>
                                         </li> 

@@ -153,7 +153,7 @@ box-shadow: none !important;
 
 .navbar-style{
     padding: 8px 7px 6px 4px!important;
-    margin-right: 15px;
+    margin-right: 0px!important;
 }
 
 .navbar-style li{
@@ -327,6 +327,10 @@ box-shadow: none !important;
 
 ul.nav-body sidebar-subnav {
     padding-left: 2px !important;
+}
+
+.nav>li>a.nav-child{
+    padding: 6px 0px!important;
 }
 
 .li-spacer{
@@ -622,6 +626,18 @@ fieldset {
     background-color: #f9f9f9;
 }
 
+.table-condensed > tbody > tr > td{
+    border-bottom: 1px solid #dddddd!important;
+    border-top: none!important;
+    
+}
+
+.table-condensed > thead > tr > th{
+    border-bottom: 1px solid #dddddd!important;
+    border-top: none!important;
+    
+}
+
 .my-row {
     margin-top: 5px !important;
 }
@@ -819,6 +835,10 @@ fieldset {
     margin-left: 0px;
 }
 
+.breadcrumb-last-item{
+    margin-right: 3px;
+}
+
 .navbar-default {
     border-color: #1c7498;
     border-bottom: 1px solid #1c7498 !important;
@@ -837,7 +857,7 @@ fieldset {
 }
 
 table.dataTable thead th, table.dataTable thead td {
-    padding: 5px 10px 5px 3px!important;
+    padding: 5px 10px 5px 8px!important;
 }
 
 table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child,
@@ -1094,3 +1114,20 @@ button.btn-secondary:hover
 }
 
 .drop-row { visibility: hidden; }
+
+/*Process*/
+#processiList tbody{
+    border-bottom: 1px solid #dddddd!important;
+}
+.process-btns{
+    vertical-align: middle!important;
+    text-align: center;
+}
+
+.process-btns a{
+    padding: 5px;
+}
+
+.process-border-right{
+    border-right: 1px solid #dddddd!important;
+}

@@ -88,8 +88,11 @@
                                 <a class="bar-right" id="btn_graph" title="Data analytics" th:href="@{'/graph/home/'+${idfile}}">
                                     <i class="fa fa-image"></i>&nbsp;<span th:text="#{sessionewf.graph}"></span>
                                 </a>
-                                <a class="" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
+                                <a class="bar-right" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
                                     <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>
+                                </a>
+                                <a class="breadcrumb-last-item" title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                                 </a>
                             </div>
                         </ol>
@@ -125,12 +128,13 @@
                                         <span th:text="#{listasessioni.nome.file}"></span>:&nbsp;<span th:text="${dfile.nomeFile}"></span>
                                         <div class="card-header-actions" th:if="${nextFile}">
                                             <a class="card-header-action" th:href="@{'/viewDataset/'+${nextFile.id}}" title="Nuova elaborazione"> 
-                                                <i class="fa fa-file-text-o"></i>&nbsp;<span th:text="${nextFile.nomeFile}"></span>
+                                                <i class="fa fa-chevron-right"></i>&nbsp;<span th:text="${nextFile.nomeFile}"></span>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <table id="dataview" class="table table-bordered table-striped " cellspacing="0" width="auto" style="overflow: auto;">
+                                        <table id="dataview" class="table table-bordered table-striped " cellspacing="0" width="auto" 
+                                               style="overflow: auto;">
                                             <thead>
                                                 <tr>
                                                     <th th:each="varname: ${colonne}" th:text="${varname.nome}"></th>

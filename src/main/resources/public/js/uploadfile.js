@@ -39,8 +39,10 @@ $(document).ready(function () {
         $("#delimiter").val($("#delimiter_sel").val());
     });
 
+    $("#file").fileinput({showCaption: false, dropZoneEnabled: false});
+    
     $("#file").change(function () { // bCheck is a input type button
-        filename = $("div.file-caption-name").text();
+        filename = $("div.file-caption-name").attr("title");
         $("#delimiter").val($("#delimiter_sel").val());
         preview();
         if (filename) { // returns true if the string is not empty
