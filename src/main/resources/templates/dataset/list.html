@@ -89,7 +89,7 @@
                                             </div>
                                         </form> 
                                         
-                                        <table id="datasetList" class="table table-striped table-condensed"
+                                        <table id="datasetList" class="table table-condensed"
                                                th:if="${listaDataset}" cellspacing="0" style="overflow: auto;">
                                             <thead>
                                                 <tr th:unless="${(listaDataset == null) or (listaDataset.size() == 0) }">                                                
@@ -97,7 +97,7 @@
                                                     <th><span th:text="#{listaDataset.label}">Label</span></th>
                                                     <th><span th:text="#{listaDataset.formatofile}">Formato</span></th>
                                                     <th><span th:text="#{listaDataset.numerorighe}">N. Righe</span></th>
-                                                    <th></th>
+                                                    <th colspan="3"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
