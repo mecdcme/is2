@@ -51,6 +51,8 @@ public class SxStepInstance implements Serializable {
     private String etichetta;
 
     private String fname;
+    
+    private String script;
 
     // bi-directional many-to-one association to SxAppInstance
     @ManyToMany(mappedBy = "sxStepInstances", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

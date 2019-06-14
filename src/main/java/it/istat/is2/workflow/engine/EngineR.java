@@ -84,9 +84,9 @@ public class EngineR implements EngineService {
     @Value("${serverR.port}")
     private Integer serverRPort;
 
-    @Value("${path.R}")
+    @Value("${path.script.R}")
     private String pathR;
-    @Value("${file.script.R}")
+    
     private String fileScriptR;
 
     private RConnection connection;
@@ -128,6 +128,7 @@ public class EngineR implements EngineService {
 		// Create a connection to Rserve instance running on default port 6311
 		this.elaborazione=elaborazione;
 		this.stepInstance=stepInstance;
+		this.fileScriptR=stepInstance.getScript();
 		prepareEnv();
 		createConnection(serverRHost, serverRPort);
 		bindInputColumns(worksetVariabili, EngineR.SELEMIX_WORKSET);
@@ -148,8 +149,8 @@ public class EngineR implements EngineService {
 		} else {
 			connection = new RConnection(server, port);
 		}
-		//connection.eval("setwd('" + pathR + "')");
-		//connection.eval("source('" + fileScriptR + "')");
+		connection.eval("setwd('" + pathR + "')");
+		connection.eval("source('" + fileScriptR + "')");
 		Logger.getRootLogger().debug("Script Loaded");
 	}
 
