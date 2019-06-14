@@ -26,8 +26,10 @@ package it.istat.is2.rule.service;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.workflow.dao.SxRuleDao;
 import it.istat.is2.workflow.dao.SxRuleTypeDao;
+import it.istat.is2.workflow.dao.SxRulesetDao;
 import it.istat.is2.workflow.domain.SxRule;
 import it.istat.is2.workflow.domain.SxRuleType;
+import it.istat.is2.workflow.domain.SxRuleset;
 import it.istat.is2.workflow.engine.EngineFactory;
 
 import java.util.List;
@@ -46,10 +48,15 @@ public class RuleService {
     private SxRuleDao sxRuleDao;
     @Autowired
     private SxRuleTypeDao sxRuleTypeDao;
+    @Autowired
+    private SxRulesetDao sxRulesetDao;
 
     public List<SxRule> findAll() {
         return (List<SxRule>) this.sxRuleDao.findAll();
     }
+    public void saveRuleset(SxRuleset ruleset) {
+   	 sxRulesetDao.save(ruleset);
+    } 
 
     public List<SxRuleType> findAllRuleType() {
         return (List<SxRuleType>) sxRuleTypeDao.findAll();
