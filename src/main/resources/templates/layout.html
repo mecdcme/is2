@@ -121,7 +121,7 @@
                         <nav class="sidebar navbar navbar-primary navbar-fixed-side">
                             <ul class="nav">
                                 <li class="nav-body menu-line" >
-                                    <a title="Home" th:href="@{/sessione/mostraSessioni}"> 
+                                    <a id="home" title="Home" th:href="@{/sessione/mostraSessioni}"> 
                                         <i class="fa fa-home"></i><span th:text="#{Layout.home}"></span>
                                     </a>
                                 </li>
@@ -129,18 +129,18 @@
                                     <span th:text="#{label.sessione.lavoro}"></span>
                                 </li>
                                 <li class="nav-body">
-                                    <a th:title="${session.sessioneBean.nome}" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
+                                    <a id="sessione" th:title="${session.sessioneBean.nome}" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
                                         <i class="fa fa-folder-open"></i><span th:text="${session.sessioneBean.nome}"></span>
                                     </a>
                                     <ul th:if="${session.sessioneBean}" id="wf" class="nav sidebar-subnav" aria-expanded="false">
                                         <li class="nav-body" th:if="${(session.sessioneBean.file != null) }">
-                                            <a title="Dati" class="nav-child" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                            <a id="dati" title="Dati" class="nav-child" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                                 <i class="fa fa-table"></i><span th:text="#{Layout.dati}"></span>
                                                 <span th:if="${session.sessioneBean.file}"  th:text="${'('+session.sessioneBean.file.size()+')'}" ></span>
                                             </a>
                                         </li>
                                         <li class="nav-body" th:if="${(session.sessioneBean.file != null) }">
-                                            <a title="Regole" class="nav-child" th:href="@{'/roles/viewRoleset/'+${session.sessioneBean.id}}">
+                                            <a id="regole" title="Regole" class="nav-child" th:href="@{'/roles/viewRoleset/'+${session.sessioneBean.id}}">
                                                 <i class="fa fa-wrench"></i><span th:text="#{Layout.Rules}"></span>
                                                 <span th:if="${session.sessioneBean.file}"  th:text="${'('+session.sessioneBean.file.size()+')'}" ></span>
                                             </a>
@@ -155,7 +155,7 @@
                                     <span th:text="#{Layout.elaborazione}"></span>
                                 </li>
                                 <li class="nav-body" th:if="${session.sessioneBean}">
-                                    <a th:title="${session.sessioneBean.nomeElaborazione}" th:if="${session.sessioneBean.idElaborazione > 0}" 
+                                    <a id="elaborazione" th:title="${session.sessioneBean.nomeElaborazione}" th:if="${session.sessioneBean.idElaborazione > 0}" 
                                        th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}"> 
                                         <i class="fa fa-sitemap"></i><span th:text="${session.sessioneBean.nomeElaborazione}">Elaborazione</span>
                                     </a>

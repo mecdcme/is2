@@ -37,6 +37,8 @@ var table = null;
 
 $(document).ready(function () {
 
+    setMenuActive("elaborazione");
+
     table = $("#worksetTab").DataTable({
         "aoColumnDefs": [{
                 "aTargets": ['_all'],

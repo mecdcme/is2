@@ -27,6 +27,11 @@
         <head th:include="layout :: site-head" th:remove="tag" />
         <script th:src="@{/js/table/datatables.js}"></script>
         <script th:src="@{/js/sessioni.js}"></script>
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                setMenuActive("sessione");
+            });
+        </script>
         <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
     </head>
     <body>

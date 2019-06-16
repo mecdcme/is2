@@ -24,7 +24,7 @@
 var _ctx = $("meta[name='ctx']").attr("content");
 
 $(document).ready(function () {
-
+    
     $("#funzioni").change(function () {
         var id = $("#funzioni :selected").val();
         $('.els').addClass('hide');

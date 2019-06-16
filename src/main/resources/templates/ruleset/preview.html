@@ -30,6 +30,7 @@
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
             var _variabili = [[${colonne.size()}]];
+            setMenuActive("regole");
         </script>
         <script th:src="@{/js/table/datatables.js}"></script>
         <script th:src="@{/js/table/buttons.colVis.min.js}"></script>

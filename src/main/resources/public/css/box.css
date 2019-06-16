@@ -252,6 +252,10 @@ box-shadow: none !important;
     padding-top: 8px;
 }
 
+.menu-selected{
+    font-weight: 500;
+}
+
 .sidebar {
     height: 100%;
     padding-bottom: 20px;
@@ -1121,7 +1125,6 @@ button.btn-secondary:hover
 }
 .process-btns{
     vertical-align: middle!important;
-    text-align: center;
 }
 
 .process-btns a{

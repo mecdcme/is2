@@ -30,6 +30,11 @@
         <script th:src="@{/js/papaParse/papaparse.min.js}"></script>
         <script th:src="@{/js/fileinput.min.js}"></script>
         <script th:src="@{/js/uploadruleset.js}"></script>
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                setMenuActive("regole");
+            });
+        </script>
         <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
         <link rel="stylesheet" th:href="@{/css/fileinput.min.css}" />
     </head>
