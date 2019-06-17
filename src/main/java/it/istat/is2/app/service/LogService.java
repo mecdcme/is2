@@ -23,51 +23,70 @@
  */
 package it.istat.is2.app.service;
 
-import it.istat.is2.app.dao.LogDao;
-import it.istat.is2.app.domain.Log;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.istat.is2.app.bean.SessionBean;
+import it.istat.is2.app.dao.LogDao;
+import it.istat.is2.app.domain.Log;
+import it.istat.is2.app.util.IS2Const;
+
 @Service
 @Transactional
 public class LogService {
-    
-    @Autowired
-    private LogDao logDao;
-    
-    public List<Log> findAll() {
-        return (List<Log>) this.logDao.findAll();
-    }
-    
-    public List<Log> findByIdUtente(Long idUtente) {
-        return (List<Log>) this.logDao.findByIdUtenteOrderByIdDesc(idUtente);
-    }
-    
-    public List<Log> findByIdSessione(Long idSessione) {
-        return (List<Log>) this.logDao.findByIdSessioneOrderByIdDesc(idSessione);
-    }
-    
-    public long deleteByIdSessione(Long idSessione) {
-        return this.logDao.deleteByIdSessione(idSessione);
-    }
-    
-    public void save(String msg, Long idUtente, Long idSessione){
-        
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"), Locale.ITALY);
-        
-        Log log = new Log();
-        log.setMsg(msg);
-        log.setMsgTime(new Date());
-        log.setIdUtente(idUtente);
-        log.setIdSessione(idSessione);
-        
-        this.logDao.save(log);
-    }
-    
+
+	@Autowired
+	private LogDao logDao;
+	@Autowired
+	private HttpSession httpSession;
+
+	public List<Log> findAll() {
+		return (List<Log>) this.logDao.findAll();
+	}
+
+	public List<Log> findByIdUtente(Long idUtente) {
+		return (List<Log>) this.logDao.findByIdUtenteOrderByIdDesc(idUtente);
+	}
+
+	public List<Log> findByIdSessione(Long idSessione) {
+		return (List<Log>) this.logDao.findByIdSessioneOrderByIdDesc(idSessione);
+	}
+
+	public long deleteByIdSessione(Long idSessione) {
+		return this.logDao.deleteByIdSessione(idSessione);
+	}
+
+	public void save(String msg, Long idUtente, Long idSessione) {
+
+		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+		Log log = new Log();
+
+		log.setIdSessione(sessionBean.getId());
+		log.setMsg(msg);
+		log.setMsgTime(new Date());
+
+		this.logDao.save(log);
+	}
+
+	/**
+	 * @param string
+	 */
+	public void save(String msg) {
+		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+		Log log = new Log();
+
+		log.setIdSessione(sessionBean.getId());
+		log.setMsg(msg);
+		log.setMsgTime(new Date());
+
+		this.logDao.save(log);
+
+	}
+
 }

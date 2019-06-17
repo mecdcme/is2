@@ -55,9 +55,6 @@ public class Log implements Serializable{
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date msgTime;
     
-    @Column(name = "id_utente")
-    private Long idUtente;
-    
     @Column(name = "id_sessione")
     private Long idSessione;
     

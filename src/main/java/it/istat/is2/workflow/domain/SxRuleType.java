@@ -42,7 +42,7 @@ public class SxRuleType implements Serializable {
 
     @Id 
     @Column(name = "ID")
-    private Integer id;
+    private Short id;
     @Column(name = "DESCRIZIONE")
     private String descrizione;
     @Column(name = "NOME")
@@ -53,7 +53,7 @@ public class SxRuleType implements Serializable {
         super();
     }
 
-    public SxRuleType(Integer id) {
+    public SxRuleType(Short id) {
         super();
         this.id = id;
     }

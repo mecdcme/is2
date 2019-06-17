@@ -63,12 +63,12 @@ public class SxRuleset implements Serializable {
 	@JsonBackReference
 	private List<SxBusinessStep> sxBusinessSteps;
 
-	@OneToMany(mappedBy = "sxRuleset")
+	@OneToMany(mappedBy = "sxRuleset",cascade=CascadeType.ALL)
 	@JsonBackReference
 	private List<SxRule> sxRules;
 
 	public SxRuleset() {
-		//this.sxRules = new ArrayList<SxRule>();
+		this.sxRules = new ArrayList<SxRule>();
 	}
 
 }

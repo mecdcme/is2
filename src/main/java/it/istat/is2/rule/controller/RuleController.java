@@ -45,6 +45,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -63,25 +64,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+@RequestMapping("/rule")
 @Controller
 public class RuleController {
 
-    @Autowired
-    private DatasetService datasetService;
-    @Autowired
-    ServletContext context;
-    @Autowired
-    private NotificationService notificationService;
-    @Autowired
-    private MessageSource messages;
-    @Autowired
-    private WorkSessionService sessioneLavoroService;
-    @Autowired
-    private RuleService ruleService;
-    @Autowired
-    private LogService logService;
+	@Autowired
+	private DatasetService datasetService;
+	@Autowired
+	ServletContext context;
+	@Autowired
+	private NotificationService notificationService;
+	@Autowired
+	private MessageSource messages;
+	@Autowired
+	private WorkSessionService sessioneLavoroService;
+	@Autowired
+	private RuleService ruleService;
+	@Autowired
+	private LogService logService;
+ 
 
-    @RequestMapping(value = "/loadRulesFile", method = RequestMethod.POST)
+	@RequestMapping(value = "/loadRulesFile", method = RequestMethod.POST)
 	public String loadInputRulesData(HttpSession session, HttpServletRequest request, Model model,
 			@AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") InputFormBean form)
 			throws IOException {
@@ -89,103 +92,20 @@ public class RuleController {
 		notificationService.removeAllMessages();
 
 		String descrizione = form.getDescrizione();
-		String classificazione = form.getClassificazione();
+		String idclassificazione = form.getClassificazione();
 		String separatore = form.getDelimiter();
 		String idsessione = form.getIdsessione();
 
-		File f = FileHandler.convertMultipartFileToFile(form.getFileName());
-		String pathTmpFile = f.getAbsolutePath().replace("\\", "/");
-				
-		
-		
-		SxRuleset fileRegole = new SxRuleset();
-		List<SxRule> regole = new ArrayList<SxRule>();
+		File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());
+
+		int rules = ruleService.loadRules(fileRules, idsessione, descrizione, idclassificazione, separatore);
+        logService.save("Caricate " + rules + " regole");
         
-        Reader in = null;
-        char delimiter = 9;
-        try {
-            in = new FileReader(pathTmpFile);
-            delimiter = FileHandler.checkDelimiter(separatore.toCharArray()[0]);
-        } catch (FileNotFoundException e) {
-            Logger.getRootLogger().error("Errore: ", e);
-        }
-        Iterable<CSVRecord> records = null;
-        try {
-            records = CSVFormat.RFC4180.withDelimiter(delimiter).parse(in);
-        } catch (IOException e) {
-            Logger.getRootLogger().error("Errore: ", e);
-        }
-      
-        String riga = null;
-        WorkSession sessionelv = sessioneLavoroService.getSessione(Long.parseLong(idsessione));
-        while (records.iterator().hasNext()) {
-        	
-            CSVRecord rec = records.iterator().next();
-            riga = rec.toString();
-            SxRule regola = new SxRule();
-            
-            regola.setActive((short) 1);
-            regola.setRule(riga);
-            regola.setRtype(Short.parseShort(classificazione));           
-            regola.setSxRuleset(fileRegole);
-            regole.add(regola);  
-            
-            //fileRegole.getSxRules().add(regola);
-            regola.setSxRuleset(fileRegole);
-            
-            }
-        
-        fileRegole.setDescr(descrizione);
-        fileRegole.setSessioneLavoro(sessionelv);
-        fileRegole.setSxRules(regole);
-        try {
-        	ruleService.saveRuleset(fileRegole);
-        } catch (Exception e) {
-			notificationService.addErrorMessage("Errore nel salvataggio del file di regole.");
-			return "redirect:/roles/viewRoleset/" + idsessione;
-		}
-		
-		
-		/*
 
-		HashMap<Integer, String> valoriHeaderNum = null;
-		try {
-			valoriHeaderNum = FileHandler.getCampiHeaderNumIndex(pathTmpFile, separatore.toCharArray()[0]);
-		} catch (Exception e) {
-			notificationService.addErrorMessage(
-					messages.getMessage("file.read.error", null, LocaleContextHolder.getLocale()), e.getMessage());
-			return "redirect:/sessione/mostradataset/" + idsessione;
-		}
-
-		HashMap<String, ArrayList<String>> campiL = null;
-		try {
-			campiL = FileHandler.getArrayListFromCsv2(pathTmpFile, form.getNumeroCampi(), separatore.toCharArray()[0],
-					valoriHeaderNum);
-		} catch (Exception e) {
-			notificationService.addErrorMessage(
-					messages.getMessage("file.read.error", null, LocaleContextHolder.getLocale()), e.getMessage());
-		}
-
-		try {
-			datasetService.salva(campiL, valoriHeaderNum, labelFile, tipoDato, separatore, form.getDescrizione(),
-					idsessione);
-			logService.save("File " + labelFile + " salvato con successo", user.getUserid(),
-					Long.parseLong(idsessione));
-			notificationService.addInfoMessage("Salvataggio avvenuto con successo.");
-
-			SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-			sessionBean.getFile().add(form.getDescrizione());
-			session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
-		} catch (Exception e) {
-			notificationService.addErrorMessage("Errore nel salvataggio del file.");
-			return "redirect:/sessione/mostradataset/" + idsessione;
-		}
-*/
-		return "redirect:/roles/viewRoleset/" + idsessione;
+		return "redirect:/rule/viewRuleset/" + idsessione;
 	}
 
-
-    @GetMapping(value = "/roles/viewRoleset/{id}")
+	@GetMapping(value = "/viewRuleset/{id}")
 	public String mostraroleset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
 		List<Log> logs = logService.findByIdSessione(id);
@@ -195,32 +115,27 @@ public class RuleController {
 			session.setAttribute(IS2Const.SESSION_DATASET, true);
 		}
 
-		List<SxRuleset> listaRuleSet = sessionelv.getRuleSets();		
-		
+		List<SxRuleset> listaRuleSet = sessionelv.getRuleSets();
+
 		List<SxRuleType> listaRuleType = ruleService.findAllRuleType();
 
-
 		session.setAttribute(IS2Const.SESSION_LV, sessionelv);
-		
+
 		model.addAttribute("listaRuleSet", listaRuleSet);
 		model.addAttribute("listaRuleType", listaRuleType);
 		model.addAttribute("logs", logs);
-		
+
 		return "ruleset/list";
 	}
-    @RequestMapping("/viewRuleset/{idfile}")
-    public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Long idfile) {
 
-        notificationService.removeAllMessages();
+	@RequestMapping("/viewRules/{idfile}")
+	public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Integer  idfile) {
 
-        DatasetFile dfile = datasetService.findDataSetFile(idfile);
-
-        List<DatasetColonna> colonne = datasetService.findAllNomeColonne(idfile);
-
-        model.addAttribute("colonne", colonne);
-        model.addAttribute("idfile", idfile);
-        model.addAttribute("dfile", dfile);
-
-        return "ruleset/preview";
-    }
+		notificationService.removeAllMessages();
+		SxRuleset ruleset=ruleService.findRuleSet(idfile);
+ 
+		model.addAttribute("ruleset", ruleset);
+	 
+		return "ruleset/preview";
+	}
 }

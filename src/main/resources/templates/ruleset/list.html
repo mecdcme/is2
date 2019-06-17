@@ -97,7 +97,7 @@
                                         </form> 
                                         
                                         <table id="datasetList" class="table table-condensed"
-                                               th:if="${listaDataset}" cellspacing="0" style="overflow: auto;">
+                                               th:if="${listaRuleSet}" cellspacing="0" style="overflow: auto;">
                                             <thead>
                                                 <tr th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">                                                
                                                     <th><span th:text="#{generic.label.id}">Id</span></th>                                                    
@@ -111,7 +111,7 @@
                                                     th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
                                                     <td th:text="${ruleset.id}"></td>
                                                     <td th:text="${ruleset.nome}"></td>
-                                                    <td th:text="${ruleset.descrizione}"></td>                                                    
+                                                    <td th:text="${ruleset.descr}"></td>                                                    
                                                     <td style="width: 1%">
                                                         <a href="javascript:void(0)" title="Elimina ruleset" role="button" th:attr="onclick='javascript:eliminaDataset(' + ${ruleset.id} + ', \'' + ${ruleset.nome} + '\')'">												
                                                             <i class="fa fa-trash"></i>
