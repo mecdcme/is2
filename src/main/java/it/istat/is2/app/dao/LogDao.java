@@ -30,14 +30,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LogDao extends CrudRepository<Log, Long>{
-    
-     public void save(Optional<Log> log);
-     
-     public List<Log> findByIdUtenteOrderByIdDesc(Long idUtente);
-     
-     public List<Log> findByIdSessioneOrderByIdDesc(Long idSessione);
-     
-     public long deleteByIdSessione(Long idSessione);
-    
+public interface LogDao extends CrudRepository<Log, Long> {
+
+	public void save(Optional<Log> log);
+
+	public List<Log> findByIdSessioneOrderByIdDesc(Long idSessione);
+
+	public long deleteByIdSessione(Long idSessione);
+
 }

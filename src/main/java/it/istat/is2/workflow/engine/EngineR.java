@@ -147,7 +147,7 @@ public class EngineR implements EngineService {
 		if (server == null) {
 			connection = new RConnection();
 		} else {
-			connection = new RConnection(server, port);
+			connection = new RConnection();
 		}
 		connection.eval("setwd('" + pathR + "')");
 		connection.eval("source('" + fileScriptR + "')");

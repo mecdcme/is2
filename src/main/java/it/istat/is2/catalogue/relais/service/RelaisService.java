@@ -289,7 +289,6 @@ public class RelaisService {
 	  			}
     		 	
 		}
-		worksetOut.put("PATTERN", new ArrayList<>());
 		worksetOut.put("FREQUENCY", new ArrayList<>());
 
 		// write to worksetout
@@ -297,7 +296,6 @@ public class RelaisService {
 			
 			int idx = 0;
 			for (String nameMatchingVariable : nameMatchingVariables)   worksetOut.get(nameMatchingVariable).add(String.valueOf(key.charAt(idx++)));
-			worksetOut.get("PATTERN").add(key);
 			worksetOut.get("FREQUENCY").add(value.toString());
 
 		});

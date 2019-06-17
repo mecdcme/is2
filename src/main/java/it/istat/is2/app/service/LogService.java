@@ -50,10 +50,6 @@ public class LogService {
 		return (List<Log>) this.logDao.findAll();
 	}
 
-	public List<Log> findByIdUtente(Long idUtente) {
-		return (List<Log>) this.logDao.findByIdUtenteOrderByIdDesc(idUtente);
-	}
-
 	public List<Log> findByIdSessione(Long idSessione) {
 		return (List<Log>) this.logDao.findByIdSessioneOrderByIdDesc(idSessione);
 	}
