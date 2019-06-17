@@ -41,48 +41,36 @@ import it.istat.is2.app.util.IS2Const;
 @Transactional
 public class LogService {
 
-	@Autowired
-	private LogDao logDao;
-	@Autowired
-	private HttpSession httpSession;
+    @Autowired
+    private LogDao logDao;
+    @Autowired
+    private HttpSession httpSession;
 
-	public List<Log> findAll() {
-		return (List<Log>) this.logDao.findAll();
-	}
+    public List<Log> findAll() {
+        return (List<Log>) this.logDao.findAll();
+    }
 
-	public List<Log> findByIdSessione(Long idSessione) {
-		return (List<Log>) this.logDao.findByIdSessioneOrderByIdDesc(idSessione);
-	}
+    public List<Log> findByIdSessione(Long idSessione) {
+        return (List<Log>) this.logDao.findByIdSessioneOrderByIdDesc(idSessione);
+    }
 
-	public long deleteByIdSessione(Long idSessione) {
-		return this.logDao.deleteByIdSessione(idSessione);
-	}
+    public long deleteByIdSessione(Long idSessione) {
+        return this.logDao.deleteByIdSessione(idSessione);
+    }
 
-	public void save(String msg, Long idUtente, Long idSessione) {
+    public void save(String msg) {
 
-		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
-		Log log = new Log();
+        SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
 
-		log.setIdSessione(sessionBean.getId());
-		log.setMsg(msg);
-		log.setMsgTime(new Date());
+        Log log = new Log();
+        if (sessionBean != null) {
+            log.setIdSessione(sessionBean.getId());
+        } else{
+            log.setIdSessione(new Long(-1));
+        }
+        log.setMsg(msg);
+        log.setMsgTime(new Date());
 
-		this.logDao.save(log);
-	}
-
-	/**
-	 * @param string
-	 */
-	public void save(String msg) {
-		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
-		Log log = new Log();
-
-		log.setIdSessione(sessionBean.getId());
-		log.setMsg(msg);
-		log.setMsgTime(new Date());
-
-		this.logDao.save(log);
-
-	}
-
+        this.logDao.save(log);
+    }
 }

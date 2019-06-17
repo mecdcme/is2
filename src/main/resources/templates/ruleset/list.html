@@ -73,7 +73,7 @@
                                         <span th:text="#{ruleset.list.label}">Lista file di regole</span>
                                     </div>
                                     <div class="card-body">
-                                        <form id="inputFileRulesetForm" th:action="@{'/loadRulesFile'}" method="post" enctype="multipart/form-data">
+                                        <form id="inputFileRulesetForm" th:action="@{'/rule/loadRulesFile'}" method="post" enctype="multipart/form-data">
                                             <input type="hidden" value="" name="descrizione" id="desc" /> 
                                             <input type="hidden" th:value="${session.sessionelv.id}" th:name="idsessione" />
                                             <input type="hidden" value="" name="delimiter" id="delimiter" />

@@ -140,7 +140,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-body" th:if="${(session.sessioneBean.file != null) }">
-                                            <a id="regole" title="Regole" class="nav-child" th:href="@{'/roles/viewRoleset/'+${session.sessioneBean.id}}">
+                                            <a id="regole" title="Regole" class="nav-child" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
                                                 <i class="fa fa-wrench"></i><span th:text="#{Layout.Rules}"></span>
                                                 <span th:if="${session.sessioneBean.file}"  th:text="${'('+session.sessioneBean.file.size()+')'}" ></span>
                                             </a>

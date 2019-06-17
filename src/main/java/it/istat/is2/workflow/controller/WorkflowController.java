@@ -277,7 +277,7 @@ public class WorkflowController {
         List<WorkSession> listasessioni = sessioneLavoroService.getSessioneList(user);
         model.addAttribute("listasessioni", listasessioni);
         
-        logService.save("Elaborazione " + idelaborazione + " Eliminata con successo", user.getUserid(), idsessione);
+        logService.save("Elaborazione " + idelaborazione + " Eliminata con successo");
         
         //Create session DTO
         SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);

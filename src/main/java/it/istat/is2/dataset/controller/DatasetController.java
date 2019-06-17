@@ -220,8 +220,7 @@ public class DatasetController {
         try {
             datasetService.salva(campiL, valoriHeaderNum, labelFile, tipoDato, separatore, form.getDescrizione(),
                     idsessione);
-            logService.save("File " + labelFile + " salvato con successo", user.getUserid(),
-                    Long.parseLong(idsessione));
+            logService.save("File " + labelFile + " salvato con successo");
             notificationService.addInfoMessage("Salvataggio avvenuto con successo.");
 
             SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
@@ -284,7 +283,7 @@ public class DatasetController {
 
         WorkSession sessionelv = sessioneLavoroService.getSessioneByIdFile(idDataset);
         datasetService.deleteDataset(idDataset);
-        logService.save("File " + idDataset + " eliminato con successo", user.getUserid(), sessionelv.getId());
+        logService.save("File " + idDataset + " eliminato con successo");
         notificationService.addInfoMessage("Eliminazione avvenuta con successo");
 
         SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);

@@ -84,7 +84,7 @@ public class WorkSessionController {
         try {
             WorkSession sessionelv = sessioneLavoroService.nuovaSessioneLavoro(user.getEmail(), descrizione, nome);
             notificationService.addInfoMessage("Sessione creata con ID:" + sessionelv.getId());
-            logService.save("Sessione " + sessionelv.getNome() + " creata con successo", user.getUserid(), sessionelv.getId());
+            logService.save("Sessione " + sessionelv.getNome() + " creata con successo");
         } catch (Exception e) {
             notificationService.addErrorMessage("Errore creazione nuova sessione.", e.getMessage());
         }
@@ -159,7 +159,7 @@ public class WorkSessionController {
             elaborazione.setSxBusinessFunction(businessFunctionService.findBFunctionById(form.getIdfunzione()));
 
             elaborazioneService.salvaElaborazione(elaborazione);
-            logService.save("Elaborazione " + elaborazione.getNome() + " creata con successo", user.getUserid(), sessionelv.getId());
+            logService.save("Elaborazione " + elaborazione.getNome() + " creata con successo");
             notificationService.addInfoMessage("Elaborazione creata.");
         } catch (Exception e) {
             notificationService.addErrorMessage("Errore creazione elaborazione", e.getMessage());

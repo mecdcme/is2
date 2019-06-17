@@ -30,29 +30,18 @@ import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.app.util.IS2Const;
-import it.istat.is2.dataset.domain.DatasetColonna;
-import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.rule.service.RuleService;
-import it.istat.is2.workflow.domain.SxRule;
 import it.istat.is2.workflow.domain.SxRuleType;
 import it.istat.is2.workflow.domain.SxRuleset;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -68,74 +57,65 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class RuleController {
 
-	@Autowired
-	private DatasetService datasetService;
-	@Autowired
-	ServletContext context;
-	@Autowired
-	private NotificationService notificationService;
-	@Autowired
-	private MessageSource messages;
-	@Autowired
-	private WorkSessionService sessioneLavoroService;
-	@Autowired
-	private RuleService ruleService;
-	@Autowired
-	private LogService logService;
- 
+    @Autowired
+    ServletContext context;
+    @Autowired
+    private NotificationService notificationService;
+    @Autowired
+    private WorkSessionService sessioneLavoroService;
+    @Autowired
+    private RuleService ruleService;
+    @Autowired
+    private LogService logService;
 
-	@RequestMapping(value = "/loadRulesFile", method = RequestMethod.POST)
-	public String loadInputRulesData(HttpSession session, HttpServletRequest request, Model model,
-			@AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") InputFormBean form)
-			throws IOException {
+    @RequestMapping(value = "/loadRulesFile", method = RequestMethod.POST)
+    public String loadInputRulesData(HttpSession session, HttpServletRequest request, Model model,
+            @AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") InputFormBean form)
+            throws IOException {
 
-		notificationService.removeAllMessages();
+        notificationService.removeAllMessages();
 
-		String descrizione = form.getDescrizione();
-		String idclassificazione = form.getClassificazione();
-		String separatore = form.getDelimiter();
-		String idsessione = form.getIdsessione();
+        String descrizione = form.getDescrizione();
+        String idclassificazione = form.getClassificazione();
+        String separatore = form.getDelimiter();
+        String idsessione = form.getIdsessione();
 
-		File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());
+        File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());
 
-		int rules = ruleService.loadRules(fileRules, idsessione, descrizione, idclassificazione, separatore);
+        int rules = ruleService.loadRules(fileRules, idsessione, descrizione, idclassificazione, separatore);
         logService.save("Caricate " + rules + " regole");
-        
 
-		return "redirect:/rule/viewRuleset/" + idsessione;
-	}
+        return "redirect:/rule/viewRuleset/" + idsessione;
+    }
 
-	@GetMapping(value = "/viewRuleset/{id}")
-	public String mostraroleset(HttpSession session, Model model, @PathVariable("id") Long id) {
+    @GetMapping(value = "/viewRuleset/{id}")
+    public String mostraroleset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
-		List<Log> logs = logService.findByIdSessione(id);
+        List<Log> logs = logService.findByIdSessione(id);
 
-		WorkSession sessionelv = sessioneLavoroService.getSessione(id);
-		if (sessionelv.getDatasetFiles() != null) {
-			session.setAttribute(IS2Const.SESSION_DATASET, true);
-		}
+        WorkSession sessionelv = sessioneLavoroService.getSessione(id);
+       
 
-		List<SxRuleset> listaRuleSet = sessionelv.getRuleSets();
+        List<SxRuleset> listaRuleSet = sessionelv.getRuleSets();
+        List<SxRuleType> listaRuleType = ruleService.findAllRuleType();
 
-		List<SxRuleType> listaRuleType = ruleService.findAllRuleType();
+        session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 
-		session.setAttribute(IS2Const.SESSION_LV, sessionelv);
+        model.addAttribute("listaRuleSet", listaRuleSet);
+        model.addAttribute("listaRuleType", listaRuleType);
+        model.addAttribute("logs", logs);
 
-		model.addAttribute("listaRuleSet", listaRuleSet);
-		model.addAttribute("listaRuleType", listaRuleType);
-		model.addAttribute("logs", logs);
+        return "ruleset/list";
+    }
 
-		return "ruleset/list";
-	}
+    @RequestMapping("/viewRules/{idfile}")
+    public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Integer idfile) {
 
-	@RequestMapping("/viewRules/{idfile}")
-	public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Integer  idfile) {
+        notificationService.removeAllMessages();
+        SxRuleset ruleset = ruleService.findRuleSet(idfile);
 
-		notificationService.removeAllMessages();
-		SxRuleset ruleset=ruleService.findRuleSet(idfile);
- 
-		model.addAttribute("ruleset", ruleset);
-	 
-		return "ruleset/preview";
-	}
+        model.addAttribute("ruleset", ruleset);
+
+        return "ruleset/preview";
+    }
 }
