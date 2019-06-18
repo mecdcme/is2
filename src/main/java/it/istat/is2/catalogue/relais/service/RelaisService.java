@@ -303,6 +303,83 @@ public class RelaisService {
 		return worksetOut;
 	}
 	
+	public Map<?, ?> resultTables(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+			Map<String, ArrayList<String>> worksetVariabili) throws Exception {
+
+		Map<String, ArrayList<String>> worksetOut = new LinkedHashMap<String, ArrayList<String>>();
+	
+		// <codRuolo,[namevar1,namevar2..]
+
+		String codeMatchingA = "X1";
+		String codeMatchingB = "X2";
+		int indexItems=0;
+		ArrayList<String> variabileNomeListMA = new ArrayList<>();
+		ArrayList<String> variabileNomeListMB = new ArrayList<>();
+
+		ArrayList<String> variabileNomeListOut = new ArrayList<>();
+
+		ruoliVariabileNome.get(codeMatchingA).forEach((varname) -> {
+			variabileNomeListMA.add(varname);
+		});
+		ruoliVariabileNome.get(codeMatchingB).forEach((varname) -> {
+			variabileNomeListMB.add(varname);
+		});
+
+		ruoliVariabileNome.values().forEach((list) -> {
+			variabileNomeListOut.addAll(list);
+		});
+
+		String firstFiledMA = ruoliVariabileNome.get(codeMatchingA).get(0);
+		String firstFiledMB = ruoliVariabileNome.get(codeMatchingB).get(0);
+		int sizeA = worksetVariabili.get(firstFiledMA).size();
+		int sizeB = worksetVariabili.get(firstFiledMB).size();
+
+	contingencyService.init();
+		 List <String> nameMatchingVariables=new ArrayList<>();
+		 
+		 contingencyService.getMetricMatchingVariableVector().forEach(metricsm-> {
+				 worksetOut.put(metricsm.getMatchingVariable(), new ArrayList<>());
+				 nameMatchingVariables.add(metricsm.getMatchingVariable());
+			});
+	
+
+		 Map<String, Integer> contengencyTable = contingencyService.getEmptyContengencyTable();
+	     
+     	for (int iA = 0; iA < sizeA; iA++) {
+     		Map<String, String> valuesI = new HashMap<>();
+			final Integer innerIA = new Integer(iA);
+			variabileNomeListMA.forEach(varnameMA -> {
+				valuesI.put(varnameMA, worksetVariabili.get(varnameMA).get(innerIA));
+			});
+
+
+			for (int iB = 0; iB < sizeB; iB++) {
+				ArrayList<String> valueIB = new ArrayList<>();
+				final Integer innerIB = new Integer(iB);
+				variabileNomeListMB.forEach(varnameMB -> {
+					valuesI.put(varnameMB, worksetVariabili.get(varnameMB).get(innerIB));
+				});
+				
+				String pattern=contingencyService.getPattern(valuesI);
+		 		 contengencyTable.put(pattern,contengencyTable.get(pattern)+1);
+			 	indexItems++;
+	  			}
+    		 	
+		}
+		worksetOut.put("FREQUENCY", new ArrayList<>());
+
+		// write to worksetout
+		contengencyTable.forEach((key, value) -> {
+			
+			int idx = 0;
+			for (String nameMatchingVariable : nameMatchingVariables)   worksetOut.get(nameMatchingVariable).add(String.valueOf(key.charAt(idx++)));
+			worksetOut.get("FREQUENCY").add(value.toString());
+
+		});
+
+		return worksetOut;
+	}
+	
 	
 
 	/**

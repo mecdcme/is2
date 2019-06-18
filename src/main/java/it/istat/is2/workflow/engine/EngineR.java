@@ -128,7 +128,7 @@ public class EngineR implements EngineService {
 		// Create a connection to Rserve instance running on default port 6311
 		this.elaborazione=elaborazione;
 		this.stepInstance=stepInstance;
-		this.fileScriptR=stepInstance.getScript();
+		this.fileScriptR=stepInstance.getSxAppService().getScript();
 		prepareEnv();
 		createConnection(serverRHost, serverRPort);
 		bindInputColumns(worksetVariabili, EngineR.SELEMIX_WORKSET);
