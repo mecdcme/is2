@@ -312,6 +312,7 @@ public class RelaisService {
 
 		String codeMatchingA = "X1";
 		String codeMatchingB = "X2";
+		String codeFS = "FS";
 		int indexItems=0;
 		ArrayList<String> variabileNomeListMA = new ArrayList<>();
 		ArrayList<String> variabileNomeListMB = new ArrayList<>();

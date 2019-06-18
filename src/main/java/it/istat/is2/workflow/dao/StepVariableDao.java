@@ -42,6 +42,7 @@ import it.istat.is2.workflow.domain.SxTipoVar;
 public interface StepVariableDao extends CrudRepository<SxStepVariable, Long> {
 
 	List<SxStepVariable> findByElaborazione(Elaborazione elaborazione);
+	List<SxStepVariable> findByElaborazioneAndSxRuoliIn(Elaborazione elaborazione,List<SxRuoli> roles);
 
 	Optional<SxStepVariable> findById(Long idvar);
 

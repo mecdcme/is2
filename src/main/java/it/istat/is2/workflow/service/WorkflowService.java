@@ -433,10 +433,7 @@ public class WorkflowService {
         sxWorkset.setNome(nomeVar);
         sxStepVariable.setFlagRicerca(flagRicerca);
         sxStepVariable.setSxRuoli(sxruolo);
-        sxStepVariable.setOrdine(sxruolo.getOrdine());
-        sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_INPUT));
-        sxWorkset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
-        ArrayList<SxStepVariable> listaStepV = new ArrayList<>();
+         ArrayList<SxStepVariable> listaStepV = new ArrayList<>();
         listaStepV.add(sxStepVariable);
         sxWorkset.setSxStepVariables(listaStepV);
         sxStepVariable.setSxWorkset(sxWorkset);

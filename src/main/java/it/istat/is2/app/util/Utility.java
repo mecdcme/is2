@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import org.apache.commons.csv.CSVFormat;
@@ -458,6 +459,27 @@ public class Utility {
 		}
 		value = allDataArray.toString();
 		return value;
+	}
+
+	/**
+	 * @param dataMap
+	 * @param sxTipoVar
+	 * @param keySet
+	 * @return
+	 */
+	public static HashMap<String, ArrayList<String>> getMapWorkSetValuesInRoles(Map<String, SxStepVariable> dataMap,
+			SxTipoVar sxTipoVar, Set<String> roles) {
+		// TODO Auto-generated method stub
+		HashMap<String, ArrayList<String>> ret = new HashMap<>();
+
+		for (Map.Entry<String, SxStepVariable> entry : dataMap.entrySet()) {
+			String nomeW = entry.getKey();
+			SxStepVariable sxStepVariable = entry.getValue();
+			if (roles.contains(sxStepVariable.getSxRuoli().getCod()) && sxStepVariable.getSxWorkset().getSxTipoVar().getId().equals(sxTipoVar.getId())  ) {
+				ret.put(nomeW, (ArrayList<String>) sxStepVariable.getSxWorkset().getValori());
+			}
+		}
+		return ret;
 	}
 
 }
