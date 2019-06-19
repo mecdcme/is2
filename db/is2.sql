@@ -355,10 +355,9 @@ CREATE TABLE `sx_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `msg` text,
   `msg_time` date DEFAULT NULL,
-  `id_utente` int(20) NOT NULL,
   `id_sessione` int(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -367,6 +366,7 @@ CREATE TABLE `sx_log` (
 
 LOCK TABLES `sx_log` WRITE;
 /*!40000 ALTER TABLE `sx_log` DISABLE KEYS */;
+INSERT INTO `sx_log` VALUES (1,'File DSb salvato con successo','2019-06-19',11);
 /*!40000 ALTER TABLE `sx_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -966,4 +966,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-06-18 18:43:35
+-- Dump completed on 2019-06-19 16:28:08
