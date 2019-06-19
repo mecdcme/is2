@@ -477,7 +477,7 @@ CREATE TABLE `sx_rule_type` (
 
 LOCK TABLES `sx_rule_type` WRITE;
 /*!40000 ALTER TABLE `sx_rule_type` DISABLE KEYS */;
-INSERT INTO `sx_rule_type` VALUES (1,'regoole','r1');
+INSERT INTO `sx_rule_type` VALUES (1,'Regole di editing','EDITING');
 /*!40000 ALTER TABLE `sx_rule_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
