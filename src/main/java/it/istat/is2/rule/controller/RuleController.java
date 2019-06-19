@@ -30,8 +30,8 @@ import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.app.util.IS2Const;
-import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.rule.service.RuleService;
+import it.istat.is2.workflow.domain.SxRule;
 import it.istat.is2.workflow.domain.SxRuleType;
 import it.istat.is2.workflow.domain.SxRuleset;
 import it.istat.is2.worksession.domain.WorkSession;
@@ -43,7 +43,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -113,8 +112,9 @@ public class RuleController {
 
         notificationService.removeAllMessages();
         SxRuleset ruleset = ruleService.findRuleSet(idfile);
+        List<SxRule> rules = ruleService.findRules(ruleset);
 
-        model.addAttribute("ruleset", ruleset);
+        model.addAttribute("rules", rules);
 
         return "ruleset/preview";
     }

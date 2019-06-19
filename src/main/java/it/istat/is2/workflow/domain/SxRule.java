@@ -38,40 +38,38 @@ import lombok.Data;
 @NamedQuery(name = "SxRule.findAll", query = "SELECT s FROM SxRule s")
 public class SxRule implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;	
+    private Integer id;
 
-	@Column(name = "ACTION")
-	private String action;
+    @Column(name = "ACTION")
+    private String action;
 
-	private Short active;
+    private Short active;
 
-	private Short blockrule;
+    private Short blockrule;
 
-	private String descr;
+    private String descr;
 
-	private String eccezione;
+    private String eccezione;
 
-	private Short errcode;
+    private Short errcode;
 
-	private String nome;
+    private String nome;
 
-	private String rule;
-  
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "RTYPE", nullable = true)
-	private SxRuleType ruleType;
+    private String rule;
 
-	@ManyToOne
-	@JoinColumn(name = "RULESET")
-	private SxRuleset sxRuleset;
-    
-  
-    
-	public SxRule() {
-	}
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "RTYPE", nullable = true)
+    private SxRuleType ruleType;
+
+    @ManyToOne
+    @JoinColumn(name = "RULESET")
+    private SxRuleset sxRuleset;
+
+    public SxRule() {
+    }
 }

@@ -44,31 +44,31 @@ import java.util.List;
 @NamedQuery(name = "SxRuleset.findAll", query = "SELECT s FROM SxRuleset s")
 public class SxRuleset implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;	
+    private Integer id;
 
-	private String descr;
+    private String descr;
 
-	private String nome;
+    private String nome;
 
-	@OneToOne
-	@JoinColumn(name = "SESSIONE_LAVORO")
-	private WorkSession sessioneLavoro;
+    @OneToOne
+    @JoinColumn(name = "SESSIONE_LAVORO")
+    private WorkSession sessioneLavoro;
 
-	@OneToMany(mappedBy = "sxRuleset")
-	@JsonBackReference
-	private List<SxBusinessStep> sxBusinessSteps;
+    @OneToMany(mappedBy = "sxRuleset")
+    @JsonBackReference
+    private List<SxBusinessStep> sxBusinessSteps;
 
-	@OneToMany(mappedBy = "sxRuleset",cascade=CascadeType.ALL)
-	@JsonBackReference
-	private List<SxRule> sxRules;
+    @OneToMany(mappedBy = "sxRuleset", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<SxRule> sxRules;
 
-	public SxRuleset() {
-		this.sxRules = new ArrayList<SxRule>();
-	}
+    public SxRuleset() {
+        this.sxRules = new ArrayList<SxRule>();
+    }
 
 }

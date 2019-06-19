@@ -26,16 +26,16 @@
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
-
-        <script th:inline="javascript">
-            var _idfile = [[${idfile}]];
-            var _variabili = [[${colonne.size()}]];
-            setMenuActive("regole");
-        </script>
         <script th:src="@{/js/table/datatables.js}"></script>
         <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
-        <script th:src="@{/js/rulesetpreview.js}"></script>
+        <!--script th:src="@{/js/rulesetpreview.js}"></script-->
         <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
+        <script th:inline="javascript">
+            $(document).ready(function () {
+               setMenuActive("regole");
+            });
+        </script>
+
     </head>
     <body>
         <!-- Body -->
@@ -50,41 +50,40 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
                                     <span th:if="${session.sessionelv}">
                                         <span th:text="${session.sessionelv.nome}"></span>
                                     </span>
                                 </a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                     <span th:if="${session.sessionelv}">
                                         <span th:text="#{sessionewf.listadataset}"></span>
                                     </span>
                                 </a>
                             </li>
                             <li class="breadcrumb-item">
-                                <span th:text="${dfile.nomeFile}"></span>
+                                <!--span th:text="${dfile.nomeFile}"></span-->
                             </li>
 
                             <div class="btn-group pull-right" role="group">
-                                <a class="bar-right" title="Run validate" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                                <a class="bar-right" title="Run validate" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                     <i class="fa fa-caret-square-o-right"></i>&nbsp;<span th:text="#{ruleset.package.validate}"></span>
                                 </a>
-                                <a class="" title="Chiudi sessione" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                                <a class="" title="Chiudi sessione" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                     <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                                 </a>
                             </div>
                         </ol>
                     </nav>
                     <!-- End breadcrumb -->
-
                     <div class="container-fluid">
                         <div class="row" >
                             <div class="col-lg-7">
                                 <div class="card">
                                     <div class="card-header">
-                                        <span th:text="#{ruleset.label}"></span>&nbsp;<span th:text="${dfile.nomeFile}"></span>
+                                        <!--span th:text="#{ruleset.label}"></span>&nbsp;<span th:text="${dfile.nomeFile}"></span-->
                                         <div class="card-header-actions">
                                             <a class="card-header-action" href="javascript:void(0)" onclick="javascript:newRule();" 
                                                title="Nuova regola"> 
@@ -101,7 +100,12 @@
                                                     <th width="10%"></th>
                                                 </tr>
                                             </thead>
-                                            <tbody></tbody>
+                                            <tbody>
+                                                <tr th:each="rule : ${ruleset}">
+                                                    <td><span th:text="${rule.rule}"></span></td>
+                                                    <td width="10%"></th>
+                                                </tr>
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -112,7 +116,7 @@
                                         <span th:text="#{Layout.log.panel}">Log panel</span>
                                         <div class="card-header-actions">
                                             <a class="card-header-action" href="javascript:void(0)" 
-                                               th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
+                                               th:onclick="'javascript:clearLog(\'' + ${session.sessioneBean.id} + '\')'" title="Clear log">
                                                 <i class="fa fa-trash-o"></i>
                                             </a>
                                         </div>
@@ -133,7 +137,7 @@
                                         <span>Report</span>
                                         <div class="card-header-actions">
                                             <a class="card-header-action" href="javascript:void(0)" 
-                                               th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
+                                               th:onclick="'javascript:clearLog(\'' + ${session.sessioneBean.id} + '\')'" title="Clear log">
                                                 <i class="fa fa-trash-o"></i>
                                             </a>
                                         </div>

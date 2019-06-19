@@ -34,9 +34,6 @@ public class EngineFactory {
     private EngineR engineR;
     
     @Autowired
-    private EngineRlight engineRlight;
-
-    @Autowired
     private EngineJava engineJava;
 
     @Autowired
@@ -56,8 +53,6 @@ public class EngineFactory {
         } else if (engineType.equalsIgnoreCase(IS2Const.ENGINE_SQL)) {
             return engineSQL;
             
-        }else if (engineType.equalsIgnoreCase(IS2Const.ENGINE_R_LIGHT)) {
-            return engineRlight;
         }
 
         return null;

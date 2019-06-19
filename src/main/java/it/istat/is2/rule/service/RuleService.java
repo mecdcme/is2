@@ -50,101 +50,91 @@ import org.springframework.stereotype.Service;
 @Service
 public class RuleService {
 
-	// private EngineValidate engine;
+    // private EngineValidate engine;
+    @Autowired
+    private WorkSessionService sessioneLavoroService;
+    @Autowired
+    private SxRuleDao sxRuleDao;
+    @Autowired
+    private SxRuleTypeDao sxRuleTypeDao;
+    @Autowired
+    private SxRulesetDao sxRulesetDao;
 
-	@Autowired
-	private WorkSessionService sessioneLavoroService;
-	@Autowired
-	private SxRuleDao sxRuleDao;
-	@Autowired
-	private SxRuleTypeDao sxRuleTypeDao;
-	@Autowired
-	private SxRulesetDao sxRulesetDao;
+    public List<SxRule> findAll() {
+        return (List<SxRule>) this.sxRuleDao.findAll();
+    }
 
-	public List<SxRule> findAll() {
-		return (List<SxRule>) this.sxRuleDao.findAll();
-	}
+    public List<SxRuleType> findAllRuleType() {
+        return (List<SxRuleType>) sxRuleTypeDao.findAll();
+    }
 
-	public List<SxRuleType> findAllRuleType() {
-		return (List<SxRuleType>) sxRuleTypeDao.findAll();
-	}
+    public void runValidate(Integer idRuleset) {
+        // List<SxRule> rules = sxRuleDao.findBySxRuleset(idRuleset);
 
-	public void runValidate(Integer idRuleset) {
-		// List<SxRule> rules = sxRuleDao.findBySxRuleset(idRuleset);
+        try {
+            // engine.init();
+            // engine.loadRules(null);
+            // engine.processOutput();
 
-		try {
-			// engine.init();
-			// engine.loadRules(null);
-			// engine.processOutput();
+        } catch (Exception e) {
+            Logger.getRootLogger().debug(e.getMessage());
+        } finally {
+            // engine.destroy();
+        }
 
-		} catch (Exception e) {
-			Logger.getRootLogger().debug(e.getMessage());
-		} finally {
-			// engine.destroy();
-		}
+    }
 
-	}
+    public int loadRules(File fileRules, String idsessione, String descrizione, String idclassificazione, String separatore) {
+        // TODO Auto-generated method stub
+        String pathTmpFile = fileRules.getAbsolutePath().replace("\\", "/");
+        WorkSession sessionelv = sessioneLavoroService.getSessione(Long.parseLong(idsessione));
+        SxRuleset ruleset = new SxRuleset();
 
-	/**
-	 * @param fileRules
-	 * @param idsessione
-	 * @param idclassificazione
-	 * @param descrizione2
-	 * @param separatore
-	 * @return
-	 */
-	public int loadRules(File fileRules, String idsessione, String descrizione, String idclassificazione,
-			String separatore) {
-		// TODO Auto-generated method stub
-		String pathTmpFile = fileRules.getAbsolutePath().replace("\\", "/");
-		WorkSession sessionelv = sessioneLavoroService.getSessione(Long.parseLong(idsessione));
-		SxRuleset ruleset = new SxRuleset();
+        Reader in = null;
+        char delimiter = 9;
+        try {
+            in = new FileReader(pathTmpFile);
+            delimiter = FileHandler.checkDelimiter(separatore.toCharArray()[0]);
+        } catch (FileNotFoundException e) {
+            Logger.getRootLogger().error("Errore: ", e);
+        }
+        Iterable<CSVRecord> records = null;
+        try {
+            records = CSVFormat.RFC4180.withDelimiter(delimiter).parse(in);
+        } catch (IOException e) {
+            Logger.getRootLogger().error("Errore: ", e);
+        }
 
-		Reader in = null;
-		char delimiter = 9;
-		try {
-			in = new FileReader(pathTmpFile);
-			delimiter = FileHandler.checkDelimiter(separatore.toCharArray()[0]);
-		} catch (FileNotFoundException e) {
-			Logger.getRootLogger().error("Errore: ", e);
-		}
-		Iterable<CSVRecord> records = null;
-		try {
-			records = CSVFormat.RFC4180.withDelimiter(delimiter).parse(in);
-		} catch (IOException e) {
-			Logger.getRootLogger().error("Errore: ", e);
-		}
+        String riga = null;
+        String formula = null;
 
-		String riga = null;
-		String formula = null;
+        Iterator<CSVRecord> itr = records.iterator();
+        while (itr.hasNext()) {
+            CSVRecord rec = itr.next();
+            formula = rec.get(0);
+            SxRule regola = new SxRule();
+            regola.setActive((short) 1);
+            regola.setRule(formula);
+            regola.setRuleType(new SxRuleType(new Short(idclassificazione)));
+            regola.setSxRuleset(ruleset);
+            ruleset.getSxRules().add(regola);
 
-		Iterator<CSVRecord> itr = records.iterator();
-		while (itr.hasNext()) {
-			CSVRecord rec = itr.next();
-			formula = rec.get(0);
-			SxRule regola = new SxRule();
-			regola.setActive((short) 1);
-			regola.setRule(formula);
-			regola.setRuleType(new SxRuleType(new Short(idclassificazione)));
-			regola.setSxRuleset(ruleset);
-			ruleset.getSxRules().add(regola);
+        }
 
-		}
+        ruleset.setDescr(descrizione);
+        ruleset.setSessioneLavoro(sessionelv);
 
-		ruleset.setDescr(descrizione);
-		ruleset.setSessioneLavoro(sessionelv);
+        ruleset = sxRulesetDao.save(ruleset);
 
-		ruleset = sxRulesetDao.save(ruleset);
+        return ruleset.getSxRules().size();
+    }
 
-		return ruleset.getSxRules().size();
-	}
-
-	/**
-	 * @param idfile
-	 * @return
-	 */
-	public SxRuleset findRuleSet(Integer idfile) {
-		// TODO Auto-generated method stub
-		return sxRulesetDao.findById(idfile).orElse(null);
-	}
+    public SxRuleset findRuleSet(Integer idfile) {
+        // TODO Auto-generated method stub
+        return sxRulesetDao.findById(idfile).orElse(null);
+    }
+    
+    public List<SxRule> findRules(SxRuleset ruleset){
+        return sxRuleDao.findBySxRuleset(ruleset);
+    }
 }
