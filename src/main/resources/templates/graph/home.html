@@ -26,8 +26,9 @@
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+        <script th:src="@{/js/d3/d3.js}"></script>
         <script th:src="@{/js/table/datatables.js}"></script>
-        <script th:src="@{/js/jquery-ui.min.js}"></script>
+        <script th:src="@{/js/jquery-ui.min.js}"></script>        
         <script th:src="@{/js/graph.js}"></script>
         <script th:src="@{/js/table/dataTables.rowReorder.min.js}"></script>
         <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
@@ -134,13 +135,21 @@
                                     <div class="card-header">
                                         <span th:text="#{graph.plot}"></span>
                                         <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getChartData();" title="Click me!"> 
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getScatterPlot();" title="scatter plot!"> 
                                                 <i class="fa fa-plus-square-o"></i>
-                                                <span>Click me!</span>
+                                                <span>scatter plot</span>
+                                            </a>
+                                        </div>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getBoxPlot();" title="Box plot!"> 
+                                                <i class="fa fa-plus-square-o"></i>
+                                                <span>Box plot</span>
                                             </a>
                                         </div>
                                     </div>
+                                    
                                     <div class="card-body">
+                                        <div id="datagraph"></div>                                        
                                     </div>
                                 </div>
                             </div>

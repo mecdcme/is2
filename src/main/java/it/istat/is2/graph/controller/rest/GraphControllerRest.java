@@ -25,6 +25,7 @@ package it.istat.is2.graph.controller.rest;
 
 import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.service.DatasetService;
+import it.istat.is2.graph.bean.Point;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -53,5 +54,24 @@ public class GraphControllerRest {
         
         return colonne;
     }
+    
+    @GetMapping("/rest/graph/getPoints/{ids}")
+    public List<Point> getPoints(HttpServletRequest request, @PathVariable("ids") List<Integer> ids) {
+        
+        List<String> valorix;
+        List<String> valoriy;
+        
+        List<Point> points = new ArrayList();
+        
+        valorix = datasetService.findOneColonna(new Long(ids.get(0))).getDatiColonna();
+        valoriy = datasetService.findOneColonna(new Long(ids.get(1))).getDatiColonna();
+
+        for(int i = 0; i < valorix.size(); i++){
+            points.add(new Point(valorix.get(i), valoriy.get(i)));
+        }
+        
+        return points;
+    }
+    
 
 }
