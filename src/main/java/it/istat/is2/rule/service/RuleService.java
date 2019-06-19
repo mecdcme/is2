@@ -85,7 +85,6 @@ public class RuleService {
     }
 
     public int loadRules(File fileRules, String idsessione, String etichetta, String idclassificazione, String separatore, String nomeFile) {
-        // TODO Auto-generated method stub
         String pathTmpFile = fileRules.getAbsolutePath().replace("\\", "/");
         WorkSession sessionelv = sessioneLavoroService.getSessione(Long.parseLong(idsessione));
         SxRuleset ruleset = new SxRuleset();
@@ -104,8 +103,7 @@ public class RuleService {
         } catch (IOException e) {
             Logger.getRootLogger().error("Errore: ", e);
         }
-
-        String riga = null;
+        
         String formula = null;
 
         Iterator<CSVRecord> itr = records.iterator();
@@ -123,6 +121,7 @@ public class RuleService {
 
         ruleset.setNomeFile(nomeFile);
         ruleset.setLabelFile(etichetta);
+        ruleset.setNumeroRighe(ruleset.getSxRules().size());
         ruleset.setSessioneLavoro(sessionelv);
 
         ruleset = sxRulesetDao.save(ruleset);

@@ -130,10 +130,10 @@
                                         <table class="table table-condensed" th:if="${listasessioni}" cellspacing="0">
                                             <thead>
                                                 <tr th:unless="${(listasessioni == null) or (listasessioni.size() == 0) }">
-                                                    <th><span th:text="#{listasessioni.codice}"></span></th>
                                                     <th><span th:text="#{listasessioni.nome}"></span></th>
                                                     <th><span th:text="#{listasessioni.descrizione}"></span></th>
                                                     <th><span th:text="#{listasessioni.nome.file}"></span></th>
+                                                    <th><span th:text="#{listasessioni.nome.regole}"></span></th>
                                                     <th><span th:text="#{listasessioni.nome.elaborazione}"></span></th>
                                                     <th><span th:text="#{listasessioni.data.creazione}"></span></th>
                                                     <th colspan="2"></th>
@@ -141,11 +141,12 @@
                                             </thead>
                                             <tbody>
                                                 <tr th:each="sessione : ${listasessioni}" th:unless="${(listasessioni == null) or (listasessioni.size() == 0) }">
-                                                    <td th:id="${'sesid_'+ sessione.id}" th:text="${sessione.id}"></td>
                                                     <td th:id="${'sesnome_'+ sessione.id}" th:text="${sessione.nome}"></td>
                                                     <td th:id="${'sesdesc_'+ sessione.id}" th:text="${sessione.descrizione}"></td>
                                                     <td th:if="${(sessione.datasetFiles!=null) and (sessione.datasetFiles.size()>0)}" th:text="${sessione.datasetFiles.size()}"></td>
                                                     <td th:unless="${(sessione.datasetFiles!=null) and (sessione.datasetFiles.size()>0)}">-</td>
+                                                    <td th:if="${(sessione.ruleSets!=null) and (sessione.ruleSets.size()>0)}" th:text="${sessione.ruleSets.size()}"></td>
+                                                    <td th:unless="${(sessione.ruleSets!=null) and (sessione.ruleSets.size()>0)}">-</td>
                                                     <td th:if="${(sessione.listaElaborazioni!=null) and (sessione.listaElaborazioni.size()>0)}" th:text="${sessione.listaElaborazioni.size()}"></td>
                                                     <td th:unless="${(sessione.listaElaborazioni!=null) and (sessione.listaElaborazioni.size()>0)}">-</td>
                                                     <td th:id="${'sesdata_'+ sessione.dataCreazione}" th:text="${#dates.format(sessione.dataCreazione, 'dd/MM/yyyy HH:mm')}"></td>

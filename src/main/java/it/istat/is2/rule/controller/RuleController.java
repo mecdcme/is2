@@ -24,6 +24,7 @@
 package it.istat.is2.rule.controller;
 
 import it.istat.is2.app.bean.InputFormBean;
+import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.LogService;
@@ -68,7 +69,7 @@ public class RuleController {
     private LogService logService;
 
     @RequestMapping(value = "/loadRulesFile", method = RequestMethod.POST)
-    public String loadInputRulesData(HttpSession session, HttpServletRequest request, Model model,
+    public String loadInputRulesData(HttpSession httpSession, HttpServletRequest request, Model model,
             @AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") InputFormBean form)
             throws IOException {
 
@@ -85,6 +86,10 @@ public class RuleController {
         int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile);
         logService.save("Caricate " + rules + " regole");
 
+        SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+        sessionBean.getRuleset().add(nomeFile);
+        httpSession.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+        
         return "redirect:/rule/viewRuleset/" + idsessione;
     }
 

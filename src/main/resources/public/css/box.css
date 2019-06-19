@@ -1045,9 +1045,21 @@ button.btn-secondary:hover
     text-decoration: none;
 } 
 
+.card-header a:hover,.card-header a:focus{
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .card-header-action {
     padding-left: 5px;
     padding-right: 5px
+}
+
+
+.card-header-action .bar-right{
+    padding-left: 0px!important;
+    padding-right: 10px!important;
+    border-right: 1px solid #ccc;
 }
 
 .card-header-action-border {

@@ -30,7 +30,9 @@
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
             var _variabili = [[${colonne.size()}]];
-            setMenuActive("dati");
+            $(document).ready(function () {
+                setMenuActive("dati");
+            });
         </script>
         <script th:src="@{/js/table/datatables.js}"></script>
         <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
@@ -119,12 +121,13 @@
                                 </div>
                                 <div class="card">
                                     <div class="card-header">
-                                        <span th:text="#{listasessioni.nome.file}"></span>:&nbsp;<span th:text="${dfile.nomeFile}"></span>
-                                        <div class="card-header-actions" th:if="${nextFile}">
-                                            <a class="card-header-action" th:href="@{'/viewDataset/'+${nextFile.id}}" title="Nuova elaborazione"> 
-                                                <i class="fa fa-chevron-right"></i>&nbsp;<span th:text="${nextFile.nomeFile}"></span>
+                                        <span th:each="file, iterStat : ${files}">
+                                            <a class="card-header-action" th:href="@{'/viewDataset/'+${file.id}}" title="Nuova elaborazione"> 
+                                                <span th:if="${file.id} == ${idfile}" th:class="!${iterStat.last}? 'header-strong bar-right' : 'header-strong'" 
+                                                      th:text="${file.nomeFile}"></span>
+                                                <span th:unless="${file.id} == ${idfile}" th:class="!${iterStat.last}? 'bar-right'" th:text="${file.nomeFile}"></span>
                                             </a>
-                                        </div>
+                                        </span>
                                     </div>
                                     <div class="card-body">
                                         <table id="dataview" class="table table-condensed table-striped" cellspacing="0" width="auto" 

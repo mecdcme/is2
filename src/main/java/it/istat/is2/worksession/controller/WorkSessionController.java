@@ -48,10 +48,12 @@ import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.SxBusinessFunction;
+import it.istat.is2.workflow.domain.SxRuleset;
 import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
 import java.util.ArrayList;
+import org.dom4j.rule.RuleSet;
 
 @Controller
 public class WorkSessionController {
@@ -120,6 +122,12 @@ public class WorkSessionController {
                 files.add(datasetFile.getNomeFile());
             }
         }
+        List<String> rulesets = new ArrayList();
+        if (sessionelv.getRuleSets() != null) {
+            for (SxRuleset ruleset : sessionelv.getRuleSets()) {
+                rulesets.add(ruleset.getNomeFile());
+            }
+        }
         List<Elaborazione> listaElaborazioni = elaborazioneService.getElaborazioneList(sessionelv);
         List<SxBusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
 
@@ -135,6 +143,7 @@ public class WorkSessionController {
             sessionBean = new SessionBean(id, sessionelv.getNome());
         }
         sessionBean.setFile(files);
+        sessionBean.setRuleset(rulesets);
         session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
         model.addAttribute("listaFunzioni", listaFunzioni);

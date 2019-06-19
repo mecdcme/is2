@@ -33,7 +33,9 @@
         <link rel="stylesheet" th:href="@{/css/table/rowReorder.dataTables.min.css}" />
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
-            setMenuActive("elaborazione");
+            $(document).ready(function () {
+                setMenuActive("elaborazione");
+            });
         </script>
     </head>
     <body>

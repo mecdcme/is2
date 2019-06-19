@@ -36,6 +36,7 @@ public class SessionBean implements Serializable {
 	private Long id;
 	private String nome;
         private List<String> file;
+        private List<String> ruleset;
         private Long idElaborazione;
         private String nomeElaborazione;
         private BusinessFunctionBean businessFunction;
