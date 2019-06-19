@@ -84,7 +84,7 @@ public class RuleService {
 
     }
 
-    public int loadRules(File fileRules, String idsessione, String descrizione, String idclassificazione, String separatore) {
+    public int loadRules(File fileRules, String idsessione, String etichetta, String idclassificazione, String separatore, String nomeFile) {
         // TODO Auto-generated method stub
         String pathTmpFile = fileRules.getAbsolutePath().replace("\\", "/");
         WorkSession sessionelv = sessioneLavoroService.getSessione(Long.parseLong(idsessione));
@@ -121,7 +121,8 @@ public class RuleService {
 
         }
 
-        ruleset.setDescr(descrizione);
+        ruleset.setNomeFile(nomeFile);
+        ruleset.setLabelFile(etichetta);
         ruleset.setSessioneLavoro(sessionelv);
 
         ruleset = sxRulesetDao.save(ruleset);

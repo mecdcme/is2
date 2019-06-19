@@ -32,6 +32,7 @@ import it.istat.is2.worksession.domain.WorkSession;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,11 +51,17 @@ public class SxRuleset implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-
+    @Column(name = "DESCR")
     private String descr;
-
-    private String nome;
-
+    @Column(name = "NUMERO_RIGHE")
+    private Integer numeroRighe;
+    @Column(name = "NOME_FILE")
+    private String nomeFile;
+    @Column(name = "LABEL_FILE")
+    private String labelFile;
+    @Column(name = "DATA_CARICAMENTO")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataCaricamento;
     @OneToOne
     @JoinColumn(name = "SESSIONE_LAVORO")
     private WorkSession sessioneLavoro;

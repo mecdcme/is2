@@ -74,14 +74,15 @@ public class RuleController {
 
         notificationService.removeAllMessages();
 
-        String descrizione = form.getDescrizione();
+        String nomeFile = form.getDescrizione();
+        String etichetta = form.getLabelFile();
         String idclassificazione = form.getClassificazione();
         String separatore = form.getDelimiter();
         String idsessione = form.getIdsessione();
 
         File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());
 
-        int rules = ruleService.loadRules(fileRules, idsessione, descrizione, idclassificazione, separatore);
+        int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile);
         logService.save("Caricate " + rules + " regole");
 
         return "redirect:/rule/viewRuleset/" + idsessione;
@@ -114,6 +115,7 @@ public class RuleController {
         SxRuleset ruleset = ruleService.findRuleSet(idfile);
         List<SxRule> rules = ruleService.findRules(ruleset);
 
+        model.addAttribute("ruleset", ruleset);
         model.addAttribute("rules", rules);
 
         return "ruleset/preview";

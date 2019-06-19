@@ -28,7 +28,7 @@
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
         <script th:src="@{/js/table/datatables.js}"></script>
         <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
-        <!--script th:src="@{/js/rulesetpreview.js}"></script-->
+        <script th:src="@{/js/rulesetpreview.js}"></script>
         <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
         <script th:inline="javascript">
             $(document).ready(function () {
@@ -57,21 +57,21 @@
                                 </a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                <a class="" title="Chiudi ruleset" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
                                     <span th:if="${session.sessionelv}">
-                                        <span th:text="#{sessionewf.listadataset}"></span>
+                                        <span th:text="#{sessionewf.listaruleset}"></span>
                                     </span>
                                 </a>
                             </li>
                             <li class="breadcrumb-item">
-                                <!--span th:text="${dfile.nomeFile}"></span-->
+                                <span th:text="${ruleset.nomeFile}"></span>
                             </li>
 
                             <div class="btn-group pull-right" role="group">
                                 <a class="bar-right" title="Run validate" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                     <i class="fa fa-caret-square-o-right"></i>&nbsp;<span th:text="#{ruleset.package.validate}"></span>
                                 </a>
-                                <a class="" title="Chiudi sessione" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                <a class="" title="Chiudi sessione" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
                                     <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                                 </a>
                             </div>
@@ -83,7 +83,7 @@
                             <div class="col-lg-7">
                                 <div class="card">
                                     <div class="card-header">
-                                        <!--span th:text="#{ruleset.label}"></span>&nbsp;<span th:text="${dfile.nomeFile}"></span-->
+                                        <span th:text="#{ruleset.label}"></span>&nbsp;<span th:text="${ruleset.nomeFile}"></span>
                                         <div class="card-header-actions">
                                             <a class="card-header-action" href="javascript:void(0)" onclick="javascript:newRule();" 
                                                title="Nuova regola"> 
@@ -96,14 +96,24 @@
                                         <table id="dataview" class="table table-striped " cellspacing="0" width="auto" style="overflow: auto;">
                                             <thead>
                                                 <tr>
-                                                    <th width="90%">EDIT</th>
-                                                    <th width="10%"></th>
+                                                    <th>Ruleset</th>
+                                                    <th width="1%"></th>
+                                                    <th width="1%"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="rule : ${ruleset}">
+                                                <tr th:each="rule : ${rules}">
                                                     <td><span th:text="${rule.rule}"></span></td>
-                                                    <td width="10%"></th>
+                                                    <td style="width: 1%">
+                                                        <a href="javascript:void(0)" title="Edit" role="button" th:attr="onclick='javascript:editRule(' + ${rule.id} + ')'">
+                                                            <i class="fa fa-search"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td style="width: 1%">
+                                                        <a href="javascript:void(0)" title="Delete" role="button" th:attr="onclick='javascript:deleteRule(' + ${rule.id} + ')'">
+                                                            <i class="fa fa-trash-o"></i>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>

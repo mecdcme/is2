@@ -785,7 +785,7 @@ fieldset {
     font-size: 16px;
     margin-top: 25px !important;
     background-color: #fff !important;
-    color: #2189b4 !important;
+    color: #155873 !important;
     padding: 15px;
     border:1px solid #c8ced3;
 }
@@ -834,7 +834,7 @@ fieldset {
 }
 
 .breadcrumb-item a{
-    color: #155873!important;
+    color: #196889!important;
     margin-right: 0px;
     margin-left: 0px;
 }
@@ -846,12 +846,13 @@ fieldset {
 .navbar-default {
     border-color: #1c7498;
     border-bottom: 1px solid #1c7498 !important;
+    background-color: #196889;
 }
 
 
 .sidebar>.nav>li>a:hover, sidebar>.nav>li>a:focus {
     text-decoration: none;
-    color: black !important;
+    color: #0f4a62 !important;
     background-color: transparent !important;
 }
 

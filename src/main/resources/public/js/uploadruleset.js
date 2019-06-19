@@ -153,9 +153,11 @@ function preview() {
 function inviaFormRulesetFile() {
     var fileName = document.getElementById('file').files[0];
     if (fileName) { // returns true if the string is not empty
-    	var a = $("#descrizione").val($("#descrizione_file").val());
-    	var b = $("#classificazione_f").val($("#classificazione_file").val());    	
-        $("#inputFileRulesetForm").submit();
+        $("#desc").val($("div.file-caption-name").attr("title"));//set filename
+        $("#labelFile").val($("#label_file").val());
+    	$("#delimiter").val($("#delimiter_sel").val());
+    	$("#classificazione").val($("#tipo_regola").val());    	
+    	 $("#inputFileRulesetForm").submit();
     } else { // no file was selected        	
         $("#errorUplodFile").modal('toggle');
         return false;

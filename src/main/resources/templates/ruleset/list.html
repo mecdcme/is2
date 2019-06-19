@@ -26,7 +26,6 @@
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
         <script th:src="@{/js/table/datatables.js}"></script>
-        <script th:src="@{/js/sessioni.js}"></script>
         <script th:src="@{/js/papaParse/papaparse.min.js}"></script>
         <script th:src="@{/js/fileinput.min.js}"></script>
         <script th:src="@{/js/uploadruleset.js}"></script>
@@ -54,7 +53,7 @@
                                 </a>
                             </li>
                             <li class="breadcrumb-item">
-                                <span th:text="#{ruleset.list.label}"> Lista file di regole</span>
+                                <span th:text="#{ruleset.list.label}"></span>
                             </li>
                             <div class="btn-group pull-right" role="group">
                                 <a class="" title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
@@ -77,10 +76,8 @@
                                             <input type="hidden" value="" name="descrizione" id="desc" /> 
                                             <input type="hidden" th:value="${session.sessionelv.id}" th:name="idsessione" />
                                             <input type="hidden" value="" name="delimiter" id="delimiter" />
-                                            <input type="hidden" value="" name="descrizione" id="descrizione_f" />                                            
-                                            <!-- Il file ruleset ha tipo 2 --> 
-                                            <input type="hidden" value="2" name="tipoDato" id="tipo_dat" />                       
-                                            <input type="hidden" value="" name="classificazione" id="classificazione_f" />
+                                            <input type="hidden" value="" name="labelFile" id="labelFile" />
+                                            <input type="hidden" value="" name="classificazione" id="classificazione" />
                                             <div id="upload" class="row">
                                                 <div class="col-lg-8">
                                                     <div class="form-group">
@@ -100,20 +97,25 @@
                                                th:if="${listaRuleSet}" cellspacing="0" style="overflow: auto;">
                                             <thead>
                                                 <tr th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">                                                
-                                                    <th><span th:text="#{generic.label.id}">Id</span></th>                                                    
-                                                    <th><span th:text="#{generic.label.name}">Nome</span></th>
-                                                    <th><span th:text="#{generic.label.description}">Descrizione</span></th>                                                    
-                                                    <th></th>
+                                                    <th><span th:text="#{listaDataset.nome}">Nome</span></th>
+                                                    <th><span th:text="#{listaDataset.label}">Label</span></th>
+                                                    <th><span th:text="#{listaDataset.numerorighe}">N. Righe</span></th>
+                                                    <th colspan="2"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr th:each="ruleset : ${listaRuleSet}"
                                                     th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
-                                                    <td th:text="${ruleset.id}"></td>
-                                                    <td th:text="${ruleset.nome}"></td>
-                                                    <td th:text="${ruleset.descr}"></td>                                                    
+                                                    <td th:text="${ruleset.nomeFile}"></td>
+                                                    <td th:text="${ruleset.labelFile}"></td>
+                                                    <td th:text="${ruleset.numeroRighe}"></td>
                                                     <td style="width: 1%">
-                                                        <a href="javascript:void(0)" title="Elimina ruleset" role="button" th:attr="onclick='javascript:eliminaDataset(' + ${ruleset.id} + ', \'' + ${ruleset.nome} + '\')'">												
+                                                        <a th:href="@{'/rule/viewRules/'+${ruleset.id}}" title="Visualizza ruleset">
+                                                            <i class="fa fa-search"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td style="width: 1%">
+                                                        <a href="javascript:void(0)" title="Elimina ruleset" role="button" th:attr="onclick='javascript:eliminaDataset(' + ${ruleset.id} + ')'">												
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
@@ -135,7 +137,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div id="logbox" class="card-body">
+                                    <div id="logbox" class="card-body" style="height: 200px">
                                         <ul th:if="${logs}">
                                             <li th:each="log : ${logs}">
                                                 <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
@@ -157,8 +159,7 @@
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content ">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <h4 class="modal-title">
@@ -219,12 +220,12 @@
                             <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
                         </div>
                         <div class="modal-body">
-                            <span th:text="#{generic.label.description}" >Descrizione file:</span> &nbsp;&nbsp;&nbsp; 
-                            <input id="descrizione_file" type="text"/>                                
+                            <span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
+                            <input id="label_file" value="" type="text"/>                 
                         </div>
                         <div class="modal-body">
                             <span th:text="#{rules.classification.type}">Classificazione:</span> &nbsp;&nbsp;&nbsp;
-                            <select id="classificazione_file" >
+                            <select id="tipo_regola" >
                                 <option th:each="ruleType : ${listaRuleType}"
                                         th:value="${ruleType.id}"
                                         th:text="${ruleType.nome}">

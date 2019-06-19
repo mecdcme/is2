@@ -22,11 +22,9 @@
  * @version 1.0
  */
 var _ctx = $("meta[name='ctx']").attr("content");
-var ID = _idfile;
-var table;
 
 $(document).ready(function () {
-   
+
     $("#dataview").DataTable({
 
         drawCallback: function () {
@@ -40,84 +38,37 @@ $(document).ready(function () {
         ordering: false,
         searching: true,
         lengthChange: true,
-        pageLength: 15,
-        processing: true,
-        serverSide: true,
-        ajax: {url: _ctx + "/rest/datasetvalori/" + ID + "/" + getParams(),
-            type: "POST"
-        },
-        columns: [
-            {data: 'EDIT'},
-            {
-                render: function (data, type, row) {
-                    var txt = '<a href="javascript:void(0)" title="Edit" onclick="javascript:editRule(\''
-                            + row.EDIT
-                            + '\');"><i class="fa fa-pencil"></i></a>'
-                            + '&nbsp;&nbsp; <a   href="javascript:void(0)" title="Delete" onclick="javascript:deleteRule(\''
-                            + row.EDIT
-                            + '\');"><i class="fa fa-trash-o"></i></a>';
-
-                    return txt;
-                },
-                orderable: false
-            }
-        ],
+        pageLength: 20,
         buttons: [{
-            extend: 'csvHtml5',
-            filename: 'download',
-            title: 'download',
-            className: 'btn-light',
-            action: function (e, dt, node, config) {
-                scaricaDataset(e, 'csv', ID);
-            }
-        }],
-        language:{
-            paginate:{
+                extend: 'csvHtml5',
+                filename: 'download',
+                title: 'download',
+                className: 'btn-light',
+                action: function (e, dt, node, config) {
+                    scaricaDataset(e, 'csv', ID);
+                }
+            }],
+        language: {
+            paginate: {
                 "previous": "Prev"
             }
         }
     });
 });
 
-function getParams() {
-    var params = "";
-    var inputs = $(".input-sm");
-    var y = 0;
-    var z = 0;
-    for (var i = 0; i < inputs.length; i++) {
-        var valore = inputs[i].value;
-        if (valore != "") {
-            // Controlla e non aggiunge l'& dopo l'ultimo elemento
-            if (y > z) {
-                z++;
-                params += "&";
-
-            }
-            params += inputs[i].id + "=" + inputs[i].value;//this is not working
-            y++;
-        }
-    }
-
-    if (params == "") {
-        params = "noparams";
-    }
-
-    return params;
-}
-
 function scaricaDataset(e, param, idDFile) {
     e.preventDefault();
     window.location = _ctx + '/rest/download/dataset/' + param + '/' + idDFile;
 }
 
-function newRule(){
+function newRule() {
     alert("Add a new rule");
 }
 
-function editRule(idRule){
+function editRule(idRule) {
     alert("Edit rule \'" + idRule + "\'");
 }
 
-function deleteRule(idRule){
+function deleteRule(idRule) {
     alert("Delete rule \'" + idRule + "\'");
 }
