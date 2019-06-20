@@ -103,7 +103,7 @@
                                             </thead>
                                             <tbody>
                                                 <tr th:each="rule : ${rules}">
-                                                    <td><span th:text="${rule.rule}"></span></td>
+                                                    <td><span  th:text="${#strings.abbreviate(rule.rule,50)}" th:title="${rule.rule}"></span></td>
                                                     <td style="width: 1%">
                                                         <a href="javascript:void(0)" title="Edit" role="button" th:attr="onclick='javascript:editRule(' + ${rule.id} + ')'">
                                                             <i class="fa fa-search"></i>

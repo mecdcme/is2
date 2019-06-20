@@ -204,7 +204,7 @@ public class WorkflowService {
             engine.processOutput();
 
         } catch (Exception e) {
-            Logger.getRootLogger().debug(e.getMessage());
+            Logger.getRootLogger().error(e.getMessage());
 
             throw (e);
         } finally {
