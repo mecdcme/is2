@@ -38,6 +38,9 @@ body, html {
     margin-right: -10px;
 }
 
+a:hover, a:focus{
+    text-decoration: none!important;
+}
 /* login */
 #login {
     background-color: #f1f3f7;
@@ -1105,7 +1108,7 @@ button.btn-secondary:hover
     border-color: #f86c6b!important;
 }
 
-#header-variabili{
+#header-variabili, #header-parametri{
     font-weight: normal;
     border-right: 1px solid #c8ced3;
     padding-right: 7px;
@@ -1113,10 +1116,17 @@ button.btn-secondary:hover
 
 #header-parametri{
     font-weight: normal;
+    border-right: 1px solid #c8ced3;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+#header-execution{
+    font-weight: normal;
     padding-left: 7px;
 }
 
-#header-variabili:hover, #header-parametri:hover{
+#header-variabili:hover, #header-parametri:hover, #header-execution:hover{
     text-decoration: none;
     cursor: pointer;
 }

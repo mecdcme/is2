@@ -252,19 +252,19 @@ $(document).ready(function() {
             $(row).attr('id', 'row-' + dataIndex);
         },
         buttons: [{
-                extend: 'colvis',
-                text: 'Seleziona colonne',
-                className: 'btn-light'
-            },
-            {
-                extend: 'csvHtml5',
-                filename: 'download',
-                title: 'download',
-                className: 'btn-light',
-                action: function(e, dt, node, config) {
-                    scaricaDataset(e, 'csv', ID);
-                }
+            extend: 'colvis',
+            text: 'Seleziona colonne',
+            className: 'btn-light'
+        },
+        {
+            extend: 'csvHtml5',
+            filename: 'download',
+            title: 'download',
+            className: 'btn-light',
+            action: function(e, dt, node, config) {
+                scaricaDataset(e, 'csv', ID);
             }
+        }
         ]
     });
 

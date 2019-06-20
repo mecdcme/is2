@@ -53,13 +53,10 @@
                                 </a>
                             </li>
                             <li class="breadcrumb-item ">
-                                <span>Dati</span>
+                                <span th:text="#{output.data.tab}"></span>
                             </li>
 
                             <div class="btn-group pull-right" role="group">
-                                <a class="bar-right" title="Workset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}">
-                                    <i class="fa fa-cog"></i>&nbsp;<span>Settings</span>
-                                </a>
                                 <a class="" title="Chiudi elaborazione" th:href="@{'/ws/home/'+${elaborazione.id}}"> 
                                     <i class="fa fa-times"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                                 </a>
@@ -69,35 +66,13 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="card" th:if="${not #lists.isEmpty(stepVList)}">
-                                    <div class="card-header">Filtri di ricerca</div>
-                                    <div class="card-body">
-                                        <div id="form_ricerca">
-                                            <span id="no_filters_msg"></span>
-                                            <div id="form-ricerca-per-params" class="form-inline">
-                                                <div class="form-group" th:each="step, i: ${stepVList}" style="margin-right: 10px">
-                                                    <th:block th:if="${step.flagRicerca == 1}">
-                                                        <label th:for="${step.sxWorkset.nome}" style="margin-right: 5px">
-                                                            <span th:text="${step.sxWorkset.nome+' : '}"></span>
-                                                        </label>
-                                                        <input type="text" class="form-control param-filter" th:id="${step.sxWorkset.nome}" />
-                                                    </th:block>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="btn_filters_ricerca">
-                                            <button id="btn_filtri_cerca" type="submit" onclick="ricercaByParams()" class="btn btn-primary">Cerca</button>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:text="${tipoCampo.nome}" >Dati</span>
                                     </div>
                                     <div class="card-body">
                                         <table id="worksetTab" th:if="${not #lists.isEmpty(stepVList)}"
-                                               class="table table-condensed" cellspacing="0" width="auto" style="overflow: auto;">
+                                               class="table table-condensed table-striped" cellspacing="0" width="auto" style="overflow: auto;">
                                             <thead>
                                                 <tr>
                                                     <th th:each="stepV: ${stepVList}" th:text="${stepV.sxWorkset.nome}"></th>

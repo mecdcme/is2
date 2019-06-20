@@ -28,6 +28,7 @@ $(document).ready(function () {
 
     var ID = 1; // _idfile;
     $("#contenuto_file").hide();
+    showPanel('variabili');
 
     var table = $("#worksetTabList").DataTable({
         dom: "<'row'<'col-sm-5'B><'col-sm-7'f>>"
@@ -36,6 +37,7 @@ $(document).ready(function () {
         autoWidth: false,
         responsive: true,
         paging: false,
+        ordering: false,
         rowReorder: {        	
             selector: 'td:nth-child(2)'
         },
@@ -604,15 +606,17 @@ function mostraDialogModificaAssociazione(idelab, idstepvar, nomestepvar, idruol
     $("#modifica-viarabile-workset-modal").modal('show');
 }
 
-function showVariabili(){
-    $("#card-variabili").show();
-    $("#header-variabili span").addClass("header-strong");
-    $("#card-parametri").hide();
-    $("#header-parametri span").removeClass("header-strong");
+function showPanel(idPanel){
+    hidePanels();
+    $("#card-" + idPanel).show();
+    $("#header-" + idPanel +" span").addClass("header-strong");
 }
-function showParametri(){
+
+function hidePanels(){
     $("#card-variabili").hide();
     $("#header-variabili span").removeClass("header-strong");
-    $("#card-parametri").show();
-    $("#header-parametri span").addClass("header-strong");
+    $("#card-parametri").hide();
+    $("#header-parametri span").removeClass("header-strong");
+    $("#card-execution").hide();
+    $("#header-execution span").removeClass("header-strong");
 }

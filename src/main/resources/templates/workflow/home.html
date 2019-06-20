@@ -127,8 +127,8 @@
                                                 <tr>
                                                     <th><span  th:text="#{Layout.Process}"></span></th>
                                                     <th><span th:text="#{Layout.Step}">Step</span></th>
-                                                    <th>Esegui</th>
-                                                    <th>Dati</th>
+                                                    <th></th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -150,21 +150,16 @@
                                                             </a>
                                                          </td>
                                                         <td th:if="${stats.index==0}" th:rowspan="${bProcess.sxBusinessSteps.size()}" class="process-btns">
-                                                            <a class="towait" title="Visualizza Workset"
-                                                               th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.is2.app.util.IS2Const).VARIABILE_TIPO_INPUT}}">
-                                                                <i class="fa fa-table" aria-hidden="true"></i> 
-                                                                <span th:text="#{Layout.Input}">Input</span>
-                                                            </a>
                                                             <a th:name="link" class="towait" title="Visualizza Workset"
                                                                th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.is2.app.util.IS2Const).VARIABILE_TIPO_OUTPUT}}">
                                                                 <i class="fa fa-table" aria-hidden="true"></i> 
                                                                 <span th:text="#{Layout.Output}">Output</span>
                                                             </a>
-                                                            <a th:name="link" class="disabled  towait" title="Visualizza Workset"
+                                                            <!--a th:name="link" class="disabled  towait" title="Visualizza Workset"
                                                                th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${bProcess.id}}">
                                                                 <i class="fa fa-bar-chart" aria-hidden="true"></i> 
                                                                 <span th:text="#{Layout.Report}">Report</span>
-                                                            </a>
+                                                            </a-->
                                                          </td>
                                                     </tr>
                                                 </th:block>
