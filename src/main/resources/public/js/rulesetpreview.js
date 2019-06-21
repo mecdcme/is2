@@ -72,3 +72,18 @@ function editRule(idRule) {
 function deleteRule(idRule) {
     alert("Delete rule \'" + idRule + "\'");
 }
+
+function runValidate(idRuleset){
+    $('#loading').modal('show');
+    $.ajax({
+        url: _ctx + "/rules/runvalidate/" + idRuleset,
+        type: "GET",
+        success: function (data) {
+            $('#loading').modal('hide');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error loading data');
+        }
+    });
+    
+}

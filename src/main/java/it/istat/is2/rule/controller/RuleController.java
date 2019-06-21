@@ -150,11 +150,13 @@ public class RuleController {
     public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Integer idfile) {
 
         notificationService.removeAllMessages();
+       List<Log> logs = logService.findByIdSessione();
         SxRuleset ruleset = ruleService.findRuleSet(idfile);
         List<SxRule> rules = ruleService.findRules(ruleset);
 
         model.addAttribute("ruleset", ruleset);
         model.addAttribute("rules", rules);
+        model.addAttribute("logs", logs);
 
         return "ruleset/preview";
     }

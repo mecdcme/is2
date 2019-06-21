@@ -24,6 +24,7 @@
 package it.istat.is2.rule.service;
 
 import it.istat.is2.app.util.FileHandler;
+import it.istat.is2.rule.engine.EngineValidate;
 import it.istat.is2.workflow.dao.SxRuleDao;
 import it.istat.is2.workflow.dao.SxRuleTypeDao;
 import it.istat.is2.workflow.dao.SxRulesetDao;
@@ -50,7 +51,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class RuleService {
 
-    // private EngineValidate engine;
     @Autowired
     private WorkSessionService sessioneLavoroService;
     @Autowired
@@ -59,6 +59,8 @@ public class RuleService {
     private SxRuleTypeDao sxRuleTypeDao;
     @Autowired
     private SxRulesetDao sxRulesetDao;
+    @Autowired
+    private EngineValidate engine;
 
     public List<SxRule> findAll() {
         return (List<SxRule>) this.sxRuleDao.findAll();
@@ -68,18 +70,15 @@ public class RuleService {
         return (List<SxRuleType>) sxRuleTypeDao.findAll();
     }
 
-    public void runValidate(Integer idRuleset) {
-        // List<SxRule> rules = sxRuleDao.findBySxRuleset(idRuleset);
+    public void runValidate(SxRuleset ruleset) {
+        List<SxRule> rules = sxRuleDao.findBySxRuleset(ruleset);
 
         try {
-            // engine.init();
-            // engine.loadRules(null);
-            // engine.processOutput();
-
+            engine.validateRules(rules);
         } catch (Exception e) {
-            Logger.getRootLogger().debug(e.getMessage());
+            Logger.getRootLogger().error(e.getMessage());
         } finally {
-            // engine.destroy();
+            engine.destroy();
         }
 
     }

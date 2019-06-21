@@ -36,6 +36,7 @@ import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.dao.LogDao;
 import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.util.IS2Const;
+import java.util.ArrayList;
 
 @Service
 @Transactional
@@ -54,6 +55,17 @@ public class LogService {
         return (List<Log>) this.logDao.findByIdSessioneOrderByIdDesc(idSessione);
     }
 
+    public List<Log> findByIdSessione() {
+         SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+         List<Log> logs;
+         if (sessionBean != null) {
+             logs = this.logDao.findByIdSessioneOrderByIdDesc(sessionBean.getId());
+         } else{
+             logs = new ArrayList<>();
+         }
+        return logs;
+    }
+    
     public long deleteByIdSessione(Long idSessione) {
         return this.logDao.deleteByIdSessione(idSessione);
     }

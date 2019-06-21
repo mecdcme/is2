@@ -23,9 +23,11 @@
  */
 package it.istat.is2.rule.controller.rest;
 
+import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.rule.service.RuleService;
 import it.istat.is2.workflow.domain.SxRule;
+import it.istat.is2.workflow.domain.SxRuleset;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -49,11 +51,11 @@ public class RuleRestController {
         return rules;
     }
 
-    @GetMapping("/runvalidate/{idRuleset}")
+    @GetMapping("/rules/runvalidate/{idRuleset}")
     public void runValidate(@PathVariable("idRuleset") Integer idRuleset) {
-
-        ruleService.runValidate(idRuleset);
-
+ 
+        SxRuleset ruleSet = ruleService.findRuleSet(idRuleset);
+        ruleService.runValidate(ruleSet);
     }
 
 }

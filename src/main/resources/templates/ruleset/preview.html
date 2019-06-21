@@ -68,7 +68,7 @@
                             </li>
 
                             <div class="btn-group pull-right" role="group">
-                                <a class="bar-right" title="Run validate" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                <a class="bar-right" title="Run validate" href="javascript:void(0)" th:onclick="'javascript:runValidate(' + ${ruleset.id} + ')'">
                                     <i class="fa fa-caret-square-o-right"></i>&nbsp;<span th:text="#{ruleset.package.validate}"></span>
                                 </a>
                                 <a class="" title="Chiudi sessione" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
