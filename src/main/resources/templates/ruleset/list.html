@@ -70,6 +70,18 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:text="#{ruleset.list.label}">Lista file di regole</span>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNewRulesetDialog();" 
+                                               title="Nuovo ruleset"> 
+                                                <i class="fa fa-plus-square-o"></i>
+                                                <span th:text="#{ruleset.new.ruleset}"></span>
+                                            </a>
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:showUploadDiv();" 
+                                               title="Carica file di regole"> 
+                                                <i class="fa fa-plus-square-o"></i>
+                                                <span th:text="#{ruleset.new.file.ruleset}"></span>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <form id="inputFileRulesetForm" th:action="@{'/rule/loadRulesFile'}" method="post" enctype="multipart/form-data">
@@ -151,6 +163,7 @@
                             </div>
                         </div>
                         <!-- row -->
+                                               
                     </div>
                 </div>
             </section>
@@ -251,6 +264,55 @@
                     </div>
                 </div>
             </div>
+            <!-- New Ruleset Dialog -->
+            <div class="modal fade" id="newrulesetdialog" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">
+                                <i class="fa fa-plus-square"></i>&nbsp;
+                                <span th:text="#{rules.new.ruleset.dialog.title}">Nuovo ruleset di regole</span>
+                            </h4>
+                        </div>                        
+                        <div class="modal-body">
+                            <span th:text="#{rules.new.ruleset.name}" >Nome ruleset:</span> &nbsp;&nbsp;&nbsp; 
+                            <input id="ruleset_name" value="" type="text"/>              
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
+                            <input id="ruleset_label" value="" type="text"/>                 
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{ruleset.dataset.label}">Dataset:</span> &nbsp;&nbsp;&nbsp;
+                            <select id="dataset_file" >
+                                <option th:each="dataset : ${listaDatasetFile}"
+                                        th:value="${dataset.id}"
+                                        th:text="${dataset.nomeFile}">
+                                </option>
+                            </select>                               
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{ruleset.type.label}">Tipo:</span> &nbsp;&nbsp;&nbsp;
+                            <select id="tipo_ruleset" >                            	
+                                <option th:text="DOMINIO" th:value="1"></option>
+                            </select>                               
+                        </div>                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                <span th:text="#{Layout.Close}">Annulla</span>
+                            </button>
+                            <button type="button" id="btn-invia-file" class="btn btn-primary towait"
+                                    onclick="inviaFormRulesetFile();" th:title="#{submit.button.title}"
+                                    th:text="#{submit.button}" data-dismiss="modal">Invia</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fine New Ruleset Dialog -->
             <!-- END MAIN CONTAINER -->
             <footer th:replace="layout :: site-footer" />
         </div>
