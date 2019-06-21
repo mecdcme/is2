@@ -24,6 +24,7 @@
 package it.istat.is2.rule.controller;
 
 import it.istat.is2.app.bean.InputFormBean;
+import it.istat.is2.app.bean.NewRulesetFormBean;
 import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.domain.User;
@@ -95,6 +96,33 @@ public class RuleController {
         httpSession.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
         
         return "redirect:/rule/viewRuleset/" + idsessione;
+    }
+    
+    @RequestMapping(value = "/newRuleset", method = RequestMethod.POST)
+    public String newRulesetData(HttpSession httpSession, HttpServletRequest request, Model model,
+            @AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") NewRulesetFormBean form)
+            throws IOException {
+
+        notificationService.removeAllMessages();
+
+        String nomeRuleset = form.getRulesetName();
+        String etichettaRuleset = form.getRulesetLabel();
+        Integer tipoRuleset = form.getRulesetType();
+        String descrRuleset = form.getRulesetDesc();
+        WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));
+       
+        Integer dataset = form.getDataset();        
+
+        SxRuleset ruleset = new SxRuleset();
+        ruleset.setLabelFile(etichettaRuleset);
+        ruleset.setNomeFile(nomeRuleset);
+        ruleset.setSessioneLavoro(sessionelv);
+        
+        
+        ruleService.saveRuleSet(ruleset);
+        
+        
+        return "redirect:/rule/viewRuleset/" + form.getIdsessione();
     }
 
     @GetMapping(value = "/viewRuleset/{id}")

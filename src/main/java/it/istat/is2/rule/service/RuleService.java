@@ -129,6 +129,10 @@ public class RuleService {
         return ruleset.getSxRules().size();
     }
 
+    public void saveRuleSet(SxRuleset sxRuleset) {
+       
+        sxRulesetDao.save(sxRuleset);
+    }
     public SxRuleset findRuleSet(Integer idfile) {
         // TODO Auto-generated method stub
         return sxRulesetDao.findById(idfile).orElse(null);

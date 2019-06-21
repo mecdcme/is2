@@ -173,6 +173,14 @@ function inviaFormRulesetFile() {
         return false;
     }
 }
+function inviaFormNewRuleset() {
+    $("#rulesetName").val($("#ruleset_name").val());
+    $("#rulesetLabel").val($("#ruleset_label").val());
+	$("#dataset").val($("#dataset_file").val());
+	$("#rulesetDesc").val($("#ruleset_desc").val());
+	$("#rulesetType").val($("#tipo_ruleset").val());   
+	$("#inputNewRulesetForm").submit();
+}
 
 function readSomeLines(file, maxlines, forEachLine, onComplete) {
     var CHUNK_SIZE = 50000; // 50kb, arbitrarily chosen.

@@ -104,6 +104,15 @@
                                                 </div>
                                             </div>
                                         </form> 
+                                        <form id="inputNewRulesetForm" th:action="@{'/rule/newRuleset'}" method="post" enctype="multipart/form-data">                                             
+                                            <input type="hidden" th:value="${session.sessionelv.id}" th:name="idsessione" />
+                                            <input type="hidden" value="" name="rulesetName" id="rulesetName" />                                           
+                                            <input type="hidden" value="" name="rulesetLabel" id="rulesetLabel" />                                            
+                                            <input type="hidden" value="" name="dataset" id="dataset" />
+                                            <input type="hidden" value="" name="rulesetDesc" id="rulesetDesc" /> 
+                                            <input type="hidden" value="" name="rulesetType" id="rulesetType" />
+                                            
+                                        </form> 
                                         
                                         <table id="datasetList" class="table table-condensed"
                                                th:if="${listaRuleSet}" cellspacing="0" style="overflow: auto;">
@@ -300,12 +309,16 @@
                             <select id="tipo_ruleset" >                            	
                                 <option th:text="DOMINIO" th:value="1"></option>
                             </select>                               
-                        </div>                        
+                        </div>     
+                        <div class="modal-body">
+                            <span th:text="#{rules.new.ruleset.desc}" >Descrizione:</span> &nbsp;&nbsp;&nbsp; 
+                            <input id="ruleset_desc" value="" type="text"/>              
+                        </div>                  
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">
                                 <span th:text="#{Layout.Close}">Annulla</span>
                             </button>
-                            <button type="button" id="btn-invia-file" class="btn btn-primary towait"
+                            <button type="button" id="btn-invia-new-ruleset" class="btn btn-primary towait"
                                     onclick="inviaFormRulesetFile();" th:title="#{submit.button.title}"
                                     th:text="#{submit.button}" data-dismiss="modal">Invia</button>
                         </div>
