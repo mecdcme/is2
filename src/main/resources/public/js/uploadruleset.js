@@ -34,7 +34,8 @@ $(document).ready(function () {
     $("#mostraDati").hide();
     $("#scegliHeader").hide();
     $("#lnk_opzioni_avanzate").hide();
-
+    $("#upload").hide();
+    
     $("#delimiter_sel").change(function () {
         $("#delimiter").val($("#delimiter_sel").val());
     });
@@ -115,7 +116,16 @@ function creaContenuto(data, delimiter) {
     $("#separator").val(delimiter);
     $("#titolo").html("Intestazione file:");
 }
-
+function showUploadDiv(){
+	if( $("#upload").css("display") == "none" ){	
+		$("#upload").show();
+	}else{
+		$("#upload").hide();
+	}	
+}
+function openNewRulesetDialog(){	
+	$("#newrulesetdialog").modal('show');
+}
 function parsingStep(results, parser) {
     console.log("Row data:", results.data);
     previewString += results.data.toString() + "\n";
