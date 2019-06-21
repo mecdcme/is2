@@ -31,6 +31,8 @@ import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.app.util.IS2Const;
+import it.istat.is2.dataset.domain.DatasetFile;
+import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.rule.service.RuleService;
 import it.istat.is2.workflow.domain.SxRule;
 import it.istat.is2.workflow.domain.SxRuleType;
@@ -67,6 +69,8 @@ public class RuleController {
     private RuleService ruleService;
     @Autowired
     private LogService logService;
+    @Autowired
+    private DatasetService datasetService;
 
     @RequestMapping(value = "/loadRulesFile", method = RequestMethod.POST)
     public String loadInputRulesData(HttpSession httpSession, HttpServletRequest request, Model model,
@@ -99,13 +103,14 @@ public class RuleController {
         List<Log> logs = logService.findByIdSessione(id);
 
         WorkSession sessionelv = sessioneLavoroService.getSessione(id);
-       
+        List<DatasetFile> listaDatasetFile = datasetService.findDatasetFilesByIdSessioneLavoro(id);
 
         List<SxRuleset> listaRuleSet = sessionelv.getRuleSets();
         List<SxRuleType> listaRuleType = ruleService.findAllRuleType();
 
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 
+        model.addAttribute("listaDatasetFile", listaDatasetFile);
         model.addAttribute("listaRuleSet", listaRuleSet);
         model.addAttribute("listaRuleType", listaRuleType);
         model.addAttribute("logs", logs);
