@@ -113,46 +113,57 @@ public class EngineJava implements EngineService {
 
 	public void prepareEnv() {
 
-		// SxStepInstance stepInstance =sxStepInstanceDao.findOne(idStepInstance);
-		List<SxStepVariable> dataList = stepVariableDao.findByElaborazione(elaborazione);
-		// mappa delle colonne workset <nome campo, oggetto stepv>
-		dataMap = Utility.getMapNameWorkSetStep(dataList);
-		// mappa delle colonne workset <nome campo, oggetto stepv>
-		Map<String, ArrayList<SxStepVariable>> dataRuoliStepVarMap = Utility.getMapCodiceRuoloStepVariabili(dataList);
-		// List<SxRuoli> ruoliAll = ruoloDao.findAll();
-		// ruoliAllMap = Utility.getMapRuoliByCod(ruoliAll);
-		ruoliAllMap = ruoloDao.findByServiceAsCodMap(stepInstance.getSxAppService());
-		// mappa delle colonne workset <nome,lista valori>
-		worksetVariabili = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
-		// PARAMETRI
-		parametriMap = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
-		modelloMap = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_MODELLO));
+		
+	   	 // get all roles by service
+	    	ruoliAllMap = ruoloDao.findByServiceAsCodMap(stepInstance.getSxAppService());
+	      
 
-		// REcupero dei ruoli di INPUT e OUTUPT e dalle istanze
+	        // REcupero dei ruoli di INPUT e OUTUPT e dalle istanze
+	        // {S=[S], X=[X], Y=[Y], Z=[Z]}
+	        HashMap<String, ArrayList<String>> ruoliInputStep = new HashMap<>();
+	        // {P=[P], M=[M], O=[O]}
+	        ruoliOutputStep = new LinkedHashMap<String, ArrayList<String>>();
 
-		// {S=[S], X=[X], Y=[Y], Z=[Z]}
-		HashMap<String, ArrayList<String>> ruoliInputStep = new HashMap<>();
-		// {P=[P], M=[M], O=[O]}
-		ruoliOutputStep = new LinkedHashMap<>();
-
-		for (Iterator<?> iterator = stepInstance.getSxStepPatterns().iterator(); iterator.hasNext();) {
-			SxStepPattern sxStepPattern = (SxStepPattern) iterator.next();
-			if (sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_INPUT) {
-				ArrayList<String> listv = ruoliInputStep.get(sxStepPattern.getSxRuoli().getCod());
-				if (listv == null) {
-					listv = new ArrayList<>();
-				}
-				listv.add(sxStepPattern.getSxRuoli().getCod());
-				ruoliInputStep.put(sxStepPattern.getSxRuoli().getCod(), listv);
-			} else if (sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_OUTPUT) {
-				ArrayList<String> listv = ruoliOutputStep.get(sxStepPattern.getSxRuoli().getCod());
-				if (listv == null) {
-					listv = new ArrayList<>();
-				}
-				listv.add(sxStepPattern.getSxRuoli().getCod());
-				ruoliOutputStep.put(sxStepPattern.getSxRuoli().getCod(), listv);
-			}
-		}
+	        for (Iterator<?> iterator = stepInstance.getSxStepPatterns().iterator(); iterator.hasNext();) {
+	            SxStepPattern sxStepPattern = (SxStepPattern) iterator.next();
+	            if (sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_INPUT) {
+	                ArrayList<String> listv = ruoliInputStep.get(sxStepPattern.getSxRuoli().getCod());
+	                if (listv == null) {
+	                    listv = new ArrayList<>();
+	                }
+	                listv.add(sxStepPattern.getSxRuoli().getCod());
+	                ruoliInputStep.put(sxStepPattern.getSxRuoli().getCod(), listv);
+	            } else if (sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_OUTPUT) {
+	                ArrayList<String> listv = ruoliOutputStep.get(sxStepPattern.getSxRuoli().getCod());
+	                if (listv == null) {
+	                    listv = new ArrayList<>();
+	                }
+	                listv.add(sxStepPattern.getSxRuoli().getCod());
+	                ruoliOutputStep.put(sxStepPattern.getSxRuoli().getCod(), listv);
+	            }
+	        }
+	        
+	        //Recupero workset di input 
+	        List<SxStepVariable> dataList = stepVariableDao.findByElaborazione(elaborazione);
+	        // mappa delle colonne workset <nome campo, oggetto stepv>
+	        dataMap = Utility.getMapNameWorkSetStep(dataList);
+	        // mappa delle colonne workset <nome campo, oggetto stepv>
+	        Map<String, ArrayList<SxStepVariable>> dataRuoliStepVarMap = Utility.getMapCodiceRuoloStepVariabili(dataList);
+//			List<SxRuoli> ruoliAll = ruoloDao.findAll();
+	        // Utility.getMapRuoliByCod(ruoliAll)
+	      
+	        // mappa delle colonne workset <nome,lista valori>
+	        worksetVariabili = Utility.getMapWorkSetValuesInRoles(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE),ruoliInputStep.keySet());
+	        // PARAMETRI
+	        parametriMap = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
+	        modelloMap = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_MODELLO));
+	        worksetOut = new HashMap<>();
+	        
+	        
+	        
+	        
+		
+		
 		// associo il codice ruolo alla variabile
 		// codiceRuolo, lista nome variabili {X=[X1], Y=[Y1]}
 		ruoliVariabileNome = new LinkedHashMap<>();

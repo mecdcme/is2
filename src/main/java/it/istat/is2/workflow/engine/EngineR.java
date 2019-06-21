@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -103,7 +104,7 @@ public class EngineR implements EngineService {
     private HashMap<String, ArrayList<String>> worksetOut;
     private HashMap<String, ArrayList<String>> ruoliVariabileNome;
 
-    private HashMap<String, ArrayList<String>> ruoliOutputStep;
+    private LinkedHashMap<String, ArrayList<String>> ruoliOutputStep;
     private HashMap<String, ArrayList<String>> parametriOutput = new HashMap<>();
 
     public EngineR(String serverRHost, int serverRPort, String pathR, String fileScriptR) {
@@ -148,6 +149,7 @@ public class EngineR implements EngineService {
 			connection = new RConnection();
 		} else {
 			connection = new RConnection();
+			//connection = new RConnection(server,port);
 		}
 		connection.eval("setwd('" + pathR + "')");
 		connection.eval("source('" + fileScriptR + "')");
@@ -314,7 +316,7 @@ public class EngineR implements EngineService {
 	 * @see it.istat.is2.workflow.engine.EngineService#prepareEnv()
      */
     public void prepareEnv() {
-        // TODO Auto-generated method stub
+        
     	 // get all roles by service
     	ruoliAllMap = ruoloDao.findByServiceAsCodMap(stepInstance.getSxAppService());
       
@@ -323,7 +325,7 @@ public class EngineR implements EngineService {
         // {S=[S], X=[X], Y=[Y], Z=[Z]}
         HashMap<String, ArrayList<String>> ruoliInputStep = new HashMap<>();
         // {P=[P], M=[M], O=[O]}
-        ruoliOutputStep = new HashMap<>();
+        ruoliOutputStep = new LinkedHashMap();
 
         for (Iterator<?> iterator = stepInstance.getSxStepPatterns().iterator(); iterator.hasNext();) {
             SxStepPattern sxStepPattern = (SxStepPattern) iterator.next();
