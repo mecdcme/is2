@@ -18,8 +18,11 @@ import org.springframework.stereotype.Service;
 public class EngineValidate {
 
     public static final String INPUT = "input";
+    public static final String INPUT_NAMES = "input_names";
     public static final String OUTPUT = "output";
     public static final String SRC_VALIDATE = "validate.R";
+    public static final String FUNCTION_DETECT_INFEASIBLE = "detect_infeasible";
+    
     @Value("${serverR.host}")
     private String serverRHost;
     @Value("${serverR.port}")
@@ -27,49 +30,47 @@ public class EngineValidate {
     @Value("${path.script.R}")
     private String pathR;
     private RConnection connection;
-    private String[] input;
-    
+    private String[] out;
+
     @Autowired
     private LogService logService;
 
     public void init() throws Exception {
 
         logService.save("Connecting to R server...");
-        
+
         // Create a connection to Rserve instance running on default port 6311
         if (serverRPort == null || serverRPort == 0) {
             serverRPort = 6311;
         }
 
-        if (serverRHost == null || serverRHost.equals("") || serverRHost.equals("localhost")) {
+        if (serverRHost == null || serverRHost.equals("") || serverRHost.trim().equals("localhost")) {
             connection = new RConnection();
         } else {
             connection = new RConnection(serverRHost, serverRPort);
         }
-        
+
         logService.save("Successfully connected!");
-        
+
         connection.eval("setwd('" + pathR + "')");
         connection.eval("source('" + SRC_VALIDATE + "')");
         logService.save("Validate R script loaded");
     }
 
-    public void validateRules(List<SxRule> rules) throws Exception {
+    public String[] detectInfeasibleRules(String[]input, String[]inputNames) throws Exception {
 
         init();
-        
-        input = new String[rules.size()];
-        for(int i = 0; i < rules.size(); i++){
-            input[i] = rules.get(i).getRule().toUpperCase();
-        } 
+
         connection.assign(INPUT, input);
+        connection.assign(INPUT_NAMES, inputNames);
         connection.eval(INPUT + " <- data.frame(rule=" + INPUT + ")");
-        connection.eval("print(" + INPUT + ")");
-        String[] out = connection.eval("validate(" + INPUT + ")").asStrings();
-        
-        logService.save("Script output " + out[0]);
-        
+        out = connection.eval(FUNCTION_DETECT_INFEASIBLE + "(" + INPUT + ", " + INPUT_NAMES + ")").asStrings();
+
+        logService.save("Script completed!");
+
         destroy();
+        
+        return out;
     }
 
     public void destroy() {

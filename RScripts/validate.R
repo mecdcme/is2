@@ -7,11 +7,12 @@ library(validate)
 library(validatetools)
 library(errorlocate)
 
-print("...script validate loaded!")
-
-validate <- function(input){
+validate <- function(input, inputNames){
   print("Ready to parse rules...")
+  rules_inc <- vector('character')
   rules <- validator(.data=input)
+  names(rules) <- inputNames
+  print(head(rules, 10))
   print(summary(rules))
   rule_infeasible <- is_infeasible(rules)
   print(rule_infeasible)
@@ -19,4 +20,5 @@ validate <- function(input){
 	rules_inc <- detect_infeasible_rules(rules)
 	print(rules_inc)
   }
+  return(rules_inc)
 }

@@ -25,6 +25,7 @@ package it.istat.is2.rule.service;
 
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.rule.engine.EngineValidate;
+import it.istat.is2.rule.forms.RuleCreateForm;
 import it.istat.is2.workflow.dao.SxRuleDao;
 import it.istat.is2.workflow.dao.SxRuleTypeDao;
 import it.istat.is2.workflow.dao.SxRulesetDao;
@@ -62,6 +63,10 @@ public class RuleService {
     @Autowired
     private EngineValidate engine;
 
+    private String[] input;
+    private String[] inputNames;
+    private String[] out;
+
     public List<SxRule> findAll() {
         return (List<SxRule>) this.sxRuleDao.findAll();
     }
@@ -73,8 +78,17 @@ public class RuleService {
     public void runValidate(SxRuleset ruleset) {
         List<SxRule> rules = sxRuleDao.findBySxRuleset(ruleset);
 
+        input = new String[rules.size()];
+        for (int i = 0; i < rules.size(); i++) {
+            input[i] = rules.get(i).getRule().toUpperCase();
+        }
+        inputNames = new String[rules.size()];
+        for (int i = 0; i < rules.size(); i++) {
+            inputNames[i] = "R_" + rules.get(i).getId();
+        }
+
         try {
-            engine.validateRules(rules);
+            out = engine.detectInfeasibleRules(input, inputNames);
         } catch (Exception e) {
             Logger.getRootLogger().error(e.getMessage());
         } finally {
@@ -102,7 +116,7 @@ public class RuleService {
         } catch (IOException e) {
             Logger.getRootLogger().error("Errore: ", e);
         }
-        
+
         String formula = null;
 
         Iterator<CSVRecord> itr = records.iterator();
@@ -129,15 +143,50 @@ public class RuleService {
     }
 
     public void saveRuleSet(SxRuleset sxRuleset) {
-       
+
         sxRulesetDao.save(sxRuleset);
     }
+
     public SxRuleset findRuleSet(Integer idfile) {
         // TODO Auto-generated method stub
         return sxRulesetDao.findById(idfile).orElse(null);
     }
-    
-    public List<SxRule> findRules(SxRuleset ruleset){
+
+    public List<SxRule> findRules(SxRuleset ruleset) {
         return sxRuleDao.findBySxRuleset(ruleset);
     }
+
+    public SxRule findRuleByid(Integer ruleId) {
+        return sxRuleDao.findById(ruleId).orElse(null);
+    }
+
+    public void save(RuleCreateForm ruleForm) {
+
+        SxRule rule = new SxRule();
+
+        SxRuleset ruleSet = sxRulesetDao.findById(ruleForm.getRuleSetId()).orElse(null);
+
+        rule.setId(ruleForm.getRuleId());
+        rule.setSxRuleset(ruleSet);
+        rule.setRule(ruleForm.getRule());
+
+        sxRuleDao.save(rule);
+
+    }
+
+    public void update(RuleCreateForm ruleForm) {
+
+        SxRule rule = sxRuleDao.findById(ruleForm.getRuleId()).orElse(null);
+
+        if (rule != null) {
+            rule.setRule(ruleForm.getRule());
+            sxRuleDao.save(rule);
+        }
+
+    }
+
+    public void delete(Integer ruleId) {
+        sxRuleDao.deleteById(ruleId);
+    }
+
 }

@@ -23,16 +23,26 @@
  */
 package it.istat.is2.rule.controller.rest;
 
-import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.service.LogService;
+import it.istat.is2.app.service.NotificationService;
+import it.istat.is2.rule.forms.RuleCreateForm;
 import it.istat.is2.rule.service.RuleService;
 import it.istat.is2.workflow.domain.SxRule;
 import it.istat.is2.workflow.domain.SxRuleset;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -44,6 +54,12 @@ public class RuleRestController {
     @Autowired
     private RuleService ruleService;
 
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
+    MessageSource messages;
+
     @GetMapping("/rules")
     public List<SxRule> ruleslist(Model model) {
 
@@ -53,9 +69,68 @@ public class RuleRestController {
 
     @GetMapping("/rules/runvalidate/{idRuleset}")
     public void runValidate(@PathVariable("idRuleset") Integer idRuleset) {
- 
+
         SxRuleset ruleSet = ruleService.findRuleSet(idRuleset);
         ruleService.runValidate(ruleSet);
+    }
+
+    @PostMapping("/rules")
+    public List<NotificationService.NotificationMessage> newRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,
+            BindingResult bindingResult) {
+
+        notificationService.removeAllMessages();
+        if (!bindingResult.hasErrors()) {
+            try {
+                ruleService.save(form);
+                notificationService.addInfoMessage(messages.getMessage("rule.created", null, LocaleContextHolder.getLocale()));
+            } catch (Exception e) {
+                notificationService.addErrorMessage("Error: " + e.getMessage());
+            }
+        } else {
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors) {
+                notificationService.addErrorMessage(error.getField() + " - " + error.getDefaultMessage());
+            }
+        }
+        return notificationService.getNotificationMessages();
+    }
+
+    @PutMapping("/rules")
+    public List<NotificationService.NotificationMessage> updateRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,
+            BindingResult bindingResult) {
+
+        notificationService.removeAllMessages();
+        if (!bindingResult.hasErrors()) {
+
+            try {
+                ruleService.update(form);
+                notificationService.addInfoMessage(messages.getMessage("rule.updated", null, LocaleContextHolder.getLocale()));
+            } catch (Exception e) {
+                notificationService.addErrorMessage("Error: " + e.getMessage());
+            }
+        } else {
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors) {
+                notificationService.addErrorMessage(error.getField() + " - " + error.getDefaultMessage());
+            }
+        }
+        return notificationService.getNotificationMessages();
+    }
+
+    @DeleteMapping("/rules/{id}")
+    public List<NotificationService.NotificationMessage> deleteRule(@PathVariable("id") Integer id) {
+
+        notificationService.removeAllMessages();
+       
+        try {
+            ruleService.delete(id);
+            notificationService.addInfoMessage(messages.getMessage("user.deleted", null, LocaleContextHolder.getLocale()));
+
+        } catch (Exception e) {
+            notificationService.addErrorMessage("Error: " + e.getMessage());
+        }
+
+        return notificationService.getNotificationMessages();
     }
 
 }

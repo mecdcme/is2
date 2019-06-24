@@ -40,8 +40,6 @@
                     </div>
                     <div class="container-fluid">
                         <div class="row mb-lg">
-
-
                             <div class="col-lg-6">
                                 <div class="panel panel-default">
                                     <!--div class="panel-heading">
@@ -56,7 +54,7 @@
                                                         <div class="alert alert-danger panel-danger" 
                                                              th:if="${#fields.hasErrors()}">Error</div>                                        
                                                         <div>
-                                                            <ul id="messages"  th:with="notifyMessages=${session[T(it.istat.is2.app.service.NotificationService).NOTIFY_MSG_SESSION_KEY]}">
+                                                            <ul id="messages" th:with="notifyMessages=${session[T(it.istat.is2.app.service.NotificationService).NOTIFY_MSG_SESSION_KEY]}">
                                                                 <li th:each="msg : ${notifyMessages}" 
                                                                     th:text="${msg.text}" 
                                                                     class="alert" 

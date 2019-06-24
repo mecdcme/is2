@@ -32,10 +32,9 @@
         <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
         <script th:inline="javascript">
             $(document).ready(function () {
-               setMenuActive("regole");
+                setMenuActive("regole");
             });
         </script>
-
     </head>
     <body>
         <!-- Body -->
@@ -105,12 +104,12 @@
                                                 <tr th:each="rule : ${rules}">
                                                     <td><span  th:text="${#strings.abbreviate(rule.rule,50)}" th:title="${rule.rule}"></span></td>
                                                     <td style="width: 1%">
-                                                        <a href="javascript:void(0)" title="Edit" role="button" th:attr="onclick='javascript:editRule(' + ${rule.id} + ')'">
+                                                        <a href="javascript:void(0)" title="Edit" role="button" th:attr="onclick='javascript:editRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">
                                                             <i class="fa fa-search"></i>
                                                         </a>
                                                     </td>
                                                     <td style="width: 1%">
-                                                        <a href="javascript:void(0)" title="Delete" role="button" th:attr="onclick='javascript:deleteRule(' + ${rule.id} + ')'">
+                                                        <a href="javascript:void(0)" title="Delete" role="button" th:attr="onclick='javascript:deleteRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">
                                                             <i class="fa fa-trash-o"></i>
                                                         </a>
                                                     </td>
@@ -120,7 +119,7 @@
                                     </div>
                                 </div>
                             </div>
-                             <div class="col-lg-5">
+                            <div class="col-lg-5">
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:text="#{Layout.log.panel}">Log panel</span>
@@ -142,7 +141,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                 <div class="card">
+                                <div class="card">
                                     <div class="card-header">
                                         <span>Report</span>
                                         <div class="card-header-actions">
@@ -163,6 +162,66 @@
             </section>
             <!-- END MAIN CONTAINER -->
             <footer th:replace="layout :: site-footer" />
+        </div>
+        <!-- Modal Delete-->
+        <div class="modal fade" id="modalDeleteRule" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel">
+                            <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
+                        </h4>
+                    </div>
+                    <div class="modal-body">Eliminare la regola &nbsp;<span></span>?</div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="" id="ruleId" value="" />
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                        <button type="button" id="btnDelete" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Edit-->
+        <div class="modal fade" id="modalEditRule" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title"><span th:text="#{ruleset.rule}">Regola</span></h4>
+                    </div>                
+                    <div class="modal-body form">
+                        <form action="#" id="editForm" class="form-horizontal">
+                            <input type="hidden" value="" name="ruleId" id="editRuleId"/>
+                            <input type="hidden" value="10" name="ruleSetId" id="editRuleId"/>
+                            <div class="form-body">
+                                <div id="msgs"></div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12">
+                                        <div class="col-lg-4 text-right">
+                                            <label class="control-label">Rule</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input name="rule" placeholder="Rule" class="form-control" title="Rule" type="text" id="editRuleText"/>
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnEdit" class="btn btn-primary"><span th:text="#{Userlist.save}">Save</span></button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">
+                            <span th:text="#{Userlist.close}">Close</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

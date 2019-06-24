@@ -54,6 +54,39 @@ $(document).ready(function () {
             }
         }
     });
+
+
+    $('#btnDelete').click(function () {
+        var ruleId = $('#ruleId').val();
+        $.ajax({
+            url: _ctx + "/rules/" + ruleId,
+            type: "DELETE",
+            success: function (data) {
+                location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error loading data');
+            }
+        });
+    });
+
+
+    $('#btnEdit').click(function () {
+        
+        $.ajax({
+            url: _ctx + "/rules/",
+            type: "PUT",
+            data: $('#editForm').serialize(),
+            dataType: "JSON",
+            success: function (data) {
+                location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error loading data');
+            }
+        });
+    });
+
 });
 
 function scaricaDataset(e, param, idDFile) {
@@ -65,15 +98,20 @@ function newRule() {
     alert("Add a new rule");
 }
 
-function editRule(idRule) {
-    alert("Edit rule \'" + idRule + "\'");
+function editRule(id, rule) {
+    $('#editRuleId').val(id);
+    $('#editRuleText').val(rule);
+    $('#modalEditRule').modal('show');
 }
 
-function deleteRule(idRule) {
-    alert("Delete rule \'" + idRule + "\'");
+function deleteRule(id, rule) {
+    $('#ruleId').val(id);
+    $('#modalDeleteRule .modal-body span').text(rule);
+    $('#modalDeleteRule').modal('show');
+
 }
 
-function runValidate(idRuleset){
+function runValidate(idRuleset) {
     $('#loading').modal('show');
     $.ajax({
         url: _ctx + "/rules/runvalidate/" + idRuleset,
@@ -85,5 +123,5 @@ function runValidate(idRuleset){
             alert('Error loading data');
         }
     });
-    
+
 }
