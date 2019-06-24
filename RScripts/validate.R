@@ -7,7 +7,7 @@ library(validate)
 library(validatetools)
 library(errorlocate)
 
-validate <- function(input, inputNames){
+detect_infeasible <- function(input, inputNames){
   print("Ready to parse rules...")
   rules_inc <- vector('character')
   rules <- validator(.data=input)

@@ -19,6 +19,7 @@ public class EngineValidate {
 
     public static final String INPUT = "input";
     public static final String INPUT_NAMES = "input_names";
+    public static final String INPUT_NAMES_PREFIX = "R_";
     public static final String OUTPUT = "output";
     public static final String SRC_VALIDATE = "validate.R";
     public static final String FUNCTION_DETECT_INFEASIBLE = "detect_infeasible";
@@ -35,7 +36,7 @@ public class EngineValidate {
     @Autowired
     private LogService logService;
 
-    public void init() throws Exception {
+    public void connect() throws Exception {
 
         logService.save("Connecting to R server...");
 
@@ -59,16 +60,12 @@ public class EngineValidate {
 
     public String[] detectInfeasibleRules(String[]input, String[]inputNames) throws Exception {
 
-        init();
-
         connection.assign(INPUT, input);
         connection.assign(INPUT_NAMES, inputNames);
         connection.eval(INPUT + " <- data.frame(rule=" + INPUT + ")");
         out = connection.eval(FUNCTION_DETECT_INFEASIBLE + "(" + INPUT + ", " + INPUT_NAMES + ")").asStrings();
 
         logService.save("Script completed!");
-
-        destroy();
         
         return out;
     }

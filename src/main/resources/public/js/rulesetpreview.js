@@ -118,6 +118,7 @@ function runValidate(idRuleset) {
         type: "GET",
         success: function (data) {
             $('#loading').modal('hide');
+            location.reload();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error loading data');

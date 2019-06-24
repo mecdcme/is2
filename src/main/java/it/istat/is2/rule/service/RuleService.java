@@ -25,6 +25,7 @@ package it.istat.is2.rule.service;
 
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.rule.engine.EngineValidate;
+import static it.istat.is2.rule.engine.EngineValidate.INPUT_NAMES_PREFIX;
 import it.istat.is2.rule.forms.RuleCreateForm;
 import it.istat.is2.workflow.dao.SxRuleDao;
 import it.istat.is2.workflow.dao.SxRuleTypeDao;
@@ -76,19 +77,41 @@ public class RuleService {
     }
 
     public void runValidate(SxRuleset ruleset) {
+        SxRule rule;
+        Integer ruleId;
         List<SxRule> rules = sxRuleDao.findBySxRuleset(ruleset);
-
+        
+        //Reset error status of rules
+        for (int i = 0; i < rules.size(); i++) {
+            rules.get(i).setErrcode(0);
+        }
+        sxRuleDao.saveAll(rules);
+        
+        //Create array of rules for R
         input = new String[rules.size()];
         for (int i = 0; i < rules.size(); i++) {
             input[i] = rules.get(i).getRule().toUpperCase();
         }
+
+        //Create array of names for R
         inputNames = new String[rules.size()];
         for (int i = 0; i < rules.size(); i++) {
-            inputNames[i] = "R_" + rules.get(i).getId();
+            inputNames[i] = INPUT_NAMES_PREFIX + rules.get(i).getId();
         }
 
         try {
+            engine.connect();
+
             out = engine.detectInfeasibleRules(input, inputNames);
+            //Save error codes of infeasible rules 
+            for (int i = 0; i < out.length; i++) {
+                ruleId = Integer.valueOf(out[i].replace(INPUT_NAMES_PREFIX, ""));
+                rule = sxRuleDao.findById(ruleId).orElse(null);
+                if (rule != null) {
+                    rule.setErrcode(1);
+                    sxRuleDao.save(rule);
+                }
+            }
         } catch (Exception e) {
             Logger.getRootLogger().error(e.getMessage());
         } finally {

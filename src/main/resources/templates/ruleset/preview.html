@@ -101,7 +101,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="rule : ${rules}">
+                                                <tr th:each="rule : ${rules}" th:classappend="${rule.errcode > 0} ? table-warning : table-ok">
                                                     <td><span  th:text="${#strings.abbreviate(rule.rule,50)}" th:title="${rule.rule}"></span></td>
                                                     <td style="width: 1%">
                                                         <a href="javascript:void(0)" title="Edit" role="button" th:attr="onclick='javascript:editRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">

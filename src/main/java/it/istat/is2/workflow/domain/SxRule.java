@@ -56,7 +56,7 @@ public class SxRule implements Serializable {
 
     private String eccezione;
 
-    private Short errcode;
+    private Integer errcode;
 
     private String nome;
 
