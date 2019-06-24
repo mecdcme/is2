@@ -312,8 +312,12 @@ public class RelaisService {
 
 		String codeMatchingA = "X1";
 		String codeMatchingB = "X2";
-		String codeFS = "FS";
+		String codeFS = "FS";		String paramTh="0.8";
 		int indexItems=0;
+		
+		
+		//ArrayList<String> patternOk =getPatternListOk(Mu_table,paramTh)
+		
 		ArrayList<String> variabileNomeListMA = new ArrayList<>();
 		ArrayList<String> variabileNomeListMB = new ArrayList<>();
 
