@@ -35,7 +35,7 @@
             });
         </script>
         <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
-        <link rel="stylesheet" th:href="@{/css/fileinput.min.css}" />
+        <link rel="stylesheet" th:href="@{/css/fileinput.min.css}" />        
     </head>
     <body>
         <!-- Body -->
@@ -90,6 +90,7 @@
                                             <input type="hidden" value="" name="delimiter" id="delimiter" />
                                             <input type="hidden" value="" name="labelFile" id="labelFile" />
                                             <input type="hidden" value="" name="classificazione" id="classificazione" />
+                                            <input type="hidden" value="" name="skipFirstLine" id="skipFisrtLine" />
                                             <div id="upload" class="row">
                                                 <div class="col-lg-8">
                                                     <div class="form-group">
@@ -136,7 +137,8 @@
                                                         </a>
                                                     </td>
                                                     <td style="width: 1%">
-                                                        <a href="javascript:void(0)" title="Elimina ruleset" role="button" th:attr="onclick='javascript:eliminaDataset(' + ${ruleset.id} + ')'">												
+                                                        <a href="javascript:void(0)" title="Elimina ruleset" role="button" 
+                                                        th:attr="onclick='javascript:eliminaRuleset(' + ${ruleset.id} + ', \'' + ${ruleset.nomeFile} + '\',' + ${session.sessionelv.id} +')'">									
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
@@ -201,8 +203,8 @@
                     <!-- /.modal-content -->
                 </div>
             </div>
-		<!-- Modal elimina dataset -->
-        <div class="modal fade" id="modalCancellaDataset" tabindex="-1"
+		<!-- Modal elimina ruleset -->
+        <div class="modal fade" id="modalCancellaRuleset" tabindex="-1"
              role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -214,11 +216,12 @@
                             <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
                         </h4>
                     </div>
-                    <div class="modal-body"><span id="msg_elim_dataset"></span></div>
+                    <div class="modal-body"><span id="msg_elim_ruleset"></span></div>
                     <div class="modal-footer">
-                        <input type="hidden" id="idDataset" th:name="idDataset" />                        
+                        <input type="hidden" id="idRuleset" th:name="idRuleset" />
+                        <input type="hidden" id="idSessione_del" th:name="idSessione" />                  
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
-                        <button type="button" id="btn_delete_dataset" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
+                        <button type="button" id="btn_delete_ruleset" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
                     </div>
                 </div>
             </div>
@@ -243,7 +246,12 @@
                         </div>
                         <div class="modal-body">
                             <span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
-                            <input id="label_file" value="" type="text"/>                 
+                            <input id="label_file" th:value="${etichetta}" type="text"/>                 
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{file.skip.first.line}" >Salta prima riga:</span> &nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="skip_line" value="1"> Si
+                            <input type="radio" name="skip_line" value="0" checked="checked"> No
                         </div>
                         <div class="modal-body">
                             <span th:text="#{rules.classification.type}">Classificazione:</span> &nbsp;&nbsp;&nbsp;

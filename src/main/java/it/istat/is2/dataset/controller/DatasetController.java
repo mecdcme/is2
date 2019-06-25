@@ -140,13 +140,11 @@ public class DatasetController {
         List<DatasetFile> listaDataset = sessionelv.getDatasetFiles();
         List<SxTipoDato> listaTipoDato = tipoDatoService.findListTipoDato();
 
-        Long etichetta = new Long(0);
-
-        if (listaDataset != null && !listaDataset.isEmpty()) {
-            DatasetFile lastDS = listaDataset.get(listaDataset.size() - 1);
-
-            etichetta = lastDS.getId() + 1;
-
+        String etichetta = null;
+        if(listaDataset!=null && listaDataset.size()>0) {
+        	etichetta = "DS_" + Integer.toString( listaDataset.size()+1 );
+        }else {
+        	etichetta = "DS_0";
         }
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 

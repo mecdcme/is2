@@ -49,4 +49,5 @@ public class InputFormBean implements Serializable {
 	private String outlier;
 	private String idsessione;
 	private String classificazione;
+	private Integer skipFirstLine;
 }

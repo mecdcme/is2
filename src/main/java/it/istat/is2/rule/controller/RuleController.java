@@ -86,10 +86,11 @@ public class RuleController {
         String idclassificazione = form.getClassificazione();
         String separatore = form.getDelimiter();
         String idsessione = form.getIdsessione();
+        Integer skipFirstLine = form.getSkipFirstLine();
 
         File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());
 
-        int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile);
+        int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile, skipFirstLine);
         logService.save("Caricate " + rules + " regole");
 
         SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
@@ -134,6 +135,14 @@ public class RuleController {
         List<DatasetFile> listaDatasetFile = datasetService.findDatasetFilesByIdSessioneLavoro(id);
 
         List<SxRuleset> listaRuleSet = sessionelv.getRuleSets();
+        String etichetta = null;
+        if(listaRuleSet!=null && listaRuleSet.size()>0) {
+        	etichetta = "RS_" + Integer.toString( listaRuleSet.size()+1 );
+        }else {
+        	etichetta = "RS_1";
+        }
+        
+        
         List<SxRuleType> listaRuleType = ruleService.findAllRuleType();
 
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
@@ -141,6 +150,7 @@ public class RuleController {
         model.addAttribute("listaDatasetFile", listaDatasetFile);
         model.addAttribute("listaRuleSet", listaRuleSet);
         model.addAttribute("listaRuleType", listaRuleType);
+        model.addAttribute("etichetta", etichetta);
         model.addAttribute("logs", logs);
         model.addAttribute("rlogs", rlogs);
 
@@ -162,5 +172,21 @@ public class RuleController {
         model.addAttribute("rlogs", rlogs);
 
         return "ruleset/preview";
+    }
+    @GetMapping(value = "/deleteRuleset/{idSessione}/{idRuleset}")
+    public String eliminaRuleset(HttpSession session, Model model, @PathVariable("idSessione") Long idSessione,  @PathVariable("idRuleset") Integer idRuleset) {
+
+    	notificationService.removeAllMessages();      
+        
+        ruleService.deleteRuleset(idRuleset);
+        
+        logService.save("Set di regole con id " + idRuleset + " eliminato con successo");
+        notificationService.addInfoMessage("Eliminazione avvenuta con successo");
+
+        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);        
+        sessionBean.getRuleset().remove(0);
+        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+
+        return "redirect:/rule/viewRuleset/" + idSessione;
     }
 }

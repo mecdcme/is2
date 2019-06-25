@@ -236,7 +236,7 @@
                         </div>
                         <div class="modal-body">
                             <span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
-                            <input id="label_file" value="" type="text"/>                                
+                            <input id="label_file" th:value="${etichetta}" type="text"/>                                
                         </div>
                         <div class="modal-body">
                             <span th:text="#{file.data.type}">Tipo dato:</span> &nbsp;&nbsp;&nbsp;

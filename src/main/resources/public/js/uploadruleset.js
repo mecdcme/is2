@@ -57,9 +57,10 @@ $(document).ready(function () {
     $('#label_file').on("keyup", function (e) {
     	controllaInputText();
     });*/
-    $('#btn_delete_dataset').click(function () {
-    	var datasetid = $('#idDataset').val();      
-        window.location = _ctx + '/deleteDataset/' + datasetid;
+    $('#btn_delete_ruleset').click(function () { 
+    	var rulesetid = $('#idRuleset').val();  
+    	var sessioneid = $('#idSessione_del').val();
+        window.location = _ctx + '/rule/deleteRuleset/' + sessioneid +"/"+ rulesetid;
     });
 });
 
@@ -73,10 +74,11 @@ function controllaInputText() {
     }
 }
 	
-function eliminaDataset(idDataset, nomeFile) {	
-    $("#idDataset").val(idDataset);    
-    $('#msg_elim_dataset').text("Eliminare il dataset " + nomeFile + "?");
-    $('#modalCancellaDataset').modal('show');    
+function eliminaRuleset(idRuleset, nomeFile, idSessione) {	
+    $("#idRuleset").val(idRuleset); 
+    $("#idSessione_del").val(idSessione);
+    $('#msg_elim_ruleset').text("Eliminare il set di regole " + nomeFile + "?");
+    $('#modalCancellaRuleset').modal('show');    
 }
 function eliminaElaborazione(ide, ids) {
     $('#id_elaborazione_del').val(ide);
@@ -166,12 +168,14 @@ function inviaFormRulesetFile() {
         $("#desc").val($("div.file-caption-name").attr("title"));//set filename
         $("#labelFile").val($("#label_file").val());
     	$("#delimiter").val($("#delimiter_sel").val());
-    	$("#classificazione").val($("#tipo_regola").val());    	
+    	$("#classificazione").val($("#tipo_regola").val());  
+    	var radioValue = $("input[name='skip_line']:checked"). val();    	
+    	$("#skipFisrtLine").val(radioValue);
     	 $("#inputFileRulesetForm").submit();
     } else { // no file was selected        	
         $("#errorUplodFile").modal('toggle');
         return false;
-    }
+    }    
 }
 function inviaFormNewRuleset() {
     $("#rulesetName").val($("#ruleset_name").val());
