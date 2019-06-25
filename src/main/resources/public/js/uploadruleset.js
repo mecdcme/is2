@@ -53,10 +53,10 @@ $(document).ready(function () {
             return false;
         };
     });
-    /*controllaInputText();
+    controllaInputText();
     $('#label_file').on("keyup", function (e) {
     	controllaInputText();
-    });*/
+    });
     $('#btn_delete_ruleset').click(function () { 
     	var rulesetid = $('#idRuleset').val();  
     	var sessioneid = $('#idSessione_del').val();
