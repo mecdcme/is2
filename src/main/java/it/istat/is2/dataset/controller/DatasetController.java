@@ -144,7 +144,7 @@ public class DatasetController {
         if(listaDataset!=null && listaDataset.size()>0) {
         	etichetta = "DS_" + Integer.toString( listaDataset.size()+1 );
         }else {
-        	etichetta = "DS_0";
+        	etichetta = "DS_1";
         }
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 
