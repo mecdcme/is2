@@ -44,11 +44,10 @@ public interface LogDao extends CrudRepository<Log, Long> {
     
     public List<Log> findByIdSessioneAndTipoOrderByIdAsc(Long idSessione, String tipo);
 
-    public long deleteByIdSessione(Long idSessione);
+    public int deleteByIdSessione(Long idSessione);
     
-    @Transactional
     @Modifying
     @Query("delete from Log lg where lg.idSessione = :idSessione and lg.tipo = :tipo")
-    public long deleteByIdSessioneAndTipo(@Param("idSessione") Long idSessione, @Param("tipo") String tipo);
+    public int deleteByIdSessioneAndTipo(@Param("idSessione") Long idSessione, @Param("tipo") String tipo);
 
 }

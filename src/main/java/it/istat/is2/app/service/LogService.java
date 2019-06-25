@@ -81,11 +81,11 @@ public class LogService {
         return logs;
     }
     
-    public long deleteByIdSessione(Long idSessione) {
+    public int deleteByIdSessione(Long idSessione) {
         return this.logDao.deleteByIdSessione(idSessione);
     }
     
-    public long deleteByIdSessioneAndTipo(Long idSessione, String tipo) {
+    public int deleteByIdSessioneAndTipo(Long idSessione, String tipo) {
         return this.logDao.deleteByIdSessioneAndTipo(idSessione, tipo);
     }
     
