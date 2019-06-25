@@ -44,6 +44,12 @@ public interface IS2Const {
     public static final String ENGINE_JAVA = "JAVA";
     public static final String ENGINE_SQL = "SQL";
     public static final String ENGINE_R_LIGHT = "R-LIGHT";
+	public static final String WORKSET_FREQUENCY = "FREQUENCY";
+	public static final String WF_OUTPUT_ROLES = "roles.output";
+	public static final String WF_OUTPUT_WORKSET = "worset.output";
+    
+    public static final String OUTPUT_DEFAULT = "OUT";
+    public static final String OUTPUT_R = "R";
     
     public static final String OUTPUT_DEFAULT = "OUT";
     public static final String OUTPUT_R = "R";

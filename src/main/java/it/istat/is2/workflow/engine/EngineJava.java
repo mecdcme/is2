@@ -75,6 +75,7 @@ public class EngineJava implements EngineService {
 	private Map<String, ArrayList<String>> parametriMap;
 	private Map<String, ArrayList<String>> modelloMap;
 	private Map<String, ArrayList<String>> worksetOut;
+	private Map<String, Map<?,?>> resultOut;
 	private LinkedHashMap<String, ArrayList<String>> ruoliVariabileNome;
 
 	private LinkedHashMap<String, ArrayList<String>> ruoliOutputStep;
@@ -107,8 +108,11 @@ public class EngineJava implements EngineService {
 		// Method method = RelaisService.class.getDeclaredMethod(fname);
 		Method method = ReflectionUtils.findMethod(RelaisService.class, fname, Long.class, Map.class,Map.class);
 
-		worksetOut = (HashMap<String, ArrayList<String>>) method.invoke(relaisService, elaborazione.getId(),
+		resultOut = (Map<String, Map<?, ?>>) method.invoke(relaisService, elaborazione.getId(),
 				ruoliVariabileNome,worksetVariabili);
+			
+		worksetOut=(Map<String, ArrayList<String>>) resultOut.get(IS2Const.WF_OUTPUT_WORKSET);
+		ruoliOutputStep =(LinkedHashMap<String, ArrayList<String>>) resultOut.get(IS2Const.WF_OUTPUT_ROLES);
 	}
 
 	public void prepareEnv() {
@@ -188,17 +192,13 @@ public class EngineJava implements EngineService {
 	@Override
 	public void processOutput() throws Exception {
 
-		getGenericoOutput(ruoliOutputStep);
+	 
 
 		saveOutputDB();
 
 	}
 
-	private void getGenericoOutput(HashMap<String, ArrayList<String>> ruoliOutputStep2) {
-		// TODO Auto-generated method stub
-		ArrayList<String> listValue = new ArrayList<String>(worksetOut.keySet());
-		ruoliOutputStep2.put("CT", listValue);
-	}
+	 
 
 	private void saveOutputDB() {
 		// TODO Auto-generated method stub
