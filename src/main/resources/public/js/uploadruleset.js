@@ -57,7 +57,7 @@ $(document).ready(function () {
     $('#label_file').on("keyup", function (e) {
     	controllaInputText();
     });*/
-    $('#btn_delete_ruleset').click(function () {
+    $('#btn_delete_ruleset').click(function () { 
     	var rulesetid = $('#idRuleset').val();  
     	var sessioneid = $('#idSessione_del').val();
         window.location = _ctx + '/rule/deleteRuleset/' + sessioneid +"/"+ rulesetid;
