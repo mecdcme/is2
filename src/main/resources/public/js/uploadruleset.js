@@ -57,9 +57,10 @@ $(document).ready(function () {
     $('#label_file').on("keyup", function (e) {
     	controllaInputText();
     });*/
-    $('#btn_delete_dataset').click(function () {
-    	var datasetid = $('#idDataset').val();      
-        window.location = _ctx + '/deleteDataset/' + datasetid;
+    $('#btn_delete_ruleset').click(function () {
+    	var rulesetid = $('#idRuleset').val();  
+    	var sessioneid = $('#idSessione_del').val();
+        window.location = _ctx + '/rule/deleteRuleset/' + sessioneid +"/"+ rulesetid;
     });
 });
 
@@ -73,10 +74,11 @@ function controllaInputText() {
     }
 }
 	
-function eliminaDataset(idDataset, nomeFile) {	
-    $("#idDataset").val(idDataset);    
-    $('#msg_elim_dataset').text("Eliminare il dataset " + nomeFile + "?");
-    $('#modalCancellaDataset').modal('show');    
+function eliminaRuleset(idRuleset, nomeFile, idSessione) {	
+    $("#idRuleset").val(idRuleset); 
+    $("#idSessione_del").val(idSessione);
+    $('#msg_elim_ruleset').text("Eliminare il set di regole " + nomeFile + "?");
+    $('#modalCancellaRuleset').modal('show');    
 }
 function eliminaElaborazione(ide, ids) {
     $('#id_elaborazione_del').val(ide);
