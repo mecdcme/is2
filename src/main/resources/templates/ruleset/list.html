@@ -35,7 +35,7 @@
             });
         </script>
         <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
-        <link rel="stylesheet" th:href="@{/css/fileinput.min.css}" />
+        <link rel="stylesheet" th:href="@{/css/fileinput.min.css}" />        
     </head>
     <body>
         <!-- Body -->
@@ -90,6 +90,7 @@
                                             <input type="hidden" value="" name="delimiter" id="delimiter" />
                                             <input type="hidden" value="" name="labelFile" id="labelFile" />
                                             <input type="hidden" value="" name="classificazione" id="classificazione" />
+                                            <input type="hidden" value="" name="skipFirstLine" id="skipFisrtLine" />
                                             <div id="upload" class="row">
                                                 <div class="col-lg-8">
                                                     <div class="form-group">
@@ -243,7 +244,12 @@
                         </div>
                         <div class="modal-body">
                             <span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
-                            <input id="label_file" value="" type="text"/>                 
+                            <input id="label_file" th:value="${etichetta}" type="text"/>                 
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{file.skip.first.line}" >Salta prima riga:</span> &nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="skip_line" value="1"> Si
+                            <input type="radio" name="skip_line" value="0" checked="checked"> No
                         </div>
                         <div class="modal-body">
                             <span th:text="#{rules.classification.type}">Classificazione:</span> &nbsp;&nbsp;&nbsp;
