@@ -209,7 +209,19 @@ public class RuleService {
     }
 
     public void delete(Integer ruleId) {
+        
+        SxRule rule =  sxRuleDao.findById(ruleId).orElse(null);
+        SxRuleset ruleSet;
+        Integer numberOfRules;
+        if(rule != null){
+            ruleSet = rule.getSxRuleset();
+            numberOfRules = sxRuleDao.countBySxRuleset(ruleSet);
+            ruleSet.setNumeroRighe(numberOfRules - 1);
+            sxRulesetDao.save(ruleSet);
+        }
+        
         sxRuleDao.deleteById(ruleId);
+        
     }
 
 }

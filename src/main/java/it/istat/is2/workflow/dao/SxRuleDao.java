@@ -34,6 +34,7 @@ import java.util.List;
 @Repository
 public interface SxRuleDao extends CrudRepository<SxRule,Integer> {
     
-  List<SxRule> findBySxRuleset(SxRuleset ruleset); 
+  List<SxRule> findBySxRuleset(SxRuleset ruleset);
+  Integer countBySxRuleset(SxRuleset ruleset);
  
 }

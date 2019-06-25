@@ -1,0 +1,10 @@
+edit
+sat1+sat2+sat3+sat4+sat5+sat6+sat7 == sat8 
+sau1+sau2+sau3+sau4+sau5+sau6+sau7 == sau8 
+sau1 <= sat1
+sau2 <= sat2
+sau3 <= sat3
+sau4 <= sat4
+sau5 <= sat5
+sau6 <= sat6
+sau7 <= sat7
