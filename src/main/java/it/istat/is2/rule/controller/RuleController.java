@@ -139,7 +139,7 @@ public class RuleController {
         if(listaRuleSet!=null && listaRuleSet.size()>0) {
         	etichetta = "RS_" + Integer.toString( listaRuleSet.size()+1 );
         }else {
-        	etichetta = "RS_0";
+        	etichetta = "RS_1";
         }
         
         
