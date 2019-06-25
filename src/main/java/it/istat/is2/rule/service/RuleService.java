@@ -173,6 +173,9 @@ public class RuleService {
 
         sxRulesetDao.save(sxRuleset);
     }
+public void deleteRuleset(Integer rulesetId) {       
+        sxRulesetDao.deleteById(rulesetId);        
+    }
 
     public SxRuleset findRuleSet(Integer idfile) {
         // TODO Auto-generated method stub
