@@ -120,7 +120,7 @@ public class RuleService {
 
     }
 
-    public int loadRules(File fileRules, String idsessione, String etichetta, String idclassificazione, String separatore, String nomeFile) {
+    public int loadRules(File fileRules, String idsessione, String etichetta, String idclassificazione, String separatore, String nomeFile, Integer skipFirstLine) {
         String pathTmpFile = fileRules.getAbsolutePath().replace("\\", "/");
         WorkSession sessionelv = sessioneLavoroService.getSessione(Long.parseLong(idsessione));
         SxRuleset ruleset = new SxRuleset();
@@ -143,6 +143,10 @@ public class RuleService {
         String formula = null;
 
         Iterator<CSVRecord> itr = records.iterator();
+        // If skipFirstLine equals 1 skips first line
+        if(skipFirstLine==1) {
+        	itr.next();
+        }        
         while (itr.hasNext()) {
             CSVRecord rec = itr.next();
             formula = rec.get(0);
