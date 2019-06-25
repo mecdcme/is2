@@ -50,8 +50,6 @@ public interface IS2Const {
     
     public static final String OUTPUT_DEFAULT = "OUT";
     public static final String OUTPUT_R = "R";
-    
-    public static final String OUTPUT_DEFAULT = "OUT";
-    public static final String OUTPUT_R = "R";
+
     
 }

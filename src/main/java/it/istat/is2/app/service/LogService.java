@@ -85,7 +85,7 @@ public class LogService {
         return this.logDao.deleteByIdSessione(idSessione);
     }
     
-    public long deleteByIdSessioneAndTipo(Long idSessione, String tipo) {
+    public int deleteByIdSessioneAndTipo(Long idSessione, String tipo) {
         return this.logDao.deleteByIdSessioneAndTipo(idSessione, tipo);
     }
     
