@@ -85,10 +85,11 @@ public class RuleController {
         String idclassificazione = form.getClassificazione();
         String separatore = form.getDelimiter();
         String idsessione = form.getIdsessione();
+        Integer skipFirstLine = form.getSkipFirstLine();
 
         File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());
 
-        int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile);
+        int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile, skipFirstLine);
         logService.save("Caricate " + rules + " regole");
 
         SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
@@ -134,6 +135,14 @@ public class RuleController {
         List<DatasetFile> listaDatasetFile = datasetService.findDatasetFilesByIdSessioneLavoro(id);
 
         List<SxRuleset> listaRuleSet = sessionelv.getRuleSets();
+        String etichetta = null;
+        if(listaRuleSet!=null && listaRuleSet.size()>0) {
+        	etichetta = "RS_" + Integer.toString( listaRuleSet.size()+1 );
+        }else {
+        	etichetta = "RS_0";
+        }
+        
+        
         List<SxRuleType> listaRuleType = ruleService.findAllRuleType();
 
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
@@ -141,6 +150,7 @@ public class RuleController {
         model.addAttribute("listaDatasetFile", listaDatasetFile);
         model.addAttribute("listaRuleSet", listaRuleSet);
         model.addAttribute("listaRuleType", listaRuleType);
+        model.addAttribute("etichetta", etichetta);
         model.addAttribute("logs", logs);
 
         return "ruleset/list";
