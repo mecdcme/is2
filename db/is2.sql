@@ -347,6 +347,7 @@ CREATE TABLE `sx_log` (
   `msg` text,
   `msg_time` datetime DEFAULT NULL,
   `id_sessione` int(20) NOT NULL,
+  `tipo` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

@@ -115,19 +115,26 @@ box-shadow: none !important;
     overflow-x: hidden;
 }
 
-#logbox, #rbox{
+#logbox{
     height: 178px;
     overflow-y: auto;
     font-family: monospace;
     font-size: 12px;
 }
 
-#logbox ul{
+#rbox{
+    height: 270px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+#logbox ul, #rbox ul{
     list-style-type: none;
     padding-left: 4px;
 }
 
-#logbox ul > li{
+.logbox ul > li, .rbox ul > li{
     padding: 2px 0px;
 }
 
@@ -645,9 +652,10 @@ fieldset {
 
 }
 
-.table-warning{
+.table-warning td, .table-warning td a{
     background-color: #ffeeba!important;
-    border-color: #ffdf7e!important;
+    font-weight: 600;
+    color: #383529;
 }
 
 .my-row {

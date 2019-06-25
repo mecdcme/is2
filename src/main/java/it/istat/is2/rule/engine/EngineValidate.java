@@ -6,9 +6,8 @@
 package it.istat.is2.rule.engine;
 
 import it.istat.is2.app.service.LogService;
-import it.istat.is2.workflow.domain.SxRule;
-import java.util.List;
-import org.apache.log4j.Logger;
+import static it.istat.is2.app.util.IS2Const.OUTPUT_R;
+import org.rosuda.REngine.RList;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +20,8 @@ public class EngineValidate {
     public static final String INPUT_NAMES = "input_names";
     public static final String INPUT_NAMES_PREFIX = "R_";
     public static final String OUTPUT = "output";
-    public static final String SRC_VALIDATE = "validate.R";
+    public static final String VALIDATE_FOLDER = "validate";
+    public static final String VALIDATE_SRC = "validate.R";
     public static final String FUNCTION_DETECT_INFEASIBLE = "detect_infeasible";
     
     @Value("${serverR.host}")
@@ -31,7 +31,9 @@ public class EngineValidate {
     @Value("${path.script.R}")
     private String pathR;
     private RConnection connection;
-    private String[] out;
+    private RList out;
+    private String[] result;
+    private String[] rlog;
 
     @Autowired
     private LogService logService;
@@ -54,7 +56,7 @@ public class EngineValidate {
         logService.save("Successfully connected!");
 
         connection.eval("setwd('" + pathR + "')");
-        connection.eval("source('" + SRC_VALIDATE + "')");
+        connection.eval("source('" + VALIDATE_FOLDER + "/" + VALIDATE_SRC + "')");
         logService.save("Validate R script loaded");
     }
 
@@ -63,11 +65,18 @@ public class EngineValidate {
         connection.assign(INPUT, input);
         connection.assign(INPUT_NAMES, inputNames);
         connection.eval(INPUT + " <- data.frame(rule=" + INPUT + ")");
-        out = connection.eval(FUNCTION_DETECT_INFEASIBLE + "(" + INPUT + ", " + INPUT_NAMES + ")").asStrings();
+        out = connection.eval(FUNCTION_DETECT_INFEASIBLE + "(" + INPUT + ", " + INPUT_NAMES + ")").asList();
 
+        result = out.at("rules").asStrings();
+        rlog = out.at("log").asStrings();
+        
+        for(int i = 0; i < rlog.length; i++){
+             logService.save(rlog[i], OUTPUT_R);
+        }
+        
         logService.save("Script completed!");
         
-        return out;
+        return result;
     }
 
     public void destroy() {

@@ -156,3 +156,17 @@ function clearLog(idSessione) {
         }
     });
 }
+
+function clearRLog(idSessione) {
+    $.ajax({
+        url: _ctx + "/rlogs/" + idSessione,
+        type: "DELETE",
+        dataType: "JSON",
+        success: function () {
+            $("#logbox").text("No message available");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            writeMsgsError('Error deleting data', 'msgs');
+        }
+    });
+}

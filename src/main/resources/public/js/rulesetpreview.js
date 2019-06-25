@@ -39,7 +39,16 @@ $(document).ready(function () {
         searching: true,
         lengthChange: true,
         pageLength: 20,
-        buttons: [{
+        buttons: [
+            {
+                text: 'Nuova regola',
+                title: 'New rule',
+                className: 'btn-light',
+                action: function (e, dt, node, config) {
+                    newRule();
+                }
+            },
+            {
                 extend: 'csvHtml5',
                 filename: 'download',
                 title: 'download',
@@ -72,7 +81,7 @@ $(document).ready(function () {
 
 
     $('#btnEdit').click(function () {
-        
+
         $.ajax({
             url: _ctx + "/rules/",
             type: "PUT",
@@ -125,4 +134,19 @@ function runValidate(idRuleset) {
         }
     });
 
+}
+
+function runIsContradicted(idRule) {
+    $('#loading').modal('show');
+    $.ajax({
+        url: _ctx + "/rules/IsContradicted/" + idRule,
+        type: "GET",
+        success: function (data) {
+            $('#loading').modal('hide');
+            location.reload();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error loading data');
+        }
+    });
 }

@@ -52,14 +52,29 @@ public class LogService {
     }
 
     public List<Log> findByIdSessione(Long idSessione) {
-        return (List<Log>) this.logDao.findByIdSessioneOrderByIdDesc(idSessione);
+        return (List<Log>) this.logDao.findByIdSessioneAndTipoOrderByIdDesc(idSessione, IS2Const.OUTPUT_DEFAULT);
     }
 
+    public List<Log> findByIdSessioneAndTipo(Long idSessione, String tipo) {
+        return (List<Log>) this.logDao.findByIdSessioneAndTipoOrderByIdAsc(idSessione, tipo);
+    }
+        
     public List<Log> findByIdSessione() {
          SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
          List<Log> logs;
          if (sessionBean != null) {
-             logs = this.logDao.findByIdSessioneOrderByIdDesc(sessionBean.getId());
+             logs = this.logDao.findByIdSessioneAndTipoOrderByIdDesc(sessionBean.getId(),IS2Const.OUTPUT_DEFAULT);
+         } else{
+             logs = new ArrayList<>();
+         }
+        return logs;
+    }
+    
+    public List<Log> findByIdSessioneAndTipo(String tipo) {
+         SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+         List<Log> logs;
+         if (sessionBean != null) {
+             logs = this.logDao.findByIdSessioneAndTipoOrderByIdAsc(sessionBean.getId(),tipo);
          } else{
              logs = new ArrayList<>();
          }
@@ -69,7 +84,11 @@ public class LogService {
     public long deleteByIdSessione(Long idSessione) {
         return this.logDao.deleteByIdSessione(idSessione);
     }
-
+    
+    public long deleteByIdSessioneAndTipo(Long idSessione, String tipo) {
+        return this.logDao.deleteByIdSessioneAndTipo(idSessione, tipo);
+    }
+    
     public void save(String msg) {
 
         SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
@@ -81,8 +100,28 @@ public class LogService {
             log.setIdSessione(new Long(-1));
         }
         log.setMsg(msg);
+        log.setTipo(IS2Const.OUTPUT_DEFAULT);
         log.setMsgTime(new Date());
 
         this.logDao.save(log);
     }
+    
+    public void save(String msg, String tipo) {
+
+        SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+
+        Log log = new Log();
+        if (sessionBean != null) {
+            log.setIdSessione(sessionBean.getId());
+        } else{
+            log.setIdSessione(new Long(-1));
+        }
+        log.setMsg(msg);
+        log.setTipo(tipo);
+        log.setMsgTime(new Date());
+
+        this.logDao.save(log);
+    }
+    
+    
 }

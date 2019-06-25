@@ -32,6 +32,7 @@ import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.app.util.IS2Const;
+import static it.istat.is2.app.util.IS2Const.OUTPUT_R;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.rule.service.RuleService;
@@ -94,10 +95,10 @@ public class RuleController {
         SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
         sessionBean.getRuleset().add(nomeFile);
         httpSession.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
-        
+
         return "redirect:/rule/viewRuleset/" + idsessione;
     }
-    
+
     @RequestMapping(value = "/newRuleset", method = RequestMethod.POST)
     public String newRulesetData(HttpSession httpSession, HttpServletRequest request, Model model,
             @AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") NewRulesetFormBean form)
@@ -110,18 +111,16 @@ public class RuleController {
         Integer tipoRuleset = form.getRulesetType();
         String descrRuleset = form.getRulesetDesc();
         WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));
-       
-        Integer dataset = form.getDataset();        
+
+        Integer dataset = form.getDataset();
 
         SxRuleset ruleset = new SxRuleset();
         ruleset.setLabelFile(etichettaRuleset);
         ruleset.setNomeFile(nomeRuleset);
         ruleset.setSessioneLavoro(sessionelv);
-        
-        
+
         ruleService.saveRuleSet(ruleset);
-        
-        
+
         return "redirect:/rule/viewRuleset/" + form.getIdsessione();
     }
 
@@ -129,6 +128,7 @@ public class RuleController {
     public String mostraroleset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
         List<Log> logs = logService.findByIdSessione(id);
+        List<Log> rlogs = logService.findByIdSessioneAndTipo(id, OUTPUT_R);
 
         WorkSession sessionelv = sessioneLavoroService.getSessione(id);
         List<DatasetFile> listaDatasetFile = datasetService.findDatasetFilesByIdSessioneLavoro(id);
@@ -142,6 +142,7 @@ public class RuleController {
         model.addAttribute("listaRuleSet", listaRuleSet);
         model.addAttribute("listaRuleType", listaRuleType);
         model.addAttribute("logs", logs);
+        model.addAttribute("rlogs", rlogs);
 
         return "ruleset/list";
     }
@@ -150,13 +151,15 @@ public class RuleController {
     public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Integer idfile) {
 
         notificationService.removeAllMessages();
-       List<Log> logs = logService.findByIdSessione();
+        List<Log> logs = logService.findByIdSessione();
+        List<Log> rlogs = logService.findByIdSessioneAndTipo(OUTPUT_R);
         SxRuleset ruleset = ruleService.findRuleSet(idfile);
         List<SxRule> rules = ruleService.findRules(ruleset);
 
         model.addAttribute("ruleset", ruleset);
         model.addAttribute("rules", rules);
         model.addAttribute("logs", logs);
+        model.addAttribute("rlogs", rlogs);
 
         return "ruleset/preview";
     }

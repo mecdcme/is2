@@ -25,6 +25,7 @@ package it.istat.is2.app.controller.rest;
 
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
+import it.istat.is2.app.util.IS2Const;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -46,12 +47,12 @@ public class LogRestController {
     private LogService logService;
 
     @DeleteMapping("/logs/{sessionId}")
-    public List<NotificationService.NotificationMessage> deleteUser(@PathVariable("sessionId") Long sessionId) {
+    public List<NotificationService.NotificationMessage> deleteLogs(@PathVariable("sessionId") Long sessionId) {
 
         notificationService.removeAllMessages();
 
         try {
-            logService.deleteByIdSessione(sessionId);
+            logService.deleteByIdSessioneAndTipo(sessionId, IS2Const.OUTPUT_DEFAULT);
             notificationService.addInfoMessage(messages.getMessage("user.created", null, LocaleContextHolder.getLocale()));
         } catch (Exception e) {
             notificationService.addErrorMessage("Error: " + e.getMessage());
@@ -59,4 +60,20 @@ public class LogRestController {
 
         return notificationService.getNotificationMessages();
     }
+    
+    @DeleteMapping("/rlogs/{sessionId}")
+    public List<NotificationService.NotificationMessage> deleteRLogs(@PathVariable("sessionId") Long sessionId) {
+
+        notificationService.removeAllMessages();
+
+        try {
+            logService.deleteByIdSessioneAndTipo(sessionId, IS2Const.OUTPUT_R);
+            notificationService.addInfoMessage(messages.getMessage("user.created", null, LocaleContextHolder.getLocale()));
+        } catch (Exception e) {
+            notificationService.addErrorMessage("Error: " + e.getMessage());
+        }
+
+        return notificationService.getNotificationMessages();
+    }
+    
 }

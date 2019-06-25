@@ -51,6 +51,6 @@ public interface DatasetFileDao extends JpaRepository<DatasetFile, Long> {
 	
 	@Transactional
 	@Modifying
-	@Query(value="delete from DatasetFile df   where df.id=:dFile ")
+	@Query(value="delete from DatasetFile df where df.id=:dFile ")
 	void deleteDatasetFile(@Param("dFile")Long dFile);
 }

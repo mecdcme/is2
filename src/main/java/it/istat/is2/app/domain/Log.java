@@ -51,6 +51,9 @@ public class Log implements Serializable{
     @Column(name = "msg")
     private String msg;
     
+    @Column(name = "tipo")
+    private String tipo;
+    
     @Column(name = "msg_time")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date msgTime;

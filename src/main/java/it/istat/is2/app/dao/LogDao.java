@@ -26,16 +26,29 @@ package it.istat.is2.app.dao;
 import it.istat.is2.app.domain.Log;
 import java.util.List;
 import java.util.Optional;
+import javax.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LogDao extends CrudRepository<Log, Long> {
 
-	public void save(Optional<Log> log);
+    public void save(Optional<Log> log);
 
-	public List<Log> findByIdSessioneOrderByIdDesc(Long idSessione);
+    public List<Log> findByIdSessioneOrderByIdDesc(Long idSessione);
 
-	public long deleteByIdSessione(Long idSessione);
+    public List<Log> findByIdSessioneAndTipoOrderByIdDesc(Long idSessione, String tipo);
+    
+    public List<Log> findByIdSessioneAndTipoOrderByIdAsc(Long idSessione, String tipo);
+
+    public long deleteByIdSessione(Long idSessione);
+    
+    @Transactional
+    @Modifying
+    @Query("delete from Log lg where lg.idSessione = :idSessione and lg.tipo = :tipo")
+    public long deleteByIdSessioneAndTipo(@Param("idSessione") Long idSessione, @Param("tipo") String tipo);
 
 }

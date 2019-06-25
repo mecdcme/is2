@@ -213,6 +213,7 @@ public class RuleService {
         SxRule rule =  sxRuleDao.findById(ruleId).orElse(null);
         SxRuleset ruleSet;
         Integer numberOfRules;
+        //decrease the number of rules of the ruleset
         if(rule != null){
             ruleSet = rule.getSxRuleset();
             numberOfRules = sxRuleDao.countBySxRuleset(ruleSet);

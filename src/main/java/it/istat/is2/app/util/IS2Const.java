@@ -45,4 +45,7 @@ public interface IS2Const {
     public static final String ENGINE_SQL = "SQL";
     public static final String ENGINE_R_LIGHT = "R-LIGHT";
     
+    public static final String OUTPUT_DEFAULT = "OUT";
+    public static final String OUTPUT_R = "R";
+    
 }
