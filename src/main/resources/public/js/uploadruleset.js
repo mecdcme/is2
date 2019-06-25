@@ -166,12 +166,14 @@ function inviaFormRulesetFile() {
         $("#desc").val($("div.file-caption-name").attr("title"));//set filename
         $("#labelFile").val($("#label_file").val());
     	$("#delimiter").val($("#delimiter_sel").val());
-    	$("#classificazione").val($("#tipo_regola").val());    	
+    	$("#classificazione").val($("#tipo_regola").val());  
+    	var radioValue = $("input[name='skip_line']:checked"). val();    	
+    	$("#skipFisrtLine").val(radioValue);
     	 $("#inputFileRulesetForm").submit();
     } else { // no file was selected        	
         $("#errorUplodFile").modal('toggle');
         return false;
-    }
+    }    
 }
 function inviaFormNewRuleset() {
     $("#rulesetName").val($("#ruleset_name").val());
