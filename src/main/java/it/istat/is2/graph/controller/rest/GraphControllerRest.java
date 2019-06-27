@@ -34,12 +34,8 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -89,21 +85,21 @@ public class GraphControllerRest {
             @PathVariable("xAxis") List<Integer> xAxis, @PathVariable("yAxis") List<Integer> yAxis) {
 
         Map<String, List<String>> filterData = new HashMap<>();
-        for (int i = 0; i < filters.size(); i++) {
-            if (filters.get(i) > 0) {
-                filterData.put("FILTER_" + i, datasetService.findOneColonna(new Long(filters.get(i))).getDatiColonna());
+        for (Integer filter : filters) {
+            if (filter > 0) {
+                filterData.put(datasetService.findOneColonna(new Long(filter)).getNome(), datasetService.findOneColonna(new Long(filter)).getDatiColonna());
             }
         }
         Map<String, List<String>> xData = new HashMap<>();
-        for (int i = 0; i < xAxis.size(); i++) {
-            if (xAxis.get(i) > 0) {
-                xData.put("X_" + i, datasetService.findOneColonna(new Long(xAxis.get(i))).getDatiColonna());
+        for (Integer x: xAxis) {
+            if (x > 0) {
+                xData.put(datasetService.findOneColonna(new Long(x)).getNome(), datasetService.findOneColonna(new Long(x)).getDatiColonna());
             }
         }
         Map<String, List<String>> yData = new HashMap<>();
-        for (int i = 0; i < yAxis.size(); i++) {
-            if (yAxis.get(i) > 0) {
-                yData.put("Y_" + i, datasetService.findOneColonna(new Long(yAxis.get(i))).getDatiColonna());
+        for (Integer y: yAxis) {
+            if (y > 0) {
+                yData.put(datasetService.findOneColonna(new Long(y)).getNome(), datasetService.findOneColonna(new Long(y)).getDatiColonna());
             }
         }
 

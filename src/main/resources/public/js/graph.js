@@ -55,7 +55,7 @@ function getBoxPlot() {
         url: _ctx + "/rest/graph/getColumns/" + getColumnIds(),
         type: "POST",
         success: function (data) {
-            boxplotP(data)
+            boxplotP(data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error loading data');
@@ -77,32 +77,20 @@ function getScatter() {
 }
 
 function getBar() {
-    $.ajax({
-        url: _ctx + "/rest/graph/getCoordinates/" + getColumnIds(),
-        type: "POST",
-        success: function (data) {
-            barP(data);
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error loading data');
-        }
-    });
+
+    barP(getData());
+
 }
 
-function getData() {
+function getData(graphType) {
 
-    var graphmeta = getMetaData()
+    var graphmeta = getMetaData();
 
     $.ajax({
         url: _ctx + "/rest/graph/getData/" + graphmeta.filters + "/" + graphmeta.xAxis + "/" + graphmeta.yAxis,
         type: "GET",
         success: function (data) {
-            if (Object.keys(data.filter).length) //check if object is empty
-                console.log(data.filter);
-            if (Object.keys(data.xaxis).length) //check if object is empty
-                console.log(data.xaxis);
-            if (Object.keys(data.yaxis).length) //check if object is empty
-                console.log(data.yaxis);
+            drawGraph(graphType, data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error loading data');
@@ -115,7 +103,7 @@ function getMetaData() {
     var meta = {
         filters: "",
         xAxis: "",
-        yAxis: "",
+        yAxis: ""
     };
 
     meta.filters = getFields("filter");
@@ -142,57 +130,93 @@ function getFields(idDiv) {
     return ids;
 }
 
-function boxplotP(data) {
+function drawGraph(graphType, data) {
 
-    var length = data.length;
     var globalBox = [];
-    var layout = {
-        title: 'BOX PLOT',
-        showlegend: true
-    };
-    for (var i = 0; i < length; i++) {
-        var groupBox = {
-            y: data[i].datiColonna,
-            name: data[i].nome,
-            type: 'box',
-            hoverinfo: 'skip'
-        };
-        globalBox.push(groupBox);
+
+
+    if (Object.keys(data.filter).length)
+        console.log(data.yaxis);
+    if (Object.keys(data.xaxis).length)
+        console.log(data.yaxis);
+    if (Object.keys(data.yaxis).length)
+        console.log(data.yaxis);
+
+
+
+    switch (graphType) {
+
+
+        case 'box':
+
+            var layout = {
+                title: graphType,
+                showlegend: true
+            };
+
+            for (var key in data.yaxis) {
+
+                var groupBox = {
+                    y: data.yaxis[key],
+                    //name: data[i].nome,
+                    type: graphType,
+                    hoverinfo: 'skip'
+                };
+                globalBox.push(groupBox);
+
+            }
+
+            break;
+
+        case 'scatter':
+
+            for (var key in data.xaxis) {
+                var x = data.xaxis[key];
+            }
+            for (var key in data.yaxis) {
+                var y = data.yaxis[key];
+            }
+
+            var layout = {
+                title: graphType,
+                showlegend: false
+            };
+
+
+            var groupBox = {
+                x: x,
+                y: y,
+                mode: 'markers',
+                type: graphType
+            };
+            globalBox.push(groupBox);
+            break;
+
+        case 'bar':
+
+            for (var key in data.xaxis) {
+                var x = data.xaxis[key];
+            }
+
+            var layout = {
+                title: graphType,
+                showlegend: true
+            };
+
+            for (var key in data.yaxis) {
+
+                var groupBox = {
+                    x: x,
+                    y: data.yaxis[key],
+                    type: graphType,
+                    hoverinfo: 'skip'
+                };
+                globalBox.push(groupBox);
+            }
+            break;
+
     }
-    Plotly.newPlot('datagraph', globalBox, layout, {scrollZoom: true});
-}
 
-function scatterP(data) {
-
-    var globalBox = [];
-    var layout = {
-        title: 'SCATTER',
-        showlegend: false
-    };
-    var groupBox = {
-        x: data.x,
-        y: data.y,
-        mode: 'markers',
-        type: 'scatter',
-    };
-    globalBox.push(groupBox);
     Plotly.newPlot('datagraph', globalBox, layout, {scrollZoom: true});
 
-}
-
-function barP(data) {
-
-    var globalBox = [];
-    var layout = {
-        title: 'BAR',
-        showlegend: true
-    };
-    var groupBox = {
-        x: data.x,
-        y: data.y,
-        type: 'bar',
-        hoverinfo: 'skip'
-    };
-    globalBox.push(groupBox);
-    Plotly.newPlot('datagraph', globalBox, layout, {scrollZoom: true});
 }
