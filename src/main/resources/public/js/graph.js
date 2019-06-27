@@ -40,13 +40,11 @@ $(document).ready(function () {
 
 function hideOrShowDropRow() {
     $(".sortable").each(function () {
-        var dropRow = $(this).find(".drop-row"),
-                hasRows = $(this).find("tbody tr").length;
-
+        var dropRow = $(this).find(".drop-row");
+        var hasRows = $(this).find("tbody tr").length;
         hasRows ? dropRow.hide() : dropRow.show();
     });
 }
-
 
 function getDensityPlot() {
 
@@ -55,22 +53,22 @@ function getDensityPlot() {
 function getBoxPlot() {
     $.ajax({
         url: _ctx + "/rest/graph/getColumns/" + getColumnIds(),
-        type: "GET",
+        type: "POST",
         success: function (data) {
-            boxPlot(data);
+            boxplotP(data)
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error loading data');
         }
     });
 }
-function getScatterPlot() {
+function getScatter() {
 
     $.ajax({
-        url: _ctx + "/rest/graph/getPoints/" + getColumnIds(),
-        type: "GET",
+        url: _ctx + "/rest/graph/getCoordinates/" + getColumnIds(),
+        type: "POST",
         success: function (data) {
-            scatterPlot(data);
+            scatterP(data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error loading data');
@@ -78,143 +76,123 @@ function getScatterPlot() {
     });
 }
 
-function getColumnIds() {
-    var ids = "";
-    isfirst = true;
-    $("#targetTable tr").each(function (rowIndex, r) {
-        id = $(this).find("td").last().text();
-        if (id > 0 && isfirst) {
-            ids = id;
-            isfirst = false;
-        } else if (id > 0 && !isfirst) {
-            ids = ids + "," + id;
+function getBar() {
+    $.ajax({
+        url: _ctx + "/rest/graph/getCoordinates/" + getColumnIds(),
+        type: "POST",
+        success: function (data) {
+            barP(data);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error loading data');
         }
     });
+}
+
+function getData() {
+
+    var graphmeta = getMetaData()
+
+    $.ajax({
+        url: _ctx + "/rest/graph/getData/" + graphmeta.filters + "/" + graphmeta.xAxis + "/" + graphmeta.yAxis,
+        type: "GET",
+        success: function (data) {
+            if (Object.keys(data.filter).length) //check if object is empty
+                console.log(data.filter);
+            if (Object.keys(data.xaxis).length) //check if object is empty
+                console.log(data.xaxis);
+            if (Object.keys(data.yaxis).length) //check if object is empty
+                console.log(data.yaxis);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error loading data');
+        }
+    });
+}
+
+function getMetaData() {
+
+    var meta = {
+        filters: "",
+        xAxis: "",
+        yAxis: "",
+    };
+
+    meta.filters = getFields("filter");
+    meta.xAxis = getFields("targetX");
+    meta.yAxis = getFields("targetY");
+
+    return meta;
+}
+
+function getFields(idDiv) {
+    var ids = "";
+    $("#" + idDiv + " tr").each(function (rowIndex, r) {
+        if ($(this).find("span").attr("value") > 0)
+            ids = $(this).find("span").attr("value") + "," + ids;
+    });
+
+    if (ids !== "") {
+        ids = ids.substring(0, ids.length - 1);
+    } else {
+        ids = "0";
+    }
+
     console.log(ids);
     return ids;
 }
-function boxPlot(data) {
-    // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 30, bottom: 30, left: 40},
-    width = 400 - margin.left - margin.right,
-            height = 400 - margin.top - margin.bottom;
 
-// append the svg object to the body of the page
-    var svg = d3.select("#datagraph")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+function boxplotP(data) {
 
-// create dummy data
-//var data = [12, 19, 11, 13, 12, 22, 13, 4, 15, 16, 18, 19, 20, 12, 11, 9]
-
-// Compute summary statistics used for the box:
-    var data_sorted = data[0].datiColonna.sort(d3.ascending);
-    var q1 = d3.quantile(data_sorted, .25);
-    var median = d3.quantile(data_sorted, .5);
-    var q3 = d3.quantile(data_sorted, .75);
-    var interQuantileRange = q3 - q1;
-    var min = q1 - 1.5 * interQuantileRange;
-    var max = q1 + 1.5 * interQuantileRange;
-
-// Show the Y scale
-    var y = d3.scaleLinear()
-            .domain([0, 24])
-            .range([height, 0]);
-
-    svg.call(d3.axisLeft(y));
-
-// a few features for the box
-    var center = 200;
-    var width = 100;
-
-// Show the main vertical line
-    svg
-            .append("line")
-            .attr("x1", center)
-            .attr("x2", center)
-            .attr("y1", y(min))
-            .attr("y2", y(max))
-            .attr("stroke", "black");
-
-// Show the box
-    svg
-            .append("rect")
-            .attr("x", center - width / 2)
-            .attr("y", y(q3))
-            .attr("height", (y(q1) - y(q3)))
-            .attr("width", width)
-            .attr("stroke", "black")
-            .style("fill", "#69b3a2");
-
-// show median, min and max horizontal lines
-    svg
-            .selectAll("toto")
-            .data([min, median, max])
-            .enter()
-            .append("line")
-            .attr("x1", center - width / 2)
-            .attr("x2", center + width / 2)
-            .attr("y1", function (d) {
-                return(y(d))
-            })
-            .attr("y2", function (d) {
-                return(y(d))
-            })
-            .attr("stroke", "black")
+    var length = data.length;
+    var globalBox = [];
+    var layout = {
+        title: 'BOX PLOT',
+        showlegend: true
+    };
+    for (var i = 0; i < length; i++) {
+        var groupBox = {
+            y: data[i].datiColonna,
+            name: data[i].nome,
+            type: 'box',
+            hoverinfo: 'skip'
+        };
+        globalBox.push(groupBox);
+    }
+    Plotly.newPlot('datagraph', globalBox, layout, {scrollZoom: true});
 }
 
-function scatterPlot(data) {
-// set the dimensions and margins of the graph
-    var margin = {top: 10, right: 40, bottom: 30, left: 30},
-    width = 450 - margin.left - margin.right,
-            height = 400 - margin.top - margin.bottom;
+function scatterP(data) {
 
-// append the svg object to the body of the page
-    var svg = d3.select("#datagraph")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-// Create data
-//var data = [ {x:10, y:20}, {x:40, y:90}, {x:80, y:50} ]
-
-// X scale and Axis
-    var x = d3.scaleLinear()
-            .domain([0, 10])         // This is the min and the max of the data: 0 to 100 if percentages
-            .range([0, width]);       // This is the corresponding value I want in Pixel
-    svg
-            .append('g')
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
-
-// X scale and Axis
-    var y = d3.scaleLinear()
-            .domain([0, 10])         // This is the min and the max of the data: 0 to 100 if percentages
-            .range([height, 0]);       // This is the corresponding value I want in Pixel
-    svg
-            .append('g')
-            .call(d3.axisLeft(y));
-
-// Add 3 dots for 0, 50 and 100%
-    svg
-            .selectAll("whatever")
-            .data(data)
-            .enter()
-            .append("circle")
-            .attr("cx", function (d) {
-                return x(d.x);
-            })
-            .attr("cy", function (d) {
-                return y(d.y);
-            })
-            .attr("r", 7)
-            .style("fill", "#69b3a2");
-
+    var globalBox = [];
+    var layout = {
+        title: 'SCATTER',
+        showlegend: false
+    };
+    var groupBox = {
+        x: data.x,
+        y: data.y,
+        mode: 'markers',
+        type: 'scatter',
+    };
+    globalBox.push(groupBox);
+    Plotly.newPlot('datagraph', globalBox, layout, {scrollZoom: true});
 
 }
 
+function barP(data) {
+
+    var globalBox = [];
+    var layout = {
+        title: 'BAR',
+        showlegend: true
+    };
+    var groupBox = {
+        x: data.x,
+        y: data.y,
+        type: 'bar',
+        hoverinfo: 'skip'
+    };
+    globalBox.push(groupBox);
+    Plotly.newPlot('datagraph', globalBox, layout, {scrollZoom: true});
+}

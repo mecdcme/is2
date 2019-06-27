@@ -98,12 +98,12 @@
                                         </div>
                                     </div>
                                     <div id="logbox" class="card-body">
-                                        <ul th:if="${logs}">
+                                        <ul th:if="${logs.size()>0}">
                                             <li th:each="log : ${logs}">
                                                 <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
                                             </li>
                                         </ul>
-                                        <span th:unless="${logs}">
+                                        <span th:unless="${logs.size()>0}">
                                             No message available
                                         </span>
                                     </div>

@@ -136,12 +136,12 @@
                                         </div>
                                     </div>
                                     <div id="logbox" class="card-body">
-                                        <ul th:if="${logs}">
+                                        <ul th:if="${logs.size()>0}">
                                             <li th:each="log : ${logs}">
                                                 <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
                                             </li>
                                         </ul>
-                                        <span th:unless="${logs}">
+                                        <span th:unless="${logs.size()>0}">
                                             No message available
                                         </span>
                                     </div>
@@ -157,12 +157,12 @@
                                         </div>
                                     </div>
                                     <div id="rbox" class="card-body">
-                                        <ul th:if="${rlogs}">
+                                        <ul th:if="${rlogs.size()>0}">
                                             <li th:each="rlog : ${rlogs}">
                                                 <span th:text="${#dates.format(rlog.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${rlog.msg}"></span>
                                             </li>
                                         </ul>
-                                        <span th:unless="${rlogs}">
+                                        <span th:unless="${rlogs.size()>0}">
                                             No message available
                                         </span>
                                     </div>
