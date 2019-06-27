@@ -43,6 +43,7 @@ import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -101,7 +102,7 @@ public class RuleController {
     }
 
     @RequestMapping(value = "/newRuleset", method = RequestMethod.POST)
-    public String newRulesetData(HttpSession httpSession, HttpServletRequest request, Model model,
+    public String newRulesetData(HttpSession session, HttpServletRequest request, Model model,
             @AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") NewRulesetFormBean form)
             throws IOException {
 
@@ -111,15 +112,24 @@ public class RuleController {
         String etichettaRuleset = form.getRulesetLabel();
         Integer tipoRuleset = form.getRulesetType();
         String descrRuleset = form.getRulesetDesc();
-        WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));
-
         Integer dataset = form.getDataset();
+        
+        
+        
+        WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));        
 
         SxRuleset ruleset = new SxRuleset();
         ruleset.setLabelFile(etichettaRuleset);
         ruleset.setNomeFile(nomeRuleset);
         ruleset.setSessioneLavoro(sessionelv);
 
+        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+        
+        sessionBean.setTipoRuleset(tipoRuleset);
+        sessionBean.setDataset(dataset);
+        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+        
+        
         ruleService.saveRuleSet(ruleset);
 
         return "redirect:/rule/viewRuleset/" + form.getIdsessione();
@@ -132,7 +142,16 @@ public class RuleController {
         List<Log> rlogs = logService.findByIdSessioneAndTipo(id, OUTPUT_R);
 
         WorkSession sessionelv = sessioneLavoroService.getSessione(id);
+        List<DatasetFile> listaDSFile = new ArrayList<DatasetFile>();
+        
+        DatasetFile fakeFile = new DatasetFile();
+        fakeFile.setId(new Long(-1));
+        fakeFile.setNomeFile("--");
+        listaDSFile.add(fakeFile);    
+        
         List<DatasetFile> listaDatasetFile = datasetService.findDatasetFilesByIdSessioneLavoro(id);
+        
+        listaDSFile.addAll(listaDatasetFile);
 
         List<SxRuleset> listaRuleSet = sessionelv.getRuleSets();
         String etichetta = null;
@@ -147,7 +166,7 @@ public class RuleController {
 
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 
-        model.addAttribute("listaDatasetFile", listaDatasetFile);
+        model.addAttribute("listaDatasetFile", listaDSFile);
         model.addAttribute("listaRuleSet", listaRuleSet);
         model.addAttribute("listaRuleType", listaRuleType);
         model.addAttribute("etichetta", etichetta);
