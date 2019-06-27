@@ -443,6 +443,206 @@ public class DatasetService {
 
         return dFile;
     }
+    
+    public DatasetFile createParsedFields(String idfile, String idColonna, String columnOrder, String numRows,  String executeCommand, String commandValue, String startTo, String field1, String field2) {
+
+        List<String> campo1 =new ArrayList<String>();
+        List<String> campo2 =new ArrayList<String>();
+        	    	
+        DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
+        List<String> temp = colonna.getDatiColonna();
+        String tempString="";
+        Integer indice;
+        int firstIndex = 0;
+    	int lastIndex=0;
+    	String sepValue=null;
+        switch (executeCommand) {
+        
+        
+        
+        case "separatore":
+            
+        	firstIndex = commandValue.indexOf("{...");
+    		lastIndex = commandValue.indexOf("...}");
+    		sepValue= commandValue.substring(firstIndex + "{...".length(), lastIndex);
+        	if (startTo.equals("start")){
+        		
+        		
+        		for (int i = 0; i <temp.size(); i++) {
+        			tempString= temp.get(i);
+        			indice= tempString.indexOf(sepValue);
+        			if (indice < tempString.length() && indice != -1){
+        				campo1.add(tempString.substring(0,indice));
+        				campo2.add(tempString.substring(indice + sepValue.length(),tempString.length()));
+        			}else{
+        				campo1.add(tempString);
+        				campo2.add("");
+        			}
+        			
+        		}
+        		
+        	}else{
+        		
+        		for (int i = 0; i <temp.size(); i++) {
+        			tempString= temp.get(i);
+        			indice= tempString.lastIndexOf(sepValue);
+        			if (indice < tempString.length()  && indice != -1){
+        				campo1.add(tempString.substring(0, indice));
+        				campo2.add(tempString.substring(indice + sepValue.length(),tempString.length()));
+        			}else{
+        				campo1.add("");
+        				campo2.add(tempString);
+        			}
+        			
+        		}
+        	}
+        	
+        	
+            break;
+        case "lunghezza":
+           
+        	if (startTo.equals("start")){
+        		
+        		for (int i = 0; i <temp.size(); i++) {
+        			tempString= temp.get(i);
+        			indice= Integer.parseInt(commandValue);
+        			if (indice < tempString.length()){
+        				campo1.add(tempString.substring(0, indice - 1));
+        				campo2.add(tempString.substring(indice ,tempString.length()));
+        			}else{
+        				campo1.add(tempString);
+        				campo2.add("");
+        			}
+        			
+        		}
+        	}else{
+        		
+        		for (int i = 0; i <temp.size(); i++) {
+        			tempString= temp.get(i);
+        			indice= Integer.parseInt(commandValue);
+        			if (indice < tempString.length()){
+        				campo1.add(tempString.substring(0,(tempString.length() - indice)-1));
+        				campo2.add(tempString.substring(tempString.length() - indice,tempString.length()));
+        			}else{
+        				campo1.add("");
+        				campo2.add(tempString);
+        			}
+        			
+        		}
+        	}
+        	
+        	
+        	
+        	break;
+        
+     
+            
+        };	    	
+       
+        	
+        	
+        DatasetColonna nuovaColonna1 = new DatasetColonna();
+        DatasetColonna nuovaColonna2 = new DatasetColonna();
+        	
+        	
+        nuovaColonna1.setDatiColonna(campo1);
+        nuovaColonna2.setDatiColonna(campo2);
+
+
+         DatasetFile dFile = new DatasetFile();
+         dFile.setId(Long.parseLong(idfile));
+         nuovaColonna1.setDatasetFile(dFile);
+         nuovaColonna1.setNome(field1);
+         nuovaColonna1.setOrdine((short) Integer.parseInt(columnOrder));
+         nuovaColonna1.setValoriSize(Integer.parseInt(numRows));
+         nuovaColonna2.setDatasetFile(dFile);
+         nuovaColonna2.setNome(field2);
+         nuovaColonna2.setOrdine((short) (Integer.parseInt(columnOrder) + 1));
+         nuovaColonna2.setValoriSize(Integer.parseInt(numRows));
+
+     
+         datasetColonna.save(nuovaColonna1);
+         datasetColonna.save(nuovaColonna2);
+
+            return dFile;
+        }
+    
+   
+    
+    
+    public DatasetFile createFixedField(String idfile, String idColonna, HashMap<Integer,String> Header,  HashMap<String, ArrayList<String>> Campi, String fieldName, String numColonne, String numRighe) {
+        
+    	 HashMap<String,String> ErrataCorridge= new HashMap<String,String>() ;
+       
+    	if (Header.size() > 1 && Campi.size() >1 ){
+    		 for (int i = 0; i < Campi.get(Header.get(0)).size(); i++) {
+    			 ErrataCorridge.put(Campi.get(Header.get(0)).get(i), Campi.get(Header.get(1)).get(i));
+			 }	
+    	}
+    	
+        	    	
+        DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
+        List<String> temp = colonna.getDatiColonna();
+        DatasetColonna nuovaColonna = new DatasetColonna();
+        List<String> nuoviDatiColonna = new ArrayList<String>();
+        
+        for (int i = 0; i < temp.size(); i++) {
+			 if (ErrataCorridge.containsKey(temp.get(i))){
+				 nuoviDatiColonna.add(ErrataCorridge.get(temp.get(i)));
+				 
+			 }else{
+				 
+				 nuoviDatiColonna.add(temp.get(i));
+			 }
+			 
+			 
+			 
+		 }	
+        	
+        	
+        
+       
+        	
+       
+
+
+         DatasetFile dFile = new DatasetFile();
+         dFile.setId(Long.parseLong(idfile));
+         nuovaColonna.setDatiColonna(nuoviDatiColonna);
+         nuovaColonna.setDatasetFile(dFile);
+         nuovaColonna.setNome(fieldName);
+         nuovaColonna.setOrdine((short) Integer.parseInt(numColonne));
+         nuovaColonna.setValoriSize(Integer.parseInt(numRighe));
+        
+     
+         datasetColonna.save(nuovaColonna);
+        
+
+         return dFile;
+        }
+    
+    public DatasetFile deleteField(String idfile, String idColonna) {
+        
+      	 
+       	
+	    	
+        DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
+        datasetColonna.delete(colonna);
+        
+        
+        DatasetColonna nuovaColonna = new DatasetColonna();
+        List<String> nuoviDatiColonna = new ArrayList<String>();
+        
+
+         DatasetFile dFile = new DatasetFile();
+         dFile.setId(Long.parseLong(idfile));
+        
+
+         return dFile;
+        }
+    
+    
+    
 
     @Transactional
     public Boolean deleteDataset(Long idFile) {
