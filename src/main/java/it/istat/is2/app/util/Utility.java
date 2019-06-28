@@ -397,8 +397,8 @@ public class Utility {
 		return c;
 	}
 
-	public static Map<Long, SxRuoli> getMapRuoliById(List<SxRuoli> ruoliAll) {
-		HashMap<Long, SxRuoli> ret = new HashMap<>();
+	public static Map<Integer, SxRuoli> getMapRuoliById(List<SxRuoli> ruoliAll) {
+		HashMap<Integer, SxRuoli> ret = new HashMap<>();
 		for (SxRuoli sxRuoli : ruoliAll) {
 			ret.put(sxRuoli.getId(), sxRuoli);
 		}

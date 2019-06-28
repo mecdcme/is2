@@ -45,7 +45,7 @@ public class SxStepVariable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "flag_ricerca")
     private Short flagRicerca;
@@ -53,6 +53,10 @@ public class SxStepVariable implements Serializable {
     @ManyToOne
     @JoinColumn(name = "RUOLO")
     private SxRuoli sxRuoli;
+    
+    @ManyToOne
+    @JoinColumn(name = "ROLE_GROUP")
+    private SxRuoli sxRuoloGruppo;
 
     @ManyToOne
     @JoinColumn(name = "TIPO_CAMPO")
@@ -73,12 +77,12 @@ public class SxStepVariable implements Serializable {
     public SxStepVariable() {
     }
 
-    public SxStepVariable(Long id) {
+    public SxStepVariable(Integer id) {
         super();
         this.id = id;
     }
 
-    public SxStepVariable(Long id, SxRuoli sxRuoli, Elaborazione elaborazione, SXTipoCampo tipoCampo, Short ordineW, Short flagRicerca,
+    public SxStepVariable(Integer id, SxRuoli sxRuoli, Elaborazione elaborazione, SXTipoCampo tipoCampo, Short ordineW, Short flagRicerca,
             Long idw, String nomeW, Integer valoriSizeW) {
         super();
         this.id = id;

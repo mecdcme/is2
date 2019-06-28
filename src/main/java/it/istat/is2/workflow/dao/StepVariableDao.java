@@ -39,12 +39,12 @@ import it.istat.is2.workflow.domain.SxStepVariable;
 import it.istat.is2.workflow.domain.SxTipoVar;
 
 @Repository
-public interface StepVariableDao extends CrudRepository<SxStepVariable, Long> {
+public interface StepVariableDao extends CrudRepository<SxStepVariable, Integer> {
 
 	List<SxStepVariable> findByElaborazione(Elaborazione elaborazione);
 	List<SxStepVariable> findByElaborazioneAndSxRuoliIn(Elaborazione elaborazione,List<SxRuoli> roles);
 
-	Optional<SxStepVariable> findById(Long idvar);
+	Optional<SxStepVariable> findById(Integer idvar);
 
 	List<SxStepVariable> findBySxRuoli(SxRuoli ruolo);
 
@@ -65,9 +65,9 @@ public interface StepVariableDao extends CrudRepository<SxStepVariable, Long> {
 	 * @param sxTipoVar
 	 * @return
 	 */
-	@Query("SELECT new it.istat.is2.workflow.domain.SxStepVariable(st.id, st.sxRuoli, st.elaborazione,st.tipoCampo,st.ordine, st.flagRicerca, st.sxWorkset.id, st.sxWorkset.nome,st.sxWorkset.valoriSize) from SxStepVariable st  where st.elaborazione=:elab and st.sxWorkset.sxTipoVar=:tipoVar and st.tipoCampo=:tipoCampo ORDER BY st.ordine ASC ")
+	@Query("SELECT new it.istat.is2.workflow.domain.SxStepVariable(st.id, st.sxRuoli, st.elaborazione,st.tipoCampo,st.ordine, st.flagRicerca, st.sxWorkset.id, st.sxWorkset.nome,st.sxWorkset.valoriSize) from SxStepVariable st  where st.elaborazione=:elab and st.sxWorkset.sxTipoVar=:tipoVar and st.tipoCampo=:tipoCampo and (:roleGroup IS NULL OR st.sxRuoloGruppo=:roleGroup) ORDER BY st.ordine ASC ")
 	List<SxStepVariable> findByElaborazioneTipoCampoNoValori(@Param("elab") Elaborazione elaborazione,
-			@Param("tipoVar") SxTipoVar sxTipoVar, @Param("tipoCampo") SXTipoCampo sxTipoCampo);
+			@Param("tipoVar") SxTipoVar sxTipoVar, @Param("tipoCampo") SXTipoCampo sxTipoCampo,@Param("roleGroup") SxRuoli sxRuoli);
 	
 
 	/**
@@ -78,6 +78,14 @@ public interface StepVariableDao extends CrudRepository<SxStepVariable, Long> {
 	@Query("SELECT st from SxStepVariable st  where st.elaborazione=:elab and st.sxWorkset.sxTipoVar!=:tipoVar ORDER BY st.ordine ASC ")
 	List<SxStepVariable> findSxStepVariablesParametri(@Param("elab") Elaborazione elaborazione,
 			@Param("tipoVar") SxTipoVar sxTipoVar);
+	/**
+	 * @param idElaborazione
+	 * @param sxTipoVar
+	 * @param sxTipoCampo
+	 * @return
+	 */
+	@Query("SELECT distinct sr  from  SxRuoli sr,SxStepVariable st  where st.elaborazione.id=:elab and st.sxWorkset.sxTipoVar=:tipoVar and st.tipoCampo=:tipoCampo and st.sxRuoloGruppo=sr ORDER BY st.ordine ASC ")
+	List<SxRuoli> getOutputRoleGroupsStepVariables(@Param("elab")Long idElaborazione,@Param("tipoVar") SxTipoVar sxTipoVar,@Param("tipoCampo") SXTipoCampo sxTipoCampo);
 
 	
 }

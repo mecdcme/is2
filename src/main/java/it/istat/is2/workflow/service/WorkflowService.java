@@ -142,10 +142,10 @@ public class WorkflowService {
 		return obj.toString();
 	}
 
-	public String loadWorkSetValoriByElaborazione(Long idelaborazione, Integer tipoCampo, Integer length, Integer start,
+	public String loadWorkSetValoriByElaborazione(Long idelaborazione, Integer tipoCampo,Integer groupRole, Integer length, Integer start,
 			Integer draw, HashMap<String, String> paramsFilter) throws JSONException {
 
-		List<SxWorkset> dataList = sqlGenericDao.findWorkSetDatasetColonnaByElaborazioneQuery(idelaborazione, tipoCampo,
+		List<SxWorkset> dataList = sqlGenericDao.findWorkSetDatasetColonnaByElaborazioneQuery(idelaborazione, tipoCampo,groupRole,
 				start, start + length, paramsFilter);
 		// start, start + length, query_filter);
 		Integer numRighe = 0;
@@ -172,9 +172,9 @@ public class WorkflowService {
 		return obj.toString();
 	}
 
-	public List<SxWorkset> loadWorkSetValoriByElaborazione(Long idelaborazione, Integer tipoCampo,
+	public List<SxWorkset> loadWorkSetValoriByElaborazione(Long idelaborazione, Integer tipoCampo,Integer groupRole,
 			HashMap<String, String> paramsFilter) {
-		List<SxWorkset> dataList = sqlGenericDao.findWorkSetDatasetColonnaByElaborazioneQuery(idelaborazione, tipoCampo,
+		List<SxWorkset> dataList = sqlGenericDao.findWorkSetDatasetColonnaByElaborazioneQuery(idelaborazione, tipoCampo,groupRole,
 				0, null, paramsFilter);
 
 		return dataList;
@@ -359,7 +359,7 @@ public class WorkflowService {
 	public void creaAssociazioni(AssociazioneVarFormBean form, Elaborazione elaborazione) {
 
 		List<SxRuoli> ruoliAll = ruoloDao.findAll();
-		Map<Long, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
+		Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
 		List<SxStepVariable> listaVar = elaborazione.getSxStepVariables();
 		SxWorkset sxWorkset = null;
 
@@ -403,10 +403,10 @@ public class WorkflowService {
 	public void updateAssociazione(AssociazioneVarFormBean form, Elaborazione elaborazione) {
 
 		List<SxRuoli> ruoliAll = ruoloDao.findAll();
-		Map<Long, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
+		Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
 		List<SxStepVariable> listaVar = elaborazione.getSxStepVariables();
 		SxWorkset sxWorkset = null;
-		Long idVar = Long.parseLong(form.getVariabile()[0]);
+		Integer idVar = Integer.parseInt(form.getVariabile()[0]);
 		SxStepVariable sxStepVariable = stepVariableDao.findById(idVar).get();
 		String idr = form.getRuolo()[0];
 		String nomeVar = form.getValore()[0];
@@ -458,15 +458,15 @@ public class WorkflowService {
 	}
 
 	public List<SxStepVariable> getSxStepVariablesTipoCampoNoValori(Long idelaborazione, SxTipoVar sxTipoVar,
-			SXTipoCampo sxTipoCampo) {
+			SXTipoCampo sxTipoCampo,SxRuoli sxRuoli) {
 		return stepVariableDao.findByElaborazioneTipoCampoNoValori(new Elaborazione(idelaborazione), sxTipoVar,
-				sxTipoCampo);
+				sxTipoCampo,sxRuoli);
 	}
 
 	public void associaParametri(AssociazioneVarFormBean form, Elaborazione elaborazione) {
 
 		List<SxRuoli> ruoliAll = ruoloDao.findAll();
-		Map<Long, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
+		Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
 
 		for (int i = 0; i < form.getElaborazione().length; i++) {
 			String[] all_parametri = form.getParametri();
@@ -506,7 +506,7 @@ public class WorkflowService {
 	public void updateParametri(AssociazioneVarFormBean form, Elaborazione elaborazione) {
 
 		List<SxRuoli> ruoliAll = ruoloDao.findAll();
-		Map<Long, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
+		Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
 
 		for (int i = 0; i < form.getElaborazione().length; i++) {
 			String[] all_parametri = form.getParametri();
@@ -525,7 +525,7 @@ public class WorkflowService {
 			String idStepVar = form.getIdStepVar();
 			sxruolo = ruoliAllMap.get(new Long(ruoloparam));
 			SxStepVariable sxStepVariable = new SxStepVariable();
-			Long idstep = Long.parseLong(idStepVar);
+			Integer idstep = Integer.parseInt(idStepVar);
 			sxStepVariable = stepVariableDao.findById(idstep).get();
 			sxStepVariable.setElaborazione(elaborazione);
 			sxStepVariable.setSxRuoli(sxruolo);
@@ -625,5 +625,16 @@ public class WorkflowService {
 	public SXTipoCampo getTipoCampoById(Integer tipoCampo) {
 		// TODO Auto-generated method stub
 		return sxTipoCampoDao.findById(tipoCampo).get();
+	}
+
+	/**
+	 * @param long1
+	 * @param sxTipoVar 
+	 * @param sxTipoCampo
+	 * @return
+	 */
+	public List<SxRuoli> getOutputRoleGroupsStepVariables(Long idElaborazione, SxTipoVar sxTipoVar, SXTipoCampo sxTipoCampo) {
+		// TODO Auto-generated method stub
+		return stepVariableDao.getOutputRoleGroupsStepVariables(idElaborazione,  sxTipoVar,  sxTipoCampo);
 	}
 }

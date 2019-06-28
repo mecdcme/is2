@@ -14,16 +14,13 @@ percorso_fail="FSFail.Rout"
 percorso_allert="FSAllert.Rout"
 
 fellegisunter <- function(workset,ct, nvar=3, ...) {
-
-  print(workset)
-
-
+  stdout <- vector('character')
+  con <- textConnection('stdout', 'wr', local = TRUE)
+  sink(con)
+  
 yy <-  as.data.frame(matrix(as.numeric(workset[,ct]),ncol=length(ct),nrow=nrow(workset)))
 colnames(yy)<- ct
-
-print(yy)
-
-print("....................... ")
+ 
 muTableName="muTable"
 varmuTableName="varmuTable"
 eps=0.0000001
@@ -44,16 +41,14 @@ variabili<-paste('Freq',paste(paste('V',nvar:1,sep=''),collapse='+'),sep='~')
 
 nomimatvar = names(yy)[1:nvar]
 print( names(yy))
-print( "----------------------------")
+ 
 #aggiorno i valori di frequency a o
 
 
 
 if(nrow(yy[yy$FREQUENCY==0,])>0)
   yy[yy$FREQUENCY==0,]$FREQUENCY<-0.0001
-
-
-print("worksetaaaaaaaaaaaaaaaaaa")
+ 
 #legge i dati come data frame
 names(yy) [nvar+1] = 'Freq'
 for(i in 1:nvar) names(yy)[i] = paste('V',i,sep='')
@@ -177,14 +172,19 @@ names(r_out)[1:nvar]=nomimatvar
 var_est <- data.frame(rep(nomimatvar, rep(2,length(nomimatvar))),rep(c("1","0"),length(nomimatvar)),mvar,uvar,rep(p,2*length(nomimatvar)),stringsAsFactors=FALSE)
 names(var_est)=c("variable","comparison","m","u","p")
 ##sqlSave(con, var_est, varmuTableName, rownames = FALSE)
-print(var_est) 
-
-
- roles <- list ( muTableName, varmuTableName)
- result <-list( out=r_out, roles= roles, var_est = var_est)
+ 
+  
+ 
+ roles <- list (FS=names(r_out))
+ rolesgroup <- list (FS= c("FS"))
+ result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, var_est = var_est, log = stdout)
  
  print(".........RESULT.............. ")
  print(result)
+ 
+ sink()
+  close(con)
+ 
   return(result)
  
 }

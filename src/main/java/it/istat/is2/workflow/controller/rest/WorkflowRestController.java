@@ -63,9 +63,9 @@ public class WorkflowRestController {
     @Autowired
     StepVariableService stepVariableService;
 
-    @RequestMapping(value = "/worksetvalori/{idelaborazione}/{tipoCampo}/{paramsFilter:.+}", method = RequestMethod.GET)
+    @RequestMapping(value = "/worksetvalori/{idelaborazione}/{tipoCampo}/{groupRole}/{paramsFilter:.+}", method = RequestMethod.GET)
     public String loadDatasetValori2(HttpServletRequest request, Model model,
-            @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("tipoCampo") Integer tipoCampo,
+            @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("tipoCampo") Integer tipoCampo,@PathVariable("groupRole") Integer groupRole,
             @PathVariable("paramsFilter") String paramsFilter, @RequestParam("length") Integer length,
             @RequestParam("start") Integer start, @RequestParam("draw") Integer draw) throws IOException, JSONException {
 
@@ -85,7 +85,7 @@ public class WorkflowRestController {
                 parameters.put(nomeValore.get(0), nomeValore.get(1));
             }
         }
-        String dtb = workflowService.loadWorkSetValoriByElaborazione(idelaborazione, tipoCampo, length, start, draw, parameters);
+        String dtb = workflowService.loadWorkSetValoriByElaborazione(idelaborazione, tipoCampo,groupRole, length, start, draw, parameters);
 
         return dtb;
     }
@@ -110,7 +110,7 @@ public class WorkflowRestController {
 
     @RequestMapping(value = "/loadVarsByStep/{idelab}/{idstep}", method = RequestMethod.GET)
     public List<SxStepVariable> loadVarsByStep(HttpServletRequest request, Model model,
-            @PathVariable("idelab") Long idelab, @PathVariable("idstep") Long idstep) throws IOException {
+            @PathVariable("idelab") Long idelab, @PathVariable("idstep") Integer idstep) throws IOException {
 
         List<SxStepVariable> listaVarAssociate = stepVariableService.findBStepByIdProcess(idelab, idstep);
 
@@ -161,7 +161,7 @@ public class WorkflowRestController {
                 ordine = stringTokenizerValues.nextElement().toString();
                 idstepvar = stringTokenizerValues.nextElement().toString();
             }
-            Long idstep = Long.parseLong(idstepvar);
+            Integer idstep =Integer.parseInt(idstepvar);
             Short ordineS = Short.parseShort(ordine);
             stepVariable = stepVariableService.findById(idstep).get();
             stepVariable.setOrdine(ordineS);

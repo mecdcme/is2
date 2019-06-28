@@ -57,7 +57,7 @@ $(document).ready(function () {
         pageLength: 20,
         processing: true,
         serverSide: true,
-        ajax: _ctx + "/rest/ws/worksetvalori/" + _idElaborazione + "/" + _tipoCampo + "/" + getParams(),
+        ajax: _ctx + "/rest/ws/worksetvalori/" + _idElaborazione + "/" + _tipoCampo + "/" + _roleGroup + "/"+ getParams(),
         columns: eval(getHeaders('worksetTab')),
         buttons: [{
             extend: 'colvis',
@@ -108,7 +108,7 @@ function getParams() {
 
 function ricercaByParams() {
     //table.ajax.reload();
-    table.ajax.url(_ctx + "/rest/ws/worksetvalori/" + _idElaborazione + "/"+ _tipoCampo + "/" + getParams()).load();
+    table.ajax.url(_ctx + "/rest/ws/worksetvalori/" + _idElaborazione + "/"+ _tipoCampo + "/"+ _roleGroup + "/" + getParams()).load();
         return false;
 }
 
