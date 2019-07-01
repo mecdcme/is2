@@ -43,7 +43,7 @@ public class SxRuoli implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    private Long id;
+    private Integer id;
 
     private String cod;
 
@@ -72,6 +72,10 @@ public class SxRuoli implements Serializable {
     private SxTipoVar sxTipoVar;
 
     public SxRuoli() {
+    }
+    
+    public SxRuoli(Integer id) {
+    	this.id=id;
     }
 
 }

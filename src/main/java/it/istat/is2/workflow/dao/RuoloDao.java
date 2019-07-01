@@ -35,7 +35,7 @@ import it.istat.is2.workflow.domain.SxAppService;
 import it.istat.is2.workflow.domain.SxRuoli;
 
 @Repository
-public interface RuoloDao extends CrudRepository<SxRuoli, Long> {
+public interface RuoloDao extends CrudRepository<SxRuoli, Integer> {
 
     List<SxRuoli> findAll();
 

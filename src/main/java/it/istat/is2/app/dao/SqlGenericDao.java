@@ -60,7 +60,7 @@ public class SqlGenericDao {
 		return result;
 	}
 
-	public List<SxWorkset> findWorkSetDatasetColonnaByElaborazioneQuery(Long idelaborazione, Integer tipoCampo,
+	public List<SxWorkset> findWorkSetDatasetColonnaByElaborazioneQuery(Long idelaborazione, Integer tipoCampo, Integer groupRole,
 			Integer riga_inf, Integer riga_sup, HashMap<String, String> paramsFilter) {
 
 		String query = " " 
@@ -87,13 +87,13 @@ public class SqlGenericDao {
 				+ "             SX_STEP_VARIABLE sv, "
 				+ "             json_table(ss.valori , '$[*]' columns( idx FOR ORDINALITY,  v TEXT  path '$[0]')"
 				+ "     ) t"
-				+ "	where  sv.elaborazione=:idelaborazione and sv.tipo_campo=:tipoCampo and sv.var=ss.id and ss.TIPO_VAR=1 ";
+				+ "	where  sv.elaborazione=:idelaborazione and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.tipo_campo=:tipoCampo and sv.var=ss.id and ss.TIPO_VAR=1 ";
 		if (paramsFilter != null) {
 			for (String key : paramsFilter.keySet()) {
 
 				query += " and t.idx in( select f.idx from SX_WORKSET si, SX_STEP_VARIABLE ssv,json_table( si.valori, '$[*]'  columns "
 						+ "(  idx FOR ORDINALITY, v TEXT path '$[0]') ) f "
-						+ " where  ssv.elaborazione=:idelaborazione and ssv.tipo_campo=:tipoCampo and ssv.var=si.id  and si.nome=:n_"
+						+ " where  ssv.elaborazione=:idelaborazione  and (:groupRole is null ||ssv.ROLE_GROUP=:groupRole)  and ssv.tipo_campo=:tipoCampo and ssv.var=si.id  and si.nome=:n_"
 						+ key + " and f.v=:v_" + key + " ) ";
 			}
 		}
@@ -106,6 +106,7 @@ public class SqlGenericDao {
 		q.setParameter("tipoCampo", tipoCampo);
 		q.setParameter("riga_inf", riga_inf);
 		q.setParameter("riga_sup", riga_sup);
+		q.setParameter("groupRole", groupRole);
 		if (paramsFilter != null) {
 			for (String key : paramsFilter.keySet()) {
 				String value = paramsFilter.get(key);

@@ -76,324 +76,365 @@ import it.istat.is2.worksession.service.WorkSessionService;
 @Controller
 public class WorkflowController {
 
-    @Autowired
-    private WorkflowService workflowService;
-    @Autowired
-    private NotificationService notificationService;
-    @Autowired
-    private MessageSource messages;
-    @Autowired
-    private WorkSessionService sessioneLavoroService;
-    @Autowired
-    private ElaborazioneService elaborazioneService;
-    @Autowired
-    private BusinessFunctionService businessFunctionService;
-    @Autowired
-    private DatasetService datasetService;
-    @Autowired
-    private StepVariableService stepVariableService;
-    @Autowired
-    private LogService logService;
+	@Autowired
+	private WorkflowService workflowService;
+	@Autowired
+	private NotificationService notificationService;
+	@Autowired
+	private MessageSource messages;
+	@Autowired
+	private WorkSessionService sessioneLavoroService;
+	@Autowired
+	private ElaborazioneService elaborazioneService;
+	@Autowired
+	private BusinessFunctionService businessFunctionService;
+	@Autowired
+	private DatasetService datasetService;
+	@Autowired
+	private StepVariableService stepVariableService;
+	@Autowired
+	private LogService logService;
 
-    @GetMapping(value = "/home/{id}")
-    public String homeWS(HttpSession session, Model model, @PathVariable("id") Long id) {
-        notificationService.removeAllMessages();
+	@GetMapping(value = "/home/{id}")
+	public String homeWS(HttpSession session, Model model, @PathVariable("id") Long id) {
+		notificationService.removeAllMessages();
 
-        Elaborazione elaborazione = workflowService.findElaborazione(id);
-        List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
-        List<BusinessProcessBean> businessProcessBeans = new ArrayList<BusinessProcessBean>();
-        List<SxStepVariable> listaSV = workflowService.getSxStepVariablesNoValori(elaborazione.getId(), new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
-        model.addAttribute("stepVList", listaSV);
+		Elaborazione elaborazione = workflowService.findElaborazione(id);
+		List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
+		List<BusinessProcessBean> businessProcessBeans = new ArrayList<BusinessProcessBean>();
+		List<SxStepVariable> listaSV = workflowService.getSxStepVariablesNoValori(elaborazione.getId(),
+				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+		model.addAttribute("stepVList", listaSV);
 
-        //Create session DTO
-        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-        sessionBean.setIdElaborazione(elaborazione.getId());
-        sessionBean.setNomeElaborazione(elaborazione.getNome());
-        BusinessFunctionBean businessFunction = new BusinessFunctionBean();
-        businessFunction.setId(elaborazione.getSxBusinessFunction().getId());
-        businessFunction.setName(elaborazione.getSxBusinessFunction().getNome());
-        for (SxBusinessProcess sbp : listaBp) {
-            BusinessProcessBean businessProcessBean = new BusinessProcessBean();
-            businessProcessBean.setId(sbp.getId());
-            businessProcessBean.setName(sbp.getNome());
-            List<ProcessStepBean> processStepBeans = new ArrayList<ProcessStepBean>();
-            for (SxBusinessStep bpStep : sbp.getSxBusinessSteps()) {
-                processStepBeans.add(new ProcessStepBean(bpStep.getId(), bpStep.getNome()));
-            }
-            businessProcessBean.setSteps(processStepBeans);
-            businessProcessBeans.add(businessProcessBean);
-        }
-        businessFunction.setProcesses(businessProcessBeans);
-        sessionBean.setBusinessFunction(businessFunction);
-        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+		// Create session DTO
+		SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+		sessionBean.setIdElaborazione(elaborazione.getId());
+		sessionBean.setNomeElaborazione(elaborazione.getNome());
+		BusinessFunctionBean businessFunction = new BusinessFunctionBean();
+		businessFunction.setId(elaborazione.getSxBusinessFunction().getId());
+		businessFunction.setName(elaborazione.getSxBusinessFunction().getNome());
+		for (SxBusinessProcess sbp : listaBp) {
+			BusinessProcessBean businessProcessBean = new BusinessProcessBean();
+			businessProcessBean.setId(sbp.getId());
+			businessProcessBean.setName(sbp.getNome());
+			List<ProcessStepBean> processStepBeans = new ArrayList<ProcessStepBean>();
+			for (SxBusinessStep bpStep : sbp.getSxBusinessSteps()) {
+				processStepBeans.add(new ProcessStepBean(bpStep.getId(), bpStep.getNome()));
+			}
+			businessProcessBean.setSteps(processStepBeans);
+			businessProcessBeans.add(businessProcessBean);
+		}
+		businessFunction.setProcesses(businessProcessBeans);
+		sessionBean.setBusinessFunction(businessFunction);
+		session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
-        model.addAttribute("elaborazione", elaborazione);
-        model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
-        
-        List<Log> logs = logService.findByIdSessione(sessionBean.getId());
-        model.addAttribute("logs", logs);
+		model.addAttribute("elaborazione", elaborazione);
+		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
 
-        return "workflow/home";
-    }
+		List<Log> logs = logService.findByIdSessione(sessionBean.getId());
+		model.addAttribute("logs", logs);
 
-    @GetMapping(value = "/eliminaAssociazione/{idelaborazione}/{idvar}")
-    public String eliminaAssociazioneVar(HttpSession session, Model model,
-            @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("idvar") Long idvar) {
-        notificationService.removeAllMessages();
+		return "workflow/home";
+	}
 
-        SxStepVariable stepVar = stepVariableService.findById(idvar).get();
-        List<SxStepVariable> listaVars = stepVar.getSxWorkset().getSxStepVariables();
+	@GetMapping(value = "/eliminaAssociazione/{idelaborazione}/{idvar}")
+	public String eliminaAssociazioneVar(HttpSession session, Model model,
+			@PathVariable("idelaborazione") Long idelaborazione, @PathVariable("idvar") Integer idvar) {
+		notificationService.removeAllMessages();
 
-        if (listaVars.size() == 1) {
-            SxWorkset workset = (SxWorkset) listaVars.get(0).getSxWorkset();
-            workflowService.deleteWorkset(workset);
-        } else {
-            // do nothing
-        }
+		SxStepVariable stepVar = stepVariableService.findById(idvar).get();
+		List<SxStepVariable> listaVars = stepVar.getSxWorkset().getSxStepVariables();
 
-        stepVariableService.removeStepVarById(idvar);
-        notificationService.addInfoMessage("La variabile è stata rimossa");
+		if (listaVars.size() == 1) {
+			SxWorkset workset = (SxWorkset) listaVars.get(0).getSxWorkset();
+			workflowService.deleteWorkset(workset);
+		} else {
+			// do nothing
+		}
 
-        return "redirect:/ws/editworkingset/" + idelaborazione;
-    }
+		stepVariableService.removeStepVarById(idvar);
+		notificationService.addInfoMessage("La variabile è stata rimossa");
 
-    @GetMapping(value = "/eliminaParametro/{idelaborazione}/{idparametro}")
-    public String eliminaParametro(HttpSession session, Model model,
-            @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("idparametro") Long idparametro) {
-        notificationService.removeAllMessages();
+		return "redirect:/ws/editworkingset/" + idelaborazione;
+	}
 
-        SxStepVariable stepVar = stepVariableService.findById(idparametro).get();
-        List<SxStepVariable> listaVars = stepVar.getSxWorkset().getSxStepVariables();
+	@GetMapping(value = "/eliminaParametro/{idelaborazione}/{idparametro}")
+	public String eliminaParametro(HttpSession session, Model model,
+			@PathVariable("idelaborazione") Long idelaborazione, @PathVariable("idparametro") Integer idparametro) {
+		notificationService.removeAllMessages();
 
-        if (listaVars.size() == 1) {
-            SxWorkset workset = (SxWorkset) listaVars.get(0).getSxWorkset();
-            workflowService.deleteWorkset(workset);
-        } else {
-            // do nothing
-        }
+		SxStepVariable stepVar = stepVariableService.findById(idparametro).get();
+		List<SxStepVariable> listaVars = stepVar.getSxWorkset().getSxStepVariables();
 
-        stepVariableService.removeStepVarById(idparametro);
-        notificationService.addInfoMessage("Il parametro è stato eliminato");
+		if (listaVars.size() == 1) {
+			SxWorkset workset = (SxWorkset) listaVars.get(0).getSxWorkset();
+			workflowService.deleteWorkset(workset);
+		} else {
+			// do nothing
+		}
 
-        return "redirect:/ws/editworkingset/" + idelaborazione;
-    }
+		stepVariableService.removeStepVarById(idparametro);
+		notificationService.addInfoMessage("Il parametro è stato eliminato");
 
-    @GetMapping(value = "/editworkingset/{idelaborazione}")
-    public String editWorkingSet(HttpSession session, Model model,
-            @PathVariable("idelaborazione") Long idElaborazione) {
+		return "redirect:/ws/editworkingset/" + idelaborazione;
+	}
 
-        session.setAttribute(IS2Const.WORKINGSET, "workingset");
+	@GetMapping(value = "/editworkingset/{idelaborazione}")
+	public String editWorkingSet(HttpSession session, Model model,
+			@PathVariable("idelaborazione") Long idElaborazione) {
 
-        Elaborazione elaborazione = elaborazioneService.findElaborazione(idElaborazione);
+		session.setAttribute(IS2Const.WORKINGSET, "workingset");
 
-        SessionBean elaSession = new SessionBean(elaborazione.getId(), elaborazione.getNome());
-        session.setAttribute(IS2Const.SESSION_ELABORAZIONE, elaSession);
+		Elaborazione elaborazione = elaborazioneService.findElaborazione(idElaborazione);
 
-        List<DatasetFile> datasetfiles = datasetService
-                .findDatasetFilesByIdSessioneLavoro(elaborazione.getSessioneLavoro().getId());
+		SessionBean elaSession = new SessionBean(elaborazione.getId(), elaborazione.getNome());
+		session.setAttribute(IS2Const.SESSION_ELABORAZIONE, elaSession);
 
-        datasetfiles.forEach(datasetfile -> {
-            // retrieve DatasetColonna without data
-            List<DatasetColonna> colonne = datasetService.findAllNomeColonne(datasetfile);
-            datasetfile.setColonne(colonne);
+		List<DatasetFile> datasetfiles = datasetService
+				.findDatasetFilesByIdSessioneLavoro(elaborazione.getSessioneLavoro().getId());
 
-        });
+		datasetfiles.forEach(datasetfile -> {
+			// retrieve DatasetColonna without data
+			List<DatasetColonna> colonne = datasetService.findAllNomeColonne(datasetfile);
+			datasetfile.setColonne(colonne);
 
-        List<SxStepVariable> listaSV = workflowService.getSxStepVariablesNoValori(idElaborazione,
-                new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
-        List<SxStepVariable> listaSP = workflowService.getSxStepVariablesParametri(idElaborazione);
-        List<SxBusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
+		});
 
-        SxBusinessFunction businessFunction = elaborazione.getSxBusinessFunction();
+		List<SxStepVariable> listaSV = workflowService.getSxStepVariablesNoValori(idElaborazione,
+				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+		List<SxStepVariable> listaSP = workflowService.getSxStepVariablesParametri(idElaborazione);
+		List<SxBusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
 
-        // Carica i Ruoli di input
-        List<SxRuoli> listaRuoliInput = workflowService.findRuoliByFunction(businessFunction, 0);
-        // Carica i Ruoli di input e output
-        List<SxRuoli> listaRuoliInOut = workflowService.findRuoliByFunction(businessFunction, 1);
-        List<SxParPattern> listaParametri = workflowService.findParametriByFunction(businessFunction);
-        List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
+		SxBusinessFunction businessFunction = elaborazione.getSxBusinessFunction();
 
-        model.addAttribute("bProcess", listaBp);
-        model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
-        model.addAttribute("stepVList", listaSV);
+		// Carica i Ruoli di input
+		List<SxRuoli> listaRuoliInput = workflowService.findRuoliByFunction(businessFunction, 0);
+		// Carica i Ruoli di input e output
+		List<SxRuoli> listaRuoliInOut = workflowService.findRuoliByFunction(businessFunction, 1);
+		List<SxParPattern> listaParametri = workflowService.findParametriByFunction(businessFunction);
+		List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
 
-        model.addAttribute("stepParamList", listaSP);
+		model.addAttribute("bProcess", listaBp);
+		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
+		model.addAttribute("stepVList", listaSV);
 
-        model.addAttribute("listaRuoliInput", listaRuoliInput);
-        model.addAttribute("listaRuoliInOut", listaRuoliInOut);
-        model.addAttribute("listaParametri", listaParametri);
-        model.addAttribute("listaFunzioni", listaFunzioni);
-        model.addAttribute("datasetfiles", datasetfiles);
-        model.addAttribute("elaborazione", elaborazione);
-        model.addAttribute("businessFunction", businessFunction);
+		model.addAttribute("stepParamList", listaSP);
 
-        return "workflow/edit";
+		model.addAttribute("listaRuoliInput", listaRuoliInput);
+		model.addAttribute("listaRuoliInOut", listaRuoliInOut);
+		model.addAttribute("listaParametri", listaParametri);
+		model.addAttribute("listaFunzioni", listaFunzioni);
+		model.addAttribute("datasetfiles", datasetfiles);
+		model.addAttribute("elaborazione", elaborazione);
+		model.addAttribute("businessFunction", businessFunction);
 
-    }
+		return "workflow/edit";
 
-    @GetMapping(value = "/dataview/{idelab}/{tipoCampo}")
-    public String viewDataProc(HttpSession session, Model model, @PathVariable("idelab") Long idelaborazione,
-            @PathVariable("tipoCampo") Integer tipoCampo) {
-        notificationService.removeAllMessages();
+	}
 
-        SXTipoCampo sxTipoCampo = workflowService.getTipoCampoById(tipoCampo);
-        List<SxStepVariable> listaSV = workflowService.getSxStepVariablesTipoCampoNoValori(idelaborazione,
-                new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE), sxTipoCampo);
-        Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
-        List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
+	@GetMapping(value = "/dataview/{idelab}/{tipoCampo}")
+	public String viewDataProc(HttpSession session, Model model, @PathVariable("idelab") Long idelaborazione,
+			@PathVariable("tipoCampo") Integer tipoCampo) {
+		notificationService.removeAllMessages();
+		List<SxStepVariable> listaSV = new ArrayList<>();
+		List<SxBusinessProcess> listaBp = new ArrayList<>();
+		SxRuoli currentGroup =new SxRuoli();
+		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
+		SXTipoCampo sxTipoCampo = workflowService.getTipoCampoById(tipoCampo);
 
-        model.addAttribute("stepVList", listaSV);
-        model.addAttribute("elaborazione", elaborazione);
-        model.addAttribute("tipoCampo", sxTipoCampo);
-        model.addAttribute("bProcess", listaBp);
-        model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
+		List<SxRuoli> outputObjects = workflowService.getOutputRoleGroupsStepVariables(idelaborazione,
+				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE), sxTipoCampo);
+		if (!outputObjects.isEmpty()) {
+			  currentGroup = outputObjects.get(0);
+			listaSV = workflowService.getSxStepVariablesTipoCampoNoValori(idelaborazione,
+					new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE), sxTipoCampo, currentGroup);
+		}
 
-        return "workflow/view_data";
+		listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
+		model.addAttribute("outputObjects", outputObjects);
+		model.addAttribute("currentGroup", currentGroup);
+		model.addAttribute("stepVList", listaSV);
+		model.addAttribute("elaborazione", elaborazione);
+		model.addAttribute("tipoCampo", sxTipoCampo);
+		model.addAttribute("bProcess", listaBp);
+		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
 
-    }
+		return "workflow/view_data";
 
-    @GetMapping(value = "/chiudiElab/{id}")
-    public String chiudiWS(HttpSession session, Model model, @PathVariable("id") Long id) {
-        notificationService.removeAllMessages();
+	}
 
-        Elaborazione elaborazione = workflowService.findElaborazione(id);
-        session.removeAttribute(IS2Const.SESSION_ELABORAZIONE);
-        
-        //Create session DTO
-        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-        sessionBean.setBusinessFunction(null);
-        sessionBean.setIdElaborazione(Long.valueOf("-1"));
-        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+	@GetMapping(value = "/dataview/{idelab}/{tipoCampo}/{outRole}")
+	public String viewDataOut(HttpSession session, Model model, @PathVariable("idelab") Long idelaborazione,
+			@PathVariable("tipoCampo") Integer tipoCampo, @PathVariable("outRole") Integer outRole) {
+		notificationService.removeAllMessages();
 
-        return "redirect:/sessione/apri/" + elaborazione.getSessioneLavoro().getId();
-    }
+		List<SxStepVariable> listaSV = new ArrayList<>();
+		List<SxBusinessProcess> listaBp = new ArrayList<>();
+		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
+		SXTipoCampo sxTipoCampo = workflowService.getTipoCampoById(tipoCampo);
 
-    @GetMapping(value = "/elimina/{idelaborazione}/{idsessione}")
-    public String eliminaWS(HttpSession session, Model model, @AuthenticationPrincipal User user,
-            @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("idsessione") Long idsessione) {
-        notificationService.removeAllMessages();
-        notificationService.addInfoMessage("L'elaborazione è stata rimossa.");
-        workflowService.eliminaElaborazione(idelaborazione);
-        List<WorkSession> listasessioni = sessioneLavoroService.getSessioneList(user);
-        model.addAttribute("listasessioni", listasessioni);
-        
-        logService.save("Elaborazione " + idelaborazione + " Eliminata con successo");
-        
-        //Create session DTO
-        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-        sessionBean.setBusinessFunction(null);
-        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+		List<SxRuoli> outputObjects = workflowService.getOutputRoleGroupsStepVariables(idelaborazione,
+				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE), sxTipoCampo);
 
-        return "redirect:/sessione/apri/" + idsessione;
-    }
+		SxRuoli currentGroup = new SxRuoli(outRole);
+		listaSV = workflowService.getSxStepVariablesTipoCampoNoValori(idelaborazione,
+				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE), sxTipoCampo, currentGroup);
 
-    @GetMapping(value = "/dobproc/{idelaborazione}/{idBProc}")
-    public String dobproc(Model model, @PathVariable("idelaborazione") Long idelaborazione,
-            @PathVariable("idBProc") Long idBProc) throws REngineException {
-        notificationService.removeAllMessages();
+		listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
+		model.addAttribute("outputObjects", outputObjects);
+		model.addAttribute("currentGroup", currentGroup);
+		model.addAttribute("stepVList", listaSV);
+		model.addAttribute("elaborazione", elaborazione);
+		model.addAttribute("tipoCampo", sxTipoCampo);
+		model.addAttribute("bProcess", listaBp);
+		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
 
-        Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
-        try {
-            elaborazione = workflowService.doBusinessProc(elaborazione, idBProc);
-            notificationService.addInfoMessage(messages.getMessage("run.ok", null, LocaleContextHolder.getLocale()));
-        } catch (Exception e) {
-            notificationService.addErrorMessage("Error: " + e.getMessage());
-        }
+		return "workflow/view_data";
 
-        SXTipoCampo sxTipoCampo = workflowService.getTipoCampoById(IS2Const.TIPO_CAMPO_ELABORATO);
+	}
 
-        List<SxStepVariable> listaSV = workflowService.getSxStepVariablesTipoCampoNoValori(idelaborazione,
-                new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE), new SXTipoCampo(IS2Const.TIPO_CAMPO_ELABORATO));
-        List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
+	@GetMapping(value = "/chiudiElab/{id}")
+	public String chiudiWS(HttpSession session, Model model, @PathVariable("id") Long id) {
+		notificationService.removeAllMessages();
 
-        SxBusinessProcess bProcess = Utility.getSxBusinessProcess(listaBp, idBProc);
-        model.addAttribute("stepVList", listaSV);
-        model.addAttribute("elaborazione", elaborazione);
-        model.addAttribute("bProcess", bProcess);
-        model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
-        model.addAttribute("elaborazione", elaborazione);
-        model.addAttribute("tipoCampo", sxTipoCampo);
+		Elaborazione elaborazione = workflowService.findElaborazione(id);
+		session.removeAttribute(IS2Const.SESSION_ELABORAZIONE);
 
-        return "workflow/view_data";
-    }
+		// Create session DTO
+		SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+		sessionBean.setBusinessFunction(null);
+		sessionBean.setIdElaborazione(Long.valueOf("-1"));
+		session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
-    @RequestMapping(value = "/associavariabile", method = RequestMethod.POST)
-    public String associavariabileWS(HttpSession session, Model model,
-            @ModelAttribute("associazioneVarFormBean") AssociazioneVarFormBean form) {
-        Elaborazione elaborazione = workflowService.findElaborazione(Long.parseLong(form.getElaborazione()[0]));
-        workflowService.creaAssociazioni(form, elaborazione);
-        model.addAttribute("elaborazione", elaborazione);
-        notificationService.addInfoMessage("L'associazione è stata aggiunta");
+		return "redirect:/sessione/apri/" + elaborazione.getSessioneLavoro().getId();
+	}
 
-        return "redirect:/ws/editworkingset/" + elaborazione.getId();
-    }
+	@GetMapping(value = "/elimina/{idelaborazione}/{idsessione}")
+	public String eliminaWS(HttpSession session, Model model, @AuthenticationPrincipal User user,
+			@PathVariable("idelaborazione") Long idelaborazione, @PathVariable("idsessione") Long idsessione) {
+		notificationService.removeAllMessages();
+		notificationService.addInfoMessage("L'elaborazione è stata rimossa.");
+		workflowService.eliminaElaborazione(idelaborazione);
+		List<WorkSession> listasessioni = sessioneLavoroService.getSessioneList(user);
+		model.addAttribute("listasessioni", listasessioni);
 
-    @RequestMapping(value = "/associavariabileSum/{idvar}/{idvarsum}", method = RequestMethod.POST)
-    public String associavariabileSum(HttpSession session, Model model, @RequestParam("idvar") Long idVar,
-            @RequestParam("idvarsum") Long idVarSum,
-            @ModelAttribute("associazioneVarFormBean") AssociazioneVarFormBean form) {
-        Elaborazione elaborazione = workflowService.findElaborazione(Long.parseLong(form.getElaborazione()[0]));
-        workflowService.creaAssociazioni(form, elaborazione);
-        model.addAttribute("elaborazione", elaborazione);
-        notificationService.addInfoMessage("L'associazione è stata aggiunta");
+		logService.save("Elaborazione " + idelaborazione + " Eliminata con successo");
 
-        return "redirect:/ws/editworkingset/" + idVar + "/" + idVarSum;
-    }
+		// Create session DTO
+		SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+		sessionBean.setBusinessFunction(null);
+		session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
-    @RequestMapping(value = "/updateassociavariabile", method = RequestMethod.POST)
-    public String updateAssociavariabileWS(HttpSession session, Model model,
-            @ModelAttribute("associazioneVarFormBean") AssociazioneVarFormBean form) {
-        Elaborazione elaborazione = workflowService.findElaborazione(Long.parseLong(form.getElaborazione()[0]));
-        workflowService.updateAssociazione(form, elaborazione);
-        model.addAttribute("elaborazione", elaborazione);
-        notificationService.addInfoMessage("L'associazione è stata modificata");
+		return "redirect:/sessione/apri/" + idsessione;
+	}
 
-        return "redirect:/ws/editworkingset/" + elaborazione.getId();
-    }
+	@GetMapping(value = "/dobproc/{idelaborazione}/{idBProc}")
+	public String dobproc(Model model, @PathVariable("idelaborazione") Long idelaborazione,
+			@PathVariable("idBProc") Long idBProc) throws REngineException {
+		notificationService.removeAllMessages();
 
-    @RequestMapping(value = "/assegnaparametri", method = RequestMethod.POST)
-    public String assegnaparametriWS(HttpSession session, Model model,
-            @RequestParam("idelaborazione") Long idelaborazione, @RequestParam("parametri") String parametri,
-            @RequestParam("valoreParam") String valoreParam) {
+		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
+		try {
+			elaborazione = workflowService.doBusinessProc(elaborazione, idBProc);
+			notificationService.addInfoMessage(messages.getMessage("run.ok", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			notificationService.addErrorMessage("Error: " + e.getMessage());
+		}
 
-        AssociazioneVarFormBean form2 = new AssociazioneVarFormBean();
-        String[] idelaborazioneList = {idelaborazione + ""};
-        form2.setElaborazione(idelaborazioneList);
-        String[] params = {parametri};
-        form2.setParametri(params);
-        String[] valori = {valoreParam};
-        form2.setValore(valori);
-        Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
-        workflowService.associaParametri(form2, elaborazione);
-        notificationService.addInfoMessage("Parametro inserito correttamente");
+		SXTipoCampo sxTipoCampo = workflowService.getTipoCampoById(IS2Const.TIPO_CAMPO_ELABORATO);
 
-        model.addAttribute("elaborazione", elaborazione);
+		List<SxStepVariable> listaSV = workflowService.getSxStepVariablesTipoCampoNoValori(idelaborazione,
+				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE), new SXTipoCampo(IS2Const.TIPO_CAMPO_ELABORATO), null);
+		List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
 
-        return "redirect:/ws/editworkingset/" + elaborazione.getId();
-    }
+		SxBusinessProcess bProcess = Utility.getSxBusinessProcess(listaBp, idBProc);
+		model.addAttribute("stepVList", listaSV);
+		model.addAttribute("elaborazione", elaborazione);
+		model.addAttribute("bProcess", bProcess);
+		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
+		model.addAttribute("elaborazione", elaborazione);
+		model.addAttribute("tipoCampo", sxTipoCampo);
 
-    @RequestMapping(value = "modificaparametro", method = RequestMethod.POST)
-    public String modificaparametro(HttpSession session, Model model,
-            @RequestParam("idelaborazione") Long idelaborazione, @RequestParam("parametri") String parametri,
-            @RequestParam("valoreParam") String valoreParam, @RequestParam("idStepvarMod") String idStepvarMod) {
+		return "workflow/view_data";
+	}
 
-        AssociazioneVarFormBean form2 = new AssociazioneVarFormBean();
-        String[] idelaborazioneList = {idelaborazione + ""};
-        form2.setElaborazione(idelaborazioneList);
-        String[] params = {parametri};
-        form2.setParametri(params);
-        form2.setIdStepVar(idStepvarMod);
-        String[] valori = {valoreParam};
-        form2.setValore(valori);
+	@RequestMapping(value = "/associavariabile", method = RequestMethod.POST)
+	public String associavariabileWS(HttpSession session, Model model,
+			@ModelAttribute("associazioneVarFormBean") AssociazioneVarFormBean form) {
+		Elaborazione elaborazione = workflowService.findElaborazione(Long.parseLong(form.getElaborazione()[0]));
+		workflowService.creaAssociazioni(form, elaborazione);
+		model.addAttribute("elaborazione", elaborazione);
+		notificationService.addInfoMessage("L'associazione è stata aggiunta");
 
-        Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
+		return "redirect:/ws/editworkingset/" + elaborazione.getId();
+	}
 
-        workflowService.updateParametri(form2, elaborazione);
-        notificationService.addInfoMessage("Parametro modificato");
+	@RequestMapping(value = "/associavariabileSum/{idvar}/{idvarsum}", method = RequestMethod.POST)
+	public String associavariabileSum(HttpSession session, Model model, @RequestParam("idvar") Long idVar,
+			@RequestParam("idvarsum") Long idVarSum,
+			@ModelAttribute("associazioneVarFormBean") AssociazioneVarFormBean form) {
+		Elaborazione elaborazione = workflowService.findElaborazione(Long.parseLong(form.getElaborazione()[0]));
+		workflowService.creaAssociazioni(form, elaborazione);
+		model.addAttribute("elaborazione", elaborazione);
+		notificationService.addInfoMessage("L'associazione è stata aggiunta");
 
-        model.addAttribute("elaborazione", elaborazione);
+		return "redirect:/ws/editworkingset/" + idVar + "/" + idVarSum;
+	}
 
-        return "redirect:/ws/editworkingset/" + elaborazione.getId();
-    }
+	@RequestMapping(value = "/updateassociavariabile", method = RequestMethod.POST)
+	public String updateAssociavariabileWS(HttpSession session, Model model,
+			@ModelAttribute("associazioneVarFormBean") AssociazioneVarFormBean form) {
+		Elaborazione elaborazione = workflowService.findElaborazione(Long.parseLong(form.getElaborazione()[0]));
+		workflowService.updateAssociazione(form, elaborazione);
+		model.addAttribute("elaborazione", elaborazione);
+		notificationService.addInfoMessage("L'associazione è stata modificata");
+
+		return "redirect:/ws/editworkingset/" + elaborazione.getId();
+	}
+
+	@RequestMapping(value = "/assegnaparametri", method = RequestMethod.POST)
+	public String assegnaparametriWS(HttpSession session, Model model,
+			@RequestParam("idelaborazione") Long idelaborazione, @RequestParam("parametri") String parametri,
+			@RequestParam("valoreParam") String valoreParam) {
+
+		AssociazioneVarFormBean form2 = new AssociazioneVarFormBean();
+		String[] idelaborazioneList = { idelaborazione + "" };
+		form2.setElaborazione(idelaborazioneList);
+		String[] params = { parametri };
+		form2.setParametri(params);
+		String[] valori = { valoreParam };
+		form2.setValore(valori);
+		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
+		workflowService.associaParametri(form2, elaborazione);
+		notificationService.addInfoMessage("Parametro inserito correttamente");
+
+		model.addAttribute("elaborazione", elaborazione);
+
+		return "redirect:/ws/editworkingset/" + elaborazione.getId();
+	}
+
+	@RequestMapping(value = "modificaparametro", method = RequestMethod.POST)
+	public String modificaparametro(HttpSession session, Model model,
+			@RequestParam("idelaborazione") Long idelaborazione, @RequestParam("parametri") String parametri,
+			@RequestParam("valoreParam") String valoreParam, @RequestParam("idStepvarMod") String idStepvarMod) {
+
+		AssociazioneVarFormBean form2 = new AssociazioneVarFormBean();
+		String[] idelaborazioneList = { idelaborazione + "" };
+		form2.setElaborazione(idelaborazioneList);
+		String[] params = { parametri };
+		form2.setParametri(params);
+		form2.setIdStepVar(idStepvarMod);
+		String[] valori = { valoreParam };
+		form2.setValore(valori);
+
+		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
+
+		workflowService.updateParametri(form2, elaborazione);
+		notificationService.addInfoMessage("Parametro modificato");
+
+		model.addAttribute("elaborazione", elaborazione);
+
+		return "redirect:/ws/editworkingset/" + elaborazione.getId();
+	}
 
 }

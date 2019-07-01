@@ -42,7 +42,7 @@ public class RuoloService {
         return ruoloDao.findAll();
     }
 
-    public Optional<SxRuoli> findRuolo(Long idruolo) {
+    public Optional<SxRuoli> findRuolo(Integer idruolo) {
         return ruoloDao.findById(idruolo);
     }
 }

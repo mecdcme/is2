@@ -294,40 +294,71 @@
                                 <i class="fa fa-plus-square"></i>&nbsp;
                                 <span th:text="#{rules.new.ruleset.dialog.title}">Nuovo ruleset di regole</span>
                             </h4>
-                        </div>                        
-                        <div class="modal-body">
-                            <span th:text="#{rules.new.ruleset.name}" >Nome ruleset:</span> &nbsp;&nbsp;&nbsp; 
-                            <input id="ruleset_name" value="" type="text"/>              
+                        </div>                      
+                        <div class="modal-body row">
+                        	<div class="col-lg-12">
+			                    <div class="col-lg-4 text-right">
+	                            	<span th:text="#{rules.new.ruleset.name}" >Nome ruleset:</span> &nbsp;&nbsp;&nbsp; 
+	                            </div>            
+			                    <div class="col-lg-8">
+	                            	<input id="ruleset_name" value="" type="text"/>      
+	                            </div>     
+	                        </div>        
                         </div>
-                        <div class="modal-body">
-                            <span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
-                            <input id="ruleset_label" value="" type="text"/>                 
+                        <div class="modal-body row">
+                        	<div class="col-lg-12">
+		                        <div class="col-lg-4 text-right">
+                            		<span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
+                            	</div>            
+		                        <div class="col-lg-8">
+                            		<input id="ruleset_label" value="" type="text"/>    
+                            	</div>     
+	                        </div>             
                         </div>
-                        <div class="modal-body">
-                            <span th:text="#{ruleset.dataset.label}">Dataset:</span> &nbsp;&nbsp;&nbsp;
-                            <select id="dataset_file" >
-                                <option th:each="dataset : ${listaDatasetFile}"
-                                        th:value="${dataset.id}"
-                                        th:text="${dataset.nomeFile}">
-                                </option>
-                            </select>                               
+                        <div class="modal-body row">
+                        	<div class="col-lg-12">
+		                        <div class="col-lg-4 text-right">
+                            		<span th:text="#{ruleset.dataset.label}">Dataset:</span> &nbsp;&nbsp;&nbsp;
+                            	</div>            
+		                        <div class="col-lg-8">
+                            		<select id="dataset_file" >
+                                		<option th:each="dataset : ${listaDatasetFile}"
+                                        	th:value="${dataset.id}"
+                                        	th:text="${dataset.nomeFile}">
+                                		</option>
+                            		</select>  
+                            	</div>     
+	                        </div>                              
                         </div>
-                        <div class="modal-body">
-                            <span th:text="#{ruleset.type.label}">Tipo:</span> &nbsp;&nbsp;&nbsp;
-                            <select id="tipo_ruleset" >                            	
-                                <option th:text="DOMINIO" th:value="1"></option>
-                            </select>                               
+                        <div class="modal-body row">
+                        	<div class="col-lg-12">
+		                        <div class="col-lg-4 text-right">
+	                            	<span th:text="#{ruleset.type.label}">Tipo:</span> &nbsp;&nbsp;&nbsp;
+	                            </div>            
+		                        <div class="col-lg-8">
+	                            	<select id="tipo_ruleset" >            
+	                            		<option th:text="--" th:value="-1"></option>                	
+	                                	<option th:text="DOMINIO" th:value="1"></option>
+	                            	</select> 
+	                            </div>     
+	                        </div>                               
                         </div>     
-                        <div class="modal-body">
-                            <span th:text="#{rules.new.ruleset.desc}" >Descrizione:</span> &nbsp;&nbsp;&nbsp; 
-                            <input id="ruleset_desc" value="" type="text"/>              
-                        </div>                  
+                        <div class="modal-body row">
+	                        <div class="col-lg-12">
+	                        	<div class="col-lg-4 text-right">
+	                            	<span th:text="#{rules.new.ruleset.desc}" >Descrizione:</span> &nbsp;&nbsp;&nbsp; 
+	                           	</div>            
+	                            <div class="col-lg-8">
+	                            	<input id="ruleset_desc" value="" type="text"/>         
+	                            </div>     
+	                        </div> 
+                        </div>                
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">
                                 <span th:text="#{Layout.Close}">Annulla</span>
                             </button>
                             <button type="button" id="btn-invia-new-ruleset" class="btn btn-primary towait"
-                                    onclick="inviaFormRulesetFile();" th:title="#{submit.button.title}"
+                                    onclick="inviaFormNewRuleset();" th:title="#{submit.button.title}"
                                     th:text="#{submit.button}" data-dismiss="modal">Invia</button>
                         </div>
                     </div>

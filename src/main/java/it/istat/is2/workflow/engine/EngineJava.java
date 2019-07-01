@@ -79,6 +79,7 @@ public class EngineJava implements EngineService {
 	private LinkedHashMap<String, ArrayList<String>> ruoliVariabileNome;
 
 	private LinkedHashMap<String, ArrayList<String>> ruoliOutputStep;
+	private HashMap<String, String> ruoliGruppoOutputStep;
 	private LinkedHashMap<String, ArrayList<String>> parametriOutput = new LinkedHashMap<>();
 
 	public EngineJava() {
@@ -113,6 +114,7 @@ public class EngineJava implements EngineService {
 			
 		worksetOut=(Map<String, ArrayList<String>>) resultOut.get(IS2Const.WF_OUTPUT_WORKSET);
 		ruoliOutputStep =(LinkedHashMap<String, ArrayList<String>>) resultOut.get(IS2Const.WF_OUTPUT_ROLES);
+		ruoliGruppoOutputStep =(HashMap<String, String>) resultOut.get(IS2Const.WF_OUTPUT_ROLES_GROUP);
 	}
 
 	public void prepareEnv() {
@@ -216,10 +218,11 @@ public class EngineJava implements EngineService {
 			ArrayList<String> value = entry.getValue();
 			SxStepVariable sxStepVariable;
 			String ruolo = ruoliOutputStepInversa.get(nomeW);
-			if (ruolo == null) {
-				ruolo = RUOLO_SKIP_N;
-			}
+			String ruoloGruppo = ruoliGruppoOutputStep.get(ruolo);
+			if (ruolo == null) {ruolo = RUOLO_SKIP_N;}
+			if (ruoloGruppo == null) {ruoloGruppo = RUOLO_SKIP_N;}
 			SxRuoli sxRuolo = ruoliAllMap.get(ruolo);
+			SxRuoli sxRuoloGruppo = ruoliAllMap.get(ruoloGruppo);
 
 			if (dataMap.keySet().contains(nomeW) && dataMap.get(nomeW).getSxRuoli().getCod().equals(sxRuolo.getCod())) { // update
 																															// fields
@@ -232,6 +235,7 @@ public class EngineJava implements EngineService {
 				sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_ELABORATO));
 
 				sxStepVariable.setSxRuoli(sxRuolo);
+				sxStepVariable.setSxRuoloGruppo(sxRuoloGruppo);
 				sxStepVariable.setOrdine(sxRuolo.getOrdine());
 				SxWorkset sxWorkset = new SxWorkset();
 				sxWorkset.setNome(nomeW.replaceAll("\\.", "_"));
@@ -265,8 +269,14 @@ public class EngineJava implements EngineService {
 				if (ruolo == null) {
 					ruolo = RUOLO_SKIP_N;
 				}
+				String ruoloGruppo = ruoliGruppoOutputStep.get(ruolo);
+				if (ruolo == null) {ruolo = RUOLO_SKIP_N;}
+				if (ruoloGruppo == null) {ruoloGruppo = RUOLO_SKIP_N;}
 				SxRuoli sxRuolo = ruoliAllMap.get(ruolo);
+				SxRuoli sxRuoloGruppo = ruoliAllMap.get(ruoloGruppo);
 				sxStepVariable.setSxRuoli(sxRuolo);
+				sxStepVariable.setSxRuoloGruppo(sxRuoloGruppo);
+				
 				sxStepVariable.setOrdine(sxRuolo.getOrdine());
 				SxWorkset sxWorkset = new SxWorkset();
 				sxWorkset.setNome(nomeW.replaceAll("\\.", "_"));

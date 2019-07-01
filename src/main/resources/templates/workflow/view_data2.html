@@ -32,7 +32,6 @@
         <script th:inline="javascript">
             var _idElaborazione = [[${session.sessioneBean.idElaborazione}]];
             var _tipoCampo = [[${tipoCampo.id}]];
-            var _roleGroup =[[${currentGroup.id}]];
         </script>
         <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
     </head>
@@ -69,13 +68,7 @@
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
-                                       <span th:each="objectGroup,iterStat : ${outputObjects}">
-                                            <a class="card-header-action" th:href="@{'/ws/dataview/'+${elaborazione.id}+'/2/'+${objectGroup.id}}"  > 
-                                                <span th:if="${objectGroup.id} == ${currentGroup.id}" th:class="!${iterStat.last}? 'header-strong bar-right' : 'header-strong'" 
-                                                      th:text="${objectGroup.nome}"></span>
-                                                <span th:unless="${objectGroup.id} == ${currentGroup.id}" th:class="!${iterStat.last}? 'bar-right'" th:text="${objectGroup.nome}"></span>
-                                            </a>
-                                        </span>
+                                        <span th:text="${tipoCampo.nome}" >Dati</span>
                                     </div>
                                     <div class="card-body">
                                         <table id="worksetTab" th:if="${not #lists.isEmpty(stepVList)}"
@@ -84,7 +77,9 @@
                                                 <tr>
                                                     <th th:each="stepV: ${stepVList}" th:text="${stepV.sxWorkset.nome}"></th>
                                                 </tr>
-                                                
+                                                <tr>
+                                                    <th th:each="stepV: ${stepVList}" th:text="${stepV.sxRuoli.nome}"></th>
+                                                </tr>
                                             </thead>
                                         </table>
                                         <span th:unless="${not #lists.isEmpty(stepVList)}">

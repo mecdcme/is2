@@ -40,11 +40,11 @@ public class StepVariableService {
     @Autowired
     StepVariableDao stepVariableDao;
 
-    public List<SxStepVariable> findBStepByIdProcess(Long idelab, Long idstep) {
+    public List<SxStepVariable> findBStepByIdProcess(Long idelab, Integer idstep) {
         return stepVariableDao.findByElaborazione(new Elaborazione(idelab));
     }
 
-    public Optional<SxStepVariable> findById(Long idstep) {
+    public Optional<SxStepVariable> findById(Integer idstep) {
         return stepVariableDao.findById(idstep);
     }
 
@@ -52,7 +52,7 @@ public class StepVariableService {
         return stepVariableDao.findBySxRuoli(ruolo);
     }
 
-    public void removeStepVarById(Long idstep) {
+    public void removeStepVarById(Integer idstep) {
         stepVariableDao.deleteById(idstep);
     }
 
