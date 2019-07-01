@@ -22,6 +22,7 @@
  * @version 1.0
  */
 var _ctx = $("meta[name='ctx']").attr("content");
+var passGraphType;
 
 $(document).ready(function () {
 
@@ -82,20 +83,31 @@ function getBar() {
 
 }
 
-function getData(graphType) {
+function getData(graphType, action) {
 
-    var graphmeta = getMetaData();
+    if (action === 1) {
 
-    $.ajax({
-        url: _ctx + "/rest/graph/getData/" + graphmeta.filters + "/" + graphmeta.xAxis + "/" + graphmeta.yAxis,
-        type: "GET",
-        success: function (data) {
-            drawGraph(graphType, data);
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error loading data');
-        }
-    });
+        var graphmeta = getMetaData();
+        $.ajax({
+            url: _ctx + "/rest/graph/getData/" + graphmeta.filters + "/" + graphmeta.xAxis + "/" + graphmeta.yAxis,
+            type: "GET",
+            success: function (data) {
+                drawGraph(graphType, data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error loading data');
+            }
+        });
+
+    }
+
+    if (action === 0) {
+        
+        showGraph(graphType);
+        passGraphType = graphType;
+
+    }
+
 }
 
 function getMetaData() {
@@ -111,6 +123,7 @@ function getMetaData() {
     meta.yAxis = getFields("targetY");
 
     return meta;
+
 }
 
 function getFields(idDiv) {
@@ -130,10 +143,10 @@ function getFields(idDiv) {
     return ids;
 }
 
+
 function drawGraph(graphType, data) {
 
     var globalBox = [];
-
 
     if (Object.keys(data.filter).length)
         console.log(data.yaxis);
@@ -142,81 +155,103 @@ function drawGraph(graphType, data) {
     if (Object.keys(data.yaxis).length)
         console.log(data.yaxis);
 
-
-
     switch (graphType) {
-
-
         case 'box':
-
-            var layout = {
-                title: graphType,
-                showlegend: true
-            };
-
-            for (var key in data.yaxis) {
-
+            $.each(data.yaxis, function (key, value) {
                 var groupBox = {
-                    y: data.yaxis[key],
-                    //name: data[i].nome,
+                    y: value,
+                    name: key,
                     type: graphType,
                     hoverinfo: 'skip'
                 };
                 globalBox.push(groupBox);
-
-            }
-
-            break;
-
-        case 'scatter':
-
-            for (var key in data.xaxis) {
-                var x = data.xaxis[key];
-            }
-            for (var key in data.yaxis) {
-                var y = data.yaxis[key];
-            }
-
+            });
             var layout = {
-                title: graphType,
-                showlegend: false
-            };
-
-
-            var groupBox = {
-                x: x,
-                y: y,
-                mode: 'markers',
-                type: graphType
-            };
-            globalBox.push(groupBox);
-            break;
-
-        case 'bar':
-
-            for (var key in data.xaxis) {
-                var x = data.xaxis[key];
-            }
-
-            var layout = {
-                title: graphType,
+                title: graphType.toUpperCase(),
                 showlegend: true
             };
-
-            for (var key in data.yaxis) {
-
+            break;
+        case 'scatter':
+            var x = [];
+            var keys = [];
+            $.each(data.xaxis, function (key, value) {
+                x.push(value);
+                keys.push(key);
+            });
+            var y = [];
+            $.each(data.yaxis, function (key, value) {
+                y.push(value);
+            });
+            for (var i = 0; i < x.length; i++) {
+                var groupBox = {
+                    x: x[i],
+                    y: y[i],
+                    name: keys[i],
+                    mode: 'markers',
+                    type: graphType,
+                    hoverinfo: 'skip'
+                };
+                globalBox.push(groupBox);
+            }
+            ;
+            var layout = {
+                title: graphType.toUpperCase(),
+                showlegend: true
+            };
+            break;
+        case 'bar':
+            var x;
+            $.each(data.xaxis, function (key, value) {
+                x = value;
+            });
+            $.each(data.yaxis, function (key, value) {
                 var groupBox = {
                     x: x,
-                    y: data.yaxis[key],
+                    y: value,
+                    name: key,
                     type: graphType,
                     hoverinfo: 'skip'
                 };
                 globalBox.push(groupBox);
-            }
+            });
+            var layout = {
+                title: graphType.toUpperCase(),
+                showlegend: true
+            };
+
             break;
-
     }
-
     Plotly.newPlot('datagraph', globalBox, layout, {scrollZoom: true});
+}
+function showGraph(graphType) {
+
+    $('.card-container').addClass("invisible");
+    $('#targetX').addClass("invisible");
+    $('#targety').addClass("invisible");
+    $('#filter').addClass("invisible");    
+    $('.graph-button').addClass("invisible");     
+    
+    
+    
+
+    switch (graphType) {
+        case 'box':
+            $('.card-container').removeClass("invisible");
+            $('.yaxis').removeClass("invisible");
+            $('.graph-button').removeClass("invisible");
+            break;
+        case 'scatter':
+            $('.card-container').removeClass("invisible");
+            $('.xaxis').removeClass("invisible");
+            $('.yaxis').removeClass("invisible");
+            $('.graph-button').removeClass("invisible");
+            break;
+        case 'bar':
+            $('.card-container').removeClass("invisible");
+            $('.xaxis').removeClass("invisible");
+            $('.yaxis').removeClass("invisible");
+            $('.graph-button').removeClass("invisible");
+            break;
+    }
 
 }

@@ -71,12 +71,9 @@ public class GraphControllerRest {
 
     @GetMapping("/rest/graph/getCoordinates/{ids}")
     public Coordinate geCoordinates(HttpServletRequest request, @PathVariable("ids") List<Integer> ids) {
-
         Coordinate coordinateXY = new Coordinate();
-
         coordinateXY.setX(datasetService.findOneColonna(new Long(ids.get(0))).getDatiColonna());
         coordinateXY.setY(datasetService.findOneColonna(new Long(ids.get(1))).getDatiColonna());
-
         return coordinateXY;
     }
 
