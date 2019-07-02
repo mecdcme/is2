@@ -75,6 +75,55 @@
                     </nav>
                     <!-- End breadcrumb -->
                     <div class="container-fluid">
+                    <!-- TEST ROW RULESET VARS -->
+                    
+                    <div class="row" th:if="${(dfile != null) and (dfile.size() > 0)}">
+                    	<div class="col-lg-7">
+	                        <div class="card">
+	                            <div class="card-header">
+	                                <span th:text="#{ruleset.edit.title}">Edit regole</span>                                        
+	                            </div>
+	                            
+	                            <div class="card-body">
+	                                <table id="metadataTab" class="table table-bordered table-hover">
+	                                    <thead>
+	                                        <tr>
+	                                            <th style="width: 5%"><span></span></th>
+	                                            <th><span>Nome Variabile</span><span class="pull-right"><i class="fa fa-arrows"></i></span></th>
+	                                            <th><span>Tipo Variabile SUM </span></th>
+	                                            <th><span>Filtro</span></th>
+	                                            <th style="width: 5%"></th>
+	                                        </tr>
+	                                    </thead>
+	                                    <tbody>
+	                                        <tr th:each="cols: ${dfile.colonne}" th:unless="${(dfile.colonne == null) or (dfile.colonne.size() == 0) }">
+	                                            <td><i class="fa fa-sort"></i><span th:text="${cols.ordine}"></span></td>
+	                                            <td><span th:text="${cols.nome}"></span></td>
+	                                            <td><span  th:text="${cols.tipoVariabile} != null? ${cols.tipoVariabile.nomeTipoVariabileIta}: ''"></span></td>
+	                                            <td align="center">
+	                                                <a href="javascript:void(0)" title="Filtro ricerca" class="disabled">
+	                                                    <span th:if="${ cols.filtro==1 }"><i class="fa fa-check"></i></span>
+	                                                </a>
+	                                            </td>
+	                                            <td align="center">
+	                                                <a href="javascript:void(0)"  th:if="${cols.tipoVariabile}"
+	                                                   th:attr="onclick='javascript:associaVarSum('+${cols.id}+','+${cols.tipoVariabile.tipoVariabile}+',\''+${cols.nome}+'\','+${cols.filtro}+')'"
+	                                                   title="Associa"><i class="fa fa-pencil"></i>
+	                                                </a>
+	                                                <a href="javascript:void(0)"   th:unless="${cols.tipoVariabile}"
+	                                                   th:attr="onclick='javascript:associaVarSum('+${cols.id}+',null,\''+${cols.nome}+'\','+${cols.filtro}+')'"
+	                                                   title="Associa"> <i class="fa fa-pencil"></i>
+	                                                </a>
+	                                                <input type="hidden" name="colsid" th:value="${cols.id}" />
+	                                            </td>
+	                                        </tr>
+	                                    </tbody>
+	                                </table>
+	                            </div>
+	                        </div>
+	                    </div>
+                    </div>
+                    <!-- FINE TEST ROW RULESET VARS -->
                         <div class="row" >
                             <div class="col-lg-7">
                                 <div class="card">
@@ -109,8 +158,8 @@
                                                         </a>
                                                     </td>
                                                     <td style="width: 1%">
-                                                        <a href="javascript:void(0)" title="Edit" role="button" th:attr="onclick='javascript:editRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">
-                                                            <i class="fa fa-search"></i>
+                                                        <a href="javascript:void(0)" title="Edit regola" role="button" th:attr="onclick='javascript:editRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">
+                                                            <i class="fa fa-edit"></i>
                                                         </a>
                                                     </td>
                                                     <td style="width: 1%">
@@ -175,6 +224,73 @@
             <!-- END MAIN CONTAINER -->
             <footer th:replace="layout :: site-footer" />
         </div>
+        <form id="inputNewRuleForm" th:action="@{'/rule/newRule'}" method="post" enctype="multipart/form-data">            
+            <input type="hidden" value="" name="ruleText" id="ruleText" />            
+            <input type="hidden" value="" name="ruleDesc" id="ruleDesc" /> 
+            <input type="hidden" value="" name="ruleType" id="ruleType" />
+            <input type="hidden" th:value="${session.sessioneBean.id}" th:name="idsessione" />
+            <input type="hidden" th:value="${ruleset.id}" th:name="idruleset" />
+            
+        </form> 
+         <!-- New Rule Dialog -->
+            <div class="modal fade" id="newruledialog" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">
+                                <i class="fa fa-plus-square"></i>&nbsp;
+                                <span th:text="#{rules.new.rule.dialog.title}">Nuova regola</span>
+                            </h4>
+                        </div>                      
+                        <div class="modal-body row">
+                        	<div class="col-lg-12">
+			                    <div class="col-lg-4 text-right">
+	                            	<span th:text="#{ruleset.rule}" >Regola:</span> &nbsp;&nbsp;&nbsp; 
+	                            </div>            
+			                    <div class="col-lg-8">
+	                            	<input id="rule_text" value="" type="text"/>      
+	                            </div>     
+	                        </div>        
+                        </div>
+                        <div class="modal-body row">
+                        	<div class="col-lg-12">
+		                        <div class="col-lg-4 text-right">
+                            		<span th:text="#{rules.new.ruleset.desc}" >Descrizione:</span> &nbsp;&nbsp;&nbsp; 
+                            	</div>            
+		                        <div class="col-lg-8">
+                            		<input id="rule_desc" value="" type="text"/>    
+                            	</div>     
+	                        </div>             
+                        </div>                        
+                        <div class="modal-body row">
+                        	<div class="col-lg-12">
+		                        <div class="col-lg-4 text-right">
+	                            	<span th:text="#{ruleset.type.label}">Tipo:</span> &nbsp;&nbsp;&nbsp;
+	                            </div>            
+		                        <div class="col-lg-8">
+	                            	<select id="rule_tipo" >            
+	                            		<option th:text="--" value="-1"></option>                	
+	                                	<option th:text="DOMINIO" value="1"></option>
+	                            	</select> 
+	                            </div>     
+	                        </div>                               
+                        </div>                                      
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                <span th:text="#{Layout.Close}">Annulla</span>
+                            </button>
+                            <button type="button" id="btn-invia-new-rule" class="btn btn-primary towait"
+                                    onclick="inviaFormNewRule();" th:title="#{submit.button.title}"
+                                    th:text="#{submit.button}" data-dismiss="modal">Invia</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fine New Rule Dialog -->
         <!-- Modal Delete-->
         <div class="modal fade" id="modalDeleteRule" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -204,7 +320,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title"><span th:text="#{ruleset.rule}">Regola</span></h4>
+                        <h4 class="modal-title"><span th:text="#{ruleset.rule.edit}">Edit regola</span></h4>
                     </div>                
                     <div class="modal-body form">
                         <form action="#" id="editForm" class="form-horizontal">

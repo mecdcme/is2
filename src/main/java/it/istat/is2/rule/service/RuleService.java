@@ -75,6 +75,9 @@ public class RuleService {
     public List<SxRuleType> findAllRuleType() {
         return (List<SxRuleType>) sxRuleTypeDao.findAll();
     }
+    public SxRuleType findRuleTypeById(short idrule) {
+        return sxRuleTypeDao.findById(idrule);
+    }
 
     public void runValidate(SxRuleset ruleset) {
         SxRule rule;

@@ -102,9 +102,14 @@ function scaricaDataset(e, param, idDFile) {
     e.preventDefault();
     window.location = _ctx + '/rest/download/dataset/' + param + '/' + idDFile;
 }
-
-function newRule() {
-    alert("Add a new rule");
+function inviaFormNewRule() {
+    $("#ruleText").val($("#rule_text").val());
+    $("#ruleDesc").val($("#rule_desc").val());
+	$("#ruleType").val($("#rule_tipo").val());  
+	$("#inputNewRuleForm").submit();
+}
+function newRule() {    
+    $('#newruledialog').modal('show');
 }
 
 function editRule(id, rule) {

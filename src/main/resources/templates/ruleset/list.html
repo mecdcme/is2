@@ -121,8 +121,8 @@
                                                 <tr th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">                                                
                                                     <th><span th:text="#{listaDataset.nome}">Nome</span></th>
                                                     <th><span th:text="#{listaDataset.label}">Label</span></th>
-                                                    <th><span th:text="#{listaDataset.numerorerole}">N. Righe</span></th>
-                                                    <th colspan="2"></th>
+                                                    <th><span th:text="#{listaDataset.numeroregole}">N. regole</span></th>
+                                                    <th colspan="3"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -130,7 +130,7 @@
                                                     th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
                                                     <td th:text="${ruleset.nomeFile}"></td>
                                                     <td th:text="${ruleset.labelFile}"></td>
-                                                    <td th:text="${ruleset.numeroRighe}"></td>
+                                                    <td th:text="${ruleset.numeroRighe}"></td>                                                    
                                                     <td style="width: 1%">
                                                         <a th:href="@{'/rule/viewRules/'+${ruleset.id}}" title="Visualizza ruleset">
                                                             <i class="fa fa-search"></i>
