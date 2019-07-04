@@ -29,13 +29,17 @@ $(document).ready(function () {
     $(".sortable").sortable({
         items: 'tbody > tr',
         connectWith: ".sortable",
+        //revert:true,
         receive: function (event, ui) {
             $(this).find("tbody").append(ui.item);
             hideOrShowDropRow();
         }
     });
+    /*
 
     hideOrShowDropRow();
+    
+    */
 });
 
 
@@ -98,11 +102,9 @@ function getData(graphType, action) {
                 alert('Error loading data');
             }
         });
-
     }
 
     if (action === 0) {
-        
         showGraph(graphType);
         passGraphType = graphType;
 
@@ -144,16 +146,11 @@ function getFields(idDiv) {
 }
 
 
-function drawGraph(graphType, data) {
-
+function drawGraph(graphType, data) {  
+    
     var globalBox = [];
 
-    if (Object.keys(data.filter).length)
-        console.log(data.yaxis);
-    if (Object.keys(data.xaxis).length)
-        console.log(data.yaxis);
-    if (Object.keys(data.yaxis).length)
-        console.log(data.yaxis);
+    var loadingdata = false;
 
     switch (graphType) {
         case 'box':
@@ -165,6 +162,7 @@ function drawGraph(graphType, data) {
                     hoverinfo: 'skip'
                 };
                 globalBox.push(groupBox);
+                loadingdata = true;
             });
             var layout = {
                 title: graphType.toUpperCase(),
@@ -192,8 +190,8 @@ function drawGraph(graphType, data) {
                     hoverinfo: 'skip'
                 };
                 globalBox.push(groupBox);
-            }
-            ;
+                loadingdata = true;
+            };
             var layout = {
                 title: graphType.toUpperCase(),
                 showlegend: true
@@ -213,6 +211,7 @@ function drawGraph(graphType, data) {
                     hoverinfo: 'skip'
                 };
                 globalBox.push(groupBox);
+                loadingdata=true;
             });
             var layout = {
                 title: graphType.toUpperCase(),
@@ -221,37 +220,53 @@ function drawGraph(graphType, data) {
 
             break;
     }
-    Plotly.newPlot('datagraph', globalBox, layout, {scrollZoom: true});
+    
+    
+    if (loadingdata === true ){
+        Plotly.newPlot('datagraph', globalBox, layout, {scrollZoom: true});
+        $('.card-graph').removeClass("invisible"); 
+        $('.button-graph').addClass("invisible"); 
+    }else{
+        alert("selezionare i dati");
+    }
 }
 function showGraph(graphType) {
 
-    $('.card-container').addClass("invisible");
+    $("#targetX tbody tr").each(function () { 
+        $('#sourceTable tr:last').after($(this));   
+    });
+    $("#targetY tbody tr").each(function () {        
+        $('#sourceTable tr:last').after($(this)); 
+    });    
+    $("#filter tbody tr").each(function () {         
+        $('#sourceTable tr:last').after($(this));        
+    });
+    
+    $('.card-graph').addClass("invisible");  
+    $('.button-graph').addClass("invisible");      
+   
     $('#targetX').addClass("invisible");
     $('#targety').addClass("invisible");
     $('#filter').addClass("invisible");    
-    $('.graph-button').addClass("invisible");     
     
-    
-    
-
     switch (graphType) {
         case 'box':
             $('.card-container').removeClass("invisible");
             $('.yaxis').removeClass("invisible");
-            $('.graph-button').removeClass("invisible");
+            $('.button-graph').removeClass("invisible");
             break;
         case 'scatter':
             $('.card-container').removeClass("invisible");
             $('.xaxis').removeClass("invisible");
             $('.yaxis').removeClass("invisible");
-            $('.graph-button').removeClass("invisible");
+            $('.button-graph').removeClass("invisible");
             break;
         case 'bar':
             $('.card-container').removeClass("invisible");
             $('.xaxis').removeClass("invisible");
             $('.yaxis').removeClass("invisible");
-            $('.graph-button').removeClass("invisible");
+            $('.button-graph').removeClass("invisible");
             break;
     }
-
+   
 }

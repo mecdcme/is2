@@ -35,7 +35,11 @@
         <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
         <link rel="stylesheet" th:href="@{/css/table/rowReorder.dataTables.min.css}" />
         <script th:inline="javascript">
-            var _idfile = [[${idfile}]];</script>
+            var _idfile = [[${idfile}]];
+                    $(document).ready(function () {
+                setMenuActive("dati");
+            });
+        </script>
     </head>
     <body>
         <!-- Body -->
@@ -72,36 +76,33 @@
                             </li>
 
                             <div class="btn-group pull-right">  
-                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getData('scatter', 0);" title="Scatter!"> 
-                                    <i class="fa fa-plus-square-o"></i>
-                                    <span>Scatter</span>
+                                <a href="javascript:void(0)" onclick="javascript:getData('scatter', 0);" title="Scatter!"> 
+                                    <i class="fa fa-plus-square-o"></i>&nbsp;<span>Scatter</span>
                                 </a>
-                            </div>
-
-                            <div class="btn-group pull-right">
-                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getData('box', 0);" title="Box plot!"> 
-                                    <i class="fa fa-plus-square-o"></i>
-                                    <span>Box plot</span>
+                                <a href="javascript:void(0)" onclick="javascript:getData('box', 0);" title="Box plot!"> 
+                                    <i class="fa fa-plus-square-o"></i>&nbsp;<span>Box plot</span>
                                 </a>
-                            </div>
-                            <div class="btn-group pull-right">                        
-                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getData('bar', 0);" title="Bar!"> 
-                                    <i class="fa fa-plus-square-o"></i>
-                                    <span>Bar</span>
+                                <a class="bar-right" href="javascript:void(0)" onclick="javascript:getData('bar', 0);" title="Bar!"> 
+                                    <i class="fa fa-plus-square-o"></i>&nbsp;<span>Bar</span>
                                 </a>
-                            </div>
-                            <div class="btn-group pull-right">
                                 <a class="" title="Chiudi analytics" th:href="@{'/viewDataset/'+${idfile}}">
-                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{graph.button.close}"></span>
+                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                                 </a>
                             </div>
                         </ol>
                     </nav>
                     <!-- End breadcrumb -->
                     <div class="container-fluid">
-
-
                         <div class="card card-nocolor">
+                            <div class="card-header">
+                                <span>Selezione variabili</span>
+                                <div class="card-header-actions">
+                                    <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getData(passGraphType, 1);" title="Graph!"> 
+                                        <i class="fa fa-plus-square-o"></i>
+                                        <span>Draw chart</span>
+                                    </a>
+                                </div>
+                            </div>                            
                             <div class="card-body"> 
                                 <div class="row">
                                     <div class="col-xs-2">
@@ -156,44 +157,30 @@
                                             </tbody>
                                         </table>
                                     </div>
-
-                                    <div class="col-xs-2 graph-button invisible">
-
-                                        <div class="btn-group pull-right">                        
-                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getData(passGraphType, 1);" title="Bar!"> 
-                                                <i class=""></i>
-                                                <span>OK</span>
-                                            </a>
-                                        </div>
-                                    </div>
-
-
-
                                 </div>
-
                             </div>
-
                         </div>
-                        <div class="card">
+                        <div class="card card-graph invisible">
+                            <div class="card-header">
+                                <span>Plot</span>
+                                <div class="card-header-actions">
+                                    <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getData(passGraphType, 1);" title="Graph!"> 
+                                        <i class="fa fa-plus-square-o"></i>
+                                        <span>Update chart</span>
+                                    </a>
+                                </div>
+                            </div>
                             <div class="card-body"> 
-
                                 <div class="row">
                                     <div  id="datagraph"></div>                                        
                                 </div>
                             </div>
-
-                            <!--/div>
-
-</div-->
-
                         </div>
                     </div>
                 </div>
                 <!-- container fluid -->
-        </div>
-        </section>
-
-        <footer th:replace="layout :: site-footer" />
+            </section>
+            <footer th:replace="layout :: site-footer" />
         </div>
     </body>
 </html>
