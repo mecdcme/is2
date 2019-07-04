@@ -106,10 +106,15 @@ function inviaFormNewRule() {
     $("#ruleText").val($("#rule_text").val());
     $("#ruleDesc").val($("#rule_desc").val());
 	$("#ruleType").val($("#rule_tipo").val());  
+	$("#classification").val($("#classification_l").val());
 	$("#inputNewRuleForm").submit();
 }
 function newRule() {    
     $('#newruledialog').modal('show');
+}
+function addRule(id_variable, nome_variabile) {
+	$('#nome_var').text(nome_variabile);
+    $('#addrulevariable').modal('show');
 }
 
 function editRule(id, rule) {

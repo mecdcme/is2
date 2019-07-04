@@ -35,4 +35,5 @@ public class NewRuleFormBean implements Serializable {
 	private String ruleText;
 	private String idsessione;
 	private Integer idruleset;
+	private short classification;
 }

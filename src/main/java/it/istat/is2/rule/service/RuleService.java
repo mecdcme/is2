@@ -27,9 +27,11 @@ import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.rule.engine.EngineValidate;
 import static it.istat.is2.rule.engine.EngineValidate.INPUT_NAMES_PREFIX;
 import it.istat.is2.rule.forms.RuleCreateForm;
+import it.istat.is2.workflow.dao.SxClassificationDao;
 import it.istat.is2.workflow.dao.SxRuleDao;
 import it.istat.is2.workflow.dao.SxRuleTypeDao;
 import it.istat.is2.workflow.dao.SxRulesetDao;
+import it.istat.is2.workflow.domain.SxClassification;
 import it.istat.is2.workflow.domain.SxRule;
 import it.istat.is2.workflow.domain.SxRuleType;
 import it.istat.is2.workflow.domain.SxRuleset;
@@ -62,6 +64,8 @@ public class RuleService {
     @Autowired
     private SxRulesetDao sxRulesetDao;
     @Autowired
+    private SxClassificationDao sxClassificationDao;
+    @Autowired
     private EngineValidate engine;
 
     private String[] input;
@@ -75,8 +79,14 @@ public class RuleService {
     public List<SxRuleType> findAllRuleType() {
         return (List<SxRuleType>) sxRuleTypeDao.findAll();
     }
+    public List<SxClassification> findAllClassifications() {
+        return (List<SxClassification>) sxClassificationDao.findAll();
+    }
     public SxRuleType findRuleTypeById(short idrule) {
         return sxRuleTypeDao.findById(idrule);
+    }
+    public SxClassification findClassificationById(short idclassification) {
+        return sxClassificationDao.findById(idclassification);
     }
 
     public void runValidate(SxRuleset ruleset) {
