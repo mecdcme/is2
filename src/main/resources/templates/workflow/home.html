@@ -25,15 +25,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
-        <script th:src="@{/js/table/datatables.js}"></script>
+        <script th:src="@{/webjars/sockjs-client/sockjs.min.js}"></script>
+		<script th:src="@{/webjars/stomp-websocket/stomp.min.js}"></script>
+		<script th:src="@{/js/table/datatables.js}"></script>
         <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
         <script th:src="@{/js/elaborazione.js}"></script>
+        <script th:src="@{/js/batch.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
                 setMenuActive("elaborazione");
             });
         </script>
         <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
+        <link rel="stylesheet" th:href="@{/css/batch/batch.css}" />
     </head>
     <body>
         <!-- Body -->
@@ -79,7 +83,7 @@
                                                 </tr>
                                                  <tr>
                                                     <td width="25%"><span th:text="#{Layout.Function}"></span></td>
-                                                    <td><span th:text="${elaborazione.sxBusinessFunction.descr }"></span</td>
+                                                    <td><span th:text="${elaborazione.sxBusinessFunction.descr }"></span></td>
                                                 </tr>
                                                 <tr>
                                                     <td width="25%"><span th:text="#{Layout.Date}"></span></td>
@@ -102,12 +106,12 @@
                                         </div>
                                     </div>
                                     <div id="logbox" class="card-body">
-                                        <ul th:if="${logs.size()>0}">
+                                        <ul th:if="${logs.size()>0}" id="logList">
                                             <li th:each="log : ${logs}">
-                                                <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
+                                                <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}" id="logMsg"></span>
                                             </li>
                                         </ul>
-                                        <span th:unless="${logs.size()>0}">
+                                        <span th:unless="${logs.size()>0}" id="noLogList">
                                             No message available
                                         </span>
                                     </div>
@@ -125,8 +129,9 @@
                                         <table id="processiList" class="table table-condensed">
                                             <thead>
                                                 <tr>
-                                                    <th><span  th:text="#{Layout.Process}"></span></th>
+                                                    <th><span  th:text="#{Layout.Process}">Processo</span></th>
                                                     <th><span th:text="#{Layout.Step}">Step</span></th>
+                                                    <th><span th:text="#{Layout.status}">Stato</span></th>
                                                     <th></th>
                                                     <th></th>
                                                 </tr>
@@ -142,24 +147,25 @@
                                                             <span th:text="${bProcess.descr+' ('+bProcess.nome+')' }"></span>
                                                         </td>
                                                         <td class="process-border-right"><span th:text="${bStep.descr+' ('+bStep.nome+')' }"></span></td>
+                                                        <td class="process-border-right">
+															<span th:id="${bProcess.id}">DA PROCESSARE</span>
+													  	</td>
+<!--                                                         <span th:id="${bProcess.id}">DA PROCESSARE</span></td> -->
                                                         <td class="process-border-right process-btns" th:if="${stats.index==0}" th:rowspan="${bProcess.sxBusinessSteps.size()}">
-                                                            <a th:name="link" class="towait" title="Esegui processo"
-                                                               th:href="@{'/ws/dobproc/'+${elaborazione.id}+'/'+${bProcess.id}}">
+                                                            <a th:name="link" title="Esegui processo"
+                                                            	th:onclick="'javascript:esegui(\'' +${elaborazione.id} +'\',\''+${bProcess.id}+'\')'"
+                                                                href="javascript:void(0)"
+                                                                th:id="'esegui_'+${bProcess.id}">
                                                                 <i class="fa fa-play" aria-hidden="true"></i> 
                                                                 <span>Esegui</span>
                                                             </a>
                                                          </td>
-                                                        <td th:if="${stats.index==0}" th:rowspan="${bProcess.sxBusinessSteps.size()}" class="process-btns">
-                                                            <a th:name="link" class="towait" title="Visualizza Workset"
+                                                        <td th:if="${stats.index==0}" th:rowspan="${bProcess.sxBusinessSteps.size()}" >
+                                                            <a th:name="link" class="towait not-active" title="Visualizza Workset" th:id="'output_'+${bProcess.id}"
                                                                th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.is2.app.util.IS2Const).VARIABILE_TIPO_OUTPUT}}">
                                                                 <i class="fa fa-table" aria-hidden="true"></i> 
                                                                 <span th:text="#{Layout.Output}">Output</span>
                                                             </a>
-                                                            <!--a th:name="link" class="disabled  towait" title="Visualizza Workset"
-                                                               th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${bProcess.id}}">
-                                                                <i class="fa fa-bar-chart" aria-hidden="true"></i> 
-                                                                <span th:text="#{Layout.Report}">Report</span>
-                                                            </a-->
                                                          </td>
                                                     </tr>
                                                 </th:block>
