@@ -66,9 +66,6 @@ public class WorkFlowBatchController {
 				.addLong("idBProc", idBProc).addLong("time", System.currentTimeMillis()).toJobParameters();
 		try {
 			jobLauncher.run(doBusinessProc, jobParameters);
-			List<String> jobName = jobExplorer.getJobNames();
-			List<Long> instanceIds = jobOperator.getJobInstances(jobName.get(0), 0, 1);
-			System.out.println(instanceIds);
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
 				| JobParametersInvalidException e) {
 			logService.save(e.getMessage());

@@ -55,7 +55,6 @@ public class WorkFlowBatchProcessor implements ItemReader<Elaborazione>{
 				elaborazione = doStep(elaborazione, sxStepInstance);
 			}
 		}
-		Thread.sleep(10000);
 		return null;
 	}
 
