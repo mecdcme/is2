@@ -28,6 +28,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.worksession.domain.WorkSession;
 import lombok.Data;
 
@@ -72,7 +73,11 @@ public class SxRuleset implements Serializable {
 
     @OneToMany(mappedBy = "sxRuleset", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<SxRule> sxRules;
+    private List<SxRule> sxRules;   
+    
+    @OneToOne
+    @JoinColumn(name = "DATASET")
+    private DatasetFile datasetFile;
 
     public SxRuleset() {
         this.sxRules = new ArrayList<SxRule>();

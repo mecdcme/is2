@@ -44,6 +44,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import it.istat.is2.workflow.domain.SxRuleset;
 import it.istat.is2.workflow.domain.SxTipoDato;
 import it.istat.is2.worksession.domain.WorkSession;
 import javax.persistence.Temporal;
@@ -91,7 +92,7 @@ public class DatasetFile implements Serializable {
     @JsonManagedReference
     @OrderBy(value = "ordine ASC")
     private List<DatasetColonna> colonne;
-
+    
     public DatasetFile(Long id) {
         super();
         this.id = id;

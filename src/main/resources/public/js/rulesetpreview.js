@@ -102,9 +102,26 @@ function scaricaDataset(e, param, idDFile) {
     e.preventDefault();
     window.location = _ctx + '/rest/download/dataset/' + param + '/' + idDFile;
 }
-
-function newRule() {
-    alert("Add a new rule");
+function inviaFormNewRule() {
+    $("#ruleText").val($("#rule_text").val());
+    $("#ruleDesc").val($("#rule_desc").val());
+	$("#ruleType").val($("#rule_tipo").val());  
+	$("#classification").val($("#classification_l").val());
+	$("#inputNewRuleForm").submit();
+}
+function inviaFormNewVarRule() {    
+    $("#ruleText").val($("#rule_text_v").val());
+    $("#ruleDesc").val($("#rule_desc_v").val());	
+	$("#classification").val($("#classification_v").val());	
+	$("#inputNewRuleForm").submit();
+}
+function newRule() {    
+    $('#newruledialog').modal('show');
+}
+function addRule(id_variable, nome_variabile) {
+	$('#nome_var').text(nome_variabile);
+	$('#idcol').val(id_variable);	
+    $('#addrulevariable').modal('show');
 }
 
 function editRule(id, rule) {

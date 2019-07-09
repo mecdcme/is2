@@ -24,6 +24,7 @@
 package it.istat.is2.rule.controller;
 
 import it.istat.is2.app.bean.InputFormBean;
+import it.istat.is2.app.bean.NewRuleFormBean;
 import it.istat.is2.app.bean.NewRulesetFormBean;
 import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Log;
@@ -33,9 +34,12 @@ import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.app.util.IS2Const;
 import static it.istat.is2.app.util.IS2Const.OUTPUT_R;
+
+import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.rule.service.RuleService;
+import it.istat.is2.workflow.domain.SxClassification;
 import it.istat.is2.workflow.domain.SxRule;
 import it.istat.is2.workflow.domain.SxRuleType;
 import it.istat.is2.workflow.domain.SxRuleset;
@@ -49,6 +53,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,6 +70,8 @@ public class RuleController {
 
     @Autowired
     ServletContext context;
+    @Autowired
+    private MessageSource messages;
     @Autowired
     private NotificationService notificationService;
     @Autowired
@@ -107,34 +115,120 @@ public class RuleController {
             throws IOException {
 
         notificationService.removeAllMessages();
-
-        String nomeRuleset = form.getRulesetName();
-        String etichettaRuleset = form.getRulesetLabel();
-        Integer tipoRuleset = form.getRulesetType();
+        List<Log> logs = logService.findByIdSessione(Long.parseLong(form.getIdsessione()));
+        List<Log> rlogs = logService.findByIdSessioneAndTipo(Long.parseLong(form.getIdsessione()), OUTPUT_R);
+        
+        List<SxClassification> listaClassificazioni1 = new ArrayList<SxClassification>();
+        SxClassification nullClass = new SxClassification();
+        nullClass.setId((short)-1);
+        nullClass.setNome("--");
+        listaClassificazioni1.add(nullClass);
+        
+        List<SxClassification> listaClassificazioni2 = ruleService.findAllClassifications();
+        listaClassificazioni1.addAll(listaClassificazioni2);
+        
+        List<SxClassification> listaClassificazioni3 = new ArrayList<SxClassification>();
+        SxClassification onlyDominio = new SxClassification();
+        onlyDominio.setId((short)1);
+        onlyDominio.setNome("Dominio");
+        listaClassificazioni3.add(onlyDominio);        
+       
+        String nomeRuleset = form.getRulesetName();   
+       
         String descrRuleset = form.getRulesetDesc();
-        Integer dataset = form.getDataset();
+        Long dataset = form.getDataset();
+        DatasetFile dfile = null;
+        List<DatasetColonna> colonne = null;
+        SxRuleset ruleset = new SxRuleset(); 
         
         
+        if(dataset!=-1) {
+        	dfile = datasetService.findDataSetFile(dataset);
+        	colonne = datasetService.findAllNomeColonne(dataset);
+        	ruleset.setDatasetFile(dfile);
+        	model.addAttribute("listaClassificazioni", listaClassificazioni3);
+        }else {
+        	model.addAttribute("listaClassificazioni", listaClassificazioni1);
+        }      
         
         WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));        
+              
+        ruleset.setLabelFile(nomeRuleset);
+        ruleset.setDescr(descrRuleset);
+        ruleset.setSessioneLavoro(sessionelv);       
 
-        SxRuleset ruleset = new SxRuleset();
-        ruleset.setLabelFile(etichettaRuleset);
-        ruleset.setNomeFile(nomeRuleset);
+        model.addAttribute("colonne", colonne);        
+        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+              
+        sessionBean.setDataset(dataset);        
+        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+        session.setAttribute("dfile", dfile);
+        model.addAttribute("ruleset", ruleset);
+        model.addAttribute("logs", logs);
+        model.addAttribute("rlogs", rlogs);  
+        
+        ruleService.saveRuleSet(ruleset);
+        return "ruleset/preview";       
+        
+    }
+    @RequestMapping(value = "/newRule", method = RequestMethod.POST)
+    public String newRule(HttpSession session, HttpServletRequest request, Model model,
+            @AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") NewRuleFormBean form)
+            throws IOException {
+
+        notificationService.removeAllMessages();
+
+        String nomeRule = form.getRuleName();
+        
+        //short tipoRule = form.getRuleType();
+        String descrRule = form.getRuleDesc();        
+        Integer idRuleset = form.getIdruleset();
+        String textRule = form.getRuleText();
+        short idclassification = form.getClassification();
+        Integer idVar = form.getIdcol();
+        
+        SxRuleset ruleset = ruleService.findRuleSet(idRuleset);
+        SxRule sxrule = new SxRule();
+        
+        //SxRuleType ruletype = ruleService.findRuleTypeById(tipoRule);
+        SxClassification classification = ruleService.findClassificationById(idclassification);
+        
+        sxrule.setNome(nomeRule);
+        sxrule.setDescr(descrRule);        
+        sxrule.setActive((short) 1);
+        //sxrule.setRuleType(ruletype);
+        sxrule.setRule(textRule);       
+        sxrule.setSxRuleset(ruleset); 
+        sxrule.setSxClassification(classification);
+        sxrule.setVariabile(idVar);
+        
+        List<SxRule>rules = ruleset.getSxRules();
+        rules.add(sxrule);
+        
+        try {
+        	ruleService.saveRuleSet(ruleset);
+        }catch(Exception e){
+        	notificationService.addErrorMessage(
+            messages.getMessage("rules.save.error", null, LocaleContextHolder.getLocale()), e.getMessage());      	
+            
+        }
+        
+        notificationService.addInfoMessage("Salvataggio avvenuto con successo.");
+        WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));        
+
         ruleset.setSessioneLavoro(sessionelv);
 
+       
         SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-        
-        sessionBean.setTipoRuleset(tipoRuleset);
-        sessionBean.setDataset(dataset);
+       
         session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+        model.addAttribute("ruleset", ruleset);
         
         
         ruleService.saveRuleSet(ruleset);
-
-        return "redirect:/rule/viewRuleset/" + form.getIdsessione();
+        return "redirect:/rule/viewRules/" + ruleset.getId();        
+        
     }
-
     @GetMapping(value = "/viewRuleset/{id}")
     public String mostraroleset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
@@ -160,15 +254,23 @@ public class RuleController {
         }else {
         	etichetta = "RS_1";
         }
+        SxRuleset rs;       
+        for(int i=0; i<listaRuleSet.size(); i++) {
+        	rs = listaRuleSet.get(i);
+        	if(rs.getDatasetFile()==null) {
+        		rs.setNumeroRighe(rs.getSxRules().size());
+        	}
+        }
         
         
-        List<SxRuleType> listaRuleType = ruleService.findAllRuleType();
+        List<SxRuleType> listaRuleType = ruleService.findAllRuleType();        
+        
 
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 
         model.addAttribute("listaDatasetFile", listaDSFile);
         model.addAttribute("listaRuleSet", listaRuleSet);
-        model.addAttribute("listaRuleType", listaRuleType);
+        model.addAttribute("listaRuleType", listaRuleType);        
         model.addAttribute("etichetta", etichetta);
         model.addAttribute("logs", logs);
         model.addAttribute("rlogs", rlogs);
@@ -179,14 +281,38 @@ public class RuleController {
     @RequestMapping("/viewRules/{idfile}")
     public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Integer idfile) {
 
+    	session.removeAttribute("dfile");
         notificationService.removeAllMessages();
         List<Log> logs = logService.findByIdSessione();
         List<Log> rlogs = logService.findByIdSessioneAndTipo(OUTPUT_R);
         SxRuleset ruleset = ruleService.findRuleSet(idfile);
         List<SxRule> rules = ruleService.findRules(ruleset);
+        
+        DatasetFile dfile = ruleset.getDatasetFile();
+        
+        List<SxClassification> listaClassificazioni1 = new ArrayList<SxClassification>();
+        SxClassification nullClass = new SxClassification();
+        nullClass.setId((short)-1);
+        nullClass.setNome("--");
+        listaClassificazioni1.add(nullClass);
+        
+        List<SxClassification> listaClassificazioni3 = new ArrayList<SxClassification>();
+        SxClassification onlyDominio = new SxClassification();
+        onlyDominio.setId((short)1);
+        onlyDominio.setNome("Dominio");
+        listaClassificazioni3.add(onlyDominio);
+        
+        List<SxClassification> listaClassificazioni2 = ruleService.findAllClassifications();
+        listaClassificazioni1.addAll(listaClassificazioni2);
 
         model.addAttribute("ruleset", ruleset);
         model.addAttribute("rules", rules);
+        if(dfile!=null) {
+        	model.addAttribute("listaClassificazioni", listaClassificazioni3);
+        }else {
+        	model.addAttribute("listaClassificazioni", listaClassificazioni1);
+        }        
+        session.setAttribute("dfile", dfile);
         model.addAttribute("logs", logs);
         model.addAttribute("rlogs", rlogs);
 

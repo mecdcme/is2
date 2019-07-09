@@ -69,7 +69,7 @@
                             <div class="col-lg-7">
                                 <div class="card">
                                     <div class="card-header">
-                                        <span th:text="#{ruleset.list.label}">Lista file di regole</span>
+                                        <span th:text="#{ruleset.list.label}">Lista ruleset</span>
                                         <div class="card-header-actions">
                                             <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNewRulesetDialog();" 
                                                title="Nuovo ruleset"> 
@@ -107,10 +107,9 @@
                                         </form> 
                                         <form id="inputNewRulesetForm" th:action="@{'/rule/newRuleset'}" method="post" enctype="multipart/form-data">                                             
                                             <input type="hidden" th:value="${session.sessionelv.id}" th:name="idsessione" />
-                                            <input type="hidden" value="" name="rulesetName" id="rulesetName" />                                           
-                                            <input type="hidden" value="" name="rulesetLabel" id="rulesetLabel" />                                            
+                                            <input type="hidden" value="" name="rulesetName" id="rulesetName" />
                                             <input type="hidden" value="" name="dataset" id="dataset" />
-                                            <input type="hidden" value="" name="rulesetDesc" id="rulesetDesc" /> 
+                                            <input type="hidden" value="" name="rulesetDesc" id="rulesetDesc" />
                                             <input type="hidden" value="" name="rulesetType" id="rulesetType" />
                                             
                                         </form> 
@@ -119,18 +118,18 @@
                                                th:if="${listaRuleSet}" cellspacing="0" style="overflow: auto;">
                                             <thead>
                                                 <tr th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">                                                
-                                                    <th><span th:text="#{listaDataset.nome}">Nome</span></th>
-                                                    <th><span th:text="#{listaDataset.label}">Label</span></th>
-                                                    <th><span th:text="#{listaDataset.numerorerole}">N. Righe</span></th>
-                                                    <th colspan="2"></th>
+                                                    <th><span th:text="#{generic.label.name}">Nome</span></th>
+                                                    <th><span th:text="#{generic.label.description}">Descrizione</span></th>
+                                                    <th><span th:text="#{listaDataset.numeroregole}">N. regole</span></th>
+                                                    <th colspan="3"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr th:each="ruleset : ${listaRuleSet}"
                                                     th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
-                                                    <td th:text="${ruleset.nomeFile}"></td>
                                                     <td th:text="${ruleset.labelFile}"></td>
-                                                    <td th:text="${ruleset.numeroRighe}"></td>
+                                                    <td th:text="${ruleset.descr}"></td>
+                                                    <td th:text="${ruleset.numeroRighe}"></td>                                                    
                                                     <td style="width: 1%">
                                                         <a th:href="@{'/rule/viewRules/'+${ruleset.id}}" title="Visualizza ruleset">
                                                             <i class="fa fa-search"></i>
@@ -241,35 +240,59 @@
                             </h4>
                         </div>
 
-                        <div class="modal-body">
+                        <div class="modal-body row">
                             <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
                         </div>
-                        <div class="modal-body">
-                            <span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
-                            <input id="label_file" th:value="${etichetta}" type="text"/>                 
+                        <div class="modal-body row">
+                        	<div class="col-lg-12">
+			            		<div class="col-lg-2 text-right">
+                            		<span th:text="#{file.logical.name}" >Etichetta:</span>
+                            	</div>            
+	                            <div class="col-lg-8">
+	                            	<input id="label_file" th:value="${etichetta}" type="text"/>        
+	                            </div>         
+                        	</div>
                         </div>
-                        <div class="modal-body">
-                            <span th:text="#{file.skip.first.line}" >Salta prima riga:</span> &nbsp;&nbsp;&nbsp;
-                            <input type="radio" name="skip_line" value="1"> Si
-                            <input type="radio" name="skip_line" value="0" checked="checked"> No
+                        <div class="modal-body row">
+                        	<div class="col-lg-12">
+			            		<div class="col-lg-2 text-right">
+                            		<span th:text="#{file.skip.first.line}" >Salta prima riga:</span>
+                            	</div>            
+	                            <div class="col-lg-8">
+		                            <input type="radio" name="skip_line" value="1"> Si
+		                            <input type="radio" name="skip_line" value="0" checked="checked"> No
+		                        </div>                             
+                        	</div>
                         </div>
-                        <div class="modal-body">
-                            <span th:text="#{rules.classification.type}">Classificazione:</span> &nbsp;&nbsp;&nbsp;
-                            <select id="tipo_regola" >
-                                <option th:each="ruleType : ${listaRuleType}"
-                                        th:value="${ruleType.id}"
-                                        th:text="${ruleType.nome}">
-                                </option>
-                            </select>                               
+                        <div class="modal-body row">
+                        	<div class="col-lg-12">
+			            		<div class="col-lg-2 text-right">
+                            		<span th:text="#{rules.classification.type}">Classificazione:</span>
+                            	</div>            
+	                            <div class="col-lg-8">
+                            		<select id="tipo_regola" >
+                                		<option th:each="ruleType : ${listaRuleType}"
+                                        	th:value="${ruleType.id}"
+                                        	th:text="${ruleType.nome}">
+                                		</option>
+                            		</select>  
+                            	</div>
+                        	</div>                             
                         </div>
-                        <div class="modal-body">
-                            <span th:text="#{delimiter.file.legend}">Separatore:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <select id="delimiter_sel">
-                                <option value=','>,</option>
-                                <option value=';'>;</option>
-                                <option value='0'>tab</option>
-                            </select>
-                        </div>
+                        <div class="modal-body row">
+                        	<div class="col-lg-12">
+			            		<div class="col-lg-2 text-right">
+                            		<span th:text="#{delimiter.file.legend}">Separatore:</span>
+                            	</div>            
+	                            <div class="col-lg-8">
+		                            <select id="delimiter_sel">
+		                                <option value=','>,</option>
+		                                <option value=';'>;</option>
+		                                <option value='0'>tab</option>
+		                            </select>
+                        		</div>
+                        	</div>
+                        </div> 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">
                                 <span th:text="#{Layout.Close}">Annulla</span>
@@ -301,20 +324,20 @@
 	                            	<span th:text="#{rules.new.ruleset.name}" >Nome ruleset:</span> &nbsp;&nbsp;&nbsp; 
 	                            </div>            
 			                    <div class="col-lg-8">
-	                            	<input id="ruleset_name" value="" type="text"/>      
+	                            	<input id="ruleset_name" th:value="${etichetta}" type="text"/>      
 	                            </div>     
 	                        </div>        
                         </div>
                         <div class="modal-body row">
-                        	<div class="col-lg-12">
-		                        <div class="col-lg-4 text-right">
-                            		<span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
-                            	</div>            
-		                        <div class="col-lg-8">
-                            		<input id="ruleset_label" value="" type="text"/>    
-                            	</div>     
-	                        </div>             
-                        </div>
+	                        <div class="col-lg-12">
+	                        	<div class="col-lg-4 text-right">
+	                            	<span th:text="#{rules.new.ruleset.desc}" >Descrizione:</span> &nbsp;&nbsp;&nbsp; 
+	                           	</div>            
+	                            <div class="col-lg-8">
+	                            	<input id="ruleset_desc" value="" type="text"/>         
+	                            </div>     
+	                        </div> 
+                        </div>          
                         <div class="modal-body row">
                         	<div class="col-lg-12">
 		                        <div class="col-lg-4 text-right">
@@ -329,30 +352,7 @@
                             		</select>  
                             	</div>     
 	                        </div>                              
-                        </div>
-                        <div class="modal-body row">
-                        	<div class="col-lg-12">
-		                        <div class="col-lg-4 text-right">
-	                            	<span th:text="#{ruleset.type.label}">Tipo:</span> &nbsp;&nbsp;&nbsp;
-	                            </div>            
-		                        <div class="col-lg-8">
-	                            	<select id="tipo_ruleset" >            
-	                            		<option th:text="--" th:value="-1"></option>                	
-	                                	<option th:text="DOMINIO" th:value="1"></option>
-	                            	</select> 
-	                            </div>     
-	                        </div>                               
-                        </div>     
-                        <div class="modal-body row">
-	                        <div class="col-lg-12">
-	                        	<div class="col-lg-4 text-right">
-	                            	<span th:text="#{rules.new.ruleset.desc}" >Descrizione:</span> &nbsp;&nbsp;&nbsp; 
-	                           	</div>            
-	                            <div class="col-lg-8">
-	                            	<input id="ruleset_desc" value="" type="text"/>         
-	                            </div>     
-	                        </div> 
-                        </div>                
+                        </div>                                                              
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">
                                 <span th:text="#{Layout.Close}">Annulla</span>

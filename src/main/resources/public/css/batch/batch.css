@@ -1,0 +1,29 @@
+.error {
+	color: red;
+	font-weight: bold;
+}
+
+.success {
+	color: green;
+	font-weight: bold;
+}
+
+.waiting {
+	color: orange;
+	font-weight: bold;
+}
+
+.hidden {
+	display: none;
+}
+
+.show {
+	block;
+}
+
+.not-active {
+	pointer-events: none;
+	cursor: default;
+	text-decoration: none;
+	color: darkgrey;
+}

@@ -26,13 +26,15 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class NewRulesetFormBean implements Serializable {
+public class NewRuleFormBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String rulesetName;
-	private String rulesetLabel;
-	private Long rulesetType;
-	private String rulesetDesc;	
-	private Long dataset;
+	private String ruleName;	
+	private short ruleType;
+	private String ruleDesc;
+	private String ruleText;
 	private String idsessione;
+	private Integer idruleset;
+	private Integer idcol;
+	private short classification;
 }

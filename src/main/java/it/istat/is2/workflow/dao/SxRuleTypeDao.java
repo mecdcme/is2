@@ -25,6 +25,7 @@ package it.istat.is2.workflow.dao;
 
 import java.util.List;
 
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import it.istat.is2.workflow.domain.SxRuleType;
@@ -33,5 +34,7 @@ import it.istat.is2.workflow.domain.SxRuleType;
 @Repository
 public interface SxRuleTypeDao extends CrudRepository<SxRuleType,Integer> {
  
-	List<SxRuleType> findAll();
+	List<SxRuleType> findAll();	
+	
+	SxRuleType findById(Short id);
 }

@@ -441,6 +441,8 @@ CREATE TABLE `sx_rule` (
   `ACTION` varchar(500) DEFAULT NULL,
   `ECCEZIONE` varchar(500) DEFAULT NULL,
   `RULESET` int(20) DEFAULT NULL,
+  `CLASS` varchar(50) DEFAULT NULL,
+  `VARIABILE` int(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `SYS_C0014188` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=840 DEFAULT CHARSET=utf8;
@@ -496,6 +498,7 @@ CREATE TABLE `sx_ruleset` (
   `NUMERO_RIGHE` int(10) DEFAULT NULL,
   `DATA_CARICAMENTO` datetime DEFAULT NULL,
   `SESSIONE_LAVORO` int(10) DEFAULT NULL,
+  `DATASET` int(10) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `SYS_C0014346` (`ID`),
   KEY `ws_idx` (`SESSIONE_LAVORO`),
@@ -911,6 +914,26 @@ CREATE TABLE `sx_workset` (
 
 --
 -- Dumping data for table `sx_workset`
+--
+
+--
+-- Table structure for table `sx_classification`
+--
+
+DROP TABLE IF EXISTS `sx_classification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `sx_classification` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NOME` varchar(255) DEFAULT NULL,
+  `DESCRIZIONE` varchar(255) DEFAULT NULL,
+  `NOTE` varchar(255) DEFAULT NULL,  
+  PRIMARY KEY (`ID`)  
+) ENGINE=InnoDB AUTO_INCREMENT=456 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sx_classification`
 --
 
 LOCK TABLES `sx_workset` WRITE;

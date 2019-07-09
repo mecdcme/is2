@@ -1175,3 +1175,8 @@ button.btn-secondary:hover
 .process-border-right{
     border-right: 1px solid #dddddd!important;
 }
+
+.card-nocolor{background-color:transparent !important;padding:0 !important;}
+
+.round-cell { border-radius:50px !important;}
+
