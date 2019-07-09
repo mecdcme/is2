@@ -153,7 +153,7 @@ public class RuleController {
         
         WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));        
               
-        ruleset.setNomeFile(nomeRuleset);
+        ruleset.setLabelFile(nomeRuleset);
         ruleset.setDescr(descrRuleset);
         ruleset.setSessioneLavoro(sessionelv);       
 
@@ -229,24 +229,6 @@ public class RuleController {
         return "redirect:/rule/viewRules/" + ruleset.getId();        
         
     }
-/*
-    @GetMapping(value = "/edit/{id}")
-    public String editruleset(HttpSession session, Model model, @PathVariable("id") Integer id) {       
-
-        SxRuleset ruleset = ruleService.findRuleSet(id);
-        
-        List<Log> logs = logService.findByIdSessione(ruleset.getSessioneLavoro().getId());
-        List<Log> rlogs = logService.findByIdSessioneAndTipo(ruleset.getSessioneLavoro().getId(), OUTPUT_R);
-        
-        WorkSession sessionelv = ruleset.getSessioneLavoro();
-        
-        session.setAttribute(IS2Const.SESSION_LV, sessionelv);
-        model.addAttribute("logs", logs);
-        model.addAttribute("rlogs", rlogs);
-
-        return "ruleset/edit";
-    }
-    */
     @GetMapping(value = "/viewRuleset/{id}")
     public String mostraroleset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
@@ -271,6 +253,13 @@ public class RuleController {
         	etichetta = "RS_" + Integer.toString( listaRuleSet.size()+1 );
         }else {
         	etichetta = "RS_1";
+        }
+        SxRuleset rs;       
+        for(int i=0; i<listaRuleSet.size(); i++) {
+        	rs = listaRuleSet.get(i);
+        	if(rs.getDatasetFile()==null) {
+        		rs.setNumeroRighe(rs.getSxRules().size());
+        	}
         }
         
         

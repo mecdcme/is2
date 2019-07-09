@@ -180,15 +180,15 @@ public class WorkflowService {
         return dataList;
     }
 
-    public Map<String, List<String>> loadWorkSetValoriByElaborazioneMap(Long idelaborazione) {
-        Map<String, List<String>> ret = new LinkedHashMap<>();
-        Elaborazione el = findElaborazione(idelaborazione);
-        for (Iterator<?> iterator = el.getSxStepVariables().iterator(); iterator.hasNext();) {
-            SxStepVariable sxStepVariable = (SxStepVariable) iterator.next();
-            if (sxStepVariable.getSxWorkset().getSxTipoVar().getNome().equals("VAR")) {
-                ret.put(sxStepVariable.getSxWorkset().getNome(), sxStepVariable.getSxWorkset().getValori());
-            }
-        }
+	public Map<String, List<String>> loadWorkSetValoriByElaborazioneMap(Long idelaborazione) {
+		Map<String, List<String>> ret = new LinkedHashMap<>();
+		Elaborazione el = findElaborazione(idelaborazione);
+		for (Iterator<?> iterator = el.getSxStepVariables().iterator(); iterator.hasNext();) {
+			SxStepVariable sxStepVariable = (SxStepVariable) iterator.next();
+			if (sxStepVariable.getSxWorkset().getSxTipoVar().getNome().equals("VAR")) {
+				ret.put(sxStepVariable.getSxWorkset().getNome(), sxStepVariable.getSxWorkset().getValori());
+			}
+		}
 
         return ret;
     }
@@ -214,7 +214,7 @@ public class WorkflowService {
         return elaborazione;
     }
 
-    /*
+	/*
 	 * public Elaborazione doStep_old(Elaborazione elaborazione, SxStepInstance
 	 * stepInstance) throws Exception {
 	 * 
@@ -358,281 +358,283 @@ public class WorkflowService {
 
     public void creaAssociazioni(AssociazioneVarFormBean form, Elaborazione elaborazione) {
 
-        List<SxRuoli> ruoliAll = ruoloDao.findAll();
-        Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
-        List<SxStepVariable> listaVar = elaborazione.getSxStepVariables();
-        SxWorkset sxWorkset = null;
+		List<SxRuoli> ruoliAll = ruoloDao.findAll();
+		Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
+		List<SxStepVariable> listaVar = elaborazione.getSxStepVariables();
+		SxWorkset sxWorkset = null;
 
-        for (int i = 0; i < form.getElaborazione().length; i++) {
-            SxStepVariable sxStepVariable = new SxStepVariable();
-            sxStepVariable.setElaborazione(elaborazione);
-            String idr = form.getRuolo()[i];
-            String nomeVar = form.getValore()[i];
-            SxRuoli sxruolo = ruoliAllMap.get(new Integer(idr));
-            sxWorkset = null;
-            for (int y = 0; y < listaVar.size(); y++) {
-                if (listaVar.get(y).getSxWorkset() != null && nomeVar.equals(listaVar.get(y).getSxWorkset().getNome())
-                        && sxruolo.getId().equals(listaVar.get(y).getSxRuoli().getId())) {
-                    sxWorkset = listaVar.get(y).getSxWorkset();
-                }
-            }
+		for (int i = 0; i < form.getElaborazione().length; i++) {
+			SxStepVariable sxStepVariable = new SxStepVariable();
+			sxStepVariable.setElaborazione(elaborazione);
+			String idr = form.getRuolo()[i];
+			String nomeVar = form.getValore()[i];
+			SxRuoli sxruolo = ruoliAllMap.get(new Integer(idr));
+			sxWorkset = null;
+			for (int y = 0; y < listaVar.size(); y++) {
+				if (listaVar.get(y).getSxWorkset() != null && nomeVar.equals(listaVar.get(y).getSxWorkset().getNome())
+						&& sxruolo.getId().equals(listaVar.get(y).getSxRuoli().getId())) {
+					sxWorkset = listaVar.get(y).getSxWorkset();
+				}
+			}
 
-            if (sxWorkset == null) {
-                sxWorkset = new SxWorkset();
-                DatasetColonna dscolonna = datasetColonnaDao.findById((Long.parseLong(form.getVariabile()[i]))).get();
-                sxWorkset.setNome(dscolonna.getDatasetFile().getLabelFile() + "_" + dscolonna.getNome().replaceAll("\\.", "_"));
-                sxWorkset.setValori(dscolonna.getDatiColonna());
-                sxWorkset.setValoriSize(sxWorkset.getValori().size());
-            }
+			if (sxWorkset == null) {
+				sxWorkset = new SxWorkset();
+				DatasetColonna dscolonna = datasetColonnaDao.findById((Long.parseLong(form.getVariabile()[i]))).get();
+				;
+				sxWorkset.setNome(
+						dscolonna.getDatasetFile().getLabelFile() + "_" + dscolonna.getNome().replaceAll("\\.", "_"));
+				sxWorkset.setValori(dscolonna.getDatiColonna());
+				sxWorkset.setValoriSize(sxWorkset.getValori().size());
+			}
 
-            sxStepVariable.setSxRuoli(sxruolo);
-            sxStepVariable.setOrdine(sxruolo.getOrdine());
-            sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_INPUT));
-            sxWorkset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
-            ArrayList<SxStepVariable> listaStepV = new ArrayList<>();
-            listaStepV.add(sxStepVariable);
-            sxWorkset.setSxStepVariables(listaStepV);
-            sxStepVariable.setSxWorkset(sxWorkset);
+			sxStepVariable.setSxRuoli(sxruolo);
+			sxStepVariable.setOrdine(sxruolo.getOrdine());
+			sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_INPUT));
+			sxWorkset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+			ArrayList<SxStepVariable> listaStepV = new ArrayList<>();
+			listaStepV.add(sxStepVariable);
+			sxWorkset.setSxStepVariables(listaStepV);
+			sxStepVariable.setSxWorkset(sxWorkset);
 
-            stepVariableDao.save(sxStepVariable);
-        }
-    }
+			stepVariableDao.save(sxStepVariable);
+		}
+	}
 
-    public void updateAssociazione(AssociazioneVarFormBean form, Elaborazione elaborazione) {
+	public void updateAssociazione(AssociazioneVarFormBean form, Elaborazione elaborazione) {
 
-        List<SxRuoli> ruoliAll = ruoloDao.findAll();
-        Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
-        List<SxStepVariable> listaVar = elaborazione.getSxStepVariables();
-        SxWorkset sxWorkset = null;
-        Integer idVar = Integer.parseInt(form.getVariabile()[0]);
-        SxStepVariable sxStepVariable = stepVariableDao.findById(idVar).get();
-        String idr = form.getRuolo()[0];
-        String nomeVar = form.getValore()[0];
-        String nomeOld = form.getValoreOld();
-        Short flagRicerca = Short.parseShort(form.getFlagRicerca());
-        SxRuoli sxruolo = ruoliAllMap.get(new Long(idr));
-        sxWorkset = null;
+		List<SxRuoli> ruoliAll = ruoloDao.findAll();
+		Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
+		List<SxStepVariable> listaVar = elaborazione.getSxStepVariables();
+		SxWorkset sxWorkset = null;
+		Integer idVar = Integer.parseInt(form.getVariabile()[0]);
+		SxStepVariable sxStepVariable = stepVariableDao.findById(idVar).get();
+		String idr = form.getRuolo()[0];
+		String nomeVar = form.getValore()[0];
+		String nomeOld = form.getValoreOld();
+		Short flagRicerca = Short.parseShort(form.getFlagRicerca());
+		SxRuoli sxruolo = ruoliAllMap.get(new Integer(idr));
+		sxWorkset = null;
 
-        for (int y = 0; y < listaVar.size(); y++) {
-            if (listaVar.get(y).getSxWorkset() != null && nomeOld.equals(listaVar.get(y).getSxWorkset().getNome())) {
-                sxWorkset = listaVar.get(y).getSxWorkset();
-            }
-        }
+		for (int y = 0; y < listaVar.size(); y++) {
+			if (listaVar.get(y).getSxWorkset() != null && nomeOld.equals(listaVar.get(y).getSxWorkset().getNome())) {
+				sxWorkset = listaVar.get(y).getSxWorkset();
+			}
+		}
 
-        if (sxWorkset == null) {
-            sxWorkset = new SxWorkset();
-            DatasetColonna dscolonna = datasetColonnaDao.findById((Long.parseLong(form.getVariabile()[0])))
-                    .orElse(new DatasetColonna());
-            sxWorkset.setNome(dscolonna.getNome().replaceAll("\\.", "_"));
-            sxWorkset.setValori(dscolonna.getDatiColonna());
-            sxWorkset.setValoriSize(sxWorkset.getValori().size());
-        }
+		if (sxWorkset == null) {
+			sxWorkset = new SxWorkset();
+			DatasetColonna dscolonna = datasetColonnaDao.findById((Long.parseLong(form.getVariabile()[0])))
+					.orElse(new DatasetColonna());
+			sxWorkset.setNome(dscolonna.getNome().replaceAll("\\.", "_"));
+			sxWorkset.setValori(dscolonna.getDatiColonna());
+			sxWorkset.setValoriSize(sxWorkset.getValori().size());
+		}
 
-        sxWorkset.setNome(nomeVar);
-        sxStepVariable.setFlagRicerca(flagRicerca);
-        sxStepVariable.setSxRuoli(sxruolo);
-        ArrayList<SxStepVariable> listaStepV = new ArrayList<>();
-        listaStepV.add(sxStepVariable);
-        sxWorkset.setSxStepVariables(listaStepV);
-        sxStepVariable.setSxWorkset(sxWorkset);
+		sxWorkset.setNome(nomeVar);
+		sxStepVariable.setFlagRicerca(flagRicerca);
+		sxStepVariable.setSxRuoli(sxruolo);
+		ArrayList<SxStepVariable> listaStepV = new ArrayList<>();
+		listaStepV.add(sxStepVariable);
+		sxWorkset.setSxStepVariables(listaStepV);
+		sxStepVariable.setSxWorkset(sxWorkset);
 
-        stepVariableDao.save(sxStepVariable);
-    }
+		stepVariableDao.save(sxStepVariable);
+	}
 
-    public Elaborazione doBusinessProc(Elaborazione elaborazione, Long idBProc) throws Exception {
-        SxBusinessProcess sxBusinessProcess = businessProcessDao.findById(idBProc).orElse(new SxBusinessProcess());
-        for (Iterator<?> iterator = sxBusinessProcess.getSxBusinessSteps().iterator(); iterator.hasNext();) {
-            SxBusinessStep businessStep = (SxBusinessStep) iterator.next();
-            for (Iterator<?> iteratorStep = businessStep.getSxStepInstances().iterator(); iteratorStep.hasNext();) {
-                SxStepInstance sxStepInstance = (SxStepInstance) iteratorStep.next();
-                elaborazione = doStep(elaborazione, sxStepInstance);
-            }
-        }
-        return elaborazione;
-    }
+	public Elaborazione doBusinessProc(Elaborazione elaborazione, Long idBProc) throws Exception {
+		SxBusinessProcess sxBusinessProcess = businessProcessDao.findById(idBProc).orElse(new SxBusinessProcess());
+		for (Iterator<?> iterator = sxBusinessProcess.getSxBusinessSteps().iterator(); iterator.hasNext();) {
+			SxBusinessStep businessStep = (SxBusinessStep) iterator.next();
+			for (Iterator<?> iteratorStep = businessStep.getSxStepInstances().iterator(); iteratorStep.hasNext();) {
+				SxStepInstance sxStepInstance = (SxStepInstance) iteratorStep.next();
+				elaborazione = doStep(elaborazione, sxStepInstance);
+			}
+		}
+		return elaborazione;
+	}
 
-    public List<SxStepVariable> getSxStepVariablesNoValori(Long idelaborazione, SxTipoVar sxTipoVar) {
-        return stepVariableDao.findByElaborazioneNoValori(new Elaborazione(idelaborazione), sxTipoVar);
-    }
+	public List<SxStepVariable> getSxStepVariablesNoValori(Long idelaborazione, SxTipoVar sxTipoVar) {
+		return stepVariableDao.findByElaborazioneNoValori(new Elaborazione(idelaborazione), sxTipoVar);
+	}
 
-    public List<SxStepVariable> getSxStepVariablesTipoCampoNoValori(Long idelaborazione, SxTipoVar sxTipoVar,
-            SXTipoCampo sxTipoCampo, SxRuoli sxRuoli) {
-        return stepVariableDao.findByElaborazioneTipoCampoNoValori(new Elaborazione(idelaborazione), sxTipoVar,
-                sxTipoCampo, sxRuoli);
-    }
+	public List<SxStepVariable> getSxStepVariablesTipoCampoNoValori(Long idelaborazione, SxTipoVar sxTipoVar,
+			SXTipoCampo sxTipoCampo,SxRuoli sxRuoli) {
+		return stepVariableDao.findByElaborazioneTipoCampoNoValori(new Elaborazione(idelaborazione), sxTipoVar,
+				sxTipoCampo,sxRuoli);
+	}
 
-    public void associaParametri(AssociazioneVarFormBean form, Elaborazione elaborazione) {
+	public void associaParametri(AssociazioneVarFormBean form, Elaborazione elaborazione) {
 
-        List<SxRuoli> ruoliAll = ruoloDao.findAll();
-        Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
+		List<SxRuoli> ruoliAll = ruoloDao.findAll();
+		Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
 
-        for (int i = 0; i < form.getElaborazione().length; i++) {
-            String[] all_parametri = form.getParametri();
-            String parametri = all_parametri[i];
-            // String[] stringTokenizer = parametri.split("|");
-            StringTokenizer stringTokenizer = new StringTokenizer(parametri, "|");
+		for (int i = 0; i < form.getElaborazione().length; i++) {
+			String[] all_parametri = form.getParametri();
+			String parametri = all_parametri[i];
+			// String[] stringTokenizer = parametri.split("|");
+			StringTokenizer stringTokenizer = new StringTokenizer(parametri, "|");
 
-            SxRuoli sxruolo = null;
-            String idparam = null;
-            String nomeparam = null;
-            String ruoloparam = null;
-            SxWorkset sxWorkset = new SxWorkset();
+			SxRuoli sxruolo = null;
+			String idparam = null;
+			String nomeparam = null;
+			String ruoloparam = null;
+			SxWorkset sxWorkset = new SxWorkset();
 
-            while (stringTokenizer.hasMoreTokens()) {
-                // ordine: nomeParam, idParam, ruolo
-                nomeparam = stringTokenizer.nextToken();
-                idparam = stringTokenizer.nextToken();
-                ruoloparam = stringTokenizer.nextToken();
-            }
-            sxruolo = ruoliAllMap.get(new Long(ruoloparam));
-            SxStepVariable sxStepVariable = new SxStepVariable();
-            sxStepVariable.setElaborazione(elaborazione);
-            sxStepVariable.setSxRuoli(sxruolo);
-            sxWorkset.setNome(nomeparam);
-            sxStepVariable.setOrdine(sxruolo.getOrdine());
-            sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_INPUT));
-            String valori = form.getValore()[i];
-            String[] values = valori.split(" ");
-            sxWorkset.setValori(Arrays.asList(values));
-            sxWorkset.setValoriSize(values.length);
-            sxWorkset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
+			while (stringTokenizer.hasMoreTokens()) {
+				// ordine: nomeParam, idParam, ruolo
+				nomeparam = stringTokenizer.nextToken();
+				idparam = stringTokenizer.nextToken();
+				ruoloparam = stringTokenizer.nextToken();
+			}
+			sxruolo = ruoliAllMap.get(new Integer(ruoloparam));
+			SxStepVariable sxStepVariable = new SxStepVariable();
+			sxStepVariable.setElaborazione(elaborazione);
+			sxStepVariable.setSxRuoli(sxruolo);
+			sxWorkset.setNome(nomeparam);
+			sxStepVariable.setOrdine(sxruolo.getOrdine());
+			sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_INPUT));
+			String valori = form.getValore()[i];
+			String[] values = valori.split(" ");
+			sxWorkset.setValori(Arrays.asList(values));
+			sxWorkset.setValoriSize(values.length);
+			sxWorkset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
 
-            stepVariableDao.save(sxStepVariable);
-        }
-    }
+			stepVariableDao.save(sxStepVariable);
+		}
+	}
 
-    public void updateParametri(AssociazioneVarFormBean form, Elaborazione elaborazione) {
+	public void updateParametri(AssociazioneVarFormBean form, Elaborazione elaborazione) {
 
-        List<SxRuoli> ruoliAll = ruoloDao.findAll();
-        Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
+		List<SxRuoli> ruoliAll = ruoloDao.findAll();
+		Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
 
-        for (int i = 0; i < form.getElaborazione().length; i++) {
-            String[] all_parametri = form.getParametri();
-            String parametri = all_parametri[i];
-            String[] stringTokenizer = parametri.split("|");
-            SxRuoli sxruolo = null;
-            String nomeparam = null;
-            String idparam = null;
-            String ruoloparam = null;
-            SxWorkset sxWorkset = new SxWorkset();
-            // ordine: nomeParam, idParam, ruolo
-            nomeparam = stringTokenizer[0];
-            idparam = stringTokenizer[1];
-            ruoloparam = stringTokenizer[2];
+		for (int i = 0; i < form.getElaborazione().length; i++) {
+			String[] all_parametri = form.getParametri();
+			String parametri = all_parametri[i];
+			String[] stringTokenizer = parametri.split("|");
+			SxRuoli sxruolo = null;
+			String nomeparam = null;
+			String idparam = null;
+			String ruoloparam = null;
+			SxWorkset sxWorkset = new SxWorkset();
+			// ordine: nomeParam, idParam, ruolo
+			nomeparam = stringTokenizer[0];
+			idparam = stringTokenizer[1];
+			ruoloparam = stringTokenizer[2];
 
-            String idStepVar = form.getIdStepVar();
-            sxruolo = ruoliAllMap.get(new Long(ruoloparam));
-            SxStepVariable sxStepVariable = new SxStepVariable();
-            Integer idstep = Integer.parseInt(idStepVar);
-            sxStepVariable = stepVariableDao.findById(idstep).get();
-            sxStepVariable.setElaborazione(elaborazione);
-            sxStepVariable.setSxRuoli(sxruolo);
-            sxWorkset.setNome(nomeparam);
-            sxStepVariable.setOrdine(sxruolo.getOrdine());
-            sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_INPUT));
-            String valori = form.getValore()[i];
-            String[] values = valori.split(" ");
-            sxWorkset.setValori(Arrays.asList(values));
-            sxWorkset.setValoriSize(values.length);
-            sxWorkset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
+			String idStepVar = form.getIdStepVar();
+			sxruolo = ruoliAllMap.get(new Integer(ruoloparam));
+			SxStepVariable sxStepVariable = new SxStepVariable();
+			Integer idstep = Integer.parseInt(idStepVar);
+			sxStepVariable = stepVariableDao.findById(idstep).get();
+			sxStepVariable.setElaborazione(elaborazione);
+			sxStepVariable.setSxRuoli(sxruolo);
+			sxWorkset.setNome(nomeparam);
+			sxStepVariable.setOrdine(sxruolo.getOrdine());
+			sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_INPUT));
+			String valori = form.getValore()[i];
+			String[] values = valori.split(" ");
+			sxWorkset.setValori(Arrays.asList(values));
+			sxWorkset.setValoriSize(values.length);
+			sxWorkset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
 
-            ArrayList<SxStepVariable> listaStepV = new ArrayList<>();
-            listaStepV.add(sxStepVariable);
-            sxWorkset.setSxStepVariables(listaStepV);
-            sxStepVariable.setSxWorkset(sxWorkset);
+			ArrayList<SxStepVariable> listaStepV = new ArrayList<>();
+			listaStepV.add(sxStepVariable);
+			sxWorkset.setSxStepVariables(listaStepV);
+			sxStepVariable.setSxWorkset(sxWorkset);
 
-            stepVariableDao.save(sxStepVariable);
-        }
-    }
+			stepVariableDao.save(sxStepVariable);
+		}
+	}
 
-    public List<SxStepVariable> getSxStepVariablesParametri(Long idElaborazione) {
-        return stepVariableDao.findSxStepVariablesParametri(new Elaborazione(idElaborazione),
-                new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
-    }
+	public List<SxStepVariable> getSxStepVariablesParametri(Long idElaborazione) {
+		return stepVariableDao.findSxStepVariablesParametri(new Elaborazione(idElaborazione),
+				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+	}
 
-    public List<SxRuoli> findRuoliByFunction(SxBusinessFunction businessFunction, int num) {
-        List<SxRuoli> ret = new ArrayList<>();
-        List<SxRuoli> ret2 = new ArrayList<>();
-        List<SxStepInstance> instanceBF = findAllSxStepInstanceByFunction(businessFunction,
-                IS2Const.CODICE_APP_SERVICE_R);
-        SxRuoli sxruoli = new SxRuoli();
+	public List<SxRuoli> findRuoliByFunction(SxBusinessFunction businessFunction, int num) {
+		List<SxRuoli> ret = new ArrayList<>();
+		List<SxRuoli> ret2 = new ArrayList<>();
+		List<SxStepInstance> instanceBF = findAllSxStepInstanceByFunction(businessFunction,
+				IS2Const.CODICE_APP_SERVICE_R);
+		SxRuoli sxruoli = new SxRuoli();
 
-        for (Iterator<SxStepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
-            SxStepInstance sxStepInstance = (SxStepInstance) iterator.next();
-            List<SxStepPattern> sxsetpppList = sxStepInstance.getSxStepPatterns();
-            for (Iterator<SxStepPattern> iterator2 = sxsetpppList.iterator(); iterator2.hasNext();) {
-                SxStepPattern sxStepPattern = (SxStepPattern) iterator2.next();
-                if (num == 0) {
-                    if ((sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_INPUT && sxStepPattern
-                            .getSxRuoli().getSxTipoVar().getId().intValue() == IS2Const.WORKSET_TIPO_VARIABILE)) {
-                        ret.add(sxStepPattern.getSxRuoli());
-                    }
+		for (Iterator<SxStepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
+			SxStepInstance sxStepInstance = (SxStepInstance) iterator.next();
+			List<SxStepPattern> sxsetpppList = sxStepInstance.getSxStepPatterns();
+			for (Iterator<SxStepPattern> iterator2 = sxsetpppList.iterator(); iterator2.hasNext();) {
+				SxStepPattern sxStepPattern = (SxStepPattern) iterator2.next();
+				if (num == 0) {
+					if ((sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_INPUT && sxStepPattern
+							.getSxRuoli().getSxTipoVar().getId().intValue() == IS2Const.WORKSET_TIPO_VARIABILE)) {
+						ret.add(sxStepPattern.getSxRuoli());
+					}
 
-                } else {
-                    if ((sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_INPUT && sxStepPattern
-                            .getSxRuoli().getSxTipoVar().getId().intValue() == IS2Const.WORKSET_TIPO_VARIABILE)
-                            || (sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_OUTPUT
-                            && sxStepPattern.getSxRuoli().getSxTipoVar().getId()
-                                    .intValue() == IS2Const.WORKSET_TIPO_VARIABILE)) {
-                        ret.add(sxStepPattern.getSxRuoli());
-                    }
-                }
+				} else {
+					if ((sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_INPUT && sxStepPattern
+							.getSxRuoli().getSxTipoVar().getId().intValue() == IS2Const.WORKSET_TIPO_VARIABILE)
+							|| (sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_OUTPUT
+									&& sxStepPattern.getSxRuoli().getSxTipoVar().getId()
+											.intValue() == IS2Const.WORKSET_TIPO_VARIABILE)) {
+						ret.add(sxStepPattern.getSxRuoli());
+					}
+				}
 
-            }
-        }
-        // Rimuovo i ruoli duplicati nel caso si disponga di più variabili per processo
-        for (int i = 0; i < ret.size(); i++) {
-            sxruoli = ret.get(i);
-            if (!ret2.contains(sxruoli)) {
-                ret2.add(sxruoli);
-            }
-        }
+			}
+		}
+		// Rimuovo i ruoli duplicati nel caso si disponga di più variabili per processo
+		for (int i = 0; i < ret.size(); i++) {
+			sxruoli = ret.get(i);
+			if (!ret2.contains(sxruoli)) {
+				ret2.add(sxruoli);
+			}
+		}
 
-        return ret2;
-    }
+		return ret2;
+	}
 
-    private List<SxStepInstance> findAllSxStepInstanceByFunction(SxBusinessFunction businessFunction,
-            int codiceAppServiceR) {
-        return sxStepInstanceDao.findAllSxStepInstanceByFunction(businessFunction);
-    }
+	private List<SxStepInstance> findAllSxStepInstanceByFunction(SxBusinessFunction businessFunction,
+			int codiceAppServiceR) {
+		return sxStepInstanceDao.findAllSxStepInstanceByFunction(businessFunction);
+	}
 
-    public List<SxParPattern> findParametriByFunction(SxBusinessFunction businessFunction) {
+	public List<SxParPattern> findParametriByFunction(SxBusinessFunction businessFunction) {
 
-        List<SxParPattern> ret = new ArrayList<>();
-        List<SxStepInstance> instanceBF = findAllSxStepInstanceByFunction(businessFunction,
-                IS2Const.CODICE_APP_SERVICE_R);
-        for (Iterator<SxStepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
-            SxStepInstance sxStepInstance = (SxStepInstance) iterator.next();
-            List<SxParPattern> sxsetpppList = sxParPatternDao.findAllSxParPatternByStepAndTypeIOVar(sxStepInstance,
-                    new SxTipoIO(new Integer(IS2Const.VARIABILE_TIPO_INPUT)),
-                    new SxTipoVar(new Integer(IS2Const.WORKSET_TIPO_VARIABILE))); // INPUT 1; 1 PARAMETRO
-            ret.addAll(sxsetpppList);
-        }
-        return ret;
-    }
+		List<SxParPattern> ret = new ArrayList<>();
+		List<SxStepInstance> instanceBF = findAllSxStepInstanceByFunction(businessFunction,
+				IS2Const.CODICE_APP_SERVICE_R);
+		for (Iterator<SxStepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
+			SxStepInstance sxStepInstance = (SxStepInstance) iterator.next();
+			List<SxParPattern> sxsetpppList = sxParPatternDao.findAllSxParPatternByStepAndTypeIOVar(sxStepInstance,
+					new SxTipoIO(new Integer(IS2Const.VARIABILE_TIPO_INPUT)),
+					new SxTipoVar(new Integer(IS2Const.WORKSET_TIPO_VARIABILE))); // INPUT 1; 1 PARAMETRO
+			ret.addAll(sxsetpppList);
+		}
+		return ret;
+	}
 
-    public boolean deleteWorkset(SxWorkset workset) {
-        workSetDao.deleteById(workset.getId());
-        return true;
-    }
+	public boolean deleteWorkset(SxWorkset workset) {
+		workSetDao.deleteById(workset.getId());
+		return true;
+	}
 
-    /**
-     * @param tipoCampo
-     * @return
-     */
-    public SXTipoCampo getTipoCampoById(Integer tipoCampo) {
-        // TODO Auto-generated method stub
-        return sxTipoCampoDao.findById(tipoCampo).get();
-    }
+	/**
+	 * @param tipoCampo
+	 * @return
+	 */
+	public SXTipoCampo getTipoCampoById(Integer tipoCampo) {
+		// TODO Auto-generated method stub
+		return sxTipoCampoDao.findById(tipoCampo).get();
+	}
 
-    /**
-     * @param long1
-     * @param sxTipoVar
-     * @param sxTipoCampo
-     * @return
-     */
-    public List<SxRuoli> getOutputRoleGroupsStepVariables(Long idElaborazione, SxTipoVar sxTipoVar, SXTipoCampo sxTipoCampo) {
-        // TODO Auto-generated method stub
-        return stepVariableDao.getOutputRoleGroupsStepVariables(idElaborazione, sxTipoVar, sxTipoCampo);
-    }
+	/**
+	 * @param long1
+	 * @param sxTipoVar 
+	 * @param sxTipoCampo
+	 * @return
+	 */
+	public List<SxRuoli> getOutputRoleGroupsStepVariables(Long idElaborazione, SxTipoVar sxTipoVar, SXTipoCampo sxTipoCampo) {
+		// TODO Auto-generated method stub
+		return stepVariableDao.getOutputRoleGroupsStepVariables(idElaborazione,  sxTipoVar,  sxTipoCampo);
+	}
 }
