@@ -69,7 +69,7 @@ public class EngineJava implements EngineService {
 
 	private Elaborazione elaborazione;
 	private SxStepInstance stepInstance;
-	private Map<String, SxStepVariable> dataMap;
+	private Map<String,  ArrayList<SxStepVariable>> dataMap;
 	private Map<String, SxRuoli> ruoliAllMap;
 	private Map<String, ArrayList<String>> worksetVariabili;
 	private Map<String, ArrayList<String>> parametriMap;
@@ -209,6 +209,7 @@ public class EngineJava implements EngineService {
 		for (Map.Entry<String, ArrayList<String>> entry : ruoliOutputStep.entrySet()) {
 			String nomeR = entry.getKey();
 			ArrayList<String> value = entry.getValue();
+			
 			value.forEach((nomevar) -> ruoliOutputStepInversa.put(nomevar, nomeR));
 		}
 
@@ -224,9 +225,10 @@ public class EngineJava implements EngineService {
 			SxRuoli sxRuolo = ruoliAllMap.get(ruolo);
 			SxRuoli sxRuoloGruppo = ruoliAllMap.get(ruoloGruppo);
 
-			if (dataMap.keySet().contains(nomeW) && dataMap.get(nomeW).getSxRuoli().getCod().equals(sxRuolo.getCod())) { // update
-																															// fields
-				sxStepVariable = dataMap.get(nomeW);
+			sxStepVariable=Utility.retrieveSxStepVariable(dataMap,nomeW,sxRuolo);
+			
+			if (sxStepVariable!=null) { // update
+			
 				sxStepVariable.getSxWorkset().setValori(value);
 				sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_ELABORATO));
 			} else {
@@ -251,11 +253,13 @@ public class EngineJava implements EngineService {
 			stepVariableDao.save(sxStepVariable);
 		}
 
-		for (Map.Entry<String, ArrayList<String>> entry : parametriOutput.entrySet()) {
+/*		for (Map.Entry<String, ArrayList<String>> entry : parametriOutput.entrySet()) {
 			String nomeW = entry.getKey();
 			ArrayList<String> value = entry.getValue();
-			SxStepVariable sxStepVariable;
-
+			SxStepVariable sxStepVariable=null;
+          	sxStepVariable=Utility.retrieveSxStepVariable(dataMap,nomeW,sxRuolo);
+	
+		
 			if (dataMap.keySet().contains(nomeW)) {
 				sxStepVariable = dataMap.get(nomeW);
 				sxStepVariable.getSxWorkset().setValori(value);
@@ -291,7 +295,7 @@ public class EngineJava implements EngineService {
 
 			stepVariableDao.save(sxStepVariable);
 		}
-
+*/
 	}
 
 	

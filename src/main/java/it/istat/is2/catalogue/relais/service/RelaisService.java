@@ -177,6 +177,7 @@ public class RelaisService {
 		int indexItems = 0;
 
 		ArrayList<String> patternOk = new ArrayList<>();
+		Map<String,String> patternOkMap =new HashMap<>();
 
 		//
 		for (String pPostVarname : ruoliVariabileNome.get(codeFS)) {
@@ -197,6 +198,7 @@ public class RelaisService {
 						}
 
 						patternOk.add(pattern.toString());
+						patternOkMap.put(pattern.toString(),pPostValue);
 					}
 
 					indexItems++;
@@ -220,6 +222,9 @@ public class RelaisService {
 		variabileNomeListOut.addAll(variabileNomeListMA);
 		variabileNomeListOut.addAll(variabileNomeListMB);
 
+		variabileNomeListOut.add(codeP_POST);
+		
+		
 		rolesOut.put(codMachingTable, variabileNomeListOut);
 
 		String firstFiledMA = ruoliVariabileNome.get(codeMatchingA).get(0);
@@ -254,7 +259,7 @@ public class RelaisService {
 					valuesI.forEach((k, v) -> {
 						worksetOut.get(k).add(v);
 					});
-
+					worksetOut.get(codeP_POST).add(patternOkMap.get(pattern));
 				}
 
 				indexItems++;
@@ -271,7 +276,7 @@ public class RelaisService {
 		return returnOut;
 	}
 
-	/**
+	/**@
 	 * @param worksetOut
 	 */
 	private void cleanValuesWorksetOut(Map<String, ArrayList<String>> worksetOut) {

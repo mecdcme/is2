@@ -329,7 +329,7 @@ public class WorkflowController {
 	}
 
 	@GetMapping(value = "/dobproc/{idelaborazione}/{idBProc}")
-	public String dobproc(Model model, @PathVariable("idelaborazione") Long idelaborazione,
+	public String dobproc(HttpSession session,Model model, @PathVariable("idelaborazione") Long idelaborazione,
 			@PathVariable("idBProc") Long idBProc) throws REngineException {
 		notificationService.removeAllMessages();
 
@@ -341,7 +341,7 @@ public class WorkflowController {
 			notificationService.addErrorMessage("Error: " + e.getMessage());
 		}
 
-		SXTipoCampo sxTipoCampo = workflowService.getTipoCampoById(IS2Const.TIPO_CAMPO_ELABORATO);
+	
 
 		List<SxStepVariable> listaSV = workflowService.getSxStepVariablesTipoCampoNoValori(idelaborazione,
 				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE), new SXTipoCampo(IS2Const.TIPO_CAMPO_ELABORATO), null);
@@ -352,10 +352,13 @@ public class WorkflowController {
 		model.addAttribute("elaborazione", elaborazione);
 		model.addAttribute("bProcess", bProcess);
 		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
-		model.addAttribute("elaborazione", elaborazione);
-		model.addAttribute("tipoCampo", sxTipoCampo);
+	 
+		SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+		List<Log> logs = logService.findByIdSessione(sessionBean.getId());
+		model.addAttribute("logs", logs);
+		
 
-		return "workflow/view_data";
+		return "workflow/home";
 	}
 
 	@RequestMapping(value = "/associavariabile", method = RequestMethod.POST)

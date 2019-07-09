@@ -102,17 +102,17 @@ public class EngineR implements EngineService {
 
 	private Elaborazione elaborazione;
 	private SxStepInstance stepInstance;
-	private Map<String, SxStepVariable> dataMap;
+	private Map<String,  ArrayList<SxStepVariable>> dataMap;
 	private Map<String, SxRuoli> ruoliAllMap;
 	private HashMap<String, ArrayList<String>> worksetVariabili;
 	private HashMap<String, ArrayList<String>> parametriMap;
 	private HashMap<String, ArrayList<String>> modelloMap;
-	private HashMap<String, ArrayList<String>> worksetOut;
+	private LinkedHashMap<String, ArrayList<String>> worksetOut;
 	private HashMap<String, ArrayList<String>> ruoliVariabileNome;
 
 	private LinkedHashMap<String, ArrayList<String>> ruoliOutputStep;
-	private HashMap<String, String> ruoliGruppoOutputStep;
-	private HashMap<String, ArrayList<String>> parametriOutput = new HashMap<>();
+	private LinkedHashMap<String, String> ruoliGruppoOutputStep;
+	private LinkedHashMap<String, ArrayList<String>> parametriOutput = new LinkedHashMap<>();
 
 	public EngineR(String serverRHost, int serverRPort, String pathR, String fileScriptR) {
 		super();
@@ -267,7 +267,7 @@ public class EngineR implements EngineService {
 		Logger.getRootLogger().debug("Campi dei ruoli IMPOSTATI (speriamo)");
 	}
 
-	public void getGenericoOutput(HashMap<String, ArrayList<String>> genericHashMap, String varR, String tipoOutput)
+	public void getGenericoOutput(LinkedHashMap<String, ArrayList<String>> genericHashMap, String varR, String tipoOutput)
 			throws RserveException, REXPMismatchException {
 		Logger.getRootLogger().debug("Eseguo Get " + tipoOutput);
 		try {
@@ -285,7 +285,7 @@ public class EngineR implements EngineService {
 		}
 	}
 
-	public void getRolesGroup(HashMap<String, String> genericHashMap, String varR, String tipoOutput)
+	public void getRolesGroup(LinkedHashMap<String, String> genericHashMap, String varR, String tipoOutput)
 			throws RserveException, REXPMismatchException {
 		Logger.getRootLogger().debug("Eseguo Get " + tipoOutput);
 		try {
@@ -318,7 +318,7 @@ public class EngineR implements EngineService {
 
 	}
 
-	public void getGenericoOutput(HashMap<String, ArrayList<String>> genericHashMap, RList lista)
+	public void getGenericoOutput(LinkedHashMap<String, ArrayList<String>> genericHashMap, RList lista)
 			throws RserveException, REXPMismatchException {
 		String name = "";
 		if (lista != null) {
@@ -363,7 +363,7 @@ public class EngineR implements EngineService {
 		HashMap<String, ArrayList<String>> ruoliInputStep = new HashMap<>();
 		// {P=[P], M=[M], O=[O]}
 		ruoliOutputStep = new LinkedHashMap();
-		ruoliGruppoOutputStep=new HashMap<>();
+		ruoliGruppoOutputStep=new LinkedHashMap<>();
 
 		for (Iterator<?> iterator = stepInstance.getSxStepPatterns().iterator(); iterator.hasNext();) {
 			SxStepPattern sxStepPattern = (SxStepPattern) iterator.next();
@@ -399,12 +399,12 @@ public class EngineR implements EngineService {
 		// PARAMETRI
 		parametriMap = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
 		modelloMap = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_MODELLO));
-		worksetOut = new HashMap<>();
+		worksetOut = new LinkedHashMap<>();
 
 		// associo il codice ruolo alla variabile
 		// codiceRuolo, lista nome variabili {X=[X1], Y=[Y1]}
 		ruoliVariabileNome = new HashMap<>();
-		parametriOutput = new HashMap<>();
+		parametriOutput = new LinkedHashMap<>();
 
 		for (Map.Entry<String, ArrayList<SxStepVariable>> entry : dataRuoliStepVarMap.entrySet()) {
 			String codR = entry.getKey();
@@ -470,9 +470,10 @@ public class EngineR implements EngineService {
 			SxRuoli sxRuolo = ruoliAllMap.get(ruolo);
 			SxRuoli sxRuoloGruppo = ruoliAllMap.get(ruoloGruppo);
 
-			if (dataMap.keySet().contains(nomeW) && dataMap.get(nomeW).getSxRuoli().getCod().equals(sxRuolo.getCod())) { // update
-
-				sxStepVariable = dataMap.get(nomeW);
+          sxStepVariable=Utility.retrieveSxStepVariable(dataMap,nomeW,sxRuolo);
+			
+			if (sxStepVariable!=null) { // update
+			
 				sxStepVariable.getSxWorkset().setValori(value);
 				sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_ELABORATO));
 			} else {
@@ -497,7 +498,7 @@ public class EngineR implements EngineService {
 			stepVariableDao.save(sxStepVariable);
 		}
 
-		for (Map.Entry<String, ArrayList<String>> entry : parametriOutput.entrySet()) {
+	/*	for (Map.Entry<String, ArrayList<String>> entry : parametriOutput.entrySet()) {
 			String nomeW = entry.getKey();
 			ArrayList<String> value = entry.getValue();
 			SxStepVariable sxStepVariable;
@@ -531,7 +532,7 @@ public class EngineR implements EngineService {
 
 			stepVariableDao.save(sxStepVariable);
 		}
-
+*/
 	}
 
 	/*

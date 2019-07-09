@@ -77,108 +77,108 @@ import it.istat.is2.worksession.domain.WorkSession;
 @Service
 public class WorkflowService {
 
-	@Autowired
-	WorkSessionDao sessioneDao;
-	@Autowired
-	WorkflowDao elaborazioneDao;
-	@Autowired
-	WorkSetDao workSetDao;
-	@Autowired
-	SxBusinessStepDao sxBusinessStepDao;
-	@Autowired
-	StepVariableDao stepVariableDao;
-	@Autowired
-	RuoloDao ruoloDao;
-	@Autowired
-	DatasetColonnaDao datasetColonnaDao;
-	@Autowired
-	BusinessProcessDao businessProcessDao;
-	@Autowired
-	SxStepInstanceDao sxStepInstanceDao;
-	@Autowired
-	SxParPatternDao sxParPatternDao;
-	@Autowired
-	SxTipoCampoDao sxTipoCampoDao;
-	@Autowired
-	SqlGenericDao sqlGenericDao;
-	@Autowired
-	EngineFactory engineFactory;
+    @Autowired
+    WorkSessionDao sessioneDao;
+    @Autowired
+    WorkflowDao elaborazioneDao;
+    @Autowired
+    WorkSetDao workSetDao;
+    @Autowired
+    SxBusinessStepDao sxBusinessStepDao;
+    @Autowired
+    StepVariableDao stepVariableDao;
+    @Autowired
+    RuoloDao ruoloDao;
+    @Autowired
+    DatasetColonnaDao datasetColonnaDao;
+    @Autowired
+    BusinessProcessDao businessProcessDao;
+    @Autowired
+    SxStepInstanceDao sxStepInstanceDao;
+    @Autowired
+    SxParPatternDao sxParPatternDao;
+    @Autowired
+    SxTipoCampoDao sxTipoCampoDao;
+    @Autowired
+    SqlGenericDao sqlGenericDao;
+    @Autowired
+    EngineFactory engineFactory;
 
-	public WorkSession findSessioneLavoro(Long id) {
-		return sessioneDao.findById(id).get();
-	}
+    public WorkSession findSessioneLavoro(Long id) {
+        return sessioneDao.findById(id).get();
+    }
 
-	public Elaborazione findElaborazione(Long id) {
-		return elaborazioneDao.findById(id).get();
-	}
+    public Elaborazione findElaborazione(Long id) {
+        return elaborazioneDao.findById(id).get();
+    }
 
-	public void eliminaElaborazione(Long id) {
-		elaborazioneDao.deleteById(id);
-	}
+    public void eliminaElaborazione(Long id) {
+        elaborazioneDao.deleteById(id);
+    }
 
-	public String loadWorkSetValori(Long idelaborazione, Integer length, Integer start, Integer draw)
-			throws JSONException {
-		List<SxWorkset> dataList = workSetDao.findWorkSetDatasetColonnabyQuery(idelaborazione, start, start + length);
-		Integer numRighe = 0;
-		if (!dataList.isEmpty()) {
-			numRighe = dataList.get(0).getValori().size();
-		}
+    public String loadWorkSetValori(Long idelaborazione, Integer length, Integer start, Integer draw)
+            throws JSONException {
+        List<SxWorkset> dataList = workSetDao.findWorkSetDatasetColonnabyQuery(idelaborazione, start, start + length);
+        Integer numRighe = 0;
+        if (!dataList.isEmpty()) {
+            numRighe = dataList.get(0).getValori().size();
+        }
 
-		JSONObject obj = new JSONObject();
-		JSONArray data = new JSONArray();
-		for (int i = 0; i < numRighe; i++) {
-			JSONObject obji = new JSONObject();
-			for (int j = 0; j < dataList.size(); j++) {
-				obji.put(dataList.get(j).getNome(), dataList.get(j).getValori().get(i));
-			}
-			data.put(obji);
-		}
+        JSONObject obj = new JSONObject();
+        JSONArray data = new JSONArray();
+        for (int i = 0; i < numRighe; i++) {
+            JSONObject obji = new JSONObject();
+            for (int j = 0; j < dataList.size(); j++) {
+                obji.put(dataList.get(j).getNome(), dataList.get(j).getValori().get(i));
+            }
+            data.put(obji);
+        }
 
-		obj.put("data", data);
-		obj.put("draw", draw);
-		obj.put("recordsTotal", numRighe);
-		obj.put("recordsFiltered", numRighe);
+        obj.put("data", data);
+        obj.put("draw", draw);
+        obj.put("recordsTotal", numRighe);
+        obj.put("recordsFiltered", numRighe);
 
-		return obj.toString();
-	}
+        return obj.toString();
+    }
 
-	public String loadWorkSetValoriByElaborazione(Long idelaborazione, Integer tipoCampo,Integer groupRole, Integer length, Integer start,
-			Integer draw, HashMap<String, String> paramsFilter) throws JSONException {
+    public String loadWorkSetValoriByElaborazione(Long idelaborazione, Integer tipoCampo, Integer groupRole, Integer length, Integer start,
+            Integer draw, HashMap<String, String> paramsFilter) throws JSONException {
 
-		List<SxWorkset> dataList = sqlGenericDao.findWorkSetDatasetColonnaByElaborazioneQuery(idelaborazione, tipoCampo,groupRole,
-				start, start + length, paramsFilter);
-		// start, start + length, query_filter);
-		Integer numRighe = 0;
-		Integer valoriSize = 0;
-		if (!dataList.isEmpty()) {
-			numRighe = dataList.get(0).getValori().size();
-			valoriSize = dataList.get(0).getValoriSize();
-		}
-		JSONObject obj = new JSONObject();
-		JSONArray data = new JSONArray();
-		for (int i = 0; i < numRighe; i++) {
-			JSONObject obji = new JSONObject();
-			for (int j = 0; j < dataList.size(); j++) {
-				obji.put(dataList.get(j).getNome(), dataList.get(j).getValori().get(i));
-			}
-			data.put(obji);
-		}
+        List<SxWorkset> dataList = sqlGenericDao.findWorkSetDatasetColonnaByElaborazioneQuery(idelaborazione, tipoCampo, groupRole,
+                start, start + length, paramsFilter);
+        // start, start + length, query_filter);
+        Integer numRighe = 0;
+        Integer valoriSize = 0;
+        if (!dataList.isEmpty()) {
+            numRighe = dataList.get(0).getValori().size();
+            valoriSize = dataList.get(0).getValoriSize();
+        }
+        JSONObject obj = new JSONObject();
+        JSONArray data = new JSONArray();
+        for (int i = 0; i < numRighe; i++) {
+            JSONObject obji = new JSONObject();
+            for (int j = 0; j < dataList.size(); j++) {
+                obji.put(dataList.get(j).getNome(), dataList.get(j).getValori().get(i));
+            }
+            data.put(obji);
+        }
 
-		obj.put("data", data);
-		obj.put("draw", draw);
-		obj.put("recordsTotal", valoriSize);
-		obj.put("recordsFiltered", valoriSize);
+        obj.put("data", data);
+        obj.put("draw", draw);
+        obj.put("recordsTotal", valoriSize);
+        obj.put("recordsFiltered", valoriSize);
 
-		return obj.toString();
-	}
+        return obj.toString();
+    }
 
-	public List<SxWorkset> loadWorkSetValoriByElaborazione(Long idelaborazione, Integer tipoCampo,Integer groupRole,
-			HashMap<String, String> paramsFilter) {
-		List<SxWorkset> dataList = sqlGenericDao.findWorkSetDatasetColonnaByElaborazioneQuery(idelaborazione, tipoCampo,groupRole,
-				0, null, paramsFilter);
+    public List<SxWorkset> loadWorkSetValoriByElaborazione(Long idelaborazione, Integer tipoCampo, Integer groupRole,
+            HashMap<String, String> paramsFilter) {
+        List<SxWorkset> dataList = sqlGenericDao.findWorkSetDatasetColonnaByElaborazioneQuery(idelaborazione, tipoCampo, groupRole,
+                0, null, paramsFilter);
 
-		return dataList;
-	}
+        return dataList;
+    }
 
 	public Map<String, List<String>> loadWorkSetValoriByElaborazioneMap(Long idelaborazione) {
 		Map<String, List<String>> ret = new LinkedHashMap<>();
@@ -190,29 +190,29 @@ public class WorkflowService {
 			}
 		}
 
-		return ret;
-	}
+        return ret;
+    }
 
-	public Elaborazione doStep(Elaborazione elaborazione, SxStepInstance stepInstance) throws Exception {
+    public Elaborazione doStep(Elaborazione elaborazione, SxStepInstance stepInstance) throws Exception {
 
-		EngineService engine = engineFactory.getEngine(stepInstance.getSxAppService().getInterfaccia());
-		try {
+        EngineService engine = engineFactory.getEngine(stepInstance.getSxAppService().getInterfaccia());
+        try {
 
-			engine.init(elaborazione, stepInstance);
+            engine.init(elaborazione, stepInstance);
 
-			engine.doAction();
-			engine.processOutput();
+            engine.doAction();
+            engine.processOutput();
 
-		} catch (Exception e) {
-			Logger.getRootLogger().error(e.getMessage());
+        } catch (Exception e) {
+            Logger.getRootLogger().error(e.getMessage());
 
-			throw (e);
-		} finally {
-			engine.destroy();
-		}
+            throw (e);
+        } finally {
+            engine.destroy();
+        }
 
-		return elaborazione;
-	}
+        return elaborazione;
+    }
 
 	/*
 	 * public Elaborazione doStep_old(Elaborazione elaborazione, SxStepInstance
@@ -350,13 +350,13 @@ public class WorkflowService {
 	 * stepVariableDao.save(sxStepVariable); }
 	 * 
 	 * return elaborazione; }
-	 */
-	public List<SxStepVariable> getSxStepVariables(Long idelaborazione) {
+     */
+    public List<SxStepVariable> getSxStepVariables(Long idelaborazione) {
 
-		return stepVariableDao.findByElaborazione(new Elaborazione(idelaborazione));
-	}
+        return stepVariableDao.findByElaborazione(new Elaborazione(idelaborazione));
+    }
 
-	public void creaAssociazioni(AssociazioneVarFormBean form, Elaborazione elaborazione) {
+    public void creaAssociazioni(AssociazioneVarFormBean form, Elaborazione elaborazione) {
 
 		List<SxRuoli> ruoliAll = ruoloDao.findAll();
 		Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
@@ -368,7 +368,7 @@ public class WorkflowService {
 			sxStepVariable.setElaborazione(elaborazione);
 			String idr = form.getRuolo()[i];
 			String nomeVar = form.getValore()[i];
-			SxRuoli sxruolo = ruoliAllMap.get(new Long(idr));
+			SxRuoli sxruolo = ruoliAllMap.get(new Integer(idr));
 			sxWorkset = null;
 			for (int y = 0; y < listaVar.size(); y++) {
 				if (listaVar.get(y).getSxWorkset() != null && nomeVar.equals(listaVar.get(y).getSxWorkset().getNome())
@@ -412,7 +412,7 @@ public class WorkflowService {
 		String nomeVar = form.getValore()[0];
 		String nomeOld = form.getValoreOld();
 		Short flagRicerca = Short.parseShort(form.getFlagRicerca());
-		SxRuoli sxruolo = ruoliAllMap.get(new Long(idr));
+		SxRuoli sxruolo = ruoliAllMap.get(new Integer(idr));
 		sxWorkset = null;
 
 		for (int y = 0; y < listaVar.size(); y++) {
@@ -486,7 +486,7 @@ public class WorkflowService {
 				idparam = stringTokenizer.nextToken();
 				ruoloparam = stringTokenizer.nextToken();
 			}
-			sxruolo = ruoliAllMap.get(new Long(ruoloparam));
+			sxruolo = ruoliAllMap.get(new Integer(ruoloparam));
 			SxStepVariable sxStepVariable = new SxStepVariable();
 			sxStepVariable.setElaborazione(elaborazione);
 			sxStepVariable.setSxRuoli(sxruolo);
@@ -523,7 +523,7 @@ public class WorkflowService {
 			ruoloparam = stringTokenizer[2];
 
 			String idStepVar = form.getIdStepVar();
-			sxruolo = ruoliAllMap.get(new Long(ruoloparam));
+			sxruolo = ruoliAllMap.get(new Integer(ruoloparam));
 			SxStepVariable sxStepVariable = new SxStepVariable();
 			Integer idstep = Integer.parseInt(idStepVar);
 			sxStepVariable = stepVariableDao.findById(idstep).get();
