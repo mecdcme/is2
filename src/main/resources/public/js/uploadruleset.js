@@ -180,8 +180,7 @@ function inviaFormRulesetFile() {
 function inviaFormNewRuleset() {
 	$("#rulesetName").val($("#ruleset_name").val());    
 	$("#dataset").val($("#dataset_file").val());
-	$("#rulesetDesc").val($("#ruleset_desc").val());
-	$("#rulesetType").val($("#tipo_ruleset").val());   
+	$("#rulesetDesc").val($("#ruleset_desc").val());	  
 	$("#inputNewRulesetForm").submit();
 }
 

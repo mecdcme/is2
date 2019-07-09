@@ -127,48 +127,45 @@ public class RuleController {
         List<SxClassification> listaClassificazioni2 = ruleService.findAllClassifications();
         listaClassificazioni1.addAll(listaClassificazioni2);
         
-        String nomeRuleset = form.getRulesetName();        
-        Long tipoRuleset = form.getRulesetType();
+        List<SxClassification> listaClassificazioni3 = new ArrayList<SxClassification>();
+        SxClassification onlyDominio = new SxClassification();
+        onlyDominio.setId((short)1);
+        onlyDominio.setNome("Dominio");
+        listaClassificazioni3.add(onlyDominio);        
+       
+        String nomeRuleset = form.getRulesetName();   
+       
         String descrRuleset = form.getRulesetDesc();
         Long dataset = form.getDataset();
-        DatasetFile dfile = new DatasetFile();
+        DatasetFile dfile = null;
         List<DatasetColonna> colonne = null;
         SxRuleset ruleset = new SxRuleset(); 
         
-        if(tipoRuleset!=-1) {
-        	
-        }
+        
         if(dataset!=-1) {
         	dfile = datasetService.findDataSetFile(dataset);
         	colonne = datasetService.findAllNomeColonne(dataset);
         	ruleset.setDatasetFile(dfile);
-        }
-        
-        
+        	model.addAttribute("listaClassificazioni", listaClassificazioni3);
+        }else {
+        	model.addAttribute("listaClassificazioni", listaClassificazioni1);
+        }      
         
         WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));        
-
               
         ruleset.setNomeFile(nomeRuleset);
-        ruleset.setSessioneLavoro(sessionelv);
-        
-       
-        
+        ruleset.setDescr(descrRuleset);
+        ruleset.setSessioneLavoro(sessionelv);       
 
         model.addAttribute("colonne", colonne);        
         SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-        
-        
-        sessionBean.setTipoRuleset(tipoRuleset);
-        sessionBean.setDataset(dataset);
-        
+              
+        sessionBean.setDataset(dataset);        
         session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
         session.setAttribute("dfile", dfile);
         model.addAttribute("ruleset", ruleset);
         model.addAttribute("logs", logs);
-        model.addAttribute("rlogs", rlogs);
-        model.addAttribute("listaClassificazioni", listaClassificazioni1);
-        
+        model.addAttribute("rlogs", rlogs);  
         
         ruleService.saveRuleSet(ruleset);
         return "ruleset/preview";       
@@ -183,25 +180,27 @@ public class RuleController {
 
         String nomeRule = form.getRuleName();
         
-        short tipoRule = form.getRuleType();
+        //short tipoRule = form.getRuleType();
         String descrRule = form.getRuleDesc();        
         Integer idRuleset = form.getIdruleset();
         String textRule = form.getRuleText();
         short idclassification = form.getClassification();
+        Integer idVar = form.getIdcol();
         
         SxRuleset ruleset = ruleService.findRuleSet(idRuleset);
         SxRule sxrule = new SxRule();
         
-        SxRuleType ruletype = ruleService.findRuleTypeById(tipoRule);
+        //SxRuleType ruletype = ruleService.findRuleTypeById(tipoRule);
         SxClassification classification = ruleService.findClassificationById(idclassification);
         
         sxrule.setNome(nomeRule);
         sxrule.setDescr(descrRule);        
         sxrule.setActive((short) 1);
-        sxrule.setRuleType(ruletype);
+        //sxrule.setRuleType(ruletype);
         sxrule.setRule(textRule);       
         sxrule.setSxRuleset(ruleset); 
         sxrule.setSxClassification(classification);
+        sxrule.setVariabile(idVar);
         
         List<SxRule>rules = ruleset.getSxRules();
         rules.add(sxrule);

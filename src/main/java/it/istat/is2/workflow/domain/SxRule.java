@@ -61,6 +61,8 @@ public class SxRule implements Serializable {
     private String nome;
 
     private String rule;
+    
+    private Integer variabile;
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "RTYPE", nullable = true)

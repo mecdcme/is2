@@ -109,11 +109,18 @@ function inviaFormNewRule() {
 	$("#classification").val($("#classification_l").val());
 	$("#inputNewRuleForm").submit();
 }
+function inviaFormNewVarRule() {    
+    $("#ruleText").val($("#rule_text_v").val());
+    $("#ruleDesc").val($("#rule_desc_v").val());	
+	$("#classification").val($("#classification_v").val());	
+	$("#inputNewRuleForm").submit();
+}
 function newRule() {    
     $('#newruledialog').modal('show');
 }
 function addRule(id_variable, nome_variabile) {
 	$('#nome_var').text(nome_variabile);
+	$('#idcol').val(id_variable);	
     $('#addrulevariable').modal('show');
 }
 
