@@ -444,21 +444,22 @@
                             		</select> 
 	                            </div>     
 	                        </div>                               
-                        </div>                                     
+                        </div>                        
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                <span th:text="#{Layout.Close}">Annulla</span>
-                            </button>
-                            <button type="button" id="btn-invia-new-rule" class="btn btn-primary towait"
-                                    onclick="inviaFormNewVarRule();" th:title="#{submit.button.title}"
-                                    th:text="#{submit.button}" data-dismiss="modal">Invia</button>
-                        </div>
+	                        <button type="button" id="btn-invia-new-rule" class="btn btn-primary towait"
+	                        	onclick="inviaFormNewVarRule();" th:title="#{generic.title.submit.button}">
+	                        	<span th:text="#{Userlist.save}">Salva</span></button>
+	                        <button type="button" class="btn btn-danger" data-dismiss="modal">
+                            	<span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
+                        	</button>
+                    	</div>
                     </div>
                 </div>
             </div>
             <!-- Fine New Rule Dialog -->
         <!-- Modal Delete-->
         <div class="modal fade" id="modalDeleteRule" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        	<input type="hidden" id="ruleId"/>
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -469,11 +470,12 @@
                             <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
                         </h4>
                     </div>
-                    <div class="modal-body">Eliminare la regola &nbsp;<span></span>?</div>
+                    <div class="modal-body">Eliminare la regola &nbsp;<span></span>?</div>                    
                     <div class="modal-footer">
-                        <input type="hidden" name="" id="ruleId" value="" />
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
-                        <button type="button" id="btnDelete" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
+                        <button type="button" id="btnDelete" class="btn btn-primary towait" th:title="#{generic.delete.button.label}"><span th:text="#{generic.delete.button.label}">Elimina</span></button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">
+                            <span th:text="#{Userlist.close}">Close</span>
+                        </button>
                     </div>
                 </div>
             </div>
