@@ -44,7 +44,6 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import it.istat.is2.workflow.domain.SxRuleset;
 import it.istat.is2.workflow.domain.SxTipoDato;
 import it.istat.is2.worksession.domain.WorkSession;
 import javax.persistence.Temporal;
@@ -106,5 +105,17 @@ public class DatasetFile implements Serializable {
     public Short getNumCol() {
         // TODO Auto-generated method stub
         return (short) colonne.size();
+    }
+    
+    public String getNomeColFormId(int id){
+    	DatasetColonna dsc;
+        String nomeCol = "";
+    	for(int i=0; i<this.colonne.size(); i++) {
+    		dsc = colonne.get(i);
+    		if(dsc.getId()==id){
+    			nomeCol = dsc.getNome();
+    		}
+    	}
+    	return nomeCol;
     }
 }
