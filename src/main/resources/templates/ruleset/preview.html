@@ -135,7 +135,7 @@
 		                                    <tbody>
 		                                        <tr th:each="rule : ${rules}" th:classappend="${rule.errcode > 0} ? table-warning : table-ok">
 		                                            <td><span  th:text="${#strings.abbreviate(rule.rule,50)}" th:title="${rule.rule}"></span></td>
-		                                            <td><span  th:text="${#strings.abbreviate(rule.variabile,50)}" th:title="${rule.variabile}"></span></td>
+		                                            <td><span  th:text="${#strings.abbreviate(rule.sxRuleset.datasetFile.getNomeColFormId(rule.variabile),50)}" th:title="${rule.variabile}"></span></td>
 		                                            <td th:if="${ rule.sxClassification != null }"><span  th:text="${#strings.abbreviate(rule.sxClassification.nome,50)}" th:title="${rule.sxClassification.nome}"></span></td>
 		                                            <td th:unless="${ rule.sxClassification != null }"><span></span></td>
 		                                            <td style="width: 1%">
