@@ -16,6 +16,78 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `batch_job_execution_seq`
+--
+
+DROP TABLE IF EXISTS `batch_job_execution_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `batch_job_execution_seq` (
+  `ID` bigint(20) NOT NULL,
+  `UNIQUE_KEY` char(1) NOT NULL,
+  UNIQUE KEY `UNIQUE_KEY_UN` (`UNIQUE_KEY`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `batch_job_execution_seq`
+--
+
+LOCK TABLES `batch_job_execution_seq` WRITE;
+/*!40000 ALTER TABLE `batch_job_execution_seq` DISABLE KEYS */;
+INSERT INTO `batch_job_execution_seq` VALUES (0,'0');
+/*!40000 ALTER TABLE `batch_job_execution_seq` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `batch_job_seq`
+--
+
+DROP TABLE IF EXISTS `batch_job_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `batch_job_seq` (
+  `ID` bigint(20) NOT NULL,
+  `UNIQUE_KEY` char(1) NOT NULL,
+  UNIQUE KEY `UNIQUE_KEY_UN` (`UNIQUE_KEY`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `batch_job_seq`
+--
+
+LOCK TABLES `batch_job_seq` WRITE;
+/*!40000 ALTER TABLE `batch_job_seq` DISABLE KEYS */;
+INSERT INTO `batch_job_seq` VALUES (0,'0');
+/*!40000 ALTER TABLE `batch_job_seq` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `batch_step_execution_seq`
+--
+
+DROP TABLE IF EXISTS `batch_step_execution_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `batch_step_execution_seq` (
+  `ID` bigint(20) NOT NULL,
+  `UNIQUE_KEY` char(1) NOT NULL,
+  UNIQUE KEY `UNIQUE_KEY_UN` (`UNIQUE_KEY`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `batch_step_execution_seq`
+--
+
+LOCK TABLES `batch_step_execution_seq` WRITE;
+/*!40000 ALTER TABLE `batch_step_execution_seq` DISABLE KEYS */;
+INSERT INTO `batch_step_execution_seq` VALUES (0,'0');
+/*!40000 ALTER TABLE `batch_step_execution_seq` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sx_app_instance`
 --
 
@@ -225,6 +297,31 @@ INSERT INTO `sx_business_step` VALUES (70,'CONTINGENCY_TABLE','Create contingenc
 UNLOCK TABLES;
 
 --
+-- Table structure for table `sx_classification`
+--
+
+DROP TABLE IF EXISTS `sx_classification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `sx_classification` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NOME` varchar(255) DEFAULT NULL,
+  `DESCRIZIONE` varchar(255) DEFAULT NULL,
+  `NOTE` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=456 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sx_classification`
+--
+
+LOCK TABLES `sx_classification` WRITE;
+/*!40000 ALTER TABLE `sx_classification` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sx_classification` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sx_dataset_colonna`
 --
 
@@ -395,7 +492,7 @@ CREATE TABLE `sx_par_pattern` (
 
 LOCK TABLES `sx_par_pattern` WRITE;
 /*!40000 ALTER TABLE `sx_par_pattern` DISABLE KEYS */;
-INSERT INTO `sx_par_pattern` VALUES (1,'MATCHING VARAIBLES',11,'MATCHING VARAIBLES','3',166);
+INSERT INTO `sx_par_pattern` VALUES (1,'MATCHING VARAIBLES',11,'MATCHING VARAIBLES','3',166),(2,'THRESHOLD MATCHING',13,'THRESHOLD MATCHING','1',169);
 /*!40000 ALTER TABLE `sx_par_pattern` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -454,7 +551,6 @@ CREATE TABLE `sx_rule` (
 
 LOCK TABLES `sx_rule` WRITE;
 /*!40000 ALTER TABLE `sx_rule` DISABLE KEYS */;
-INSERT INTO `sx_rule` VALUES (836,NULL,NULL,NULL,1,1,1,'sau2 > sat3',NULL,NULL,16),(837,NULL,NULL,NULL,1,0,1,'sau2 <= sat2',NULL,NULL,16),(838,NULL,NULL,NULL,1,0,1,'sau3 <= sat3',NULL,NULL,16),(839,NULL,NULL,NULL,1,0,1,'sau4 <= sat4',NULL,NULL,16);
 /*!40000 ALTER TABLE `sx_rule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -512,7 +608,6 @@ CREATE TABLE `sx_ruleset` (
 
 LOCK TABLES `sx_ruleset` WRITE;
 /*!40000 ALTER TABLE `sx_ruleset` DISABLE KEYS */;
-INSERT INTO `sx_ruleset` VALUES (16,'edit_piccolo.txt','ed',NULL,7,NULL,13);
 /*!40000 ALTER TABLE `sx_ruleset` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -541,7 +636,7 @@ CREATE TABLE `sx_ruoli` (
 
 LOCK TABLES `sx_ruoli` WRITE;
 /*!40000 ALTER TABLE `sx_ruoli` DISABLE KEYS */;
-INSERT INTO `sx_ruoli` VALUES (0,'SKIP','N','VARIABILE NON UTILIZZATA',100,1,1),(1,'IDENTIFICATIVO','I','CHIAVE OSSERVAZIONE',100,1,1),(2,'TARGET','Y','VARIABILE DI OGGETTO DI ANALISI',100,3,1),(3,'COVARIATA','X','VARIABILE INDIPENDENTE',100,4,1),(4,'PREDIZIONE','P','VARIABILE DI PREDIZIONE',100,5,1),(5,'OUTLIER','O','FLAG OUTLIER',100,6,1),(6,'PESO','W','PESO CAMPIONARIO',100,7,1),(7,'ERRORE','E','ERRORE INFLUENTE',100,10,1),(8,'RANKING','R','INFLUENCE RANKING',100,11,1),(9,'OUTPUT','T','VARIABILE DI OUTPUT',100,20,1),(10,'STRATO','S','PARTIZIONAMENTO DEL DATASET',100,2,1),(11,'PARAMETRI','Z','PARAMETRI DI INPUT',100,997,2),(12,'MODELLO','M','MODELLO DATI',100,998,2),(13,'SCORE','F','INFLUENCE SCORE',100,12,1),(14,'INFO','G','PARAMETRI OUT - INFO RIEPILOGO',100,999,1),(100,'SKIP','N','VARIABILE NON UTILIZZATA',200,100,1),(102,'CHIAVE A','K1','CHIAVE DATASET A',200,3,1),(103,'CHIAVE B','K2','CHIAVE DATASET B',200,4,1),(104,'MATCHING A','X1','VARIABILE DI OGGETTO DI ANALISI A',200,5,1),(105,'MATCHING B','X2','VARIABILE DI OGGETTO DI ANALISI B',200,6,1),(108,'RANKING','M','INFLUENCE RANKING',200,11,2),(110,'STRATO','S','PARTIZIONAMENTO DEL DATASET',200,2,1),(111,'RESULT','R','RISULTATO PRODOTTO CARTESIANO',200,10,2),(115,'BLOCKING','B','SLICING DEL DATASET',200,3,1),(150,'SKIP','N','VARIABILE NON UTILIZZATA',250,100,1),(152,'KEY A','K1','CHIAVE DATASET A',250,3,1),(153,'KEY B','K2','CHIAVE DATASET B',250,4,1),(154,'MATCHING A','X1','VARIABILE DI OGGETTO DI ANALISI A',250,5,1),(155,'MATCHING B','X2','VARIABILE DI OGGETTO DI ANALISI B',250,6,1),(158,'RANKING','M','INFLUENCE RANKING',250,11,2),(160,'STRATA','S','PARTIZIONAMENTO DEL DATASET',250,2,1),(161,'CONTENGENCY TABLE','CT','CONTENGENCY TABLE',250,1,2),(165,'BLOCKING','B','SLICING DEL DATASET',250,3,1),(166,'MATCHING ','X','VARIABLI DI MATCHING',250,1,2),(167,'FELLEGI-SUNTER','FS','FELLEGI-SUNTER',200,2,1),(168,'MATCHING TABLE','MT','MATCHING TABLE',250,3,1);
+INSERT INTO `sx_ruoli` VALUES (0,'SKIP','N','VARIABILE NON UTILIZZATA',100,1,1),(1,'IDENTIFICATIVO','I','CHIAVE OSSERVAZIONE',100,1,1),(2,'TARGET','Y','VARIABILE DI OGGETTO DI ANALISI',100,3,1),(3,'COVARIATA','X','VARIABILE INDIPENDENTE',100,4,1),(4,'PREDIZIONE','P','VARIABILE DI PREDIZIONE',100,5,1),(5,'OUTLIER','O','FLAG OUTLIER',100,6,1),(6,'PESO','W','PESO CAMPIONARIO',100,7,1),(7,'ERRORE','E','ERRORE INFLUENTE',100,10,1),(8,'RANKING','R','INFLUENCE RANKING',100,11,1),(9,'OUTPUT','T','VARIABILE DI OUTPUT',100,20,1),(10,'STRATO','S','PARTIZIONAMENTO DEL DATASET',100,2,1),(11,'PARAMETRI','Z','PARAMETRI DI INPUT',100,997,2),(12,'MODELLO','M','MODELLO DATI',100,998,2),(13,'SCORE','F','INFLUENCE SCORE',100,12,1),(14,'INFO','G','PARAMETRI OUT - INFO RIEPILOGO',100,999,1),(100,'SKIP','N','VARIABILE NON UTILIZZATA',200,100,1),(102,'CHIAVE A','K1','CHIAVE DATASET A',200,3,1),(103,'CHIAVE B','K2','CHIAVE DATASET B',200,4,1),(104,'MATCHING A','X1','VARIABILE DI OGGETTO DI ANALISI A',200,5,1),(105,'MATCHING B','X2','VARIABILE DI OGGETTO DI ANALISI B',200,6,1),(108,'RANKING','M','INFLUENCE RANKING',200,11,2),(110,'STRATO','S','PARTIZIONAMENTO DEL DATASET',200,2,1),(111,'RESULT','R','RISULTATO PRODOTTO CARTESIANO',200,10,2),(115,'BLOCKING','B','SLICING DEL DATASET',200,3,1),(150,'SKIP','N','VARIABILE NON UTILIZZATA',250,100,1),(152,'KEY A','K1','CHIAVE DATASET A',250,3,1),(153,'KEY B','K2','CHIAVE DATASET B',250,4,1),(154,'MATCHING A','X1','VARIABILE DI OGGETTO DI ANALISI A',250,5,1),(155,'MATCHING B','X2','VARIABILE DI OGGETTO DI ANALISI B',250,6,1),(158,'RANKING','M','INFLUENCE RANKING',250,11,2),(160,'STRATA','S','PARTIZIONAMENTO DEL DATASET',250,2,1),(161,'CONTENGENCY TABLE','CT','CONTENGENCY TABLE',250,1,2),(165,'BLOCKING','B','SLICING DEL DATASET',250,3,1),(166,'MATCHING ','X','VARIABLI DI MATCHING',250,1,2),(167,'FELLEGI-SUNTER','FS','FELLEGI-SUNTER',200,2,1),(168,'MATCHING TABLE','MT','MATCHING TABLE',250,3,1),(169,'THRESHOLD','TH','THRESHOLD MATCHING',250,2,2);
 /*!40000 ALTER TABLE `sx_ruoli` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -615,7 +710,7 @@ CREATE TABLE `sx_step_pattern` (
   `TIPO_IO` int(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `SYS_C0014189` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=174 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=177 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -624,7 +719,7 @@ CREATE TABLE `sx_step_pattern` (
 
 LOCK TABLES `sx_step_pattern` WRITE;
 /*!40000 ALTER TABLE `sx_step_pattern` DISABLE KEYS */;
-INSERT INTO `sx_step_pattern` VALUES (154,11,154,1),(155,11,155,1),(158,11,158,2),(161,11,161,2),(165,11,165,1),(166,11,166,1),(167,12,161,1),(168,12,167,2),(169,13,154,1),(170,13,155,1),(171,13,167,1),(172,13,161,1),(173,13,168,2);
+INSERT INTO `sx_step_pattern` VALUES (154,11,154,1),(155,11,155,1),(158,11,158,2),(161,11,161,2),(165,11,165,1),(166,11,166,1),(167,12,161,1),(168,12,167,2),(169,13,154,1),(170,13,155,1),(171,13,167,1),(172,13,161,1),(173,13,168,2),(176,13,169,1);
 /*!40000 ALTER TABLE `sx_step_pattern` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -648,7 +743,7 @@ CREATE TABLE `sx_step_variable` (
   `ROLE_GROUP` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `SYS_C0014744` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -657,6 +752,7 @@ CREATE TABLE `sx_step_variable` (
 
 LOCK TABLES `sx_step_variable` WRITE;
 /*!40000 ALTER TABLE `sx_step_variable` DISABLE KEYS */;
+INSERT INTO `sx_step_variable` VALUES (1,1,166,25,NULL,1,NULL,1,NULL,NULL),(2,2,169,25,NULL,2,NULL,1,NULL,NULL);
 /*!40000 ALTER TABLE `sx_step_variable` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -906,38 +1002,20 @@ CREATE TABLE `sx_workset` (
   `TIPO_VAR` int(20) DEFAULT NULL,
   `VALORI_SIZE` int(20) DEFAULT NULL,
   `vjson` json DEFAULT NULL,
+  `param_value` longtext COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `SYS_C0014021` (`ID`),
   KEY `TIPOVAR` (`TIPO_VAR`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `sx_workset`
 --
 
---
--- Table structure for table `sx_classification`
---
-
-DROP TABLE IF EXISTS `sx_classification`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `sx_classification` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `NOME` varchar(255) DEFAULT NULL,
-  `DESCRIZIONE` varchar(255) DEFAULT NULL,
-  `NOTE` varchar(255) DEFAULT NULL,  
-  PRIMARY KEY (`ID`)  
-) ENGINE=InnoDB AUTO_INCREMENT=456 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sx_classification`
---
-
 LOCK TABLES `sx_workset` WRITE;
 /*!40000 ALTER TABLE `sx_workset` DISABLE KEYS */;
+INSERT INTO `sx_workset` VALUES (1,'MATCHING VARAIBLES',NULL,'[\"1\"]',2,1,NULL,'{\"MetricMatchingVariables\":[{\"MatchingVariable\":\"SURNAME\",\"MatchingVariableA\":\"DSa_SURNAME\",\"MatchingVariableB\":\"DSb_SURNAME\",\"Method\": \"Jaro\",\"Thresould\": 0.8,\"Window\":0 },{\"MatchingVariable\":\"NAME\",\"MatchingVariableA\":\"DSa_NAME\",\"MatchingVariableB\":\"DSb_NAME\",\"Method\": \"Jaro\",\"Thresould\": 0.8,\"Window\":0 },{\"MatchingVariable\":\"LASTCODE\",\"MatchingVariableA\":\"DSa_LASTCODE\",\"MatchingVariableB\":\"DSb_LASTCODE\",\"Method\": \"Jaro\",\"Thresould\": 0.8,\"Window\":0 }]}'),(2,'THRESHOLD MATCHING',NULL,'[\"1\"]',2,1,NULL,'0.8');
 /*!40000 ALTER TABLE `sx_workset` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -993,4 +1071,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-06-28 16:55:57
+-- Dump completed on 2019-07-11 16:36:56

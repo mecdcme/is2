@@ -151,19 +151,19 @@
                                                         <i class="fa fa-sort"></i><span th:text="${stats.index+1}"></span>
                                                     </td>
                                                     <td th:text="${stepP.sxWorkset.nome}"></td>
-                                                    <td th:text="${stepP.sxWorkset.valori}"></td>
+                                                    <td th:text="${stepP.sxWorkset.paramValue}"></td>
                                                     <td th:text="${stepP.sxRuoli.descr}"></td>
                                                     <td th:text="${stepP.tipoCampo.nome}"></td>
                                                     <td>
                                                         <a href="javascript:void(0)"
-                                                           th:onclick="'javascript:openDlgModParametriWorkset(\'' + ${elaborazione.id} + '\', \'' + ${stepP.id} + '\', \'' + ${stepP.sxWorkset.nome} + '\', \'' + ${stepP.sxWorkset.valoriStr} + '\')'"
+                                                           th:attr="onclick='javascript:openDlgModParametriWorkset(' + ${elaborazione.id} + ',' + ${stepP.id} + ', \'' + ${stepP.sxWorkset.nome} + '\', \'' + ${stepP.sxWorkset.nome} + '\')'"
                                                            title="Modifica parametro">
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
                                                     </td>
                                                     <td>
                                                         <a href="javascript:void(0)"
-                                                           th:onclick="'javascript:mostraDialogEliminaParametro(\'' + ${elaborazione.id} + '\', \'' + ${stepP.id} + '\', \'' + ${stepP.sxWorkset.nome} + '\')'"
+                                                           th:attr="onclick='javascript:mostraDialogEliminaParametro(' + ${elaborazione.id} + ', ' + ${stepP.id} + ', \'' + ${stepP.sxWorkset.nome} + '\')'"
                                                            title="Elimina parametro">
                                                             <i class="fa fa-trash-o"></i>
                                                         </a>

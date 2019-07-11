@@ -371,6 +371,7 @@ public class Utility {
 
 		HashMap<String, ArrayList<SxStepVariable>> ret = new HashMap<>();
 		for (SxStepVariable sxStepVariable : dataList) {
+		System.out.println(sxStepVariable.getId());
 			ArrayList<SxStepVariable> stepList = ret.get(sxStepVariable.getSxWorkset().getNome());
 			if (stepList == null)
 				stepList = new ArrayList<>();

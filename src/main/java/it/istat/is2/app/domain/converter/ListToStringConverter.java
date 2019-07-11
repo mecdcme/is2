@@ -39,8 +39,9 @@ public class ListToStringConverter implements AttributeConverter<List<String>, S
 
 	@Override
 	public String convertToDatabaseColumn(List<String> data) {
-		String value = "";
+		String value = null;
 
+		if(data!=null) {
 		JSONArray allDataArray = new JSONArray();
 
 		for (int index = 0; index < data.size(); index++) {
@@ -49,7 +50,7 @@ public class ListToStringConverter implements AttributeConverter<List<String>, S
 		}
 
 		value = allDataArray.toString();
-
+		}
 		return value;
 	}
 
