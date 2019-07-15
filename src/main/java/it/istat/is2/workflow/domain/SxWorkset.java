@@ -59,6 +59,10 @@ public class SxWorkset implements Serializable {
     @Column(name = "valori")
     @Convert(converter = ListToStringConverter.class)
     private List<String> valori;
+    
+    @Column(name = "param_value")
+    private String paramValue;
+    
     @Transient
     @Getter(AccessLevel.NONE)
     private String valoriStr;

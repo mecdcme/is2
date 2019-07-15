@@ -334,16 +334,19 @@ public class Utility {
 		return headerValuesSelected;
 	}
 
-	public static HashMap<String, ArrayList<String>> getMapWorkSetValues(Map<String, SxStepVariable> dataMap,
+	public static HashMap<String, ArrayList<String>> getMapWorkSetValues(Map<String, ArrayList<SxStepVariable>> dataMap,
 			SxTipoVar sxTipoVar) {
 
 		HashMap<String, ArrayList<String>> ret = new HashMap<>();
-
-		for (Map.Entry<String, SxStepVariable> entry : dataMap.entrySet()) {
+		for (Map.Entry<String, ArrayList<SxStepVariable>> entry : dataMap.entrySet()) {
 			String nomeW = entry.getKey();
-			SxStepVariable sxStepVariable = entry.getValue();
-			if (sxStepVariable.getSxWorkset().getSxTipoVar().getId().equals(sxTipoVar.getId())) {
-				ret.put(nomeW, (ArrayList<String>) sxStepVariable.getSxWorkset().getValori());
+			ArrayList<SxStepVariable> sxStepVariables = entry.getValue();
+			for (Iterator iterator = sxStepVariables.iterator(); iterator.hasNext();) {
+				SxStepVariable sxStepVariable = (SxStepVariable) iterator.next();
+
+				if (sxStepVariable.getSxWorkset().getSxTipoVar().getId().equals(sxTipoVar.getId())) {
+					ret.put(nomeW, (ArrayList<String>) sxStepVariable.getSxWorkset().getValori());
+				}
 			}
 		}
 		return ret;
@@ -364,12 +367,16 @@ public class Utility {
 		return ret;
 	}
 
-	public static Map<String, SxStepVariable> getMapNameWorkSetStep(List<SxStepVariable> dataList) {
+	public static Map<String, ArrayList<SxStepVariable>> getMapNameWorkSetStep(List<SxStepVariable> dataList) {
 
-		HashMap<String, SxStepVariable> ret = new HashMap<>();
+		HashMap<String, ArrayList<SxStepVariable>> ret = new HashMap<>();
 		for (SxStepVariable sxStepVariable : dataList) {
-
-			ret.put(sxStepVariable.getSxWorkset().getNome(), sxStepVariable);
+		System.out.println(sxStepVariable.getId());
+			ArrayList<SxStepVariable> stepList = ret.get(sxStepVariable.getSxWorkset().getNome());
+			if (stepList == null)
+				stepList = new ArrayList<>();
+			stepList.add(sxStepVariable);
+			ret.put(sxStepVariable.getSxWorkset().getNome(), stepList);
 		}
 		return ret;
 	}
@@ -449,8 +456,6 @@ public class Utility {
 		}
 	}
 
-	
-	
 	public static String convertToJsonStringArray(ArrayList<String> values) throws JSONException {
 		String value = "";
 		JSONArray allDataArray = new JSONArray();
@@ -467,18 +472,48 @@ public class Utility {
 	 * @param keySet
 	 * @return
 	 */
-	public static HashMap<String, ArrayList<String>> getMapWorkSetValuesInRoles(Map<String, SxStepVariable> dataMap,
-			SxTipoVar sxTipoVar, Set<String> roles) {
+	public static HashMap<String, ArrayList<String>> getMapWorkSetValuesInRoles(
+			Map<String, ArrayList<SxStepVariable>> dataMap, SxTipoVar sxTipoVar, Set<String> roles) {
 		// TODO Auto-generated method stub
 		HashMap<String, ArrayList<String>> ret = new HashMap<>();
 
-		for (Map.Entry<String, SxStepVariable> entry : dataMap.entrySet()) {
+		for (Map.Entry<String, ArrayList<SxStepVariable>> entry : dataMap.entrySet()) {
 			String nomeW = entry.getKey();
-			SxStepVariable sxStepVariable = entry.getValue();
-			if (roles.contains(sxStepVariable.getSxRuoli().getCod()) && sxStepVariable.getSxWorkset().getSxTipoVar().getId().equals(sxTipoVar.getId())  ) {
-				ret.put(nomeW, (ArrayList<String>) sxStepVariable.getSxWorkset().getValori());
+			ArrayList<SxStepVariable> sxStepVariables = entry.getValue();
+			for (Iterator iterator = sxStepVariables.iterator(); iterator.hasNext();) {
+				SxStepVariable sxStepVariable = (SxStepVariable) iterator.next();
+
+				String codeRole = sxStepVariable.getSxRuoli().getCod();
+				Integer idTipoVar = sxStepVariable.getSxWorkset().getSxTipoVar().getId();
+
+				if (roles.contains(codeRole) && idTipoVar.equals(sxTipoVar.getId())) {
+					ret.put(nomeW, (ArrayList<String>) sxStepVariable.getSxWorkset().getValori());
+				}
 			}
 		}
+		return ret;
+	}
+
+	/**
+	 * @param dataMap
+	 * @param nomeW
+	 * @param sxRuolo
+	 * @return
+	 */
+	public static SxStepVariable retrieveSxStepVariable(Map<String, ArrayList<SxStepVariable>> dataMap, String nomeW,
+			SxRuoli sxRuolo) {
+		SxStepVariable ret = null;
+		ArrayList<SxStepVariable> sxStepVariables = dataMap.get(nomeW);
+		if (sxStepVariables != null) {
+			for (Iterator iterator = sxStepVariables.iterator(); iterator.hasNext();) {
+				SxStepVariable sxStepVariable = (SxStepVariable) iterator.next();
+				if (sxStepVariable.getSxRuoli().getCod().equals(sxRuolo.getCod()))
+					ret = sxStepVariable;
+
+			}
+
+		}
+
 		return ret;
 	}
 

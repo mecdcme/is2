@@ -478,7 +478,7 @@ public class WorkflowService {
 			String idparam = null;
 			String nomeparam = null;
 			String ruoloparam = null;
-			SxWorkset sxWorkset = new SxWorkset();
+		
 
 			while (stringTokenizer.hasMoreTokens()) {
 				// ordine: nomeParam, idParam, ruolo
@@ -490,15 +490,21 @@ public class WorkflowService {
 			SxStepVariable sxStepVariable = new SxStepVariable();
 			sxStepVariable.setElaborazione(elaborazione);
 			sxStepVariable.setSxRuoli(sxruolo);
+			SxWorkset sxWorkset = new SxWorkset();
 			sxWorkset.setNome(nomeparam);
 			sxStepVariable.setOrdine(sxruolo.getOrdine());
 			sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_INPUT));
 			String valori = form.getValore()[i];
-			String[] values = valori.split(" ");
-			sxWorkset.setValori(Arrays.asList(values));
-			sxWorkset.setValoriSize(values.length);
+		//	String[] values = valori.split(" ");
+			sxWorkset.setValori(Arrays.asList("1"));
+			sxWorkset.setParamValue(valori);
+			sxWorkset.setValoriSize(1);
 			sxWorkset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
-
+			
+			ArrayList<SxStepVariable> listaStepV = new ArrayList<>();
+			listaStepV.add(sxStepVariable);
+			sxWorkset.setSxStepVariables(listaStepV);
+			sxStepVariable.setSxWorkset(sxWorkset);
 			stepVariableDao.save(sxStepVariable);
 		}
 	}
@@ -533,9 +539,10 @@ public class WorkflowService {
 			sxStepVariable.setOrdine(sxruolo.getOrdine());
 			sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_INPUT));
 			String valori = form.getValore()[i];
-			String[] values = valori.split(" ");
-			sxWorkset.setValori(Arrays.asList(values));
-			sxWorkset.setValoriSize(values.length);
+		//	String[] values = valori.split(" ");
+		//	sxWorkset.setValori(Arrays.asList(values));
+			sxWorkset.setParamValue(valori);
+			sxWorkset.setValoriSize(1);
 			sxWorkset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
 
 			ArrayList<SxStepVariable> listaStepV = new ArrayList<>();
