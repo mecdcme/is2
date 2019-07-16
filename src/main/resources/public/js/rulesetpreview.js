@@ -23,8 +23,8 @@
  */
 var _ctx = $("meta[name='ctx']").attr("content");
 
-$(document).ready(function () {
 
+$(document).ready(function () {	
     $("#dataview").DataTable({
 
         drawCallback: function () {
@@ -39,32 +39,51 @@ $(document).ready(function () {
         searching: true,
         lengthChange: true,
         pageLength: 20,
-        buttons: [
-            {
-                text: 'Nuova regola',
-                title: 'New rule',
-                className: 'btn-light',
-                action: function (e, dt, node, config) {
-                    newRule();
-                }
-            },
-            {
-                extend: 'csvHtml5',
-                filename: 'download',
-                title: 'download',
-                className: 'btn-light',
-                action: function (e, dt, node, config) {
-                    scaricaDataset(e, 'csv', ID);
-                }
-            }],
+        
+        
+        	buttons: [
+                {
+                    text: 'Nuova regola',
+                    title: 'New rule',
+                    className: 'btn-light',
+                    action: function (e, dt, node, config) {
+                        newRule();
+                    }
+                },                          
+                {
+                    extend: 'csvHtml5',
+                    filename: 'download',
+                    title: 'download',
+                    className: 'btn-light',
+                    action: function (e, dt, node, config) {
+                        scaricaDataset(e, 'csv', ID);
+                    }
+                }],             
+        
+        
         language: {
             paginate: {
                 "previous": "Prev"
             }
         }
     });
+    if ( $('#dataset_div').length > 0 ) {    	
+    	
+    	$("#dataview").DataTable().button().add( 1, {    		
+            title: 'Show variables',
+            className: 'btn-light',          
+            action: function ( e, dt, node, config ) {
+            	mostraVariabili();
+            },
+            text: 'Mostra variabili'
+        } );
+	}
+    
+    
 
-
+    
+    $("#dataset_div").hide();
+    
     $('#btnDelete').click(function () {
         var ruleId = $('#ruleId').val();
         $.ajax({
@@ -102,6 +121,10 @@ function scaricaDataset(e, param, idDFile) {
     e.preventDefault();
     window.location = _ctx + '/rest/download/dataset/' + param + '/' + idDFile;
 }
+function chiudiDivVariabili(){
+	$("#dataset_div").hide();
+}
+
 function inviaFormNewRule() {
     $("#ruleText").val($("#rule_text").val());
     $("#ruleDesc").val($("#rule_desc").val());
@@ -118,15 +141,20 @@ function inviaFormNewVarRule() {
 function newRule() {    
     $('#newruledialog').modal('show');
 }
+function mostraVariabili() {    
+	$("#dataset_div").show();
+}
 function addRule(id_variable, nome_variabile) {
 	$('#nome_var').text(nome_variabile);
 	$('#idcol').val(id_variable);	
     $('#addrulevariable').modal('show');
 }
 
-function editRule(id, rule) {
+function editRule(id, rule, descr, classif) {	
     $('#editRuleId').val(id);
     $('#editRuleText').val(rule);
+    $('#descrizione_edit').val(descr);    
+    $("#classification_edit").val(classif);
     $('#modalEditRule').modal('show');
 }
 

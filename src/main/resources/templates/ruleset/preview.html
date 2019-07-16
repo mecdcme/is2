@@ -76,38 +76,9 @@
                     <!-- End breadcrumb -->
                     <div class="container-fluid">
                     
-	                    <!-- DIV case NO SELECTED dataset for ruleset -->                    
-	                    <div class="row" th:if="${session.dfile != null}">
-	                    	<div class="col-lg-7">
-		                        <div class="card">
-		                            <div class="card-header">
-		                                <span th:text="#{ruleset.edit.title}">Edit regole</span>                                        
-		                            </div>
-		                            
-		                            <div class="card-body">
-		                                <table id="metadataTab" class="table table-bordered table-hover">
-		                                    <thead>
-		                                        <tr>	                                            
-		                                            <th><span>Nome Variabile</span></th>	                                            
-		                                            <th style="width: 5%"></th>
-		                                        </tr>
-		                                    </thead>
-		                                    <tbody>
-		                                        <tr th:each="cols: ${session.dfile.colonne}" th:unless="${(session.dfile.colonne == null) or (session.dfile.colonne.size() == 0) }">	                                            
-		                                            <td><span th:text="${cols.nome}"></span></td>                                            
-		                                            <td align="center">	                                                
-		                                                <a href="javascript:void(0)"   th:unless="${cols.tipoVariabile}"
-		                                                   th:attr="onclick='javascript:addRule('+${cols.id}+',\''+${cols.nome}+ '\')'"
-		                                                  
-		                                                   title="Aggiungi regola"> <i class="fa fa-plus"></i>
-		                                                </a>
-		                                                <input type="hidden" name="colsid" th:value="${cols.id}" />
-		                                            </td>
-		                                        </tr>
-		                                    </tbody>
-		                                </table>
-		                            </div>
-		                        </div>	                        
+	                    <!-- TEST DIV case SELECTED dataset for ruleset -->                    
+	                    <div class="row">
+	                    	<div class="col-lg-7">		                        	                        
 		                        <div class="card">
 		                            <div class="card-header">
 		                                <span th:text="${ruleset.labelFile}"></span>
@@ -135,7 +106,7 @@
 		                                    <tbody>
 		                                        <tr th:each="rule : ${rules}" th:classappend="${rule.errcode > 0} ? table-warning : table-ok">
 		                                            <td><span  th:text="${#strings.abbreviate(rule.rule,50)}" th:title="${rule.rule}"></span></td>
-		                                            <td><span  th:text="${#strings.abbreviate(rule.sxRuleset.datasetFile.getNomeColFormId(rule.variabile),50)}" th:title="${rule.variabile}"></span></td>
+		                                            <td><span th:if="${session.dfile != null}" th:text="${#strings.abbreviate(rule.sxRuleset.datasetFile.getNomeColFormId(rule.variabile),50)}" th:title="${rule.variabile}"></span></td>
 		                                            <td th:if="${ rule.sxClassification != null }"><span  th:text="${#strings.abbreviate(rule.sxClassification.nome,50)}" th:title="${rule.sxClassification.nome}"></span></td>
 		                                            <td th:unless="${ rule.sxClassification != null }"><span></span></td>
 		                                            <td style="width: 1%">
@@ -145,7 +116,9 @@
 		                                                </a>
 		                                            </td>
 		                                            <td style="width: 1%">
-		                                                <a href="javascript:void(0)" title="Edit regola" role="button" th:attr="onclick='javascript:editRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">
+		                                                <a href="javascript:void(0)" title="Edit regola" role="button" th:attr="onclick='javascript:editRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\', \'' + ${rule.descr}+ '\', \'' + ${rule.sxClassification.id} +'\')'">	
+		                                                
+		                                                
 		                                                    <i class="fa fa-edit"></i>
 		                                                </a>
 		                                            </td>
@@ -153,6 +126,40 @@
 		                                                <a href="javascript:void(0)" title="Delete" role="button" th:attr="onclick='javascript:deleteRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">
 		                                                    <i class="fa fa-trash-o"></i>
 		                                                </a>
+		                                            </td>
+		                                        </tr>
+		                                    </tbody>
+		                                </table>
+		                            </div>
+		                        </div>
+		                        <div class="card" th:if="${session.dfile != null}" id="dataset_div">		                        	
+		                            <div class="card-header">
+		                                <span th:text="${session.dfile.nomeFile}">Nome dataset</span>      
+			                                <div class="btn-group pull-right" role="group">
+				                                <a class="" title="Chiudi riquadro" href="javascript:void(0)" th:attr="onclick='javascript:chiudiDivVariabili()'">
+				                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+				                                </a>
+				                            </div>                                  
+		                            </div>
+		                            
+		                            <div class="card-body">
+		                                <table id="metadataTab" class="table table-bordered table-hover">
+		                                    <thead>
+		                                        <tr>	                                            
+		                                            <th><span>Nome Variabile</span></th>	                                            
+		                                            <th style="width: 5%"></th>
+		                                        </tr>
+		                                    </thead>
+		                                    <tbody>
+		                                        <tr th:each="cols: ${session.dfile.colonne}" th:unless="${(session.dfile.colonne == null) or (session.dfile.colonne.size() == 0) }">	                                            
+		                                            <td><span th:text="${cols.nome}"></span></td>                                            
+		                                            <td align="center">	                                                
+		                                                <a href="javascript:void(0)"   th:unless="${cols.tipoVariabile}"
+		                                                   th:attr="onclick='javascript:addRule('+${cols.id}+',\''+${cols.nome}+ '\')'"
+		                                                  
+		                                                   title="Aggiungi regola"> <i class="fa fa-plus"></i>
+		                                                </a>
+		                                                <input type="hidden" name="colsid" th:value="${cols.id}" />
 		                                            </td>
 		                                        </tr>
 		                                    </tbody>
@@ -206,109 +213,8 @@
 	                                </div>
 	                            </div>
 	                    </div>
-	                    <!-- End no dataset div -->
-                    	
-	                   	<!-- DIV case dataset SELECTED for ruleset -->
-	                    <div class="row" th:if="${session.dfile==null}">
-	                        <div class="col-lg-7">
-	                            <div class="card">
-	                                <div class="card-header">
-	                                    <span th:text="${ruleset.labelFile}"></span>
-	                                    <div class="card-header-actions">
-	                                        <a class="card-header-action" href="javascript:void(0)" th:onclick="'javascript:runValidate(' + ${ruleset.id} + ')'" title="Nuova regola"> 
-	                                            <i class="fa fa-caret-square-o-right"></i>&nbsp;<span th:text="#{ruleset.package.validate.contrad}"></span>
-	                                        </a>
-	                                        <a class="card-header-action" href="javascript:void(0)" th:onclick="'javascript:runValidate(' + ${ruleset.id} + ')'" title="Nuova regola"> 
-	                                            <i class="fa fa-caret-square-o-right"></i>&nbsp;<span th:text="#{ruleset.package.validate.redundant}"></span>
-	                                        </a>
-	                                    </div>
-	                                </div>
-	                                <div class="card-body">
-	                                    <table id="dataview" class="table table-striped " cellspacing="0" width="auto" style="overflow: auto;">
-	                                        <thead>
-	                                            <tr>
-	                                                <th>Regola</th>
-	                                                <th>Variabile</th>
-	                                                <th>Classificazione</th>
-	                                                <th width="1%"></th>
-	                                                <th width="1%"></th>
-	                                                <th width="1%"></th>
-	                                            </tr>
-	                                        </thead>
-	                                        <tbody>
-	                                            <tr th:each="rule : ${rules}" th:classappend="${rule.errcode > 0} ? table-warning : table-ok">
-	                                                <td><span  th:text="${#strings.abbreviate(rule.rule,50)}" th:title="${rule.rule}"></span></td>
-	                                                <td><span  th:text="${#strings.abbreviate(rule.variabile,50)}" th:title="${rule.variabile}"></span></td>
-	                                                <td th:if="${ rule.sxClassification != null }"><span  th:text="${#strings.abbreviate(rule.sxClassification.nome,50)}" th:title="${rule.sxClassification.nome}"></span></td>
-	                                                <td th:unless="${ rule.sxClassification != null }"><span></span></td>
-	                                                <td style="width: 1%">
-	                                                    <a th:if="${rule.errcode > 0}" href="javascript:void(0)" th:title="#{ruleset.package.validate.incoherent}" role="button" 
-	                                                       th:attr="onclick='javascript:runIsContradicted(' + ${rule.id} + ')'">
-	                                                        <i class="fa fa-wrench"></i>
-	                                                    </a>
-	                                                </td>
-	                                                <td style="width: 1%">
-	                                                    <a href="javascript:void(0)" title="Edit regola" role="button" th:attr="onclick='javascript:editRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">
-	                                                        <i class="fa fa-edit"></i>
-	                                                    </a>
-	                                                </td>
-	                                                <td style="width: 1%">
-	                                                    <a href="javascript:void(0)" title="Delete" role="button" th:attr="onclick='javascript:deleteRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">
-	                                                        <i class="fa fa-trash-o"></i>
-	                                                    </a>
-	                                                </td>
-	                                            </tr>
-	                                        </tbody>
-	                                    </table>
-	                                </div>
-	                            </div>
-	                        </div>
-	                        <div class="col-lg-5">
-	                            <div class="card">
-	                                <div class="card-header">
-	                                    <span th:text="#{Layout.log.panel}">Log panel</span>
-	                                    <div class="card-header-actions">
-	                                        <a class="card-header-action" href="javascript:void(0)" 
-	                                           th:onclick="'javascript:clearLog(\'' + ${session.sessioneBean.id} + '\')'" title="Clear log">
-	                                            <i class="fa fa-trash-o"></i>
-	                                        </a>
-	                                    </div>
-	                                </div>
-	                                <div id="logbox" class="card-body">
-	                                    <ul th:if="${logs.size()>0}">
-	                                        <li th:each="log : ${logs}">
-	                                            <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
-	                                        </li>
-	                                    </ul>
-	                                    <span th:unless="${logs.size()>0}">
-	                                        No message available
-	                                    </span>
-	                                </div>
-	                            </div>
-	                            <div class="card">
-	                                <div class="card-header">
-	                                    <span>R output</span>
-	                                    <div class="card-header-actions">
-	                                        <a class="card-header-action" href="javascript:void(0)" 
-	                                           th:onclick="'javascript:clearRLog(\'' + ${session.sessioneBean.id} + '\')'" title="Clear log">
-	                                            <i class="fa fa-trash-o"></i>
-	                                        </a>
-	                                    </div>
-	                                </div>
-	                                <div id="rbox" class="card-body">
-	                                    <ul th:if="${rlogs.size()>0}">
-	                                        <li th:each="rlog : ${rlogs}">
-	                                            <span th:text="${#dates.format(rlog.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${rlog.msg}"></span>
-	                                        </li>
-	                                    </ul>
-	                                    <span th:unless="${rlogs.size()>0}">
-	                                        No message available
-	                                    </span>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                    <!-- End dataset selected div -->
+	                    <!-- TEST div -->                   	
+	                   	
                     </div>
                 </div>
             </section>
@@ -497,16 +403,44 @@
                             <div class="form-body">
                                 <div id="msgs"></div>
                                 <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <div class="col-lg-4 text-right">
-                                            <label class="control-label">Rule</label>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <input name="rule" placeholder="Rule" class="form-control" title="Rule" type="text" id="editRuleText"/>
-                                            <span class="help-block"></span>
-                                        </div>
-                                    </div>
-                                </div>
+                                	<div class="modal-body row">
+	                                    <div class="col-lg-12">
+	                                        <div class="col-lg-4 text-right">
+	                                            <label class="control-label" th:text="#{rule.edit.label}">Regola</label>
+	                                        </div>
+	                                        <div class="col-lg-8">
+	                                            <input name="rule" placeholder="Rule" class="form-control" title="Rule" type="text" id="editRuleText"/>
+	                                            <span class="help-block"></span>
+	                                        </div>
+	                                    </div>
+                                    </div> 
+                                    <div class="modal-body row">
+	                                    <div class="col-lg-12">
+	                                        <div class="col-lg-4 text-right">
+	                                            <label class="control-label" th:text="#{generic.label.description.colon}">Descrizione:</label>
+	                                        </div>
+	                                        <div class="col-lg-8">
+	                                            <input name="descrizione" th:placeholder="#{generic.label.description}" class="form-control" title="Descrizione" type="text" id="descrizione_edit"/>
+	                                            <span class="help-block"></span>
+	                                        </div>
+	                                    </div>
+                                    </div> 
+                                    <div class="modal-body row">
+                        				<div class="col-lg-12">
+			                        		<div class="col-lg-4 text-right">
+		                            			<label th:text="#{ruleset.classification.label}">Classificazione:</label>
+		                            		</div>            
+			                        		<div class="col-lg-8">
+		                            			<select id="classification_edit" >
+		                                			<option th:each="classificazione : ${listaClassificazioni}"
+		                                        		th:value="${classificazione.id}"
+		                                        		th:text="${classificazione.nome}">
+		                                			</option>
+	                            				</select> 
+		                            		</div>     
+	                        			</div>                               
+                        			</div>                                   
+	                            </div>                               
                             </div>
                         </form>
                     </div>

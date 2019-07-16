@@ -154,7 +154,8 @@ public class RuleService {
         }
 
         String formula = null;
-
+        SxClassification classificazione = new SxClassification();
+        classificazione.setId(Short.parseShort(idclassificazione));
         Iterator<CSVRecord> itr = records.iterator();
         // If skipFirstLine equals 1 skips first line
         if(skipFirstLine==1) {
@@ -165,8 +166,8 @@ public class RuleService {
             formula = rec.get(0);
             SxRule regola = new SxRule();
             regola.setActive((short) 1);
-            regola.setRule(formula);
-            regola.setRuleType(new SxRuleType(new Short(idclassificazione)));
+            regola.setRule(formula);          
+            regola.setSxClassification(classificazione);
             regola.setSxRuleset(ruleset);
             ruleset.getSxRules().add(regola);
 
@@ -190,8 +191,7 @@ public void deleteRuleset(Integer rulesetId) {
         sxRulesetDao.deleteById(rulesetId);        
     }
 
-    public SxRuleset findRuleSet(Integer idfile) {
-        // TODO Auto-generated method stub
+    public SxRuleset findRuleSet(Integer idfile) {        
         return sxRulesetDao.findById(idfile).orElse(null);
     }
 

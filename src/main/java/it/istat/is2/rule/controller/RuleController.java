@@ -41,7 +41,6 @@ import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.rule.service.RuleService;
 import it.istat.is2.workflow.domain.SxClassification;
 import it.istat.is2.workflow.domain.SxRule;
-import it.istat.is2.workflow.domain.SxRuleType;
 import it.istat.is2.workflow.domain.SxRuleset;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
@@ -168,7 +167,7 @@ public class RuleController {
         model.addAttribute("rlogs", rlogs);  
         
         ruleService.saveRuleSet(ruleset);
-        return "ruleset/preview";       
+        return "redirect:/rule/viewRuleset/" + sessionelv.getId();           
         
     }
     @RequestMapping(value = "/newRule", method = RequestMethod.POST)
@@ -260,17 +259,21 @@ public class RuleController {
         	if(rs.getDatasetFile()==null) {
         		rs.setNumeroRighe(rs.getSxRules().size());
         	}
-        }
+        }        
         
+        List<SxClassification> listaClassificazioni3 = new ArrayList<SxClassification>();
+        SxClassification onlyDominio = new SxClassification();
+        onlyDominio.setId((short)1);
+        onlyDominio.setNome("Dominio");
+        listaClassificazioni3.add(onlyDominio);
         
-        List<SxRuleType> listaRuleType = ruleService.findAllRuleType();        
-        
+        List<SxClassification> listaClassificazioni = ruleService.findAllClassifications();  
 
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 
         model.addAttribute("listaDatasetFile", listaDSFile);
         model.addAttribute("listaRuleSet", listaRuleSet);
-        model.addAttribute("listaRuleType", listaRuleType);        
+        model.addAttribute("listaClassificazioni", listaClassificazioni);        
         model.addAttribute("etichetta", etichetta);
         model.addAttribute("logs", logs);
         model.addAttribute("rlogs", rlogs);
@@ -290,11 +293,11 @@ public class RuleController {
         
         DatasetFile dfile = ruleset.getDatasetFile();
         
-        List<SxClassification> listaClassificazioni1 = new ArrayList<SxClassification>();
+        /*List<SxClassification> listaClassificazioni1 = new ArrayList<SxClassification>();
         SxClassification nullClass = new SxClassification();
         nullClass.setId((short)-1);
         nullClass.setNome("--");
-        listaClassificazioni1.add(nullClass);
+        listaClassificazioni1.add(nullClass);*/
         
         List<SxClassification> listaClassificazioni3 = new ArrayList<SxClassification>();
         SxClassification onlyDominio = new SxClassification();
@@ -302,15 +305,15 @@ public class RuleController {
         onlyDominio.setNome("Dominio");
         listaClassificazioni3.add(onlyDominio);
         
-        List<SxClassification> listaClassificazioni2 = ruleService.findAllClassifications();
-        listaClassificazioni1.addAll(listaClassificazioni2);
+        List<SxClassification> listaClassificazioni = ruleService.findAllClassifications();
+        //listaClassificazioni1.addAll(listaClassificazioni2);
 
         model.addAttribute("ruleset", ruleset);
         model.addAttribute("rules", rules);
         if(dfile!=null) {
         	model.addAttribute("listaClassificazioni", listaClassificazioni3);
         }else {
-        	model.addAttribute("listaClassificazioni", listaClassificazioni1);
+        	model.addAttribute("listaClassificazioni", listaClassificazioni);
         }        
         session.setAttribute("dfile", dfile);
         model.addAttribute("logs", logs);

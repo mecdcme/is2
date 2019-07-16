@@ -275,9 +275,10 @@
                             	</div>            
 	                            <div class="col-lg-8">
                             		<select id="tipo_regola" >
-                                		<option th:each="ruleType : ${listaRuleType}"
-                                        	th:value="${ruleType.id}"
-                                        	th:text="${ruleType.nome}">
+                                		<option th:each="classif : ${listaClassificazioni}"
+                                        	th:value="${classif.id}"
+                                        	th:text="${classif.nome}"
+                                        	th:selected="${classif.id==0}">
                                 		</option>
                             		</select>  
                             	</div>
