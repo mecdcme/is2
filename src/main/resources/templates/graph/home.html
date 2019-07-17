@@ -76,15 +76,6 @@
                             </li>
 
                             <div class="btn-group pull-right">  
-                                <a href="javascript:void(0)" onclick="javascript:getData('scatter', 0);" title="Scatter!"> 
-                                    <i class="fa fa-plus-square-o"></i>&nbsp;<span>Scatter</span>
-                                </a>
-                                <a href="javascript:void(0)" onclick="javascript:getData('box', 0);" title="Box plot!"> 
-                                    <i class="fa fa-plus-square-o"></i>&nbsp;<span>Box plot</span>
-                                </a>
-                                <a class="bar-right" href="javascript:void(0)" onclick="javascript:getData('bar', 0);" title="Bar!"> 
-                                    <i class="fa fa-plus-square-o"></i>&nbsp;<span>Bar</span>
-                                </a>
                                 <a class="" title="Chiudi analytics" th:href="@{'/viewDataset/'+${idfile}}">
                                     <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                                 </a>
@@ -97,9 +88,20 @@
                             <div class="card-header">
                                 <span>Selezione variabili</span>
                                 <div class="card-header-actions">
-                                    <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getData(passGraphType, 1);" title="Graph!"> 
-                                        <i class="fa fa-plus-square-o"></i>
-                                        <span>Draw chart</span>
+
+
+                                    <a class="card-header-action graph-action  ">
+                                        <input id="checkbox-filter" type="checkbox">
+                                            <label class="label-filter" for="checkbox2">Filters</label>
+                                    </a>
+                                    <a  id="scatter" class="card-header-action graph-action" href="javascript:void(0)" onclick="javascript:getData('scatter', 0);" title="select a Scatter chart!"> 
+                                        <i  class="fa fa-plus-square-o"></i>&nbsp;<span>Scatter</span>
+                                    </a>
+                                    <a id="box" class="card-header-action graph-action" href="javascript:void(0)" onclick="javascript:getData('box', 0);" title="select a Box plot chart!"> 
+                                        <i  class="fa fa-plus-square-o"></i>&nbsp;<span>Box plot</span>
+                                    </a>
+                                    <a id="bar" class="card-header-action graph-action"  href="javascript:void(0)" onclick="javascript:getData('bar', 0);" title="select a Bar chart!"> 
+                                        <i   class="fa fa-plus-square-o"></i>&nbsp;<span>Bar</span>
                                     </a>
                                 </div>
                             </div>                            
@@ -124,7 +126,7 @@
                                         <table id="targetY" class="table table-striped table-bordered table-hover sortable yaxis invisible col-lg-3">
                                             <thead>
                                                 <tr style="border-bottom: 1px solid #ddd">
-                                                    <th class="round-cell"><span>Variabili selezionate</span></th>
+                                                    <th class="round-cell"><span>Y axis</span></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -133,7 +135,7 @@
                                         </table>
                                     </div>
                                     <div class="col-xs-2">
-                                        <table id="targetX" class="table table-striped table-bordered table-hover sortable  xaxis invisible col-lg-3">
+                                        <table id="targetX" class="table table-striped table-bordered table-hover sortable xaxis invisible col-lg-3">
                                             <thead>
                                                 <tr style="border-bottom: 1px solid #ddd">
                                                     <th class="round-cell"><span>X axis</span></th>
@@ -160,19 +162,25 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card card-graph invisible">
+                        <div class="card card-graph">
                             <div class="card-header">
-                                <span>Plot</span>
-                                <div class="card-header-actions">
-                                    <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getData(passGraphType, 1);" title="Graph!"> 
-                                        <i class="fa fa-plus-square-o"></i>
-                                        <span>Update chart</span>
+                                <span class="graph-title">Chart</span>
+                                <div class="card-header-actions">                                    
+                                    <a id="select-filter" class="card-header-action invisible">
+                                        <label class="label-filter" for="select-data-filter">Select filter:</label>
+                                        <select id="select-data-filter" >
+                                            <option value="any">any</option>
+                                        </select>
                                     </a>
-                                </div>
+                                    <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getData(passGraphType, 1);" title="Draw Chart!"> 
+                                        <i class="fa fa-pencil-square-o"></i>
+                                        <span>Draw</span>
+                                    </a>
+                                </div>                            
                             </div>
                             <div class="card-body"> 
                                 <div class="row">
-                                    <div  id="datagraph"></div>                                        
+                                    <div  id="datagraph" style="height: 300px;"></div>                                        
                                 </div>
                             </div>
                         </div>

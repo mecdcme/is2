@@ -141,12 +141,12 @@ box-shadow: none !important;
 /* START HEADER */
 .topnavbar {
     margin-bottom: 0px;
-    padding-right: 10px;
+    padding-right: 15px;
     z-index: 120;
 }
 
 .navbar {
-    min-height: 20px
+    min-height: 40px
 }
 
 .navbar-btn {
@@ -430,7 +430,9 @@ aside.toggle-off .active {
     border-top: 1px solid #c8ced3;
 }
 /* END FOOTER */
+
 @media screen and (max-width: 560px) {
+
     .small-screen-hide {
         display: none;
     }
@@ -440,8 +442,17 @@ aside.toggle-off .active {
     .content-body {
         overflow-x: auto;
     }
+    .move-top{
+        margin-top: 0px !important
+    }
+
 }
 
+
+.move-bottom{
+
+    margin-top: 5px;
+}
 section, footer {
     min-width: 400px;
 }
@@ -1118,8 +1129,8 @@ button.btn-secondary:hover
 .card-deck {
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column
+    -ms-flex-direction: row;
+    flex-direction: row
 }
 
 .card-danger{
@@ -1180,3 +1191,22 @@ button.btn-secondary:hover
 
 .round-cell { border-radius:50px !important;}
 
+.label-filter{    
+    font-weight:100!important;    
+}
+#carbonads {
+    position: static;
+    display: block;
+    max-width: 400px;
+    padding: 15px 15px 15px 160px;
+    margin: 2rem 0;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: left;
+    background-color: rgba(0,0,0,.05);
+}
+#carbonads {
+    max-width: 280px;
+    border-radius: 4px;
+}

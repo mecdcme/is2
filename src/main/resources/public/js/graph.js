@@ -21,11 +21,27 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
+
+
 var _ctx = $("meta[name='ctx']").attr("content");
 var passGraphType;
+var filterChecked;
+var entryPoint = [];
+var passData;
 
 $(document).ready(function () {
 
+    $('#checkbox-filter').change(function () {
+        filterChecked = $(this).is(':checked');
+        $('#filter').toggleClass("invisible");
+    });
+    $('#select-data-filter').change(function () {
+        /*
+        alert($("#select-data-filter option:selected").val());
+        alert($("#select-data-filter option:selected").index());
+        */
+        drawGraphByFilter($("#select-data-filter option:selected").val(),$("#select-data-filter option:selected").index());
+    });
     $(".sortable").sortable({
         items: 'tbody > tr',
         connectWith: ".sortable",
@@ -35,14 +51,8 @@ $(document).ready(function () {
             hideOrShowDropRow();
         }
     });
-    /*
-
     hideOrShowDropRow();
-    
-    */
 });
-
-
 function hideOrShowDropRow() {
     $(".sortable").each(function () {
         var dropRow = $(this).find(".drop-row");
@@ -84,7 +94,6 @@ function getScatter() {
 function getBar() {
 
     barP(getData());
-
 }
 
 function getData(graphType, action) {
@@ -107,7 +116,6 @@ function getData(graphType, action) {
     if (action === 0) {
         showGraph(graphType);
         passGraphType = graphType;
-
     }
 
 }
@@ -119,13 +127,10 @@ function getMetaData() {
         xAxis: "",
         yAxis: ""
     };
-
     meta.filters = getFields("filter");
     meta.xAxis = getFields("targetX");
     meta.yAxis = getFields("targetY");
-
     return meta;
-
 }
 
 function getFields(idDiv) {
@@ -134,7 +139,6 @@ function getFields(idDiv) {
         if ($(this).find("span").attr("value") > 0)
             ids = $(this).find("span").attr("value") + "," + ids;
     });
-
     if (ids !== "") {
         ids = ids.substring(0, ids.length - 1);
     } else {
@@ -146,12 +150,45 @@ function getFields(idDiv) {
 }
 
 
-function drawGraph(graphType, data) {  
-    
+function drawGraph(graphType, data) {
+
     var globalBox = [];
-
     var loadingdata = false;
-
+    
+    xAxis = [];
+    yAxis = [];
+    /*
+    alert(data);
+    alert("pass" + passData);
+    */
+    
+    $('#select-filter').removeClass('invisible');
+    $('#select-data-filter').children('option:not(:first)').remove();
+    
+    var ctr=-1;
+    entryPoint=[];
+    
+    $.each(data.filter, function (keys, values) {
+        ctr=-1;        
+        $.each(values, function (key, value) {
+            ctr++;
+            if ($('#select-data-filter').find("option[value='" + value + "']").length) {
+            } else {
+                //alert(ctr);
+                entryPoint.push(ctr);                
+                $('#select-data-filter')
+                        .append($("<option></option>")
+                                .attr("value", value)
+                                .text(value));
+            }
+        });
+        entryPoint.push(ctr+1);            
+        //alert(entryPoint);
+    });
+    
+    
+    
+    
     switch (graphType) {
         case 'box':
             $.each(data.yaxis, function (key, value) {
@@ -165,36 +202,69 @@ function drawGraph(graphType, data) {
                 loadingdata = true;
             });
             var layout = {
-                title: graphType.toUpperCase(),
+                //title: graphType.toUpperCase(),
                 showlegend: true
             };
             break;
         case 'scatter':
             var x = [];
-            var keys = [];
+            var y = [];
             $.each(data.xaxis, function (key, value) {
                 x.push(value);
-                keys.push(key);
-            });
-            var y = [];
+                xAxis.push(key);
+            });            
             $.each(data.yaxis, function (key, value) {
                 y.push(value);
+                yAxis.push(key);
             });
             for (var i = 0; i < x.length; i++) {
                 var groupBox = {
                     x: x[i],
                     y: y[i],
-                    name: keys[i],
+                    
+                    //name: keys[i],
+                    
                     mode: 'markers',
                     type: graphType,
                     hoverinfo: 'skip'
+                    /*
+                     ,
+                     transforms: [{
+                     type: 'filter',
+                     target: 'y',
+                     operation: '>',
+                     value: 25
+                     }]
+                     */
                 };
                 globalBox.push(groupBox);
                 loadingdata = true;
             };
             var layout = {
-                title: graphType.toUpperCase(),
-                showlegend: true
+                //title: graphType.toUpperCase(),
+                showlegend: true,
+                
+                xaxis: {
+                        title: {
+                          text: xAxis[0],
+                          font: {
+                            family: 'Courier New, monospace',
+                            size: 18,
+                            color: '#7f7f7f'
+                          }
+                        }
+                      },
+                      yaxis: {
+                        title: {
+                          text: yAxis[0],
+                          font: {
+                            family: 'Courier New, monospace',
+                            size: 18,
+                            color: '#7f7f7f'
+                          }
+                        }
+                      }
+                
             };
             break;
         case 'bar':
@@ -209,64 +279,188 @@ function drawGraph(graphType, data) {
                     name: key,
                     type: graphType,
                     hoverinfo: 'skip'
+
                 };
                 globalBox.push(groupBox);
-                loadingdata=true;
+                loadingdata = true;
             });
             var layout = {
-                title: graphType.toUpperCase(),
+                //title: graphType.toUpperCase(),
                 showlegend: true
             };
-
             break;
     }
-    
-    
-    if (loadingdata === true ){
+
+
+    if (loadingdata === true) {
+        Plotly.newPlot('datagraph');
         Plotly.newPlot('datagraph', globalBox, layout, {scrollZoom: true});
-        $('.card-graph').removeClass("invisible"); 
-        $('.button-graph').addClass("invisible"); 
-    }else{
+        passData = data;
+    } else {
         alert("selezionare i dati");
     }
-}
-function showGraph(graphType) {
 
-    $("#targetX tbody tr").each(function () { 
-        $('#sourceTable tr:last').after($(this));   
-    });
-    $("#targetY tbody tr").each(function () {        
-        $('#sourceTable tr:last').after($(this)); 
-    });    
-    $("#filter tbody tr").each(function () {         
-        $('#sourceTable tr:last').after($(this));        
-    });
+}
+
+
+
+
+function drawGraphByFilter(passValue,index) {
     
-    $('.card-graph').addClass("invisible");  
-    $('.button-graph').addClass("invisible");      
-   
-    $('#targetX').addClass("invisible");
-    $('#targety').addClass("invisible");
-    $('#filter').addClass("invisible");    
     
-    switch (graphType) {
-        case 'box':
-            $('.card-container').removeClass("invisible");
-            $('.yaxis').removeClass("invisible");
-            $('.button-graph').removeClass("invisible");
+    //alert(entryPoint);  
+    
+    var fromItem = entryPoint[index-1];
+    var toItem =  entryPoint[index]-1;
+    var globalBox = [];
+    
+    xAxis = [];
+    yAxis = [];
+    
+    
+    var loadingdata = false;
+    switch (passGraphType) {
+        case 'box': 
+            $.each(passData.yaxis, function (key, value) {        
+                var groupBox = {
+                    y: value.slice(fromItem, toItem),
+                    name: key,
+                    type: passGraphType,
+                    hoverinfo: 'skip'
+                };
+                globalBox.push(groupBox);
+                loadingdata = true;
+            });
+            var layout = {
+                //title: graphType.toUpperCase(),
+                showlegend: true
+            };
             break;
         case 'scatter':
-            $('.card-container').removeClass("invisible");
-            $('.xaxis').removeClass("invisible");
-            $('.yaxis').removeClass("invisible");
-            $('.button-graph').removeClass("invisible");
+            var x = [];
+            var y = [];                      
+            $.each(passData.xaxis, function (key, value) {   
+                x.push(value.slice(fromItem, toItem));
+                xAxis.push(key);
+            });
+            $.each(passData.yaxis, function (key, value) {
+                y.push(value.slice(fromItem, toItem));
+                yAxis.push(key);
+            });
+            for (var i = 0; i < x.length; i++) {
+                var groupBox = {
+                    x: x[i],
+                    y: y[i],
+                    name: passValue,
+                    mode: 'markers',
+                    type: passGraphType,
+                    hoverinfo: 'skip'
+                
+                };
+                globalBox.push(groupBox);
+                loadingdata = true;
+            };
+            var layout = scatterLayout();
             break;
         case 'bar':
-            $('.card-container').removeClass("invisible");
-            $('.xaxis').removeClass("invisible");
-            $('.yaxis').removeClass("invisible");
-            $('.button-graph').removeClass("invisible");
+            var x;
+            $.each(passData.xaxis, function (key, value) {
+                x = value.slice(fromItem, toItem);
+            });
+            $.each(data.yaxis, function (key, value) {
+                var groupBox = {
+                    x: x,
+                    y: value.slice(fromItem, toItem),
+                    name: key,
+                    type: passGraphType,
+                    hoverinfo: 'skip' 
+                };
+                globalBox.push(groupBox);
+                loadingdata = true;
+            });
+            var layout = {
+                //title: graphType.toUpperCase(),
+                showlegend: true
+            };
             break;
     }
-   
+    if (loadingdata === true) {
+        Plotly.newPlot('datagraph');
+        Plotly.newPlot('datagraph', globalBox, layout, {scrollZoom: true});
+    } else {
+        alert("selezionare i dati");
+    }
+
+}
+
+
+function showGraph(graphType) {
+
+
+    $('#checkbox-filter').prop("checked", false);
+    $('#select-filter').addClass('invisible');
+    $("#targetX tbody tr").each(function () {
+        $('#sourceTable tr:last').after($(this));
+    });
+    $("#targetY tbody tr").each(function () {
+        $('#sourceTable tr:last').after($(this));
+    });
+    $("#filter tbody tr").each(function () {
+        $('#sourceTable tr:last').after($(this));
+    });
+    $('#targetX').addClass("invisible");
+    $('#targety').addClass("invisible");
+    $('#filter').addClass("invisible");
+    $(".graph-title").text("Chart");
+    $(".graph-action").removeClass("menu-selected");
+    Plotly.purge("datagraph");
+    switch (graphType) {
+        case 'box':
+            $('.yaxis').removeClass("invisible");
+            $(".graph-title").text("Box Plot Chart");
+            break;
+        case 'scatter':
+            $('.xaxis').removeClass("invisible");
+            $('.yaxis').removeClass("invisible");
+            $(".graph-title").text("Scatter Chart");
+            break;
+        case 'bar':
+            $('.xaxis').removeClass("invisible");
+            $('.yaxis').removeClass("invisible");
+            $(".graph-title").text("Bar Chart");
+            break;
+    }
+    $("#" + graphType).addClass("menu-selected");
+}
+
+
+function scatterLayout(){
+        var layout = {
+        //title: graphType.toUpperCase(),
+        showlegend: true,
+
+        xaxis: {
+                title: {
+                  text: xAxis[0],
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                  }
+                }
+              },
+              yaxis: {
+                title: {
+                  text: yAxis[0],
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                  }
+                }
+              }
+
+    };
+    
+    return layout;
 }

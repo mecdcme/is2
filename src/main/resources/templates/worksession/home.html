@@ -61,33 +61,70 @@
 
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-lg-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <span>Dettaglio sessione di lavoro</span>
-                                    </div>
-                                    <div class="card-body">
-                                        <table class="table table-condensed">
-                                            <tbody>
-                                                <tr>
-                                                    <td width="25%"><span th:text="#{Layout.Name}">Nome: </span></td>
-                                                    <td><strong th:text="${session.sessionelv.nome }">nome</strong></td>
-                                                </tr>
-                                                <tr>
-                                                    <td width="25%"><span th:text="#{Layout.Description}">Descrizione:</span></td>
-                                                    <td><span th:text="${session.sessionelv.descrizione }">Descrizione</span></td>
-                                                </tr>
-                                                <tr>
-                                                    <td width="25%"><span th:text="#{Layout.Date}">Data:</span></td>
-                                                    <td><span th:text="${#dates.format(session.sessionelv.dataCreazione, 'dd/MM/yyyy HH:mm')}">data creazione</span</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                            <div class="card-deck">
+                                <div class="col-lg-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <span>Dettaglio sessione di lavoro</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table table-condensed">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="25%"><span th:text="#{Layout.Name}">Nome: </span></td>
+                                                        <td><strong th:text="${session.sessionelv.nome }">nome</strong></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="25%"><span th:text="#{Layout.Description}">Descrizione:</span></td>
+                                                        <td><span th:text="${session.sessionelv.descrizione }">Descrizione</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="25%"><span th:text="#{Layout.Date}">Data:</span></td>
+                                                        <td><span th:text="${#dates.format(session.sessionelv.dataCreazione, 'dd/MM/yyyy HH:mm')}">data creazione</span</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="card">
+                                <div class="col-lg-3">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <span>Dati</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="list-unstyled mt-3 mb-4">
+                                                <li>Help</li>
+                                            </ul>
+                                            <!--button type="button" class="btn btn btn-block btn-outline-primary">Vai</button-->
+                                            <button class="btn btn btn-block btn-outline-primary" th:if="${(session.sessioneBean.file != null) }">
+                                                <a id="dati" title="Dati" class="nav-child" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                                    <span th:text="#{Layout.dati}"></span>
+                                                    <span th:if="${session.sessioneBean.file}"  th:text="${'('+session.sessioneBean.file.size()+')'}" ></span>
+                                                </a>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3"> 
+                                    <div class="card" >
+                                        <div class="card-header">
+                                            <span>Regole</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="list-unstyled mt-3 mb-4">
+                                                <li>Help</li>
+                                            </ul>
+                                            <button class="btn btn btn-block btn-outline-primary" th:if="${(session.sessioneBean.ruleset != null) }">
+                                                <a id="regole" title="Regole" class="nav-child" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                                                    <span th:text="#{Layout.Rules}"></span>
+                                                    <span th:if="${session.sessioneBean.ruleset}"  th:text="${'('+session.sessioneBean.ruleset.size()+')'}" ></span>
+                                                </a>
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--div class="card">
                                     <div class="card-header">
                                         <span th:text="#{Layout.log.panel}">Log panel</span>
                                         <div class="card-header-actions">
@@ -107,56 +144,59 @@
                                             No message available
                                         </span>
                                     </div>
-                                </div>
+                                </div-->
                             </div>
                         </div>
+                        <!-- row -->
                         <input id="idsessionelv" type="hidden" value="${session.sessionelv.id}" />
                         <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <span th:text="#{lista.elaborazioni.legend}">Lista elaborazioni</span>
-                                        <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaElaborazione();" title="Nuova elaborazione"> 
-                                                <i class="fa fa-plus-square-o"></i>
-                                                <span th:text="#{label.button.nuova.elaborazione}">Nuova elaborazione</span>
-                                            </a>
+                            <div class="card-deck">
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <span th:text="#{lista.elaborazioni.legend}">Lista elaborazioni</span>
+                                            <div class="card-header-actions">
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaElaborazione();" title="Nuova elaborazione"> 
+                                                    <i class="fa fa-plus-square-o"></i>
+                                                    <span th:text="#{label.button.nuova.elaborazione}">Nuova elaborazione</span>
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <table id="outputR" class="table table-condensed"
-                                               th:if="${listaElaborazioni}" cellspacing="0" style="overflow: auto;">
-                                            <thead>
-                                                <tr th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
-                                                    <th><span th:text="#{listasessioni.codice}">codice</span></th>
-                                                    <th><span th:text="#{listasessioni.nome}">nome</span></th>
-                                                    <th><span th:text="#{listasessioni.descrizione}">Funzione</span></th>
-                                                    <th><span th:text="#{listasessioni.funzione}">descrizione</span></th>
-                                                    <th><span th:text="#{listasessioni.data.creazione}">data creazione</span></th>
-                                                    <th colspan="2"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr th:each="elaborazione : ${listaElaborazioni}"
-                                                    th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
-                                                    <td th:id="${'elabid_'+ elaborazione.id}" th:text="${elaborazione.id}"></td>
-                                                    <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.nome}"></td>
-                                                    <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.descrizione}"></td>
-                                                    <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${elaborazione.sxBusinessFunction.nome}"></td>
-                                                    <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${#dates.format(elaborazione.dataElaborazione, 'dd/MM/yyyy HH:mm')}"></td>
-                                                    <td style="width: 1%">
-                                                        <a class='towait' title="Visualizza elaborazione" th:href="@{'/ws/home/'+${elaborazione.id}}"> 
-                                                            <i class="fa fa-folder-open"></i>
-                                                        </a>
-                                                    </td>
-                                                    <td style="width: 1%">
-                                                        <a title="Elimina elaborazione" role="button" th:onclick="'javascript:eliminaElaborazione(\'' + ${elaborazione.id} + '\', \'' + ${session.sessionelv.id} + '\')'">												
-                                                            <i class="fa fa-trash"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="card-body">
+                                            <table id="outputR" class="table table-condensed"
+                                                   th:if="${listaElaborazioni}" cellspacing="0" style="overflow: auto;">
+                                                <thead>
+                                                    <tr th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
+                                                        <th><span th:text="#{listasessioni.codice}">codice</span></th>
+                                                        <th><span th:text="#{listasessioni.nome}">nome</span></th>
+                                                        <th><span th:text="#{listasessioni.descrizione}">Funzione</span></th>
+                                                        <th><span th:text="#{listasessioni.funzione}">descrizione</span></th>
+                                                        <th><span th:text="#{listasessioni.data.creazione}">data creazione</span></th>
+                                                        <th colspan="2"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr th:each="elaborazione : ${listaElaborazioni}"
+                                                        th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
+                                                        <td th:id="${'elabid_'+ elaborazione.id}" th:text="${elaborazione.id}"></td>
+                                                        <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.nome}"></td>
+                                                        <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.descrizione}"></td>
+                                                        <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${elaborazione.sxBusinessFunction.nome}"></td>
+                                                        <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${#dates.format(elaborazione.dataElaborazione, 'dd/MM/yyyy HH:mm')}"></td>
+                                                        <td style="width: 1%">
+                                                            <a class='towait' title="Visualizza elaborazione" th:href="@{'/ws/home/'+${elaborazione.id}}"> 
+                                                                <i class="fa fa-folder-open"></i>
+                                                            </a>
+                                                        </td>
+                                                        <td style="width: 1%">
+                                                            <a title="Elimina elaborazione" role="button" th:onclick="'javascript:eliminaElaborazione(\'' + ${elaborazione.id} + '\', \'' + ${session.sessionelv.id} + '\')'">												
+                                                                <i class="fa fa-trash"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
