@@ -24,6 +24,7 @@
 package it.istat.is2.rule.service;
 
 import it.istat.is2.app.util.FileHandler;
+import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.rule.engine.EngineValidate;
 import static it.istat.is2.rule.engine.EngineValidate.INPUT_NAMES_PREFIX;
 import it.istat.is2.rule.forms.RuleCreateForm;
@@ -187,12 +188,15 @@ public class RuleService {
 
         sxRulesetDao.save(sxRuleset);
     }
-public void deleteRuleset(Integer rulesetId) {       
+    public void deleteRuleset(Integer rulesetId) {       
         sxRulesetDao.deleteById(rulesetId);        
     }
 
-    public SxRuleset findRuleSet(Integer idfile) {        
-        return sxRulesetDao.findById(idfile).orElse(null);
+    public SxRuleset findRulesetByDatasetFile(DatasetFile ds) {        
+        return sxRulesetDao.findByDatasetFile(ds).orElse(null);
+    }
+    public SxRuleset findRulesetById(Integer id) {        
+        return sxRulesetDao.findById(id).orElse(null);
     }
 
     public List<SxRule> findRules(SxRuleset ruleset) {

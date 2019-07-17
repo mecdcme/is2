@@ -29,6 +29,7 @@ import lombok.Data;
 public class NewRulesetFormBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private String rulesetId;
 	private String rulesetName;
 	private String rulesetLabel;
 	private Long rulesetType;

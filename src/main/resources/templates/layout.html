@@ -64,45 +64,56 @@
                     </ul>
                 </div>
 
+
                 <div class="topnavbar-wrapper">
                     <nav role="navigation" class="navbar navbar-default navbar-fixed-top topnavbar">
-                        <div class="navbar-brand">
-                            <span class="fa-stack" style="font-size: small">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-rocket fa-stack-1x" style="color:#2189b4"></i>
-                            </span>
-                            <span class="small-screen-hide">IS<sup>2</sup></span>
-                            <span class="toggle-menu" onclick="toggleMenu()">
-                                <i id="toggle-menu" class="fa fa-bars"></i>
-                            </span>
-                        </div>
-                        <ul class="nav navbar-nav navbar-style">
-                            <li sec:authorize="hasAuthority('ADMIN')">
-                                <a  title="Administration" th:href="@{/users/userlist}">
-                                    <span th:text="#{Layout.users}"></span>
-                                </a>
-                            </li>        
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right navbar-style">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-user-circle-o"></i><span sec:authentication="name"><span th:text="#{Layout.user}">User</span></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="dropdown-header">Account</li>
-                                    <li class="item"><a href="#" th:href="@{/users/edituser}"><i class="fa fa-user"></i>Profile</a></li>
-                                    <li class="item">
-                                        <a sec:authorize="isAuthenticated()" th:href="@{/users/logout}">
-                                            <i class="fa fa-lock"></i><span th:text="#{Layout.signout}">Sign out</span>
+                        
+                            <div class="navbar-brand ">
+                                <span class="fa-stack" style="font-size: small">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-rocket fa-stack-1x" style="color:#2189b4"></i>
+                                </span>
+                                <!--span class="small-screen-hide">IS<sup>2</sup></span-->
+                                <span class="">IS<sup>2</sup></span>
+                                <span class="toggle-menu" onclick="toggleMenu()">
+                                    <i id="toggle-menu" class="fa fa-bars"></i>
+                                </span>
+                            </div>
+                        
+                            <div class="nav pull-right move-bottom move-top">
+                                
+                                <ul class="nav navbar-nav">
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-user-circle-o"></i><span sec:authentication="name">
+                                                <span th:text="#{Layout.user}">User</span>                                            
+                                            </span>
                                         </a>
+                                        <ul class="dropdown-menu">
+                                            <li class="item" sec:authorize="hasAuthority('ADMIN')">
+                                                <a  title="Administration" th:href="@{/users/userlist}">
+                                                    <span th:text="#{Layout.users}"></span>
+                                                </a>
+                                            </li> 
+                                            <li class="item">
+                                                <a href="#" th:href="@{/users/edituser}"><i class="fa fa-user"></i>Profile</a>
+                                            </li>
+                                            <li class="item">
+                                                <a sec:authorize="isAuthenticated()" th:href="@{/users/logout}">
+                                                    <i class="fa fa-lock"></i><span th:text="#{Layout.signout}">Sign out</span>
+                                                </a>
+                                            </li>
+                                        </ul>     
+                                        <li class="item"><a href="?language=en_US">ENG</a></li>
+                                        <li class="item"><a href="?language=it_IT">ITA</a></li>
                                     </li>
                                 </ul>
-                            </li>
-                            <li><a class="" href="?language=it_IT">ITA</a></li>
-                            <li><a class="" href="?language=en_US">ENG</a></li>
-                        </ul>
+                            
+                        </div>
                     </nav>
                 </div>
+
+
                 <div class="loading modal fade" id="loading" role="dialog">
                     <div class="modal-content">
                         <div class="loader">
@@ -159,7 +170,7 @@
                                        th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}"> 
                                         <i class="fa fa-sitemap"></i><span th:text="${session.sessioneBean.nomeElaborazione}">Elaborazione</span>
                                     </a>
-                                    
+
                                     <ul th:if="${session.sessioneBean.businessFunction != null}" class="nav sidebar-subnav" aria-expanded="false">
                                         <li class="nav-body" th:each="bProcess : ${session.sessioneBean.businessFunction.processes}">
                                             <a th:title="${bProcess.name}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
