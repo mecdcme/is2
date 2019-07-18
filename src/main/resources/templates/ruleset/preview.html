@@ -431,7 +431,7 @@
 		                            			<label th:text="#{ruleset.classification.label}">Classificazione:</label>
 		                            		</div>            
 			                        		<div class="col-lg-8">
-		                            			<select id="classification_edit" >
+		                            			<select name="classificazione" id="classification_edit" >
 		                                			<option th:each="classificazione : ${listaClassificazioni}"
 		                                        		th:value="${classificazione.id}"
 		                                        		th:text="${classificazione.nome}">

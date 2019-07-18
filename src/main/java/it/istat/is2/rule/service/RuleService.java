@@ -225,8 +225,11 @@ public class RuleService {
 
         SxRule rule = sxRuleDao.findById(ruleForm.getRuleId()).orElse(null);
 
+        SxClassification classif = findClassificationById(ruleForm.getClassificazione());
         if (rule != null) {
             rule.setRule(ruleForm.getRule());
+            rule.setDescr(ruleForm.getDescrizione());
+            rule.setSxClassification(classif);
             sxRuleDao.save(rule);
         }
 

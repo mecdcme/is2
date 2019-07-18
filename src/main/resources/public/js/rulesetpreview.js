@@ -138,6 +138,12 @@ function inviaFormNewVarRule() {
 	$("#classification").val($("#classification_v").val());	
 	$("#inputNewRuleForm").submit();
 }
+function modificaRegola() {    
+    $("#ruleText").val($("#rule_text_v").val());
+    $("#ruleDesc").val($("#rule_desc_v").val());	
+	$("#classification").val($("#classification_v").val());	
+	$("#inputNewRuleForm").submit();
+}
 function newRule() {    
     $('#newruledialog').modal('show');
 }
