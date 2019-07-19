@@ -280,13 +280,14 @@
 	                            </div>     
 	                        </div>                               
                         </div>                        
-                        <div class="modal-footer">
-	                        <button type="button" id="btn-invia-new-rule" class="btn btn-primary towait"
-	                        	onclick="inviaFormNewRule();" th:title="#{generic.title.submit.button}">
-	                        	<span th:text="#{Userlist.save}">Salva</span></button>
-	                        <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        <div class="modal-footer">	                        
+	                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
                             	<span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
                         	</button>
+                        	<button type="button" id="btn-invia-new-rule" class="btn btn-primary towait"
+	                        	onclick="inviaFormNewRule();" th:title="#{generic.title.submit.button}">
+	                        	<span th:text="#{Userlist.save}">Salva</span>
+	                        </button>
                     	</div>
                     </div>
                 </div>
@@ -351,13 +352,14 @@
 	                            </div>     
 	                        </div>                               
                         </div>                        
-                        <div class="modal-footer">
-	                        <button type="button" id="btn-invia-new-rule" class="btn btn-primary towait"
-	                        	onclick="inviaFormNewVarRule();" th:title="#{generic.title.submit.button}">
-	                        	<span th:text="#{Userlist.save}">Salva</span></button>
-	                        <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        <div class="modal-footer">	                        
+	                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
                             	<span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
                         	</button>
+                        	<button type="button" id="btn-invia-new-rule" class="btn btn-primary towait"
+	                        	onclick="inviaFormNewVarRule();" th:title="#{generic.title.submit.button}">
+	                        	<span th:text="#{Userlist.save}">Salva</span>
+	                        </button>
                     	</div>
                     </div>
                 </div>
@@ -377,11 +379,11 @@
                         </h4>
                     </div>
                     <div class="modal-body">Eliminare la regola &nbsp;<span></span>?</div>                    
-                    <div class="modal-footer">
-                        <button type="button" id="btnDelete" class="btn btn-primary towait" th:title="#{generic.delete.button.label}"><span th:text="#{generic.delete.button.label}">Elimina</span></button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    <div class="modal-footer">                        
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
                             <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
                         </button>
+                        <button type="button" id="btnDelete" class="btn btn-primary towait" th:title="#{generic.delete.button.label}"><span th:text="#{generic.delete.button.label}">Elimina</span></button>
                     </div>
                 </div>
             </div>
@@ -447,11 +449,11 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btnEdit" class="btn btn-primary" th:title="#{generic.title.submit.button}"><span th:text="#{Userlist.save}">Save</span></button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
                             <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
                         </button>
-                    </div>
+                        <button type="button" id="btnEdit" class="btn btn-primary towait" th:title="#{generic.title.submit.button}"><span th:text="#{Userlist.save}">Save</span></button>                        
+                    </div>                    
                 </div>
             </div>
         </div>
