@@ -88,65 +88,96 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <span>Dati</span>
-                                        </div>
-                                        <div class="card-body">
-                                            <ul class="list-unstyled mt-3 mb-4">
-                                                <li>Help</li>
-                                            </ul>
-                                            <!--button type="button" class="btn btn btn-block btn-outline-primary">Vai</button-->
-                                            <button class="btn btn btn-block btn-outline-primary" th:if="${(session.sessioneBean.file != null) }">
-                                                <a id="dati" title="Dati" class="nav-child" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
-                                                    <span th:text="#{Layout.dati}"></span>
-                                                    <span th:if="${session.sessioneBean.file}"  th:text="${'('+session.sessioneBean.file.size()+')'}" ></span>
-                                                </a>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3"> 
                                     <div class="card" >
-                                        <div class="card-header">
-                                            <span>Regole</span>
-                                        </div>
                                         <div class="card-body">
                                             <ul class="list-unstyled mt-3 mb-4">
-                                                <li>Help</li>
+                                                <li>                                                
+                                                    <img class="center-block" th:src="@{/img/datalast.png}" alt="" border="0" height="90" width="125" style="max-width: 125px;">
+                                                </li>
+                                                <li>
+                                                    <!---span th:text="#{Layout.dati}"></span-->
+                                                    Sono presenti <span th:if="${session.sessioneBean.file}"  th:text="${'('+session.sessioneBean.file.size()+')'}" ></span> file di dati per la sessione di lavoro                                                    
+                                                </li>
                                             </ul>
-                                            <button class="btn btn btn-block btn-outline-primary" th:if="${(session.sessioneBean.ruleset != null) }">
-                                                <a id="regole" title="Regole" class="nav-child" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
-                                                    <span th:text="#{Layout.Rules}"></span>
-                                                    <span th:if="${session.sessioneBean.ruleset}"  th:text="${'('+session.sessioneBean.ruleset.size()+')'}" ></span>
-                                                </a>
-                                            </button> 
+
+                                        </div>
+                                        <div class="card-footer">
+                                            <ul class="list-unstyled mt-3 mb-4">   
+                                                <li  th:if="${(session.sessioneBean.file != null) }">
+                                                    <a id="dati" title="Dati" class="nav-child" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                                        <span>Dati <span class="pull-right" ><i class="fa fa-angle-double-right"></i></span></span>
+                                                    </a>
+                                                </li>
+                                            </ul>    
                                         </div>
                                     </div>
                                 </div>
-                                <!--div class="card">
-                                    <div class="card-header">
-                                        <span th:text="#{Layout.log.panel}">Log panel</span>
-                                        <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)" 
-                                               th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
+                                <div class="col-lg-3">
+                                    <div class="card" >
+
+                                        <div class="card-body">
+
+                                            <ul class="list-unstyled">
+                                                <li>                                                
+                                                    <img class="center-block" th:src="@{/img/ruleslast.png}" alt="" border="0" height="90" width="125" style="max-width: 125px;">
+                                                </li>
+                                                <li>
+                                                    <!--span th:text="#{Layout.Rules}"></span-->
+                                                    Sono presenti <span th:if="${session.sessioneBean.ruleset}"  th:text="${'('+session.sessioneBean.ruleset.size()+')'}" ></span> file di regole per la sessione di lavoro                                                    
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                        <div class="card-footer">
+                                            <ul class="list-unstyled">   
+                                                <li class="" th:if="${(session.sessioneBean.ruleset != null) }">
+                                                    <a id="regole" title="Regole" class="nav-child" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                                                        <span>Regole <span class="pull-right" ><i class="fa fa-angle-double-right"></i></span></span>
+                                                    </a>
+                                                </li>
+                                            </ul>    
                                         </div>
                                     </div>
-                                    <div id="logbox" class="card-body">
-                                        <ul th:if="${logs.size()>0}">
-                                            <li th:each="log : ${logs}">
-                                                <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
-                                            </li>
-                                        </ul>
-                                        <span th:unless="${logs.size()>0}">
-                                            No message available
-                                        </span>
-                                    </div>
-                                </div-->
+
+                                    <!--div id="carbonads">
+                                    <span>
+                                    <span class="carbon-wrap">
+                                    <a href="" class="carbon-img" target="_blank" rel="noopener"><img th:src="@{/img/rules2.png}" alt="ads via Carbon" border="0" height="100" width="130" style="max-width: 130px;"></a></span>
+                                    </span>
+                                    </div-->                                            
+
+
+
+                                </div>
+
+
+
+
                             </div>
                         </div>
+                        <!--div class="card">
+        <div class="card-header">
+            <span th:text="#{Layout.log.panel}">Log panel</span>
+            <div class="card-header-actions">
+                <a class="card-header-action" href="javascript:void(0)" 
+                   th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+            </div>
+        </div>
+        <div id="logbox" class="card-body">
+            <ul th:if="${logs.size()>0}">
+                <li th:each="log : ${logs}">
+                    <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
+                </li>
+            </ul>
+            <span th:unless="${logs.size()>0}">
+                No message available
+            </span>
+        </div>
+    </div-->
+
+
                         <!-- row -->
                         <input id="idsessionelv" type="hidden" value="${session.sessionelv.id}" />
                         <div class="row">
