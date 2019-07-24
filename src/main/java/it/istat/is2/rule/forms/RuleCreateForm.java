@@ -21,6 +21,10 @@ public class RuleCreateForm {
     @NotNull
     @Size(max = 500)
     private String rule;
+    @NotNull
+    private String descrizione;
+    @NotNull
+    private Short classificazione;
 
     
 }

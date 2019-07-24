@@ -23,12 +23,17 @@
  */
 package it.istat.is2.workflow.dao;
 
+import java.util.Optional;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.workflow.domain.SxRuleset;
 
 @Repository
 public interface SxRulesetDao extends CrudRepository<SxRuleset,Integer> {
+
+	Optional<SxRuleset> findByDatasetFile(DatasetFile ds);
  
 }

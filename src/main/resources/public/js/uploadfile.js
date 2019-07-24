@@ -34,7 +34,8 @@ $(document).ready(function () {
     $("#mostraDati").hide();
     $("#scegliHeader").hide();
     $("#lnk_opzioni_avanzate").hide();
-
+    $("#upload_file").hide();
+    
     $("#delimiter_sel").change(function () {
         $("#delimiter").val($("#delimiter_sel").val());
     });
@@ -73,7 +74,13 @@ function controllaInputText() {
         $("#btn-invia-file").attr("disabled", "disabled");
     }
 }
-	
+function showUploadDiv() {
+	if ($("#upload_file").css("display") == "none") {
+		$("#upload_file").show();
+	} else {
+		$("#upload_file").hide();
+	}
+}
 function eliminaDataset(idDataset, nomeFile) {	
     $("#idDataset").val(idDataset);    
     $('#msg_elim_dataset').text("Eliminare il dataset " + nomeFile + "?");

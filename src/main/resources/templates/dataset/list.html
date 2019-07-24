@@ -71,6 +71,14 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:text="#{lista.dataset.legend}">Lista dataset</span>
+                                        <div class="card-header-actions">
+	                                        <a class="card-header-action" href="javascript:void(0)"
+												onclick="javascript:showUploadDiv();"
+												title="Carica file"> <i
+												class="fa fa-plus-square-o"></i> <span
+												th:text="#{ruleset.new.file.ruleset}"></span>
+											</a>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <form id="inputFileForm" th:action="@{'/loadInputData'}" method="post" enctype="multipart/form-data">
@@ -81,7 +89,7 @@
                                             <input type="hidden" value="" name="tipoDato" id="tipo_dat" />
                                             <div id="upload" class="row">
                                                 <div class="col-lg-8">
-                                                    <div class="form-group">
+                                                    <div id="upload_file" class="form-group">
                                                         <label class="control-label"
                                                                th:text="#{selection.file.legend}">Seleziona un file da caricare (txt o csv) </label>
                                                         <!-- Impostare data-show-preview a true per avere la preview del file -->

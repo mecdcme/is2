@@ -70,7 +70,7 @@ public class RuleRestController {
     @GetMapping("/rules/runvalidate/{idRuleset}")
     public void runValidate(@PathVariable("idRuleset") Integer idRuleset) {
 
-        SxRuleset ruleSet = ruleService.findRuleSet(idRuleset);
+        SxRuleset ruleSet = ruleService.findRulesetById(idRuleset);
         ruleService.runValidate(ruleSet);
     }
 
