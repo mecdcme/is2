@@ -84,7 +84,7 @@ public interface StepVariableDao extends CrudRepository<SxStepVariable, Integer>
 	 * @param sxTipoCampo
 	 * @return
 	 */
-	@Query("SELECT distinct sr  from  SxRuoli sr,SxStepVariable st  where st.elaborazione.id=:elab and st.sxWorkset.sxTipoVar=:tipoVar and st.tipoCampo=:tipoCampo and st.sxRuoloGruppo=sr ORDER BY st.ordine ASC ")
+	@Query("SELECT distinct sr  from  SxRuoli sr,SxStepVariable st  where st.elaborazione.id=:elab and st.sxWorkset.sxTipoVar=:tipoVar and st.tipoCampo=:tipoCampo and st.sxRuoloGruppo=sr ORDER BY st.ordine desc ")
 	List<SxRuoli> getOutputRoleGroupsStepVariables(@Param("elab")Long idElaborazione,@Param("tipoVar") SxTipoVar sxTipoVar,@Param("tipoCampo") SXTipoCampo sxTipoCampo);
 
 	

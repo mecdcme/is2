@@ -23,6 +23,8 @@
  */
 package it.istat.is2.catalogue.relais.service;
 
+import static org.hamcrest.CoreMatchers.theInstance;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -56,6 +58,19 @@ public class RelaisService {
 	final int stepService = 250;
 	final int sizeFlushed = 20;
 
+	final String codeMatchingA = "X1";
+	final String codeMatchingB = "X2";
+	final String codContengencyTable = "CT";
+	final String codMachingTable = "MT";
+	final String codPossibleMachingTable = "PM";
+	final String codResidualA = "RA";
+	final String codResidualB = "RB";
+	final String codeFS = "FS";
+	final String codeP_POST = "P_POST";
+	final String params_MatchingVariables = "MATCHING VARAIBLES";
+	final String params_ThresholdMatching = "THRESHOLD MATCHING";
+	final String params_ThresholdUnMatching = "THRESHOLD UNMATCHING";
+
 	@Autowired
 	private RelaisGenericDao relaisGenericDao;
 	@Autowired
@@ -69,18 +84,16 @@ public class RelaisService {
 	private ContingencyService contingencyService;
 
 	public Map<?, ?> contengencyTable(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
-			Map<String, ArrayList<String>> worksetVariabili) throws Exception {
+			Map<String, ArrayList<String>> worksetVariabili,Map<String, String> parametriMap) throws Exception {
 
 		Map<String, Map<?, ?>> returnOut = new HashMap<>();
-		Map<String, ArrayList<String>> worksetOut = new LinkedHashMap<String, ArrayList<String>>();
+		Map<String, Map<?, ?>> worksetOut = new HashMap<>();
+		Map<String, ArrayList<String>> contengencyTableOut = new LinkedHashMap<String, ArrayList<String>>();
 		Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<String, ArrayList<String>>();
 		Map<String, String> rolesGroupOut = new HashMap<String, String>();
 
 		// <codRuolo,[namevar1,namevar2..]
 
-		String codeMatchingA = "X1";
-		String codeMatchingB = "X2";
-		String codContengencyTable = "CT";
 		int indexItems = 0;
 		ArrayList<String> variabileNomeListMA = new ArrayList<>();
 		ArrayList<String> variabileNomeListMB = new ArrayList<>();
@@ -103,11 +116,11 @@ public class RelaisService {
 		int sizeA = worksetVariabili.get(firstFiledMA).size();
 		int sizeB = worksetVariabili.get(firstFiledMB).size();
 
-		contingencyService.init();
+		contingencyService.init(parametriMap.get(params_MatchingVariables));
 		List<String> nameMatchingVariables = new ArrayList<>();
 
 		contingencyService.getMetricMatchingVariableVector().forEach(metricsm -> {
-			worksetOut.put(metricsm.getMatchingVariable(), new ArrayList<>());
+			contengencyTableOut.put(metricsm.getMatchingVariable(), new ArrayList<>());
 			nameMatchingVariables.add(metricsm.getMatchingVariable());
 		});
 
@@ -133,60 +146,65 @@ public class RelaisService {
 			}
 
 		}
-		worksetOut.put("FREQUENCY", new ArrayList<>());
+		contengencyTableOut.put("FREQUENCY", new ArrayList<>());
 
 		// write to worksetout
 		contengencyTable.forEach((key, value) -> {
 
 			int idx = 0;
 			for (String nameMatchingVariable : nameMatchingVariables)
-				worksetOut.get(nameMatchingVariable).add(String.valueOf(key.charAt(idx++)));
-			worksetOut.get("FREQUENCY").add(value.toString());
+				contengencyTableOut.get(nameMatchingVariable).add(String.valueOf(key.charAt(idx++)));
+			contengencyTableOut.get("FREQUENCY").add(value.toString());
 
 		});
 
-		rolesOut.put(codContengencyTable, new ArrayList<>(worksetOut.keySet()));
+		rolesOut.put(codContengencyTable, new ArrayList<>(contengencyTableOut.keySet()));
 		returnOut.put(IS2Const.WF_OUTPUT_ROLES, rolesOut);
 		
 		rolesOut.keySet().forEach(code ->{
 		  	rolesGroupOut.put(code, codContengencyTable);
 		});
 	 		returnOut.put(IS2Const.WF_OUTPUT_ROLES_GROUP, rolesGroupOut);
+	 		
+	 		
+	 	worksetOut.put(codContengencyTable, contengencyTableOut);
 		returnOut.put(IS2Const.WF_OUTPUT_WORKSET, worksetOut);
 		return returnOut;
+		
 
 	}
 
 	public Map<?, ?> resultTables(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
-			Map<String, ArrayList<String>> worksetVariabili) throws Exception {
+			Map<String, ArrayList<String>> worksetVariabili,Map<String, String> parametriMap) throws Exception {
 
-		Map<String, Map<?, ?>> returnOut = new HashMap<>();
-		Map<String, ArrayList<String>> worksetOut = new LinkedHashMap<String, ArrayList<String>>();
+		Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
+		Map<String, Map<?, ?>> worksetOut = new LinkedHashMap<>();
+		Map<String, ArrayList<String>> matchingTable = new LinkedHashMap<String, ArrayList<String>>();
+		Map<String, ArrayList<String>> possibleMatchingTable = new LinkedHashMap<String, ArrayList<String>>();
+		Map<String, ArrayList<String>> residualATable = new LinkedHashMap<String, ArrayList<String>>();
+		Map<String, ArrayList<String>> residualBTable = new LinkedHashMap<String, ArrayList<String>>();
 		Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<String, ArrayList<String>>();
 		Map<String, String> rolesGroupOut = new HashMap<String, String>();
 
 		// <codRuolo,[namevar1,namevar2..]
 
-		String codeMatchingA = "X1";
-		String codeMatchingB = "X2";
-		String codContengencyTable = "CT";
-		String codMachingTable = "MT";
-		String codeFS = "FS";
-		String codeP_POST = "P_POST";
-		String paramTh = "0.8";
 		int indexItems = 0;
-
-		ArrayList<String> patternOk = new ArrayList<>();
-		Map<String,String> patternOkMap =new HashMap<>();
-
-		//
+		ArrayList<String> patternMatching = new ArrayList<>();
+		ArrayList<String> patternPossibleMatching = new ArrayList<>();
+		Map<String,String> patternPPostValues =new HashMap<>();
+        String paramTM=parametriMap.get(params_ThresholdMatching);
+        String paramTU=parametriMap.get(params_ThresholdUnMatching);
+        
+        checkThresholds(paramTM,paramTU);
+ 			
+        // select pattern by P_POST value
 		for (String pPostVarname : ruoliVariabileNome.get(codeFS)) {
 
 			if (codeP_POST.equals(pPostVarname)) {
 				indexItems = 0;
 
 				for (String pPostValue : worksetVariabili.get(pPostVarname)) {
-					if (Float.parseFloat(pPostValue) >= Float.parseFloat(paramTh)) {
+					if (Float.parseFloat(pPostValue) >= Float.parseFloat(paramTU)) {
 						StringBuffer pattern = new StringBuffer();
 
 						for (String ctVarname : ruoliVariabileNome.get(codContengencyTable)) {
@@ -197,8 +215,9 @@ public class RelaisService {
 
 						}
 
-						patternOk.add(pattern.toString());
-						patternOkMap.put(pattern.toString(),pPostValue);
+					if(Float.parseFloat(pPostValue) >= Float.parseFloat(paramTM))	patternMatching.add(pattern.toString());
+					else patternPossibleMatching.add(pattern.toString());
+						patternPPostValues.put(pattern.toString(),pPostValue);
 					}
 
 					indexItems++;
@@ -226,17 +245,20 @@ public class RelaisService {
 		
 		
 		rolesOut.put(codMachingTable, variabileNomeListOut);
+		rolesOut.put(codPossibleMachingTable, variabileNomeListOut);
+		rolesOut.put(codResidualA, variabileNomeListMA);
+		rolesOut.put(codResidualB, variabileNomeListMB);
 
 		String firstFiledMA = ruoliVariabileNome.get(codeMatchingA).get(0);
 		String firstFiledMB = ruoliVariabileNome.get(codeMatchingB).get(0);
 		int sizeA = worksetVariabili.get(firstFiledMA).size();
 		int sizeB = worksetVariabili.get(firstFiledMB).size();
 
-		contingencyService.init();
-
+	//	contingencyService.init();
+		contingencyService.init(parametriMap.get(params_MatchingVariables));
 		variabileNomeListOut.forEach(varname -> {
-			worksetOut.put(varname, new ArrayList<>());
-
+			matchingTable.put(varname, new ArrayList<>());
+            possibleMatchingTable.put(varname, new ArrayList<>());
 		});
 
 		indexItems = 0;
@@ -255,11 +277,17 @@ public class RelaisService {
 				});
 
 				String pattern = contingencyService.getPattern(valuesI);
-				if (patternOk.contains(pattern)) {
+				if (patternMatching.contains(pattern)) {
 					valuesI.forEach((k, v) -> {
-						worksetOut.get(k).add(v);
+						matchingTable.get(k).add(v);
 					});
-					worksetOut.get(codeP_POST).add(patternOkMap.get(pattern));
+					matchingTable.get(codeP_POST).add(patternPPostValues.get(pattern));
+				}
+				else if (patternPossibleMatching.contains(pattern)) {
+					valuesI.forEach((k, v) -> {
+						possibleMatchingTable.get(k).add(v);
+					});
+					possibleMatchingTable.get(codeP_POST).add(patternPPostValues.get(pattern));
 				}
 
 				indexItems++;
@@ -269,11 +297,34 @@ public class RelaisService {
 
 		returnOut.put(IS2Const.WF_OUTPUT_ROLES, rolesOut);
 		rolesOut.keySet().forEach(code ->{
-		  	rolesGroupOut.put(code, codMachingTable);
+		  	rolesGroupOut.put(code, code);
 		});
-    		returnOut.put(IS2Const.WF_OUTPUT_ROLES_GROUP, rolesGroupOut);
+    	returnOut.put(IS2Const.WF_OUTPUT_ROLES_GROUP, rolesGroupOut);
+    	 
+    	
+    	
+    	
+    	worksetOut.put(codResidualB, residualBTable);
+    	worksetOut.put(codResidualA, residualATable);
+    	worksetOut.put(codPossibleMachingTable, possibleMatchingTable);
+    	worksetOut.put(codMachingTable, matchingTable);
 		returnOut.put(IS2Const.WF_OUTPUT_WORKSET, worksetOut);
 		return returnOut;
+	}
+
+	/**
+	 * @param paramTM
+	 * @param paramTU
+	 * @throws Exception 
+	 */
+	private void checkThresholds(String paramTM, String paramTU) throws Exception {
+		// TODO Auto-generated method stub
+		try {
+		if(	Float.parseFloat( paramTU) > Float.parseFloat(paramTM))    throw new Exception();
+		} catch (Exception e) {
+			throw new Exception("Incorrect Threshold value!");
+		}
+	 
 	}
 
 	/**@

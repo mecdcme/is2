@@ -68,6 +68,7 @@ public class SqlGenericDao {
 				+ "   rs1.nome as nome, "
 				+ "	  rs1.ORDINE as ordine, "
 				+ "   rs1.tipo_var as tipo_var, "
+				+ "   rs1.param_value as param_value, "
 				+ "   rs1.paginationTotalRows as valori_size,"
 				+ "   concat('[', group_concat( concat('\"',rs1.v,'\"')" 
 				+ "   ORDER BY rs1.idx ASC),']' ) AS valori "
@@ -77,7 +78,8 @@ public class SqlGenericDao {
 				+ "         select  ss.id as id, "
 				+ "         ss.nome as nome, "
 				+ "         ss.ordine, "
-				+ "         ss.tipo_var as tipo_var, "
+				+ "         ss.tipo_var as tipo_var, " 
+				+ "         ss.param_value as param_value, "  
 				+ "         ss.valori_size, "
 				+ "         t.idx, "
 				+ "         t.v,"
@@ -99,7 +101,7 @@ public class SqlGenericDao {
 		}
 		query += "  order by t.idx asc " + "  ) rs " + " ) rs1 "
 				+ "  where  rs1.adx    >:riga_inf     and  rs1.adx <= :riga_sup"
-				+ "	   group by rs1.id,rs1.nome, rs1.ORDINE  , rs1.tipo_var  , rs1.paginationTotalRows ";
+				+ "	   group by rs1.id,rs1.nome, rs1.ORDINE  , rs1.tipo_var  ,rs1.param_value, rs1.paginationTotalRows ";
 
 		Query q = em.createNativeQuery(query, SxWorkset.class);
 		q.setParameter("idelaborazione", idelaborazione);

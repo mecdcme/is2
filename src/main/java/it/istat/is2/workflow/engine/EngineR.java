@@ -139,7 +139,7 @@ public class EngineR implements EngineService {
 		prepareEnv();
 		createConnection(serverRHost, serverRPort);
 		bindInputColumns(worksetVariabili, EngineR.SELEMIX_WORKSET);
-		bindInputParams(parametriMap);
+		//bindInputParams(parametriMap);
 		bindInputParams(modelloMap);
 		setRuoli(ruoliVariabileNome);
 

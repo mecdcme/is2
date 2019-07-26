@@ -66,6 +66,7 @@ public class ListToStringConverter implements AttributeConverter<List<String>, S
 		} catch (JSONException e) {
 
 			logger.error(e);
+			logger.error(data);
 		}
 		return listValue;
 	}

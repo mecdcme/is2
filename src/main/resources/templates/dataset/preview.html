@@ -26,7 +26,7 @@
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
-
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
             var _variabili = [[${colonne.size()}]];

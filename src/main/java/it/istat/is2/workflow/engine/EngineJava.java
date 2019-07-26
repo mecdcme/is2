@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,9 +73,9 @@ public class EngineJava implements EngineService {
 	private Map<String,  ArrayList<SxStepVariable>> dataMap;
 	private Map<String, SxRuoli> ruoliAllMap;
 	private Map<String, ArrayList<String>> worksetVariabili;
-	private Map<String, ArrayList<String>> parametriMap;
+	private Map<String, String> parametriMap;
 	private Map<String, ArrayList<String>> modelloMap;
-	private Map<String, ArrayList<String>> worksetOut;
+	private Map<String, Map<?,?>> worksetOut;
 	private Map<String, Map<?,?>> resultOut;
 	private LinkedHashMap<String, ArrayList<String>> ruoliVariabileNome;
 
@@ -107,12 +108,12 @@ public class EngineJava implements EngineService {
 	public void doAction() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		String fname = stepInstance.getFname();
 		// Method method = RelaisService.class.getDeclaredMethod(fname);
-		Method method = ReflectionUtils.findMethod(RelaisService.class, fname, Long.class, Map.class,Map.class);
+		Method method = ReflectionUtils.findMethod(RelaisService.class, fname, Long.class, Map.class,Map.class,Map.class);
 
 		resultOut = (Map<String, Map<?, ?>>) method.invoke(relaisService, elaborazione.getId(),
-				ruoliVariabileNome,worksetVariabili);
+				ruoliVariabileNome,worksetVariabili,parametriMap);
 			
-		worksetOut=(Map<String, ArrayList<String>>) resultOut.get(IS2Const.WF_OUTPUT_WORKSET);
+		worksetOut=(Map<String, Map<?, ?>>) resultOut.get(IS2Const.WF_OUTPUT_WORKSET);
 		ruoliOutputStep =(LinkedHashMap<String, ArrayList<String>>) resultOut.get(IS2Const.WF_OUTPUT_ROLES);
 		ruoliGruppoOutputStep =(HashMap<String, String>) resultOut.get(IS2Const.WF_OUTPUT_ROLES_GROUP);
 	}
@@ -161,7 +162,7 @@ public class EngineJava implements EngineService {
 	        // mappa delle colonne workset <nome,lista valori>
 	        worksetVariabili = Utility.getMapWorkSetValuesInRoles(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE),ruoliInputStep.keySet());
 	        // PARAMETRI
-	        parametriMap = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
+	        parametriMap = Utility.getMapWorkSetValuesParams(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
 	        modelloMap = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_MODELLO));
 	        worksetOut = new HashMap<>();
 	        
@@ -205,20 +206,24 @@ public class EngineJava implements EngineService {
 	private void saveOutputDB() {
 		// TODO Auto-generated method stub
 
-		HashMap<String, String> ruoliOutputStepInversa = new HashMap<>();
-		for (Map.Entry<String, ArrayList<String>> entry : ruoliOutputStep.entrySet()) {
-			String nomeR = entry.getKey();
-			ArrayList<String> value = entry.getValue();
-			
-			value.forEach((nomevar) -> ruoliOutputStepInversa.put(nomevar, nomeR));
-		}
+		//HashMap<String, String> ruoliOutputStepInversa = new HashMap<>();
+	//	for (Map.Entry<String, ArrayList<String>> entry : ruoliOutputStep.entrySet()) {
+	//		String nomeR = entry.getKey();
+	//		ArrayList<String> value = entry.getValue();
+	//		value.forEach((nomevar) -> ruoliOutputStepInversa.put(nomevar, nomeR));
+	//	}
 
 		// salva output su DB
-		for (Map.Entry<String, ArrayList<String>> entry : worksetOut.entrySet()) {
-			String nomeW = entry.getKey();
-			ArrayList<String> value = entry.getValue();
+		for (Map.Entry<String,?> entry : worksetOut.entrySet()) {
+			String nameOut = entry.getKey();
+			Map<String, ArrayList<String>> outContent = (Map<String, ArrayList<String>>) entry.getValue();
+			
+		for (Map.Entry<String, ArrayList<String>> entryWS : outContent.entrySet()) {
+			String nomeW = entryWS.getKey();
+			ArrayList<String> value = entryWS.getValue();
 			SxStepVariable sxStepVariable;
-			String ruolo = ruoliOutputStepInversa.get(nomeW);
+			//String ruolo = ruoliOutputStepInversa.get(nomeW);
+			String ruolo =nameOut;
 			String ruoloGruppo = ruoliGruppoOutputStep.get(ruolo);
 			if (ruolo == null) {ruolo = RUOLO_SKIP_N;}
 			if (ruoloGruppo == null) {ruoloGruppo = RUOLO_SKIP_N;}
@@ -297,6 +302,7 @@ public class EngineJava implements EngineService {
 		}
 */
 	}
+}
 
 	
 	@Override

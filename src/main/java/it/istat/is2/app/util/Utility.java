@@ -345,7 +345,13 @@ public class Utility {
 				SxStepVariable sxStepVariable = (SxStepVariable) iterator.next();
 
 				if (sxStepVariable.getSxWorkset().getSxTipoVar().getId().equals(sxTipoVar.getId())) {
-					ret.put(nomeW, (ArrayList<String>) sxStepVariable.getSxWorkset().getValori());
+					if(sxTipoVar.getId().equals(IS2Const.WORKSET_TIPO_PARAMETRO))
+					{
+						ArrayList<String> paramList=new ArrayList<>();
+						paramList.add(sxStepVariable.getSxWorkset().getParamValue());
+						ret.put(nomeW,paramList);
+					}
+					else 	ret.put(nomeW, (ArrayList<String>) sxStepVariable.getSxWorkset().getValori());
 				}
 			}
 		}
@@ -515,6 +521,35 @@ public class Utility {
 		}
 
 		return ret;
+	}
+
+	/**
+	 * @param dataMap
+	 * @param sxTipoVar
+	 * @return
+	 */
+	public static Map<String, String> getMapWorkSetValuesParams(Map<String, ArrayList<SxStepVariable>> dataMap,
+			SxTipoVar sxTipoVar) {
+		// TODO Auto-generated method stub
+		HashMap<String, String> ret = new HashMap<>();
+		for (Map.Entry<String, ArrayList<SxStepVariable>> entry : dataMap.entrySet()) {
+			String nomeW = entry.getKey();
+			ArrayList<SxStepVariable> sxStepVariables = entry.getValue();
+			for (Iterator iterator = sxStepVariables.iterator(); iterator.hasNext();) {
+				SxStepVariable sxStepVariable = (SxStepVariable) iterator.next();
+
+				if (sxStepVariable.getSxWorkset().getSxTipoVar().getId().equals(sxTipoVar.getId())) {
+					if(sxTipoVar.getId().equals(IS2Const.WORKSET_TIPO_PARAMETRO))
+					{
+					
+						ret.put(nomeW,sxStepVariable.getSxWorkset().getParamValue());
+					}
+					
+				}
+			}
+		}
+		return ret;
+		 
 	}
 
 }
