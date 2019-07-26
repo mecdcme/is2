@@ -1206,13 +1206,9 @@ button.btn-secondary:hover
     line-height: 1.4;
     text-align: left;
     background-color: rgba(0, 0, 0, .05);
-    @include media-breakpoint-up(sm) {
-        max-width: 330px;
-        border-radius: 4px;
-    }
 }
 
-#dati, #regole {
+#card-dati, #card-regole {
     font-size: 16px;
 }
 

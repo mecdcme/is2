@@ -105,10 +105,10 @@ function writeMsgs(data, iddiv_msgs) {
 }
 
 //write REST response user
-function writeMsgsError(msg, iddiv_msgs) {
+function writeMsgsError(msg, id) {
     var classs = 'alert alert-danger';
     var div = $('<div class="' + classs + '">' + msg + ' </div>"');
-    $("#" + iddiv_msgs).append(div);
+    $("#" + id).append(div);
 
 }
 

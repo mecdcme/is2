@@ -104,7 +104,7 @@
                                         <div class="card-footer">
                                             <ul class="list-unstyled mt-3 mb-4">   
                                                 <li  th:if="${(session.sessioneBean.file != null) }">
-                                                    <a id="dati" title="Dati" class="nav-child" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                                    <a id="card-dati" title="Dati" class="nav-child" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                                         <span>Dati <span class="pull-right" ><i class="fa fa-angle-double-right"></i></span></span>
                                                     </a>
                                                 </li>
@@ -131,7 +131,7 @@
                                         <div class="card-footer">
                                             <ul class="list-unstyled">   
                                                 <li class="" th:if="${(session.sessioneBean.ruleset != null) }">
-                                                    <a id="regole" title="Regole" class="nav-child" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                                                    <a id="card-regole" title="Regole" class="nav-child" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
                                                         <span>Regole <span class="pull-right" ><i class="fa fa-angle-double-right"></i></span></span>
                                                     </a>
                                                 </li>
