@@ -26,6 +26,8 @@ package it.istat.is2.workflow.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 /**
@@ -48,13 +50,18 @@ public class SxParPattern implements Serializable {
     private String descr;
 
     private String nome;
+    
+    @JoinColumn(name = "json_template")
+    private String jsonTemplate;
 
     // bi-directional many-to-one association to SxStepInstance
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "ISTANZA")
     private SxStepInstance sxStepInstance;
 
     // bi-directional many-to-one association to SxRuoli
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "RUOLO")
     private SxRuoli sxRuoli;

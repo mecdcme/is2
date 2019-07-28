@@ -23,8 +23,6 @@
  */
 package it.istat.is2.catalogue.relais.service;
 
-import static org.hamcrest.CoreMatchers.theInstance;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;

@@ -35,41 +35,22 @@
         <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
         <link rel="stylesheet" th:href="@{/css/table/rowReorder.dataTables.min.css}" />
         <script th:inline="javascript">
+      
             var _idfile = [[${idfile}]];
+            var _paramTemplateMap={};
+            var _paramList = [[${listaParametri}]]
+            for (i = 0; i < _paramList.length; i++) {
+            	_paramTemplateMap[_paramList[i].id]=_paramList[i].jsonTemplate;
+            }
+            
+            
             $(document).ready(function () {
                 setMenuActive("elaborazione");
          
-            $('#edit-param').jsonForm(
-            		   {
-                     	  "schema": {
-                     	    "friends": {
-                     	      "type": "array",
-                     	      "items": {
-                     	        "type": "object",
-                     	        "title": "Friend",
-                     	        "properties": {
-                     	          "nick": {
-                     	            "type": "string",
-                     	            "title": "Nickname",
-                     	            "required": true
-                     	          },
-                     	          "gender": {
-                     	            "type": "string",
-                     	            "title": "Gender",
-                     	            "enum": [ "male", "female", "alien" ]
-                     	          },
-                     	          "age": {
-                     	            "type": "integer",
-                     	            "title": "Age"
-                     	          }
-                     	        }
-                     	      }
-                     	    }
-                     	  }
-                     	}   );
+         //   $('#edit-param').jsonForm('aaa' );
             
             });
-            
+      
         </script>
     </head>
     <body>
@@ -439,7 +420,7 @@
 
             <!-- Bootstrap modal -->
             <div class="modal fade" id="add-parametri-workset-modal" role="dialog">
-                <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <form th:action="@{/ws/assegnaparametri}" id="formAssociaParam"
                           method="post">
                         <input id="id_elaborazione" type="hidden" name="idelaborazione"
@@ -463,10 +444,16 @@
                                     <select class="form-control" name="parametri" id="select-param">
                                         <option
                                             th:value="${parameter.nome+'|'+parameter.id+'|'+parameter.sxRuoli.id}"
+                                            th:attr="param-id=${parameter.id}"
                                             th:each="parameter, y: ${listaParametri}" th:text="${parameter.nome}">
                                         </option>
                                     </select>
                                 </div>
+                               <div class="form-group" id="add-param">
+                                </div>   
+                                
+                                
+                                
                                 <div class="form-group">
                                     <label for="value-text" class="col-form-label">Valore*:</label>
                                     <textarea class="form-control" id="value-text"></textarea>

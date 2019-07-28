@@ -182,6 +182,12 @@ $(document).ready(function () {
     $('#value-text-mod').on("keyup", function (e) {
         controllaCampoModParam();
     });
+    
+    $('#select-param').on("change", function (e) {
+     var pid=	$( "#select-param option:selected" ).attr("param-id");
+     var template=_paramTemplateMap[pid];
+           $('#add-param').jsonForm(JSON.parse(template)); 
+    });
 
 });
 function cambiaPosizione() {
