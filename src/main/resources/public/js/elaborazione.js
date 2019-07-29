@@ -186,8 +186,12 @@ $(document).ready(function () {
     $('#select-param').on("change", function (e) {
      var pid=	$( "#select-param option:selected" ).attr("param-id");
      var template=_paramTemplateMap[pid];
+           $('#add-param').empty();
            $('#add-param').jsonForm(JSON.parse(template)); 
     });
+
+  
+       
 
 });
 function cambiaPosizione() {
@@ -262,9 +266,17 @@ function openDlgAddParametriWorkset() {
     $("#roleSelectedId").val('');
     $("#roleSelectedName").val('Nessun ruolo selezionato');
     $("#add-parametri-workset-modal").modal('show');
+    $("#select-param").change();
+    
 }
 
 function openDlgModParametriWorkset(idelab, idParam, nomeParam, valoreParam) {
+	
+     var template=_paramTemplateMap[idParam];
+           $('#edit-param').empty();
+           $('#edit-param').jsonForm(JSON.parse(template)); 
+	
+	
     $("#value-text-mod").val(valoreParam);
     controllaCampoModParam();
     $("#select-param-mod option:contains(" + nomeParam + ")").attr('selected', 'selected');
