@@ -28,7 +28,7 @@
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
         <script th:src="@{/js/table/datatables.js}"></script>
         <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
-        <script th:src="@{/js/rulesetpreview.js}"></script>
+        <script th:src="@{/js/rulesetpreview.js}"></script>       
         <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
         <script th:inline="javascript">
             $(document).ready(function () {
@@ -168,18 +168,34 @@
 		                        </div>
 	                            
 		                    </div>
+		                    <!-- TEST DIV PANELS -->
+		                  
+		                    
 		                    <div class="col-lg-5">
-	                                <div class="card">
-	                                    <div class="card-header">
-	                                        <span th:text="#{Layout.log.panel}">Log panel</span>
-	                                        <div class="card-header-actions">
-	                                            <a class="card-header-action" href="javascript:void(0)" 
-	                                               th:onclick="'javascript:clearLog(\'' + ${session.sessioneBean.id} + '\')'" title="Clear log">
-	                                                <i class="fa fa-trash-o"></i>
-	                                            </a>
-	                                        </div>
-	                                    </div>
-	                                    <div id="logbox" class="card-body">
+		                   	
+			                    <ul class="nav nav-tabs">							 
+									<li class="active">
+										<a data-toggle="tab" href="#tab1" th:text="#{Layout.log.panel}">Log panel
+									  	</a>
+								  	</li>
+									
+								  	<li>
+									  	<a data-toggle="tab" href="#tab2" th:text="#{Layout.r.panel}">R output
+									  	</a>
+								  	</li>
+								</ul>
+								
+								
+								<div class="tab-content">
+								 
+									<div id="tab1" class="tab-pane fade  in active">
+										<div class="card-header-actions">
+		                                	<a class="card-header-action" href="javascript:void(0)" 
+		                                         th:onclick="'javascript:clearLog(\'' + ${session.sessioneBean.id} + '\')'" title="Clear log">
+		                                         <i class="fa fa-trash-o"></i>
+		                                    </a>
+		                                </div>								    	
+								    	<div id="logbox"  class="card-body">
 	                                        <ul th:if="${logs.size()>0}">
 	                                            <li th:each="log : ${logs}">
 	                                                <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
@@ -189,18 +205,15 @@
 	                                            No message available
 	                                        </span>
 	                                    </div>
-	                                </div>
-	                                <div class="card">
-	                                    <div class="card-header">
-	                                        <span>R output</span>
-	                                        <div class="card-header-actions">
-	                                            <a class="card-header-action" href="javascript:void(0)" 
-	                                               th:onclick="'javascript:clearRLog(\'' + ${session.sessioneBean.id} + '\')'" title="Clear log">
-	                                                <i class="fa fa-trash-o"></i>
-	                                            </a>
-	                                        </div>
-	                                    </div>
-	                                    <div id="rbox" class="card-body">
+								  </div>
+								  <div id="tab2" class="tab-pane fade">
+									  	<div class="card-header-actions">
+	                                    	<a class="card-header-action" href="javascript:void(0)" 
+	                                         	th:onclick="'javascript:clearRLog(\'' + ${session.sessioneBean.id} + '\')'" title="Clear log">
+	                                          	<i class="fa fa-trash-o"></i>
+	                                      	</a>
+	                                  	</div>								  		
+								    	<div id="rbox" class="card-body">
 	                                        <ul th:if="${rlogs.size()>0}">
 	                                            <li th:each="rlog : ${rlogs}">
 	                                                <span th:text="${#dates.format(rlog.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${rlog.msg}"></span>
@@ -210,8 +223,12 @@
 	                                            No message available
 	                                        </span>
 	                                    </div>
-	                                </div>
-	                            </div>
+								  </div>
+								  
+								  
+								</div>
+	                            
+	                            <!-- FINE TEST PANELS -->
 	                    </div>
 	                    <!-- TEST div -->                   	
 	                   	
@@ -234,7 +251,7 @@
          <!-- New Rule Dialog -->
             <div class="modal fade" id="newruledialog" tabindex="-1" role="dialog"
                  aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -293,10 +310,9 @@
                 </div>
             </div>
             <!-- Fine New Rule Dialog -->
-            <!-- New Rule Dialog -->
-            <div class="modal fade" id="addrulevariable" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
+            <!-- New Rule Dialog -->            
+            <div class="modal fade" id="addrulevariable" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">

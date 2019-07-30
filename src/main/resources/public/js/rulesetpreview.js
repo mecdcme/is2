@@ -24,7 +24,7 @@
 var _ctx = $("meta[name='ctx']").attr("content");
 
 
-$(document).ready(function () {	
+$(document).ready(function () {
     $("#dataview").DataTable({
 
         drawCallback: function () {
@@ -114,6 +114,7 @@ $(document).ready(function () {
             }
         });
     });
+   
 
 });
 
