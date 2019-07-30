@@ -201,9 +201,9 @@ function openDlgModParametriWorkset(identifier) {
     var schema=_paramTemplateMap[idParam];
     var data=$(identifier).data('value-param');
  
-    var dataContent="{\"data\":"+ JSON.stringify(data)+",\"schema\":"+schema+"}";
-    console.log( dataContent);
-    console.log(JSON.parse(dataContent));
+    var option="\"options\": {\"fields\": {\"THRESHOLD MATCHING\": {\"toolbarSticky\": true}}}";
+    var dataContent="{\"data\":"+ JSON.stringify(data)+",\"schema\":"+schema+","+option+"}";
+  
      $('#edit-param').empty();
      $('#edit-param').alpaca(JSON.parse(dataContent));
   
