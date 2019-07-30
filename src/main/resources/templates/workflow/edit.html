@@ -29,13 +29,30 @@
         <script th:src="@{/js/table/datatables.js}"></script>
         <script th:src="@{/js/elaborazione.js}"></script>
         <script th:src="@{/js/table/dataTables.rowReorder.min.js}"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+         <script th:src="@{/js/alpaca/alpaca.min.js}"></script>
+       
+        
         <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
         <link rel="stylesheet" th:href="@{/css/table/rowReorder.dataTables.min.css}" />
+         <link rel="stylesheet" th:href="@{/css/alpaca/alpaca.min.css}" />
         <script th:inline="javascript">
+      
             var _idfile = [[${idfile}]];
+            var _paramTemplateMap={};
+            var _paramList = [[${listaParametri}]]
+            for (i = 0; i < _paramList.length; i++) {
+            	_paramTemplateMap[_paramList[i].id]=_paramList[i].jsonTemplate;
+            }
+            
+            
             $(document).ready(function () {
                 setMenuActive("elaborazione");
+         
+         //   $('#edit-param').jsonForm('aaa' );
+            
             });
+      
         </script>
     </head>
     <body>
@@ -151,12 +168,12 @@
                                                         <i class="fa fa-sort"></i><span th:text="${stats.index+1}"></span>
                                                     </td>
                                                     <td th:text="${stepP.sxWorkset.nome}"></td>
-                                                    <td th:text="${stepP.sxWorkset.paramValue}"></td>
+                                                    <td ><span th:text="${stepP.sxWorkset.paramValue}"></span></td>
                                                     <td th:text="${stepP.sxRuoli.descr}"></td>
                                                     <td th:text="${stepP.tipoCampo.nome}"></td>
                                                     <td>
                                                         <a href="javascript:void(0)"
-                                                           th:attr="onclick='javascript:openDlgModParametriWorkset(' + ${elaborazione.id} + ',' + ${stepP.id} + ', \'' + ${stepP.sxWorkset.nome} + '\', \'' + ${stepP.sxWorkset.nome} + '\')'"
+                                                          th:attr="data-id-elab=${elaborazione.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-value-param=${stepP.sxWorkset.paramValue},onclick='javascript:openDlgModParametriWorkset(this)'"
                                                            title="Modifica parametro">
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
@@ -315,7 +332,7 @@
             <!-- Bootstrap modal modifica associazione -->
             <div class="modal fade" id="modifica-viarabile-workset-modal"
                  role="dialog">
-                <div class="modal-dialog " role="document">
+                <div class="modal-dialog modal-lg " role="document">
                     <div class="modal-content ">
                         <form th:action="@{/ws/updateassociavariabile}"
                               id="formUpdateAssociaRuolo" class="form-horizontal" method="post">
@@ -336,8 +353,7 @@
                             </div>
                             <div class="modal-body 	">
                                 <div class="form-body">
-
-                                    <div class="row">
+                                     <div class="row">
                                         <div class="col-lg-3">
                                             <label class="control-label"
                                                    th:text="#{update.nome.label}+':'  "> <span>nome</span></label>
@@ -406,7 +422,7 @@
 
             <!-- Bootstrap modal -->
             <div class="modal fade" id="add-parametri-workset-modal" role="dialog">
-                <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <form th:action="@{/ws/assegnaparametri}" id="formAssociaParam"
                           method="post">
                         <input id="id_elaborazione" type="hidden" name="idelaborazione"
@@ -430,10 +446,16 @@
                                     <select class="form-control" name="parametri" id="select-param">
                                         <option
                                             th:value="${parameter.nome+'|'+parameter.id+'|'+parameter.sxRuoli.id}"
+                                            th:attr="param-id=${parameter.id}"
                                             th:each="parameter, y: ${listaParametri}" th:text="${parameter.nome}">
                                         </option>
                                     </select>
                                 </div>
+                               <div  id="add-param">
+                                </div>   
+                                
+                                
+                                
                                 <div class="form-group">
                                     <label for="value-text" class="col-form-label">Valore*:</label>
                                     <textarea class="form-control" id="value-text"></textarea>
@@ -465,7 +487,7 @@
 
             <!-- Bootstrap modal Modifica Paramentro -->
             <div class="modal fade" id="mod-parametri-workset-modal" role="dialog">
-                <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <form th:action="@{/ws/modificaparametro}" id="formModAssociaParam"
                           method="post">
                         <input id="id_elaborazione" type="hidden" name="idelaborazione"
@@ -484,7 +506,10 @@
                                 </h4>
                             </div>
                             <div class="modal-body">
-
+                            <div id="edit-param" class="form-group">    </div>
+                          
+                          da cancellare 
+                          
                                 <div class="form-group">
                                     <label for="select-param" class="col-form-label">Parametro:</label>
                                     <select class="form-control" name="parametri"
@@ -531,7 +556,7 @@
             <div class="modal fade" id="scelta-ruolo-modal" role="dialog">
                 <div class="modal-dialog " role="document">
 
-                    class="form-horizontal" method="post">
+                  
                     <div class="modal-content ">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"
