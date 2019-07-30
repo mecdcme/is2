@@ -502,6 +502,12 @@ CREATE TABLE `sx_classification` (
 ) ENGINE=InnoDB AUTO_INCREMENT=456 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+INSERT INTO `is2`.`sx_classification` (`ID`, `NOME`, `DESCRIZIONE`, `NOTE`) VALUES ('1', 'Dominio', 'Definisce i valori o le modalità ammissibili della variabile', 'Può comprendere missing e/o zero; distinguere tra variabile qualitativa e quantitativa');
+INSERT INTO `is2`.`sx_classification` (`ID`, `NOME`, `DESCRIZIONE`, `NOTE`) VALUES ('2', 'Coerenza logica', 'Definisce le combinazioni ammissibili di valori e/o modalità tra due o più variabili ', 'Prevalentemente per  variabli qualitative, anche se la regola può riguardare entrambe le tipologie di variabili (es. ETA(0-15) STACIV(coniugato) con ETA fissa)');
+INSERT INTO `is2`.`sx_classification` (`ID`, `NOME`, `DESCRIZIONE`, `NOTE`) VALUES ('3', 'Quadratura', 'Definisce l''uguaglianza ammissibile tra la somma di due o più variabili quantitative e il totale corrispondente (che può essere noto a priori o a sua volta ottenuto dalla somma di altre variabili del dataset)', 'Solo variabili quantitative');
+INSERT INTO `is2`.`sx_classification` (`ID`, `NOME`, `DESCRIZIONE`, `NOTE`) VALUES ('4', 'Disuguaglianza forma semplice', 'Definisce la relazione matematica ammissibile (>, >=, <, <=) tra due variabili quantitative', 'Solo variabili quantitative');
+INSERT INTO `is2`.`sx_classification` (`ID`, `NOME`, `DESCRIZIONE`, `NOTE`) VALUES ('5', 'Disuguaglianza forma composta', 'Definisce la relazione matematica ammissibile (>, >=, <, <=) tra due quantità, dove ciascuna quantità può essere costituita da una sola variabile X o dalla somma/differenza/prodotto tra due o più variabili X', 'Solo variabili quantitative');
+INSERT INTO `is2`.`sx_classification` (`ID`, `NOME`, `DESCRIZIONE`, `NOTE`) VALUES ('6', 'Validazione/Completezza', 'Verifica in base alle regole di compilazione del questionario che i dati siano stati immessi correttamente', 'Distinguere tra variabile qualitativa e quantitativa');
 --
 -- Dumping data for table `sx_classification`
 --
