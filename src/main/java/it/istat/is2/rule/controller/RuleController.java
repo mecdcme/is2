@@ -89,16 +89,18 @@ public class RuleController {
 
 		notificationService.removeAllMessages();
 
-		String nomeFile = form.getDescrizione();
+		String nomeFile = form.getName();
+		String descrizione = form.getDescrizione();
 		String etichetta = form.getLabelFile();
 		String idclassificazione = form.getClassificazione();
 		String separatore = form.getDelimiter();
 		String idsessione = form.getIdsessione();
 		Integer skipFirstLine = form.getSkipFirstLine();
 
-		File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());
+		File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());	
+		
 
-		int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile,
+		int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile, descrizione,
 				skipFirstLine);
 		logService.save("Caricate " + rules + " regole");
 

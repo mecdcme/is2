@@ -46,7 +46,7 @@ $(document).ready(
 				$("#delimiter").val($("#delimiter_sel").val());
 				preview();
 				if (filename) { // returns true if the string is not empty
-					$("#desc").val(filename);
+					$("#nomeF").val(filename);
 					$("#previewModal").modal('show');
 					return true;
 				} else { // no file was selected
@@ -184,6 +184,7 @@ function inviaFormRulesetFile() {
 		$("#desc").val($("div.file-caption-name").attr("title"));// set
 																	// filename
 		$("#labelFile").val($("#label_file").val());
+		$("#desc").val($("#desc_file").val());
 		$("#delimiter").val($("#delimiter_sel").val());
 		$("#classificazione").val($("#tipo_regola").val());
 		var radioValue = $("input[name='skip_line']:checked").val();

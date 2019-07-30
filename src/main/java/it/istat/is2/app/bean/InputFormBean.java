@@ -35,6 +35,7 @@ public class InputFormBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private MultipartFile fileName;
+	private String name;
 	private String descrizione;
 	private String tipo;
 	private String labelFile;

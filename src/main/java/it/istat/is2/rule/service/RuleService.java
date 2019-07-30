@@ -134,7 +134,7 @@ public class RuleService {
 
     }
 
-    public int loadRules(File fileRules, String idsessione, String etichetta, String idclassificazione, String separatore, String nomeFile, Integer skipFirstLine) {
+    public int loadRules(File fileRules, String idsessione, String etichetta, String idclassificazione, String separatore, String nomeFile, String descrizione, Integer skipFirstLine) {
         String pathTmpFile = fileRules.getAbsolutePath().replace("\\", "/");
         WorkSession sessionelv = sessioneLavoroService.getSessione(Long.parseLong(idsessione));
         SxRuleset ruleset = new SxRuleset();
@@ -175,6 +175,7 @@ public class RuleService {
         }
 
         ruleset.setNomeFile(nomeFile);
+        ruleset.setDescr(descrizione);
         ruleset.setLabelFile(etichetta);
         ruleset.setNumeroRighe(ruleset.getSxRules().size());
         ruleset.setSessioneLavoro(sessionelv);

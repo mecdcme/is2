@@ -89,6 +89,7 @@
 									<form id="inputFileRulesetForm"
 										th:action="@{'/rule/loadRulesFile'}" method="post"
 										enctype="multipart/form-data">
+										<input type="hidden" value="" name="name" id="nomeF" />
 										<input type="hidden" value="" name="descrizione" id="desc" />
 										<input type="hidden" th:value="${session.sessionelv.id}"
 											th:name="idsessione" /> <input type="hidden" value=""
@@ -145,10 +146,6 @@
 												<td th:text="${ruleset.labelFile}"></td>
 												<td th:text="${ruleset.descr}"></td>
 												<td th:text="${ruleset.numeroRighe}"></td>
-												<td style="width: 1%"><a
-													th:href="@{'/rule/viewRules/'+${ruleset.id}}"
-													title="Visualizza ruleset"> <i class="fa fa-search"></i>
-												</a></td>
 												<td style="width: 1%"><a href="javascript:void(0)"
 													title="Modifica ruleset" role="button"
 													th:if="${ruleset.datasetFile}"
@@ -159,6 +156,10 @@
 													th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.nomeFile} + '\',\'' + ${ruleset.descr} + '\', \'' + 'null' +'\')'">
 														<i class="fa fa-pencil"></i>
 												</a></td>
+												<td style="width: 1%"><a
+													th:href="@{'/rule/viewRules/'+${ruleset.id}}"
+													title="Visualizza ruleset"> <i class="fa fa-search"></i>
+												</a></td>												
 												<td style="width: 1%"><a href="javascript:void(0)"
 													title="Elimina ruleset" role="button"
 													th:attr="onclick='javascript:eliminaRuleset(' + ${ruleset.id} + ', \'' + ${ruleset.nomeFile} + '\',' + ${session.sessionelv.id} +')'">
@@ -302,6 +303,16 @@
 								<input type="radio" name="skip_line" value="1"> Si <input
 									type="radio" name="skip_line" value="0" checked="checked">
 								No
+							</div>
+						</div>
+					</div>
+					<div class="modal-body row">
+						<div class="col-lg-12">
+							<div class="col-lg-2 text-right">
+								<span th:text="#{generic.label.description.colon}">Descrizione:</span>
+							</div>
+							<div class="col-lg-8">
+								<input id="desc_file" type="text" />
 							</div>
 						</div>
 					</div>
