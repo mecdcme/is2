@@ -45,7 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper; 
 
 import it.istat.is2.app.bean.InputFormBean;
 import it.istat.is2.workflow.domain.SxBusinessProcess;
