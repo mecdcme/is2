@@ -29,7 +29,19 @@ $(document).ready(function () {
     var ID = 1; // _idfile;
     $("#contenuto_file").hide();
     showPanel('variabili');
+    
+    $('form input').on('keypress', function(e) {
+        return e.which !== 13;
+    });
 
+    
+    $('#add-param > input').on("change paste keyup", function() {
+    	   alert($(this).val()); 
+    });
+    
+    $('#edit-param > input').on("change paste keyup", function() {
+ 	   alert($(this).val()); 
+ });
     var table = $("#worksetTabList").DataTable({
         dom: "<'row'<'col-sm-5'B><'col-sm-7'f>>"
                 + "<'row'<'col-sm-12'tr>>"
@@ -184,10 +196,12 @@ $(document).ready(function () {
     });
     
     $('#select-param').on("change", function (e) {
-     var pid=	$( "#select-param option:selected" ).attr("param-id");
-     var template=_paramTemplateMap[pid];
-           $('#add-param').empty();
-           $('#add-param').alpaca(JSON.parse(template)); 
+     var nameParameter=	$( "#select-param option:selected" ).attr("param-name");
+     var schema=_paramTemplateMap[nameParameter];
+     var option="\"options\": {\"fields\": {\"MetricMatchingVariables\": {\"toolbarSticky\": true,\"toolbarPosition\": \"top\"}}}";
+     var dataContent="{\"schema\":"+schema+","+option+"}";
+     $('#add-param').empty();
+     $('#add-param').alpaca(JSON.parse(dataContent)); 
     });
 
   
@@ -197,22 +211,20 @@ $(document).ready(function () {
 
 
 function openDlgModParametriWorkset(identifier) {
+	
+	//controllaCampoModParam();
+	
 	var idParam=$(identifier).data('id-param');
-    var schema=_paramTemplateMap[idParam];
+	var idWorkset=$(identifier).data('id-workset');
+	var nameWorkset=$(identifier).data('name-workset');
+	var schema=_paramTemplateMap[nameWorkset];
     var data=$(identifier).data('value-param');
- 
-    var option="\"options\": {\"fields\": {\"THRESHOLD MATCHING\": {\"toolbarSticky\": true}}}";
+    $('#edit-parameters').val(idWorkset);
+    var option="\"options\": {\"fields\": {\"MetricMatchingVariables\": {\"toolbarSticky\": true,\"toolbarPosition\": \"top\"}}}";
     var dataContent="{\"data\":"+ JSON.stringify(data)+",\"schema\":"+schema+","+option+"}";
-  
-     $('#edit-param').empty();
+    $('#edit-param').empty();
      $('#edit-param').alpaca(JSON.parse(dataContent));
-  
-   
-  
-//     $("#value-text-mod").val(valoreParam);
-//   controllaCampoModParam();
- //  $("#select-param-mod option:contains(" + nomeParam + ")").attr('selected', 'selected');
- //  $("#idStepvarMod").val(idParam);
+     $("#idStepvarMod").val(idParam);
   $("#mod-parametri-workset-modal").modal("show");
 }
 
@@ -296,7 +308,7 @@ function openDlgAddParametriWorkset() {
 
 
 function controllaCampoModParam() {
-    if ($("#value-text-mod").val().length > 0) {
+    if ($("#value-text-mod") && $("#value-text-mod").val().length > 0) {
         $("#btn_dlg_mod_assoc_param").removeClass('disabled');
         $("#btn_dlg_mod_assoc_param").removeAttr('disabled');
     } else {
@@ -535,13 +547,16 @@ function eseguiFunzioneUpdate() {
 }
 
 function inserisciParams() {
-    $("#valoreParam").val($("#value-text").val());
+	var value =  JSON.stringify($('#add-param').alpaca().getValue());
+	alert(value);
+    $("#valoreParam").val(value);
     $("#formAssociaParam").submit();
 }
 
 function modificaParam() {
-    $("#valoreParamMod").val($("#value-text-mod").val());
-    $("#formModAssociaParam").submit();
+	var value =  JSON.stringify($('#edit-param').alpaca().getValue());
+    $("#valoreParamMod").val(value);
+   $("#formModAssociaParam").submit();
 }
 
 function mostraDialogEliminaAssociazione(idelab, idstepvar, nomestepvar) {
@@ -595,7 +610,7 @@ function controllaCampo() {
 }
 
 function controllaCampoParam() {
-    if ($("#value-text").val().length > 0 && $("#value-text").val() != '') {
+    if ($("#value-text").val() && $("#value-text").val().length > 0 && $("#value-text").val() != '') {
         $("#btn_dlg_assoc_param").removeClass('disabled');
         $("#btn_dlg_assoc_param").removeAttr('disabled');
     } else {

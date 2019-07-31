@@ -202,7 +202,9 @@ public class WorkflowController {
 
 		List<SxStepVariable> listaSV = workflowService.getSxStepVariablesNoValori(idElaborazione,
 				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
-		List<SxStepVariable> listaSP = workflowService.getSxStepVariablesParametri(idElaborazione);
+	
+		
+		
 		List<SxBusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
 
 		SxBusinessFunction businessFunction = elaborazione.getSxBusinessFunction();
@@ -211,7 +213,20 @@ public class WorkflowController {
 		List<SxRuoli> listaRuoliInput = workflowService.findRuoliByFunction(businessFunction, 0);
 		// Carica i Ruoli di input e output
 		List<SxRuoli> listaRuoliInOut = workflowService.findRuoliByFunction(businessFunction, 1);
-		List<SxParPattern> listaParametri = workflowService.findParametriByFunction(businessFunction);
+		
+		List<SxStepVariable> listaSP = workflowService.getSxStepVariablesParametri(idElaborazione);
+		List<SxParPattern> listaParametriAll = workflowService.findParametriByFunction(businessFunction);
+		//remove assigned paramters
+		ArrayList<String> paramAssigned=new ArrayList<>();
+		List<SxParPattern> listaParametri=new ArrayList<>();
+		listaSP.forEach(sxstepVaraible -> { paramAssigned.add(sxstepVaraible.getSxWorkset().getNome());});
+		listaParametriAll.forEach(sxParPattern -> {
+				if( !paramAssigned.contains(sxParPattern.getNome())) 
+					listaParametri.add(sxParPattern) ;
+				});
+		
+		
+		
 		List<SxBusinessProcess> listaBp = elaborazione.getSxBusinessFunction().getSxBusinessProcesses();
 
 		model.addAttribute("bProcess", listaBp);
@@ -223,6 +238,7 @@ public class WorkflowController {
 		model.addAttribute("listaRuoliInput", listaRuoliInput);
 		model.addAttribute("listaRuoliInOut", listaRuoliInOut);
 		model.addAttribute("listaParametri", listaParametri);
+		model.addAttribute("listaParametriAll", listaParametriAll);
 		model.addAttribute("listaFunzioni", listaFunzioni);
 		model.addAttribute("datasetfiles", datasetfiles);
 		model.addAttribute("elaborazione", elaborazione);

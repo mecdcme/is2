@@ -44,6 +44,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import it.istat.is2.app.bean.InputFormBean;
 import it.istat.is2.workflow.domain.SxBusinessProcess;
 import it.istat.is2.workflow.domain.SxRuoli;
@@ -52,6 +55,64 @@ import it.istat.is2.workflow.domain.SxTipoVar;
 
 public class Utility {
 
+	
+   public static String printJsonToHtml(String jsonString)  {
+		StringBuffer ret=new StringBuffer();
+		
+		JSONObject jsonObject;
+		try {
+			jsonObject = new JSONObject(jsonString);
+		ret.append(parseJson(jsonObject,""));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			ret.append(jsonString);
+		}
+		
+
+		return ret.toString();
+	}
+	public static String getArray(Object object2,String ret) throws JSONException {
+		 
+        JSONArray jsonArr = (JSONArray) object2;
+
+        for (int k = 0; k < jsonArr.length(); k++) {
+     
+            if (jsonArr.get(k) instanceof JSONObject) {
+                   	ret=     parseJson((JSONObject) jsonArr.get(k),ret);
+            } else {
+            	ret+=  jsonArr.get(k);
+           	 
+            }
+    
+        }
+        
+        return ret;
+    }
+
+    public static String parseJson(JSONObject jsonObject,String ret) throws JSONException  {
+    
+        Iterator<String> iterator =  jsonObject.keys();
+        int len=jsonObject.length();
+        int index=0;
+        while (iterator.hasNext()) {
+      	String obj = iterator.next();
+             if (jsonObject.get(obj) instanceof JSONArray) {
+            	 ret+="<ul>";
+                 ret+=obj;
+               	 ret= getArray(jsonObject.get(obj),ret);
+                 ret+="</ul>";
+           } else {
+        	  if(index==0)  ret+="<li>";
+        	     ret+="<i>";ret+=obj; ret+="</i>:&nbsp;";
+            	 ret+= jsonObject.get(obj);
+            	 ret+="&nbsp;&nbsp;";
+            	  if(index==len-1)  ret+="</li>"; 
+            }
+ index++;
+        }
+        return ret;
+    }
+  
 	public static String getLocalDate() {
 		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"), Locale.ITALY);
 		Date today = calendar.getTime();

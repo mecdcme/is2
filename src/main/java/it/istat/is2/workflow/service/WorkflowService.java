@@ -510,47 +510,14 @@ public class WorkflowService {
 	}
 
 	public void updateParametri(AssociazioneVarFormBean form, Elaborazione elaborazione) {
-
-		List<SxRuoli> ruoliAll = ruoloDao.findAll();
-		Map<Integer, SxRuoli> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
-
-		for (int i = 0; i < form.getElaborazione().length; i++) {
+ 	for (int i = 0; i < form.getElaborazione().length; i++) {
 			String[] all_parametri = form.getParametri();
-			String parametri = all_parametri[i];
-			String[] stringTokenizer = parametri.split("|");
-			SxRuoli sxruolo = null;
-			String nomeparam = null;
-			String idparam = null;
-			String ruoloparam = null;
-			SxWorkset sxWorkset = new SxWorkset();
-			// ordine: nomeParam, idParam, ruolo
-			nomeparam = stringTokenizer[0];
-			idparam = stringTokenizer[1];
-			ruoloparam = stringTokenizer[2];
-
-			String idStepVar = form.getIdStepVar();
-			sxruolo = ruoliAllMap.get(new Integer(ruoloparam));
-			SxStepVariable sxStepVariable = new SxStepVariable();
-			Integer idstep = Integer.parseInt(idStepVar);
-			sxStepVariable = stepVariableDao.findById(idstep).get();
-			sxStepVariable.setElaborazione(elaborazione);
-			sxStepVariable.setSxRuoli(sxruolo);
-			sxWorkset.setNome(nomeparam);
-			sxStepVariable.setOrdine(sxruolo.getOrdine());
-			sxStepVariable.setTipoCampo(new SXTipoCampo(IS2Const.TIPO_CAMPO_INPUT));
-			String valori = form.getValore()[i];
-		//	String[] values = valori.split(" ");
-		//	sxWorkset.setValori(Arrays.asList(values));
-			sxWorkset.setParamValue(valori);
-			sxWorkset.setValoriSize(1);
-			sxWorkset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
-
-			ArrayList<SxStepVariable> listaStepV = new ArrayList<>();
-			listaStepV.add(sxStepVariable);
-			sxWorkset.setSxStepVariables(listaStepV);
-			sxStepVariable.setSxWorkset(sxWorkset);
-
-			stepVariableDao.save(sxStepVariable);
+			String idWorkset = all_parametri[i];
+	  
+			SxWorkset sxWorkset =workSetDao.findById(new Long(idWorkset)).get();
+         	String valori = form.getValore()[i];
+		  	sxWorkset.setParamValue(valori);
+		  	workSetDao.save(sxWorkset);
 		}
 	}
 
