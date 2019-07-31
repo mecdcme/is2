@@ -185,20 +185,31 @@
 							</div>
 
 						</div>
-						<!-- TEST DIV TABS -->
-
 
 						<div class="col-lg-5">
+						
+						
 							<div class="card">
-								<ul class="nav nav-tabs card-header">
-									<li class="active"><a data-toggle="tab" href="#tab1"
-										th:text="#{Layout.log.panel}">Log panel </a></li>
-
-									<li><a data-toggle="tab" href="#tab2"
-										th:text="#{Layout.r.panel}">R output </a></li>
-								</ul>
-
-
+							
+							
+								<div class="card-header">
+								<!-- TEST TABS -->
+								
+								
+								<div class="navbar-collapse collapse">
+									<ul class="nav navbar-nav">
+										<li class="active"><a data-toggle="tab" href="#tab1"
+											th:text="#{Layout.log.panel}">Log panel </a></li>
+	
+										<li><a data-toggle="tab" href="#tab2"
+											th:text="#{Layout.r.panel}">R output </a></li>
+									</ul>
+									</div>
+								</div>
+								
+								
+								
+								
 								<div class="tab-content">
 
 									<div id="tab1" class="tab-pane fade  in active">
@@ -235,19 +246,19 @@
 												available </span>
 										</div>
 									</div>
-
-
-								</div>
+									
+									
+									</div>
+								
 							</div>
-							<!-- FINE TEST TABS -->
 						</div>
-						<!-- TEST div -->
-
 					</div>
 				</div>
-		</section>
-		<!-- END MAIN CONTAINER -->
-		<footer th:replace="layout :: site-footer" />
+			</div>
+	
+	</section>
+	<!-- END MAIN CONTAINER -->
+	<footer th:replace="layout :: site-footer" />
 	</div>
 	<form id="inputNewRuleForm" th:action="@{'/rule/newRule'}"
 		method="post" enctype="multipart/form-data">
@@ -279,8 +290,7 @@
 				<div class="modal-body row">
 					<div class="col-lg-12">
 						<div class="col-lg-4 text-right">
-							<span th:text="#{ruleset.rule}">Regola:</span>
-							&nbsp;&nbsp;&nbsp;
+							<span th:text="#{ruleset.rule}">Regola:</span> &nbsp;&nbsp;&nbsp;
 						</div>
 						<div class="col-lg-8">
 							<input id="rule_text" value="" type="text" />
@@ -359,8 +369,7 @@
 				<div class="modal-body row">
 					<div class="col-lg-12">
 						<div class="col-lg-4 text-right">
-							<span th:text="#{ruleset.rule}">Regola:</span>
-							&nbsp;&nbsp;&nbsp;
+							<span th:text="#{ruleset.rule}">Regola:</span> &nbsp;&nbsp;&nbsp;
 						</div>
 						<div class="col-lg-8">
 							<input id="rule_text_v" value="" type="text" />
@@ -521,5 +530,6 @@
 			</div>
 		</div>
 	</div>
+	
 </body>
 </html>
