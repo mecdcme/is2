@@ -293,7 +293,7 @@ function openDlgAddVariabileWorkset() {
 }
 
 function openDlgAddParametriWorkset() {
-    controllaCampoParam();
+ //   controllaCampoParam();
    
     $(".rolelist").removeClass('active');
     $(".varlist").removeClass('active');
@@ -548,7 +548,7 @@ function eseguiFunzioneUpdate() {
 
 function inserisciParams() {
 	var value =  JSON.stringify($('#add-param').alpaca().getValue());
-	alert(value);
+	
     $("#valoreParam").val(value);
     $("#formAssociaParam").submit();
 }
