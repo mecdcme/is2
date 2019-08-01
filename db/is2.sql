@@ -508,6 +508,7 @@ INSERT INTO `is2`.`sx_classification` (`ID`, `NOME`, `DESCRIZIONE`, `NOTE`) VALU
 INSERT INTO `is2`.`sx_classification` (`ID`, `NOME`, `DESCRIZIONE`, `NOTE`) VALUES ('4', 'Disuguaglianza forma semplice', 'Definisce la relazione matematica ammissibile (>, >=, <, <=) tra due variabili quantitative', 'Solo variabili quantitative');
 INSERT INTO `is2`.`sx_classification` (`ID`, `NOME`, `DESCRIZIONE`, `NOTE`) VALUES ('5', 'Disuguaglianza forma composta', 'Definisce la relazione matematica ammissibile (>, >=, <, <=) tra due quantità, dove ciascuna quantità può essere costituita da una sola variabile X o dalla somma/differenza/prodotto tra due o più variabili X', 'Solo variabili quantitative');
 INSERT INTO `is2`.`sx_classification` (`ID`, `NOME`, `DESCRIZIONE`, `NOTE`) VALUES ('6', 'Validazione/Completezza', 'Verifica in base alle regole di compilazione del questionario che i dati siano stati immessi correttamente', 'Distinguere tra variabile qualitativa e quantitativa');
+INSERT INTO `is2`.`sx_classification` (`ID`, `NOME`, `NOTE`) VALUES ('7', 'Editing', 'Valore di default al caricamento del file');
 --
 -- Dumping data for table `sx_classification`
 --
