@@ -23,6 +23,7 @@
  */
 package it.istat.is2.workflow.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -35,5 +36,9 @@ import it.istat.is2.workflow.domain.SxRuleset;
 public interface SxRulesetDao extends CrudRepository<SxRuleset,Integer> {
 
 	Optional<SxRuleset> findByDatasetFile(DatasetFile ds);
+	
+	Optional<SxRuleset> findByLabelFile(String label);
+	
+	List<SxRuleset> findAll();
  
 }

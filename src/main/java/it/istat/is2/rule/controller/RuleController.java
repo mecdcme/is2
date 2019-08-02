@@ -47,6 +47,7 @@ import it.istat.is2.worksession.service.WorkSessionService;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -97,17 +98,23 @@ public class RuleController {
 		String idsessione = form.getIdsessione();
 		Integer skipFirstLine = form.getSkipFirstLine();
 
-		File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());	
+		// Controlla che il nome non sia già presente in tabella
+		SxRuleset rs = ruleService.findRulesetByLabel_file(etichetta);			
+		if(rs!=null) {
+			notificationService.addErrorMessage("Esiste già un Ruleset con quel nome. Specificare un nome diverso.");
+		}else{
 		
-
-		int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile, descrizione,
-				skipFirstLine);
-		logService.save("Caricate " + rules + " regole");
-
-		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
-		sessionBean.getRuleset().add(nomeFile);
-		httpSession.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
-
+			File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());	
+			
+	
+			int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile, descrizione,
+					skipFirstLine);
+			logService.save("Caricate " + rules + " regole");
+	
+			SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+			sessionBean.getRuleset().add(nomeFile);
+			httpSession.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+		}
 		return "redirect:/rule/viewRuleset/" + idsessione;
 	}
 
@@ -136,41 +143,48 @@ public class RuleController {
 		listaClassificazioni3.add(onlyDominio);
 
 		String nomeRuleset = form.getRulesetName();
-
-		String descrRuleset = form.getRulesetDesc();
-		Long dataset = form.getDataset();
-		DatasetFile dfile = null;
-		List<DatasetColonna> colonne = null;
-		SxRuleset ruleset = new SxRuleset();
-
-		if (dataset != -1) {
-			dfile = datasetService.findDataSetFile(dataset);
-			colonne = datasetService.findAllNomeColonne(dataset);
-			ruleset.setDatasetFile(dfile);
-			model.addAttribute("listaClassificazioni", listaClassificazioni3);
-		} else {
-			model.addAttribute("listaClassificazioni", listaClassificazioni1);
-		}
-
+		
 		WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));
+		
+		// Controlla che il nome non sia già presente in tabella
+		SxRuleset rs = ruleService.findRulesetByLabel_file(nomeRuleset);			
+		if(rs!=null) {
+			notificationService.addErrorMessage("Esiste già un Ruleset con quel nome. Specificare un nome diverso.");
+		}else{
+			String descrRuleset = form.getRulesetDesc();
+			Long dataset = form.getDataset();
+			DatasetFile dfile = null;
+			List<DatasetColonna> colonne = null;
+			SxRuleset ruleset = new SxRuleset();
 
-		ruleset.setLabelFile(nomeRuleset);
-		ruleset.setDescr(descrRuleset);
-		ruleset.setSessioneLavoro(sessionelv);
+			if (dataset != -1) {
+				dfile = datasetService.findDataSetFile(dataset);
+				colonne = datasetService.findAllNomeColonne(dataset);
+				ruleset.setDatasetFile(dfile);
+				model.addAttribute("listaClassificazioni", listaClassificazioni3);
+			} else {
+				model.addAttribute("listaClassificazioni", listaClassificazioni1);
+			}
+			
 
-		model.addAttribute("colonne", colonne);
-		SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+			ruleset.setLabelFile(nomeRuleset);
+			ruleset.setDescr(descrRuleset);
+			ruleset.setSessioneLavoro(sessionelv);
 
-		sessionBean.setDataset(dataset);
-		session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
-		session.setAttribute("dfile", dfile);
-		model.addAttribute("ruleset", ruleset);
-		model.addAttribute("logs", logs);
-		model.addAttribute("rlogs", rlogs);
+			model.addAttribute("colonne", colonne);
+			SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
 
-		ruleService.saveRuleSet(ruleset);
+			sessionBean.setDataset(dataset);
+			session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+			session.setAttribute("dfile", dfile);
+			model.addAttribute("ruleset", ruleset);
+			model.addAttribute("logs", logs);
+			model.addAttribute("rlogs", rlogs);
+
+			ruleService.saveRuleSet(ruleset);
+		}
+		
 		return "redirect:/rule/viewRuleset/" + sessionelv.getId();
-
 	}
 
 	@RequestMapping(value = "/modificaRuleset", method = RequestMethod.POST)
@@ -179,19 +193,31 @@ public class RuleController {
 			throws IOException {
 
 		SxRuleset ruleset = ruleService.findRulesetById(Integer.parseInt(form.getRulesetId()));
-
 		String nomeRuleset = form.getRulesetName();
-		String descrRuleset = form.getRulesetDesc();
-		Long datasetid = form.getDataset();
-		DatasetFile ds = datasetService.findDataSetFile(datasetid);
-
-		ruleset.setLabelFile(nomeRuleset);
-		ruleset.setDescr(descrRuleset);
-		ruleset.setDatasetFile(ds);
-
 		WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));
+		
+		
+		List<SxRuleset> listRS = ruleService.findAllRuleset();
+		listRS.remove(ruleset);
+		Iterator<SxRuleset> itr = listRS.iterator();
+		while(itr.hasNext()) {
+			 SxRuleset rs = itr.next();
+	         String label = rs.getLabelFile();
+	         if(nomeRuleset.equals(label)) {
+	        	 notificationService.addErrorMessage("Esiste già un Ruleset con quel nome. Specificare un nome diverso.");
+	         }else {
+	        	 String descrRuleset = form.getRulesetDesc();
+	     		Long datasetid = form.getDataset();
+	     		DatasetFile ds = datasetService.findDataSetFile(datasetid);
 
-		ruleService.saveRuleSet(ruleset);
+	     		ruleset.setLabelFile(nomeRuleset);
+	     		ruleset.setDescr(descrRuleset);
+	     		ruleset.setDatasetFile(ds);     		
+
+	     		ruleService.saveRuleSet(ruleset);
+	         }
+	     }	
+		
 		return "redirect:/rule/viewRuleset/" + sessionelv.getId();
 
 	}
@@ -204,8 +230,7 @@ public class RuleController {
 		notificationService.removeAllMessages();
 
 		String nomeRule = form.getRuleName();
-
-		// short tipoRule = form.getRuleType();
+		
 		String descrRule = form.getRuleDesc();
 		Integer idRuleset = form.getIdruleset();
 		String textRule = form.getRuleText();
@@ -214,14 +239,12 @@ public class RuleController {
 
 		SxRuleset ruleset = ruleService.findRulesetById(idRuleset);
 		SxRule sxrule = new SxRule();
-
-		// SxRuleType ruletype = ruleService.findRuleTypeById(tipoRule);
+		
 		SxClassification classification = ruleService.findClassificationById(idclassification);
 
 		sxrule.setNome(nomeRule);
 		sxrule.setDescr(descrRule);
-		sxrule.setActive((short) 1);
-		// sxrule.setRuleType(ruletype);
+		sxrule.setActive((short) 1);		
 		sxrule.setRule(textRule);
 		sxrule.setSxRuleset(ruleset);
 		sxrule.setSxClassification(classification);
@@ -273,8 +296,20 @@ public class RuleController {
 
 		List<SxRuleset> listaRuleSet = sessionelv.getRuleSets();
 		String etichetta = null;
+				
+		
+		
 		if (listaRuleSet != null && listaRuleSet.size() > 0) {
-			etichetta = "RS_" + Integer.toString(listaRuleSet.size() + 1);
+			String progressivo = Integer.toString(listaRuleSet.size() + 1);
+			etichetta = "RS_" + progressivo;
+			
+			// Controlla se il nome è già presente nella tabella		
+			SxRuleset rs = ruleService.findRulesetByLabel_file(etichetta);			
+			while(rs!=null) {				
+				etichetta = "RS_" + Integer.parseInt(progressivo + 1);
+				rs = ruleService.findRulesetByLabel_file(etichetta);
+			}			
+			
 		} else {
 			etichetta = "RS_1";
 		}

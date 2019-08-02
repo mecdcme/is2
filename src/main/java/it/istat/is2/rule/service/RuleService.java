@@ -196,6 +196,12 @@ public class RuleService {
     public SxRuleset findRulesetByDatasetFile(DatasetFile ds) {        
         return sxRulesetDao.findByDatasetFile(ds).orElse(null);
     }
+    public List<SxRuleset> findAllRuleset() {
+        return sxRulesetDao.findAll();
+    }
+    public SxRuleset findRulesetByLabel_file(String label) {
+        return sxRulesetDao.findByLabelFile(label).orElse(null);
+    }
     public SxRuleset findRulesetById(Integer id) {        
         return sxRulesetDao.findById(id).orElse(null);
     }
@@ -206,8 +212,7 @@ public class RuleService {
 
     public SxRule findRuleByid(Integer ruleId) {
         return sxRuleDao.findById(ruleId).orElse(null);
-    }
-
+    }   
     public void save(RuleCreateForm ruleForm) {
 
         SxRule rule = new SxRule();
