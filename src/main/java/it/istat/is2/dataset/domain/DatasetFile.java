@@ -107,15 +107,21 @@ public class DatasetFile implements Serializable {
         return (short) colonne.size();
     }
     
-    public String getNomeColFormId(int id){
+    public String getNomeColFormId(String id){
     	DatasetColonna dsc;
         String nomeCol = "";
-    	for(int i=0; i<this.colonne.size(); i++) {
-    		dsc = colonne.get(i);
-    		if(dsc.getId()==id){
-    			nomeCol = dsc.getNome();
-    		}
-    	}
+    	
+        if(id!=null) {
+        	int id2 = Integer.parseInt(id);
+        	for(int i=0; i<this.colonne.size(); i++) {
+        		dsc = colonne.get(i);
+        		if(dsc.getId()==id2){
+        			nomeCol = dsc.getNome();
+        		}
+        	}
+        }
+        
+        
     	return nomeCol;
     }
 }
