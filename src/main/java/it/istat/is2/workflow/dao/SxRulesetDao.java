@@ -31,14 +31,15 @@ import org.springframework.stereotype.Repository;
 
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.workflow.domain.SxRuleset;
+import it.istat.is2.worksession.domain.WorkSession;
 
 @Repository
 public interface SxRulesetDao extends CrudRepository<SxRuleset,Integer> {
 
-	Optional<SxRuleset> findByDatasetFile(DatasetFile ds);
-	
-	Optional<SxRuleset> findByLabelFile(String label);
+	Optional<SxRuleset> findByDatasetFile(DatasetFile ds);	
 	
 	List<SxRuleset> findAll();
+	
+	List<SxRuleset> findBySessioneLavoro(WorkSession sessionelv);
  
 }
