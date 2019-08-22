@@ -108,11 +108,7 @@
       
       function associaVarToRole(){
    	    var id_elaborazione = $("#idelaborazione").val();
-//    	 	associazioneVarRoleBean.push({'idElaborazione':  $("#idelaborazione").val()});
-//    		console.log("associazioneVarRoleBean",  JSON.stringify(associazioneVarRoleBean));
    	 	var myUrl = $("meta[name='ctx']").attr("content") + "/rest/ws/associaVariabiliRuolo";
-//    	 	var associazioneVarRoleBean = [{ 'idElaborazione' : $("#idelaborazione").val(),'roles':[{'idRole':1, 'name':'myRole', 'variables':[{'idVar':1,'name':'myVar'}]}]}];
-//    	     console.log("associazioneVarRoleBean",  associazioneVarRoleBean);
 	   	 $.ajax({
 	   		url: myUrl,
 	   		headers : {

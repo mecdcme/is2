@@ -201,11 +201,92 @@ $(document).ready(function () {
      var option="\"options\": {\"fields\": {\"MetricMatchingVariables\": {\"toolbarSticky\": true,\"toolbarPosition\": \"top\"}}}";
      var dataContent="{\"schema\":"+schema+","+option+"}";
      $('#add-param').empty();
-     $('#add-param').alpaca(JSON.parse(dataContent)); 
+     if(nameParameter === 'MATCHING VARAIBLES'){
+    	 $("#add-param").alpaca(JSON.parse("{" + schema + "}"));
+     } else {
+    	 $('#add-param').alpaca(JSON.parse(dataContent)); 
+     }
+     $("#add-param").alpaca({
+    	    "data": [],
+    	    "schema": {
+    	        "type": "array",
+    	        "items": {
+    	            "type": "object",
+    	            "properties": {
+    	                "matchingVariable": {
+    	                    "type": "string",
+    	                    "title": "MatchingVariable",
+    	                    "required": true
+    	                },
+    	                "matchingVariableA": {
+    	                    "type": "string",
+    	                    "title": "MatchingVariableA",
+    	                    "enum": ["DSa - DS", "DSa - IDENTIFIER", "DSa - SURNAME", "DSa - NAME", "DSa - LASTCODE", "DSa - NUMCODE", "DSa - STREET"],
+    	                    "required": true
+    	                },
+    	                "matchingVariableB": {
+    	                    "type": "string",
+    	                    "title": "MatchingVariableB",
+    	                    "enum": ["DSb - DS", "DSb - IDENTIFIER", "DSb - SURNAME", "DSb - NAME", "DSb - LASTCODE", "DSb - NUMCODE", "DSb - STREET"],
+    	                    "required": true
+    	                },
+    	                "method": {
+    	                    "type": "string",
+    	                    "title": "Method",
+    	                    "enum": ["Jaro","Jaro1","Jaro2"],
+    	                    "required": true
+    	                },
+    	                "threshold": {
+    	                    "type": "number",
+    	                    "title": "Threshold",
+    	                    "required": true
+    	                },
+    	                "window": {
+    	                    "type": "number",
+    	                    "title": "Window",
+    	                    "required": true
+    	                }
+    	            }
+    	        }
+    	    },
+    	    "options": {
+    	        "type": "table",
+    	        "toolbarSticky": true,
+                "showActionsColumn": false,
+    	        "toolbar": {
+                    "actions": [{
+                        "action": "up",
+                        "enabled": false
+                    }]
+                },
+    	        "items": {
+    				"fields": {
+    					"method": {
+    						"type": "select",
+    						"noneLabel": "",
+    	                    "removeDefaultNone": false
+    					},
+    	                 "matchingVariableA": {
+    	                    "type": "select",
+    	                    "optionLabels": ["DSa - DS", "DSa - IDENTIFIER", "DSa - SURNAME", "DSa - NAME", "DSa - LASTCODE", "DSa - NUMCODE", "DSa - STREET"]
+    	                },
+    	                "matchingVariableB": {
+    	                    "type": "select",
+    	                    "optionLabels": ["DSb - DS", "DSb - IDENTIFIER", "DSb - SURNAME", "DSb - NAME", "DSb - LASTCODE", "DSb - NUMCODE", "DSb - STREET"]
+    	                }
+    				}
+    			}
+    	    },
+    	    "postRender": function(control) {
+    	        control.on("move", function() {
+    	            for (var i = 0; i < control.children.length; i++) {
+    	                control.children[i].childrenByPropertyId["MatchingVariable"].setValue(i + 1);
+    	            }
+    	        });
+    	    }
+    	});
     });
 
-  
-       
 
 });
 
@@ -549,7 +630,7 @@ function eseguiFunzioneUpdate() {
 
 function inserisciParams() {
 	var value =  JSON.stringify($('#add-param').alpaca().getValue());
-	
+	console.log("Params: " + value);
     $("#valoreParam").val(value);
     $("#formAssociaParam").submit();
 }

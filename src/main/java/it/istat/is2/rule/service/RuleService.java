@@ -199,8 +199,9 @@ public class RuleService {
     public List<SxRuleset> findAllRuleset() {
         return sxRulesetDao.findAll();
     }
-    public SxRuleset findRulesetByLabel_file(String label) {
-        return sxRulesetDao.findByLabelFile(label).orElse(null);
+    
+    public List<SxRuleset> findRulesetBySessioneLavoro(WorkSession sessionlv) {
+        return sxRulesetDao.findBySessioneLavoro(sessionlv);
     }
     public SxRuleset findRulesetById(Integer id) {        
         return sxRulesetDao.findById(id).orElse(null);

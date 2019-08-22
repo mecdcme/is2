@@ -89,33 +89,43 @@ public class RuleController {
 			throws IOException {
 
 		notificationService.removeAllMessages();
-
+		// è il nome del file acquisito in automatico nel form di upload
 		String nomeFile = form.getName();
 		String descrizione = form.getDescrizione();
+		// è il nome logico assegnato dall'utente ed è quello visualizzato nelle viste
 		String etichetta = form.getLabelFile();
 		String idclassificazione = form.getClassificazione();
 		String separatore = form.getDelimiter();
 		String idsessione = form.getIdsessione();
 		Integer skipFirstLine = form.getSkipFirstLine();
+		WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));
 
-		// Controlla che il nome non sia già presente in tabella
-		SxRuleset rs = ruleService.findRulesetByLabel_file(etichetta);			
-		if(rs!=null) {
-			notificationService.addErrorMessage("Esiste già un Ruleset con quel nome. Specificare un nome diverso.");
-		}else{
 		
-			File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());	
+		List<SxRuleset> listaRS = ruleService.findRulesetBySessioneLavoro(sessionelv);	
+		boolean check = false;
+		Iterator<SxRuleset> itr = listaRS.iterator();
+		while(itr.hasNext()) {
+			 SxRuleset rs = itr.next();
+	         String label = rs.getLabelFile();
+	         // Controlla che la label assegnata dall'utente non sia già presente
+	         if(etichetta.equals(label)) {
+	        	 notificationService.addErrorMessage("Esiste già un Ruleset con quel nome. Specificare un nome diverso.");
+	        	 check = true;
+	        	 break;
+	         }
+		}
+		if(check==false) {
+			File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());			
 			
-	
-			int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile, descrizione,
-					skipFirstLine);
+			int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile, descrizione, skipFirstLine);
 			logService.save("Caricate " + rules + " regole");
-	
+
 			SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
 			sessionBean.getRuleset().add(nomeFile);
 			httpSession.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
-		}
-		return "redirect:/rule/viewRuleset/" + idsessione;
+		}	
+		
+		return "redirect:/rule/viewRuleset/" + form.getIdsessione();
 	}
 
 	@RequestMapping(value = "/newRuleset", method = RequestMethod.POST)
@@ -146,11 +156,20 @@ public class RuleController {
 		
 		WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));
 		
-		// Controlla che il nome non sia già presente in tabella
-		SxRuleset rs = ruleService.findRulesetByLabel_file(nomeRuleset);			
-		if(rs!=null) {
-			notificationService.addErrorMessage("Esiste già un Ruleset con quel nome. Specificare un nome diverso.");
-		}else{
+		List<SxRuleset> listaRS = ruleService.findRulesetBySessioneLavoro(sessionelv);	
+		boolean check = false;
+		Iterator<SxRuleset> itr = listaRS.iterator();
+		while(itr.hasNext()) {
+			 SxRuleset rs = itr.next();
+	         String label = rs.getLabelFile();
+	         // Controlla che la label assegnata dall'utente non sia già presente
+	         if(nomeRuleset.equals(label)) {
+	        	 notificationService.addErrorMessage("Esiste già un Ruleset con quel nome. Specificare un nome diverso.");
+	        	 check = true;
+	        	 break;
+	         }
+		}
+		if(check==false) {
 			String descrRuleset = form.getRulesetDesc();
 			Long dataset = form.getDataset();
 			DatasetFile dfile = null;
@@ -303,16 +322,25 @@ public class RuleController {
 			String progressivo = Integer.toString(listaRuleSet.size() + 1);
 			etichetta = "RS_" + progressivo;
 			
-			// Controlla se il nome è già presente nella tabella		
-			SxRuleset rs = ruleService.findRulesetByLabel_file(etichetta);			
-			while(rs!=null) {				
-				etichetta = "RS_" + Integer.parseInt(progressivo + 1);
-				rs = ruleService.findRulesetByLabel_file(etichetta);
-			}			
 			
-		} else {
+			List<SxRuleset> listaRS = ruleService.findRulesetBySessioneLavoro(sessionelv);	
+			
+			Iterator<SxRuleset> itr = listaRS.iterator();
+			while(itr.hasNext()) {
+				 SxRuleset rs = itr.next();
+		         String label = rs.getLabelFile();
+		         // Controlla che la label assegnata dall'utente non sia già presente
+		         if(etichetta.equals(label)) {
+		        	 int prog = Integer.parseInt(progressivo);	
+		        	 prog++;
+		        	 etichetta = "RS_" + prog;		        	 
+		         }
+			}
+			
+		}else {
 			etichetta = "RS_1";
 		}
+			
 		SxRuleset rs;
 		for (int i = 0; i < listaRuleSet.size(); i++) {
 			rs = listaRuleSet.get(i);

@@ -432,7 +432,7 @@ public class WorkflowController {
 
 		model.addAttribute("elaborazione", elaborazione);
 
-		return "redirect:/ws/editworkingset/" + elaborazione.getId();
+		return "redirect:/ws/editworkingset/" + elaborazione.getId() + "#parametri";
 	}
 
 	@RequestMapping(value = "modificaparametro", method = RequestMethod.POST)
