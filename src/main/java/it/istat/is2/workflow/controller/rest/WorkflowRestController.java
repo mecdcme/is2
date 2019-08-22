@@ -29,19 +29,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.istat.is2.app.bean.AssociazioneVarRoleBean;
+import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.Utility;
+import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.SxBusinessProcess;
 import it.istat.is2.workflow.domain.SxBusinessStep;
 import it.istat.is2.workflow.domain.SxStepVariable;
@@ -62,6 +69,8 @@ public class WorkflowRestController {
     private BusinessStepService businessStepService;
     @Autowired
     StepVariableService stepVariableService;
+    @Autowired
+	private NotificationService notificationService;
 
     @RequestMapping(value = "/worksetvalori/{idelaborazione}/{tipoCampo}/{groupRole}/{paramsFilter:.+}", method = RequestMethod.GET)
     public String loadDatasetValori2(HttpServletRequest request, Model model,
@@ -170,5 +179,13 @@ public class WorkflowRestController {
 
         return "success";
     }
+    
+    @PostMapping(value = "/associaVariabiliRuolo")
+	public void associaVariabiliRuolo(HttpServletResponse response, Model model, @RequestBody AssociazioneVarRoleBean[] associazioneVarRoleBean) throws IOException {
+		Elaborazione elaborazione = workflowService.findElaborazione(associazioneVarRoleBean[0].getIdElaborazione());
+		workflowService.creaAssociazionVarRole(associazioneVarRoleBean, elaborazione);
+		model.addAttribute("elaborazione", elaborazione);
+		notificationService.addInfoMessage("L'associazione è stata aggiunta");
+	}
 
 }

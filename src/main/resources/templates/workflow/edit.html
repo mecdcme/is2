@@ -27,35 +27,113 @@
 <head>
 <head th:include="layout :: site-head" th:remove="tag" />
 <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+<script th:src="@{/js/jquery-ui.min.js}"></script>
 <script th:src="@{/js/table/datatables.js}"></script>
 <script th:src="@{/js/elaborazione.js}"></script>
 <script th:src="@{/js/table/dataTables.rowReorder.min.js}"></script>
-<script type="text/javascript"
-	src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
 <script th:src="@{/js/alpaca/alpaca.min.js}"></script>
 
-
+<link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}" />
 <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
-<link rel="stylesheet"
-	th:href="@{/css/table/rowReorder.dataTables.min.css}" />
+<link rel="stylesheet" th:href="@{/css/table/rowReorder.dataTables.min.css}" />
 <link rel="stylesheet" th:href="@{/css/alpaca/alpaca.min.css}" />
 
 <script th:inline="javascript">
+	var _ctx = $("meta[name='ctx']").attr("content");
+	var associazioneVarRoleBean = [];
+	var tmpVarSel = {};
+	var tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
+          var _idfile = [[${idfile}]];
+          var _paramTemplateMap={};
+          var _paramList = [[${listaParametriAll}]]
+          for (i = 0; i < _paramList.length; i++) {
+          	_paramTemplateMap[_paramList[i].nome]=_paramList[i].jsonTemplate;
+          }
+          $(document).ready(function () {
+              setMenuActive("elaborazione");
+              tabs = $( "#tabs" ).tabs();
+              tabs.find( ".ui-tabs-nav" ).sortable({
+                axis: "x",
+                stop: function() {
+                  tabs.tabs( "refresh" );
+                }
+              });
+              
+              tabs.on( "click", "span.ui-icon-close", function() {
+                  var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
+                  $( "#" + panelId ).remove();
+                  removeSelVarFromTab(panelId);
+                  tabs.tabs( "refresh" );
+                });
+          });
+            
+      function associaVar() {
+	 	 var varSelectedId = $("#varSelectedId").val();
+	 	 var varSelectedName = $("#varSelectedName").val();
+         var labelFile = $("#varLabelFile").val();
+         var roleSelectedName = $("#roleSelectedName").val();
+         var roleSelectedId = $("#roleSelectedId").val();
+         var labelFileSet = labelFile;
+ 		 var idTab = "" + varSelectedId;
+         var li = $( tabTemplate.replace( /#\{href\}/g, "#" + idTab ).replace( /#\{label\}/g, labelFileSet + '-' + varSelectedName) );
+         var tabContentHtml = roleSelectedName;
+         tabs.find( ".ui-tabs-nav" ).append( li );
+       	 tabs.append( "<div id='" + varSelectedId + "'><p>" + tabContentHtml + "</p></div>" );
+       	 tabs.tabs( "refresh" );
+         tmpVarSel['#var_'+varSelectedId]  =  $('#var_'+varSelectedId).clone();
+       	$('#var_'+varSelectedId).remove();
+       	$("#btn_dlg_ins").removeClass('hide');
+       	$("#role_"+roleSelectedId).removeClass('active');
+       	$("#varSelectedId").val("");
+       	$("#roleSelectedId").val("");
+       	$('#btn_dlg_assoc').addClass('disabled');
+       	$('#btn_dlg_assoc').attr( "disabled","disabled");
+       	associazioneVarRoleBean.push({'idElaborazione':$("#idelaborazione").val(),'ruolo':{'idRole':roleSelectedId,'name':roleSelectedName,'variables':[{'idVar':varSelectedId,'name':varSelectedName}]}});
+        console.log(JSON.stringify(associazioneVarRoleBean));
+      }
+            
+      function removeSelVarFromTab(id){
+		tmpVarSel['#var_'+id].prependTo("#div_variabili_dataset");
+		$('#var_'+id).removeClass('active');
+		delete tmpVarSel['#var_'+id];
+		delete associazioneVarRoleBean[id];
+		if(Object.entries(tmpVarSel).length === 0 && tmpVarSel.constructor === Object){
+			$("#btn_dlg_ins").addClass('hide');
+		}
+		const index = associazioneVarRoleBean.findIndex(x => x.idVar === id);
+		if (index !== undefined) associazioneVarRoleBean.splice(index, 1);
+		console.log(JSON.stringify(associazioneVarRoleBean));
+      }
       
-            var _idfile = [[${idfile}]];
-            var _paramTemplateMap={};
-            var _paramList = [[${listaParametriAll}]]
-            for (i = 0; i < _paramList.length; i++) {
-            	_paramTemplateMap[_paramList[i].nome]=_paramList[i].jsonTemplate;
-            }
-            $(document).ready(function () {
-                setMenuActive("elaborazione");
-    
-            });
+      function associaVarToRole(){
+   	    var id_elaborazione = $("#idelaborazione").val();
+//    	 	associazioneVarRoleBean.push({'idElaborazione':  $("#idelaborazione").val()});
+//    		console.log("associazioneVarRoleBean",  JSON.stringify(associazioneVarRoleBean));
+   	 	var myUrl = $("meta[name='ctx']").attr("content") + "/rest/ws/associaVariabiliRuolo";
+//    	 	var associazioneVarRoleBean = [{ 'idElaborazione' : $("#idelaborazione").val(),'roles':[{'idRole':1, 'name':'myRole', 'variables':[{'idVar':1,'name':'myVar'}]}]}];
+//    	     console.log("associazioneVarRoleBean",  associazioneVarRoleBean);
+	   	 $.ajax({
+	   		url: myUrl,
+	   		headers : {
+                'Accept' : 'application/json',
+                'Content-Type' : 'application/json'
+            },
+	        type: "POST",
+	        async:false,
+	   	    data : JSON.stringify(associazioneVarRoleBean),
+	   	    success: function () {
+				console.log("success! ");
+				window.location.href = $("meta[name='ctx']").attr("content") + "/ws/editworkingset/"+ id_elaborazione;
+	        },
+	        error: function (jqXHR, textStatus, errorThrown) {
+	            console.log('Error!', errorThrown);
+	        }
+	   	});
+      }
       
-        </script>
-        <style>
-
+  </script>
+<style>
 
 /* Important part */
 .modal-dialog {
@@ -66,6 +144,66 @@
 	max-height: 500px;
 	overflow-y: auto;
 }
+
+#tabs { 
+	margin-top: 1em; 
+	border:none;
+}
+ 
+#tabs li .ui-icon-close { 
+ 	float: left; 
+ 	margin: 0.4em 0.2em 0 0; 
+ 	cursor: pointer; 
+ }
+ 
+ .hide{
+ 	display:none;
+ }
+ 
+ .ui-tabs .ui-tabs-panel{
+ 	background:#ededed;
+ 	border-width: thin;
+ }
+ 
+.ui-widget-header{
+    border: 0px solid #dddddd;
+    background: none;
+    color: none;
+    font-weight: bold;	
+}
+
+.ui-tabs .ui-tabs-nav{
+    margin: 0;
+    padding: 0;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active{
+	font-weight: normal;
+	color: #cccccc;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    border: 1px solid #cccccc;
+    background: #ededed;
+    font-weight: bold;
+    color: #cccccc;
+}
+
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited, .ui-icon, .ui-button:active .ui-icon {
+	color:#444444;
+}
+
+#tabs li .ui-icon-close {
+    float: left;
+    margin: 0.4em 0.2em 0 0;
+    cursor: pointer;
+}
+
+.ui-state-active .ui-icon, .ui-button:active .ui-icon {
+
+    background-image: url(http://code.jquery.com/ui/1.12.1/themes/base/images/ui-icons_444444_256x240.png);
+}
+
 </style>
 </head>
 <body>
@@ -270,6 +408,13 @@
 						<div class="form-body">
 							<div th:if="${datasetfiles.size()>0}">
 								<div class="row">
+									<div id="tabs">
+									  <ul>
+									  </ul>
+									</div>
+								</div>
+								<hr/>
+								<div class="row">
 									<div class="col-lg-12 sottotitolo">
 										<span>Seleziona una variabile dal Dataset ed il ruolo
 											da associare</span>
@@ -283,16 +428,17 @@
 												<fieldset class="well"
 													style="height: 250px; overflow-y: auto;">
 													<legend class="well-legend"> Variabili Dataset</legend>
-													<input type="hidden" id="varSelectedName" /> <input
-														type="hidden" id="varSelectedId" />
+													<input type="hidden" id="varSelectedName" /> 
+													<input type="hidden" id="varSelectedId" />
+													<input type="hidden" id="varLabelFile" />
 													<div id="div_variabili_dataset" class="list-group ">
 														<th:block th:each="datasetfile ,iter: ${datasetfiles}">
 															<a th:each="element, y: ${datasetfile.colonne}"
 																th:id="${'var_'+element.id}"
 																class="list-group-item varlist"
-																th:attr="onclick='javascript:setSelectedVar(' + ${element.ordine} + ',\'' + ${element.nome} + '\', ' + ${element.id} + ')'"
+																th:attr="onclick='javascript:setSelectedVar(' + ${element.ordine} + ',\'' + ${element.nome} + '\', ' + ${element.id} + ', \'' + ${datasetfile.labelFile} + '\')'"
 																title="Associa variabile"> <span
-																	th:text="${datasetfile.labelFile+ ' - '+ element.nome}"></span>
+																th:text="${datasetfile.labelFile+ ' - '+ element.nome}"></span>
 															</a>
 														</th:block>
 													</div>
@@ -302,8 +448,8 @@
 												<fieldset class="well"
 													style="height: 250px; overflow-y: auto;">
 													<legend class="well-legend"> Ruoli </legend>
-													<input type="hidden" id="roleSelectedId" /> <input
-														type="hidden" id="roleSelectedName" />
+													<input type="hidden" id="roleSelectedId" /> 
+													<input type="hidden" id="roleSelectedName" />
 													<div class="list-group" id="div_lista_ruoli">
 														<a th:each="ruolo, y: ${listaRuoliInput}"
 															class="list-group-item rolelist"
@@ -330,8 +476,17 @@
 						</button>
 						<span th:if="${datasetfiles.size()>0}">
 							<button id="btn_dlg_assoc" type="button"
-								class="btn btn-primary disabled towait"
-								onclick="inserisciRuoloVar()" data-dismiss="modal">Inserisci</button>
+								class="btn btn-success disabled"
+								onclick="associaVar(' + ${datasetfiles} + ')" >Associa</button>
+						</span>
+						<span th:if="${datasetfiles.size()>0}">
+							<button id="btn_dlg_ins" type="button"
+								class="btn btn-primary hide"
+								onclick="associaVarToRole()" data-dismiss="modal">Inserisci</button>
+<!-- 								onclick="inserisciRuoloVar()" data-dismiss="modal">Inserisci</button> -->
+								
+								
+
 						</span>
 					</div>
 				</div>

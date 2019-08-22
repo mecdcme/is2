@@ -290,6 +290,7 @@ function openDlgAddVariabileWorkset() {
     $("#btn_dlg_assoc").addClass('disabled');
     $("#btn_dlg_assoc").attr("disabled", "disabled");
     $("#add-viarabile-workset-modal").modal('show');
+//    $("#add-variable-workset-modal").modal('show');
 }
 
 function openDlgAddParametriWorkset() {
@@ -317,11 +318,12 @@ function controllaCampoModParam() {
     }
 }
 
-function setSelectedVar(ordine, nome, id) {
+function setSelectedVar(ordine, nome, id, labelFile) {
     $(".varlist").removeClass('active');
     $("#var_" + id).addClass('active');
     $("#varSelectedId").val(id);
     $("#varSelectedName").val(nome);
+    $("#varLabelFile").val(labelFile);
     if ($("#varSelectedId").val().length > 0 && $("#roleSelectedId").val().length > 0) {
         $("#btn_dlg_assoc").removeClass('disabled');
         $("#btn_dlg_assoc").attr("disabled", false);
@@ -375,7 +377,6 @@ function inserisciRuoloVar() {
             + "'/>" + "<input type='hidden' name='elaborazione' value='"
             + id_elaborazione
             + "'/></span><input type='hidden' name='stato' value='N'/></span>";
-
     $("#associazione_vars").html(input_content);
     $("#vars_content").html(content);
     eseguiFunzione();
