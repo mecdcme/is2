@@ -160,7 +160,11 @@ function addRule(id_variable, nome_variabile) {
 function editRule(id, rule, descr, classif) {	
     $('#editRuleId').val(id);
     $('#editRuleText').val(rule);
-    $('#descrizione_edit').val(descr);    
+    if(descr=='null'){
+    	$('#descrizione_edit').val(''); 
+    }else{
+    	$('#descrizione_edit').val(descr);    
+    }    
     $("#classification_edit").val(classif);
     $('#modalEditRule').modal('show');
 }
