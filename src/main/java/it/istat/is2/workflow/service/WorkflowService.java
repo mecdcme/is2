@@ -44,7 +44,7 @@ import org.springframework.stereotype.Service;
 import it.istat.is2.app.bean.AssociazioneVarFormBean;
 import it.istat.is2.app.bean.AssociazioneVarRoleBean;
 import it.istat.is2.app.dao.SqlGenericDao;
-import it.istat.is2.app.util.IS2Const;
+import it.istat.is2.app.util.IS2Const; 
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.dao.DatasetColonnaDao;
 import it.istat.is2.dataset.domain.DatasetColonna;
