@@ -183,7 +183,7 @@ public class WorkflowController {
 
 		stepVariableService.removeStepVarById(idparametro);
 		notificationService.addInfoMessage("Il parametro è stato eliminato");
-
+		model.addAttribute("showTabParam", true);
 		return "redirect:/ws/editworkingset/" + idelaborazione;
 	}
 
@@ -475,7 +475,7 @@ public class WorkflowController {
 		notificationService.addInfoMessage("Parametro modificato");
 
 		model.addAttribute("elaborazione", elaborazione);
-
+		model.addAttribute("showTabParam", true);
 		return "redirect:/ws/editworkingset/" + elaborazione.getId();
 	}
 

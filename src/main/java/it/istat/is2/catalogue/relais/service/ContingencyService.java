@@ -69,67 +69,17 @@ public class ContingencyService {
 	private ReconciledSchema rsc;
 	private AbstractStringMetric[] metrics;
 
-	public void init() {
-		metricMatchingVariableVector = new MetricMatchingVariableVector();
-		// MetricMatchingVariable mm1 = new MetricMatchingVariable("VIA", "DSA_VIA",
-		// "DSB_VIA", "Jaro", 0.8, 0);
-		// MetricMatchingVariable mm2 = new MetricMatchingVariable("DENOMINAZIONE", "
-		// DSA_DENOMINAZIONE", "DSB_DENOMINAZIONE", "Jaro", 0.8, 0);
-		// MetricMatchingVariable mm3 = new MetricMatchingVariable("CITTA", "DSA_CITTA",
-		// "DSB_CITTA", "Jaro", 0.8, 0);
-
-		MetricMatchingVariable mm1 = new MetricMatchingVariable("SURNAME", "DSa_SURNAME", "DSb_SURNAME", "Jaro", 0.8,
-				0);
-		MetricMatchingVariable mm2 = new MetricMatchingVariable("NAME", "DSa_NAME", "DSb_NAME", "Jaro", 0.8, 0);
-		MetricMatchingVariable mm3 = new MetricMatchingVariable("LASTCODE", "DSa_LASTCODE", "DSb_LASTCODE", "Jaro", 0.8,
-				0);
-		// MetricMatchingVariable mm3=new
-		// MetricMatchingVariable("LASTCODE","da_LASTCODE","db_LASTCODE","Equality",1,0);
-		metricMatchingVariableVector.add(mm1);
-		metricMatchingVariableVector.add(mm2);
-		metricMatchingVariableVector.add(mm3);
-		this.numVar = metricMatchingVariableVector.size();
-
-		metrics = new AbstractStringMetric[numVar];
-
-		for (int ind = 0; ind < numVar; ind++) {
-			if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Equality"))
-				metrics[ind] = null;
-			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Jaro"))
-				metrics[ind] = new Jaro();
-			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Dice"))
-				metrics[ind] = new DiceSimilarity();
-			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("JaroWinkler"))
-				metrics[ind] = new JaroWinkler();
-			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Levenshtein"))
-				metrics[ind] = new Levenshtein();
-			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("3Grams"))
-				metrics[ind] = new QGramsDistance();
-			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Soundex"))
-				metrics[ind] = new Soundex();
-			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("NumericComparison"))
-				metrics[ind] = new NumericComparison();
-			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("NumericEuclideanDistance"))
-				metrics[ind] = new NumericEuclideanDistance();
-			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("WindowEquality"))
-				metrics[ind] = new WindowEquality(metricMatchingVariableVector.get(ind));
-			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Inclusion3Grams"))
-				metrics[ind] = new QGramsInclusion();
-		}
-
-	}
 
 	public void init(String stringJson) throws JSONException {
 		metricMatchingVariableVector = new MetricMatchingVariableVector();
-		JSONObject jObject = new JSONObject(stringJson);
-		JSONArray metricMatchingVariables = jObject.getJSONArray("MetricMatchingVariables");
+	  	JSONArray metricMatchingVariables = new JSONArray(stringJson) ;
 		for (int i = 0; i < metricMatchingVariables.length(); i++) {
 			JSONObject metricMatchingVariable = metricMatchingVariables.getJSONObject(i);
 			String matchingVariable = metricMatchingVariable.getString("MatchingVariable");
 			String matchingVariableA = metricMatchingVariable.getString("MatchingVariableA");
 			String matchingVariableB = metricMatchingVariable.getString("MatchingVariableB");
 			String method = metricMatchingVariable.getString("Method");
-			double thresould = metricMatchingVariable.getDouble("Thresould");
+			double thresould = metricMatchingVariable.getDouble("Threshold");
 			int window = metricMatchingVariable.getInt("Window");
 			MetricMatchingVariable mm = new MetricMatchingVariable(matchingVariable, matchingVariableA,
 					matchingVariableB, method, thresould, window);
