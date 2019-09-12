@@ -33,6 +33,7 @@ import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.UserService;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
+import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.worksession.dao.WorkSessionDao;
 import it.istat.is2.worksession.domain.WorkSession;
 
@@ -46,10 +47,6 @@ public class WorkSessionService {
     @Autowired
     private DatasetService datasetService;
 
-    public List<WorkSession> getSessioni(User user) {
-        return sessioneDao.findByUserOrderByDataCreazioneDesc(user);
-    }
-
     public WorkSession getSessione(Long id) {
         return sessioneDao.findById(id).orElse(null);
     }
@@ -62,12 +59,19 @@ public class WorkSessionService {
     public List<WorkSession> getSessioneList(User user) {
         return sessioneDao.findByUserOrderByDataCreazioneDesc(user);
     }
+    
+    public List<WorkSession> getSessioneList(User user, Long idBusinessFunction) {
+        BusinessFunction businessFunction = new BusinessFunction(idBusinessFunction);
+        return sessioneDao.findByUserAndBusinessFunctionOrderByDataCreazioneDesc(user, businessFunction);
+    }
 
-    public WorkSession nuovaSessioneLavoro(String username, String descrizione, String nome) {
+    public WorkSession nuovaSessioneLavoro(String username, String descrizione, String nome, Long idBusinessFunction) {
         User user = userService.findByEmail(username);
         WorkSession sl = new WorkSession();
+        BusinessFunction businessFunction = new BusinessFunction(idBusinessFunction);
         sl.setDataCreazione(new Date());
         sl.setDescrizione(descrizione);
+        sl.setBusinessFunction(businessFunction);
         sl.setNome(nome);
         sl.setUser(user);
         return sessioneDao.save(sl);

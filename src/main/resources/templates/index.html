@@ -1,0 +1,65 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+    </head>
+    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+        <header th:replace="layout :: site-header"></header>
+        <!-- Body -->
+        <div class="app-body">
+            <aside th:replace="layout :: site-modals"></aside>
+            <aside th:replace="layout :: site-aside"></aside>
+            
+            <main class="main">
+                <!-- Breadcrumb-->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Home</li>
+                </ol>
+                <div class="container-fluid">
+                    <div class="animated fadeIn">
+                        <div class="row" th:if="${session.businessFunctionList}">
+                            <div class="col-sm-6 col-md-4" th:each="businessFunction, iter : ${session.businessFunctionList}">
+                                <div class="card text-white" th:classappend="${iter.odd} ? bg-primary : bg-danger">
+                                    <div class="card-header">
+                                        <i class="icon-star"></i>
+                                        <span th:text="${businessFunction.nome}"></span>
+                                    </div>
+                                    <div class="card-body">
+                                        <p th:text="${businessFunction.descr}"></p>
+                                        <a title="Regole" th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}" style="color:white">
+                                            Go to <span th:text="${businessFunction.nome}"></span> <i class="fa fa-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <footer th:replace="layout :: site-footer"></footer>     
+    </body>
+</html>

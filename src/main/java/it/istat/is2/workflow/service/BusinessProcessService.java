@@ -30,8 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.istat.is2.workflow.dao.BusinessProcessDao;
-import it.istat.is2.workflow.domain.SxBusinessFunction;
-import it.istat.is2.workflow.domain.SxBusinessProcess;
+import it.istat.is2.workflow.domain.BusinessFunction;
+import it.istat.is2.workflow.domain.BusinessProcess;
 
 @Service
 public class BusinessProcessService {
@@ -39,9 +39,13 @@ public class BusinessProcessService {
     @Autowired
     BusinessProcessDao businessProcessDao;
 
-    public List<SxBusinessProcess> findBProcessByIdFunction(Long idfunction) {
-        List<SxBusinessFunction> businessFunctions = new ArrayList<>();
-        businessFunctions.add(new SxBusinessFunction(idfunction));
-        return businessProcessDao.findBySxBusinessFunctions(businessFunctions);
+    public List<BusinessProcess> findBProcessByIdFunction(Long idfunction) {
+        List<BusinessFunction> businessFunctions = new ArrayList<>();
+        businessFunctions.add(new BusinessFunction(idfunction));
+        return businessProcessDao.findByBusinessFunctions(businessFunctions);
+    }
+    
+    public BusinessProcess findBProcessById(long idprocess) {
+        return businessProcessDao.findById(idprocess).orElse(null);
     }
 }

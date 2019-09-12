@@ -134,5 +134,5 @@ function getHeadersComplex(tab) {
 
 function scaricaWorkSet(e, param, idelab) {
     e.preventDefault();
-    window.location = _ctx + '/rest/ws/download/workset/' + param + '/' + idelab;
+    window.location = _ctx + '/rest/ws/download/workset/' + param + '/' + idelab+'/'+_roleGroup;
 }

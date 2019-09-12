@@ -28,14 +28,14 @@ import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.rule.engine.EngineValidate;
 import static it.istat.is2.rule.engine.EngineValidate.INPUT_NAMES_PREFIX;
 import it.istat.is2.rule.forms.RuleCreateForm;
-import it.istat.is2.workflow.dao.SxClassificationDao;
-import it.istat.is2.workflow.dao.SxRuleDao;
-import it.istat.is2.workflow.dao.SxRuleTypeDao;
-import it.istat.is2.workflow.dao.SxRulesetDao;
-import it.istat.is2.workflow.domain.SxClassification;
-import it.istat.is2.workflow.domain.SxRule;
-import it.istat.is2.workflow.domain.SxRuleType;
-import it.istat.is2.workflow.domain.SxRuleset;
+import it.istat.is2.workflow.dao.ClassificationDao;
+import it.istat.is2.workflow.dao.RuleDao;
+import it.istat.is2.workflow.dao.RuleTypeDao;
+import it.istat.is2.workflow.dao.RulesetDao;
+import it.istat.is2.workflow.domain.Classification;
+import it.istat.is2.workflow.domain.Rule;
+import it.istat.is2.workflow.domain.RuleType;
+import it.istat.is2.workflow.domain.Ruleset;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
 
@@ -59,13 +59,13 @@ public class RuleService {
     @Autowired
     private WorkSessionService sessioneLavoroService;
     @Autowired
-    private SxRuleDao sxRuleDao;
+    private RuleDao ruleDao;
     @Autowired
-    private SxRuleTypeDao sxRuleTypeDao;
+    private RuleTypeDao ruleTypeDao;
     @Autowired
-    private SxRulesetDao sxRulesetDao;
+    private RulesetDao rulesetDao;
     @Autowired
-    private SxClassificationDao sxClassificationDao;
+    private ClassificationDao sxClassificationDao;
     @Autowired
     private EngineValidate engine;
 
@@ -73,33 +73,33 @@ public class RuleService {
     private String[] inputNames;
     private String[] out;
 
-    public List<SxRule> findAll() {
-        return (List<SxRule>) this.sxRuleDao.findAll();
+    public List<Rule> findAll() {
+        return (List<Rule>) this.ruleDao.findAll();
     }
 
-    public List<SxRuleType> findAllRuleType() {
-        return (List<SxRuleType>) sxRuleTypeDao.findAll();
+    public List<RuleType> findAllRuleType() {
+        return (List<RuleType>) ruleTypeDao.findAll();
     }
-    public List<SxClassification> findAllClassifications() {
-        return (List<SxClassification>) sxClassificationDao.findAll();
+    public List<Classification> findAllClassifications() {
+        return (List<Classification>) sxClassificationDao.findAll();
     }
-    public SxRuleType findRuleTypeById(short idrule) {
-        return sxRuleTypeDao.findById(idrule);
+    public RuleType findRuleTypeById(short idrule) {
+        return ruleTypeDao.findById(idrule);
     }
-    public SxClassification findClassificationById(short idclassification) {
+    public Classification findClassificationById(short idclassification) {
         return sxClassificationDao.findById(idclassification);
     }
 
-    public void runValidate(SxRuleset ruleset) {
-        SxRule rule;
+    public void runValidate(Ruleset ruleset) {
+        Rule rule;
         Integer ruleId;
-        List<SxRule> rules = sxRuleDao.findBySxRuleset(ruleset);
+        List<Rule> rules = ruleDao.findByRuleset(ruleset);
         
         //Reset error status of rules
         for (int i = 0; i < rules.size(); i++) {
             rules.get(i).setErrcode(0);
         }
-        sxRuleDao.saveAll(rules);
+        ruleDao.saveAll(rules);
         
         //Create array of rules for R
         input = new String[rules.size()];
@@ -120,10 +120,10 @@ public class RuleService {
             //Save error codes of infeasible rules 
             for (int i = 0; i < out.length; i++) {
                 ruleId = Integer.valueOf(out[i].replace(INPUT_NAMES_PREFIX, ""));
-                rule = sxRuleDao.findById(ruleId).orElse(null);
+                rule = ruleDao.findById(ruleId).orElse(null);
                 if (rule != null) {
                     rule.setErrcode(1);
-                    sxRuleDao.save(rule);
+                    ruleDao.save(rule);
                 }
             }
         } catch (Exception e) {
@@ -137,7 +137,7 @@ public class RuleService {
     public int loadRules(File fileRules, String idsessione, String etichetta, String idclassificazione, String separatore, String nomeFile, String descrizione, Integer skipFirstLine) {
         String pathTmpFile = fileRules.getAbsolutePath().replace("\\", "/");
         WorkSession sessionelv = sessioneLavoroService.getSessione(Long.parseLong(idsessione));
-        SxRuleset ruleset = new SxRuleset();
+        Ruleset ruleset = new Ruleset();
 
         Reader in = null;
         char delimiter = 9;
@@ -155,7 +155,7 @@ public class RuleService {
         }
 
         String formula = null;
-        SxClassification classificazione = new SxClassification();
+        Classification classificazione = new Classification();
         classificazione.setId(Short.parseShort(idclassificazione));
         Iterator<CSVRecord> itr = records.iterator();
         // If skipFirstLine equals 1 skips first line
@@ -165,97 +165,97 @@ public class RuleService {
         while (itr.hasNext()) {
             CSVRecord rec = itr.next();
             formula = rec.get(0);
-            SxRule regola = new SxRule();
+            Rule regola = new Rule();
             regola.setActive((short) 1);
             regola.setRule(formula);          
             regola.setSxClassification(classificazione);
-            regola.setSxRuleset(ruleset);
-            ruleset.getSxRules().add(regola);
+            regola.setRuleset(ruleset);
+            ruleset.getRules().add(regola);
 
         }
 
         ruleset.setNomeFile(nomeFile);
         ruleset.setDescr(descrizione);
         ruleset.setLabelFile(etichetta);
-        ruleset.setNumeroRighe(ruleset.getSxRules().size());
+        ruleset.setNumeroRighe(ruleset.getRules().size());
         ruleset.setSessioneLavoro(sessionelv);
 
-        ruleset = sxRulesetDao.save(ruleset);
+        ruleset = rulesetDao.save(ruleset);
 
-        return ruleset.getSxRules().size();
+        return ruleset.getRules().size();
     }
 
-    public void saveRuleSet(SxRuleset sxRuleset) {
+    public void saveRuleSet(Ruleset ruleset) {
 
-        sxRulesetDao.save(sxRuleset);
+        rulesetDao.save(ruleset);
     }
     public void deleteRuleset(Integer rulesetId) {       
-        sxRulesetDao.deleteById(rulesetId);        
+        rulesetDao.deleteById(rulesetId);        
     }
 
-    public SxRuleset findRulesetByDatasetFile(DatasetFile ds) {        
-        return sxRulesetDao.findByDatasetFile(ds).orElse(null);
+    public Ruleset findRulesetByDatasetFile(DatasetFile ds) {        
+        return rulesetDao.findByDatasetFile(ds).orElse(null);
     }
-    public List<SxRuleset> findAllRuleset() {
-        return sxRulesetDao.findAll();
+    public List<Ruleset> findAllRuleset() {
+        return rulesetDao.findAll();
     }
     
-    public List<SxRuleset> findRulesetBySessioneLavoro(WorkSession sessionlv) {
-        return sxRulesetDao.findBySessioneLavoro(sessionlv);
+    public List<Ruleset> findRulesetBySessioneLavoro(WorkSession sessionlv) {
+        return rulesetDao.findBySessioneLavoro(sessionlv);
     }
-    public SxRuleset findRulesetById(Integer id) {        
-        return sxRulesetDao.findById(id).orElse(null);
-    }
-
-    public List<SxRule> findRules(SxRuleset ruleset) {
-        return sxRuleDao.findBySxRuleset(ruleset);
+    public Ruleset findRulesetById(Integer id) {        
+        return rulesetDao.findById(id).orElse(null);
     }
 
-    public SxRule findRuleByid(Integer ruleId) {
-        return sxRuleDao.findById(ruleId).orElse(null);
+    public List<Rule> findRules(Ruleset ruleset) {
+        return ruleDao.findByRuleset(ruleset);
+    }
+
+    public Rule findRuleByid(Integer ruleId) {
+        return ruleDao.findById(ruleId).orElse(null);
     }   
     public void save(RuleCreateForm ruleForm) {
 
-        SxRule rule = new SxRule();
+        Rule rule = new Rule();
 
-        SxRuleset ruleSet = sxRulesetDao.findById(ruleForm.getRuleSetId()).orElse(null);
+        Ruleset ruleSet = rulesetDao.findById(ruleForm.getRuleSetId()).orElse(null);
 
         rule.setId(ruleForm.getRuleId());
-        rule.setSxRuleset(ruleSet);
+        rule.setRuleset(ruleSet);
         rule.setRule(ruleForm.getRule());
 
-        sxRuleDao.save(rule);
+        ruleDao.save(rule);
 
     }
 
     public void update(RuleCreateForm ruleForm) {
 
-        SxRule rule = sxRuleDao.findById(ruleForm.getRuleId()).orElse(null);
+        Rule rule = ruleDao.findById(ruleForm.getRuleId()).orElse(null);
 
-        SxClassification classif = findClassificationById(ruleForm.getClassificazione());
+        Classification classif = findClassificationById(ruleForm.getClassificazione());
         if (rule != null) {
             rule.setRule(ruleForm.getRule());
             rule.setDescr(ruleForm.getDescrizione());
             rule.setSxClassification(classif);
-            sxRuleDao.save(rule);
+            ruleDao.save(rule);
         }
 
     }
 
     public void delete(Integer ruleId) {
         
-        SxRule rule =  sxRuleDao.findById(ruleId).orElse(null);
-        SxRuleset ruleSet;
+        Rule rule =  ruleDao.findById(ruleId).orElse(null);
+        Ruleset ruleSet;
         Integer numberOfRules;
         //decrease the number of rules of the ruleset
         if(rule != null){
-            ruleSet = rule.getSxRuleset();
-            numberOfRules = sxRuleDao.countBySxRuleset(ruleSet);
+            ruleSet = rule.getRuleset();
+            numberOfRules = ruleDao.countByRuleset(ruleSet);
             ruleSet.setNumeroRighe(numberOfRules - 1);
-            sxRulesetDao.save(ruleSet);
+            rulesetDao.save(ruleSet);
         }
         
-        sxRuleDao.deleteById(ruleId);
+        ruleDao.deleteById(ruleId);
         
     }
 

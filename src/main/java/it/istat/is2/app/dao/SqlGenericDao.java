@@ -35,7 +35,7 @@ import org.springframework.stereotype.Repository;
 
 import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
-import it.istat.is2.workflow.domain.SxWorkset;
+import it.istat.is2.workflow.domain.Workset;
 
 @Repository
 public class SqlGenericDao {
@@ -60,7 +60,7 @@ public class SqlGenericDao {
 		return result;
 	}
 
-	public List<SxWorkset> findWorkSetDatasetColonnaByElaborazioneQuery(Long idelaborazione, Integer tipoCampo, Integer groupRole,
+	public List<Workset> findWorkSetDatasetColonnaByElaborazioneQuery(Long idelaborazione, Integer tipoCampo, Integer groupRole,
 			Integer riga_inf, Integer riga_sup, HashMap<String, String> paramsFilter) {
 
 		String query = " " 
@@ -103,7 +103,7 @@ public class SqlGenericDao {
 				+ "  where  rs1.adx    >:riga_inf     and  rs1.adx <= :riga_sup"
 				+ "	   group by rs1.id,rs1.nome, rs1.ORDINE  , rs1.tipo_var  ,rs1.param_value, rs1.paginationTotalRows ";
 
-		Query q = em.createNativeQuery(query, SxWorkset.class);
+		Query q = em.createNativeQuery(query, Workset.class);
 		q.setParameter("idelaborazione", idelaborazione);
 		q.setParameter("tipoCampo", tipoCampo);
 		q.setParameter("riga_inf", riga_inf);
@@ -118,7 +118,7 @@ public class SqlGenericDao {
 		}
 
 		@SuppressWarnings("unchecked")
-		List<SxWorkset> resultList = (List<SxWorkset>) q.getResultList();
+		List<Workset> resultList = (List<Workset>) q.getResultList();
 		return resultList;
 	}
 

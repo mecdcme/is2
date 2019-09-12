@@ -77,7 +77,7 @@ $(function () {
 
 //Set menu active
 function setMenuActive(id) {
-    $("#" + id).addClass("menu-selected");
+    $("#bf" + id + " a").addClass("active");
 }
 
 
@@ -105,10 +105,10 @@ function writeMsgs(data, iddiv_msgs) {
 }
 
 //write REST response user
-function writeMsgsError(msg, id) {
+function writeMsgsError(msg, iddiv_msgs) {
     var classs = 'alert alert-danger';
     var div = $('<div class="' + classs + '">' + msg + ' </div>"');
-    $("#" + id).append(div);
+    $("#" + iddiv_msgs).append(div);
 
 }
 

@@ -27,8 +27,8 @@ import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.rule.forms.RuleCreateForm;
 import it.istat.is2.rule.service.RuleService;
-import it.istat.is2.workflow.domain.SxRule;
-import it.istat.is2.workflow.domain.SxRuleset;
+import it.istat.is2.workflow.domain.Rule;
+import it.istat.is2.workflow.domain.Ruleset;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,16 +61,16 @@ public class RuleRestController {
     MessageSource messages;
 
     @GetMapping("/rules")
-    public List<SxRule> ruleslist(Model model) {
+    public List<Rule> ruleslist(Model model) {
 
-        List<SxRule> rules = ruleService.findAll();
+        List<Rule> rules = ruleService.findAll();
         return rules;
     }
 
     @GetMapping("/rules/runvalidate/{idRuleset}")
     public void runValidate(@PathVariable("idRuleset") Integer idRuleset) {
 
-        SxRuleset ruleSet = ruleService.findRulesetById(idRuleset);
+        Ruleset ruleSet = ruleService.findRulesetById(idRuleset);
         ruleService.runValidate(ruleSet);
     }
 

@@ -39,6 +39,7 @@ public class SessionBean implements Serializable {
         private List<String> ruleset;
         private Long idElaborazione;
         private String nomeElaborazione;
+        private BusinessProcessParentBean businessProcess;
         private BusinessFunctionBean businessFunction;
         private Long tipoRuleset;
         private Long dataset;
@@ -46,5 +47,9 @@ public class SessionBean implements Serializable {
         public SessionBean(Long id, String nome) {
 		this.id = id;
 		this.nome = nome;
+	}
+        
+        public SessionBean() {
+            
 	}
 }

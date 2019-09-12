@@ -29,61 +29,78 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="IE=10.000" http-equiv="X-UA-Compatible" />
-        <title th:text="#{app.title}">IS2</title>
+        <title>IS2 Workbench</title>
         <!-- Javascript -->
         <script th:src="@{/js/jquery-3.1.1.min.js}" type="text/javascript"></script>
-        <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/popper/popper.min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/bootstrap.js}" type="text/javascript"></script>
+        <script th:src="@{/js/coreui/coreui.js}" type="text/javascript"></script>
         <script th:src="@{/js/box.js}" type="text/javascript"></script>
         <!-- CSS -->
-        <link th:href="@{/css/custom_bootstrap.css}" rel="stylesheet" />
-        <link th:href="@{/css/box.css}" rel="stylesheet" />
-        <!-- Fontawesome -->
-        <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+        <link th:href="@{/css/coreui/coreui.css}" rel="stylesheet" />
+        <!-- Icons -->
+        <link th:href="@{/icons/font-awesome.min.css}" rel="stylesheet" />
+        <link th:href="@{/icons/coreui-icons.css}" rel="stylesheet" />
+        <link th:href="@{/icons/simple-line-icons.css}" rel="stylesheet" />
     </head>
-    <body>
-        <div id="login" class="wrapper">
-            <div class="block-center mt-xl wd-xl">
-                <!-- START LOGIN PANEL-->
-                <div class="panel panel-primary">
-                    <div class="panel-heading text-center" style="padding: 6px">
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-circle fa-stack-2x"></i>
-                            <i class="fa fa-rocket fa-stack-1x" style="color:#2189b4"></i>
-                        </span>
-                        <span>IS<sup>2</sup> Workbench</span>
-                    </div>
-                    <div class="panel-body">
-                        <form method="post" th:object="${loginForm}" role="form" class="mb-lg">
-                            <div th:if="${param.error}" class="form-group text-danger">
-                                &nbsp;Invalid username or password.
+    <body class="app flex-row align-items-center">
+        <!-- START LOGIN FORM-->
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-7">
+                    <div class="card-group">
+                        <div class="card text-white bg-primary py-4 d-md-down-none">
+                            <div class="card-body text-center">
+                                <div>
+                                    <h2>IS<sup>2</sup> Workbench</h2>
+                                    <p>Welcome to an open source environment that offers 'out-of-the-box' a set of functionalities 
+                                        to edit, validate and analyze your precious data.</p>
+                                    <p>The project has been developed in the context of SERV2 ESSNet.</p>
+                                </div>
                             </div>
-                            <div th:if="${param.logout}">You have been logged out.</div>
-
-                            <div class="form-group has-feedback">
-                                <input id="username" type="email" name="username"
-                                       th:placeholder="#{LoginUser.mail}" autocomplete="off" required=""
-                                       class="form-control" th:value="*{username}" /> 
-                                <span class="fa fa-envelope form-control-feedback text-muted"></span>
+                        </div>
+                        <div class="card p-4">
+                            <div class="card-body">
+                                <form method="post" th:object="${loginForm}" role="form">
+                                    <h2>Login</h2>
+                                    <p class="text-muted">Sign In to your account</p>
+                                    <div th:if="${param.error}" class="form-group text-danger">
+                                        &nbsp;Invalid username or password.
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="icon-user"></i>
+                                            </span>
+                                        </div>
+                                        <input id="username" type="email" name="username"
+                                               th:placeholder="#{LoginUser.mail}" autocomplete="off" required=""
+                                               class="form-control" th:value="*{username}" /> 
+                                    </div>
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="icon-lock"></i>
+                                            </span>
+                                        </div>
+                                        <input id="password" name="password" type="password"
+                                               th:placeholder="#{LoginUser.password}" required="" class="form-control"
+                                               th:value="*{password}" /> 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button type="submit" class="btn btn-primary px-4" value="Login">
+                                                <span th:text="#{LoginUser.login}"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="form-group has-feedback">
-                                <input id="password" name="password" type="password"
-                                       th:placeholder="#{LoginUser.password}" required="" class="form-control"
-                                       th:value="*{password}" /> 
-                                <span class="fa fa-lock form-control-feedback text-muted"></span>
-                            </div>
-                            <button type="submit" class="btn btn-block btn-primary mt-lg" value="Login">
-                                <span th:text="#{LoginUser.login}"></span>
-                            </button>
-                        </form>
+                        </div>
                     </div>
                 </div>
-                <!-- END LOGIN PANEL-->
             </div>
-            <!-- START FOOTER-->
-            <div class="text-center">
-                <span>2019 - Developed by Istat</span>
-            </div>
-            <!-- END FOOTER-->
         </div>
+        <!-- END LOGIN FORM-->
     </body>
 </html>

@@ -25,95 +25,41 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
-        <script th:src="@{/js/table/datatables.js}"></script>
         <script th:src="@{/js/sessioni.js}"></script>
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
             $(document).ready(function () {
-               setMenuActive("home");
+                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
         </script>
-
-        <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
     </head>
-    <body>
+    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+        <header th:replace="layout :: site-header"></header>
         <!-- Body -->
-        <div class="wrapper">
-            <header th:replace="layout :: site-header"></header>
+        <div class="app-body">
+            <aside th:replace="layout :: site-modals"></aside>
             <aside th:replace="layout :: site-aside"></aside>
-            <!-- START MAIN CONTAINER -->
-            <section>
-                <div class="content-wrapper">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <span th:text="#{sessionewf.title}"></span>
-                            </li>
-                        </ol>
-                    </nav>
-                    <!-- START PANEL-->
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="well well-app" style="background-color: #fafbfc">
-                                    <p>
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-rocket fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                        <span>IS<sup>2</sup> Workbench</span>
-                                    </p>
-                                    <p style="padding-left: 8px;">
-                                        <span th:text="#{home.welcome}"></span>
-                                        <strong> <span sec:authentication="principal.name"></span></strong>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-lg-8">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <span th:text="#{sessionewf.storico}"></span>
-                                    </div>
-                                    <div class="card-body">
-                                        <table class="table table-condensed" cellspacing="0" style="overflow: auto;">
-                                            <thead>
-                                                <tr>
-                                                    <th>Data</th>
-                                                    <th>Sessione</th>
-                                                    <th>Elaborazione</th>
-                                                    <th>Processo</th>
-                                                    <th style="width: 1%"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <th:block th:each="i: ${#numbers.sequence(0,3)}">
-                                                    <tr th:if="${(not #lists.isEmpty(listasessioni)) and (i &lt; listasessioni.size() )}">
-                                                        <td th:text="${#dates.format(listasessioni[i].dataCreazione, 'dd/MM/yyyy HH:mm')}"></td>
-                                                        <td th:text="${listasessioni[i].nome}"></td>
-                                                        <td><span th:if="${not #lists.isEmpty(listasessioni[i].listaElaborazioni) }" th:text="${listasessioni[i].listaElaborazioni[0].nome}"></span></td>
-                                                        <td><span th:if="${not #lists.isEmpty(listasessioni[i].listaElaborazioni)} and ${not #lists.isEmpty(listasessioni[i].listaElaborazioni[0].sxBusinessFunction.sxBusinessProcesses)}"
-                                                                  th:text="${listasessioni[i].listaElaborazioni[0].sxBusinessFunction.sxBusinessProcesses[0].nome}"></span></td>
-                                                        <td style="width: 1%">
-                                                            <a class="towait" th:if="${not #lists.isEmpty(listasessioni)} and ${not #lists.isEmpty(listasessioni[i].listaElaborazioni)}" 
-                                                               title="Vai" th:href="@{'/sessione/apriseselab/'+${listasessioni[i].id}+'/'+${listasessioni[i].listaElaborazioni[0].id}}">
-                                                                <i class="fa fa-chevron-right"></i>
-                                                            </a> 
-                                                            <a class="towait" th:unless="${not #lists.isEmpty(listasessioni)} and ${not #lists.isEmpty(listasessioni[i].listaElaborazioni)}"
-                                                               title="Vai" th:href="@{'/sessione/apri/'+${listasessioni[i].id}}">
-                                                                <i class="fa fa-chevron-right"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                </th:block>
-                                                <tr th:if="${(#lists.isEmpty(listasessioni))}">
-                                                    <td colspan="4" class="text-center">Nessuna operazione eseguita </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+            <!-- Main container -->
+            <main class="main">
+                <!-- Breadcrumb-->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span th:text="${session.sessioneBean.businessFunction.name}"></span>
+                    </li>
+                    <!-- Breadcrumb Menu-->
+                    <li class="breadcrumb-menu d-md-down-none">
+                        <div class="btn-group" role="group" aria-label="Button group">
+                            <a class="breadcrumb-last-item" title="Chiudi sessione" th:href="@{'/'}">
+                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                            </a>
                         </div>
+                    </li>
+                </ol>
+                <div class="container-fluid">
+                    <div class="animated fadeIn">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -154,7 +100,7 @@
                                                         <a class="towait" title="Visualizza elaborazioni" th:href="@{'/sessione/apri/'+${sessione.id}}"> <i class="fa fa-folder-open"></i></a>
                                                     </td>
                                                     <td style="width: 1%">
-                                                        <a title="Cancella elaborazioni" role="button" th:onclick="'javascript:eliminaSessioneLavoro(\'' + ${sessione.id} + '\')'"><i class="fa fa-trash"></i></a>
+                                                        <a title="Cancella elaborazioni" role="button" href="javascript:void(0);" th:onclick="'javascript:eliminaSessioneLavoro(\'' + ${sessione.id} + '\')'"><i class="fa fa-trash"></i></a>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -163,60 +109,45 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Chiude div panel-body -->
                     </div>
-                    <!-- END PANEL-->
                 </div>
-            </section>
-            <!-- END MAIN CONTAINER -->
-            <footer th:replace="layout :: site-footer"></footer>
+            </main>
         </div>
+        <!-- End body -->
+        <footer th:replace="layout :: site-footer"></footer>
 
-        <!-- Bootstrap modal -->
+        <!-- New session modal -->
         <div class="modal fade" id="nuova-sessione-modal" role="dialog" >
             <div class="modal-dialog " role="document">
                 <div class="modal-content ">
                     <form th:action="@{/sessione/nuovasessione}" id="form" class="form-horizontal" method="post">
+                        <input type="hidden" name="idBusinessFunction" th:value="${session.sessioneBean.businessFunction.id}"/>
                         <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-folder-open"></i>
+                                <span th:text="#{nuova.sessione.dialog.title}">Nuova Sessione di Lavoro</span>
+                            </h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <h4 class="modal-title">
-                                <i class="fa fa-folder-open"></i>
-                                <span th:text="#{nuova.sessione.dialog.title}">Nuova Sessione di Lavoro</span>
-                            </h4>
                         </div>
                         <div class="modal-body form">
-                            <div class="form-body">
-                                <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <div class="col-lg-2">
-                                            <label class="control-label" th:text="#{nuova.sessione.nome}+'*'"> <span>Nome</span></label>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <input name="nome" id="nome-sessione" title="Nome" class="form-control" type="text" />
-                                            <span class="help-block">
-                                                <small class="text-danger" id="nomesesserror"></small>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <div class="col-lg-2">
-                                            <label class="control-label" th:text="#{nuova.sessione.descrizione}"> <span>Descrizione</span></label>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <input name="descrizione" title="Descrizione" class="form-control" type="text" />
-                                            <span class="help-block"></span>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label class="control-label" th:text="#{nuova.sessione.nome}+'*'"><span>Nome</span></label>
+                                <input name="nome" id="nome-sessione" title="Nome" class="form-control" type="text" />
+                                <span class="help-block">
+                                    <small class="text-danger" id="nomesesserror"></small>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" th:text="#{nuova.sessione.descrizione}"> <span>Descrizione</span></label>
+                                <input name="descrizione" title="Descrizione" class="form-control" type="text" />
+                                <span class="help-block"></span>
                             </div>
                         </div>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">
                             <span th:text="#{Layout.Close}">Annulla</span>
                         </button>
                         <button type="button" id="btn-submit-ns" class=" btn btn-primary">
@@ -224,28 +155,25 @@
                         </button>
                     </div>
                 </div>
-                <!-- /.modal-content -->
             </div>
-            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal -->
 
-        <!-- Modal -->
+        <!-- Delete session modal -->
         <div class="modal fade" id="modalCancellaSessione" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
+                        </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title" id="exampleModalLabel">
-                            <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
-                        </h4>
                     </div>
                     <div class="modal-body">Eliminare la sessione selezionata e il suo contenuto?</div>
                     <div class="modal-footer">
                         <input type="hidden" name="" id="id_sessione_del" value="" />
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Chiudi</button>
                         <button type="button" id="btn_delete" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
                     </div>
                 </div>

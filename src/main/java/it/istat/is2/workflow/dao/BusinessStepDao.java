@@ -27,12 +27,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import it.istat.is2.workflow.domain.SxBusinessStep;
+import it.istat.is2.workflow.domain.BusinessStep;
 
 @Repository
-public interface BusinessStepDao extends CrudRepository<SxBusinessStep,Long> {
+public interface BusinessStepDao extends CrudRepository<BusinessStep,Long> {
 
-	List<SxBusinessStep> findAll();
+	List<BusinessStep> findAll();
 	@SuppressWarnings("rawtypes")
-	List<SxBusinessStep> findBySxBusinessProcesses(@Param("idprocess")List sxBusinessProcess);
+	List<BusinessStep> findByBusinessProcesses(@Param("idprocess")List businessProcess);
 }

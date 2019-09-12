@@ -29,20 +29,20 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.workflow.dao.SxTipoDatoDao;
-import it.istat.is2.workflow.domain.SxTipoDato;
+import it.istat.is2.workflow.dao.TipoDatoDao;
+import it.istat.is2.workflow.domain.TipoDato;
 
 @Service
 public class TipoDatoService {
 
     @Autowired
-    SxTipoDatoDao tipoDatoDao;
+    TipoDatoDao tipoDatoDao;
 
-    public List<SxTipoDato> findListTipoDato() {
+    public List<TipoDato> findListTipoDato() {
         return tipoDatoDao.findAll();
     }
 
-    public Optional<SxTipoDato> findTipoDato(Long idtipodato) {
+    public Optional<TipoDato> findTipoDato(Long idtipodato) {
         return tipoDatoDao.findById(idtipodato);
     }
 }

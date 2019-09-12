@@ -505,8 +505,9 @@ $('#newParseField2').on('keyup', function(event) {
         dom: "<'row'<'col-sm-5'B>>" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        autoWidth: false,
-        responsive: true,
+        //autoWidth: false,
+        scrollX: true,
+        //responsive: false,
         ordering: true,
         searching: false,
         lengthChange: true,

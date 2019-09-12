@@ -27,108 +27,42 @@
 <head>
 <head th:include="layout :: site-head" th:remove="tag" />
 <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
-<script th:src="@{/js/jquery-ui.min.js}"></script>
-<script th:src="@{/js/table/datatables.js}"></script>
+
+<script th:src="@{/js/table/datatables.min.js}"></script>
 <script th:src="@{/js/elaborazione.js}"></script>
-<script th:src="@{/js/table/dataTables.rowReorder.min.js}"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+<script th:src="@{/js/alpaca/handlebars.min.js}"></script>
 <script th:src="@{/js/alpaca/alpaca.min.js}"></script>
-
-<link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}" />
-<link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
-<link rel="stylesheet" th:href="@{/css/table/rowReorder.dataTables.min.css}" />
-<link rel="stylesheet" th:href="@{/css/alpaca/alpaca.min.css}" />
-
+ <script th:src="@{/js/jquery-ui.min.js}" type="text/javascript"></script>
 <script th:inline="javascript">
-	var _ctx = $("meta[name='ctx']").attr("content");
-	var associazioneVarRoleBean = [];
-	var tmpVarSel = {};
-	var tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
-          var _idfile = [[${idfile}]];
-          var _paramTemplateMap={};
-          var _paramList = [[${listaParametriAll}]]
-          for (i = 0; i < _paramList.length; i++) {
-          	_paramTemplateMap[_paramList[i].nome]=_paramList[i].jsonTemplate;
-          }
-          $(document).ready(function () {
-              setMenuActive("elaborazione");
-              tabs = $( "#tabs" ).tabs();
-              tabs.find( ".ui-tabs-nav" ).sortable({
-                axis: "x",
-                stop: function() {
-                  tabs.tabs( "refresh" );
-                }
-              });
-              
-              tabs.on( "click", "span.ui-icon-close", function() {
-                  var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
-                  $( "#" + panelId ).remove();
-                  removeSelVarFromTab(panelId);
-                  tabs.tabs( "refresh" );
+            var _idfile = [[${idfile}]];
+            var _paramTemplateMap = {};
+            var _paramList = [[${listaParametriAll}]]
+            for (i = 0; i < _paramList.length; i++) {
+                _paramTemplateMap[_paramList[i].nome] = _paramList[i].jsonTemplate;
+            }
+            var associazioneVarRoleBean = [];
+            var tmpVarSel = {};
+            var tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
+            
+            $(document).ready(function () {
+                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+                tabs = $( "#tabs" ).tabs();
+                tabs.find( ".ui-tabs-nav" ).sortable({
+                  axis: "x",
+                  stop: function() {
+                    tabs.tabs( "refresh" );
+                  }
                 });
-          });
-            
-      function associaVar() {
-	 	 var varSelectedId = $("#varSelectedId").val();
-	 	 var varSelectedName = $("#varSelectedName").val();
-         var labelFile = $("#varLabelFile").val();
-         var roleSelectedName = $("#roleSelectedName").val();
-         var roleSelectedId = $("#roleSelectedId").val();
-         var labelFileSet = labelFile;
- 		 var idTab = "" + varSelectedId;
-         var li = $( tabTemplate.replace( /#\{href\}/g, "#" + idTab ).replace( /#\{label\}/g, labelFileSet + '-' + varSelectedName) );
-         var tabContentHtml = roleSelectedName;
-         tabs.find( ".ui-tabs-nav" ).append( li );
-       	 tabs.append( "<div id='" + varSelectedId + "'><p>" + tabContentHtml + "</p></div>" );
-       	 tabs.tabs( "refresh" );
-         tmpVarSel['#var_'+varSelectedId]  =  $('#var_'+varSelectedId).clone();
-       	$('#var_'+varSelectedId).remove();
-       	$("#btn_dlg_ins").removeClass('hide');
-       	$("#role_"+roleSelectedId).removeClass('active');
-       	$("#varSelectedId").val("");
-       	$("#roleSelectedId").val("");
-       	$('#btn_dlg_assoc').addClass('disabled');
-       	$('#btn_dlg_assoc').attr( "disabled","disabled");
-       	associazioneVarRoleBean.push({'idElaborazione':$("#idelaborazione").val(),'ruolo':{'idRole':roleSelectedId,'name':roleSelectedName,'variables':[{'idVar':varSelectedId,'name':varSelectedName}]}});
-        console.log(JSON.stringify(associazioneVarRoleBean));
-      }
-            
-      function removeSelVarFromTab(id){
-		tmpVarSel['#var_'+id].prependTo("#div_variabili_dataset");
-		$('#var_'+id).removeClass('active');
-		delete tmpVarSel['#var_'+id];
-		delete associazioneVarRoleBean[id];
-		if(Object.entries(tmpVarSel).length === 0 && tmpVarSel.constructor === Object){
-			$("#btn_dlg_ins").addClass('hide');
-		}
-		const index = associazioneVarRoleBean.findIndex(x => x.idVar === id);
-		if (index !== undefined) associazioneVarRoleBean.splice(index, 1);
-		console.log(JSON.stringify(associazioneVarRoleBean));
-      }
-      
-      function associaVarToRole(){
-   	    var id_elaborazione = $("#idelaborazione").val();
-   	 	var myUrl = $("meta[name='ctx']").attr("content") + "/rest/ws/associaVariabiliRuolo";
-	   	 $.ajax({
-	   		url: myUrl,
-	   		headers : {
-                'Accept' : 'application/json',
-                'Content-Type' : 'application/json'
-            },
-	        type: "POST",
-	        async:false,
-	   	    data : JSON.stringify(associazioneVarRoleBean),
-	   	    success: function () {
-				console.log("success! ");
-				window.location.href = $("meta[name='ctx']").attr("content") + "/ws/editworkingset/"+ id_elaborazione;
-	        },
-	        error: function (jqXHR, textStatus, errorThrown) {
-	            console.log('Error!', errorThrown);
-	        }
-	   	});
-      }
-      
-  </script>
+                
+                tabs.on( "click", "span.ui-icon-close", function() {
+                    var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
+                    $( "#" + panelId ).remove();
+                    removeSelVarFromTab(panelId);
+                    tabs.tabs( "refresh" );
+                  });
+                
+            });
+        </script>
 <style>
 
 /* Important part */
@@ -141,673 +75,599 @@
 	overflow-y: auto;
 }
 
-#tabs { 
-	margin-top: 1em; 
-	border:none;
-}
- 
-#tabs li .ui-icon-close { 
- 	float: left; 
- 	margin: 0.4em 0.2em 0 0; 
- 	cursor: pointer; 
- }
- 
- .hide{
- 	display:none;
- }
- 
- .ui-tabs .ui-tabs-panel{
- 	background:#ededed;
- 	border-width: thin;
- }
- 
-.ui-widget-header{
-    border: 0px solid #dddddd;
-    background: none;
-    color: none;
-    font-weight: bold;	
+#tabs {
+	margin-top: 1em;
+	border: none;
 }
 
-.ui-tabs .ui-tabs-nav{
-    margin: 0;
-    padding: 0;
+#tabs li .ui-icon-close {
+	float: left;
+	margin: 0.4em 0.2em 0 0;
+	cursor: pointer;
 }
 
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active{
+.hide {
+	display: none;
+}
+
+.ui-tabs .ui-tabs-panel {
+	background: #ededed;
+	border-width: thin;
+}
+
+.ui-widget-header {
+	border: 0px solid #dddddd;
+	background: none;
+	color: none;
+	font-weight: bold;
+}
+
+.ui-tabs .ui-tabs-nav {
+	margin: 0;
+	padding: 0;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default,
+	.ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover,
+	html .ui-button.ui-state-disabled:active {
 	font-weight: normal;
 	color: #cccccc;
 }
 
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
-    border: 1px solid #cccccc;
-    background: #ededed;
-    font-weight: bold;
-    color: #cccccc;
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active,
+	a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover
+	{
+	border: 1px solid #cccccc;
+	background: #ededed;
+	font-weight: bold;
+	color: #cccccc;
 }
 
-.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited, .ui-icon, .ui-button:active .ui-icon {
-	color:#444444;
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited,
+	.ui-icon, .ui-button:active .ui-icon {
+	color: #444444;
 }
 
 #tabs li .ui-icon-close {
-    float: left;
-    margin: 0.4em 0.2em 0 0;
-    cursor: pointer;
+	float: left;
+	margin: 0.4em 0.2em 0 0;
+	cursor: pointer;
 }
 
 .ui-state-active .ui-icon, .ui-button:active .ui-icon {
-
-    background-image: url(http://code.jquery.com/ui/1.12.1/themes/base/images/ui-icons_444444_256x240.png);
+	background-image:
+		url(http://code.jquery.com/ui/1.12.1/themes/base/images/ui-icons_444444_256x240.png);
 }
-
 </style>
+<link th:href="@{/css/alpaca/alpaca.min.css}" rel="stylesheet"  />
+<link th:href="@{/icons/glyphicon.css}" rel="stylesheet" />
+<link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
+<link th:href="@{/css/jquery-ui.min.css}" rel="stylesheet" />
 </head>
-<body>
-
-
+<body
+	class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+	<header th:replace="layout :: site-header"></header>
 	<!-- Body -->
-	<div class="wrapper">
-		<header th:replace="layout :: site-header"></header>
+	<div class="app-body">
+		<aside th:replace="layout :: site-modals"></aside>
 		<aside th:replace="layout :: site-aside"></aside>
-		<!-- START MAIN CONTAINER -->
-		<section>
-			<div class="content-wrapper">
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item "><a title="Sessione lavoro"
-							th:if="${session.sessionelv}"
-							th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
-								<span th:if="${session.sessioneBean.nomeElaborazione}"
-									th:text="${session.sessioneBean.nomeElaborazione}"></span>
-						</a></li>
-						<li class="breadcrumb-item "><span>Settings</span></li>
-						<div class="btn-group pull-right" role="group">
-							<a class="" title="Chiudi workset" th:if="${session.sessionelv}"
-								th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
-								<i class="fa fa-times"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
-							</a>
-						</div>
-					</ol>
-				</nav>
+		<!-- Main container -->
+		<main class="main"> <!-- Breadcrumb-->
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+			<li class="breadcrumb-item"><a
+				th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
+					<span th:text="${session.sessioneBean.businessFunction.name}"></span>
+			</a></li>
+			<li class="breadcrumb-item"><a
+				th:href="@{'/sessione/apri/' + ${session.sessioneBean.id}}"> <span
+						th:text="${session.sessioneBean.nome}"></span>
+			</a></li>
+			<li class="breadcrumb-item"><a title="Sessione lavoro"
+				th:if="${session.sessionelv}"
+				th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
+					<span th:if="${session.sessioneBean.nomeElaborazione}"
+						th:text="${session.sessioneBean.nomeElaborazione}"></span>
+			</a></li>
+			<li class="breadcrumb-item"><span>Settings</span></li>
+			<!-- Breadcrumb Menu-->
+			<li class="breadcrumb-menu d-md-down-none">
+				<div class="btn-group" role="group" aria-label="Button group">
+					<a class="breadcrumb-last-item" title="Chiudi processo"
+						th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
+						<i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+					</a>
+				</div>
+			</li>
+		</ol>
 
-				<div class="container-fluid">
-					<input id="idelaborazione" type="hidden" name="elaborazione"
-						th:value="${elaborazione.id}" />
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="card">
-								<div class="card-header header-tags">
-									<span id="header-variabili" href="javascript:void(0)"
-										onclick="javascript:showPanel('variabili');" title="Variabili">
-										<span class="header-strong">Variabili</span>
-									</span>
-									<span id="header-parametri" href="javascript:void(0)"
-										onclick="javascript:showPanel('parametri');" title="Parametri">
-										<span>Parametri</span>
-									</span>
-									<span id="header-execution" href="javascript:void(0)"
-										onclick="javascript:showPanel('execution');" title="Runtime">
-										<span>Runtime</span>
-									</span>
-								</div>
-								<div class="card-body" id="card-variabili">
-									<form th:action="@{/ws/associavariabile}" id="formAssociaRuolo"
-										class="form-horizontal" method="post">
-										<span id="associazione_vars"></span>
-									</form>
-									<table id="worksetTabList"
-										class="table table-hover table-bordered">
-										<thead>
-											<tr>
-												<th style="width: 8%"><span></span></th>
-												<th><span>Ruolo</span></th>
-												<th><span>Nome Variabile</span></th>
-												<th style="width: 8%">Filtro</th>
-												<th style="width: 1%"></th>
-												<th style="width: 1%"></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr th:each="stepV,stats: ${stepVList}"
-												th:unless="${(stepVList == null) or (stepVList.size() == 0) or (stepV.tipoCampo.nome == 'OUTPUT')}"
-												data-th-attr="stepid=${stepV.id}">
-												<td><i class="fa fa-sort"></i>
-												<span th:text="${stats.index+1}"></span></td>
-												<td th:text="${stepV.sxRuoli.nome}"></td>
-												<td th:text="${stepV.sxWorkset.nome}"></td>
-												<td><a href="javascript:void(0)" title="Filtro ricerca"
-													class="disabled"> <span
-															th:if="${ stepV.flagRicerca==1 }">
-															<i class="fa fa-check"></i>
-														</span> <span th:unless="${ stepV.flagRicerca==1 }">&dash;</span>
-												</a></td>
-												<td><a href="javascript:void(0)"
-													th:attr="onclick='javascript:mostraDialogModificaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.sxWorkset.nome} + '\', ' + ${stepV.sxRuoli.id} + ', ' + ${stepV.flagRicerca} + ')'"
-													title="Modifica associazione" class="disabled"> <i
-														class="fa fa-pencil"></i>
-												</a></td>
-												<td><a href="javascript:void(0)"
-													th:attr="onclick='javascript:mostraDialogEliminaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.sxWorkset.nome} + '\')'"
-													title="Elimina associazione"> <i class="fa fa-trash-o"></i>
-												</a> <input type="hidden" name="stepid" th:value="${stepV.id}" />
-												</td>
-											</tr>
-										</tbody>
-									</table>
-									<input type="hidden" id="idelab" name="idelab" value="" /> <input
-										type="hidden" id="idstepvar" name="idstepvar" value="" />
-								</div>
-								<div class="card-body" id="card-parametri" style="display: none">
-									<table id="parametriTabList"
-										class="table table-striped table-bordered table-hover">
-										<thead>
-											<tr>
-												<th style="width: 8%"><span></span></th>
-												<th><span>Nome Parametro</span></th>
-												<th><span>Valore</span></th>
-												<th><span>Ruolo</span></th>
-												<th><span>I/O</span></th>
-												<th style="width: 1%"></th>
-												<th style="width: 1%"></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr th:each="stepP,stats: ${stepParamList}"
-												th:unless="${(stepParamList == null) or (stepParamList.size() == 0) }">
-												<td><i class="fa fa-sort"></i>
-												<span th:text="${stats.index+1}"></span></td>
-												<td th:text="${stepP.sxWorkset.nome}"></td>
-												<td><span th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepP.sxWorkset.paramValue)}"></span></td>
-												<td th:text="${stepP.sxRuoli.descr}"></td>
-												<td th:text="${stepP.tipoCampo.nome}"></td>
-												<td><a href="javascript:void(0)"
-													th:attr="data-id-elab=${elaborazione.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-id-workset=${stepP.sxWorkset.id},data-name-workset=${stepP.sxWorkset.nome},data-value-param=${stepP.sxWorkset.paramValue},onclick='javascript:openDlgModParametriWorkset(this)'"
-													title="Modifica parametro"> <i class="fa fa-pencil"></i>
-												</a></td>
-												<td><a href="javascript:void(0)"
-													th:attr="onclick='javascript:mostraDialogEliminaParametro(' + ${elaborazione.id} + ', ' + ${stepP.id} + ', \'' + ${stepP.sxWorkset.nome} + '\')'"
-													title="Elimina parametro"> <i class="fa fa-trash-o"></i>
-												</a></td>
-											</tr>
-										</tbody>
-									</table>
-									<input type="hidden" id="idparam" name="idparam" value="" />
-								</div>
-								<div class="card-body" id="card-execution" style="display: none">
-									<form th:action="@{/ws/associavariabile}" id="formAssociaRuolo"
-										class="form-horizontal" method="post">
-										<span id="associazione_vars"></span>
-									</form>
-									<table id="worksetTabList"
-										class="table table-hover table-bordered">
-										<thead>
-											<tr>
-												<th style="width: 8%"><span></span></th>
-												<th><span>Ruolo</span></th>
-												<th><span>Nome Variabile</span></th>
-												<th style="width: 8%">Filtro</th>
-												<th style="width: 1%"></th>
-												<th style="width: 1%"></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr th:each="stepV,stats: ${stepVList}"
-												th:unless="${(stepVList == null) or (stepVList.size() == 0)}"
-												data-th-attr="stepid=${stepV.id}">
-												<td><i class="fa fa-sort"></i>
-												<span th:text="${stats.index+1}"></span></td>
-												<td th:text="${stepV.sxRuoli.nome}"></td>
-												<td th:text="${stepV.sxWorkset.nome}"></td>
-												<td><a href="javascript:void(0)" title="Filtro ricerca"
-													class="disabled"> <span
-															th:if="${ stepV.flagRicerca==1 }">
-															<i class="fa fa-check"></i>
-														</span> <span th:unless="${ stepV.flagRicerca==1 }">&dash;</span>
-												</a></td>
-												<td><a href="javascript:void(0)"
-													th:attr="onclick='javascript:mostraDialogModificaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.sxWorkset.nome} + '\', ' + ${stepV.sxRuoli.id} + ', ' + ${stepV.flagRicerca} + ')'"
-													title="Modifica associazione" class="disabled"> <i
-														class="fa fa-pencil"></i>
-												</a></td>
-												<td><a href="javascript:void(0)"
-													th:attr="onclick='javascript:mostraDialogEliminaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.sxWorkset.nome} + '\')'"
-													title="Elimina associazione"> <i class="fa fa-trash-o"></i>
-												</a> <input type="hidden" name="stepid" th:value="${stepV.id}" />
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<input id="idelaborazione" type="hidden" name="elaborazione"
+					th:value="${elaborazione.id}" />
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-header header-tags">
+								<span id="header-variabili" href="javascript:void(0)"
+									onclick="javascript:showPanel('variabili');" title="Variabili">
+									<span class="header-strong">Variabili</span>
+								</span>
+								<span id="header-parametri" href="javascript:void(0)"
+									onclick="javascript:showPanel('parametri');" title="Parametri">
+									<span>Parametri</span>
+								</span>
+								<span id="header-execution" href="javascript:void(0)"
+									onclick="javascript:showPanel('execution');" title="Runtime">
+									<span>Runtime</span>
+								</span>
+							</div>
+							<div class="card-body" id="card-variabili">
+								<form th:action="@{/ws/associavariabile}" id="formAssociaRuolo"
+									class="form-horizontal" method="post">
+									<span id="associazione_vars"></span>
+								</form>
+								<table id="worksetTabList"
+									class="table table-hover">
+									<thead>
+										<tr>
+											<th style="width: 1%"><span>#</span></th>
+											<th><span>Ruolo</span></th>
+											<th><span>Nome Variabile</span></th>
+											<th style="width: 8%">Filtro</th>
+											<th style="width: 1%"></th>
+											<th style="width: 1%"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="stepV,stats: ${stepVList}"
+											th:unless="${(stepVList == null) or (stepVList.size() == 0) or (stepV.tipoCampo.nome == 'OUTPUT')}"
+											data-th-attr="stepid=${stepV.id}">
+											<td> <span	th:text="${stats.index+1}"></span></td>
+											<td th:text="${stepV.appRole.nome}"></td>
+											<td th:text="${stepV.workset.nome}"></td>
+											<td><a href="javascript:void(0)" title="Filtro ricerca"
+												class="disabled"> <span
+														th:if="${ stepV.flagRicerca==1 }">
+														<i class="fa fa-check"></i>
+													</span> <span th:unless="${ stepV.flagRicerca==1 }">&dash;</span>
+											</a></td>
+											<td><a href="javascript:void(0)"
+												th:attr="onclick='javascript:mostraDialogModificaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.workset.nome} + '\', ' + ${stepV.appRole.id} + ', ' + ${stepV.flagRicerca} + ')'"
+												title="Modifica associazione" class="disabled"> <i
+													class="fa fa-pencil"></i>
+											</a></td>
+											<td><a href="javascript:void(0)"
+												th:attr="onclick='javascript:mostraDialogEliminaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.workset.nome} + '\')'"
+												title="Elimina associazione"> <i class="fa fa-trash-o"></i>
+											</a> <input type="hidden" name="stepid" th:value="${stepV.id}" />
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<input type="hidden" id="idelab" name="idelab" value="" /> <input
+									type="hidden" id="idstepvar" name="idstepvar" value="" />
+							</div>
+							<div class="card-body" id="card-parametri" style="display: none">
+								<table id="parametriTabList"
+									class="table table-hover">
+									<thead>
+										<tr>
+											<th style="width: 1%"><span>#</span></th>
+											<th><span>Nome Parametro</span></th>
+											<th><span>Valore</span></th>
+											<th><span>Ruolo</span></th>
+											<th><span>I/O</span></th>
+											<th style="width: 1%"></th>
+											<th style="width: 1%"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="stepP,stats: ${stepParamList}"
+											th:unless="${(stepParamList == null) or (stepParamList.size() == 0) }">
+											<td> <span th:text="${stats.index+1}"></span></td>
+											<td th:text="${stepP.workset.nome}"></td>
+											<td><span
+													th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepP.workset.paramValue)}"></span></td>
+											<td th:text="${stepP.appRole.descr}"></td>
+											<td th:text="${stepP.tipoCampo.nome}"></td>
+											<td><a href="javascript:void(0);"
+												th:attr="data-id-elab=${elaborazione.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-id-workset=${stepP.workset.id},data-name-workset=${stepP.workset.nome},data-value-param=${stepP.workset.paramValue},onclick='javascript:openDlgModParametriWorkset(this);'"
+												title="Modifica parametro"> <i class="fa fa-pencil"></i>
+											</a></td>
+											<td><a href="javascript:void(0);"
+												th:attr="data-id-elab=${elaborazione.id},data-id-param=${stepP.id},data-name-param=${stepP.workset.nome},onclick='javascript:mostraDialogEliminaParametro(this);'"
+												title="Elimina parametro"> <i class="fa fa-trash-o"></i>
+											</a></td>
+										</tr>
+									</tbody>
+								</table>
+								<input type="hidden" id="idparam" name="idparam" value="" />
+							</div>
+							<div class="card-body" id="card-execution" style="display: none">
+								<form th:action="@{/ws/associavariabile}" id="formAssociaRuolo"
+									class="form-horizontal" method="post">
+									<span id="associazione_vars"></span>
+								</form>
+								<table id="worksetRuntimeTabList"
+									class="table table-hover">
+									<thead>
+										<tr>
+											<th style="width: 8%"><span></span></th>
+											<th><span>Ruolo</span></th>
+											<th><span>Nome Variabile</span></th>
+											<th style="width: 8%">Filtro</th>
+											<th style="width: 1%"></th>
+											<th style="width: 1%"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="stepV,stats: ${stepVList}"
+											th:unless="${(stepVList == null) or (stepVList.size() == 0)}"
+											data-th-attr="stepid=${stepV.id}">
+											<td><span th:text="${stats.index+1}"></span></td>
+											<td th:text="${stepV.appRole.nome}"></td>
+											<td th:text="${stepV.workset.nome}"></td>
+											<td><a href="javascript:void(0)" title="Filtro ricerca"
+												class="disabled"> <span
+														th:if="${ stepV.flagRicerca==1 }">
+														<i class="fa fa-check"></i>
+													</span> <span th:unless="${ stepV.flagRicerca==1 }">&dash;</span>
+											</a></td>
+											<td><a href="javascript:void(0)"
+												th:attr="onclick='javascript:mostraDialogModificaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.workset.nome} + '\', ' + ${stepV.appRole.id} + ', ' + ${stepV.flagRicerca} + ')'"
+												title="Modifica associazione" class="disabled"> <i
+													class="fa fa-pencil"></i>
+											</a></td>
+											<td><a href="javascript:void(0)"
+												th:attr="onclick='javascript:mostraDialogEliminaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.workset.nome} + '\')'"
+												title="Elimina associazione"> <i class="fa fa-trash-o"></i>
+											</a> <input type="hidden" name="stepid" th:value="${stepV.id}" />
+											</td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
 				</div>
-				<!-- container fluid -->
 			</div>
-		</section>
+			<!-- container fluid -->
+		</div>
+		</main>
+	</div>
+	<!-- End body -->
+	<footer th:replace="layout :: site-footer" />
 
-		<!-- Bootstrap modal -->
-		<div class="modal fade" id="add-viarabile-workset-modal" role="dialog">
-			<div class="modal-dialog modal-lg" role="document">
-				<div class="modal-content ">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title">
-							<i class="fa fa-plus"></i>
-							<span>Nuova associazione variabile</span>
-						</h4>
-					</div>
-					<div class="modal-body form">
-						<div class="form-body">
-							<div th:if="${datasetfiles.size()>0}">
-								<div class="row">
-									<div id="tabs">
-									  <ul>
-									  </ul>
-									</div>
+	<!-- Add variable modal -->
+	<div class="modal fade" id="add-viarabile-workset-modal" role="dialog">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content ">
+				<div class="modal-header">
+				 	<h5 class="modal-title">
+						<i class="fa fa-plus"></i>
+						<span>Nuova associazione variabile</span>
+					</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body form">
+					<div class="form-body">
+						<div th:if="${datasetfiles.size()>0}">
+							<div class="row">
+								<div id="tabs">
+									<ul>
+									</ul>
 								</div>
-								<hr/>
-								<div class="row">
-									<div class="col-lg-12 sottotitolo">
-										<span>Seleziona una variabile dal Dataset ed il ruolo
-											da associare</span>
-									</div>
+							</div>
+							<hr />
+							<div class="row">
+								<div class="col-lg-12 sottotitolo">
+									<span>Seleziona una variabile dal Dataset ed il ruolo da
+										associare</span>
 								</div>
+							</div>
 
-								<div class="row">
-									<div class="col-lg-12">
-										<div class="row">
-											<div class="col-lg-6">
-												<fieldset class="well"
-													style="height: 250px; overflow-y: auto;">
-													<legend class="well-legend"> Variabili Dataset</legend>
-													<input type="hidden" id="varSelectedName" /> 
-													<input type="hidden" id="varSelectedId" />
-													<input type="hidden" id="varLabelFile" />
-													<div id="div_variabili_dataset" class="list-group ">
-														<th:block th:each="datasetfile ,iter: ${datasetfiles}">
-															<a th:each="element, y: ${datasetfile.colonne}"
-																th:id="${'var_'+element.id}"
-																class="list-group-item varlist"
-																th:attr="onclick='javascript:setSelectedVar(' + ${element.ordine} + ',\'' + ${element.nome} + '\', ' + ${element.id} + ', \'' + ${datasetfile.labelFile} + '\')'"
-																title="Associa variabile"> <span
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="row">
+										<div class="col-lg-6">
+											<fieldset class="well"
+												style="height: 250px; overflow-y: auto;">
+												<legend class="well-legend"> Variabili Dataset</legend>
+												<input type="hidden" id="varSelectedName" /> <input
+													type="hidden" id="varSelectedId" /> <input type="hidden"
+													id="varLabelFile" />
+												<div id="div_variabili_dataset" class="list-group ">
+													<th:block th:each="datasetfile ,iter: ${datasetfiles}">
+														<a th:each="element, y: ${datasetfile.colonne}"
+															th:id="${'var_'+element.id}"
+															class="list-group-item varlist"
+															th:attr="onclick='javascript:setSelectedVar(' + ${element.ordine} + ',\'' + ${element.nome} + '\', ' + ${element.id} + ', \'' + ${datasetfile.labelFile} + '\')'"
+															title="Associa variabile"> <span
 																th:text="${datasetfile.labelFile+ ' - '+ element.nome}"></span>
-															</a>
-														</th:block>
-													</div>
-												</fieldset>
-											</div>
-											<div class="col-lg-6">
-												<fieldset class="well"
-													style="height: 250px; overflow-y: auto;">
-													<legend class="well-legend"> Ruoli </legend>
-													<input type="hidden" id="roleSelectedId" /> 
-													<input type="hidden" id="roleSelectedName" />
-													<div class="list-group" id="div_lista_ruoli">
-														<a th:each="ruolo, y: ${listaRuoliInput}"
-															class="list-group-item rolelist"
-															th:id="${'role_'+ruolo.id}"
-															th:attr="onclick='javascript:setSelectedRole(\'' + ${ruolo.nome} + '\',' + ${ruolo.id} + ')'"
-															title="Scelta ruolo"> <span th:text="${ruolo.nome}"></span>
 														</a>
-													</div>
-												</fieldset>
-											</div>
+													</th:block>
+												</div>
+											</fieldset>
+										</div>
+										<div class="col-lg-6">
+											<fieldset class="well"
+												style="height: 250px; overflow-y: auto;">
+												<legend class="well-legend"> Ruoli </legend>
+												<input type="hidden" id="roleSelectedId" /> <input
+													type="hidden" id="roleSelectedName" />
+												<div class="list-group" id="div_lista_ruoli">
+													<a th:each="ruolo, y: ${listaRuoliInput}"
+														class="list-group-item rolelist"
+														th:id="${'role_'+ruolo.id}"
+														th:attr="onclick='javascript:setSelectedRole(\'' + ${ruolo.nome} + '\',' + ${ruolo.id} + ')'"
+														title="Scelta ruolo"> <span th:text="${ruolo.nome}"></span>
+													</a>
+												</div>
+											</fieldset>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div th:unless="${datasetfiles.size()>0}">
-								<span>Nessuna variabile disponibile per l'associazione</span>
+						</div>
+						<div th:unless="${datasetfiles.size()>0}">
+							<span>Nessuna variabile disponibile per l'associazione</span>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+						<span th:text="#{associazione.dialog.button.close}">Annulla</span>
+					</button>
+					<span th:if="${datasetfiles.size()>0}">
+						<button id="btn_dlg_assoc" type="button"
+							class="btn btn-success disabled"
+							onclick="associaVar(' + ${datasetfiles} + ')">Associa</button>
+					</span>
+					<span th:if="${datasetfiles.size()>0}">
+						<button id="btn_dlg_ins" type="button"
+							class="btn btn-primary hide" onclick="associaVarToRole()"
+							data-dismiss="modal">Inserisci</button>
+						<!-- 								onclick="inserisciRuoloVar()" data-dismiss="modal">Inserisci</button> -->
+
+
+
+					</span>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<!-- Edit variable modal -->
+	<div class="modal fade" id="modifica-viarabile-workset-modal"
+		role="dialog">
+		<div class="modal-dialog modal-lg " role="document">
+			<div class="modal-content ">
+				<form th:action="@{/ws/updateassociavariabile}"
+					id="formUpdateAssociaRuolo" class="form-horizontal" method="post">
+					<input type="hidden" name="variabile" id="mod_idvariabile" /> <input
+						type="hidden" name="valoreOld" id="mod_valore_old" />
+					<span id="update_associazione_vars"></span>
+					<div class="modal-header">
+						<h5 class="modal-title">
+							<i class="fa fa-cog"></i>
+							<span>Modifica associazione variabile</span>
+						</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body 	">
+						<div class="form-body">
+							<div class="row">
+								<div class="col-lg-3">
+									<label class="control-label"
+										th:text="#{update.nome.label}+':'  "> <span>nome</span></label>
+								</div>
+								<div class="col-lg-9">
+									<input name="valore" id="nome-var" title="Nome variabile"
+										class="form-control" type="text" onkeyup="controllaCampo()" />
+									<span class="help-block">
+										<small class="text-danger" id="nomevarerror"></small>
+									</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-3">
+									<label class="control-label"
+										th:text="#{update.ruolo.label}+':'  "> <span
+											id="funzione">ruolo</span></label>
+								</div>
+								<div class="col-lg-9">
+									<select name="ruolo" id="idruolomod" class="form-control">
+										<option th:each="ruolo : ${listaRuoliInOut}"
+											th:value="${ruolo.id}" th:text="${ruolo.nome}"></option>
+									</select>
+									<span class="help-block"></span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-3">
+									<label class="control-label"
+										th:text="#{update.filtro.label}+':'"> <span>Filtro</span></label>
+								</div>
+								<div id="radio_container" class="col-lg-9">
+									<input id="filtro1" type="radio" title="Aggiungi"
+										name="flagRicerca" value="1" onclick="controllaInputText()" />
+									S&Iacute; <input id="filtro0" type="radio" title="Escludi"
+										name="flagRicerca" value="0" onclick="controllaInputText()" />No
+									<span class="help-block"></span>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">
-							<span th:text="#{associazione.dialog.button.close}">Annulla</span>
-						</button>
-						<span th:if="${datasetfiles.size()>0}">
-							<button id="btn_dlg_assoc" type="button"
-								class="btn btn-success disabled"
-								onclick="associaVar(' + ${datasetfiles} + ')" >Associa</button>
-						</span>
-						<span th:if="${datasetfiles.size()>0}">
-							<button id="btn_dlg_ins" type="button"
-								class="btn btn-primary hide"
-								onclick="associaVarToRole()" data-dismiss="modal">Inserisci</button>
-<!-- 								onclick="inserisciRuoloVar()" data-dismiss="modal">Inserisci</button> -->
-								
-								
-
-						</span>
-					</div>
+				</form>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+						<span th:text="#{associazione.dialog.button.close}">Annulla</span>
+					</button>
+					<button id="btn_dlg_assoc_mod" type="button"
+						class="btn btn-primary disabled towait"
+						onclick="modificaRuoloVar()" data-dismiss="modal">Save</button>
 				</div>
-				<!-- /.modal-content -->
 			</div>
-			<!-- /.modal-dialog -->
 		</div>
-		<!-- /.modal -->
+	</div>
 
-		<!-- Bootstrap modal modifica associazione -->
-		<div class="modal fade" id="modifica-viarabile-workset-modal"
-			role="dialog">
-			<div class="modal-dialog modal-lg " role="document">
+	<!-- Add parameter modal -->
+	<div class="modal fade" id="add-parametri-workset-modal" role="dialog">
+		<div class="modal-dialog modal-xl" role="document">
+			<form th:action="@{/ws/assegnaparametri}" id="formAssociaParam"
+				method="post">
+				<input id="id_elaborazione" type="hidden" name="idelaborazione"
+					th:value="${elaborazione.id}" /> <input id="valoreParam"
+					type="hidden" name="valoreParam" value="" />
 				<div class="modal-content ">
-					<form th:action="@{/ws/updateassociavariabile}"
-						id="formUpdateAssociaRuolo" class="form-horizontal" method="post">
-
-						<input type="hidden" name="variabile" id="mod_idvariabile" /> <input
-							type="hidden" name="valoreOld" id="mod_valore_old" />
-						<span id="update_associazione_vars"></span>
-
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-							<h4 class="modal-title">
-								<i class="fa fa-cog"></i>
-								<span>Modifica associazione variabile</span>
-							</h4>
-						</div>
-						<div class="modal-body 	">
-							<div class="form-body">
-								<div class="row">
-									<div class="col-lg-3">
-										<label class="control-label"
-											th:text="#{update.nome.label}+':'  "> <span>nome</span></label>
-									</div>
-									<div class="col-lg-9">
-										<input name="valore" id="nome-var" title="Nome variabile"
-											class="form-control" type="text" onkeyup="controllaCampo()" />
-										<span class="help-block">
-											<small class="text-danger" id="nomevarerror"></small>
-										</span>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-3">
-										<label class="control-label"
-											th:text="#{update.ruolo.label}+':'  "> <span
-												id="funzione">ruolo</span></label>
-									</div>
-									<div class="col-lg-9">
-										<select name="ruolo" id="idruolomod" class="form-control">
-											<option th:each="ruolo : ${listaRuoliInOut}"
-												th:value="${ruolo.id}" th:text="${ruolo.nome}"></option>
-
-										</select>
-										<span class="help-block"></span>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-3">
-										<label class="control-label"
-											th:text="#{update.filtro.label}+':'  "> <span>Filtro</span>
-										</label>
-									</div>
-									<div id="radio_container" class="col-lg-9">
-										<input id="filtro1" type="radio" title="Aggiungi"
-											name="flagRicerca" value="1" onclick="controllaInputText()" />
-										S&Iacute; <input id="filtro0" type="radio" title="Escludi"
-											name="flagRicerca" value="0" onclick="controllaInputText()" />
-										No
-										<span class="help-block"></span>
-									</div>
-
-								</div>
-
-							</div>
-						</div>
-					</form>
-					<div class="modal-footer">
-
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">
-							<span th:text="#{associazione.dialog.button.close}">Annulla</span>
+					<div class="modal-header">
+						<h5 class="modal-title">
+							<i class="fa fa-plus"></i>
+							<span>Nuovo Parametro</span>
+						</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
 						</button>
-
-						<button id="btn_dlg_assoc_mod" type="button"
-							class="btn btn-primary disabled towait"
-							onclick="modificaRuoloVar()" data-dismiss="modal">Salva</button>
 					</div>
-				</div>
-				<!-- /.modal-content -->
-			</div>
-			<!-- /.modal-dialog -->
-		</div>
-		<!-- /.modal modifica -->
-
-
-		<!-- Bootstrap modal -->
-		<div class="modal fade" id="add-parametri-workset-modal" role="dialog">
-			<div class="modal-dialog modal-lg" role="document">
-				<form th:action="@{/ws/assegnaparametri}" id="formAssociaParam"
-					method="post">
-					<input id="id_elaborazione" type="hidden" name="idelaborazione"
-						th:value="${elaborazione.id}" /><input id="valoreParam"
-						type="hidden" name="valoreParam" value="" />
-					<div class="modal-content ">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-							<h4 class="modal-title">
-								<i class="fa fa-plus"></i>
-								<span>Nuovo Parametro</span>
-							</h4>
-						</div>
-						<div class="modal-body">
-                          	<div th:if="${listaParametri.size()>0}">
-					 		<div class="form-group" >
+					<div class="modal-body">
+						<div th:if="${listaParametri.size()>0}">
+							<div class="form-group">
 								<label for="select-param" class="col-form-label">Parametro:</label>
 								<select class="form-control" name="parametri" id="select-param">
 									<option
-										th:value="${parameter.nome+'|'+parameter.id+'|'+parameter.sxRuoli.id}"
+										th:value="${parameter.nome+'|'+parameter.id+'|'+parameter.appRole.id}"
 										th:attr="param-id=${parameter.id},param-name=${parameter.nome}"
 										th:each="parameter, y: ${listaParametri}"
 										th:text="${parameter.nome}"></option>
 								</select>
 							</div>
 							<div id="add-param"></div>
-							</div>
-                           <div th:unless="${listaParametri.size()>0}">
-								<span th:text="#{params.no.avaible}">Nessun parametro disponibile per l'associazione</span>
-							</div>
-
 						</div>
-						<div class="modal-footer">
-
-							<button type="button" class="btn btn-secondary"
-								data-dismiss="modal">
-								<span th:text="#{associazione.dialog.button.close}">Annulla</span>
-							</button>
-
-							<button id="btn_dlg_assoc_param" type="button"
-								class="btn btn-primary " onclick="inserisciParams()"
-								data-dismiss="modal">Inserisci</button>
-						</div>
-					</div>
-					<!-- /.modal-content -->
-				</form>
-			</div>
-			<!-- /.modal-dialog -->
-		</div>
-		<!-- /.modal -->
-
-		<!-- Bootstrap modal Modifica Paramentro -->
-		<div class="modal fade" id="mod-parametri-workset-modal" role="dialog">
-			<div class="modal-dialog modal-lg" role="document">
-				<form th:action="@{/ws/modificaparametro}" id="formModAssociaParam"
-					method="post">
-					<input id="id_elaborazione" type="hidden" name="idelaborazione"
-						th:value="${elaborazione.id}" /> <input id="valoreParamMod"
-						type="hidden" name="valoreParam" value="" /> <input
-						id="idStepvarMod" type="hidden" name="idStepvarMod" value="" />
-					<input type="hidden" name="parametri" id="edit-parameters">
-					<div class="modal-content ">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-							<h4 class="modal-title">
-								<i class="fa fa-edit"></i>
-								<span>Modifica Parametro</span>
-							</h4>
-						</div>
-						<div class="modal-body">
-							<div id="edit-param" class="form-group"></div>
-                       
-						</div>
-						<div class="modal-footer">
-
-							<button type="button" class="btn btn-secondary"
-								data-dismiss="modal">
-								<span th:text="#{associazione.dialog.button.close}">Annulla</span>
-							</button>
-
-							<button id="btn_dlg_mod_assoc_param" type="button"
-								class="btn btn-primary " onclick="modificaParam()"
-								data-dismiss="modal">Salva</button>
-						</div>
-					</div>
-					<!-- /.modal-content -->
-				</form>
-			</div>
-			<!-- /.modal-dialog -->
-		</div>
-		<!-- /.modal -->
-
-
-
-		<!-- Bootstrap modal -->
-		<div class="modal fade" id="scelta-ruolo-modal" role="dialog">
-			<div class="modal-dialog " role="document">
-
-
-				<div class="modal-content ">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title">
-							<i class="fa fa-navicon"></i>
-							<span th:text="#{assegna.ruolo.dialog.title}">Assegna
-								ruolo</span>
-						</h4>
-					</div>
-					<div class="modal-body form">
-						<div class="form-body">
-							<div class="form-group row">
-								<div class="col-lg-16 contenitore_dialog_ass_var">
-									<!-- Contenitore -->
-									<div class="col-lg-8">
-										<div class="col-lg-4 well-legend label_title">Variabile</div>
-										<div class="col-lg-4 well-legend label_title">Ruolo</div>
-									</div>
-
-									<div class="col-lg-8 contenuto_var_ass">
-										<!-- Contenitore 2 -->
-										<div class="col-lg-4">
-											<label class="control-label"> <span id="variabile"></span></label>
-										</div>
-
-										<div class="list-group vars_border"
-											style="height: 250px; overflow-y: scroll;">
-											<a th:each="ruolo, y: ${listaRuoli}" class="list-group-item"
-												th:id="${'vara_'+ruolo.id}"
-												th:onclick="'javascript:associaRuoloVar(\'' + ${ruolo.nome} + '\', \'' + ${ruolo.id} + '\')'"
-												title="Scelta ruolo"> <span th:text="${ruolo.nome}"></span>
-											</a>
-										</div>
-
-										<span class="help-block"></span>
-									</div>
-								</div>
-							</div>
+						<div th:unless="${listaParametri.size()>0}">
+							<span th:text="#{params.no.avaible}">Nessun parametro
+								disponibile per l'associazione</span>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" data-dismiss="modal">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">
 							<span th:text="#{associazione.dialog.button.close}">Annulla</span>
 						</button>
+						<button id="btn_dlg_assoc_param" type="button"
+							class="btn btn-primary " onclick="inserisciParams()"
+							data-dismiss="modal">Inserisci</button>
 					</div>
 				</div>
-				<!-- /.modal-content -->
-
-			</div>
-			<!-- /.modal-dialog -->
+			</form>
 		</div>
-		<!-- /.modal -->
-		<!-- Modal elimina associazione -->
-		<div class="modal fade" id="modalCancellaAssociazione" tabindex="-1"
-			role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
+	</div>
+
+	<!-- Edit parameter modal -->
+	<div class="modal fade" id="mod-parametri-workset-modal" role="dialog">
+		<div class="modal-dialog modal-xl" role="document">
+			<form th:action="@{/ws/modificaparametro}" id="formModAssociaParam"
+				method="post">
+				<input id="id_elaborazione" type="hidden" name="idelaborazione"
+					th:value="${elaborazione.id}" /> <input id="valoreParamMod"
+					type="hidden" name="valoreParam" value="" /> <input
+					id="idStepvarMod" type="hidden" name="idStepvarMod" value="" /> <input
+					type="hidden" name="parametri" id="edit-parameters" />
+				<div class="modal-content ">
 					<div class="modal-header">
+						<h5 class="modal-title">
+							<i class="fa fa-edit"></i>
+							<span>Modifica Parametro</span>
+						</h5>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title" id="exampleModalLabel">
-							<i class="fa fa-trash"></i>Conferma eliminazione
-						</h4>
 					</div>
 					<div class="modal-body">
-						Eliminare l'associazione per la variabile
-						<span id="nomeStepVar"></span>
-						?
+						<div id="edit-param" class="form-group"></div>
 					</div>
 					<div class="modal-footer">
-
 						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">Chiudi</button>
-						<button type="button" id="btn_delete"
-							class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /.modal elimina associazione -->
-		<!-- Modal elimina associazione -->
-		<div class="modal fade" id="modalCancellaParametro" tabindex="-1"
-			role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
+							data-dismiss="modal">
+							<span th:text="#{associazione.dialog.button.close}">Annulla</span>
 						</button>
-						<h4 class="modal-title" id="exampleModalLabel">
-							<i class="fa fa-trash"></i>Conferma eliminazione
-						</h4>
+						<button id="btn_dlg_mod_assoc_param" type="button"
+							class="btn btn-primary " onclick="modificaParam()"
+							data-dismiss="modal">Save</button>
 					</div>
-					<div class="modal-body">
-						Eliminare il parametro
-						<span id="nomeParametro"></span>
-						?
-					</div>
-					<div class="modal-footer">
+				</div>
+			</form>
+		</div>
+	</div>
 
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">Chiudi</button>
-						<button type="button" id="btn_delete_param"
-							class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
-					</div>
+	<!-- Delete variable/role bind-->
+	<div class="modal fade" id="modalCancellaAssociazione" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">
+						<i class="fa fa-trash"></i>Conferma eliminazione
+					</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					Eliminare l'associazione per la variabile
+					<span id="nomeStepVar"></span>
+					?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<button type="button" id="btn_delete"
+						class="btn btn-primary towait" data-dismiss="modal">Delete</button>
 				</div>
 			</div>
 		</div>
-		<!-- /.modal elimina associazione -->
-		<!-- END MAIN CONTAINER -->
-		<footer th:replace="layout :: site-footer" />
+	</div>
+
+	<!-- Delete parameter -->
+	<div class="modal fade" id="modal-cancella-parametro" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">
+						<i class="fa fa-trash"></i>Conferma eliminazione
+					</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					Eliminare il parametro
+					<span id="nomeParametro"></span>
+					?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<button type="button" id="btn_delete_param"
+						class="btn btn-primary towait" data-dismiss="modal">Delete</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 </body>

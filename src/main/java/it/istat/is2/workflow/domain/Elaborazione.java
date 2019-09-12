@@ -74,12 +74,13 @@ public class Elaborazione implements Serializable {
     private WorkSession sessioneLavoro;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "BFUNCTION", nullable = false)
-    private SxBusinessFunction sxBusinessFunction;
+    @JoinColumn(name = "BPROCESS", nullable = false)
+
+    private BusinessProcess  businessProcess;
 
     @OneToMany(mappedBy = "elaborazione", cascade = CascadeType.ALL)
     @OrderBy(value = "ordine ASC")
-    private List<SxStepVariable> sxStepVariables;
+    private List<StepVariable> stepVariables;
 
     public Elaborazione(Long id) {
         super();

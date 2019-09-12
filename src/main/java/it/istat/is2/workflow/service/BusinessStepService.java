@@ -31,8 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.istat.is2.workflow.dao.BusinessStepDao;
-import it.istat.is2.workflow.domain.SxBusinessProcess;
-import it.istat.is2.workflow.domain.SxBusinessStep;
+import it.istat.is2.workflow.domain.BusinessProcess;
+import it.istat.is2.workflow.domain.BusinessStep;
 
 @Service
 public class BusinessStepService {
@@ -40,13 +40,13 @@ public class BusinessStepService {
     @Autowired
     BusinessStepDao businessStepDao;
 
-    public List<SxBusinessStep> findBStepByIdProcess(Long idprocess) {
-        List<SxBusinessProcess> businessProcesses = new ArrayList<>();
-        businessProcesses.add(new SxBusinessProcess(idprocess));
-        return businessStepDao.findBySxBusinessProcesses(businessProcesses);
+    public List<BusinessStep> findBStepByIdProcess(Long idprocess) {
+        List<BusinessProcess> businessProcesses = new ArrayList<>();
+        businessProcesses.add(new BusinessProcess(idprocess));
+        return businessStepDao.findByBusinessProcesses(businessProcesses);
     }
 
-    public Optional<SxBusinessStep> findBusinessStep(Long idbstep) {
+    public Optional<BusinessStep> findBusinessStep(Long idbstep) {
         return businessStepDao.findById(idbstep);
     }
 }

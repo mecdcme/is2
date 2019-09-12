@@ -50,14 +50,6 @@ $(document).ready(function () {
         responsive: true,
         paging: false,
         ordering: false,
-        rowReorder: {        	
-            selector: 'td:nth-child(2)'
-        },
-        columnDefs: [{
-                orderable: false,
-                className: 'reorder',
-                targets: [1]
-            }],
         buttons: [{
                 className: 'btn-extenal-function btn-light',
                 text: '<i class="fa fa-plus"></i><span> Variabile</span>',
@@ -70,18 +62,6 @@ $(document).ready(function () {
         }
     });
 
-    table.on('row-reorder', function (e, diff, edit) {
-        var result = 'Reorder started on row: ' + edit.triggerRow.data()[1] + '<br>';
-
-        for (var i = 0, ien = diff.length; i < ien; i++) {
-            var rowData = table.row(diff[i].node).data();
-            result += rowData[1]
-                    + ' updated to be in position '
-                    + diff[i].newData + ' (was '
-                    + diff[i].oldData + ')<br>';
-        }
-        cambiaPosizione();
-    });
 
     var listVarSize = $("#check_vrs").val();
     if (listVarSize == 0) {
@@ -109,14 +89,9 @@ $(document).ready(function () {
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         autoWidth: false,
-        responsive: true,
+        responsive: false,
         paging: false,
-        rowReorder: true,
-        columnDefs: [{
-                orderable: false,
-                className: 'reorder',
-                targets: [1,2,3,4,5,6]
-            }],
+        ordering: false,
         buttons: [{
                 className: 'btn-extenal-function btn-light',
                 text: '<i class="fa fa-plus"></i><span> Parametro</span>',
@@ -129,32 +104,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#dataFile").DataTable({
-        drawCallback: function () {
-            $(".loading").hide();
-        },
-        dom: "<'row'<'col-sm-4'B><'col-sm-4'f><'col-sm-4'<'pull-right'l>> >"
-                + "<'row'<'col-sm-12'tr>>"
-                + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        responsive: true,
-        ordering: false,
-        searching: false,
-        lengthChange: true,
-        pageLength: 25,
-        serverSide: true,
-        ajax: _ctx + "/rest/datasetvalori/" + ID,
-        columns: eval(getHeaders('dataFile')),
-        processing: true,
-        buttons: [{
-                extend: 'csvHtml5',
-                filename: 'download',
-                title: 'download',
-                action: function (e, dt, node, config) {
-                    scaricaFile('csv');
-                }
-            }]
-    });
-
+ 
     var idElaborazione = 1; // _idElaborazione;
 
     $("#worksetTab").DataTable({
@@ -197,118 +147,113 @@ $(document).ready(function () {
     
     $('#select-param').on("change", function (e) {
      var nameParameter=	$( "#select-param option:selected" ).attr("param-name");
-     var schema=_paramTemplateMap[nameParameter];
-     var option="\"options\": {\"fields\": {\"MetricMatchingVariables\": {\"toolbarSticky\": true,\"toolbarPosition\": \"top\"}}}";
-     var dataContent="{\"schema\":"+schema+","+option+"}";
+     var jsontemplateText=_paramTemplateMap[nameParameter];
+     var jsontemplate=JSON.parse(jsontemplateText);
+     var schema=jsontemplate["schema"];
+     var options=jsontemplate["options"];
+     var dataContent="{\"schema\":"+JSON.stringify(schema)+",\"options\":"+JSON.stringify(options)+"}";
+     console.log(dataContent);
      $('#add-param').empty();
-     if(nameParameter === 'MATCHING VARAIBLES'){
-    	 $("#add-param").alpaca(JSON.parse("{" + schema + "}"));
-     } else {
-    	 $('#add-param').alpaca(JSON.parse(dataContent)); 
-     }
-     $("#add-param").alpaca({
-    	    "data": [],
-    	    "schema": {
-    	        "type": "array",
-    	        "items": {
-    	            "type": "object",
-    	            "properties": {
-    	                "matchingVariable": {
-    	                    "type": "string",
-    	                    "title": "MatchingVariable",
-    	                    "required": true
-    	                },
-    	                "matchingVariableA": {
-    	                    "type": "string",
-    	                    "title": "MatchingVariableA",
-    	                    "enum": ["DSa - DS", "DSa - IDENTIFIER", "DSa - SURNAME", "DSa - NAME", "DSa - LASTCODE", "DSa - NUMCODE", "DSa - STREET"],
-    	                    "required": true
-    	                },
-    	                "matchingVariableB": {
-    	                    "type": "string",
-    	                    "title": "MatchingVariableB",
-    	                    "enum": ["DSb - DS", "DSb - IDENTIFIER", "DSb - SURNAME", "DSb - NAME", "DSb - LASTCODE", "DSb - NUMCODE", "DSb - STREET"],
-    	                    "required": true
-    	                },
-    	                "method": {
-    	                    "type": "string",
-    	                    "title": "Method",
-    	                    "enum": ["Jaro","Jaro1","Jaro2"],
-    	                    "required": true
-    	                },
-    	                "threshold": {
-    	                    "type": "number",
-    	                    "title": "Threshold",
-    	                    "required": true
-    	                },
-    	                "window": {
-    	                    "type": "number",
-    	                    "title": "Window",
-    	                    "required": true
-    	                }
-    	            }
-    	        }
-    	    },
-    	    "options": {
-    	        "type": "table",
-    	        "toolbarSticky": true,
-                "showActionsColumn": false,
-    	        "toolbar": {
-                    "actions": [{
-                        "action": "up",
-                        "enabled": false
-                    }]
-                },
-    	        "items": {
-    				"fields": {
-    					"method": {
-    						"type": "select",
-    						"noneLabel": "",
-    	                    "removeDefaultNone": false
-    					},
-    	                 "matchingVariableA": {
-    	                    "type": "select",
-    	                    "optionLabels": ["DSa - DS", "DSa - IDENTIFIER", "DSa - SURNAME", "DSa - NAME", "DSa - LASTCODE", "DSa - NUMCODE", "DSa - STREET"]
-    	                },
-    	                "matchingVariableB": {
-    	                    "type": "select",
-    	                    "optionLabels": ["DSb - DS", "DSb - IDENTIFIER", "DSb - SURNAME", "DSb - NAME", "DSb - LASTCODE", "DSb - NUMCODE", "DSb - STREET"]
-    	                }
-    				}
-    			}
-    	    },
-    	    "postRender": function(control) {
-    	        control.on("move", function() {
-    	            for (var i = 0; i < control.children.length; i++) {
-    	                control.children[i].childrenByPropertyId["MatchingVariable"].setValue(i + 1);
-    	            }
-    	        });
-    	    }
-    	});
-    });
-
+     $('#add-param').alpaca(JSON.parse(jsontemplateText)); 
+     });
+       
 
 });
 
 
+function associaVar() {
+	 var varSelectedId = $("#varSelectedId").val();
+	 var varSelectedName = $("#varSelectedName").val();
+    var labelFile = $("#varLabelFile").val();
+    var roleSelectedName = $("#roleSelectedName").val();
+    var roleSelectedId = $("#roleSelectedId").val();
+    var labelFileSet = labelFile;
+	 var idTab = "" + varSelectedId;
+    var li = $( tabTemplate.replace( /#\{href\}/g, "#" + idTab ).replace( /#\{label\}/g, labelFileSet + '-' + varSelectedName) );
+    var tabContentHtml = roleSelectedName;
+    tabs.find( ".ui-tabs-nav" ).append( li );
+  	 tabs.append( "<div id='" + varSelectedId + "'><p>" + tabContentHtml + "</p></div>" );
+  	 tabs.tabs( "refresh" );
+    tmpVarSel['#var_'+varSelectedId]  =  $('#var_'+varSelectedId).clone();
+  	$('#var_'+varSelectedId).remove();
+  	$("#btn_dlg_ins").removeClass('hide');
+  	$("#role_"+roleSelectedId).removeClass('active');
+  	$("#varSelectedId").val("");
+  	$("#roleSelectedId").val("");
+  	$('#btn_dlg_assoc').addClass('disabled');
+  	$('#btn_dlg_assoc').attr( "disabled","disabled");
+  	associazioneVarRoleBean.push({'idElaborazione':$("#idelaborazione").val(),'ruolo':{'idRole':roleSelectedId,'name':roleSelectedName,'variables':[{'idVar':varSelectedId,'name':varSelectedName}]}});
+   console.log(JSON.stringify(associazioneVarRoleBean));
+ }
+       
+ function removeSelVarFromTab(id){
+	tmpVarSel['#var_'+id].prependTo("#div_variabili_dataset");
+	$('#var_'+id).removeClass('active');
+	delete tmpVarSel['#var_'+id];
+	delete associazioneVarRoleBean[id];
+	if(Object.entries(tmpVarSel).length === 0 && tmpVarSel.constructor === Object){
+		$("#btn_dlg_ins").addClass('hide');
+	}
+	const index = associazioneVarRoleBean.findIndex(x => x.idVar === id);
+	if (index !== undefined) associazioneVarRoleBean.splice(index, 1);
+	console.log(JSON.stringify(associazioneVarRoleBean));
+ }
+ 
+ function associaVarToRole(){
+	    var id_elaborazione = $("#idelaborazione").val();
+	 	var myUrl = $("meta[name='ctx']").attr("content") + "/rest/ws/associaVariabiliRuolo";
+  	 $.ajax({
+  		url: myUrl,
+  		headers : {
+           'Accept' : 'application/json',
+           'Content-Type' : 'application/json'
+       },
+       type: "POST",
+       async:false,
+  	    data : JSON.stringify(associazioneVarRoleBean),
+  	    success: function () {
+			console.log("success! ");
+			window.location.href = $("meta[name='ctx']").attr("content") + "/ws/editworkingset/"+ id_elaborazione;
+       },
+       error: function (jqXHR, textStatus, errorThrown) {
+           console.log('Error!', errorThrown);
+       }
+  	});
+ }
+
 function openDlgModParametriWorkset(identifier) {
-	
-	//controllaCampoModParam();
+		//controllaCampoModParam();
 	
 	var idParam=$(identifier).data('id-param');
 	var idWorkset=$(identifier).data('id-workset');
-	var nameWorkset=$(identifier).data('name-workset');
-	var schema=_paramTemplateMap[nameWorkset];
-    var data=$(identifier).data('value-param');
+	var nameParameter=$(identifier).data('name-workset');
+	
+	
+     var jsontemplateText=_paramTemplateMap[nameParameter];
+     var jsontemplate=JSON.parse(jsontemplateText);
+     var schema=jsontemplate["schema"];
+     var options=jsontemplate["options"];
+     if(options==undefined) options="";
+        var data=$(identifier).data('value-param');
     $('#edit-parameters').val(idWorkset);
-    var option="\"options\": {\"fields\": {\"MetricMatchingVariables\": {\"toolbarSticky\": true,\"toolbarPosition\": \"top\"}}}";
-    var dataContent="{\"data\":"+ JSON.stringify(data)+",\"schema\":"+schema+","+option+"}";
-    $('#edit-param').empty();
+     var dataContent="{\"data\":"+ JSON.stringify(data)+",\"schema\":"+JSON.stringify(schema)+",\"options\":"+JSON.stringify(options)+"}";
+      $('#edit-param').empty();
      $('#edit-param').alpaca(JSON.parse(dataContent));
      $("#idStepvarMod").val(idParam);
   $("#mod-parametri-workset-modal").modal("show");
 }
 
+function mostraDialogEliminaParametro(identifier) {
+	var idParam=$(identifier).data('id-param');
+	var idelab=$(identifier).data('id-elab');
+	var nameParam=$(identifier).data('name-param');
+	
+    $("#idparam").val(idParam);
+    $("#idelab").val(idelab);
+    $("#nomeParametro").text(nameParam);
+   
+    $("#modal-cancella-parametro").modal("show");
+}
 
 
 function cambiaPosizione() {
@@ -371,7 +316,6 @@ function openDlgAddVariabileWorkset() {
     $("#btn_dlg_assoc").addClass('disabled');
     $("#btn_dlg_assoc").attr("disabled", "disabled");
     $("#add-viarabile-workset-modal").modal('show');
-//    $("#add-variable-workset-modal").modal('show');
 }
 
 function openDlgAddParametriWorkset() {
@@ -458,6 +402,7 @@ function inserisciRuoloVar() {
             + "'/>" + "<input type='hidden' name='elaborazione' value='"
             + id_elaborazione
             + "'/></span><input type='hidden' name='stato' value='N'/></span>";
+
     $("#associazione_vars").html(input_content);
     $("#vars_content").html(content);
     eseguiFunzione();
@@ -630,7 +575,7 @@ function eseguiFunzioneUpdate() {
 
 function inserisciParams() {
 	var value =  JSON.stringify($('#add-param').alpaca().getValue());
-	console.log("Params: " + value);
+	
     $("#valoreParam").val(value);
     $("#formAssociaParam").submit();
 }
@@ -648,12 +593,6 @@ function mostraDialogEliminaAssociazione(idelab, idstepvar, nomestepvar) {
     $("#modalCancellaAssociazione").modal("show");
 }
 
-function mostraDialogEliminaParametro(idelab, idParam, nomeParam) {
-    $("#idparam").val(idParam);
-    $("#idelab").val(idelab);
-    $("#nomeParametro").text(nomeParam);
-    $("#modalCancellaParametro").modal("show");
-}
 
 function test() {
     alert($("#nome-var").val().length);

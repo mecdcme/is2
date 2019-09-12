@@ -30,10 +30,10 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import it.istat.is2.workflow.domain.SxWorkset;
+import it.istat.is2.workflow.domain.Workset;
 
 @Repository
-public interface WorkSetDao extends CrudRepository<SxWorkset, Long> {
+public interface WorkSetDao extends CrudRepository<Workset, Long> {
 
 	@Query(value = " SELECT  ss.id as id,ss.nome as nome,   ss.tipo_var as tipo_var,  '{\"valori\":[' || dbms_xmlgen.convert( "
 			+ " RTRIM(XMLAGG(XMLELEMENT(E,'{\"r\":' || t.r  || ',\"v\":\"' || t.v || '\"}',',').EXTRACT('//text()') ORDER BY t.r).GetClobVal(),','), 1) || ']}'"
@@ -42,7 +42,7 @@ public interface WorkSetDao extends CrudRepository<SxWorkset, Long> {
 			+ " ) t"
 			+ "	where t.idx > :riga_inf  and  t.idx <= :riga_sup   and ss.elaborazione=:idelaborazione and ss.TIPO_VAR=1  "
 			+ "	group by ss.id,ss.nome, ss.ORDINE  ,ss.tipo_var  ", nativeQuery = true)
-	List<SxWorkset> findWorkSetDatasetColonnabyQuery(Long idelaborazione, Integer riga_inf, Integer riga_sup);
+	List<Workset> findWorkSetDatasetColonnabyQuery(Long idelaborazione, Integer riga_inf, Integer riga_sup);
 
 	/**
 	 * @param idelaborazione
@@ -58,7 +58,7 @@ public interface WorkSetDao extends CrudRepository<SxWorkset, Long> {
 			+ "	where t.idx > :riga_inf    and t.idx <= :riga_sup     and sv.elaborazione=:idelaborazione  and sv.var=ss.id and ss.TIPO_VAR=1 "
 			+ " and 1= :param_filter  "
 			+ "	group by ss.id,ss.nome, ss.ORDINE  , ss.tipo_var  , ss.valori_size", nativeQuery = true)
-	List<SxWorkset> findWorkSetDatasetColonnaByElaborazioneQuery(@Param("idelaborazione") Long idelaborazione,
+	List<Workset> findWorkSetDatasetColonnaByElaborazioneQuery(@Param("idelaborazione") Long idelaborazione,
 			@Param("riga_inf") Integer riga_inf, @Param("riga_sup") Integer riga_sup,
 			@Param("param_filter") String param_filter);
 

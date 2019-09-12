@@ -26,74 +26,125 @@
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
         <script th:src="@{/webjars/sockjs-client/sockjs.min.js}"></script>
-		<script th:src="@{/webjars/stomp-websocket/stomp.min.js}"></script>
-		<script th:src="@{/js/table/datatables.js}"></script>
-        <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
-        <script th:src="@{/js/elaborazione.js}"></script>
+        <script th:src="@{/webjars/stomp-websocket/stomp.min.js}"></script>
         <script th:src="@{/js/batch.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
-                setMenuActive("elaborazione");
+                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
         </script>
-        <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
         <link rel="stylesheet" th:href="@{/css/batch/batch.css}" />
     </head>
-    <body>
+    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+        <header th:replace="layout :: site-header"></header>
         <!-- Body -->
-        <div class="wrapper">
-            <header th:replace="layout :: site-header"></header>
+        <div class="app-body">
+            <aside th:replace="layout :: site-modals"></aside>
             <aside th:replace="layout :: site-aside"></aside>
-            <!-- START MAIN CONTAINER -->
-            <section>
-                <div class="content-wrapper">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item ">
-                                <span th:if="${session.sessioneBean.nomeElaborazione}" th:text="${session.sessioneBean.nomeElaborazione}"></span>
-                            </li>
-                            <div class="btn-group pull-right" role="group">
-                                <a class="bar-right" title="Workset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}">
-                                    <i class="fa fa-cog"></i>&nbsp;<span>Settings</span>
-                                </a>
-                                <a class="" title="Chiudi elaborazione" th:href="@{'/ws/chiudiElab/'+${elaborazione.id}}"> 
-                                    <i class="fa fa-times"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
-                                </a>
-                            </div>
-                        </ol>
-                    </nav>
-
-                    <div class="container-fluid">
+            <!-- Main container -->
+            <main class="main">
+                <!-- Breadcrumb-->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
+                            <span th:text="${session.sessioneBean.businessFunction.name}"></span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{'/sessione/apri/' + ${session.sessioneBean.id}}">
+                            <span th:text="${session.sessioneBean.nome}"></span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span th:text="${session.sessioneBean.nomeElaborazione}"></span>
+                    </li>
+                    <!-- Breadcrumb Menu-->
+                    <li class="breadcrumb-menu d-md-down-none">
+                        <div class="btn-group" role="group" aria-label="Button group">
+                            <a class="breadcrumb-last-item" title="Chiudi processo" 
+                               th:href="@{'/ws/chiudiElab/'+${elaborazione.id}}">
+                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                            </a>
+                        </div>
+                    </li>
+                </ol>
+                <div class="container-fluid">
+                    <div class="animated fadeIn">
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <span th:text="#{Layout.Detail}">Dettaglio elaborazione </span>
+                                        <span th:text="#{Layout.Processes}"></span>
+                                        <div class="card-header-actions">
+                                            <a class="bar-right" title="Workset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}">
+                                                <i class="fa fa-cog"></i>&nbsp;<span>Settings</span>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="card-body">
-                                        <table class="table table-condensed">
+                                        <table id="processiList" class="table table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th><span  th:text="#{Layout.Process}">Processo</span></th>
+                                                    <th><span th:text="#{Layout.Step}">Step</span></th>
+                                                      <th><span >Missing</span></th>
+                                                    <th><span th:text="#{Layout.status}">Stato</span></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td width="25%"><span th:text="#{Layout.Name}"></span></td>
-                                                    <td><strong th:text="${elaborazione.nome }"></span></td>
-                                                </tr>
-                                                <tr>
-                                                    <td width="25%"><span th:text="#{Layout.Description}"></span></td>
-                                                    <td><span th:text="${elaborazione.descrizione}"></span></td>
-                                                </tr>
-                                                 <tr>
-                                                    <td width="25%"><span th:text="#{Layout.Function}"></span></td>
-                                                    <td><span th:text="${elaborazione.sxBusinessFunction.descr }"></span></td>
-                                                </tr>
-                                                <tr>
-                                                    <td width="25%"><span th:text="#{Layout.Date}"></span></td>
-                                                    <td><span th:text="${#dates.format(elaborazione.dataElaborazione, 'dd/MM/yyyy HH:mm')}"></span></td>
-                                                </tr>
+                                                <th:block
+                                                    th:each="bProcess: ${elaborazione.businessProcess.businessSubProcesses}"
+                                                    th:unless="${(elaborazione.businessProcess.businessSubProcesses == null) or (elaborazione.businessProcess.businessSubProcesses.size() == 0) }">
+                                                    <tr th:each="bStep,stats: ${bProcess.businessSteps}"
+                                                        th:unless="${(bProcess.businessSteps == null) or (bProcess.businessSteps.size() == 0) }">
+                                                        <td th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}" 
+                                                            class="process-border-right" style="vertical-align: middle">
+                                                            <span th:text="${bProcess.descr+' ('+bProcess.nome+')' }"></span>
+                                                        </td>
+                                                        <td class="process-border-right"><span th:text="${bStep.descr+' ('+bStep.nome+')' }"></span></td>
+                                                        
+                                                         <td class="process-border-right"><span th:text="${paramsMissing.get(bProcess.id)}"></span>
+                                                         <span th:text="${variablesMissing.get(bProcess.id)}"></span>
+                                                         
+                                                         
+                                                         </td>
+                                                        
+                                                        <td class="process-border-right">
+                                                            <span th:id="${bProcess.id}">DA PROCESSARE</span>
+                                                        </td>
+                                                        <!--                                                         <span th:id="${bProcess.id}">DA PROCESSARE</span></td> -->
+                                                        <td class="process-border-right process-btns" th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}">
+                                                            <a th:name="link" title="Esegui processo"
+                                                               th:onclick="'javascript:esegui(\'' +${elaborazione.id} +'\',\''+${bProcess.id}+'\')'"
+                                                               href="javascript:void(0)"
+                                                               th:id="'esegui_'+${bProcess.id}">
+                                                                <i class="fa fa-play" aria-hidden="true"></i> 
+                                                                <span>Esegui</span>
+                                                            </a>
+                                                        </td>
+                                                        <td th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}" >
+                                                            <a th:name="link" class="towait not-active" title="Visualizza Workset" th:id="'output_'+${bProcess.id}"
+                                                               th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.is2.app.util.IS2Const).VARIABILE_TIPO_OUTPUT}}">
+                                                                <i class="fa fa-table" aria-hidden="true"></i> 
+                                                                <span th:text="#{Layout.Output}">Output</span>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </th:block>
                                             </tbody>
                                         </table>
+                                        <input type="hidden" id="check_vrs" th:value="${stepVList.size()}"/>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <!-- row -->
+                        <div class="row">
                             <div class="col-lg-6">
                                 <div class="card">
                                     <div class="card-header">
@@ -119,68 +170,11 @@
                             </div>
                         </div>
                         <!-- row -->
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <span th:text="#{Layout.Processes}"></span>
-                                    </div>
-                                    <div class="card-body">
-                                        <table id="processiList" class="table table-condensed">
-                                            <thead>
-                                                <tr>
-                                                    <th><span  th:text="#{Layout.Process}">Processo</span></th>
-                                                    <th><span th:text="#{Layout.Step}">Step</span></th>
-                                                    <th><span th:text="#{Layout.status}">Stato</span></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <th:block
-                                                    th:each="bProcess: ${elaborazione.sxBusinessFunction.sxBusinessProcesses}"
-                                                    th:unless="${(elaborazione.sxBusinessFunction.sxBusinessProcesses == null) or (elaborazione.sxBusinessFunction.sxBusinessProcesses.size() == 0) }">
-                                                    <tr th:each="bStep,stats: ${bProcess.sxBusinessSteps}"
-                                                        th:unless="${(bProcess.sxBusinessSteps == null) or (bProcess.sxBusinessSteps.size() == 0) }">
-                                                        <td th:if="${stats.index==0}" th:rowspan="${bProcess.sxBusinessSteps.size()}" 
-                                                            class="process-border-right" style="vertical-align: middle">
-                                                            <span th:text="${bProcess.descr+' ('+bProcess.nome+')' }"></span>
-                                                        </td>
-                                                        <td class="process-border-right"><span th:text="${bStep.descr+' ('+bStep.nome+')' }"></span></td>
-                                                        <td class="process-border-right">
-															<span th:id="${bProcess.id}">DA PROCESSARE</span>
-													  	</td>
-<!--                                                         <span th:id="${bProcess.id}">DA PROCESSARE</span></td> -->
-                                                        <td class="process-border-right process-btns" th:if="${stats.index==0}" th:rowspan="${bProcess.sxBusinessSteps.size()}">
-                                                            <a th:name="link" title="Esegui processo"
-                                                            	th:onclick="'javascript:esegui(\'' +${elaborazione.id} +'\',\''+${bProcess.id}+'\')'"
-                                                                href="javascript:void(0)"
-                                                                th:id="'esegui_'+${bProcess.id}">
-                                                                <i class="fa fa-play" aria-hidden="true"></i> 
-                                                                <span>Esegui</span>
-                                                            </a>
-                                                         </td>
-                                                        <td th:if="${stats.index==0}" th:rowspan="${bProcess.sxBusinessSteps.size()}" >
-                                                            <a th:name="link" class="towait not-active" title="Visualizza Workset" th:id="'output_'+${bProcess.id}"
-                                                               th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.is2.app.util.IS2Const).VARIABILE_TIPO_OUTPUT}}">
-                                                                <i class="fa fa-table" aria-hidden="true"></i> 
-                                                                <span th:text="#{Layout.Output}">Output</span>
-                                                            </a>
-                                                         </td>
-                                                    </tr>
-                                                </th:block>
-                                            </tbody>
-                                        </table>
-                                        <input type="hidden" id="check_vrs" th:value="${stepVList.size()}"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
-            </section>
-            <!-- END MAIN CONTAINER -->
-            <footer th:replace="layout :: site-footer" />
+            </main>
         </div>
+        <!-- End body -->
+        <footer th:replace="layout :: site-footer" />
     </body>
 </html>

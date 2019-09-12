@@ -14,12 +14,17 @@ import lombok.Data;
  * @author mbruno
  */
 @Data
-public class BusinessFunctionBean implements Serializable{
-    
-    private static final long serialVersionUID = -5191468922294665333L;
-    
+public class BusinessFunctionBean implements Serializable {
+
+    private static final long serialVersionUID = 11292613;
+
     private Long id;
     private String name;
-    private List<BusinessProcessBean> processes;
+    private String description;
+    boolean hasRuleSet;
     
+    public BusinessFunctionBean(Long id, String name){
+        this.id = id;
+        this.name = name;
+    }
 }

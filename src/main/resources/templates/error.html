@@ -26,19 +26,27 @@
     <head th:fragment="site-head">
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="description" content="IS2 - Workbench"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="IE=10.000" http-equiv="X-UA-Compatible" />
-        <title th:text="#{app.title}">IS2</title>
+        <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+        <meta name="ctx_server" th:content="${#strings.replace(#httpServletRequest.requestURL,#httpServletRequest.requestURI,'')}" />
+        <meta name="localLang" th:content="${#locale}" />
+        <link rel="icon" th:href="@{/img/favicon.ico}" type="image/x-icon"/>
+        <title>IS2 Workbench</title>
         <!-- Javascript -->
         <script th:src="@{/js/jquery-3.1.1.min.js}" type="text/javascript"></script>
-        <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/popper/popper.min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/bootstrap.js}" type="text/javascript"></script>
+        <script th:src="@{/js/coreui/coreui.js}" type="text/javascript"></script>
         <script th:src="@{/js/box.js}" type="text/javascript"></script>
         <!-- CSS -->
-        <link th:href="@{/css/custom_bootstrap.css}" rel="stylesheet" />
+        <link th:href="@{/css/coreui/coreui.css}" rel="stylesheet" />
         <link th:href="@{/css/box.css}" rel="stylesheet" />
-        <link th:href="@{/css/error.css}" rel="stylesheet" />
-        <!-- Fontawesome -->
-        <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+        <!-- Icons -->
+        <link th:href="@{/icons/font-awesome.min.css}" rel="stylesheet" />
+        <link th:href="@{/icons/coreui-icons.css}" rel="stylesheet" />
+        <link th:href="@{/icons/simple-line-icons.css}" rel="stylesheet" />
     </head>
 
     <body>

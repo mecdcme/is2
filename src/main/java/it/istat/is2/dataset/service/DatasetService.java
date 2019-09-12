@@ -51,7 +51,7 @@ import it.istat.is2.dataset.dao.TipoVariabileSumDao;
 import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.domain.TipoVariabileSum;
-import it.istat.is2.workflow.domain.SxTipoDato;
+import it.istat.is2.workflow.domain.TipoDato;
 import it.istat.is2.worksession.dao.WorkSessionDao;
 import it.istat.is2.worksession.domain.WorkSession;
 
@@ -76,7 +76,7 @@ public class DatasetService {
         DatasetFile dFile = new DatasetFile();
 
         dFile.setLabelFile(labelFile);
-        SxTipoDato tipoD = new SxTipoDato();
+        TipoDato tipoD = new TipoDato();
         tipoD.setId(tipoDato);
         dFile.setTipoDato(tipoD);
         dFile.setSessioneLavoro(sessioneLavoroDao.findById(Long.parseLong(idsessione)).get());

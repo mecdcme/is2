@@ -57,7 +57,7 @@ import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.domain.TipoVariabileSum;
 import it.istat.is2.dataset.service.DatasetService;
-import it.istat.is2.workflow.domain.SxTipoDato;
+import it.istat.is2.workflow.domain.TipoDato;
 import it.istat.is2.workflow.service.TipoDatoService;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
@@ -140,7 +140,7 @@ public class DatasetController {
         }
 
         List<DatasetFile> listaDataset = sessionelv.getDatasetFiles();
-        List<SxTipoDato> listaTipoDato = tipoDatoService.findListTipoDato();
+        List<TipoDato> listaTipoDato = tipoDatoService.findListTipoDato();
 
         String etichetta = null;
         if(listaDataset!=null && listaDataset.size()>0) {

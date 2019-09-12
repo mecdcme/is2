@@ -31,12 +31,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import it.istat.is2.app.domain.User;
+import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.worksession.domain.WorkSession;
 
 @Repository
 public interface WorkSessionDao extends CrudRepository<WorkSession, Long> {
 
     List<WorkSession> findByUserOrderByDataCreazioneDesc(@Param("user") User user);
+    List<WorkSession> findByUserAndBusinessFunctionOrderByDataCreazioneDesc(@Param("user") User user, @Param("businessFunction") BusinessFunction businessFunction);
 
+    @Override
     Optional<WorkSession> findById(@Param("id") Long id);
 }

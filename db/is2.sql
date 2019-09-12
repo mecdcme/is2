@@ -127,7 +127,6 @@ CREATE TABLE `batch_job_execution_seq` (
 
 LOCK TABLES `batch_job_execution_seq` WRITE;
 /*!40000 ALTER TABLE `batch_job_execution_seq` DISABLE KEYS */;
-INSERT INTO `batch_job_execution_seq` VALUES (0,'0');
 /*!40000 ALTER TABLE `batch_job_execution_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -177,7 +176,6 @@ CREATE TABLE `batch_job_seq` (
 
 LOCK TABLES `batch_job_seq` WRITE;
 /*!40000 ALTER TABLE `batch_job_seq` DISABLE KEYS */;
-INSERT INTO `batch_job_seq` VALUES (0,'0');
 /*!40000 ALTER TABLE `batch_job_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -267,31 +265,36 @@ CREATE TABLE `batch_step_execution_seq` (
 
 LOCK TABLES `batch_step_execution_seq` WRITE;
 /*!40000 ALTER TABLE `batch_step_execution_seq` DISABLE KEYS */;
-INSERT INTO `batch_step_execution_seq` VALUES (0,'0');
 /*!40000 ALTER TABLE `batch_step_execution_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `sx_app_instance`
+-- Table structure for table `sx_app_role`
 --
 
-DROP TABLE IF EXISTS `sx_app_instance`;
+DROP TABLE IF EXISTS `sx_app_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `sx_app_instance` (
-  `ISTANZA` int(11) DEFAULT NULL,
-  `STEP` int(20) DEFAULT NULL
+CREATE TABLE `sx_app_role` (
+  `ID` int(11) NOT NULL,
+  `NOME` varchar(50) DEFAULT NULL,
+  `COD` varchar(50) DEFAULT NULL,
+  `DESCR` varchar(50) DEFAULT NULL,
+  `SERVIZIO` int(20) DEFAULT NULL,
+  `ORDINE` int(20) DEFAULT NULL,
+  `TIPO_VAR` int(20) DEFAULT NULL,
+  UNIQUE KEY `SYS_C0013863` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sx_app_instance`
+-- Dumping data for table `sx_app_role`
 --
 
-LOCK TABLES `sx_app_instance` WRITE;
-/*!40000 ALTER TABLE `sx_app_instance` DISABLE KEYS */;
-INSERT INTO `sx_app_instance` VALUES (11,70),(12,71),(13,72);
-/*!40000 ALTER TABLE `sx_app_instance` ENABLE KEYS */;
+LOCK TABLES `sx_app_role` WRITE;
+/*!40000 ALTER TABLE `sx_app_role` DISABLE KEYS */;
+INSERT INTO `sx_app_role` VALUES (0,'SKIP','N','VARIABILE NON UTILIZZATA',100,1,1),(1,'IDENTIFICATIVO','I','CHIAVE OSSERVAZIONE',100,1,1),(2,'TARGET','Y','VARIABILE DI OGGETTO DI ANALISI',100,3,1),(3,'COVARIATA','X','VARIABILE INDIPENDENTE',100,4,1),(4,'PREDIZIONE','P','VARIABILE DI PREDIZIONE',100,5,1),(5,'OUTLIER','O','FLAG OUTLIER',100,6,1),(6,'PESO','W','PESO CAMPIONARIO',100,7,1),(7,'ERRORE','E','ERRORE INFLUENTE',100,10,1),(8,'RANKING','R','INFLUENCE RANKING',100,11,1),(9,'OUTPUT','T','VARIABILE DI OUTPUT',100,20,1),(10,'STRATO','S','PARTIZIONAMENTO DEL DATASET',100,2,1),(11,'PARAMETRI','Z','PARAMETRI DI INPUT',100,997,2),(12,'MODELLO','M','MODELLO DATI',100,998,2),(13,'SCORE','F','INFLUENCE SCORE',100,12,1),(14,'INFO','G','PARAMETRI OUT - INFO RIEPILOGO',100,999,1),(100,'SKIP','N','VARIABILE NON UTILIZZATA',200,100,1),(102,'CHIAVE A','K1','CHIAVE DATASET A',200,3,1),(103,'CHIAVE B','K2','CHIAVE DATASET B',200,4,1),(104,'MATCHING A','X1','VARIABILE DI OGGETTO DI ANALISI A',200,5,1),(105,'MATCHING B','X2','VARIABILE DI OGGETTO DI ANALISI B',200,6,1),(108,'RANKING','M','INFLUENCE RANKING',200,11,2),(110,'STRATO','S','PARTIZIONAMENTO DEL DATASET',200,2,1),(111,'RESULT','R','RISULTATO PRODOTTO CARTESIANO',200,10,2),(115,'BLOCKING','B','SLICING DEL DATASET',200,3,1),(150,'SKIP','N','VARIABILE NON UTILIZZATA',250,100,1),(152,'KEY A','K1','CHIAVE DATASET A',250,3,1),(153,'KEY B','K2','CHIAVE DATASET B',250,4,1),(154,'MATCHING A','X1','VARIABILE DI OGGETTO DI ANALISI A',250,5,1),(155,'MATCHING B','X2','VARIABILE DI OGGETTO DI ANALISI B',250,6,1),(158,'RANKING','M','INFLUENCE RANKING',250,11,2),(160,'STRATA','S','PARTIZIONAMENTO DEL DATASET',250,2,1),(161,'CONTENGENCY TABLE','CT','CONTENGENCY TABLE',250,1,1),(165,'BLOCKING','B','SLICING DEL DATASET',250,3,1),(166,'MATCHING ','X','VARIABLI DI MATCHING',250,1,2),(167,'FELLEGI-SUNTER','FS','FELLEGI-SUNTER',200,2,1),(168,'MATCHING TABLE','MT','MATCHING TABLE',250,3,1),(169,'THRESHOLD','TH','THRESHOLD MATCHING',250,2,2),(170,'THRESHOLD','TU','THRESHOLD UNMATCHING',250,4,2),(171,'POSSIBLE MATCHING TABLE','PM','POSSIBLE MATCHING TABLE',250,5,1),(172,'RESIDUAL A','RA','RESIDUAL DATASET  A',250,6,1),(173,'RESIDUAL B','RB','RESIDUAL DATASET  B',250,7,1);
+/*!40000 ALTER TABLE `sx_app_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -351,6 +354,30 @@ INSERT INTO `sx_app_service_env` VALUES (1,100,'RESULTSET','result','Dataset di 
 UNLOCK TABLES;
 
 --
+-- Table structure for table `sx_artifact_bfunction`
+--
+
+DROP TABLE IF EXISTS `sx_artifact_bfunction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `sx_artifact_bfunction` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sx_artifact_bfunction`
+--
+
+LOCK TABLES `sx_artifact_bfunction` WRITE;
+/*!40000 ALTER TABLE `sx_artifact_bfunction` DISABLE KEYS */;
+INSERT INTO `sx_artifact_bfunction` VALUES (1,'dataset'),(2,'ruleset');
+/*!40000 ALTER TABLE `sx_artifact_bfunction` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sx_bfunc_bprocess`
 --
 
@@ -370,8 +397,55 @@ CREATE TABLE `sx_bfunc_bprocess` (
 
 LOCK TABLES `sx_bfunc_bprocess` WRITE;
 /*!40000 ALTER TABLE `sx_bfunc_bprocess` DISABLE KEYS */;
-INSERT INTO `sx_bfunc_bprocess` VALUES (90,70),(90,72),(91,70),(91,71),(91,72);
+INSERT INTO `sx_bfunc_bprocess` VALUES (1,1),(1,2),(3,3);
 /*!40000 ALTER TABLE `sx_bfunc_bprocess` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sx_bfunc_bprocess_old`
+--
+
+DROP TABLE IF EXISTS `sx_bfunc_bprocess_old`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `sx_bfunc_bprocess_old` (
+  `BFUNCTION` int(20) DEFAULT NULL,
+  `BPROCESS` int(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sx_bfunc_bprocess_old`
+--
+
+LOCK TABLES `sx_bfunc_bprocess_old` WRITE;
+/*!40000 ALTER TABLE `sx_bfunc_bprocess_old` DISABLE KEYS */;
+INSERT INTO `sx_bfunc_bprocess_old` VALUES (1,1),(1,2),(90,70),(90,72),(91,70),(91,71),(91,72);
+/*!40000 ALTER TABLE `sx_bfunc_bprocess_old` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sx_bfunction_artifactbfunction`
+--
+
+DROP TABLE IF EXISTS `sx_bfunction_artifactbfunction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `sx_bfunction_artifactbfunction` (
+  `bfunction` int(11) NOT NULL,
+  `artifact` int(11) NOT NULL,
+  PRIMARY KEY (`bfunction`,`artifact`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sx_bfunction_artifactbfunction`
+--
+
+LOCK TABLES `sx_bfunction_artifactbfunction` WRITE;
+/*!40000 ALTER TABLE `sx_bfunction_artifactbfunction` DISABLE KEYS */;
+INSERT INTO `sx_bfunction_artifactbfunction` VALUES (1,1),(2,1),(2,2),(3,1),(3,2);
+/*!40000 ALTER TABLE `sx_bfunction_artifactbfunction` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -408,8 +482,9 @@ DROP TABLE IF EXISTS `sx_business_function`;
 CREATE TABLE `sx_business_function` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `NOME` varchar(50) DEFAULT NULL,
-  `DESCR` varchar(100) DEFAULT NULL,
+  `DESCR` text,
   `ETICHETTA` varchar(100) DEFAULT NULL,
+  `ACTIVE` int(1) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `SYS_C0014019` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8;
@@ -421,8 +496,34 @@ CREATE TABLE `sx_business_function` (
 
 LOCK TABLES `sx_business_function` WRITE;
 /*!40000 ALTER TABLE `sx_business_function` DISABLE KEYS */;
-INSERT INTO `sx_business_function` VALUES (90,'Cross Table','Esegue il prodotto cartesiano di dataset','Cross Table'),(91,'Relais','Relais Multi-Process','Relais');
+INSERT INTO `sx_business_function` VALUES (1,'Record Linkage','The purpose of record linkage is to identify the same real world entity that can be differently represented in data sources, even if unique identifiers are not available or are affected by errors.','RL',1),(2,'Data Editing','Data editing is the process of reviewing the data for consistency, detection of errors and outliers and correction of errors, in order to improve the quality, accuracy and adequacy of the data and make it suitable for the purpose for which it was collected.','EDIT',1),(3,'Data Validation','Data validation is the process of ensuring data have undergone data cleansing to ensure they have data quality, that is, that they are both correct and useful. It uses routines, often called \"validation rules\", that check for correctness, meaningfulness, and security of data that are input to the system.','VALIDATE',1);
 /*!40000 ALTER TABLE `sx_business_function` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sx_business_function_old`
+--
+
+DROP TABLE IF EXISTS `sx_business_function_old`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `sx_business_function_old` (
+  `ID` int(11) NOT NULL DEFAULT '0',
+  `NOME` varchar(50) CHARACTER SET utf8 DEFAULT NULL,
+  `DESCR` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `ETICHETTA` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `ACTIVE` int(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sx_business_function_old`
+--
+
+LOCK TABLES `sx_business_function_old` WRITE;
+/*!40000 ALTER TABLE `sx_business_function_old` DISABLE KEYS */;
+INSERT INTO `sx_business_function_old` VALUES (1,'Record Linkage',NULL,'RL',1),(2,'Data Editing',NULL,'EDIT',1),(3,'Data Validation',NULL,'VALIDATE',1),(90,'Cross Table','Esegue il prodotto cartesiano di dataset','Cross Table',0),(91,'Relais','Relais Multi-Process','Relais',0);
+/*!40000 ALTER TABLE `sx_business_function_old` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -438,9 +539,11 @@ CREATE TABLE `sx_business_process` (
   `DESCR` varchar(100) DEFAULT NULL,
   `ETICHETTA` varchar(100) DEFAULT NULL,
   `REGOLE` int(20) DEFAULT NULL,
+  `PARENT` int(11) DEFAULT NULL,
+  `ORDER` smallint(1) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `SYS_C0014187` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -449,7 +552,7 @@ CREATE TABLE `sx_business_process` (
 
 LOCK TABLES `sx_business_process` WRITE;
 /*!40000 ALTER TABLE `sx_business_process` DISABLE KEYS */;
-INSERT INTO `sx_business_process` VALUES (70,'Cont Table','Calcolo tabella di contingenza','Cross Table',NULL),(71,'FellegiSunter','FellegiSunter','FellegiSunter',NULL),(72,'Matching Table','Result Matching table','MATCHING TABLE',NULL);
+INSERT INTO `sx_business_process` VALUES (1,'Record Linkage Probabilistico','Record Linkage Probabilistico','RLP',NULL,NULL,1),(2,'Record Linkage Deterministico','Record Linkage Deterministico','RLD',NULL,NULL,2),(3,'Validate R','Validate R','Validate R',NULL,NULL,1),(4,'Validate R Van de','Validate R Van de','Validate R vdf',NULL,3,2),(70,'Cont Table','Calcolo tabella di contingenza','Cross Table',NULL,1,1),(71,'FellegiSunter','FellegiSunter','FellegiSunter',NULL,1,2),(72,'Matching Table','Result Matching table','MATCHING TABLE',NULL,1,3);
 /*!40000 ALTER TABLE `sx_business_process` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -586,10 +689,10 @@ CREATE TABLE `sx_elaborazione` (
   `PARAMETRI` varchar(255) DEFAULT NULL,
   `DESCRIZIONE` varchar(255) DEFAULT NULL,
   `SES_ELABORAZIONE` int(20) DEFAULT NULL,
-  `BFUNCTION` int(20) DEFAULT NULL,
+  `BPROCESS` int(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `SX_ELABORAZIONE_PK` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -598,6 +701,7 @@ CREATE TABLE `sx_elaborazione` (
 
 LOCK TABLES `sx_elaborazione` WRITE;
 /*!40000 ALTER TABLE `sx_elaborazione` DISABLE KEYS */;
+INSERT INTO `sx_elaborazione` VALUES (1,'2019-08-01 16:20:38','Relais',NULL,'prova',15,1),(2,'2019-08-01 16:38:29','relais',NULL,'',16,1),(3,'2019-08-01 16:56:58','relais',NULL,'',17,1),(4,'2019-09-04 13:36:36','nuovo Probabilistico',NULL,'',18,1),(5,'2019-09-09 14:14:25','processo 0909',NULL,'',18,1),(6,'2019-09-10 15:12:48','p2',NULL,'',18,1);
 /*!40000 ALTER TABLE `sx_elaborazione` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -652,35 +756,6 @@ LOCK TABLES `sx_log` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `sx_par_pattern`
---
-
-DROP TABLE IF EXISTS `sx_par_pattern`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `sx_par_pattern` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `NOME` varchar(50) DEFAULT NULL,
-  `ISTANZA` int(20) DEFAULT NULL,
-  `DESCR` varchar(500) DEFAULT NULL,
-  `DEFLT` varchar(50) DEFAULT NULL,
-  `RUOLO` int(20) DEFAULT NULL,
-  `json_template` mediumtext,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `SYS_C0014050` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sx_par_pattern`
---
-
-LOCK TABLES `sx_par_pattern` WRITE;
-/*!40000 ALTER TABLE `sx_par_pattern` DISABLE KEYS */;
-INSERT INTO `sx_par_pattern` VALUES (1,'MATCHING VARAIBLES',11,'MATCHING VARAIBLES','3',166,'\"data\":[],\"schema\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"matchingVariable\":{\"type\":\"string\",\"title\":\"MatchingVariable\",\"required\":true},\"matchingVariableA\":{\"type\":\"string\",\"title\":\"MatchingVariableA\",\"required\":true},\"matchingVariableB\":{\"type\":\"string\",\"title\":\"MatchingVariableB\",\"required\":true},\"method\":{\"type\":\"string\",\"title\":\"Method\",\"required\":true},\"threshold\":{\"type\":\"number\",\"title\":\"Threshold\",\"required\":true},\"window\":{\"type\":\"number\",\"title\":\"Window\",\"required\":true}}}},\"options\":{\"type\":\"table\"}'),(2,'THRESHOLD MATCHING',13,'THRESHOLD MATCHING','1',169,'{\"name\":\"THRESHOLD MATCHING\",\"type\":\"number\",\"title\":\"THRESHOLD MATCHING\", \"minimum\": 0.01,\"maximum\": 1}'),(3,'THRESHOLD UNMATCHING',13,'THRESHOLD UNMATCHING','1',170,'{\"name\":\"THRESHOLD UNMATCHING\",\"type\":\"number\",\"title\":\"THRESHOLD UNMATCHING\", \"minimum\": 0.01,\"maximum\": 1}');
-/*!40000 ALTER TABLE `sx_par_pattern` ENABLE KEYS */;
-UNLOCK TABLES;
---
 -- Table structure for table `sx_roles`
 --
 
@@ -726,7 +801,7 @@ CREATE TABLE `sx_rule` (
   `VARIABILE` int(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `SYS_C0014188` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=840 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=960 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -735,6 +810,7 @@ CREATE TABLE `sx_rule` (
 
 LOCK TABLES `sx_rule` WRITE;
 /*!40000 ALTER TABLE `sx_rule` DISABLE KEYS */;
+INSERT INTO `sx_rule` VALUES (841,NULL,'sss',NULL,NULL,0,1,'sat1+sat2+sat3+sat4+sat5+sat6+sat7 == sat8 ',NULL,NULL,18,'7',NULL),(842,NULL,NULL,NULL,NULL,0,1,'sau1+sau2+sau3+sau4+sau5+sau6+sau7 == sau8 ',NULL,NULL,18,'7',NULL),(843,NULL,NULL,NULL,NULL,0,1,'sau1 <= sat1',NULL,NULL,18,'7',NULL),(844,NULL,NULL,NULL,NULL,0,1,'sau2 <= sat2',NULL,NULL,18,'7',NULL),(845,NULL,NULL,NULL,NULL,0,1,'sau3 <= sat3',NULL,NULL,18,'7',NULL),(846,NULL,NULL,NULL,NULL,0,1,'sau4 <= sat4',NULL,NULL,18,'7',NULL),(847,NULL,NULL,NULL,NULL,0,1,'sau5 <= sat5',NULL,NULL,18,'7',NULL),(848,NULL,NULL,NULL,NULL,0,1,'sau6 <= sat6',NULL,NULL,18,'7',NULL),(849,NULL,NULL,NULL,NULL,0,1,'sau7 <= sat7',NULL,NULL,18,'7',NULL),(850,NULL,NULL,NULL,NULL,0,1,'sat1+sat2+sat3+sat4+sat5+sat6+sat7 == sat8 ',NULL,NULL,19,'7',NULL),(851,NULL,NULL,NULL,NULL,0,1,'sau1+sau2+sau3+sau4+sau5+sau6+sau7 == sau8 ',NULL,NULL,19,'7',NULL),(852,NULL,NULL,NULL,NULL,0,1,'sau1 <= sat1',NULL,NULL,19,'7',NULL),(853,NULL,NULL,NULL,NULL,0,1,'sau2 <= sat2',NULL,NULL,19,'7',NULL),(854,NULL,NULL,NULL,NULL,0,1,'sau3 <= sat3',NULL,NULL,19,'7',NULL),(855,NULL,NULL,NULL,NULL,0,1,'sau4 <= sat4',NULL,NULL,19,'7',NULL),(856,NULL,NULL,NULL,NULL,0,1,'sau5 <= sat5',NULL,NULL,19,'7',NULL),(857,NULL,NULL,NULL,NULL,0,1,'sau6 <= sat6',NULL,NULL,19,'7',NULL),(858,NULL,NULL,NULL,NULL,0,1,'sau7 <= sat7',NULL,NULL,19,'7',NULL),(859,NULL,NULL,NULL,NULL,0,1,'c1+c2+c3+c4+c5+c6+c7+c8+c9+c10+c11+c13+c14+c16+c17+c18+c19+c20+c21+c22+c23+c24+c25+c26+c27+c28+c29+c30+c31+c32+c33+c102+c34+c35+c103+c37+c38+c104+c40+c105+c41+c42+c43+c44+c45+c46+c47+c48+c50+c52+c53+c54+c55 == c56',NULL,NULL,19,'7',NULL),(860,NULL,NULL,NULL,NULL,0,1,'s57 <= c57',NULL,NULL,19,'7',NULL),(861,NULL,NULL,NULL,NULL,0,1,'s58 <= c58',NULL,NULL,19,'7',NULL),(862,NULL,NULL,NULL,NULL,0,1,'s59 <= c59',NULL,NULL,19,'7',NULL),(863,NULL,NULL,NULL,NULL,0,1,'s61 <= c61',NULL,NULL,19,'7',NULL),(864,NULL,NULL,NULL,NULL,0,1,'s62 <= c62',NULL,NULL,19,'7',NULL),(865,NULL,NULL,NULL,NULL,0,1,'s63 <= c63',NULL,NULL,19,'7',NULL),(866,NULL,NULL,NULL,NULL,0,1,'s64 <= c64',NULL,NULL,19,'7',NULL),(867,NULL,NULL,NULL,NULL,0,1,'s65 <= c65',NULL,NULL,19,'7',NULL),(868,NULL,NULL,NULL,NULL,0,1,'s66 <= c66',NULL,NULL,19,'7',NULL),(869,NULL,NULL,NULL,NULL,0,1,'s67 <= c67',NULL,NULL,19,'7',NULL),(870,NULL,NULL,NULL,NULL,0,1,'s68 <= c68',NULL,NULL,19,'7',NULL),(871,NULL,NULL,NULL,NULL,0,1,'s69 <= c69',NULL,NULL,19,'7',NULL),(872,NULL,NULL,NULL,NULL,0,1,'s70 <= c70',NULL,NULL,19,'7',NULL),(873,NULL,NULL,NULL,NULL,0,1,'s71 <= c71',NULL,NULL,19,'7',NULL),(874,NULL,NULL,NULL,NULL,0,1,'s72 <= c72',NULL,NULL,19,'7',NULL),(875,NULL,NULL,NULL,NULL,0,1,'s73 <= c73',NULL,NULL,19,'7',NULL),(876,NULL,NULL,NULL,NULL,0,1,'s74 <= c74',NULL,NULL,19,'7',NULL),(877,NULL,NULL,NULL,NULL,0,1,'s75 <= c75',NULL,NULL,19,'7',NULL),(878,NULL,NULL,NULL,NULL,0,1,'s76 <= c76',NULL,NULL,19,'7',NULL),(879,NULL,NULL,NULL,NULL,0,1,'s77 <= c77',NULL,NULL,19,'7',NULL),(880,NULL,NULL,NULL,NULL,0,1,'s78 <= c78',NULL,NULL,19,'7',NULL),(881,NULL,NULL,NULL,NULL,0,1,'s79 <= c79',NULL,NULL,19,'7',NULL),(882,NULL,NULL,NULL,NULL,0,1,'s80 <= c80',NULL,NULL,19,'7',NULL),(883,NULL,NULL,NULL,NULL,0,1,'s81 <= c81',NULL,NULL,19,'7',NULL),(884,NULL,NULL,NULL,NULL,0,1,'s82 <= c82',NULL,NULL,19,'7',NULL),(885,NULL,NULL,NULL,NULL,0,1,'s86 <= c86',NULL,NULL,19,'7',NULL),(886,NULL,NULL,NULL,NULL,0,1,'s87 <= c87',NULL,NULL,19,'7',NULL),(887,NULL,NULL,NULL,NULL,0,1,'c57+c58+c59+c60+c61+c62+c63+c64+c65+c66+c67+c68+c69+c70+c71+c72+c73+c74+c75+c76+c77+c78+c79+c80+c81+c82+c83+c84+c85+c86+c87 == c88',NULL,NULL,19,'7',NULL),(888,NULL,NULL,NULL,NULL,0,1,'s57+s58+s59+s61+s62+s63+s64+s65+s66+s67+s68+s69+s70+s71+s72+s73+s74+s75+s76+s77+s78+s79+s80+s81+s82+s86+s87 == s88',NULL,NULL,19,'7',NULL),(889,NULL,NULL,NULL,NULL,0,1,'c90+c91+c92 == c93',NULL,NULL,19,'7',NULL),(890,NULL,NULL,NULL,NULL,0,1,'c95+c96 == c97',NULL,NULL,19,'7',NULL),(891,NULL,NULL,NULL,NULL,0,1,'c106+c107+c108 == c98',NULL,NULL,19,'7',NULL),(892,NULL,NULL,NULL,NULL,0,1,'c56+c88+c89+c93 == c94',NULL,NULL,19,'7',NULL),(893,NULL,NULL,NULL,NULL,0,1,'c94+c97+c98+c99+c100 == c101',NULL,NULL,19,'7',NULL),(894,NULL,NULL,NULL,NULL,0,1,'sau8 == c94',NULL,NULL,19,'7',NULL),(895,NULL,NULL,NULL,NULL,0,1,'sat8 == c101',NULL,NULL,19,'7',NULL),(896,NULL,NULL,NULL,NULL,0,1,'c110 <= c100*100',NULL,NULL,19,'7',NULL),(897,NULL,NULL,NULL,NULL,0,1,'c111 <= c101*100',NULL,NULL,19,'7',NULL),(898,NULL,NULL,NULL,NULL,0,1,'for1+for2+for3 == for4',NULL,NULL,19,'7',NULL),(899,NULL,NULL,NULL,NULL,0,1,'for4 == c98',NULL,NULL,19,'7',NULL),(900,NULL,NULL,NULL,NULL,0,1,'for5+for8+for11 <= for1',NULL,NULL,19,'7',NULL),(901,NULL,NULL,NULL,NULL,0,1,'for6+for9+for12 <= for2',NULL,NULL,19,'7',NULL),(902,NULL,NULL,NULL,NULL,0,1,'for7+for10+for13 <= for3',NULL,NULL,19,'7',NULL),(903,NULL,NULL,NULL,NULL,0,1,'ir0 <= c94+c97',NULL,NULL,19,'7',NULL),(904,NULL,NULL,NULL,NULL,0,1,'ir16 <= ir0',NULL,NULL,19,'7',NULL),(905,NULL,NULL,NULL,NULL,0,1,'c89 <= 30',NULL,NULL,19,'7',NULL),(906,NULL,NULL,NULL,NULL,0,1,'ir16>= 0.0001*ir20+0.0001*ir21+0.0001*ir22+0.0001*ir23+0.0001*ir24+0.0001*ir25',NULL,NULL,19,'7',NULL),(907,NULL,NULL,NULL,NULL,0,1,'ir20 <= ir16',NULL,NULL,19,'7',NULL),(908,NULL,NULL,NULL,NULL,0,1,'ir21 <= ir16',NULL,NULL,19,'7',NULL),(909,NULL,NULL,NULL,NULL,0,1,'ir22 <= ir16',NULL,NULL,19,'7',NULL),(910,NULL,NULL,NULL,NULL,0,1,'ir23 <= ir16',NULL,NULL,19,'7',NULL),(911,NULL,NULL,NULL,NULL,0,1,'ir25 <= ir16',NULL,NULL,19,'7',NULL),(912,NULL,NULL,NULL,NULL,0,1,'ir24  <=  ir23',NULL,NULL,19,'7',NULL),(913,NULL,NULL,NULL,NULL,0,1,'ir20 <= c94+c97-c38-c104-c40-c105-c41-c43-c44-c89',NULL,NULL,19,'7',NULL),(914,NULL,NULL,NULL,NULL,0,1,'ir21 <= c94+c97-c38-c104-c40-c105-c41-c43-c44-c89',NULL,NULL,19,'7',NULL),(915,NULL,NULL,NULL,NULL,0,1,'ir22 <= c94+c97-c38-c40-c41-c43-c44-c89                   ',NULL,NULL,19,'7',NULL),(916,NULL,NULL,NULL,NULL,0,1,'ir23 <= c94+c97-c38-c104-c40-c105-c41-c43-c44-c89',NULL,NULL,19,'7',NULL),(917,NULL,NULL,NULL,NULL,0,1,'ir25 <= c94+c97-c38-c104-c40-c105-c41-c43-c44-c89',NULL,NULL,19,'7',NULL),(918,NULL,NULL,NULL,NULL,0,1,'colt1 <= c94',NULL,NULL,19,'7',NULL),(919,NULL,NULL,NULL,NULL,0,1,'colt2 <= c94',NULL,NULL,19,'7',NULL),(920,NULL,NULL,NULL,NULL,0,1,'colt3 <= c94',NULL,NULL,19,'7',NULL),(921,NULL,NULL,NULL,NULL,0,1,'colt4 <= c56+c88',NULL,NULL,19,'7',NULL),(922,NULL,NULL,NULL,NULL,0,1,'colt5 <= c93',NULL,NULL,19,'7',NULL),(923,NULL,NULL,NULL,NULL,0,1,'colt6 <= c97+c98',NULL,NULL,19,'7',NULL),(924,NULL,NULL,NULL,NULL,0,1,'colt7 <= c55',NULL,NULL,19,'7',NULL),(925,NULL,NULL,NULL,NULL,0,1,'colt8 <= c99+c100',NULL,NULL,19,'7',NULL),(926,NULL,NULL,NULL,NULL,0,1,'colt9 <= c101',NULL,NULL,19,'7',NULL),(927,NULL,NULL,NULL,NULL,0,1,'colt9 == colt4+colt5+colt6+colt7+colt8',NULL,NULL,19,'7',NULL),(928,NULL,NULL,NULL,NULL,0,1,'colt10 <= c101',NULL,NULL,19,'7',NULL),(929,NULL,NULL,NULL,NULL,0,1,'sup1 <= c94+c97',NULL,NULL,19,'7',NULL),(930,NULL,NULL,NULL,NULL,0,1,'sup2 <= c94+c97',NULL,NULL,19,'7',NULL),(931,NULL,NULL,NULL,NULL,0,1,'sup3 <= c94+c97',NULL,NULL,19,'7',NULL),(932,NULL,NULL,NULL,NULL,0,1,'sup4 <= c94+c97',NULL,NULL,19,'7',NULL),(933,NULL,NULL,NULL,NULL,0,1,'sup5 <= c94+c97',NULL,NULL,19,'7',NULL),(934,NULL,NULL,NULL,NULL,0,1,'sup6 <= c94+c97',NULL,NULL,19,'7',NULL),(935,NULL,NULL,NULL,NULL,0,1,'sup7 <= c94+c97',NULL,NULL,19,'7',NULL),(936,NULL,NULL,NULL,NULL,0,1,'sup8 <= c94+c97',NULL,NULL,19,'7',NULL),(937,NULL,NULL,NULL,NULL,0,1,'sup9 <= c98',NULL,NULL,19,'7',NULL),(938,NULL,NULL,NULL,NULL,0,1,'sup10 <= c98',NULL,NULL,19,'7',NULL),(939,NULL,NULL,NULL,NULL,0,1,'sup11 <= c98',NULL,NULL,19,'7',NULL),(940,NULL,NULL,NULL,NULL,0,1,'sup12 <= c98',NULL,NULL,19,'7',NULL),(941,NULL,NULL,NULL,NULL,0,1,'sup13 <= c98',NULL,NULL,19,'7',NULL),(942,NULL,NULL,NULL,NULL,0,1,'sup14 <= c98',NULL,NULL,19,'7',NULL),(943,NULL,NULL,NULL,NULL,0,1,'bio1 <= c1+c2+c3+c4+c5+c6+c7+c8+c9+c10',NULL,NULL,19,'7',NULL),(944,NULL,NULL,NULL,NULL,0,1,'bio2 <= c32+c33+c102+c34+c35+c103+c37+c38+c104+c40+c105+c41',NULL,NULL,19,'7',NULL),(945,NULL,NULL,NULL,NULL,0,1,'bio3 <= c57+c58+c59+c60',NULL,NULL,19,'7',NULL),(946,NULL,NULL,NULL,NULL,0,1,'bio4 <= c61+c62',NULL,NULL,19,'7',NULL),(947,NULL,NULL,NULL,NULL,0,1,'bio5 <= c63+c64+c65+c66+c67',NULL,NULL,19,'7',NULL),(948,NULL,NULL,NULL,NULL,0,1,'bio6 <= c68+c69+c70+c71+c72+c73+c74+c75+c76+c77+c78+c79+c80+c81+c82',NULL,NULL,19,'7',NULL),(949,NULL,NULL,NULL,NULL,0,1,'bio7 <= c93',NULL,NULL,19,'7',NULL),(950,NULL,NULL,NULL,NULL,0,1,'bio8 <= c11+c13+c14+c16+c17+c18+c19+c20+c21+c22+c23+c24+c25+c26+c27+c28+c29+c30+c31+c42+c43+c44+c45+c46+c47+c48+c50+c52+c53+c54+c55+c83+c84+c85+c86+c87+c89 ',NULL,NULL,19,'7',NULL),(951,NULL,NULL,NULL,NULL,0,1,'bio9 == bio1+bio2+bio3+bio4+bio5+bio6+bio7+bio8',NULL,NULL,19,'7',NULL),(952,NULL,NULL,NULL,NULL,0,1,'bio10 <= c94',NULL,NULL,19,'7',NULL),(953,NULL,NULL,NULL,NULL,0,1,'pra1 <= c94',NULL,NULL,19,'7',NULL),(954,NULL,NULL,NULL,NULL,0,1,'pra2 <= c94',NULL,NULL,19,'7',NULL),(955,NULL,NULL,NULL,NULL,0,1,'pra3 <= c94',NULL,NULL,19,'7',NULL),(956,NULL,NULL,NULL,NULL,0,1,'pra4 <= c94',NULL,NULL,19,'7',NULL),(957,NULL,NULL,NULL,NULL,0,1,'pra5 <= c94',NULL,NULL,19,'7',NULL),(958,NULL,NULL,NULL,NULL,0,1,'pra6 <= c94 ',NULL,NULL,19,'7',NULL),(959,NULL,'sd',NULL,NULL,0,1,'a+b',NULL,NULL,20,'1',NULL);
 /*!40000 ALTER TABLE `sx_rule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -783,7 +859,7 @@ CREATE TABLE `sx_ruleset` (
   UNIQUE KEY `SYS_C0014346` (`ID`),
   KEY `ws_idx` (`SESSIONE_LAVORO`),
   CONSTRAINT `ws` FOREIGN KEY (`SESSIONE_LAVORO`) REFERENCES `sx_sessione_lavoro` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -792,36 +868,8 @@ CREATE TABLE `sx_ruleset` (
 
 LOCK TABLES `sx_ruleset` WRITE;
 /*!40000 ALTER TABLE `sx_ruleset` DISABLE KEYS */;
+INSERT INTO `sx_ruleset` VALUES (18,'edits_short.txt','RS_1','r1',9,NULL,17,NULL),(19,'edits_long.txt','RS_2','regola2',109,NULL,17,NULL),(20,NULL,'RS_1','d',NULL,NULL,19,NULL);
 /*!40000 ALTER TABLE `sx_ruleset` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sx_ruoli`
---
-
-DROP TABLE IF EXISTS `sx_ruoli`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `sx_ruoli` (
-  `ID` int(11) NOT NULL,
-  `NOME` varchar(50) DEFAULT NULL,
-  `COD` varchar(50) DEFAULT NULL,
-  `DESCR` varchar(50) DEFAULT NULL,
-  `SERVIZIO` int(20) DEFAULT NULL,
-  `ORDINE` int(20) DEFAULT NULL,
-  `TIPO_VAR` int(20) DEFAULT NULL,
-  UNIQUE KEY `SYS_C0013863` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sx_ruoli`
---
-
-LOCK TABLES `sx_ruoli` WRITE;
-/*!40000 ALTER TABLE `sx_ruoli` DISABLE KEYS */;
-INSERT INTO `sx_ruoli` VALUES (0,'SKIP','N','VARIABILE NON UTILIZZATA',100,1,1),(1,'IDENTIFICATIVO','I','CHIAVE OSSERVAZIONE',100,1,1),(2,'TARGET','Y','VARIABILE DI OGGETTO DI ANALISI',100,3,1),(3,'COVARIATA','X','VARIABILE INDIPENDENTE',100,4,1),(4,'PREDIZIONE','P','VARIABILE DI PREDIZIONE',100,5,1),(5,'OUTLIER','O','FLAG OUTLIER',100,6,1),(6,'PESO','W','PESO CAMPIONARIO',100,7,1),(7,'ERRORE','E','ERRORE INFLUENTE',100,10,1),(8,'RANKING','R','INFLUENCE RANKING',100,11,1),(9,'OUTPUT','T','VARIABILE DI OUTPUT',100,20,1),(10,'STRATO','S','PARTIZIONAMENTO DEL DATASET',100,2,1),(11,'PARAMETRI','Z','PARAMETRI DI INPUT',100,997,2),(12,'MODELLO','M','MODELLO DATI',100,998,2),(13,'SCORE','F','INFLUENCE SCORE',100,12,1),(14,'INFO','G','PARAMETRI OUT - INFO RIEPILOGO',100,999,1),(100,'SKIP','N','VARIABILE NON UTILIZZATA',200,100,1),(102,'CHIAVE A','K1','CHIAVE DATASET A',200,3,1),(103,'CHIAVE B','K2','CHIAVE DATASET B',200,4,1),(104,'MATCHING A','X1','VARIABILE DI OGGETTO DI ANALISI A',200,5,1),(105,'MATCHING B','X2','VARIABILE DI OGGETTO DI ANALISI B',200,6,1),(108,'RANKING','M','INFLUENCE RANKING',200,11,2),(110,'STRATO','S','PARTIZIONAMENTO DEL DATASET',200,2,1),(111,'RESULT','R','RISULTATO PRODOTTO CARTESIANO',200,10,2),(115,'BLOCKING','B','SLICING DEL DATASET',200,3,1),(150,'SKIP','N','VARIABILE NON UTILIZZATA',250,100,1),(152,'KEY A','K1','CHIAVE DATASET A',250,3,1),(153,'KEY B','K2','CHIAVE DATASET B',250,4,1),(154,'MATCHING A','X1','VARIABILE DI OGGETTO DI ANALISI A',250,5,1),(155,'MATCHING B','X2','VARIABILE DI OGGETTO DI ANALISI B',250,6,1),(158,'RANKING','M','INFLUENCE RANKING',250,11,2),(160,'STRATA','S','PARTIZIONAMENTO DEL DATASET',250,2,1),(161,'CONTENGENCY TABLE','CT','CONTENGENCY TABLE',250,1,2),(165,'BLOCKING','B','SLICING DEL DATASET',250,3,1),(166,'MATCHING ','X','VARIABLI DI MATCHING',250,1,2),(167,'FELLEGI-SUNTER','FS','FELLEGI-SUNTER',200,2,1),(168,'MATCHING TABLE','MT','MATCHING TABLE',250,3,1),(169,'THRESHOLD','TH','THRESHOLD MATCHING',250,2,2),(170,'THRESHOLD','TU','THRESHOLD UNMATCHING',250,4,2),(171,'POSSIBLE MATCHING TABLE','PM','POSSIBLE MATCHING TABLE',250,5,1),(172,'RESIDUAL A','RA','RESIDUAL DATASET  A',250,6,1),(173,'RESIDUAL B','RB','RESIDUAL DATASET  B',250,7,1);
-/*!40000 ALTER TABLE `sx_ruoli` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -837,9 +885,10 @@ CREATE TABLE `sx_sessione_lavoro` (
   `DATA_CREAZIONE` datetime DEFAULT NULL,
   `NOME` varchar(255) DEFAULT NULL,
   `DESCRIZIONE` varchar(2000) DEFAULT NULL,
+  `BFUNCTION` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `SX_SESSIONE_LAVORO_PK` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -848,6 +897,7 @@ CREATE TABLE `sx_sessione_lavoro` (
 
 LOCK TABLES `sx_sessione_lavoro` WRITE;
 /*!40000 ALTER TABLE `sx_sessione_lavoro` DISABLE KEYS */;
+INSERT INTO `sx_sessione_lavoro` VALUES (15,83,'2019-08-01 16:18:54','Relais census dataset','',1),(16,83,'2019-08-01 16:36:54','Relais altri dataset','',1),(17,83,'2019-08-01 16:54:23','relais ONS','',1),(18,83,'2019-09-04 12:55:20','Relais census dataset','Prova dopo il refactoring',1),(19,83,'2019-09-06 15:39:12','dfd','fdf',3);
 /*!40000 ALTER TABLE `sx_sessione_lavoro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -880,30 +930,26 @@ INSERT INTO `sx_step_instance` VALUES (11,'contengencyTable','contengencyTable',
 UNLOCK TABLES;
 
 --
--- Table structure for table `sx_step_pattern`
+-- Table structure for table `sx_step_stepinstance`
 --
 
-DROP TABLE IF EXISTS `sx_step_pattern`;
+DROP TABLE IF EXISTS `sx_step_stepinstance`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `sx_step_pattern` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `ISTANZA` int(20) DEFAULT NULL,
-  `RUOLO` int(20) DEFAULT NULL,
-  `TIPO_IO` int(20) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `SYS_C0014189` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=utf8;
+CREATE TABLE `sx_step_stepinstance` (
+  `ISTANZA` int(11) DEFAULT NULL,
+  `STEP` int(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sx_step_pattern`
+-- Dumping data for table `sx_step_stepinstance`
 --
 
-LOCK TABLES `sx_step_pattern` WRITE;
-/*!40000 ALTER TABLE `sx_step_pattern` DISABLE KEYS */;
-INSERT INTO `sx_step_pattern` VALUES (154,11,154,1),(155,11,155,1),(158,11,158,2),(161,11,161,2),(165,11,165,1),(166,11,166,1),(167,12,161,1),(168,12,167,2),(169,13,154,1),(170,13,155,1),(171,13,167,1),(172,13,161,1),(173,13,168,2),(176,13,169,1),(177,13,170,1);
-/*!40000 ALTER TABLE `sx_step_pattern` ENABLE KEYS */;
+LOCK TABLES `sx_step_stepinstance` WRITE;
+/*!40000 ALTER TABLE `sx_step_stepinstance` DISABLE KEYS */;
+INSERT INTO `sx_step_stepinstance` VALUES (11,70),(12,71),(13,72);
+/*!40000 ALTER TABLE `sx_step_stepinstance` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -936,6 +982,65 @@ CREATE TABLE `sx_step_variable` (
 LOCK TABLES `sx_step_variable` WRITE;
 /*!40000 ALTER TABLE `sx_step_variable` DISABLE KEYS */;
 /*!40000 ALTER TABLE `sx_step_variable` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sx_stepinstance_approle`
+--
+
+DROP TABLE IF EXISTS `sx_stepinstance_approle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `sx_stepinstance_approle` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ISTANZA` int(20) DEFAULT NULL,
+  `RUOLO` int(20) DEFAULT NULL,
+  `TIPO_IO` int(20) DEFAULT NULL,
+  `REQUIRED` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `SYS_C0014189` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sx_stepinstance_approle`
+--
+
+LOCK TABLES `sx_stepinstance_approle` WRITE;
+/*!40000 ALTER TABLE `sx_stepinstance_approle` DISABLE KEYS */;
+INSERT INTO `sx_stepinstance_approle` VALUES (154,11,154,1,1),(155,11,155,1,1),(158,11,158,2,NULL),(161,11,161,2,NULL),(165,11,165,1,1),(166,11,166,1,1),(167,12,161,1,1),(168,12,167,2,NULL),(169,13,154,1,1),(170,13,155,1,1),(171,13,167,1,1),(172,13,161,1,1),(173,13,168,2,NULL),(176,13,169,1,1),(177,13,170,1,1);
+/*!40000 ALTER TABLE `sx_stepinstance_approle` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sx_stepinstance_parameter`
+--
+
+DROP TABLE IF EXISTS `sx_stepinstance_parameter`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `sx_stepinstance_parameter` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NOME` varchar(50) DEFAULT NULL,
+  `ISTANZA` int(20) DEFAULT NULL,
+  `DESCR` varchar(500) DEFAULT NULL,
+  `DEFLT` varchar(50) DEFAULT NULL,
+  `RUOLO` int(20) DEFAULT NULL,
+  `json_template_old` mediumtext,
+  `json_template` mediumtext,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `SYS_C0014050` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sx_stepinstance_parameter`
+--
+
+LOCK TABLES `sx_stepinstance_parameter` WRITE;
+/*!40000 ALTER TABLE `sx_stepinstance_parameter` DISABLE KEYS */;
+INSERT INTO `sx_stepinstance_parameter` VALUES (1,'MATCHING VARAIBLES',11,'MATCHING VARAIBLES','3',166,'{\"type\": \"object\", \"properties\": {\"MetricMatchingVariables\":{\"title\":\"MetricMatchingVariables\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"title\":\"MetricMatchingVariable\",\"properties\":{\"MatchingVariable\":{\"type\":\"string\",\"title\":\"MatchingVariable\",\"maxLength\":50,\"required\":true},\"MatchingVariableA\":{\"type\":\"string\",\"title\":\"MatchingVariableA\",\"maxLength\":50,\"required\":true},\"MatchingVariableB\":{\"type\":\"string\",\"title\":\"MatchingVariableB\",\"maxLength\":50,\"required\":true},\"Method\":{\"title\":\"Method\",\"enum\":[\"Jaro\",\"jaro1\",\"Jaro2\"],\"required\":true},\"Thresould\":{\"type\":\"number\",\"title\":\"Threshould\"},\"Window\":{\"type\":\"integer\",\"title\":\"Window\"}}}}}}','{\"data\":[],\"schema\":{\"items\":{\"properties\":{\"MatchingVariable\":{\"maxLength\":50,\"required\":true,\"title\":\"MatchingVariable\",\"type\":\"string\"},\"MatchingVariableA\":{\"maxLength\":50,\"required\":true,\"title\":\"MatchingVariableA\",\"type\":\"string\"},\"MatchingVariableB\":{\"maxLength\":50,\"required\":true,\"title\":\"MatchingVariableB\",\"type\":\"string\"},\"Method\":{\"enum\":[\"Jaro\",\"jaro1\",\"Jaro2\"],\"required\":true,\"title\":\"Method\"},\"Threshould\":{\"title\":\"Threshould\",\"type\":\"number\"},\"Window\":{\"title\":\"Window\",\"type\":\"integer\"}},\"type\":\"object\"},\"type\":\"array\"},\"options\":{\"type\":\"table\",\"toolbarSticky\":true,\"toolbar\":{\"actions\":[{\"action\":\"up\",\"enabled\":false}]},\"items\":{\"fields\":{\"Method\":{\"type\":\"select\",\"noneLabel\":\"\",\"removeDefaultNone\":false}}}}}'),(2,'THRESHOLD MATCHING',13,'THRESHOLD MATCHING','1',169,'{\"name\":\"THRESHOLD MATCHING\",\"type\":\"number\",\"title\":\"THRESHOLD MATCHING\", \"minimum\": 0.01,\"maximum\": 1}','{\"data\":[],\"schema\":{\"name\":\"THRESHOLD MATCHING\",\"type\":\"number\",\"title\":\"THRESHOLD MATCHING\", \"minimum\": 0.01,\"maximum\": 1}}'),(3,'THRESHOLD UNMATCHING',13,'THRESHOLD UNMATCHING','1',170,'{\"name\":\"THRESHOLD UNMATCHING\",\"type\":\"number\",\"title\":\"THRESHOLD UNMATCHING\", \"minimum\": 0.01,\"maximum\": 1}','{\"data\":[],\"schema\":{\"name\":\"THRESHOLD UNMATCHING\",\"type\":\"number\",\"title\":\"THRESHOLD UNMATCHING\", \"minimum\": 0.01,\"maximum\": 1}}');
+/*!40000 ALTER TABLE `sx_stepinstance_parameter` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1228,4 +1333,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-01 18:17:42
+-- Dump completed on 2019-09-12 10:53:37

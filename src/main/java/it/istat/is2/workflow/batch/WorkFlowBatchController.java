@@ -37,66 +37,64 @@ import it.istat.is2.app.util.IS2Const;
 @RestController
 public class WorkFlowBatchController {
 
-	@Autowired
-	JobLauncher jobLauncher;
+    @Autowired
+    JobLauncher jobLauncher;
 
-	@Autowired
-	Job doBusinessProc;
+    @Autowired
+    Job doBusinessProc;
 
-	@Autowired
-	LogService logService;
+    @Autowired
+    LogService logService;
 
-	@Autowired
-	WorkFlowBatchService workFlowBatchService;
+    @Autowired
+    WorkFlowBatchService workFlowBatchService;
 
-	@Autowired
-	private JobExplorer jobExplorer;
+    @Autowired
+    private JobExplorer jobExplorer;
 
-	@Autowired
-	JobOperator jobOperator;
-	
-	@Autowired
-	JobRepository jobRepository;
+    @Autowired
+    JobOperator jobOperator;
 
-	@RequestMapping(value = "/batch/{idElaborazione}/{idBProc}", method = RequestMethod.GET)
-	public String doBatch(HttpSession session, Model model, @AuthenticationPrincipal User user,
-			@PathVariable("idElaborazione") Long idElaborazione, @PathVariable("idBProc") Long idBProc)
-			throws NoSuchJobException {
-		JobParameters jobParameters = new JobParametersBuilder().addLong("idElaborazione", idElaborazione)
-				.addLong("idBProc", idBProc).addLong("time", System.currentTimeMillis()).toJobParameters();
-		try {
-			jobLauncher.run(doBusinessProc, jobParameters);
-		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
-				| JobParametersInvalidException e) {
-			logService.save(e.getMessage());
-			e.printStackTrace();
-		}
-		return null;
-	}
+    @Autowired
+    JobRepository jobRepository;
 
-	@GetMapping("/batch/logs")
-	public ResponseEntity<?> getLogs(HttpSession httpSession, Model model) {
-		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
-		List<Log> logs;
-		if (sessionBean != null) {
-			logs = logService.findByIdSessione(sessionBean.getId());
-		} else {
-			logs = new ArrayList<>();
-		}
-		return ResponseEntity.ok(logs);
-	}
+    @RequestMapping(value = "/batch/{idElaborazione}/{idBProc}", method = RequestMethod.GET)
+    public String doBatch(HttpSession session, Model model, @AuthenticationPrincipal User user,
+            @PathVariable("idElaborazione") Long idElaborazione, @PathVariable("idBProc") Long idBProc)
+            throws NoSuchJobException {
+        JobParameters jobParameters = new JobParametersBuilder().addLong("idElaborazione", idElaborazione)
+                .addLong("idBProc", idBProc).addLong("time", System.currentTimeMillis()).toJobParameters();
+        try {
+            jobLauncher.run(doBusinessProc, jobParameters);
+        } catch (JobParametersInvalidException | JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException | JobRestartException e) {
+            logService.save(e.getMessage());
+        }
+        return null;
+    }
 
-	@GetMapping("/batch/jobs")
-	public ResponseEntity<?> getJobs(HttpSession httpSession, Model model) {
-		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
-		List<Batch> batches;
-		if (sessionBean != null) {
-			batches = workFlowBatchService.findByIdSessione(sessionBean.getId());
-		} else {
-			batches = new ArrayList<>();
-		}
-		return ResponseEntity.ok(batches);
-		
-	}
+    @GetMapping("/batch/logs")
+    public ResponseEntity<?> getLogs(HttpSession httpSession, Model model) {
+        SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+        List<Log> logs;
+        if (sessionBean != null) {
+            logs = logService.findByIdSessione(sessionBean.getId());
+        } else {
+            logs = new ArrayList<>();
+        }
+        return ResponseEntity.ok(logs);
+    }
+
+    @GetMapping("/batch/jobs")
+    public ResponseEntity<?> getJobs(HttpSession httpSession, Model model) {
+        SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+        List<Batch> batches;
+        if (sessionBean != null) {
+            batches = workFlowBatchService.findByIdSessione(sessionBean.getId());
+        } else {
+            batches = new ArrayList<>();
+        }
+        return ResponseEntity.ok(batches);
+
+    }
 
 }

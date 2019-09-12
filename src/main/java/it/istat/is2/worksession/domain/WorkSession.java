@@ -35,6 +35,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -42,7 +43,8 @@ import javax.persistence.Table;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.workflow.domain.Elaborazione;
-import it.istat.is2.workflow.domain.SxRuleset;
+import it.istat.is2.workflow.domain.BusinessFunction;
+import it.istat.is2.workflow.domain.Ruleset;
 
 import javax.persistence.Temporal;
 import lombok.Data;
@@ -78,7 +80,11 @@ public class WorkSession implements Serializable {
     private List<DatasetFile> datasetFiles;
 
     @OneToMany(mappedBy = "sessioneLavoro", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<SxRuleset> ruleSets;
+    private List<Ruleset> ruleSets;
+    
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "BFUNCTION", nullable = false)
+    private BusinessFunction  businessFunction;
 
     public WorkSession(Long id) {
         super();

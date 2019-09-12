@@ -44,7 +44,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import it.istat.is2.workflow.domain.SxTipoDato;
+import it.istat.is2.workflow.domain.TipoDato;
 import it.istat.is2.worksession.domain.WorkSession;
 import javax.persistence.Temporal;
 import lombok.Data;
@@ -81,7 +81,7 @@ public class DatasetFile implements Serializable {
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "TIPODATO", nullable = true)
-    private SxTipoDato tipoDato;
+    private TipoDato tipoDato;
 
     @OneToOne
     @JoinColumn(name = "sessione_lavoro")

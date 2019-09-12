@@ -25,46 +25,53 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
-        <script th:src="@{/js/table/datatables.js}"></script>
+        <script th:src="@{/js/table/datatables.min.js}"></script>
         <script th:src="@{/js/sessioni.js}"></script>
         <script th:src="@{/js/papaParse/papaparse.min.js}"></script>
         <script th:src="@{/js/fileinput.min.js}"></script>
         <script th:src="@{/js/uploadfile.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
-                setMenuActive("dati");
+                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
         </script>
         <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
-        <link rel="stylesheet" th:href="@{/css/fileinput.min.css}" />
+        <link th:href="@{/css/fileinput.min.css}" rel="stylesheet" />
     </head>
-    <body>
+    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
         <!-- Body -->
-        <div class="wrapper">
-            <header th:replace="layout :: site-header"></header>
+        <header th:replace="layout :: site-header"></header>
+        <!-- Body -->
+        <div class="app-body">
+            <aside th:replace="layout :: site-modals"></aside>
             <aside th:replace="layout :: site-aside"></aside>
-            <!-- START MAIN CONTAINER -->
-            <section>
-                <div class="content-wrapper">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a title="Sessione lavoro" th:if="${session.sessionelv}" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
-                                    <span th:text="${session.sessionelv.nome}"></span>
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
-                            </li>
-                            <div class="btn-group pull-right" role="group">
-                                <a class="" title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
-                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
-                                </a>
-                            </div>
-                        </ol>
-                    </nav>
-
-                    <div class="container-fluid">
+            <!-- Main container -->
+            <main class="main">
+                <!-- Breadcrumb-->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a title="Sessione lavoro" th:if="${session.sessionelv}" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
+                            <span th:text="${session.sessionelv.nome}"></span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
+                    </li>
+                    <!-- Breadcrumb Menu-->
+                    <li class="breadcrumb-menu d-md-down-none">
+                        <div class="btn-group" role="group" aria-label="Button group">
+                            <a class="" title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                            </a>
+                        </div>
+                    </li>
+                </ol>
+                
+                <div class="container-fluid">
+                    <div class="animated fadeIn">
                         <input id="idsessionelv" type="hidden" value="${session.sessionelv.id}" />
                         <div class="row">
                             <div class="col-lg-7">
@@ -72,12 +79,10 @@
                                     <div class="card-header">
                                         <span th:text="#{lista.dataset.legend}">Lista dataset</span>
                                         <div class="card-header-actions">
-	                                        <a class="card-header-action" href="javascript:void(0)"
-												onclick="javascript:showUploadDiv();"
-												title="Carica file"> <i
-												class="fa fa-plus-square-o"></i> <span
-												th:text="#{ruleset.new.file.ruleset}"></span>
-											</a>
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:showUploadDiv();" title="Carica file"> 
+                                                <i class="fa fa-plus-square-o"></i>
+                                                <span th:text="#{ruleset.new.file.ruleset}"></span>
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -90,8 +95,7 @@
                                             <div id="upload" class="row">
                                                 <div class="col-lg-8">
                                                     <div id="upload_file" class="form-group">
-                                                        <label class="control-label"
-                                                               th:text="#{selection.file.legend}">Seleziona un file da caricare (txt o csv) </label>
+                                                        <label class="control-label" th:text="#{selection.file.legend}">Seleziona un file da caricare (txt o csv) </label>
                                                         <!-- Impostare data-show-preview a true per avere la preview del file -->
                                                         <input id="file" accept=".csv,.txt" class="file" type="file" name="fileName"
                                                                data-show-preview="false" data-show-caption="true"
@@ -101,9 +105,8 @@
                                                 </div>
                                             </div>
                                         </form> 
-                                        
-                                        <table id="datasetList" class="table table-condensed"
-                                               th:if="${listaDataset}" cellspacing="0" style="overflow: auto;">
+
+                                        <table id="datasetList" class="table table-condensed" th:if="${listaDataset}" cellspacing="0" style="overflow: auto;">
                                             <thead>
                                                 <tr th:unless="${(listaDataset == null) or (listaDataset.size() == 0) }">                                                
                                                     <th><span th:text="#{listaDataset.nome}">Nome</span></th>
@@ -122,12 +125,10 @@
                                                     <td th:text="${dataset.numerorighe}"></td>
                                                     <td th:unless="${dataset.tipoDato != null}" th:text="null"></td>
                                                     <td style="width: 1%">
-                                                        <a th:if="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza dataset" 
-                                                           th:href="@{'/viewDataset/'+${dataset.id}}"> 
+                                                        <a th:if="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza dataset" th:href="@{'/viewDataset/'+${dataset.id}}"> 
                                                             <i class="fa fa-search"></i>
                                                         </a>
-                                                        <a th:unless="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza ruleset" 
-                                                           th:href="@{'/viewRuleset/'+${dataset.id}}"> 
+                                                        <a th:unless="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza ruleset" th:href="@{'/viewRuleset/'+${dataset.id}}"> 
                                                             <i class="fa fa-search"></i>
                                                         </a>
                                                     </td>
@@ -137,7 +138,8 @@
                                                         </a>
                                                     </td>
                                                     <td style="width: 1%">
-                                                        <a href="javascript:void(0)" title="Elimina dataset" role="button" th:attr="onclick='javascript:eliminaDataset(' + ${dataset.id} + ', \'' + ${dataset.nomeFile} + '\')'">												
+                                                        <a href="javascript:void(0)" title="Elimina dataset" role="button"
+                                                           th:attr="onclick='javascript:eliminaDataset(' + ${dataset.id} + ', \'' + ${dataset.nomeFile} + '\')'">												
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
@@ -172,48 +174,50 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- row -->
                     </div>
                 </div>
-            </section>
-            <!-- Bootstrap modal -->
-            <div class="modal fade" id="errorUplodFile" role="dialog">
-                <div class="modal-dialog modal-sm" role="document">
-                    <div class="modal-content ">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 class="modal-title">
-                                <i class="fa fa-times-circle"></i>
-                                <span th:text="#{upload.error.modal.title}">Errore upload</span>
-                            </h4>
-                        </div>
-                        <div class="modal-body">
-                            <span th:text="#{upload.error.modal.message}">Nessun file selezionato.</span>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">
-                                <span th:text="#{Index.button.ok}">Ok</span>
-                            </button>
-                        </div>
+            </main>
+        </div>
+        <!-- End body -->
+        <footer th:replace="layout :: site-footer"></footer>
+
+        <!-- Error file upload modal -->
+        <div class="modal fade" id="errorUplodFile" role="dialog">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content ">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fa fa-times-circle"></i>
+                            <span th:text="#{upload.error.modal.title}">Errore upload</span>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <!-- /.modal-content -->
+                    <div class="modal-body">
+                        <span th:text="#{upload.error.modal.message}">Nessun file selezionato.</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">
+                            <span th:text="#{Index.button.ok}">Ok</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-		<!-- Modal elimina dataset -->
+        </div>
+        
+        <!-- Delete dataset modal -->
         <div class="modal fade" id="modalCancellaDataset" tabindex="-1"
              role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
+                        </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title" id="exampleModalLabel">
-                            <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
-                        </h4>
                     </div>
                     <div class="modal-body"><span id="msg_elim_dataset"></span></div>
                     <div class="modal-footer">
@@ -224,59 +228,56 @@
                 </div>
             </div>
         </div>
-        <!-- fine modal elimina -->
-            <div class="modal fade" id="previewModal" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 class="modal-title">
-                                <i class="fa fa-binoculars"></i>&nbsp;
-                                <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
-                            </h4>
-                        </div>
-
-                        <div class="modal-body">
-                            <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
-                        </div>
-                        <div class="modal-body">
-                            <span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
-                            <input id="label_file" th:value="${etichetta}" type="text"/>                                
-                        </div>
-                        <div class="modal-body">
-                            <span th:text="#{file.data.type}">Tipo dato:</span> &nbsp;&nbsp;&nbsp;
-                            <select id="tipo_dato" >
-                                <option th:each="tipod : ${listaTipoDato}"
-                                        th:value="${tipod.id}"
-                                        th:text="${tipod.nome}">
-                                </option>
-                            </select>                              
-                        </div>
-                        <div class="modal-body">
-                            <span th:text="#{delimiter.file.legend}">Separatore:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <select id="delimiter_sel">
-                                <option value=','>,</option>
-                                <option value=';'>;</option>
-                                <option value='0'>tab</option>
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                <span th:text="#{Layout.Close}">Annulla</span>
-                            </button>
-                            <button type="button" id="btn-invia-file" class="btn btn-primary towait disabled"
-                                    onclick="inviaFormFile();" th:title="#{submit.button.title}"
-                                    th:text="#{submit.button}" data-dismiss="modal">Invia</button>
-                        </div>
+        
+        <!-- Dataset preview modal -->
+        <div class="modal fade" id="previewModal" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fa fa-binoculars"></i>&nbsp;
+                            <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
+                    </div>
+                    <div class="modal-body">
+                        <span th:text="#{file.logical.name}" >Etichetta:</span> &nbsp;&nbsp;&nbsp; 
+                        <input id="label_file" th:value="${etichetta}" type="text"/>                                
+                    </div>
+                    <div class="modal-body">
+                        <span th:text="#{file.data.type}">Tipo dato:</span> &nbsp;&nbsp;&nbsp;
+                        <select id="tipo_dato" >
+                            <option th:each="tipod : ${listaTipoDato}"
+                                    th:value="${tipod.id}"
+                                    th:text="${tipod.nome}">
+                            </option>
+                        </select>                              
+                    </div>
+                    <div class="modal-body">
+                        <span th:text="#{delimiter.file.legend}">Separatore:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <select id="delimiter_sel">
+                            <option value=','>,</option>
+                            <option value=';'>;</option>
+                            <option value='0'>tab</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <span th:text="#{Layout.Close}">Annulla</span>
+                        </button>
+                        <button type="button" id="btn-invia-file" class="btn btn-primary towait disabled"
+                                onclick="inviaFormFile();" th:title="#{submit.button.title}"
+                                th:text="#{submit.button}" data-dismiss="modal">Invia</button>
                     </div>
                 </div>
             </div>
-            <!-- END MAIN CONTAINER -->
-            <footer th:replace="layout :: site-footer" />
         </div>
-        <!-- wrapper -->        
+        
     </body>
 </html>

@@ -28,10 +28,10 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import it.istat.is2.workflow.domain.SxBusinessFunction;
+import it.istat.is2.workflow.domain.BusinessFunction;
 @Repository
-public interface BusinessFunctionDao extends CrudRepository<SxBusinessFunction,Long> {
+public interface BusinessFunctionDao extends CrudRepository<BusinessFunction,Long> {
 
-	List<SxBusinessFunction> findAll();
-	Optional<SxBusinessFunction> findById(Long idfunction);
+	List<BusinessFunction> findAll();
+	Optional<BusinessFunction> findById(Long idfunction);
 }

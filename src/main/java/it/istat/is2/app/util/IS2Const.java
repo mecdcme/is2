@@ -51,4 +51,6 @@ public interface IS2Const {
     public static final String OUTPUT_DEFAULT = "OUT";
     public static final String OUTPUT_R = "R";
 	public static final String WF_OUTPUT_ROLES_GROUP = "rolesgroup.output";
+	public static final String ARTIFACT_DATASET = "dataset";
+	public static final String ARTIFACT_RULESET = "ruleset";
 }

@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.istat.is2.workflow.dao.RuoloDao;
-import it.istat.is2.workflow.domain.SxRuoli;
+import it.istat.is2.workflow.domain.AppRole;
 
 @Service
 public class RuoloService {
@@ -38,11 +38,11 @@ public class RuoloService {
     @Autowired
     RuoloDao ruoloDao;
 
-    public List<SxRuoli> findRuoli() {
+    public List<AppRole> findRuoli() {
         return ruoloDao.findAll();
     }
 
-    public Optional<SxRuoli> findRuolo(Integer idruolo) {
+    public Optional<AppRole> findRuolo(Integer idruolo) {
         return ruoloDao.findById(idruolo);
     }
 }

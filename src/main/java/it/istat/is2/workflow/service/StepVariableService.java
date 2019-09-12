@@ -31,8 +31,8 @@ import org.springframework.stereotype.Service;
 
 import it.istat.is2.workflow.dao.StepVariableDao;
 import it.istat.is2.workflow.domain.Elaborazione;
-import it.istat.is2.workflow.domain.SxRuoli;
-import it.istat.is2.workflow.domain.SxStepVariable;
+import it.istat.is2.workflow.domain.AppRole;
+import it.istat.is2.workflow.domain.StepVariable;
 
 @Service
 public class StepVariableService {
@@ -40,23 +40,23 @@ public class StepVariableService {
     @Autowired
     StepVariableDao stepVariableDao;
 
-    public List<SxStepVariable> findBStepByIdProcess(Long idelab, Integer idstep) {
+    public List<StepVariable> findBStepByIdProcess(Long idelab, Integer idstep) {
         return stepVariableDao.findByElaborazione(new Elaborazione(idelab));
     }
 
-    public Optional<SxStepVariable> findById(Integer idstep) {
+    public Optional<StepVariable> findById(Integer idstep) {
         return stepVariableDao.findById(idstep);
     }
 
-    public List<SxStepVariable> findBySxRuoli(SxRuoli ruolo) {
-        return stepVariableDao.findBySxRuoli(ruolo);
+    public List<StepVariable> findByAppRole(AppRole ruolo) {
+        return stepVariableDao.findByAppRole(ruolo);
     }
 
     public void removeStepVarById(Integer idstep) {
         stepVariableDao.deleteById(idstep);
     }
 
-    public void updateStepVar(SxStepVariable stepV) {
+    public void updateStepVar(StepVariable stepV) {
         stepVariableDao.save(stepV);
     }
 }

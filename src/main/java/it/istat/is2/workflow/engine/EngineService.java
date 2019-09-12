@@ -28,7 +28,7 @@ package it.istat.is2.workflow.engine;
 import org.springframework.stereotype.Service;
 
 import it.istat.is2.workflow.domain.Elaborazione;
-import it.istat.is2.workflow.domain.SxStepInstance;
+import it.istat.is2.workflow.domain.StepInstance;
 @Service
 public interface EngineService {
 	public static final String RESULTSET = "sel_out";
@@ -46,7 +46,7 @@ public interface EngineService {
 	public static final String RESULT_REPORT = "report"; // aggiunto componente dei parametri di uscita
 
 
-	public void init(Elaborazione elaborazione, SxStepInstance stepInstance) throws Exception;
+	public void init(Elaborazione elaborazione, StepInstance stepInstance) throws Exception;
         public void init() throws Exception;
 	public void doAction()throws Exception;
 	public void processOutput() throws Exception;

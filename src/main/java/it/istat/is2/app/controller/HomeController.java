@@ -30,16 +30,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.istat.is2.app.service.NotificationService;
+import it.istat.is2.workflow.domain.BusinessFunction;
+import it.istat.is2.workflow.service.BusinessFunctionService;
+import java.util.List;
+import org.springframework.ui.Model;
 
 @Controller
 public class HomeController {
 
     @Autowired
+    private BusinessFunctionService businessFunctionService;
+    
+    @Autowired
     private NotificationService notificationService;
 
     @RequestMapping("/")
-    public String home(HttpSession session) {
+    public String home(HttpSession session, Model model) {
         notificationService.removeAllMessages();
-        return "redirect:/sessione/mostraSessioni";
+        
+        List<BusinessFunction> businessFunctionList = businessFunctionService.findBFunctions();
+        
+        session.setAttribute("businessFunctionList", businessFunctionList);
+                
+        return "index";
     }
 }

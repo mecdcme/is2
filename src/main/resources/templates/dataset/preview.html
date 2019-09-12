@@ -25,79 +25,75 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
-        <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <script th:src="@{/js/table/datatables.min.js}"></script>
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
             var _variabili = [[${colonne.size()}]];
             var _righe = [[${numRighe}]];
             $(document).ready(function () {
-                setMenuActive("dati");
+                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
         </script>
-        <script th:src="@{/js/table/datatables.js}"></script>
-        <script th:src="@{/js/table/buttons.colVis.min.js}"></script>
         <script th:src="@{/js/datasetpreview.js}"></script>
-        <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
+        <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
     </head>
-    <body>
+    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
         <!-- Body -->
-        <div class="wrapper">
-            <header th:replace="layout :: site-header"></header>
+        <header th:replace="layout :: site-header"></header>
+        <!-- Body -->
+        <div class="app-body">
+            <aside th:replace="layout :: site-modals"></aside>
             <aside th:replace="layout :: site-aside"></aside>
-            <!-- START MAIN CONTAINER -->
-            <section>
-                <!-- Begin breadcrumb -->
-                <div class="content-wrapper">
-                    <!-- Begin breadcrumb -->
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
-                                    <span th:if="${session.sessionelv}">
-                                        <span th:text="${session.sessionelv.nome}"></span>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
-                                    <span th:if="${session.sessionelv}">
-                                        <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <span th:text="${dfile.nomeFile}"></span>
-                            </li>
+            <!-- Main container -->
+            <main class="main">
+                <!-- Breadcrumb-->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a title="Sessione lavoro" th:if="${session.sessionelv}" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
+                            <span th:text="${session.sessionelv.nome}"></span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                            <span th:if="${session.sessionelv}">
+                                <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span th:text="${dfile.nomeFile}"></span>
+                    </li>
+                    <!-- Breadcrumb Menu-->
+                    <li class="breadcrumb-menu d-md-down-none">
+                        <div class="btn-group" role="group" aria-label="Button group">
+                            <a href="#" class="btn" title="Nuova Variabile">
+                                <i class="fa fa-cog"></i>&nbsp;<span th:text="#{dataset.nuovaVariabile}"></span>
+                            </a>
+                            <!--ul class="dropdown-menu" >
+                                <li><a class="dropdown-item" th:onclick="'javascript:openStandardizationModal()'" href="#"><span th:text="#{dataset.fieldStandardization}"></span></a></li>
+                                <li><a class="dropdown-item" th:onclick="'javascript:openMergeModal()'" href="#"><span th:text="#{dataset.fieldMerge}"></span></a></li>
+                                <li><a class="dropdown-item" th:onclick="'javascript:openParseModal()'" href="#"><span th:text="#{dataset.fieldParse}"></span></a></li>
+                                <li><a class="dropdown-item" th:onclick="'javascript:openRepairModal()'" href="#"><span th:text="#{dataset.fieldRepair}"></span></a></li>
+                                <li><a class="dropdown-item" th:onclick="'javascript:openDeleteModal()'" href="#"><span th:text="#{dataset.fieldDelete}"></span></a></li> 
+                            </ul-->
+                            <a class="btn" id="btn_graph" title="Data analytics" th:href="@{'/graph/home/'+${idfile}}">
+                                <i class="fa fa-image"></i>&nbsp;<span th:text="#{sessionewf.graph}"></span>
+                            </a>
+                            <a class="btn" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
+                                <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>
+                            </a>
+                            <a class="btn" title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                            </a>
+                        </div>
+                    </li>
+                </ol>
 
-                            <div class="btn-group pull-right" role="group">
-                                <span class="dropdown">
-                                    <a href="#" class="dropdown-toggle bar-right" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"  title="Nuova Variabile">
-                                        <i class="fa fa-cog"></i>&nbsp;<span th:text="#{dataset.nuovaVariabile}"></span>
-                                    </a>
-                                    <ul class="dropdown-menu" >
-                                        <li><a class="dropdown-item" th:onclick="'javascript:openStandardizationModal()'" href="#"><span th:text="#{dataset.fieldStandardization}"></span></a></li>
-                                        <li><a class="dropdown-item" th:onclick="'javascript:openMergeModal()'" href="#"><span th:text="#{dataset.fieldMerge}"></span></a></li>
-                                        <li><a class="dropdown-item" th:onclick="'javascript:openParseModal()'" href="#"><span th:text="#{dataset.fieldParse}"></span></a></li>
-                                        <li><a class="dropdown-item" th:onclick="'javascript:openRepairModal()'" href="#"><span th:text="#{dataset.fieldRepair}"></span></a></li>
-                                  		<li><a class="dropdown-item" th:onclick="'javascript:openDeleteModal()'" href="#"><span th:text="#{dataset.fieldDelete}"></span></a></li> 
-                                    </ul>
-                                </span>
-                                <a class="bar-right" id="btn_graph" title="Data analytics" th:href="@{'/graph/home/'+${idfile}}">
-                                    <i class="fa fa-image"></i>&nbsp;<span th:text="#{sessionewf.graph}"></span>
-                                </a>
-                                <a class="bar-right" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
-                                    <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>
-                                </a>
-                                <a class="breadcrumb-last-item" title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
-                                    <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
-                                </a>
-                            </div>
-                        </ol>
-                    </nav>
-                    <!-- End breadcrumb -->
-
-                    <div class="container-fluid">
+                <div class="container-fluid">
+                    <div class="animated fadeIn">
                         <div class="row" >
                             <div class="col-lg-12">
                                 <div class="card">
@@ -124,16 +120,15 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:each="file, iterStat : ${files}">
-                                            <a class="card-header-action" th:href="@{'/viewDataset/'+${file.id}}" title="Nuova elaborazione"> 
-                                                <span th:if="${file.id} == ${idfile}" th:class="!${iterStat.last}? 'header-strong bar-right' : 'header-strong'" 
+                                            <a th:href="@{'/viewDataset/'+${file.id}}" title="Nuova elaborazione"> 
+                                                <span th:if="${file.id} == ${idfile}" class="font-weight-bold" th:classappend="!${iterStat.last}? 'bar-right' : ''" 
                                                       th:text="${file.nomeFile}"></span>
                                                 <span th:unless="${file.id} == ${idfile}" th:class="!${iterStat.last}? 'bar-right'" th:text="${file.nomeFile}"></span>
                                             </a>
                                         </span>
                                     </div>
                                     <div class="card-body">
-                                        <table id="dataview" class="table table-condensed table-striped" cellspacing="0" width="auto" 
-                                               style="overflow: auto;">
+                                        <table id="dataview" class="table table-condensed table-striped" cellspacing="0" width="100%" >
                                             <thead>
                                                 <tr>
                                                     <th th:each="varname: ${colonne}" th:text="${varname.nome}"></th>
@@ -146,10 +141,11 @@
                         </div>
                     </div>
                 </div>
-            </section>
-            <!-- END MAIN CONTAINER -->
-            <footer th:replace="layout :: site-footer" />
+            </main>
         </div>
+        <!-- End body -->
+        <footer th:replace="layout :: site-footer"></footer>
+
         <div class="modal fade" id="modalCancellaDataset" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -387,10 +383,10 @@
                                 <input type="hidden" name="numRighe" id="num_Righe" value="" />
                                 <input type="hidden" name="numColonne" id="num_Colonne" value="" />
                                 <input type="hidden" name="fieldName" id="field_Name" value="" />
-                               
-                                
+
+
                                 <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
-<!--                                 <button type="submit" id="btn_Repair_field" class="btn btn-primary towait" data-dismiss="modal" disabled="true">Salva</button> -->
+                                <!--                                 <button type="submit" id="btn_Repair_field" class="btn btn-primary towait" data-dismiss="modal" disabled="true">Salva</button> -->
                             </div>
                         </form>
                     </div>
@@ -399,42 +395,42 @@
             </div>
         </div>
         <div class="modal fade" id="previewModalFixField" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 class="modal-title">
-                                <i class="fa fa-binoculars"></i>&nbsp;
-                                <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
-                            </h4>
-                        </div>
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">
+                            <i class="fa fa-binoculars"></i>&nbsp;
+                            <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
+                        </h4>
+                    </div>
 
-                        <div class="modal-body">
-                            <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
-                        </div>
-                        <div class="modal-body">
-                            <span th:text="#{delimiter.file.legend}">Separatore:</span> &nbsp;&nbsp;&nbsp; 
-                            <select id="delimiter_sel">
-                                <option value=','>,</option>
-                                <option value=';'>;</option>
-                                <option value='0'>tab</option>
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                <span th:text="#{Layout.Close}">Annulla</span>
-                            </button>
-                            <button type="button" class="btn btn-primary towait"
-                                    onclick="inviaFormFileFixField();" th:title="#{submit.button.title}"
-                                    th:text="#{submit.button}" data-dismiss="modal">Invia</button>
-                        </div>
+                    <div class="modal-body">
+                        <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
+                    </div>
+                    <div class="modal-body">
+                        <span th:text="#{delimiter.file.legend}">Separatore:</span> &nbsp;&nbsp;&nbsp; 
+                        <select id="delimiter_sel">
+                            <option value=','>,</option>
+                            <option value=';'>;</option>
+                            <option value='0'>tab</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <span th:text="#{Layout.Close}">Annulla</span>
+                        </button>
+                        <button type="button" class="btn btn-primary towait"
+                                onclick="inviaFormFileFixField();" th:title="#{submit.button.title}"
+                                th:text="#{submit.button}" data-dismiss="modal">Invia</button>
                     </div>
                 </div>
             </div>
-			<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        </div>
+        <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -454,15 +450,15 @@
                                 </option>
                             </select>
                         </div>
-                        
-                           
+
+
                         <div class="modal-footer">
-                               
-                                
-                              <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
-                              <button type="submit" id="btn_Delete_field" class="btn btn-primary towait" data-dismiss="modal">Esegui</button>
+
+
+                            <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
+                            <button type="submit" id="btn_Delete_field" class="btn btn-primary towait" data-dismiss="modal">Esegui</button>
                         </div>
-                       
+
                     </div>
                     <!-- Default checked -->
                 </div>

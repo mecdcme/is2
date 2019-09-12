@@ -31,18 +31,18 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import it.istat.is2.workflow.domain.SxAppService;
-import it.istat.is2.workflow.domain.SxRuoli;
+import it.istat.is2.workflow.domain.AppService;
+import it.istat.is2.workflow.domain.AppRole;
 
 @Repository
-public interface RuoloDao extends CrudRepository<SxRuoli, Integer> {
+public interface RuoloDao extends CrudRepository<AppRole, Integer> {
 
-    List<SxRuoli> findAll();
+    List<AppRole> findAll();
 
-    List<SxRuoli> findBySxAppService(@Param("sxAppService") SxAppService sxAppService);
+    List<AppRole> findByAppService(@Param("AppService") AppService AppService);
 
-    default Map<String, SxRuoli> findByServiceAsCodMap(SxAppService sxAppService) {
-        return findBySxAppService(sxAppService).stream().collect(Collectors.toMap(SxRuoli::getCod, v -> v));
+    default Map<String, AppRole> findByServiceAsCodMap(AppService AppService) {
+        return findByAppService(AppService).stream().collect(Collectors.toMap(AppRole::getCod, v -> v));
     }
 
 }

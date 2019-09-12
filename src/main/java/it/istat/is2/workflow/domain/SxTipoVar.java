@@ -49,9 +49,9 @@ public class SxTipoVar implements Serializable {
 
     private String nome;
 
-    //bi-directional many-to-one association to SxWorkset
+    //bi-directional many-to-one association to Workset
     @OneToMany(mappedBy = "sxTipoVar")
-    private List<SxWorkset> sxWorksets;
+    private List<Workset> worksets;
 
     public SxTipoVar() {
         super();

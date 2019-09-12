@@ -39,9 +39,9 @@ import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.rule.service.RuleService;
-import it.istat.is2.workflow.domain.SxClassification;
-import it.istat.is2.workflow.domain.SxRule;
-import it.istat.is2.workflow.domain.SxRuleset;
+import it.istat.is2.workflow.domain.Classification;
+import it.istat.is2.workflow.domain.Rule;
+import it.istat.is2.workflow.domain.Ruleset;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
 import java.io.File;
@@ -101,11 +101,11 @@ public class RuleController {
 		WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));
 
 		
-		List<SxRuleset> listaRS = ruleService.findRulesetBySessioneLavoro(sessionelv);	
+		List<Ruleset> listaRS = ruleService.findRulesetBySessioneLavoro(sessionelv);	
 		boolean check = false;
-		Iterator<SxRuleset> itr = listaRS.iterator();
+		Iterator<Ruleset> itr = listaRS.iterator();
 		while(itr.hasNext()) {
-			 SxRuleset rs = itr.next();
+			 Ruleset rs = itr.next();
 	         String label = rs.getLabelFile();
 	         // Controlla che la label assegnata dall'utente non sia già presente
 	         if(etichetta.equals(label)) {
@@ -137,17 +137,17 @@ public class RuleController {
 		List<Log> logs = logService.findByIdSessione(Long.parseLong(form.getIdsessione()));
 		List<Log> rlogs = logService.findByIdSessioneAndTipo(Long.parseLong(form.getIdsessione()), OUTPUT_R);
 
-		List<SxClassification> listaClassificazioni1 = new ArrayList<SxClassification>();
-		SxClassification nullClass = new SxClassification();
+		List<Classification> listaClassificazioni1 = new ArrayList<Classification>();
+		Classification nullClass = new Classification();
 		nullClass.setId((short) -1);
 		nullClass.setNome("--");
 		listaClassificazioni1.add(nullClass);
 
-		List<SxClassification> listaClassificazioni2 = ruleService.findAllClassifications();
+		List<Classification> listaClassificazioni2 = ruleService.findAllClassifications();
 		listaClassificazioni1.addAll(listaClassificazioni2);
 
-		List<SxClassification> listaClassificazioni3 = new ArrayList<SxClassification>();
-		SxClassification onlyDominio = new SxClassification();
+		List<Classification> listaClassificazioni3 = new ArrayList<Classification>();
+		Classification onlyDominio = new Classification();
 		onlyDominio.setId((short) 1);
 		onlyDominio.setNome("Dominio");
 		listaClassificazioni3.add(onlyDominio);
@@ -156,11 +156,11 @@ public class RuleController {
 		
 		WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));
 		
-		List<SxRuleset> listaRS = ruleService.findRulesetBySessioneLavoro(sessionelv);	
+		List<Ruleset> listaRS = ruleService.findRulesetBySessioneLavoro(sessionelv);	
 		boolean check = false;
-		Iterator<SxRuleset> itr = listaRS.iterator();
+		Iterator<Ruleset> itr = listaRS.iterator();
 		while(itr.hasNext()) {
-			 SxRuleset rs = itr.next();
+			 Ruleset rs = itr.next();
 	         String label = rs.getLabelFile();
 	         // Controlla che la label assegnata dall'utente non sia già presente
 	         if(nomeRuleset.equals(label)) {
@@ -174,7 +174,7 @@ public class RuleController {
 			Long dataset = form.getDataset();
 			DatasetFile dfile = null;
 			List<DatasetColonna> colonne = null;
-			SxRuleset ruleset = new SxRuleset();
+			Ruleset ruleset = new Ruleset();
 
 			if (dataset != -1) {
 				dfile = datasetService.findDataSetFile(dataset);
@@ -211,16 +211,16 @@ public class RuleController {
 			@AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") NewRulesetFormBean form)
 			throws IOException {
 
-		SxRuleset ruleset = ruleService.findRulesetById(Integer.parseInt(form.getRulesetId()));
+		Ruleset ruleset = ruleService.findRulesetById(Integer.parseInt(form.getRulesetId()));
 		String nomeRuleset = form.getRulesetName();
 		WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));
 		
 		
-		List<SxRuleset> listRS = ruleService.findAllRuleset();
+		List<Ruleset> listRS = ruleService.findAllRuleset();
 		listRS.remove(ruleset);
-		Iterator<SxRuleset> itr = listRS.iterator();
+		Iterator<Ruleset> itr = listRS.iterator();
 		while(itr.hasNext()) {
-			 SxRuleset rs = itr.next();
+			 Ruleset rs = itr.next();
 	         String label = rs.getLabelFile();
 	         if(nomeRuleset.equals(label)) {
 	        	 notificationService.addErrorMessage("Esiste già un Ruleset con quel nome. Specificare un nome diverso.");
@@ -256,20 +256,20 @@ public class RuleController {
 		short idclassification = form.getClassification();
 		Integer idVar = form.getIdcol();
 
-		SxRuleset ruleset = ruleService.findRulesetById(idRuleset);
-		SxRule sxrule = new SxRule();
+		Ruleset ruleset = ruleService.findRulesetById(idRuleset);
+		Rule sxrule = new Rule();
 		
-		SxClassification classification = ruleService.findClassificationById(idclassification);
+		Classification classification = ruleService.findClassificationById(idclassification);
 
 		sxrule.setNome(nomeRule);
 		sxrule.setDescr(descrRule);
 		sxrule.setActive((short) 1);		
 		sxrule.setRule(textRule);
-		sxrule.setSxRuleset(ruleset);
+		sxrule.setRuleset(ruleset);
 		sxrule.setSxClassification(classification);
 		sxrule.setVariabile(idVar);
 
-		List<SxRule> rules = ruleset.getSxRules();
+		List<Rule> rules = ruleset.getRules();
 		rules.add(sxrule);
 
 		try {
@@ -313,7 +313,7 @@ public class RuleController {
 
 		listaDSFile.addAll(listaDatasetFile);
 
-		List<SxRuleset> listaRuleSet = sessionelv.getRuleSets();
+		List<Ruleset> listaRuleSet = sessionelv.getRuleSets();
 		String etichetta = null;
 				
 		
@@ -323,11 +323,11 @@ public class RuleController {
 			etichetta = "RS_" + progressivo;
 			
 			
-			List<SxRuleset> listaRS = ruleService.findRulesetBySessioneLavoro(sessionelv);	
+			List<Ruleset> listaRS = ruleService.findRulesetBySessioneLavoro(sessionelv);	
 			
-			Iterator<SxRuleset> itr = listaRS.iterator();
+			Iterator<Ruleset> itr = listaRS.iterator();
 			while(itr.hasNext()) {
-				 SxRuleset rs = itr.next();
+				 Ruleset rs = itr.next();
 		         String label = rs.getLabelFile();
 		         // Controlla che la label assegnata dall'utente non sia già presente
 		         if(etichetta.equals(label)) {
@@ -341,21 +341,21 @@ public class RuleController {
 			etichetta = "RS_1";
 		}
 			
-		SxRuleset rs;
+		Ruleset rs;
 		for (int i = 0; i < listaRuleSet.size(); i++) {
 			rs = listaRuleSet.get(i);
 			if (rs.getDatasetFile() == null) {
-				rs.setNumeroRighe(rs.getSxRules().size());
+				rs.setNumeroRighe(rs.getRules().size());
 			}
 		}
 
-		List<SxClassification> listaClassificazioni3 = new ArrayList<SxClassification>();
-		SxClassification onlyDominio = new SxClassification();
+		List<Classification> listaClassificazioni3 = new ArrayList<Classification>();
+		Classification onlyDominio = new Classification();
 		onlyDominio.setId((short) 1);
 		onlyDominio.setNome("Dominio");
 		listaClassificazioni3.add(onlyDominio);
 
-		List<SxClassification> listaClassificazioni = ruleService.findAllClassifications();
+		List<Classification> listaClassificazioni = ruleService.findAllClassifications();
 
 		session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 
@@ -377,8 +377,8 @@ public class RuleController {
 		List<Log> logs = logService.findByIdSessione();
 		List<Log> rlogs = logService.findByIdSessioneAndTipo(OUTPUT_R);
 		// TODO: Controllare findRulesetById
-		SxRuleset ruleset = ruleService.findRulesetById(idfile);
-		List<SxRule> rules = ruleService.findRules(ruleset);
+		Ruleset ruleset = ruleService.findRulesetById(idfile);
+		List<Rule> rules = ruleService.findRules(ruleset);
 
 		DatasetFile dfile = ruleset.getDatasetFile();
 
@@ -389,13 +389,13 @@ public class RuleController {
 		 * listaClassificazioni1.add(nullClass);
 		 */
 
-		List<SxClassification> listaClassificazioni3 = new ArrayList<SxClassification>();
-		SxClassification onlyDominio = new SxClassification();
+		List<Classification> listaClassificazioni3 = new ArrayList<Classification>();
+		Classification onlyDominio = new Classification();
 		onlyDominio.setId((short) 1);
 		onlyDominio.setNome("Dominio");
 		listaClassificazioni3.add(onlyDominio);
 
-		List<SxClassification> listaClassificazioni = ruleService.findAllClassifications();
+		List<Classification> listaClassificazioni = ruleService.findAllClassifications();
 		// listaClassificazioni1.addAll(listaClassificazioni2);
 
 		model.addAttribute("ruleset", ruleset);
