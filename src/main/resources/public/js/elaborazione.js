@@ -1,22 +1,22 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * 
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * 
  * http://ec.europa.eu/idabc/eupl5
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * Licence for the specific language governing permissions and limitations under
  * the Licence.
- *
+ * 
  * @author Francesco Amato <framato @ istat.it>
  * @author Mauro Bruno <mbruno @ istat.it>
- * @author Paolo Francescangeli  <pafrance @ istat.it>
+ * @author Paolo Francescangeli <pafrance @ istat.it>
  * @author Renzo Iannacone <iannacone @ istat.it>
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
@@ -25,8 +25,7 @@ var _ctx = $("meta[name='ctx']").attr("content");
 var toggle = true;
 
 $(document).ready(function () {
-
-    var ID = 1; // _idfile;
+ 
     $("#contenuto_file").hide();
     showPanel('variabili');
     
@@ -222,7 +221,7 @@ function associaVar() {
  }
 
 function openDlgModParametriWorkset(identifier) {
-		//controllaCampoModParam();
+		// controllaCampoModParam();
 	
 	var idParam=$(identifier).data('id-param');
 	var idWorkset=$(identifier).data('id-workset');
@@ -233,8 +232,9 @@ function openDlgModParametriWorkset(identifier) {
      var jsontemplate=JSON.parse(jsontemplateText);
      var schema=jsontemplate["schema"];
      var options=jsontemplate["options"];
-     if(options==undefined) options="";
-        var data=$(identifier).data('value-param');
+     if(!options) options="";
+     var data=$(identifier).data('value-param');
+     if(!data) data="";
     $('#edit-parameters').val(idWorkset);
      var dataContent="{\"data\":"+ JSON.stringify(data)+",\"schema\":"+JSON.stringify(schema)+",\"options\":"+JSON.stringify(options)+"}";
       $('#edit-param').empty();
@@ -319,7 +319,7 @@ function openDlgAddVariabileWorkset() {
 }
 
 function openDlgAddParametriWorkset() {
- //   controllaCampoParam();
+ // controllaCampoParam();
    
     $(".rolelist").removeClass('active');
     $(".varlist").removeClass('active');

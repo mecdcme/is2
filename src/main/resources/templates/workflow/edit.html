@@ -32,8 +32,9 @@
 <script th:src="@{/js/elaborazione.js}"></script>
 <script th:src="@{/js/alpaca/handlebars.min.js}"></script>
 <script th:src="@{/js/alpaca/alpaca.min.js}"></script>
- <script th:src="@{/js/jquery-ui.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/jquery-ui.min.js}" type="text/javascript"></script>
 <script th:inline="javascript">
+            var showTabParam = [[${showTabParam}]];
             var _idfile = [[${idfile}]];
             var _paramTemplateMap = {};
             var _paramList = [[${listaParametriAll}]]
@@ -46,6 +47,9 @@
             
             $(document).ready(function () {
                 setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+                
+               if(showTabParam) showPanel('parametri');
+                
                 tabs = $( "#tabs" ).tabs();
                 tabs.find( ".ui-tabs-nav" ).sortable({
                   axis: "x",
@@ -139,7 +143,7 @@
 		url(http://code.jquery.com/ui/1.12.1/themes/base/images/ui-icons_444444_256x240.png);
 }
 </style>
-<link th:href="@{/css/alpaca/alpaca.min.css}" rel="stylesheet"  />
+<link th:href="@{/css/alpaca/alpaca.min.css}" rel="stylesheet" />
 <link th:href="@{/icons/glyphicon.css}" rel="stylesheet" />
 <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
 <link th:href="@{/css/jquery-ui.min.css}" rel="stylesheet" />
@@ -207,14 +211,12 @@
 									class="form-horizontal" method="post">
 									<span id="associazione_vars"></span>
 								</form>
-								<table id="worksetTabList"
-									class="table table-hover">
+								<table id="worksetTabList" class="table table-hover">
 									<thead>
 										<tr>
-											<th style="width: 1%"><span>#</span></th>
+											<th style="width: 2%"><span>#</span></th>
 											<th><span>Ruolo</span></th>
 											<th><span>Nome Variabile</span></th>
-											<th style="width: 8%">Filtro</th>
 											<th style="width: 1%"></th>
 											<th style="width: 1%"></th>
 										</tr>
@@ -223,15 +225,9 @@
 										<tr th:each="stepV,stats: ${stepVList}"
 											th:unless="${(stepVList == null) or (stepVList.size() == 0) or (stepV.tipoCampo.nome == 'OUTPUT')}"
 											data-th-attr="stepid=${stepV.id}">
-											<td> <span	th:text="${stats.index+1}"></span></td>
+											<td><span th:text="${stats.index+1}"></span></td>
 											<td th:text="${stepV.appRole.nome}"></td>
 											<td th:text="${stepV.workset.nome}"></td>
-											<td><a href="javascript:void(0)" title="Filtro ricerca"
-												class="disabled"> <span
-														th:if="${ stepV.flagRicerca==1 }">
-														<i class="fa fa-check"></i>
-													</span> <span th:unless="${ stepV.flagRicerca==1 }">&dash;</span>
-											</a></td>
 											<td><a href="javascript:void(0)"
 												th:attr="onclick='javascript:mostraDialogModificaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.workset.nome} + '\', ' + ${stepV.appRole.id} + ', ' + ${stepV.flagRicerca} + ')'"
 												title="Modifica associazione" class="disabled"> <i
@@ -249,11 +245,10 @@
 									type="hidden" id="idstepvar" name="idstepvar" value="" />
 							</div>
 							<div class="card-body" id="card-parametri" style="display: none">
-								<table id="parametriTabList"
-									class="table table-hover">
+								<table id="parametriTabList" class="table table-hover">
 									<thead>
 										<tr>
-											<th style="width: 1%"><span>#</span></th>
+											<th style="width: 2%"><span>#</span></th>
 											<th><span>Nome Parametro</span></th>
 											<th><span>Valore</span></th>
 											<th><span>Ruolo</span></th>
@@ -265,7 +260,7 @@
 									<tbody>
 										<tr th:each="stepP,stats: ${stepParamList}"
 											th:unless="${(stepParamList == null) or (stepParamList.size() == 0) }">
-											<td> <span th:text="${stats.index+1}"></span></td>
+											<td><span th:text="${stats.index+1}"></span></td>
 											<td th:text="${stepP.workset.nome}"></td>
 											<td><span
 													th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepP.workset.paramValue)}"></span></td>
@@ -289,14 +284,13 @@
 									class="form-horizontal" method="post">
 									<span id="associazione_vars"></span>
 								</form>
-								<table id="worksetRuntimeTabList"
-									class="table table-hover">
+								<table id="worksetRuntimeTabList" class="table table-hover">
 									<thead>
 										<tr>
 											<th style="width: 8%"><span></span></th>
 											<th><span>Ruolo</span></th>
 											<th><span>Nome Variabile</span></th>
-											<th style="width: 8%">Filtro</th>
+
 											<th style="width: 1%"></th>
 											<th style="width: 1%"></th>
 										</tr>
@@ -308,12 +302,6 @@
 											<td><span th:text="${stats.index+1}"></span></td>
 											<td th:text="${stepV.appRole.nome}"></td>
 											<td th:text="${stepV.workset.nome}"></td>
-											<td><a href="javascript:void(0)" title="Filtro ricerca"
-												class="disabled"> <span
-														th:if="${ stepV.flagRicerca==1 }">
-														<i class="fa fa-check"></i>
-													</span> <span th:unless="${ stepV.flagRicerca==1 }">&dash;</span>
-											</a></td>
 											<td><a href="javascript:void(0)"
 												th:attr="onclick='javascript:mostraDialogModificaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.workset.nome} + '\', ' + ${stepV.appRole.id} + ', ' + ${stepV.flagRicerca} + ')'"
 												title="Modifica associazione" class="disabled"> <i
@@ -344,7 +332,7 @@
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content ">
 				<div class="modal-header">
-				 	<h5 class="modal-title">
+					<h5 class="modal-title">
 						<i class="fa fa-plus"></i>
 						<span>Nuova associazione variabile</span>
 					</h5>
@@ -419,8 +407,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">
+					<button type="button" class="btn btn-light" data-dismiss="modal">
 						<span th:text="#{associazione.dialog.button.close}">Annulla</span>
 					</button>
 					<span th:if="${datasetfiles.size()>0}">
@@ -493,25 +480,13 @@
 									<span class="help-block"></span>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-lg-3">
-									<label class="control-label"
-										th:text="#{update.filtro.label}+':'"> <span>Filtro</span></label>
-								</div>
-								<div id="radio_container" class="col-lg-9">
-									<input id="filtro1" type="radio" title="Aggiungi"
-										name="flagRicerca" value="1" onclick="controllaInputText()" />
-									S&Iacute; <input id="filtro0" type="radio" title="Escludi"
-										name="flagRicerca" value="0" onclick="controllaInputText()" />No
-									<span class="help-block"></span>
-								</div>
-							</div>
+
 						</div>
 					</div>
+					<input type="hidden" name="flagRicerca" value="0" />
 				</form>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">
+					<button type="button" class="btn btn-light" data-dismiss="modal">
 						<span th:text="#{associazione.dialog.button.close}">Annulla</span>
 					</button>
 					<button id="btn_dlg_assoc_mod" type="button"
@@ -561,8 +536,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">
+						<button type="button" class="btn btn-light" data-dismiss="modal">
 							<span th:text="#{associazione.dialog.button.close}">Annulla</span>
 						</button>
 						<button id="btn_dlg_assoc_param" type="button"
@@ -599,8 +573,7 @@
 						<div id="edit-param" class="form-group"></div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">
+						<button type="button" class="btn btn-light" data-dismiss="modal">
 							<span th:text="#{associazione.dialog.button.close}">Annulla</span>
 						</button>
 						<button id="btn_dlg_mod_assoc_param" type="button"
@@ -632,8 +605,7 @@
 					?
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
 					<button type="button" id="btn_delete"
 						class="btn btn-primary towait" data-dismiss="modal">Delete</button>
 				</div>
@@ -661,8 +633,7 @@
 					?
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
 					<button type="button" id="btn_delete_param"
 						class="btn btn-primary towait" data-dismiss="modal">Delete</button>
 				</div>
