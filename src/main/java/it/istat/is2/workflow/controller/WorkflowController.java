@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.istat.is2.app.bean.AssociazioneVarFormBean;
 import it.istat.is2.app.bean.BusinessProcessParentBean;
@@ -167,7 +168,7 @@ public class WorkflowController {
 	}
 
 	@GetMapping(value = "/eliminaParametro/{idelaborazione}/{idparametro}")
-	public String eliminaParametro(HttpSession session, Model model,
+	public String eliminaParametro(HttpSession session, Model model, RedirectAttributes ra,
 			@PathVariable("idelaborazione") Long idelaborazione, @PathVariable("idparametro") Integer idparametro) {
 		notificationService.removeAllMessages();
 
@@ -183,12 +184,12 @@ public class WorkflowController {
 
 		stepVariableService.removeStepVarById(idparametro);
 		notificationService.addInfoMessage("Il parametro è stato eliminato");
-		model.addAttribute("showTabParam", true);
+		ra.addFlashAttribute("showTabParam", true);
 		return "redirect:/ws/editworkingset/" + idelaborazione;
 	}
 
 	@GetMapping(value = "/editworkingset/{idelaborazione}")
-	public String editWorkingSet(HttpSession session, Model model,
+	public String editWorkingSet(HttpSession session, Model model, @ModelAttribute("showTabParam") String showTabParam,
 			@PathVariable("idelaborazione") Long idElaborazione) {
 
 		session.setAttribute(IS2Const.WORKINGSET, "workingset");
@@ -269,7 +270,7 @@ public class WorkflowController {
 
 		model.addAttribute("assignedParamsbySBP", assignedParamsbySBP);
 		model.addAttribute("totalParamsbySBP", totalParamsbySBP);
-
+		model.addAttribute("showTabParam", showTabParam);
 		return "workflow/edit";
 
 	}
@@ -435,7 +436,7 @@ public class WorkflowController {
 	}
 
 	@RequestMapping(value = "/assegnaparametri", method = RequestMethod.POST)
-	public String assegnaparametriWS(HttpSession session, Model model,
+	public String assegnaparametriWS(HttpSession session, Model model, RedirectAttributes ra,
 			@RequestParam("idelaborazione") Long idelaborazione, @RequestParam("parametri") String parametri,
 			@RequestParam("valoreParam") String valoreParam) {
 
@@ -451,12 +452,12 @@ public class WorkflowController {
 		notificationService.addInfoMessage("Parametro inserito correttamente");
 
 		model.addAttribute("elaborazione", elaborazione);
-		model.addAttribute("showTabParam", true);
+		ra.addFlashAttribute("showTabParam", true);
 		return "redirect:/ws/editworkingset/" + elaborazione.getId();
 	}
 
 	@RequestMapping(value = "modificaparametro", method = RequestMethod.POST)
-	public String modificaparametro(HttpSession session, Model model,
+	public String modificaparametro(HttpSession session, Model model,   RedirectAttributes ra,
 			@RequestParam("idelaborazione") Long idelaborazione, @RequestParam("parametri") String parametri,
 			@RequestParam("valoreParam") String valoreParam, @RequestParam("idStepvarMod") String idStepvarMod) {
 
@@ -475,7 +476,7 @@ public class WorkflowController {
 		notificationService.addInfoMessage("Parametro modificato");
 
 		model.addAttribute("elaborazione", elaborazione);
-		model.addAttribute("showTabParam", true);
+		ra.addFlashAttribute("showTabParam", true);
 		return "redirect:/ws/editworkingset/" + elaborazione.getId();
 	}
 
