@@ -27,10 +27,10 @@
         <head th:include="layout :: site-head" th:remove="tag" />
         <script th:src="@{/js/sessioni.js}"></script>
         <script th:inline="javascript">
-         $(document).ready(function () {
+            $(document).ready(function () {
             setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
-         });
-         </script>
+            });
+        </script>
     </head>
     <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
         <header th:replace="layout :: site-header"></header>
@@ -54,7 +54,7 @@
                         <span th:text="${session.sessioneBean.nome}"></span>
                     </li>
                     <!-- Breadcrumb Menu-->
-                    <li class="breadcrumb-menu d-md-down-none">
+                    <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
                             <a class="breadcrumb-last-item" title="Chiudi sessione" 
                                th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
@@ -69,20 +69,15 @@
                             <div class="col-6 col-lg-3" th:if="${(session.sessioneBean.file != null)}">
                                 <div class="card">
                                     <div class="card-body p-3 d-flex align-items-center">
-                                        <i class="fa fa-database bg-primary p-3 font-2xl mr-3"></i>
+                                        <a id="card-dati" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                            <i class="fa fa-database bg-primary p-3 font-2xl mr-3"></i>
+                                        </a>
                                         <div>
                                             <div class="text-value-sm text-primary">
-                                                <span th:text="${'('+session.sessioneBean.file.size()+')'}" ></span>
+                                                <span th:text="${session.sessioneBean.file.size()}" ></span>
                                             </div>
                                             <div class="text-muted text-uppercase font-weight-bold small">Dataset</div>
                                         </div>
-                                    </div>
-                                    <div class="card-footer px-3 py-2">
-                                        <a id="card-dati" class="btn-block text-muted d-flex justify-content-between align-items-center" 
-                                           th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
-                                            <span class="small font-weight-bold">View dataset</span>
-                                            <i class="fa fa-angle-right"></i>
-                                        </a>
                                     </div>
                                 </div>
                             </div>

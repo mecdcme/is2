@@ -62,7 +62,7 @@
                         <span th:text="${session.sessioneBean.nomeElaborazione}"></span>
                     </li>
                     <!-- Breadcrumb Menu-->
-                    <li class="breadcrumb-menu d-md-down-none">
+                    <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
                             <a class="breadcrumb-last-item" title="Chiudi processo" 
                                th:href="@{'/ws/chiudiElab/'+${elaborazione.id}}">
@@ -79,7 +79,7 @@
                                     <div class="card-header">
                                         <span th:text="#{Layout.Processes}"></span>
                                         <div class="card-header-actions">
-                                            <a class="bar-right" title="Workset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}">
+                                            <a title="Workset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}">
                                                 <i class="fa fa-cog"></i>&nbsp;<span>Settings</span>
                                             </a>
                                         </div>
@@ -90,7 +90,7 @@
                                                 <tr>
                                                     <th><span  th:text="#{Layout.Process}">Processo</span></th>
                                                     <th><span th:text="#{Layout.Step}">Step</span></th>
-                                                      <th><span >Missing</span></th>
+                                                    <th><span >Missing</span></th>
                                                     <th><span th:text="#{Layout.status}">Stato</span></th>
                                                     <th></th>
                                                     <th></th>
@@ -107,13 +107,9 @@
                                                             <span th:text="${bProcess.descr+' ('+bProcess.nome+')' }"></span>
                                                         </td>
                                                         <td class="process-border-right"><span th:text="${bStep.descr+' ('+bStep.nome+')' }"></span></td>
-                                                        
-                                                         <td class="process-border-right"><span th:text="${paramsMissing.get(bProcess.id)}"></span>
-                                                         <span th:text="${variablesMissing.get(bProcess.id)}"></span>
-                                                         
-                                                         
-                                                         </td>
-                                                        
+                                                        <td class="process-border-right"><span th:text="${paramsMissing.get(bProcess.id)}"></span>
+                                                            <span th:text="${variablesMissing.get(bProcess.id)}"></span>
+                                                        </td>
                                                         <td class="process-border-right">
                                                             <span th:id="${bProcess.id}">DA PROCESSARE</span>
                                                         </td>

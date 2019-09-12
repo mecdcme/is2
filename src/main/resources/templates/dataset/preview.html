@@ -67,9 +67,9 @@
                         <span th:text="${dfile.nomeFile}"></span>
                     </li>
                     <!-- Breadcrumb Menu-->
-                    <li class="breadcrumb-menu d-md-down-none">
+                    <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a href="#" class="btn" title="Nuova Variabile">
+                            <a href="#" class="btn d-md-down-none" title="Preprocessing">
                                 <i class="fa fa-cog"></i>&nbsp;<span th:text="#{dataset.nuovaVariabile}"></span>
                             </a>
                             <!--ul class="dropdown-menu" >
@@ -79,13 +79,13 @@
                                 <li><a class="dropdown-item" th:onclick="'javascript:openRepairModal()'" href="#"><span th:text="#{dataset.fieldRepair}"></span></a></li>
                                 <li><a class="dropdown-item" th:onclick="'javascript:openDeleteModal()'" href="#"><span th:text="#{dataset.fieldDelete}"></span></a></li> 
                             </ul-->
-                            <a class="btn" id="btn_graph" title="Data analytics" th:href="@{'/graph/home/'+${idfile}}">
+                            <a class="btn d-md-down-none" id="btn_graph" title="Data analytics" th:href="@{'/graph/home/'+${idfile}}">
                                 <i class="fa fa-image"></i>&nbsp;<span th:text="#{sessionewf.graph}"></span>
                             </a>
-                            <a class="btn" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
+                            <a class="btn d-md-down-none" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
                                 <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>
                             </a>
-                            <a class="btn" title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                            <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -105,7 +105,7 @@
                                         <div class="form-inline">
                                             <div class="form-group" th:each="col : ${colonne}" th:if="${col.filtro}" style="margin-right: 10px">
                                                 <th:block>
-                                                    <label style="margin-right: 5px"> 
+                                                    <label> 
                                                         <span th:text="${col.nome + ' :'}"></span> 
                                                         <input type="text" class="form-control param-filter" th:id="${col.nome}" style="font-weight: normal;" />
                                                     </label>
@@ -120,15 +120,15 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:each="file, iterStat : ${files}">
-                                            <a th:href="@{'/viewDataset/'+${file.id}}" title="Nuova elaborazione"> 
-                                                <span th:if="${file.id} == ${idfile}" class="font-weight-bold" th:classappend="!${iterStat.last}? 'bar-right' : ''" 
-                                                      th:text="${file.nomeFile}"></span>
-                                                <span th:unless="${file.id} == ${idfile}" th:class="!${iterStat.last}? 'bar-right'" th:text="${file.nomeFile}"></span>
+                                            <a th:href="@{'/viewDataset/'+${file.id}}" title="Nuova elaborazione" 
+                                               th:class="nav-padding" th:classappend="!${iterStat.last}? 'bar-right' : ''" > 
+                                                <span th:if="${file.id} == ${idfile}" class="font-weight-bold" th:text="${file.nomeFile}"></span>
+                                                <span th:unless="${file.id} == ${idfile}" th:text="${file.nomeFile}"></span>
                                             </a>
                                         </span>
                                     </div>
                                     <div class="card-body">
-                                        <table id="dataview" class="table table-condensed table-striped" cellspacing="0" width="100%" >
+                                        <table id="dataview" class="table table-striped" cellspacing="0" width="100%" >
                                             <thead>
                                                 <tr>
                                                     <th th:each="varname: ${colonne}" th:text="${varname.nome}"></th>

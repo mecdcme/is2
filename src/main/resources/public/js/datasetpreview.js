@@ -25,479 +25,337 @@ var _ctx = $("meta[name='ctx']").attr("content");
 var ID = _idfile;
 var table;
 var selVar;
-var mergeField="";
-var commandField="";
-var charOrString="_";
-var upperLower="_";
-var newField="";
-var idColonna="";
-var idColonnaToParse="";
+var mergeField = "";
+var commandField = "";
+var charOrString = "_";
+var upperLower = "_";
+var newField = "";
+var idColonna = "";
+var idColonnaToParse = "";
 var filename;
-
-//var newParseField1 ="";
-//var newParseField2 ="";
 
 function eliminaDataset() {
     $('#modalCancellaDataset').modal('show');
-};
+}
 
 function openStandardizationModal() {
     $('#modalStandardization').modal('show');
-};
+}
 
 function openMergeModal() {
     $('#modalMerge').modal('show');
-};
+}
 
 function openParseModal() {
     $('#modalParse').modal('show');
-};
+}
 
 function openRepairModal() {
-	
     $('#modalRepair').modal('show');
-};
+}
 
 function openDeleteModal() {
-	
+
     $('#modalDelete').modal('show');
-};
-
-
-
- 
+}
 
 $(document).ready(function () {
-	
-	mergeField="";
-	commandField="";
-	charOrString="_";
-	upperLower="_";
-	newField="";
-	idColonna="";
-	idColonnaToParse="";
 
-$("#csvFileId").attr("disabled", true);	
-selVar= $("#selectedVar").val();
-selVarName= $("#selectedVar option:selected").text();
+    mergeField = "";
+    commandField = "";
+    charOrString = "_";
+    upperLower = "_";
+    newField = "";
+    idColonna = "";
+    idColonnaToParse = "";
 
-
-$('#id_Dataset').val(_idfile);
-$('#id_Colonna').val($('#selectedVariableToFix').val());
-$('#num_Colonne').val(_variabili);
-$('#num_Righe').val(_righe);
-
-  if($('#upperCase').is(':checked')){
-	     $('#upperRadio').show();
-  }else{
-		$('#upperRadio').hide();
- };
- 
- 
- if ($("input[name='tipoSeparatore']:checked")[0].id == 'sepRadio') {
-     $('#lenField').hide();
-     $('#sepField').show();
-
- }else{
-	 $('#lenField').show();
-     $('#sepField').hide();
-
- }	
- 
-  if($('#removeChar').is(':checked')){
-	     $('#charValue').show();
-	}else{
-		$('#charValue').hide();
-	};
-
-  $('#upperCase').on('click',function(){
-  	   $('#upperRadio').hide();
-  	   if(this.checked){
-  	     $('#upperRadio').show();
-  	   }
-  	});
-  
-  $('#selectedVariable').on('change', function() {
-	  selVarName = $(this).children("option:selected").text();
-	  selVar = $(this).val();
-	});
-  
-  $('#sselectedVariableToFix').on('change', function() {
-	  $('#id_Colonna').val( $(this).val());
-	  selVar = $(this).val();
-	});
-  
-  
-  
-  $('#id_Colonna').val($('#selectedVariableToFix').val());
-  
-  
-  $('#newfieldMerge').on('keyup', function() {
-	  if ( $('#textArea').val()!=""){
-		  $("#btn_Merge_field").attr("disabled", false);
-		  if ($(this).val() == ""){
-			  $("#btn_Merge_field").attr("disabled", true);
-		  }
-	  }else{
-		 
-			  $("#btn_Merge_field").attr("disabled", true);
-		
-		 
-	  }
-		  
-	});
-  
-  $("#csvFileId").on('change', function () { // bCheck is a input type button
-      filename = $("#csvFileId").val().substr($("#csvFileId").val().lastIndexOf("\\") + 1, $("#csvFileId").val().length);
-      
-      preview();
-      if (filename) { // returns true if the string is not empty
-          $("#desc").val(filename);
-          
-          $("#previewModalFixField").modal('show');
-         
-          return true;
-      } else { // no file was selected        	
-          alert("Nessun file caricato!");
-          return false;
-      };
-  });
-  
-$('#newfieldMerge').on('keypress', function(event) {
-	  
-	  if( event.key == "."){
-		   return (false);
-		};
-	   if( event.key == "\\"){
-		   return (false);
-		};
-	   if( event.key == "\/"){
-		   return (false);
-		};
-	   if( event.key == "\'"){
-		   return (false);
-		};
-		if( event.key == "\""){
-			return (false);
-		};
-	  
-		  
-	});
-
-$('#lenField').on('keypress', function(event) {
-	  
-	var regular = new RegExp("[0-9]");
-	
-	return (regular.test(event.key));
-	
-	
-		  
-	});
-
-//$('#sepField').on('keypress', function(event) {
-//	  
-//	var regular = new RegExp("[^.]");
-//	
-//	
-//	return (regular.test(event.key));
-//	
-//	
-//		  
-//	});
-//  
-//  $('#sepValue').on('keypress', function(event) {
-//	  
-//	   if( event.key == "."){
-//		   return (false);
-//		};
-//	   if( event.key == "\\"){
-//		   return (false);
-//		};
-//	   if( event.key == "\/"){
-//		   return (false);
-//		};
-//	   if( event.key == "\'"){
-//		   return (false);
-//		};
-//		if( event.key == "\""){
-//			return (false);
-//		};
-//	   
-//	   
-//		  
-//	});
-$('#lenField').on('keyup', function(event) {
-	  
-	if ($(this).val() != "" && $('#newParseField1').val()!="" &&  $('#newParseField2').val()!="" ){
-		  $("#btn_Parse_field").attr("disabled", false);
-	 }else{
-		 $("#btn_Parse_field").attr("disabled", true);
-	 }
-		 
-	
-		  
-});
-
-$('#newRepairedField').on('keyup', function(event) {
-	  
-	if ($(this).val() != "" ){
-		  $("#csvFileId").attr("disabled", false);
-	 }else{
-		 $("#csvFileId").attr("disabled", true);
-	 }
-		 
-	
-		  
-});
+    $("#csvFileId").attr("disabled", true);
+    selVar = $("#selectedVar").val();
+    selVarName = $("#selectedVar option:selected").text();
 
 
-$('#sepField').on('keyup', function(event) {
-	  
-	if ($(this).val() != "" && $('#newParseField1').val()!="" &&  $('#newParseField2').val()!="" ){
-		  $("#btn_Parse_field").attr("disabled", false);
-	 }else{
-		  $("#btn_Parse_field").attr("disabled", true);
-	 }
-		 
-	
-		  
-});
-$('#newParseField1').on('keyup', function(event) {
-	  
-	if ($(this).val() != "" &&  $('#newParseField2').val()!="" ){
-		if (($("input[name='tipoSeparatore']:checked")[0].id == 'sepRadio' && $('#sepField').val()!="") || ($("input[name='tipoSeparatore']:checked")[0].id == 'lenRadio' && $('#lenField').val()!="")) {
-			$("#btn_Parse_field").attr("disabled", false);
-		}else{
-			$("#btn_Parse_field").attr("disabled", true);
-		}
-		  
-	 }else{
-		 $("#btn_Parse_field").attr("disabled", true);
-	 }
-		 
-	
-		  
-});  
-$('#newParseField2').on('keyup', function(event) {
-	  
-	if ($(this).val() != "" &&  $('#newParseField1').val()!="" ){
-		if ($("input[name='tipoSeparatore']:checked")[0].id == 'sepRadio' && $('#sepField').val()!="" || ($("input[name='tipoSeparatore']:checked")[0].id == 'lenRadio' && $('#lenField').val()!="")) {
-			$("#btn_Parse_field").attr("disabled", false);
-		}else{
-			$("#btn_Parse_field").attr("disabled", true);
-		}  
-		  
-	 }else{
-		 $("#btn_Parse_field").attr("disabled", true);
-	 }
-		 
-	
-		  
-});  
-  $('input:radio[name=tipoSeparatore]').on('change', function () {
-      if ($("input[name='tipoSeparatore']:checked")[0].id == 'sepRadio') {
-          $('#lenField').hide();
-          $('#sepField').show();
-          if ($('#sepField').val() != "" && $('#newParseField1').val()!="" &&  $('#newParseField2').val()!="" ){
-    		  $("#btn_Parse_field").attr("disabled", false);
-    	 }else{
-    		 $("#btn_Parse_field").attr("disabled", true);
-    	 }
-      }
-      if ($("input[name='tipoSeparatore']:checked")[0].id == 'lenRadio') {
-    	  $('#sepField').hide();
-    	  $('#lenField').show();
-    	  if ($('#lenField').val() != "" && $('#newParseField1').val()!="" &&  $('#newParseField2').val()!="" ){
-    		  $("#btn_Parse_field").attr("disabled", false);
-    	 }else{
-    		 $("#btn_Parse_field").attr("disabled", true);
-    	 }
-      }
-  });
-  
-  $('#removeChar').on('click',function(){
-	   $('#charValue').hide();
-	   if(this.checked){
-	     $('#charValue').show();
-	   }
-	});
-	
-	$('#btn_delete_dataset').click(function () {
-       window.location = _ctx + '/deleteDataset/' + _idfile;
-   });
-   
-	$('#addVariable').click(function () {
-		$('#textArea').text($('#textArea').text() + selVarName )
-		mergeField = mergeField + "{...(id)" + selVar + "...}";
-		if ($('#newfieldMerge').val() != ""){
-			  $("#btn_Merge_field").attr("disabled", false);
-		}
-	   });
-	
-	
-	
-	$('#addSeparator').click(function () {
-		if ($('#sepValue').val()!=""){
-			$('#textArea').text($('#textArea').text() + $('#sepValue').val() )
-			mergeField = mergeField + "{...(se)" + $('#sepValue').val() + "...}";
-			 $('#sepValue').val("");
-		}else{
-			alert("Insert valid Separator!")
-//			alert(fusionField)
-		}
-		   
-		if ($('#newfieldMerge').val() != ""){
-			  $("#btn_Merge_field").attr("disabled", false);
-		  } 
-		});
-	
-	$('#clearTextArea').click(function () {
-		alert(mergeField);
-		$('#textArea').text("");
-		mergeField = "";  
-		$("#btn_Merge_field").attr("disabled", true);
-		
-	});
-	
-	
-  $('#btn_Standardization_field').click(function () {
-   	
-   
+    $('#id_Dataset').val(_idfile);
+    $('#id_Colonna').val($('#selectedVariableToFix').val());
+    $('#num_Colonne').val(_variabili);
+    $('#num_Righe').val(_righe);
+
+    if ($('#upperCase').is(':checked')) {
+        $('#upperRadio').show();
+    } else {
+        $('#upperRadio').hide();
+    }
+
+    if ($("input[name='tipoSeparatore']:checked")[0].id == 'sepRadio') {
+        $('#lenField').hide();
+        $('#sepField').show();
+
+    } else {
+        $('#lenField').show();
+        $('#sepField').hide();
+    }
+
+    if ($('#removeChar').is(':checked')) {
+        $('#charValue').show();
+    } else {
+        $('#charValue').hide();
+    }
+
+    $('#upperCase').on('click', function () {
+        $('#upperRadio').hide();
+        if (this.checked) {
+            $('#upperRadio').show();
+        }
+    });
+
+    $('#selectedVariable').on('change', function () {
+        selVarName = $(this).children("option:selected").text();
+        selVar = $(this).val();
+    });
+
+    $('#sselectedVariableToFix').on('change', function () {
+        $('#id_Colonna').val($(this).val());
+        selVar = $(this).val();
+    });
+
+    $('#id_Colonna').val($('#selectedVariableToFix').val());
+
+    $('#newfieldMerge').on('keyup', function () {
+        if ($('#textArea').val() != "") {
+            $("#btn_Merge_field").attr("disabled", false);
+            if ($(this).val() == "") {
+                $("#btn_Merge_field").attr("disabled", true);
+            }
+        } else {
+            $("#btn_Merge_field").attr("disabled", true);
+        }
+    });
+
+    $("#csvFileId").on('change', function () { // bCheck is a input type button
+        filename = $("#csvFileId").val().substr($("#csvFileId").val().lastIndexOf("\\") + 1, $("#csvFileId").val().length);
+
+        preview();
+        if (filename) { // returns true if the string is not empty
+            $("#desc").val(filename);
+            $("#previewModalFixField").modal('show');
+            return true;
+        } else { // no file was selected        	
+            alert("Nessun file caricato!");
+            return false;
+        }
+    });
+
+    $('#newfieldMerge').on('keypress', function (event) {
+        if (event.key === ".") {
+            return (false);
+        }
+        if (event.key === "\\") {
+            return (false);
+        }
+        if (event.key === "\/") {
+            return (false);
+        }
+        if (event.key === "\'") {
+            return (false);
+        }
+        if (event.key === "\"") {
+            return (false);
+        }
+    });
+
+    $('#lenField').on('keypress', function (event) {
+        var regular = new RegExp("[0-9]");
+        return (regular.test(event.key));
+    });
+
+    $('#lenField').on('keyup', function (event) {
+        if ($(this).val() !== "" && $('#newParseField1').val() !== "" && $('#newParseField2').val() !== "") {
+            $("#btn_Parse_field").attr("disabled", false);
+        } else {
+            $("#btn_Parse_field").attr("disabled", true);
+        }
+    });
+
+    $('#newRepairedField').on('keyup', function (event) {
+        if ($(this).val() !== "") {
+            $("#csvFileId").attr("disabled", false);
+        } else {
+            $("#csvFileId").attr("disabled", true);
+        }
+    });
 
 
-   	idColonna= $('#selectedVar').val();
-   	if($("#removeSpace").is(':checked')){
-   		commandField= commandField + "1";
-	      }else{
-	    	  commandField= commandField + "0";
-	   	};
-   	
-   	if($('#removeSpecial').is(':checked')){
-   		commandField= commandField + "1";
-	      }else{
-	    	  commandField= commandField + "0";
-	   };
-	   	
-	if($('#newField').val()!=""){
-		   		newField=$('#newField').val();
-			}else{
-				alert("Inserire il nome della nuova variabile");
-				return;
-			
-	}
-	   	
-	   	
-   	if($('#removeChar').is(':checked')){
-   		commandField= commandField +"1";
-   		if($('#charValue').val()!=""){
-   			charOrString=$('#charValue').val();
-   		}else{
-   			alert("inserire la stringa o il carattere da rimuovere");
-   			return;
-   			
-   		}
-	      }else{
-	    	  commandField= commandField + "0";
-	   	};
-  	
-	   	if($('#upperCase').is(':checked')){
-	   		commandField= commandField + "1";
-	   		upperLower=$('input:radio[name=gruppo3]:checked')[0].id;
-	    
-	   	}else{
-	   		commandField= commandField + "0";
-	   	};
-	   	
-	   	
-   	
-	   	$("btn_Standardization_field").addClass("towait");
-       window.location = _ctx + '/createField/' + _idfile + "/" +  idColonna + "/" + commandField + "/" +  charOrString + "/" + upperLower + "/" + newField + "/" + _variabili + "/" + _righe ;
-       
-   	
-   	
-
-   });
-   
-  
-  
-  $('#btn_Merge_field').click(function () {
-	   	
-	   
-
-
-	   	
-		   	
-	   	
-		   $("btn_Merge_field").addClass("towait");
-	       window.location = _ctx + '/createMergedField/' + _idfile + "/" + _variabili + "/" + _righe + "/" + mergeField  + "/" + $('#newfieldMerge').val();
-	       
-	   	
-	   	
-
-	   });
-  
-  $('#btn_Delete_field').click(function () {
-	   	
-	   
-
-
-	   	
-	   	
-	   	
-	   $("btn_Delete_field").addClass("towait");
-      window.location = _ctx + '/deleteField/' + _idfile + "/" + $('#selectedVariableToDelete').val() + "/" + _variabili + "/" + _righe ;
-      
-  	
-  	
-
-  });
-  
-  
-  
-  $('#btn_Parse_field').click(function () {
-	   	
-	   
-
-     var executeCommand = "";
-     var commandValue = "";
-     var startTo="";
-     idColonnaToParse = $('#selectedVariableToParse').val();
-     
-	  if ($("input[name='tipoSeparatore']:checked")[0].id == 'sepRadio') {
-		    
-		     executeCommand = "separatore";
-		     commandValue = "{..."+ $('#sepField').val() + "...}";
-		 }else{
-			
-		     executeCommand = "lunghezza";
-		     commandValue = $('#lenField').val();
-	 }	
-	  if ($("input[name='posizionePartenza']:checked")[0].id == 'startRadio') {
-		    
-		     startTo = "start";
-		     
-		 }else{
-			
-			 startTo = "end";
-	 }	  	  	
-	   	
-	   	
-	   $("btn_Parse_field").addClass("towait");
-      window.location = _ctx + '/createParsedFields/' + _idfile + "/" +  idColonnaToParse + "/" + _variabili + "/" + _righe + "/" + executeCommand  + "/" + commandValue  + "/" + startTo  +  "/" + $('#newParseField1').val()  +  "/" + $('#newParseField2').val();
-      
-  	
-  	
-
-  });
-  
-  
-  
-  
-  
-
-      
+    $('#sepField').on('keyup', function (event) {
+        if ($(this).val() !== "" && $('#newParseField1').val() !== "" && $('#newParseField2').val() !== "") {
+            $("#btn_Parse_field").attr("disabled", false);
+        } else {
+            $("#btn_Parse_field").attr("disabled", true);
+        }
+    });
     
-   table=  $("#dataview").DataTable({
+    $('#newParseField1').on('keyup', function (event) {
+        if ($(this).val() !== "" && $('#newParseField2').val() !== "") {
+            if (($("input[name='tipoSeparatore']:checked")[0].id === 'sepRadio' && $('#sepField').val() !== "") || ($("input[name='tipoSeparatore']:checked")[0].id == 'lenRadio' && $('#lenField').val() !== "")) {
+                $("#btn_Parse_field").attr("disabled", false);
+            } else {
+                $("#btn_Parse_field").attr("disabled", true);
+            }
+        } else {
+            $("#btn_Parse_field").attr("disabled", true);
+        }
+    });
+    
+    $('#newParseField2').on('keyup', function (event) {
+        if ($(this).val() !== "" && $('#newParseField1').val() !== "") {
+            if ($("input[name='tipoSeparatore']:checked")[0].id === 'sepRadio' && $('#sepField').val() != "" || ($("input[name='tipoSeparatore']:checked")[0].id == 'lenRadio' && $('#lenField').val() != "")) {
+                $("#btn_Parse_field").attr("disabled", false);
+            } else {
+                $("#btn_Parse_field").attr("disabled", true);
+            }
+        } else {
+            $("#btn_Parse_field").attr("disabled", true);
+        }
+    });
+
+    $('input:radio[name=tipoSeparatore]').on('change', function () {
+        if ($("input[name='tipoSeparatore']:checked")[0].id === 'sepRadio') {
+            $('#lenField').hide();
+            $('#sepField').show();
+            if ($('#sepField').val() !== "" && $('#newParseField1').val() !== "" && $('#newParseField2').val() !== "") {
+                $("#btn_Parse_field").attr("disabled", false);
+            } else {
+                $("#btn_Parse_field").attr("disabled", true);
+            }
+        }
+        if ($("input[name='tipoSeparatore']:checked")[0].id === 'lenRadio') {
+            $('#sepField').hide();
+            $('#lenField').show();
+            if ($('#lenField').val() !== "" && $('#newParseField1').val() !== "" && $('#newParseField2').val() != "") {
+                $("#btn_Parse_field").attr("disabled", false);
+            } else {
+                $("#btn_Parse_field").attr("disabled", true);
+            }
+        }
+    });
+
+    $('#removeChar').on('click', function () {
+        $('#charValue').hide();
+        if (this.checked) {
+            $('#charValue').show();
+        }
+    });
+
+    $('#btn_delete_dataset').click(function () {
+        window.location = _ctx + '/deleteDataset/' + _idfile;
+    });
+
+    $('#addVariable').click(function () {
+        $('#textArea').text($('#textArea').text() + selVarName)
+        mergeField = mergeField + "{...(id)" + selVar + "...}";
+        if ($('#newfieldMerge').val() != "") {
+            $("#btn_Merge_field").attr("disabled", false);
+        }
+    });
+
+    $('#addSeparator').click(function () {
+        if ($('#sepValue').val() !== "") {
+            $('#textArea').text($('#textArea').text() + $('#sepValue').val());
+            mergeField = mergeField + "{...(se)" + $('#sepValue').val() + "...}";
+            $('#sepValue').val("");
+        } else {
+            alert("Insert valid Separator!");
+        }
+
+        if ($('#newfieldMerge').val() !== "") {
+            $("#btn_Merge_field").attr("disabled", false);
+        }
+    });
+
+    $('#clearTextArea').click(function () {
+        //alert(mergeField);
+        $('#textArea').text("");
+        mergeField = "";
+        $("#btn_Merge_field").attr("disabled", true);
+    });
+
+    $('#btn_Standardization_field').click(function () {
+        idColonna = $('#selectedVar').val();
+        if ($("#removeSpace").is(':checked')) {
+            commandField = commandField + "1";
+        } else {
+            commandField = commandField + "0";
+        }
+
+        if ($('#removeSpecial').is(':checked')) {
+            commandField = commandField + "1";
+        } else {
+            commandField = commandField + "0";
+        }
+        
+        if ($('#newField').val() !== "") {
+            newField = $('#newField').val();
+        } else {
+            alert("Inserire il nome della nuova variabile");
+            return;
+        }
+
+        if ($('#removeChar').is(':checked')) {
+            commandField = commandField + "1";
+            if ($('#charValue').val() != "") {
+                charOrString = $('#charValue').val();
+            } else {
+                alert("inserire la stringa o il carattere da rimuovere");
+                return;
+            }
+        } else {
+            commandField = commandField + "0";
+        }
+        
+        if ($('#upperCase').is(':checked')) {
+            commandField = commandField + "1";
+            upperLower = $('input:radio[name=gruppo3]:checked')[0].id;
+
+        } else {
+            commandField = commandField + "0";
+        }
+
+        $("btn_Standardization_field").addClass("towait");
+        window.location = _ctx + '/createField/' + _idfile + "/" + idColonna + "/" + commandField + "/" + charOrString + "/" + upperLower + "/" + newField + "/" + _variabili + "/" + _righe;
+    });
+
+    $('#btn_Merge_field').click(function () {
+        $("btn_Merge_field").addClass("towait");
+        window.location = _ctx + '/createMergedField/' + _idfile + "/" + _variabili + "/" + _righe + "/" + mergeField + "/" + $('#newfieldMerge').val();
+    });
+
+    $('#btn_Delete_field').click(function () {
+        $("btn_Delete_field").addClass("towait");
+        window.location = _ctx + '/deleteField/' + _idfile + "/" + $('#selectedVariableToDelete').val() + "/" + _variabili + "/" + _righe;
+    });
+
+    $('#btn_Parse_field').click(function () {
+        var executeCommand = "";
+        var commandValue = "";
+        var startTo = "";
+        idColonnaToParse = $('#selectedVariableToParse').val();
+
+        if ($("input[name='tipoSeparatore']:checked")[0].id === 'sepRadio') {
+            executeCommand = "separatore";
+            commandValue = "{..." + $('#sepField').val() + "...}";
+        } else {
+            executeCommand = "lunghezza";
+            commandValue = $('#lenField').val();
+        }
+        if ($("input[name='posizionePartenza']:checked")[0].id === 'startRadio') {
+            startTo = "start";
+        } else {
+            startTo = "end";
+        }
+
+        $("btn_Parse_field").addClass("towait");
+        window.location = _ctx + '/createParsedFields/' + _idfile + "/" + idColonnaToParse + "/" + _variabili + "/" + _righe + "/" + executeCommand + "/" + commandValue + "/" + startTo + "/" + $('#newParseField1').val() + "/" + $('#newParseField2').val();
+    });
+
+    table = $("#dataview").DataTable({
 
         drawCallback: function () {
             $(".loading").hide();
@@ -508,7 +366,7 @@ $('#newParseField2').on('keyup', function(event) {
         //autoWidth: false,
         scrollX: true,
         //responsive: false,
-        ordering: true,
+        ordering: false,
         searching: false,
         lengthChange: true,
         lengthMenu: [[10, 15, 25, 50], [10, 15, 25, 50]],
@@ -520,19 +378,14 @@ $('#newParseField2').on('keyup', function(event) {
         },
         columns: eval(getHeaders('dataview')),
         buttons: [{
-            extend: 'colvis',
-            text: 'Seleziona colonne',
-            className: 'btn-light'
-        },
-        {
-            extend: 'csvHtml5',
-            filename: 'download',
-            title: 'download',
-            className: 'btn-light',
-            action: function (e, dt, node, config) {
-                scaricaDataset(e, 'csv', ID);
-            }
-        }]
+                extend: 'csvHtml5',
+                filename: 'download',
+                title: 'download',
+                className: 'btn-light',
+                action: function (e, dt, node, config) {
+                    scaricaDataset(e, 'csv', ID);
+                }
+            }]
     });
 
     $("#datapreview").DataTable({
@@ -545,9 +398,6 @@ $('#newParseField2').on('keyup', function(event) {
         $("#bottoneRicerca").hide();
         $("#no_filters_msg").text("Non ci sono filtri di ricerca impostati.");
     }
-    
-    
-    
 });
 
 function getParams() {
@@ -597,12 +447,12 @@ function getHeaders(tab) {
 function inviaFormFileFixField() {
     var fileName = document.getElementById('csvFileId').files[0];
     if (fileName) { // returns true if the string is not empty
-    	$("#field_Name").val( $("#newRepairedField").val()); 
-    	$("#delimiter").val($("#delimiter_sel").val());
-    	$("#id_Colonna").val($("#selectedVariableToFix").val());
-    	
-    	$("#repairFieldForm").submit();
-      
+        $("#field_Name").val($("#newRepairedField").val());
+        $("#delimiter").val($("#delimiter_sel").val());
+        $("#id_Colonna").val($("#selectedVariableToFix").val());
+
+        $("#repairFieldForm").submit();
+
     } else { // no file was selected        	
         $("#errorUplodFile").modal('toggle');
         return false;
@@ -635,7 +485,7 @@ function preview() {
         }
         previewString += line;
         console.log("Line: " + (lineno++) + line);
-        
+
     }, function onComplete() {
         console.log('Read all lines');
         $("#PreviewTextarea").val(previewString);

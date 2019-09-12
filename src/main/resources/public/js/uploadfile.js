@@ -43,7 +43,7 @@ $(document).ready(function () {
     $("#file").fileinput({showCaption: false, dropZoneEnabled: false});
     
     $("#file").change(function () { // bCheck is a input type button
-        filename = $("div.file-caption-name").attr("title");
+        filename = $("input.file-caption-name").attr("title");
         $("#delimiter").val($("#delimiter_sel").val());
         preview();
         if (filename) { // returns true if the string is not empty
