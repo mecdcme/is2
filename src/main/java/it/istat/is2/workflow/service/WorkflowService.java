@@ -642,39 +642,44 @@ public class WorkflowService {
 	 * @param elaborazione
 	 * @return
 	 */
-	public HashMap<Long, List<String>> findMissingAppRoleySubProcessAndTipoVar(Elaborazione elaborazione,SxTipoVar sxTipoVar) {
+	public HashMap<Long, List<String>> findMissingAppRoleySubProcessAndTipoVar(Elaborazione elaborazione,
+			SxTipoVar sxTipoVar) {
 		// TODO Auto-generated method stub
-		HashMap<Long,List<String>>  ret = new HashMap<>();
-		 List<StepVariable> stepVariables= getStepVariablesNoValori(elaborazione.getId(), sxTipoVar);
-		 List<AppRole> stepVariablesRoles=new ArrayList<>();
-		 for(StepVariable  stepVariable:stepVariables)
-		 {
-			 stepVariablesRoles.add(stepVariable.getAppRole());
-		 }
-		 
-			for (Iterator iteratorb =elaborazione.getBusinessProcess().getBusinessSubProcesses().iterator(); iteratorb.hasNext();) {
-				BusinessProcess suBusinessProcess = (BusinessProcess) iteratorb.next();
-				 
-				List<String>  roleNameList = new ArrayList();
-				List<StepInstance>  instanceBF=findAllStepInstanceBySubBProcess(suBusinessProcess) ;
-				
-			
-			 for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
+		HashMap<Long, List<String>> ret = new HashMap<>();
+		List<StepVariable> stepVariables = getStepVariablesNoValori(elaborazione.getId(), sxTipoVar);
+		List<AppRole> stepVariablesRoles = new ArrayList<>();
+		for (StepVariable stepVariable : stepVariables) {
+			stepVariablesRoles.add(stepVariable.getAppRole());
+		}
+
+		for (Iterator iteratorb = elaborazione.getBusinessProcess().getBusinessSubProcesses().iterator(); iteratorb
+				.hasNext();) {
+			BusinessProcess suBusinessProcess = (BusinessProcess) iteratorb.next();
+
+			List<String> roleNameList = new ArrayList();
+			List<StepInstance> instanceBF = findAllStepInstanceBySubBProcess(suBusinessProcess);
+
+			for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
 				StepInstance stepInstance = (StepInstance) iterator.next();
-				
-				 for (Iterator<StepInstanceAppRole> iteratorAppRoles = stepInstance.getSxStepPatterns().iterator(); iteratorAppRoles.hasNext();) {
-					 {
-						 StepInstanceAppRole stepInstanceAppRole  =iteratorAppRoles.next(); 
-						 AppRole ar= stepInstanceAppRole.getAppRole();
-					     if(ar.getSxTipoVar().equals(sxTipoVar) && !stepVariablesRoles.contains(ar))  roleNameList.add(ar.getNome());
- 
-					 }	}
-			 
+
+				for (Iterator<StepInstanceAppRole> iteratorAppRoles = stepInstance.getSxStepPatterns()
+						.iterator(); iteratorAppRoles.hasNext();) {
+					{
+						StepInstanceAppRole stepInstanceAppRole = iteratorAppRoles.next();
+						if (stepInstanceAppRole.getTipoIO().getId().equals(new Integer(IS2Const.TIPO_CAMPO_INPUT))
+								&& stepInstanceAppRole.getIsRequerid()) {
+							AppRole ar = stepInstanceAppRole.getAppRole();
+							if (ar.getSxTipoVar().equals(sxTipoVar) && !stepVariablesRoles.contains(ar))
+								roleNameList.add(ar.getNome());
+						}
+					}
+				}
+
 			}
-			 ret.put(suBusinessProcess.getId(), roleNameList);
-			}
-			
-			return ret;
+			ret.put(suBusinessProcess.getId(), roleNameList);
+		}
+
+		return ret;
 	}
 
 	/**
@@ -685,12 +690,12 @@ public class WorkflowService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	public void creaAssociazionVarRole(AssociazioneVarRoleBean[] associazioneVarRoleBean, Elaborazione elaborazione) {
 		List<AppRole> ruoliAll = ruoloDao.findAll();
 		Map<Integer, AppRole> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
 		List<StepVariable> listaVar = elaborazione.getStepVariables();
- 
+
 		String nomeVar = "";
 		DatasetColonna dscolonna = null;
 		for (int i = 0; i < associazioneVarRoleBean.length; i++) {
@@ -698,12 +703,12 @@ public class WorkflowService {
 			StepVariable sxStepVariable = new StepVariable();
 			sxStepVariable.setElaborazione(elaborazione);
 			Integer idRuolo = (int) associazioneVarRoleBean[i].getRuolo().getIdRole();
-			 
-			for(int ii = 0; ii < associazioneVarRoleBean[i].getRuolo().getVariables().size(); ii++) {
+
+			for (int ii = 0; ii < associazioneVarRoleBean[i].getRuolo().getVariables().size(); ii++) {
 				nomeVar = associazioneVarRoleBean[i].getRuolo().getVariables().get(ii).getName();
-				System.out.println("nomeVar: " + nomeVar);
+				
 			}
-			
+
 			AppRole appRole = ruoliAllMap.get(idRuolo);
 			for (int iii = 0; iii < listaVar.size(); iii++) {
 				if (listaVar.get(iii).getWorkset() != null && nomeVar.equals(listaVar.get(iii).getWorkset().getNome())
@@ -711,11 +716,13 @@ public class WorkflowService {
 					workset = listaVar.get(iii).getWorkset();
 				}
 			}
-			
+
 			if (workset == null) {
 				workset = new Workset();
-				dscolonna = datasetColonnaDao.findById(associazioneVarRoleBean[i].getRuolo().getVariables().get(0).getIdVar()).orElse(null);
-				workset.setNome(dscolonna.getDatasetFile().getLabelFile() + "_" + dscolonna.getNome().replaceAll("\\.", "_"));
+				dscolonna = datasetColonnaDao
+						.findById(associazioneVarRoleBean[i].getRuolo().getVariables().get(0).getIdVar()).orElse(null);
+				workset.setNome(
+						dscolonna.getDatasetFile().getLabelFile() + "_" + dscolonna.getNome().replaceAll("\\.", "_"));
 				workset.setValori(dscolonna.getDatiColonna());
 				workset.setValoriSize(workset.getValori().size());
 			}
