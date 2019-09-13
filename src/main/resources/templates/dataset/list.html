@@ -230,8 +230,7 @@
         </div>
 
         <!-- Dataset preview modal -->
-        <div class="modal fade" id="previewModal" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -268,18 +267,18 @@
                                 <option value='0'>tab</option>
                             </select>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-dismiss="modal">
-                                <span th:text="#{Layout.Close}">Annulla</span>
-                            </button>
-                            <button type="button" id="btn-invia-file" class="btn btn-primary towait disabled"
-                                    onclick="inviaFormFile();" th:title="#{submit.button.title}"
-                                    th:text="#{submit.button}" data-dismiss="modal">Invia
-                            </button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">
+                            <span th:text="#{Layout.Close}">Annulla</span>
+                        </button>
+                        <button type="button" id="btn-invia-file" class="btn btn-primary towait disabled"
+                                onclick="inviaFormFile();" th:title="#{submit.button.title}"
+                                th:text="#{submit.button}" data-dismiss="modal">Invia
+                        </button>
                     </div>
                 </div>
             </div>
-
+        </div>
     </body>
 </html>
