@@ -25,21 +25,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
-        <script th:src="@{/js/table/datatables.min.js}"></script>
         <script th:src="@{/js/sessioni.js}"></script>
         <script th:src="@{/js/papaParse/papaparse.min.js}"></script>
         <script th:src="@{/js/fileinput.min.js}"></script>
         <script th:src="@{/js/uploadfile.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
-                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+            setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
         </script>
-        <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
         <link th:href="@{/css/fileinput.min.css}" rel="stylesheet" />
     </head>
     <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-        <!-- Body -->
         <header th:replace="layout :: site-header"></header>
         <!-- Body -->
         <div class="app-body">
@@ -74,12 +71,14 @@
                     <div class="animated fadeIn">
                         <input id="idsessionelv" type="hidden" value="${session.sessionelv.id}" />
                         <div class="row">
-                            <div class="col-lg-7">
+                            <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
+                                        <i class="fa fa-bars"></i>
                                         <span th:text="#{lista.dataset.legend}">Lista dataset</span>
                                         <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:showUploadDiv();" title="Carica file"> 
+                                            <a class="card-header-action" href="javascript:void(0)" 
+                                               onclick="javascript:showUploadDiv();" title="Carica file"> 
                                                 <i class="fa fa-plus-square-o"></i>
                                                 <span th:text="#{ruleset.new.file.ruleset}"></span>
                                             </a>
@@ -106,7 +105,7 @@
                                             </div>
                                         </form> 
 
-                                        <table id="datasetList" class="table" th:if="${listaDataset}" cellspacing="0" style="overflow: auto;">
+                                        <table id="datasetList" class="table" th:if="${listaDataset}" cellspacing="0">
                                             <thead>
                                                 <tr th:unless="${(listaDataset == null) or (listaDataset.size() == 0) }">                                                
                                                     <th><span th:text="#{listaDataset.nome}">Nome</span></th>
@@ -146,29 +145,8 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <span th:if="${(listaDataset == null) or (listaDataset.size() == 0)}">Non sono presenti dataset per la sessione di lavoro.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-5">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <span th:text="#{Layout.log.panel}">Log panel</span>
-                                        <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)" 
-                                               th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div id="logbox" class="card-body">
-                                        <ul th:if="${logs.size()>0}">
-                                            <li th:each="log : ${logs}">
-                                                <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span th:text="${log.msg}"></span>
-                                            </li>
-                                        </ul>
-                                        <span th:unless="${logs.size()>0}">
-                                            No message available
+                                        <span th:if="${(listaDataset == null) or (listaDataset.size() == 0)}">
+                                            Non sono presenti dataset per la sessione di lavoro.
                                         </span>
                                     </div>
                                 </div>
@@ -222,7 +200,7 @@
                     <div class="modal-body"><span id="msg_elim_dataset"></span></div>
                     <div class="modal-footer">
                         <input type="hidden" id="idDataset" th:name="idDataset" />                        
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Chiudi</button>
                         <button type="button" id="btn_delete_dataset" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
                     </div>
                 </div>
@@ -230,7 +208,8 @@
         </div>
 
         <!-- Dataset preview modal -->
-        <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" 
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -246,26 +225,28 @@
                         <div class="form-group">
                             <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
                         </div>
-                        <div class="form-group col-sm-4">
-                            <label th:text="#{file.logical.name}" ><span>Etichetta:</span></label>
-                            <input id="label_file" class="form-control" th:value="${etichetta}" type="text"/>                                
-                        </div>
-                        <div class="form-group col-sm-4">
-                            <label th:text="#{file.data.type}"><span>Tipo dato:</span></label>
-                            <select id="tipo_dato" class="form-control">
-                                <option th:each="tipod : ${listaTipoDato}"
-                                        th:value="${tipod.id}"
-                                        th:text="${tipod.nome}">
-                                </option>
-                            </select>                              
-                        </div>
-                        <div class="form-group col-sm-4">
-                            <span th:text="#{delimiter.file.legend}">Separatore:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <select id="delimiter_sel" class="form-control">
-                                <option value=','>,</option>
-                                <option value=';'>;</option>
-                                <option value='0'>tab</option>
-                            </select>
+                        <div class="form-group row">
+                            <div class="col-4">
+                                <label th:text="#{file.logical.name}" ><span>Etichetta:</span></label>
+                                <input id="label_file" class="form-control" th:value="${etichetta}" type="text"/>
+                            </div>
+                            <div class="col-3">
+                                <label th:text="#{file.data.type}"><span>Tipo dato:</span></label>
+                                <select id="tipo_dato" class="form-control">
+                                    <option th:each="tipod : ${listaTipoDato}"
+                                            th:value="${tipod.id}"
+                                            th:text="${tipod.nome}">
+                                    </option>
+                                </select>     
+                            </div>
+                            <div class="col-2">
+                                <label th:text="#{delimiter.file.legend}">Separatore:</label>
+                                <select id="delimiter_sel" class="form-control">
+                                    <option value=','>,</option>
+                                    <option value=';'>;</option>
+                                    <option value='0'>tab</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

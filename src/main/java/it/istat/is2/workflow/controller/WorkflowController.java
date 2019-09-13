@@ -363,11 +363,6 @@ public class WorkflowController {
 
 		logService.save("Elaborazione " + idelaborazione + " Eliminata con successo");
 
-		// Create session DTO
-		SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-		sessionBean.setBusinessFunction(null);
-		session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
-
 		return "redirect:/sessione/apri/" + idsessione;
 	}
 

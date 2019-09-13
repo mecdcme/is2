@@ -36,6 +36,7 @@ button:focus{
 }
 
 .breadcrumb-menu .btn{
+    padding: 0 0.5rem;
     color: #20a8d8;
 }
 
@@ -50,6 +51,11 @@ button:focus{
 }
 .bar-right{
     border-right: 1px solid #ccc;
+}
+
+.btn:focus, .btn.focus {
+    outline: 0;
+    box-shadow: none;
 }
 
 /* Alpaca imports */
@@ -96,7 +102,7 @@ button:focus{
 }
 
 .table td{
-    padding: 0.75rem 0.5rem!important;
+    padding: 0.7rem 0.5rem!important;
 }
 .table-striped>tbody>tr:nth-child(odd)>td,
 .table-striped>tbody>tr:nth-child(odd)>th {

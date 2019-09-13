@@ -28,7 +28,7 @@
         <script th:src="@{/js/sessioni.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
-            setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
         </script>
     </head>
@@ -69,37 +69,34 @@
                             <div class="col-6 col-lg-3" th:if="${(session.sessioneBean.file != null)}">
                                 <div class="card">
                                     <div class="card-body p-3 d-flex align-items-center">
-                                        <a id="card-dati" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                        <a th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                             <i class="fa fa-database bg-primary p-3 font-2xl mr-3"></i>
                                         </a>
                                         <div>
-                                            <div class="text-value-sm text-primary">
-                                                <span th:text="${session.sessioneBean.file.size()}" ></span>
-                                            </div>
+                                            <a th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                                <div class="text-value-sm text-primary">
+                                                    <span th:text="${session.sessioneBean.file.size()}" ></span>
+                                                </div>
+                                            </a>
                                             <div class="text-muted text-uppercase font-weight-bold small">Dataset</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-6 col-lg-3" th:if="${(session.sessioneBean.ruleset != null)}">
                                 <div class="card">
                                     <div class="card-body p-3 d-flex align-items-center">
-                                        <i class="fa fa-wrench bg-primary p-3 font-2xl mr-3"></i>
+                                        <a th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                                            <i class="fa fa-wrench bg-primary p-3 font-2xl mr-3"></i>
+                                        </a>
                                         <div>
-                                            <div class="text-value-sm text-primary">
-                                                <span th:text="${'('+session.sessioneBean.ruleset.size()+')'}" ></span>
-                                            </div>
+                                            <a th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                                                <div class="text-value-sm text-primary">
+                                                    <span th:text="${session.sessioneBean.ruleset.size()}" ></span>
+                                                </div>
+                                            </a>
                                             <div class="text-muted text-uppercase font-weight-bold small">Ruleset</div>
                                         </div>
-                                    </div>
-                                    <div class="card-footer px-3 py-2">
-                                        <a id="card-dati" class="btn-block text-muted d-flex justify-content-between align-items-center" 
-                                           th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
-                                            <span class="small font-weight-bold">View ruleset</span>
-                                            <i class="fa fa-angle-right"></i>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -110,6 +107,7 @@
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
+                                        <i class="fa fa-bars"></i>
                                         <span th:text="#{lista.elaborazioni.legend}">Lista processi</span>
                                         <div class="card-header-actions">
                                             <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaElaborazione();" title="Nuova elaborazione"> 
@@ -119,13 +117,12 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <table id="outputR" class="table table-condensed"
-                                               th:if="${listaElaborazioni}" cellspacing="0" style="overflow: auto;">
+                                        <table class="table table-condensed" th:if="${listaElaborazioni}" cellspacing="0">
                                             <thead>
                                                 <tr th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
                                                     <th><span th:text="#{listasessioni.codice}">codice</span></th>
                                                     <th><span th:text="#{listasessioni.nome}">nome</span></th>
-                                                    <th><span th:text="#{listasessioni.descrizione}">Funzione</span></th>
+                                                    <th><span th:text="#{listasessioni.descrizione}">Descrizione</span></th>
                                                     <th><span th:text="#{listasessioni.processo}">Processo</span></th>
                                                     <th><span th:text="#{listasessioni.data.creazione}">data creazione</span></th>
                                                     <th colspan="2"></th>
@@ -234,7 +231,7 @@
                     <div class="modal-footer">
                         <input type="hidden" name="" id="id_sessione_del" value="" /> 
                         <input type="hidden" name="" id="id_elaborazione_del" value="" />
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Chiudi</button>
                         <button type="button" id="btn_delete_elab" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
                     </div>
                 </div>

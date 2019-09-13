@@ -78,7 +78,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <ul class="nav navbar-nav d-md-down-none">
-               <li class="nav-item px-3" sec:authorize="hasAuthority('ADMIN')" >
+                <li class="nav-item px-3" sec:authorize="hasAuthority('ADMIN')" >
                     <a class="nav-link"  data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                         Settings
                     </a>
@@ -109,9 +109,9 @@
                             <strong>Account</strong>
                         </div>
                         <a class="dropdown-item" th:href="@{/users/edituser}">
-                            <i class="fa fa-user"></i> Profile</a>
+                            <i class="icons cui-user"></i> Profile</a>
                         <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/users/logout}">
-                            <i class="fa fa-lock"></i> Logout</a>
+                            <i class="icons cui-account-logout"></i> Logout</a>
                     </div>
                 </li>
             </ul>
@@ -132,6 +132,28 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Log panel -->
+            <!--div class="card">
+                <div class="card-header">
+                    <span th:text="#{Layout.log.panel}">Log panel</span>
+                    <div class="card-header-actions">
+                        <a class="card-header-action" href="javascript:void(0)"
+                           th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                    </div>
+                </div>
+                <div id="logbox" class="card-body" style="height: 200px">
+                    <ul th:if="${logs.size()>0}">
+                        <li th:each="log : ${logs}">
+                            <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;
+                            <span th:text="${log.msg}"></span>
+                        </li>
+                    </ul>
+                    <span th:unless="${logs.size()>0}"> No message available</span>
+                </div>
+            </div-->
         </div>
 
         <div class="app-body">
