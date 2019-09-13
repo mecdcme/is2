@@ -145,14 +145,6 @@ button:focus{
 .header-strong{
     font-weight: bold !important;
 }
-/* Important part */
-.modal-dialog {
-    overflow-y: initial !important
-}
-.modal-body {
-    max-height: 500px;
-    overflow-y: auto;
-}
 
 
 
