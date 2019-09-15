@@ -29,7 +29,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.workflow.dao.WorkflowDao;
+import it.istat.is2.workflow.dao.ElaborazioneDao;
 import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.worksession.domain.WorkSession;
 
@@ -37,7 +37,7 @@ import it.istat.is2.worksession.domain.WorkSession;
 public class ElaborazioneService {
 
     @Autowired
-    private WorkflowDao elaborazioneDao;
+    private ElaborazioneDao elaborazioneDao;
 
     public List<Elaborazione> getElaborazioneList(WorkSession sessioneLavoro) {
         return elaborazioneDao.findBySessioneLavoroOrderByIdDesc(sessioneLavoro);

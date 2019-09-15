@@ -167,6 +167,23 @@ public class WorkflowController {
 		return "redirect:/ws/editworkingset/" + idelaborazione;
 	}
 
+	@GetMapping(value = "/cleanallworkset/{idelaborazione}/{flagIO}")
+	public String cleanAllWorkset(HttpSession session, Model model, RedirectAttributes ra,
+			@PathVariable("idelaborazione") Long idelaborazione,@PathVariable("flagIO")Integer flagIO) {
+		notificationService.removeAllMessages();
+
+		try {
+			workflowService.cleanAllWorkset(idelaborazione,flagIO);
+			notificationService
+					.addInfoMessage(messages.getMessage("workset.clean.ok", null, LocaleContextHolder.getLocale()));
+
+		} catch (Exception e) {
+			notificationService
+					.addErrorMessage(messages.getMessage("workset.clean.error", null, LocaleContextHolder.getLocale()));
+		}
+		return "redirect:/ws/home/" + idelaborazione;
+	}
+
 	@GetMapping(value = "/eliminaParametro/{idelaborazione}/{idparametro}")
 	public String eliminaParametro(HttpSession session, Model model, RedirectAttributes ra,
 			@PathVariable("idelaborazione") Long idelaborazione, @PathVariable("idparametro") Integer idparametro) {
@@ -452,7 +469,7 @@ public class WorkflowController {
 	}
 
 	@RequestMapping(value = "modificaparametro", method = RequestMethod.POST)
-	public String modificaparametro(HttpSession session, Model model,   RedirectAttributes ra,
+	public String modificaparametro(HttpSession session, Model model, RedirectAttributes ra,
 			@RequestParam("idelaborazione") Long idelaborazione, @RequestParam("parametri") String parametri,
 			@RequestParam("valoreParam") String valoreParam, @RequestParam("idStepvarMod") String idStepvarMod) {
 

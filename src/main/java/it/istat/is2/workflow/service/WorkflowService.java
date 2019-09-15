@@ -50,13 +50,13 @@ import it.istat.is2.dataset.dao.DatasetColonnaDao;
 import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.workflow.dao.BusinessProcessDao;
 import it.istat.is2.workflow.dao.BusinessStepDao;
+import it.istat.is2.workflow.dao.ElaborazioneDao;
 import it.istat.is2.workflow.dao.RuoloDao;
 import it.istat.is2.workflow.dao.StepVariableDao;
 import it.istat.is2.workflow.dao.StepInstanceParameterDao;
 import it.istat.is2.workflow.dao.StepInstanceDao;
 import it.istat.is2.workflow.dao.TipoCampoDao;
 import it.istat.is2.workflow.dao.WorkSetDao;
-import it.istat.is2.workflow.dao.WorkflowDao;
 import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.TipoCampo;
 import it.istat.is2.workflow.domain.BusinessProcess;
@@ -80,7 +80,7 @@ public class WorkflowService {
 	@Autowired
 	WorkSessionDao sessioneDao;
 	@Autowired
-	WorkflowDao elaborazioneDao;
+	ElaborazioneDao elaborazioneDao;
 	@Autowired
 	WorkSetDao workSetDao;
 	@Autowired
@@ -613,7 +613,8 @@ public class WorkflowService {
 	}
 
 	public boolean deleteWorkset(Workset workset) {
-		workSetDao.deleteById(workset.getId());
+		Long aa = workset.getId();
+		workSetDao.deleteById(aa);
 		return true;
 	}
 
@@ -706,7 +707,7 @@ public class WorkflowService {
 
 			for (int ii = 0; ii < associazioneVarRoleBean[i].getRuolo().getVariables().size(); ii++) {
 				nomeVar = associazioneVarRoleBean[i].getRuolo().getVariables().get(ii).getName();
-				
+
 			}
 
 			AppRole appRole = ruoliAllMap.get(idRuolo);
@@ -737,4 +738,19 @@ public class WorkflowService {
 			stepVariableDao.save(sxStepVariable);
 		}
 	}
+
+	public void cleanAllWorkset(Long idelaborazione, Integer flagIO) {
+		
+	List<StepVariable> list=	getStepVariables(idelaborazione);
+	for (StepVariable step : list) {
+	if(	step.getTipoCampo().getId().equals(new Integer(0))||step.getTipoCampo().getId().equals(flagIO))
+		stepVariableDao.deleteById(step.getId());
+	}
+		
+
+		 
+	}
+	
+	
+	
 }

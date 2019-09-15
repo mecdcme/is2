@@ -26,8 +26,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <head th:include="layout :: site-head" th:remove="tag" />
-<script th:src="@{/webjars/sockjs-client/sockjs.min.js}"></script>
-<script th:src="@{/webjars/stomp-websocket/stomp.min.js}"></script>
+
 <script th:src="@{/js/batch.js}"></script>
 <script th:inline="javascript">
             $(document).ready(function () {
@@ -76,8 +75,13 @@
 								<span th:text="#{Layout.Processes}"></span>
 								<div class="card-header-actions">
 								<a title="Clean Workset"
-										th:href="@{'/ws/cleanworkingset/'+${elaborazione.id}}">
+										th:href="@{'/ws/cleanallworkset/'+${elaborazione.id}+'/0'}">
 										  <i class="fa fa-paint-brush" aria-hidden="true"></i>&nbsp;<span>Clean All</span>
+									</a>
+									&nbsp;&nbsp;
+										<a title="Clean Output "
+										th:href="@{'/ws/cleanallworkset/'+${elaborazione.id}+'/2'}">
+										  <i class="fa fa-paint-brush" aria-hidden="true"></i>&nbsp;<span>Clean Output</span>
 									</a>
 									&nbsp;&nbsp;
 									<a title="Settings Wokset"
@@ -114,7 +118,7 @@
 												<td class="process-border-right">
 												<span
 													th:if="${(#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id)))}">
-														<i class="fas fa-check-double" aria-hidden="true"></i>
+														<i class="fa fa-check" aria-hidden="true"></i>
 												</span> 
 												<span
 													th:unless="${#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id))}">

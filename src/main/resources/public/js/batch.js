@@ -67,6 +67,7 @@ function pollJobs() {
 		cache : true,
 		success : function(data) {
 			jQuery.each(data, function() {
+				var old_status=$('#' + this.idProcesso).text();
 				$('#' + this.idProcesso).text(this.status);
 				if (this.status === 'FAILED') {
 					$('#' + this.idProcesso).removeClass("waiting");
@@ -77,6 +78,8 @@ function pollJobs() {
 					$('#output_' + this.idProcesso).removeClass("not-active");
 					$('#esegui_' + this.idProcesso).removeClass("not-active");
 					$('#' + this.idProcesso).addClass("success");
+					console.log(this.idProcesso+'-  '+old_status+' '+this.status)
+					if(old_status=='STARTED' && old_status!=this.status) window.location.reload();
 				} 
 				else {
 					$('#' + this.idProcesso).addClass("waiting");
@@ -92,4 +95,4 @@ function pollJobs() {
 			setTimeout(pollJobs, 5000);
 		}
 	});
-}
+}0

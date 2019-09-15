@@ -33,7 +33,7 @@ import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.worksession.domain.WorkSession;
 
 @Repository
-public interface WorkflowDao extends CrudRepository<Elaborazione, Long> {
+public interface ElaborazioneDao extends CrudRepository<Elaborazione, Long> {
 
     List<Elaborazione> findBySessioneLavoroOrderByIdDesc(@Param("ses_elaborazione") WorkSession sessioneLavoro);
 
