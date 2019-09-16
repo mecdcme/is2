@@ -24,7 +24,7 @@ public class Batch implements Serializable {
 	private static final long serialVersionUID = 8488187230261501150L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "JOB_EXECUTION_ID")
 	private Long jobExecutionId;
 	

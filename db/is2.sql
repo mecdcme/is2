@@ -112,23 +112,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `batch_job_execution_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `batch_job_execution_seq` (
-  `ID` bigint(20) NOT NULL,
-  `UNIQUE_KEY` char(1) NOT NULL,
-  UNIQUE KEY `UNIQUE_KEY_UN` (`UNIQUE_KEY`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `batch_job_execution_seq`
---
-
-LOCK TABLES `batch_job_execution_seq` WRITE;
-/*!40000 ALTER TABLE `batch_job_execution_seq` DISABLE KEYS */;
-/*!40000 ALTER TABLE `batch_job_execution_seq` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE `batch_job_execution_seq` (ID BIGINT NOT NULL) ENGINE=InnoDB;
+INSERT INTO `batch_job_execution_seq` values(0);
 
 --
 -- Table structure for table `batch_job_instance`
@@ -161,23 +146,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `batch_job_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `batch_job_seq` (
-  `ID` bigint(20) NOT NULL,
-  `UNIQUE_KEY` char(1) NOT NULL,
-  UNIQUE KEY `UNIQUE_KEY_UN` (`UNIQUE_KEY`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `batch_job_seq`
---
-
-LOCK TABLES `batch_job_seq` WRITE;
-/*!40000 ALTER TABLE `batch_job_seq` DISABLE KEYS */;
-/*!40000 ALTER TABLE `batch_job_seq` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE `batch_job_seq` (ID BIGINT NOT NULL) ENGINE=InnoDB;
+INSERT INTO `batch_job_seq` values(0);
 
 --
 -- Table structure for table `batch_step_execution`
@@ -250,23 +220,9 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `batch_step_execution_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `batch_step_execution_seq` (
-  `ID` bigint(20) NOT NULL,
-  `UNIQUE_KEY` char(1) NOT NULL,
-  UNIQUE KEY `UNIQUE_KEY_UN` (`UNIQUE_KEY`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE `batch_step_execution_seq` (ID BIGINT NOT NULL) ENGINE=InnoDB;
+INSERT INTO `batch_step_execution_seq` values(0);
 
---
--- Dumping data for table `batch_step_execution_seq`
---
-
-LOCK TABLES `batch_step_execution_seq` WRITE;
-/*!40000 ALTER TABLE `batch_step_execution_seq` DISABLE KEYS */;
-/*!40000 ALTER TABLE `batch_step_execution_seq` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `sx_app_role`
