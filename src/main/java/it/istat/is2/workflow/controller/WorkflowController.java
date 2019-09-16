@@ -239,9 +239,11 @@ public class WorkflowController {
 
 		List<StepInstanceParameter> paramsNotAssignedList = new ArrayList<>();
 		List<StepVariable> sVParamsAssignedList = workflowService.getStepVariablesParametri(idElaborazione);
-		ArrayList<String> paramAssigned = new ArrayList<>();
+		Map<Integer, StepVariable> stepParamMap=new HashMap<>();
+	 	ArrayList<String> paramAssigned = new ArrayList<>();
 		sVParamsAssignedList.forEach(sxstepVaraible -> {
 			paramAssigned.add(sxstepVaraible.getWorkset().getNome());
+			stepParamMap.put(sxstepVaraible.getId(), sxstepVaraible);
 		});
 
 		Map<Long, List<StepInstanceParameter>> paramsAllBPPMap = workflowService
@@ -275,6 +277,7 @@ public class WorkflowController {
 		model.addAttribute("stepVList", listaSV);
 
 		model.addAttribute("stepParamList", sVParamsAssignedList);
+		model.addAttribute("stepParamMap", sVParamsAssignedList);
 
 		model.addAttribute("listaRuoliInput", listaRuoliInput);
 		model.addAttribute("listaRuoliInOut", listaRuoliInOut);

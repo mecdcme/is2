@@ -41,12 +41,11 @@ $(document).ready(function () {
     $('#edit-param > input').on("change paste keyup", function() {
  	   alert($(this).val()); 
  });
-    var table = $("#worksetTabList").DataTable({
+     $("#worksetTabList").DataTable({
         dom: "<'row'<'col-sm-5'B><'col-sm-7'f>>"
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        autoWidth: false,
-        responsive: true,
+        scrollX: true,
         paging: false,
         ordering: false,
         buttons: [{
@@ -87,8 +86,6 @@ $(document).ready(function () {
         dom: "<'row'<'col-sm-6'B><'col-sm-6'f>>"
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        autoWidth: false,
-        responsive: false,
         paging: false,
         ordering: false,
         buttons: [{
@@ -98,7 +95,7 @@ $(document).ready(function () {
                     openDlgAddParametriWorkset();
                 }
             }],
-        'createdRow': function (row, data, dataIndex) {
+        createdRow: function (row, data, dataIndex) {
             $(row).attr('id', 'row-' + dataIndex);
         }
     });

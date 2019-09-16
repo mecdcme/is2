@@ -114,6 +114,13 @@ button:focus{
    background-color: #f0f3f5
  }
 
+table.dataTable thead>tr>th{
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+
 /*Menu*/
 .nav-item-active{
     color: #fff;
@@ -151,6 +158,7 @@ button:focus{
 .header-strong{
     font-weight: bold !important;
 }
+
 
 
 

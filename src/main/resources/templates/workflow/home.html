@@ -31,6 +31,7 @@
 <script th:inline="javascript">
             $(document).ready(function () {
                 setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+         
             });
         </script>
 <link rel="stylesheet" th:href="@{/css/batch/batch.css}" />
@@ -52,10 +53,10 @@
 			</a></li>
 			<li class="breadcrumb-item"><a
 				th:href="@{'/sessione/apri/' + ${session.sessioneBean.id}}"> <span
-					th:text="${session.sessioneBean.nome}"></span>
+						th:text="${session.sessioneBean.nome}"></span>
 			</a></li>
 			<li class="breadcrumb-item"><span
-				th:text="${session.sessioneBean.nomeElaborazione}"></span></li>
+					th:text="${session.sessioneBean.nomeElaborazione}"></span></li>
 			<!-- Breadcrumb Menu-->
 			<li class="breadcrumb-menu">
 				<div class="btn-group" role="group" aria-label="Button group">
@@ -74,17 +75,15 @@
 							<div class="card-header">
 								<span th:text="#{Layout.Processes}"></span>
 								<div class="card-header-actions">
-								<a title="Clean Workset"
+									<a title="Clean Workset"
 										th:href="@{'/ws/cleanallworkset/'+${elaborazione.id}+'/0'}">
-										  <i class="fa fa-paint-brush" aria-hidden="true"></i>&nbsp;<span>Clean All</span>
-									</a>
-									&nbsp;&nbsp;
-										<a title="Clean Output "
+										<i class="fa fa-paint-brush" aria-hidden="true"></i>&nbsp;<span>Clean
+											All</span>
+									</a> &nbsp;&nbsp; <a title="Clean Output "
 										th:href="@{'/ws/cleanallworkset/'+${elaborazione.id}+'/2'}">
-										  <i class="fa fa-paint-brush" aria-hidden="true"></i>&nbsp;<span>Clean Output</span>
-									</a>
-									&nbsp;&nbsp;
-									<a title="Settings Wokset"
+										<i class="fa fa-paint-brush" aria-hidden="true"></i>&nbsp;<span>Clean
+											Output</span>
+									</a> &nbsp;&nbsp; <a title="Settings Wokset"
 										th:href="@{'/ws/editworkingset/'+${elaborazione.id}}"> <i
 										class="fa fa-cog"></i>&nbsp;<span>Settings</span>
 									</a>
@@ -96,10 +95,10 @@
 										<tr>
 											<th><span th:text="#{Layout.Process}">Processo</span></th>
 											<th><span th:text="#{Layout.Step}">Step</span></th>
-											<th><span>Settings</span></th>
-											<th><span th:text="#{Layout.status}">State</span></th>
-											<th></th>
-											<th></th>
+											<th width="10%"><span>Settings</span></th>
+											<th><span>Status</span></th>
+											<th class="text-center">Actions</th>
+											<th class="text-center">Output</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -113,48 +112,77 @@
 													class="process-border-right" style="vertical-align: middle">
 													<span th:text="${bProcess.descr+' ('+bProcess.nome+')' }"></span>
 												</td>
-												<td class="process-border-right"><span
-													th:text="${bStep.descr+' ('+bStep.nome+')' }"></span></td>
-												<td class="process-border-right">
-												<span
-													th:if="${(#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id)))}">
-														<i class="fa fa-check" aria-hidden="true"></i>
-												</span> 
-												<span
-													th:unless="${#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id))}">
-														<span
-														th:if="${not #lists.isEmpty(variablesMissing.get(bProcess.id))}">
-															<small>Variables:
-																		<span th:each="item, iterStat : ${variablesMissing.get(bProcess.id)}" th:text="!${iterStat.last} ? ${item} + ',': ${item}"></span>
-														  </small>
-													<br/>
-													</span> 
-													<span
-														th:if="${not  #lists.isEmpty(paramsMissing.get(bProcess.id))}">
-															<small>Params:
-																<span th:each="item, iterStat : ${paramsMissing.get(bProcess.id)}" th:text="!${iterStat.last} ? ${item} + ',': ${item}"></span>
-														    </small> 
+												<td class="process-border-right" style="vertical-align: middle"><span
+														th:text="${bStep.descr+' ('+bStep.nome+')' }"></span></td>
+												<td style="vertical-align: middle" class="process-border-right">
+												
+												<span th:if="${(#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id)))}" class="text-success">
+														&nbsp;&nbsp;<i class="fa fa-check" aria-hidden="true"></i>
 													</span>
-												</span></td>
-												<td class="process-border-right"><span
-													th:id="${bProcess.id}">NEW</span></td>
+													<ul
+														th:unless="${#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id))}"
+														class="nav navbar-nav ml-auto process-border-right">
+
+														<li class="nav-item dropdown"
+															th:if="${not #lists.isEmpty(variablesMissing.get(bProcess.id))}">
+															<a class="nav-link" data-toggle="dropdown" href="#" style="display: initial;"
+															role="button" aria-haspopup="true" aria-expanded="true"><span>Vars</span>
+																<span class="badge badge-pill badge-danger"
+																	th:text=" ${variablesMissing.get(bProcess.id).size()}"></span>
+														</a>
+														<div
+																class="dropdown-menu dropdown-menu-right dropdown-menu-lg ">
+																<div class="dropdown-header text-center">
+																	<strong>Variables missing</strong>
+																</div>
+																<small>
+																	<span class="dropdown-item"
+																		th:each="item : ${variablesMissing.get(bProcess.id)}"
+																		th:text="${item}"></span>
+																</small>
+															</div>
+
+														</li>
+														<li class="nav-item dropdown"
+															th:if="${not  #lists.isEmpty(paramsMissing.get(bProcess.id))}">
+															<a class="nav-link" data-toggle="dropdown" href="#" style="display: initial;"
+															role="button" aria-haspopup="true" aria-expanded="false">Params
+																<span class="badge badge-pill badge-danger"
+																	th:text=" ${paramsMissing.get(bProcess.id).size()}"></span>
+														</a>
+														<div
+																class="dropdown-menu dropdown-menu-right dropdown-menu-lg ">
+																<div class="dropdown-header text-center">
+																	<strong>Parameters missing</strong>
+																</div>
+																<small>
+																	<span class="dropdown-item"
+																		th:each="item : ${paramsMissing.get(bProcess.id)}"
+																		th:text="${item}"></span>
+																</small>
+															</div>
+
+
+														</li>
+													</ul></td>
+												<td class="process-border-right" style="vertical-align: middle"><span
+														th:id="${bProcess.id}">NEW</span></td>
 												<!--                                                         <span th:id="${bProcess.id}">DA PROCESSARE</span></td> -->
-												<td class="process-border-right process-btns"
+												<td class="text-center"
 													th:if="${stats.index==0}"
 													th:rowspan="${bProcess.businessSteps.size()}"><a
-													th:name="link" title="Esegui processo"
-												th:classappend="${#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id))} ? active : not-active"
+													th:name="link" title="Run"
+													th:classappend="${#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id))} ? active : not-active"
 													th:onclick="'javascript:esegui(\'' +${elaborazione.id} +'\',\''+${bProcess.id}+'\')'"
-													href="javascript:void(0)" th:id="'esegui_'+${bProcess.id}">
-														<i class="fa fa-play" aria-hidden="true"></i> <span>RUN</span>
+													href="javascript:void(0)" th:id="'esegui_'+${bProcess.id}" style="vertical-align: middle">
+														<i class="fa fa-play" aria-hidden="true"></i> 
 												</a></td>
 												<td th:if="${stats.index==0}"
-													th:rowspan="${bProcess.businessSteps.size()}"><a
+													th:rowspan="${bProcess.businessSteps.size()}"  class="text-center"><a
 													th:name="link" class="towait not-active"
-													title="Visualizza Workset" th:id="'output_'+${bProcess.id}"
-													th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.is2.app.util.IS2Const).VARIABILE_TIPO_OUTPUT}}">
-														<i class="fa fa-table" aria-hidden="true"></i> <span
-														th:text="#{Layout.Output}">Output</span>
+													title="View Output" th:id="'output_'+${bProcess.id}"
+													th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.is2.app.util.IS2Const).VARIABILE_TIPO_OUTPUT}}" style="vertical-align: middle">
+														<i class="fa fa-table" aria-hidden="true"></i>  
 												</a></td>
 											</tr>
 										</th:block>
@@ -182,8 +210,8 @@
 							<div id="logbox" class="card-body">
 								<ul th:if="${logs.size()>0}" id="logList">
 									<li th:each="log : ${logs}"><span
-										th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span
-										th:text="${log.msg}" id="logMsg"></span></li>
+											th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;<span
+											th:text="${log.msg}" id="logMsg"></span></li>
 								</ul>
 								<span th:unless="${logs.size()>0}" id="noLogList"> No
 									message available </span>
