@@ -27,10 +27,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
@@ -657,7 +659,7 @@ public class WorkflowService {
 				.hasNext();) {
 			BusinessProcess suBusinessProcess = (BusinessProcess) iteratorb.next();
 
-			List<String> roleNameList = new ArrayList();
+		    Set<String> roleNameSet = new HashSet<String>();
 			List<StepInstance> instanceBF = findAllStepInstanceBySubBProcess(suBusinessProcess);
 
 			for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
@@ -671,13 +673,13 @@ public class WorkflowService {
 								&& stepInstanceAppRole.getIsRequerid()) {
 							AppRole ar = stepInstanceAppRole.getAppRole();
 							if (ar.getSxTipoVar().equals(sxTipoVar) && !stepVariablesRoles.contains(ar))
-								roleNameList.add(ar.getNome());
+								roleNameSet.add(ar.getNome());
 						}
 					}
 				}
 
 			}
-			ret.put(suBusinessProcess.getId(), roleNameList);
+			ret.put(suBusinessProcess.getId(), new ArrayList<>(roleNameSet));
 		}
 
 		return ret;
