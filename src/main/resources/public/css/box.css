@@ -31,8 +31,16 @@ button:focus{
     padding: 1.0rem 1.25rem;
 }
 
+.card-header-actions a{
+    padding: 0 0.4rem;
+}
+
 .app-header{
     padding-right: 10px;
+}
+
+.breadcrumb{
+    padding: 0.75rem 1.4rem 0.75rem 1rem;
 }
 
 .breadcrumb-menu .btn{
@@ -159,6 +167,9 @@ table.dataTable thead>tr>th{
     font-weight: bold !important;
 }
 
-
+/*Process page*/
+#processiList th, #processiList td{
+    vertical-align: middle;
+}
 
 

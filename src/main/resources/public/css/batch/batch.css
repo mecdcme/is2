@@ -17,13 +17,89 @@
     display: none;
 }
 
-.show {
-    display:block;
-}
-
 .not-active {
     pointer-events: none;
     cursor: default;
     text-decoration: none;
     color: darkgrey;
+}
+
+/* Important part */
+.modal-dialog {
+    overflow-y: initial !important
+}
+
+.modal-body {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+#tabs {
+    padding-left: 15px;
+    padding-bottom: 10px;
+    border: none;
+}
+
+#tabs ul{
+    font-weight: normal;
+    padding: 5px;
+}
+
+#tabs li .ui-icon-close {
+    float: left;
+    margin: 0.4em 0.2em 0 0;
+    cursor: pointer;
+}
+
+.hide {
+    display: none;
+}
+
+.ui-tabs .ui-tabs-panel {
+    background: #ededed;
+    border-width: thin;
+}
+
+.ui-widget-header {
+    border: 0px solid #dddddd;
+    background: none;
+    color: none;
+    font-weight: bold;
+}
+
+.ui-tabs .ui-tabs-nav {
+    margin: 0;
+    padding: 0;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover,
+html .ui-button.ui-state-disabled:active {
+    font-weight: normal;
+    color: #cccccc;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active,
+a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover
+{
+    border: 1px solid #cccccc;
+    background: #ededed;
+    font-weight: bold;
+    color: #cccccc;
+}
+
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited,
+.ui-icon, .ui-button:active .ui-icon {
+    color: #444444;
+}
+
+#tabs li .ui-icon-close {
+    float: left;
+    margin: 0.4em 0.2em 0 0;
+    cursor: pointer;
+}
+
+.ui-state-active .ui-icon, .ui-button:active .ui-icon {
+    background-image:
+        url(http://code.jquery.com/ui/1.12.1/themes/base/images/ui-icons_444444_256x240.png);
 }
