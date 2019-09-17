@@ -210,8 +210,8 @@
 									class="form-horizontal" method="post">
 									<span id="associazione_vars"></span>
 								</form>
-								
-									<table id="worksetTabList" class="table table-hover">
+
+								<table id="worksetTabList" class="table table-hover">
 									<thead>
 										<tr>
 											<th style="width: 2%"><span>#</span></th>
@@ -245,7 +245,7 @@
 									type="hidden" id="idstepvar" name="idstepvar" value="" />
 							</div>
 							<div class="card-body" id="card-parametri" style="display: none">
-										<table id="parametriTabList" class="table table-hover" >
+								<table id="parametriTabList" class="table table-hover">
 									<thead>
 										<tr>
 											<th style="width: 2%"><span>#</span></th>
@@ -262,36 +262,37 @@
 											th:unless="${(listaParametriAll == null) or (listaParametriAll.size() == 0) }">
 											<td><span th:text="${stats.index+1}"></span></td>
 											<td th:text="${paramInstance.nome}"></td>
-										
-											<th:block th:if="${stepParamMap.get(paramInstance.nome)}" th:with="stepP=${stepParamMap.get(paramInstance.nome)}" >
-									 		<td><span
-													th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepP.workset.paramValue)}"></span></td>
-											<td th:text="${stepP.appRole.descr}"></td>
-											<td th:text="${stepP.tipoCampo.nome}"></td>
-											<td><a href="javascript:void(0);"
-												th:attr="data-id-elab=${elaborazione.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-id-workset=${stepP.workset.id},data-name-workset=${stepP.workset.nome},data-value-param=${stepP.workset.paramValue},onclick='javascript:openDlgModParametriWorkset(this);'"
-												title="Modifica parametro"> <i class="fa fa-pencil"></i>
-											</a></td>
-											<td><a href="javascript:void(0);"
-												th:attr="data-id-elab=${elaborazione.id},data-id-param=${stepP.id},data-name-param=${stepP.workset.nome},onclick='javascript:mostraDialogEliminaParametro(this);'"
-												title="Elimina parametro"> <i class="fa fa-trash-o"></i>
-											</a></td>
-										</th:block>		
-										
-											<th:block th:unless="${stepParamMap.get(paramInstance.nome)}" >
-										 <td colspan="3">&nbsp;</td>
-											<td colspan="2" ><a href="javascript:void(0);" 
-											  	th:attr="data-role-id=${paramInstance.appRole.id},data-param-id=${paramInstance.id},data-param-name=${paramInstance.nome},onclick='javascript:openAddParameter(this);'"
-												title="Modifica parametro"> <i class="fa fa-pencil"></i>
-											</a></td>
-										
-										</th:block>	
-											 
-											 
+
+											<th:block th:if="${stepParamMap.get(paramInstance.nome)}"
+												th:with="stepP=${stepParamMap.get(paramInstance.nome)}">
+												<td><span
+														th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepP.workset.paramValue)}"></span></td>
+												<td th:text="${stepP.appRole.descr}"></td>
+												<td th:text="${stepP.tipoCampo.nome}"></td>
+												<td><a href="javascript:void(0);"
+													th:attr="data-id-elab=${elaborazione.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-id-workset=${stepP.workset.id},data-name-workset=${stepP.workset.nome},data-value-param=${stepP.workset.paramValue},onclick='javascript:openDlgModParametriWorkset(this);'"
+													title="Modifica parametro"> <i class="fa fa-pencil"></i>
+												</a></td>
+												<td><a href="javascript:void(0);"
+													th:attr="data-id-elab=${elaborazione.id},data-id-param=${stepP.id},data-name-param=${stepP.workset.nome},onclick='javascript:mostraDialogEliminaParametro(this);'"
+													title="Elimina parametro"> <i class="fa fa-trash-o"></i>
+												</a></td>
+											</th:block>
+
+											<th:block th:unless="${stepParamMap.get(paramInstance.nome)}">
+												<td colspan="3">&nbsp;</td>
+												<td colspan="2"><a href="javascript:void(0);"
+													th:attr="data-role-id=${paramInstance.appRole.id},data-param-id=${paramInstance.id},data-param-name=${paramInstance.nome},onclick='javascript:openAddParameter(this);'"
+													title="Modifica parametro"> <i class="fa fa-pencil"></i>
+												</a></td>
+
+											</th:block>
+
+
 										</tr>
 									</tbody>
 								</table>
-							<input type="hidden" id="idparam" name="idparam" value="" />
+								<input type="hidden" id="idparam" name="idparam" value="" />
 							</div>
 							<div class="card-body" id="card-execution" style="display: none">
 								<form th:action="@{/ws/associavariabile}" id="formAssociaRuolo"
@@ -532,10 +533,12 @@
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<span id="param-text"></span>
+							<span id="param-text-add"></span>
 							<input id="param-value" type="hidden" name="parametri" />
 						</div>
+						<div class="form-group">
 						<div id="add-param"></div>
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-light" data-dismiss="modal">
@@ -572,7 +575,13 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<div id="edit-param" class="form-group"></div>
+						<div class="form-group">
+							<span id="param-text-edit"></span>
+					 	</div>
+						<div class="form-group">
+							<div id="edit-param"></div>
+						</div>
+
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-light" data-dismiss="modal">

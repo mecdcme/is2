@@ -150,7 +150,7 @@ function openAddParameter(identifier) {
    var idParam=$(identifier).data('param-id');
 	var idRole=$(identifier).data('role-id');
 	var nameParameter=$(identifier).data('param-name');
-	$('#param-text').text(nameParameter);
+	$('#param-text-add').text(nameParameter);
 	$('#param-value').val(nameParameter+'|'+idParam+'|'+idRole);
 	var jsontemplateText=_paramTemplateMap[nameParameter];
 	var jsontemplate=JSON.parse(jsontemplateText);
@@ -228,6 +228,7 @@ function openDlgModParametriWorkset(identifier) {
  	var idParam=$(identifier).data('id-param');
 	var idWorkset=$(identifier).data('id-workset');
 	var nameParameter=$(identifier).data('name-workset');
+	$('#param-text-edit').text(nameParameter);
 	var jsontemplateText=_paramTemplateMap[nameParameter];
     var jsontemplate=JSON.parse(jsontemplateText);
      var schema=jsontemplate["schema"];
