@@ -109,12 +109,12 @@
 												th:unless="${(bProcess.businessSteps == null) or (bProcess.businessSteps.size() == 0) }">
 												<td th:if="${stats.index==0}"
 													th:rowspan="${bProcess.businessSteps.size()}"
-													class="process-border-right" style="vertical-align: middle">
+													class="process-border-right" >
 													<span th:text="${bProcess.descr+' ('+bProcess.nome+')' }"></span>
 												</td>
 												<td class="process-border-right" style="vertical-align: middle"><span
 														th:text="${bStep.descr+' ('+bStep.nome+')' }"></span></td>
-												<td style="vertical-align: middle" class="process-border-right">
+												<td  class="process-border-right"  th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}" >
 												
 												<span th:if="${(#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id)))}" class="text-success">
 														&nbsp;&nbsp;<i class="fa fa-check" aria-hidden="true"></i>
@@ -165,7 +165,7 @@
 
 														</li>
 													</ul></td>
-												<td class="process-border-right" style="vertical-align: middle"><span
+												<td class="process-border-right" th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}"><span
 														th:id="${bProcess.id}">NEW</span></td>
 												<!--                                                         <span th:id="${bProcess.id}">DA PROCESSARE</span></td> -->
 												<td class="text-center"

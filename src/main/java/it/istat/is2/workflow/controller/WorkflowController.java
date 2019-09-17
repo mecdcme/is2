@@ -249,25 +249,19 @@ public class WorkflowController {
 		Map<Long, List<StepInstanceParameter>> paramsAllBPPMap = workflowService
 				.findParametriAndSubProcessesByProcess(businessProcessParent);
 		List<StepInstanceParameter> paramsAllBPPList = new ArrayList<>();
-		HashMap<String, Integer> totalParamsbySBP = new HashMap<>();
-		HashMap<String, Integer> assignedParamsbySBP = new HashMap<>();
-		for (Map.Entry<Long, List<StepInstanceParameter>> entry : paramsAllBPPMap.entrySet()) {
-			Long subProccesId = entry.getKey();
-			List<StepInstanceParameter> listparams = entry.getValue();
-			Integer countAssingned = listparams.size();
-			totalParamsbySBP.put(subProccesId.toString(), countAssingned);
 
+		for (Map.Entry<Long, List<StepInstanceParameter>> entry : paramsAllBPPMap.entrySet()) {
+			
+			List<StepInstanceParameter> listparams = entry.getValue();
+			
 			paramsAllBPPList.addAll(listparams);
 			for (StepInstanceParameter sxParPattern : listparams) {
 				if (!paramAssigned.contains(sxParPattern.getNome())) {
 					paramsNotAssignedList.add(sxParPattern);
-					countAssingned--;
+				
 				}
 
 			}
-			;
-			assignedParamsbySBP.put(subProccesId.toString(), countAssingned);
-
 		}
 
 		List<BusinessProcess> listaBp = elaborazione.getBusinessProcess().getBusinessSubProcesses();
@@ -287,9 +281,6 @@ public class WorkflowController {
 		model.addAttribute("elaborazione", elaborazione);
 		model.addAttribute("businessProcessParent", businessProcessParent);
 		model.addAttribute("businessFunction", businessFunction);
-
-		model.addAttribute("assignedParamsbySBP", assignedParamsbySBP);
-		model.addAttribute("totalParamsbySBP", totalParamsbySBP);
 		model.addAttribute("showTabParam", showTabParam);
 		return "workflow/edit";
 
