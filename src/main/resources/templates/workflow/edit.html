@@ -27,12 +27,11 @@
 <head>
 <head th:include="layout :: site-head" th:remove="tag" />
 <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
-
 <script th:src="@{/js/table/datatables.min.js}"></script>
-<script th:src="@{/js/elaborazione.js}"></script>
 <script th:src="@{/js/alpaca/handlebars.min.js}"></script>
 <script th:src="@{/js/alpaca/alpaca.min.js}"></script>
 <script th:src="@{/js/jquery-ui.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/elaborazione.js}"></script>
 <script th:inline="javascript">
             var showTabParam = [[${showTabParam}]];
             var _idfile = [[${idfile}]];
@@ -211,7 +210,8 @@
 									class="form-horizontal" method="post">
 									<span id="associazione_vars"></span>
 								</form>
-								<table id="worksetTabList" class="table table-hover">
+								
+									<table id="worksetTabList" class="table table-hover">
 									<thead>
 										<tr>
 											<th style="width: 2%"><span>#</span></th>
@@ -245,7 +245,7 @@
 									type="hidden" id="idstepvar" name="idstepvar" value="" />
 							</div>
 							<div class="card-body" id="card-parametri" style="display: none">
-								<table id="parametriTabList" class="table table-hover" >
+										<table id="parametriTabList" class="table table-hover" >
 									<thead>
 										<tr>
 											<th style="width: 2%"><span>#</span></th>
@@ -258,11 +258,13 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="stepP,stats: ${stepParamList}"
-											th:unless="${(stepParamList == null) or (stepParamList.size() == 0) }">
+										<tr th:each="paramInstance,stats: ${listaParametriAll}"
+											th:unless="${(listaParametriAll == null) or (listaParametriAll.size() == 0) }">
 											<td><span th:text="${stats.index+1}"></span></td>
-											<td th:text="${stepP.workset.nome}"></td>
-											<td><span
+											<td th:text="${paramInstance.nome}"></td>
+										
+											<th:block th:if="${stepParamMap.get(paramInstance.nome)}" th:with="stepP=${stepParamMap.get(paramInstance.nome)}" >
+									 		<td><span
 													th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepP.workset.paramValue)}"></span></td>
 											<td th:text="${stepP.appRole.descr}"></td>
 											<td th:text="${stepP.tipoCampo.nome}"></td>
@@ -274,10 +276,22 @@
 												th:attr="data-id-elab=${elaborazione.id},data-id-param=${stepP.id},data-name-param=${stepP.workset.nome},onclick='javascript:mostraDialogEliminaParametro(this);'"
 												title="Elimina parametro"> <i class="fa fa-trash-o"></i>
 											</a></td>
+										</th:block>		
+										
+											<th:block th:unless="${stepParamMap.get(paramInstance.nome)}" >
+										 <td colspan="3">&nbsp;</td>
+											<td colspan="2" ><a href="javascript:void(0);" 
+											  	th:attr="data-role-id=${paramInstance.appRole.id},data-param-id=${paramInstance.id},data-param-name=${paramInstance.nome},onclick='javascript:openAddParameter(this);'"
+												title="Modifica parametro"> <i class="fa fa-pencil"></i>
+											</a></td>
+										
+										</th:block>	
+											 
+											 
 										</tr>
 									</tbody>
 								</table>
-								<input type="hidden" id="idparam" name="idparam" value="" />
+							<input type="hidden" id="idparam" name="idparam" value="" />
 							</div>
 							<div class="card-body" id="card-execution" style="display: none">
 								<form th:action="@{/ws/associavariabile}" id="formAssociaRuolo"
@@ -517,23 +531,11 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<div th:if="${listaParametri.size()>0}">
-							<div class="form-group">
-								<label for="select-param" class="col-form-label">Parametro:</label>
-								<select class="form-control" name="parametri" id="select-param">
-									<option
-										th:value="${parameter.nome+'|'+parameter.id+'|'+parameter.appRole.id}"
-										th:attr="param-id=${parameter.id},param-name=${parameter.nome}"
-										th:each="parameter, y: ${listaParametri}"
-										th:text="${parameter.nome}"></option>
-								</select>
-							</div>
-							<div id="add-param"></div>
+						<div class="form-group">
+							<span id="param-text"></span>
+							<input id="param-value" type="hidden" name="parametri" />
 						</div>
-						<div th:unless="${listaParametri.size()>0}">
-							<span th:text="#{params.no.avaible}">Nessun parametro
-								disponibile per l'associazione</span>
-						</div>
+						<div id="add-param"></div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-light" data-dismiss="modal">

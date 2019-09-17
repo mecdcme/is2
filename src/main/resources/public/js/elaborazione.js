@@ -40,8 +40,9 @@ $(document).ready(function () {
     
     $('#edit-param > input').on("change paste keyup", function() {
  	   alert($(this).val()); 
- });
-     $("#worksetTabList").DataTable({
+    });
+    
+    $("#worksetTabList").DataTable({
         dom: "<'row'<'col-sm-5'B><'col-sm-7'f>>"
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -141,20 +142,25 @@ $(document).ready(function () {
         controllaCampoModParam();
     });
     
-    $('#select-param').on("change", function (e) {
-     var nameParameter=	$( "#select-param option:selected" ).attr("param-name");
-     var jsontemplateText=_paramTemplateMap[nameParameter];
-     var jsontemplate=JSON.parse(jsontemplateText);
-     var schema=jsontemplate["schema"];
-     var options=jsontemplate["options"];
-     var dataContent="{\"schema\":"+JSON.stringify(schema)+",\"options\":"+JSON.stringify(options)+"}";
-     console.log(dataContent);
-     $('#add-param').empty();
-     $('#add-param').alpaca(JSON.parse(jsontemplateText)); 
-     });
-       
+         
 
 });
+
+function openAddParameter(identifier) {
+   var idParam=$(identifier).data('param-id');
+	var idRole=$(identifier).data('role-id');
+	var nameParameter=$(identifier).data('param-name');
+	$('#param-text').text(nameParameter);
+	$('#param-value').val(nameParameter+'|'+idParam+'|'+idRole);
+	var jsontemplateText=_paramTemplateMap[nameParameter];
+	var jsontemplate=JSON.parse(jsontemplateText);
+	var schema=jsontemplate["schema"];
+	var options=jsontemplate["options"];
+	var dataContent="{\"schema\":"+JSON.stringify(schema)+",\"options\":"+JSON.stringify(options)+"}";
+	$('#add-param').empty();
+	$('#add-param').alpaca(JSON.parse(jsontemplateText)); 
+	$("#add-parametri-workset-modal").modal('show');
+}
 
 
 function associaVar() {
@@ -219,14 +225,11 @@ function associaVar() {
 
 function openDlgModParametriWorkset(identifier) {
 		// controllaCampoModParam();
-	
-	var idParam=$(identifier).data('id-param');
+ 	var idParam=$(identifier).data('id-param');
 	var idWorkset=$(identifier).data('id-workset');
 	var nameParameter=$(identifier).data('name-workset');
-	
-	
-     var jsontemplateText=_paramTemplateMap[nameParameter];
-     var jsontemplate=JSON.parse(jsontemplateText);
+	var jsontemplateText=_paramTemplateMap[nameParameter];
+    var jsontemplate=JSON.parse(jsontemplateText);
      var schema=jsontemplate["schema"];
      var options=jsontemplate["options"];
      if(!options) options="";
