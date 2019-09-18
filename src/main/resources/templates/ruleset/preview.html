@@ -63,7 +63,10 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a title="Chiudi ruleset" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                            <a class="btn" title="Show log" href="javascript:void(0)" onclick="javascript:showLog();">
+                                <i class="fa fa-clone"></i>&nbsp;<span>Log</span>
+                            </a>
+                            <a class="btn" title="Chiudi ruleset" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -229,8 +232,7 @@
         </div>
 
         <!-- Edit Rule Dialog -->
-        <div class="modal fade" id="modalEditRule" tabindex="-1" role="dialog" 
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="modalEditRule" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -285,8 +287,7 @@
         </div>
 
         <!-- Add Domain Rule Dialog -->
-        <div class="modal fade" id="addrulevariable" tabindex="-1"
-             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addrulevariable" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -346,8 +347,7 @@
         </div>
         
         <!-- Delete Rule Dialog -->
-        <div class="modal fade" id="modalDeleteRule" tabindex="-1"
-             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="modalDeleteRule" role="dialog">
             <input type="hidden" id="ruleId" />
             <div class="modal-dialog" role="document">
                 <div class="modal-content">

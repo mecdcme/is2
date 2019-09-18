@@ -39,10 +39,6 @@ button:focus{
     padding-right: 10px;
 }
 
-.breadcrumb{
-    padding: 0.75rem 1.4rem 0.75rem 1rem;
-}
-
 .breadcrumb-menu .btn{
     padding: 0 0.5rem;
     color: #20a8d8;
@@ -103,7 +99,7 @@ button:focus{
   box-shadow: 0 0 0 0.2rem rgba(65, 181, 222, 0.5);
 }
 
-/* Data table*/
+/* Data table */
 .table thead th{
     border-bottom: none!important;
     border-top: none!important;
@@ -129,7 +125,7 @@ table.dataTable thead>tr>th{
 }
 
 
-/*Menu*/
+/* Menu */
 .nav-item-active{
     color: #fff;
     background: #20a8d8;
@@ -139,7 +135,24 @@ table.dataTable thead>tr>th{
     color: #fff!important;
 }
 
-/* Worksession*/
+/* Log panel */
+#logbox, #rbox{
+    height: 178px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+#logbox ul{
+    list-style-type: none;
+    padding-left: 4px;
+}
+
+#logbox ul > li{
+    padding: 2px 0px;
+}
+
+/* Worksession */
 #header-variabili, #header-parametri{
     font-weight: normal;
     border-right: 1px solid #c8ced3;

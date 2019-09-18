@@ -80,16 +80,18 @@
             <ul class="nav navbar-nav d-md-down-none">
                 <li class="nav-item px-3" sec:authorize="hasAuthority('ADMIN')" >
                     <a class="nav-link"  data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        Settings
+                        <span>Settings</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-xl-left">
                         <div class="dropdown-header text-center">
                             <strong>IS<sup>2</sup> Workbench</strong>
                         </div>
                         <a class="dropdown-item" th:href="@{/}">
-                            <i class="fa fa-server"></i> Server configuration</a>
+                            <i class="fa fa-server"></i>&nbsp;<span>Server configuration</span>
+                        </a>
                         <a class="dropdown-item" th:href="@{/users/userlist}">
-                            <i class="fa fa-users"></i><span th:text="#{Layout.users}"></span></a>
+                            <i class="fa fa-users"></i><span th:text="#{Layout.users}"></span>
+                        </a>
                     </div>
                 </li>
             </ul>
@@ -120,7 +122,9 @@
 
         <!-- LOADING DATA -->
         <div th:fragment="site-modals">
-            <div class="modal fade" id="modalCancellaParametro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+            <!-- Loading panel -->
+            <div class="modal fade" id="modalCancellaParametro" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
@@ -132,8 +136,42 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Log panel -->
+            <div class="modal fade" id="modalLog" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <span><i class="fa fa-clone"></i>
+                                    <span th:text="#{Layout.log.panel}">Log panel</span>
+                                    <span>R output</span>
+                                </span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div id="logbox" class="modal-body">
+                            <ul th:if="${logs.size()>0}">
+                                <li th:each="log : ${logs}">
+                                    <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;
+                                    <span th:text="${log.msg}"></span>
+                                </li>
+                            </ul>
+                            <span th:unless="${logs.size()>0}"> No message available</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:text="#{Layout.Close}"></span>
+                            </button>
+                            <button type="button" class="btn btn-primary" th:onclick="'javascript:clearLog(' + ${session.sessioneBean.id} + ')'">
+                                <span>Clear</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!--div class="card">
                 <div class="card-header">
                     <span th:text="#{Layout.log.panel}">Log panel</span>

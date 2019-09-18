@@ -31,7 +31,7 @@
         <script th:src="@{/js/uploadfile.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
-            setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
         </script>
         <link th:href="@{/css/fileinput.min.css}" rel="stylesheet" />
@@ -59,7 +59,10 @@
                     </li>
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
-                        <div class="btn-group" role="group" aria-label="Button group">
+                        <a class="btn" title="Show log" href="javascript:void(0)" onclick="javascript:showLog();">
+                            <i class="fa fa-clone"></i>&nbsp;<span>Log</span>
+                        </a>
+                        <div class="btn">
                             <a title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
@@ -107,7 +110,7 @@
 
                                         <table id="datasetList" class="table" th:if="${listaDataset}" cellspacing="0">
                                             <thead>
-                                                <tr th:unless="${(listaDataset == null) or (listaDataset.size() == 0) }">                                                
+                                                <tr th:unless="${(listaDataset == null) or (listaDataset.size() == 0)}">                                                
                                                     <th><span th:text="#{listaDataset.nome}">Nome</span></th>
                                                     <th><span th:text="#{listaDataset.label}">Label</span></th>
                                                     <th><span th:text="#{listaDataset.formatofile}">Formato</span></th>
@@ -124,10 +127,12 @@
                                                     <td th:text="${dataset.numerorighe}"></td>
                                                     <td th:unless="${dataset.tipoDato != null}" th:text="null"></td>
                                                     <td style="width: 1%">
-                                                        <a th:if="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza dataset" th:href="@{'/viewDataset/'+${dataset.id}}"> 
+                                                        <a th:if="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza dataset" 
+                                                           th:href="@{'/viewDataset/'+${dataset.id}}"> 
                                                             <i class="fa fa-search"></i>
                                                         </a>
-                                                        <a th:unless="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza ruleset" th:href="@{'/viewRuleset/'+${dataset.id}}"> 
+                                                        <a th:unless="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza ruleset" 
+                                                           th:href="@{'/viewRuleset/'+${dataset.id}}"> 
                                                             <i class="fa fa-search"></i>
                                                         </a>
                                                     </td>
@@ -185,8 +190,7 @@
         </div>
 
         <!-- Delete dataset modal -->
-        <div class="modal fade" id="modalCancellaDataset" tabindex="-1"
-             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="modalCancellaDataset" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -208,8 +212,7 @@
         </div>
 
         <!-- Dataset preview modal -->
-        <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" 
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="previewModal" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -255,7 +258,8 @@
                         </button>
                         <button type="button" id="btn-invia-file" class="btn btn-primary towait disabled"
                                 onclick="inviaFormFile();" th:title="#{submit.button.title}"
-                                th:text="#{submit.button}" data-dismiss="modal">Invia
+                                th:text="#{submit.button}" data-dismiss="modal">
+                            <span>Invia</span>
                         </button>
                     </div>
                 </div>
