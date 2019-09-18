@@ -25,7 +25,6 @@ package it.istat.is2.workflow.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -35,11 +34,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.transaction.Transactional;
+
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,26 +50,27 @@ import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.dao.DatasetColonnaDao;
 import it.istat.is2.dataset.domain.DatasetColonna;
+import it.istat.is2.workflow.batch.WorkFlowBatchDao;
 import it.istat.is2.workflow.dao.BusinessProcessDao;
 import it.istat.is2.workflow.dao.BusinessStepDao;
 import it.istat.is2.workflow.dao.ElaborazioneDao;
 import it.istat.is2.workflow.dao.RuoloDao;
-import it.istat.is2.workflow.dao.StepVariableDao;
-import it.istat.is2.workflow.dao.StepInstanceParameterDao;
 import it.istat.is2.workflow.dao.StepInstanceDao;
+import it.istat.is2.workflow.dao.StepInstanceParameterDao;
+import it.istat.is2.workflow.dao.StepVariableDao;
 import it.istat.is2.workflow.dao.TipoCampoDao;
 import it.istat.is2.workflow.dao.WorkSetDao;
-import it.istat.is2.workflow.domain.Elaborazione;
-import it.istat.is2.workflow.domain.TipoCampo;
+import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.BusinessProcess;
 import it.istat.is2.workflow.domain.BusinessStep;
-import it.istat.is2.workflow.domain.StepInstanceParameter;
-import it.istat.is2.workflow.domain.AppRole;
+import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.StepInstance;
 import it.istat.is2.workflow.domain.StepInstanceAppRole;
+import it.istat.is2.workflow.domain.StepInstanceParameter;
 import it.istat.is2.workflow.domain.StepVariable;
-import it.istat.is2.workflow.domain.TipoIO;
 import it.istat.is2.workflow.domain.SxTipoVar;
+import it.istat.is2.workflow.domain.TipoCampo;
+import it.istat.is2.workflow.domain.TipoIO;
 import it.istat.is2.workflow.domain.Workset;
 import it.istat.is2.workflow.engine.EngineFactory;
 import it.istat.is2.workflow.engine.EngineService;
@@ -105,6 +106,8 @@ public class WorkflowService {
 	SqlGenericDao sqlGenericDao;
 	@Autowired
 	EngineFactory engineFactory;
+	@Autowired
+	WorkFlowBatchDao workFlowBatchDao;
 
 	public WorkSession findSessioneLavoro(Long id) {
 		return sessioneDao.findById(id).get();
@@ -659,7 +662,7 @@ public class WorkflowService {
 				.hasNext();) {
 			BusinessProcess suBusinessProcess = (BusinessProcess) iteratorb.next();
 
-		    Set<String> roleNameSet = new HashSet<String>();
+			Set<String> roleNameSet = new HashSet<String>();
 			List<StepInstance> instanceBF = findAllStepInstanceBySubBProcess(suBusinessProcess);
 
 			for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
@@ -741,18 +744,22 @@ public class WorkflowService {
 		}
 	}
 
+	@Transactional
 	public void cleanAllWorkset(Long idelaborazione, Integer flagIO) {
-		
-	List<StepVariable> list=	getStepVariables(idelaborazione);
-	for (StepVariable step : list) {
-	if(	step.getTipoCampo().getId().equals(new Integer(0))||step.getTipoCampo().getId().equals(flagIO))
-		stepVariableDao.deleteById(step.getId());
-	}
-		
 
-		 
+		List<StepVariable> list = getStepVariables(idelaborazione);
+		for (StepVariable step : list) {
+			if (step.getTipoCampo().getId().equals(new Integer(0)) || step.getTipoCampo().getId().equals(flagIO))
+				stepVariableDao.deleteById(step.getId());
+		}
+		
+		List<Long> jobInstanceIds = workFlowBatchDao.findJobInstanceIdByElabId(idelaborazione);
+		if(jobInstanceIds != null && jobInstanceIds.size() > 0) {
+			for(int i=0; i<jobInstanceIds.size(); i++) {
+				workFlowBatchDao.deleteJobInstanceById(jobInstanceIds.get(i));
+			}	
+		}
+
 	}
-	
-	
-	
+
 }

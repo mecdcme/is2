@@ -39,7 +39,7 @@ CREATE TABLE `batch_job_execution` (
   `WF_PROC_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`JOB_EXECUTION_ID`),
   KEY `JOB_INST_EXEC_FK` (`JOB_INSTANCE_ID`),
-  CONSTRAINT `JOB_INST_EXEC_FK` FOREIGN KEY (`JOB_INSTANCE_ID`) REFERENCES `batch_job_instance` (`JOB_INSTANCE_ID`)
+  CONSTRAINT `JOB_INST_EXEC_FK` FOREIGN KEY (`JOB_INSTANCE_ID`) REFERENCES `batch_job_instance` (`JOB_INSTANCE_ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -64,7 +64,7 @@ CREATE TABLE `batch_job_execution_context` (
   `SHORT_CONTEXT` varchar(2500) NOT NULL,
   `SERIALIZED_CONTEXT` text,
   PRIMARY KEY (`JOB_EXECUTION_ID`),
-  CONSTRAINT `JOB_EXEC_CTX_FK` FOREIGN KEY (`JOB_EXECUTION_ID`) REFERENCES `batch_job_execution` (`JOB_EXECUTION_ID`)
+  CONSTRAINT `JOB_EXEC_CTX_FK` FOREIGN KEY (`JOB_EXECUTION_ID`) REFERENCES `batch_job_execution` (`JOB_EXECUTION_ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -94,7 +94,7 @@ CREATE TABLE `batch_job_execution_params` (
   `DOUBLE_VAL` double DEFAULT NULL,
   `IDENTIFYING` char(1) NOT NULL,
   KEY `JOB_EXEC_PARAMS_FK` (`JOB_EXECUTION_ID`),
-  CONSTRAINT `JOB_EXEC_PARAMS_FK` FOREIGN KEY (`JOB_EXECUTION_ID`) REFERENCES `batch_job_execution` (`JOB_EXECUTION_ID`)
+  CONSTRAINT `JOB_EXEC_PARAMS_FK` FOREIGN KEY (`JOB_EXECUTION_ID`) REFERENCES `batch_job_execution` (`JOB_EXECUTION_ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -110,23 +110,9 @@ UNLOCK TABLES;
 --
 -- Table structure for table `batch_job_execution_seq`
 --
-
 DROP TABLE IF EXISTS `batch_job_execution_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `batch_job_execution_seq` (
-  `ID` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `batch_job_execution_seq`
---
-
-LOCK TABLES `batch_job_execution_seq` WRITE;
-/*!40000 ALTER TABLE `batch_job_execution_seq` DISABLE KEYS */;
-/*!40000 ALTER TABLE `batch_job_execution_seq` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE `batch_job_execution_seq` (ID BIGINT NOT NULL) ENGINE=InnoDB;
+INSERT INTO `batch_job_execution_seq` values(0);
 
 --
 -- Table structure for table `batch_job_instance`
@@ -157,23 +143,9 @@ UNLOCK TABLES;
 --
 -- Table structure for table `batch_job_seq`
 --
-
 DROP TABLE IF EXISTS `batch_job_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `batch_job_seq` (
-  `ID` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `batch_job_seq`
---
-
-LOCK TABLES `batch_job_seq` WRITE;
-/*!40000 ALTER TABLE `batch_job_seq` DISABLE KEYS */;
-/*!40000 ALTER TABLE `batch_job_seq` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE `batch_job_seq` (ID BIGINT NOT NULL) ENGINE=InnoDB;
+INSERT INTO `batch_job_seq` values(0);
 
 --
 -- Table structure for table `batch_step_execution`
@@ -203,7 +175,7 @@ CREATE TABLE `batch_step_execution` (
   `LAST_UPDATED` datetime DEFAULT NULL,
   PRIMARY KEY (`STEP_EXECUTION_ID`),
   KEY `JOB_EXEC_STEP_FK` (`JOB_EXECUTION_ID`),
-  CONSTRAINT `JOB_EXEC_STEP_FK` FOREIGN KEY (`JOB_EXECUTION_ID`) REFERENCES `batch_job_execution` (`JOB_EXECUTION_ID`)
+  CONSTRAINT `JOB_EXEC_STEP_FK` FOREIGN KEY (`JOB_EXECUTION_ID`) REFERENCES `batch_job_execution` (`JOB_EXECUTION_ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -228,7 +200,7 @@ CREATE TABLE `batch_step_execution_context` (
   `SHORT_CONTEXT` varchar(2500) NOT NULL,
   `SERIALIZED_CONTEXT` text,
   PRIMARY KEY (`STEP_EXECUTION_ID`),
-  CONSTRAINT `STEP_EXEC_CTX_FK` FOREIGN KEY (`STEP_EXECUTION_ID`) REFERENCES `batch_step_execution` (`STEP_EXECUTION_ID`)
+  CONSTRAINT `STEP_EXEC_CTX_FK` FOREIGN KEY (`STEP_EXECUTION_ID`) REFERENCES `batch_step_execution` (`STEP_EXECUTION_ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -244,23 +216,9 @@ UNLOCK TABLES;
 --
 -- Table structure for table `batch_step_execution_seq`
 --
-
 DROP TABLE IF EXISTS `batch_step_execution_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `batch_step_execution_seq` (
-  `ID` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `batch_step_execution_seq`
---
-
-LOCK TABLES `batch_step_execution_seq` WRITE;
-/*!40000 ALTER TABLE `batch_step_execution_seq` DISABLE KEYS */;
-/*!40000 ALTER TABLE `batch_step_execution_seq` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE `batch_step_execution_seq` (ID BIGINT NOT NULL) ENGINE=InnoDB;
+INSERT INTO `batch_step_execution_seq` values(0);
 
 --
 -- Table structure for table `sx_app_role`
