@@ -172,9 +172,7 @@ function associaVar() {
     var labelFileSet = labelFile;
 	 var idTab = "" + varSelectedId;
     var li = $( tabTemplate.replace( /#\{href\}/g, "#" + idTab ).replace( /#\{label\}/g, labelFileSet + '-' + varSelectedName) );
-    var tabContentHtml = roleSelectedName;
     tabs.find( ".ui-tabs-nav" ).append( li );
-  	 tabs.append( "<div id='" + varSelectedId + "'><p>" + tabContentHtml + "</p></div>" );
   	 tabs.tabs( "refresh" );
     tmpVarSel['#var_'+varSelectedId]  =  $('#var_'+varSelectedId).clone();
   	$('#var_'+varSelectedId).remove();
@@ -184,9 +182,9 @@ function associaVar() {
   	$("#roleSelectedId").val("");
   	$('#btn_dlg_assoc').addClass('disabled');
   	$('#btn_dlg_assoc').attr( "disabled","disabled");
+  	$("#tab-msg").addClass('hide');
   	associazioneVarRoleBean.push({'idElaborazione':$("#idelaborazione").val(),'ruolo':{'idRole':roleSelectedId,'name':roleSelectedName,'variables':[{'idVar':varSelectedId,'name':varSelectedName}]}});
-   console.log(JSON.stringify(associazioneVarRoleBean));
- }
+}
        
  function removeSelVarFromTab(id){
 	tmpVarSel['#var_'+id].prependTo("#div_variabili_dataset");
@@ -195,6 +193,7 @@ function associaVar() {
 	delete associazioneVarRoleBean[id];
 	if(Object.entries(tmpVarSel).length === 0 && tmpVarSel.constructor === Object){
 		$("#btn_dlg_ins").addClass('hide');
+		$("#tab-msg").removeClass('hide');
 	}
 	const index = associazioneVarRoleBean.findIndex(x => x.idVar === id);
 	if (index !== undefined) associazioneVarRoleBean.splice(index, 1);
