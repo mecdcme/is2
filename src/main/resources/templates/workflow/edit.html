@@ -278,20 +278,17 @@
                                     <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-lg-6">
-                                                <fieldset class="well"
-                                                          style="height: 250px; overflow-y: auto;">
+                                                <fieldset class="well" style="height: 250px; overflow-y: auto;">
                                                     <legend class="well-legend"> Variabili Dataset</legend>
-                                                    <input type="hidden" id="varSelectedName" /> <input
-                                                        type="hidden" id="varSelectedId" /> <input type="hidden"
-                                                        id="varLabelFile" />
+                                                    <input type="hidden" id="varSelectedName" />
+                                                    <input type="hidden" id="varSelectedId" /> 
+                                                    <input type="hidden" id="varLabelFile" />
                                                     <div id="div_variabili_dataset" class="list-group ">
                                                         <th:block th:each="datasetfile ,iter: ${datasetfiles}">
-                                                            <a th:each="element, y: ${datasetfile.colonne}"
-                                                               th:id="${'var_'+element.id}"
-                                                               class="list-group-item varlist"
+                                                            <a th:each="element, y: ${datasetfile.colonne}" th:id="${'var_'+element.id}" class="list-group-item varlist"
                                                                th:attr="onclick='javascript:setSelectedVar(' + ${element.ordine} + ',\'' + ${element.nome} + '\', ' + ${element.id} + ', \'' + ${datasetfile.labelFile} + '\')'"
-                                                               title="Associa variabile"> <span
-                                                                    th:text="${datasetfile.labelFile+ ' - '+ element.nome}"></span>
+                                                               title="Associa variabile"> 
+                                                                <span th:text="${datasetfile.labelFile+ ' - '+ element.nome}"></span>
                                                             </a>
                                                         </th:block>
                                                     </div>
@@ -335,18 +332,12 @@
                             <button id="btn_dlg_ins" type="button"
                                     class="btn btn-primary hide" onclick="associaVarToRole()"
                                     data-dismiss="modal">Inserisci</button>
-                            <!-- 								onclick="inserisciRuoloVar()" data-dismiss="modal">Inserisci</button> -->
-
-
-
                         </span>
                     </div>
                 </div>
-                <!-- /.modal-content -->
             </div>
-            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal -->
+        
         <!-- Edit variable modal -->
         <div class="modal fade" id="modifica-viarabile-workset-modal"
              role="dialog">
