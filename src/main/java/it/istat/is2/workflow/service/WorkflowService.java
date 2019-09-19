@@ -527,7 +527,7 @@ public class WorkflowService {
 
 	public List<StepVariable> getStepVariablesParametri(Long idElaborazione) {
 		return stepVariableDao.findStepVariables(new Elaborazione(idElaborazione),
-				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+				new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
 	}
 	public List<StepVariable> getStepVariablesRuleset(Long idElaborazione) {
 		return stepVariableDao.findStepVariables(new Elaborazione(idElaborazione),
@@ -753,7 +753,7 @@ public class WorkflowService {
 
 		List<StepVariable> list = getStepVariables(idelaborazione);
 		for (StepVariable step : list) {
-			if (step.getTipoCampo().getId().equals(new Integer(0)) || step.getTipoCampo().getId().equals(flagIO))
+			if (flagIO.equals(new Integer(0)) || step.getTipoCampo().getId().equals(flagIO))
 				stepVariableDao.deleteById(step.getId());
 		}
 		

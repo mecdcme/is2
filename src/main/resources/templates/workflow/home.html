@@ -22,8 +22,7 @@
  @version 1.0
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
 
@@ -35,8 +34,7 @@
         </script>
         <link rel="stylesheet" th:href="@{/css/batch/batch.css}" />
     </head>
-    <body
-        class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
         <header th:replace="layout :: site-header"></header>
         <!-- Body -->
         <div class="app-body">
@@ -63,7 +61,10 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a class="breadcrumb-last-item" title="Chiudi processo" th:href="@{'/ws/chiudiElab/'+${elaborazione.id}}"> 
+                            <a class="btn" title="Show log" href="javascript:void(0)" onclick="javascript:showLog();">
+                                <i class="fa fa-clone"></i>&nbsp;<span>Log</span>
+                            </a>
+                            <a class="btn" title="Chiudi processo" th:href="@{'/ws/chiudiElab/'+${elaborazione.id}}"> 
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -133,7 +134,7 @@
                                                                         <li class="nav-item dropdown list-inline-item" th:if="${not  #lists.isEmpty(paramsMissing.get(bProcess.id))}">
                                                                             <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                                                                 <span>Params</span>
-                                                                                <span class="badge badge-pill badge-danger" th:text=" ${paramsMissing.get(bProcess.id).size()}"></span>
+                                                                                <span class="badge badge-pill badge-danger" th:text="${paramsMissing.get(bProcess.id).size()}"></span>
                                                                             </a>
                                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                                 <div class="dropdown-header text-center">
@@ -141,6 +142,20 @@
                                                                                 </div>
                                                                                 <small>
                                                                                     <span class="dropdown-item" th:each="item : ${paramsMissing.get(bProcess.id)}" th:text="${item}"></span>
+                                                                                </small>
+                                                                            </div>
+                                                                        </li>
+                                                                            <li class="nav-item dropdown list-inline-item" th:if="${not  #lists.isEmpty(rulesetMissing.get(bProcess.id))}">
+                                                                            <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                                <span>Ruleset</span>
+                                                                                <span class="badge badge-pill badge-danger" th:text="${rulesetMissing.get(bProcess.id).size()}"></span>
+                                                                            </a>
+                                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                                <div class="dropdown-header text-center">
+                                                                                    <strong>Ruleset missing</strong>
+                                                                                </div>
+                                                                                <small>
+                                                                                    <span class="dropdown-item" th:each="item : ${rulesetMissing.get(bProcess.id)}" th:text="${item}"></span>
                                                                                 </small>
                                                                             </div>
                                                                         </li>
@@ -173,32 +188,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- row -->
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <span th:text="#{Layout.log.panel}">Log panel</span>
-                                        <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)"
-                                               th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div id="logbox" class="card-body">
-                                        <ul th:if="${logs.size()>0}" id="logList">
-                                            <li th:each="log : ${logs}">
-                                                <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;
-                                                <span th:text="${log.msg}" id="logMsg"></span>
-                                            </li>
-                                        </ul>
-                                        <span th:unless="${logs.size()>0}" id="noLogList"> No message available </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- row -->
                     </div>
                 </div>
             </main>

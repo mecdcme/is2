@@ -25,7 +25,6 @@ package it.istat.is2.workflow.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -144,9 +143,13 @@ public class WorkflowController {
 				.findMissingAppRoleySubProcessAndTipoVar(elaborazione, new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
 		HashMap<Long, List<String>> variablesMissing = workflowService
 				.findMissingAppRoleySubProcessAndTipoVar(elaborazione, new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+		
+		HashMap<Long, List<String>> rulesetMissing = workflowService
+				.findMissingAppRoleySubProcessAndTipoVar(elaborazione, new SxTipoVar(IS2Const.WORKSET_TIPO_RULESET));
 
 		model.addAttribute("paramsMissing", paramsMissing);
 		model.addAttribute("variablesMissing", variablesMissing);
+		model.addAttribute("rulesetMissing", rulesetMissing);
 
 		return "workflow/home";
 	}
