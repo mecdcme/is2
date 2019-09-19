@@ -54,6 +54,7 @@ import it.istat.is2.workflow.batch.WorkFlowBatchDao;
 import it.istat.is2.workflow.dao.BusinessProcessDao;
 import it.istat.is2.workflow.dao.BusinessStepDao;
 import it.istat.is2.workflow.dao.ElaborazioneDao;
+import it.istat.is2.workflow.dao.RulesetDao;
 import it.istat.is2.workflow.dao.RuoloDao;
 import it.istat.is2.workflow.dao.StepInstanceDao;
 import it.istat.is2.workflow.dao.StepInstanceParameterDao;
@@ -64,6 +65,8 @@ import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.BusinessProcess;
 import it.istat.is2.workflow.domain.BusinessStep;
 import it.istat.is2.workflow.domain.Elaborazione;
+import it.istat.is2.workflow.domain.Rule;
+import it.istat.is2.workflow.domain.Ruleset;
 import it.istat.is2.workflow.domain.StepInstance;
 import it.istat.is2.workflow.domain.StepInstanceAppRole;
 import it.istat.is2.workflow.domain.StepInstanceParameter;
@@ -81,33 +84,35 @@ import it.istat.is2.worksession.domain.WorkSession;
 public class WorkflowService {
 
 	@Autowired
-	WorkSessionDao sessioneDao;
+	private WorkSessionDao sessioneDao;
 	@Autowired
-	ElaborazioneDao elaborazioneDao;
+	private ElaborazioneDao elaborazioneDao;
 	@Autowired
-	WorkSetDao workSetDao;
+	private WorkSetDao workSetDao;
 	@Autowired
-	BusinessStepDao businessStepDao;
+	private BusinessStepDao businessStepDao;
 	@Autowired
-	StepVariableDao stepVariableDao;
+	private StepVariableDao stepVariableDao;
 	@Autowired
-	RuoloDao ruoloDao;
+	private RuoloDao ruoloDao;
 	@Autowired
-	DatasetColonnaDao datasetColonnaDao;
+	private RulesetDao rulesetDao;
 	@Autowired
-	BusinessProcessDao businessProcessDao;
+	private DatasetColonnaDao datasetColonnaDao;
 	@Autowired
-	StepInstanceDao stepInstanceDao;
+	private BusinessProcessDao businessProcessDao;
 	@Autowired
-	StepInstanceParameterDao stepInstanceParameterDao;
+	private StepInstanceDao stepInstanceDao;
+	@Autowired
+	private StepInstanceParameterDao stepInstanceParameterDao;
 	@Autowired
 	TipoCampoDao sxTipoCampoDao;
 	@Autowired
-	SqlGenericDao sqlGenericDao;
+	private SqlGenericDao sqlGenericDao;
 	@Autowired
-	EngineFactory engineFactory;
+	private EngineFactory engineFactory;
 	@Autowired
-	WorkFlowBatchDao workFlowBatchDao;
+	private WorkFlowBatchDao workFlowBatchDao;
 
 	public WorkSession findSessioneLavoro(Long id) {
 		return sessioneDao.findById(id).get();
@@ -534,7 +539,7 @@ public class WorkflowService {
 				new SxTipoVar(IS2Const.WORKSET_TIPO_RULESET));
 	}
 
-	public List<AppRole> findRuoliByProcess(BusinessProcess businessProcess, int num) {
+	public List<AppRole> findRuoliByProcess(BusinessProcess businessProcess, int flagIO,SxTipoVar sxTipoVar) {
 		List<AppRole> ret = new ArrayList<>();
 		List<AppRole> ret2 = new ArrayList<>();
 		List<StepInstance> instanceBF = findAllStepInstanceByProcess(businessProcess);
@@ -545,9 +550,9 @@ public class WorkflowService {
 			List<StepInstanceAppRole> sxsetpppList = stepInstance.getSxStepPatterns();
 			for (Iterator<StepInstanceAppRole> iterator2 = sxsetpppList.iterator(); iterator2.hasNext();) {
 				StepInstanceAppRole sxStepPattern = (StepInstanceAppRole) iterator2.next();
-				if (num == 0) {
+				if (flagIO == 0) {// flagIO All
 					if ((sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_INPUT && sxStepPattern
-							.getAppRole().getSxTipoVar().getId().intValue() == IS2Const.WORKSET_TIPO_VARIABILE)) {
+							.getAppRole().getSxTipoVar().equals(sxTipoVar))) {
 						ret.add(sxStepPattern.getAppRole());
 					}
 
@@ -555,8 +560,7 @@ public class WorkflowService {
 					if ((sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_INPUT && sxStepPattern
 							.getAppRole().getSxTipoVar().getId().intValue() == IS2Const.WORKSET_TIPO_VARIABILE)
 							|| (sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_OUTPUT
-									&& sxStepPattern.getAppRole().getSxTipoVar().getId()
-											.intValue() == IS2Const.WORKSET_TIPO_VARIABILE)) {
+									&& sxStepPattern.getAppRole().getSxTipoVar().equals(sxTipoVar))) {
 						ret.add(sxStepPattern.getAppRole());
 					}
 				}
@@ -765,5 +769,33 @@ public class WorkflowService {
 		}
 
 	}
+
+	/**
+	 * @param elaborazione
+	 * @param idRuolo
+	 * @param idResultset
+	 */
+	public void setResultset(Elaborazione elaborazione, Integer idRuolo, Integer idResultset) {
+		// TODO Auto-generated method stub
+		
+		 Ruleset ruleset=rulesetDao.findById(idResultset).get();
+		 
+		 StepVariable stepVariable = new StepVariable();
+		 stepVariable.setElaborazione(elaborazione);
+		 stepVariable.setAppRole(new AppRole(idRuolo));
+		 stepVariable.setOrdine(new Short("1"));
+		 stepVariable.setTipoCampo(new TipoCampo(IS2Const.TIPO_CAMPO_INPUT));
+		 Workset workset = new Workset();
+		 workset.setNome(IS2Const.TEXT_RULE);
+		 workset.setParamValue(ruleset.getLabelFile());
+		 workset.setValori(Utility.convertToArrayListStringFieldOfObjects(ruleset.getRules(),Rule.class,"rule"));
+		 workset.setValoriSize(ruleset.getRules().size());
+		 workset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_RULESET));
+		 ArrayList<StepVariable> listaStepV = new ArrayList<>();
+		 listaStepV.add(stepVariable);
+		 workset.setStepVariables(listaStepV);
+		 stepVariable.setWorkset(workset);
+	 	 stepVariableDao.save(stepVariable);
+	  }
 
 }

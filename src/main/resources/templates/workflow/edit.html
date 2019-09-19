@@ -126,7 +126,7 @@
                                             <span id="associazione_vars"></span>
                                         </form>
 
-                                        <table id="worksetTabList" class="table table-hover">
+                                        <table id="worksetTabListq" class="table table-hover">
                                             <thead>
                                                 <tr>
                                                     <th style="width: 2%"><span>#</span></th>
@@ -214,19 +214,15 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 2%"><span>#</span></th>
-                                                    <th><span>Nome Parametro</span></th>
-                                                    <th><span>Valore</span></th>
-                                                    <th><span>Ruolo</span></th>
-                                                    <th><span>I/O</span></th>
-                                                    <th style="width: 1%"></th>
-                                                    <th style="width: 1%"></th>
+                                                    <th><span>Rule Set</span></th>
+                                           
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="paramInstance,stats: ${listaParametriAll}" th:unless="${(listaParametriAll == null) or (listaParametriAll.size() == 0) }">
+                                                <tr th:each="rulesetRole,stats: ${rulesetRoleList}" th:unless="${(rulesetRoleList == null) or (rulesetRoleList.size() == 0) }">
                                                     <td><span th:text="${stats.index+1}"></span></td>
-                                                    <td th:text="${paramInstance.nome}"></td>
-                                                    <th:block th:if="${stepParamMap.get(paramInstance.nome)}" th:with="stepP=${stepParamMap.get(paramInstance.nome)}">
+                                                    <td th:text="${rulesetRole.nome}"></td>
+                                                        <th:block th:if="${stepVariablesRulesetMap.get(rulesetRole.nome)}" th:with="stepP=${stepVariablesRulesetMap.get(rulesetRole.nome)}">
                                                         <td><span th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepP.workset.paramValue)}"></span></td>
                                                         <td th:text="${stepP.appRole.descr}"></td>
                                                         <td th:text="${stepP.tipoCampo.nome}"></td>
@@ -242,15 +238,16 @@
                                                             </a>
                                                         </td>
                                                     </th:block>
-                                                    <th:block th:unless="${stepParamMap.get(paramInstance.nome)}">
+                                                    <th:block th:unless="${stepVariablesRulesetMap.get(rulesetRole.nome)}">
                                                         <td colspan="3">&nbsp;</td>
                                                         <td colspan="2">
-                                                            <a href="javascript:void(0);" title="Modifica parametro"
-                                                                th:attr="data-role-id=${paramInstance.appRole.id},data-param-id=${paramInstance.id},data-param-name=${paramInstance.nome},onclick='javascript:openAddParameter(this);'">
-                                                                <i class="fa fa-pencil"></i>
+                                                            <a href="javascript:void(0);" title="Set Resulset"
+                                                                th:attr="data-role-id=${rulesetRole.id},data-param-name=${rulesetRole.nome},onclick='javascript:openSetResulset(this);'">
+                                                                <i class="fa fa-pencil">Add</i>
                                                             </a>
                                                         </td>
                                                     </th:block>
+
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -537,6 +534,70 @@
                 </form>
             </div>
         </div>
+
+<!-- Set Resulset -->
+        <div class="modal fade" id="set-resulset" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+             <form th:action="@{/ws/setresulset}" id="formSetRuleset" method="post">
+              <input id="id-elaborazione-ruleset" type="hidden" name="idelaborazione" th:value="${elaborazione.id}" />
+              <input id="id-role-ruleset" type="hidden" name="idRole" value="175" />
+              <input id="id-ruleset-ruleset" type="hidden" name=idResultSet value="21" />
+               </form>   
+                 <div class="modal-content ">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fa fa-plus"></i>
+                            <span>Set ResulSet</span>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body form">
+                        <div class="form-body">
+                           <div th:if="${not #lists.isEmpty(rulesetList)}">
+                         
+                                 <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                             <fieldset class="well" style="height: 250px; overflow-y: auto;">
+                                                    <legend class="well-legend"> ResulSet List</legend>
+                                                    <div id="div_resultset_list" class="list-group ">
+                                                        <a th:each="ruleset, y: ${rulesetList}" th:id="${'rs_'+ruleset.id}" class="list-group-item varlist"
+                                                               th:attr="onclick='javascript:setSelectedRuleset(' + ${ruleset.labelFile} + '\', ' + ${ruleset.id} +'\')'"
+                                                               title="Associa variabile"> 
+                                                                <span th:text="${ruleset.labelFile+ ' - Rules: '+ ruleset.numeroRighe}"></span>
+                                                          </a>
+                                                 
+                                                    </div>
+                                                </fieldset>
+                                          </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                            <div th:unless="${not #lists.isEmpty(rulesetList)}">
+                                <span>No ResulSet</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">
+                            <span th:text="#{associazione.dialog.button.close}">Annulla</span>
+                        </button>
+                 
+                        <span th:if="${not #lists.isEmpty(rulesetList)}">
+                            <button id="btn_dlg_setrs"  type="button"
+                                    class="btn btn-primary " onclick="setRuleSet()"
+                                    data-dismiss="modal">Save</button>
+                        </span>
+                    </div>
+                </div>
+         
+            </div>
+        </div>
+
+
 
         <!-- Delete variable/role bind-->
         <div class="modal fade" id="modalCancellaAssociazione" tabindex="-1"

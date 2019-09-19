@@ -162,6 +162,13 @@ function openAddParameter(identifier) {
 	$("#add-parametri-workset-modal").modal('show');
 }
 
+function openSetResulset(identifier) {
+	   var idParam=$(identifier).data('param-id');
+		var idRole=$(identifier).data('role-id');
+		var nameParameter=$(identifier).data('param-name');
+ 
+		$("#set-resulset").modal('show');
+	}
 
 function associaVar() {
 	 var varSelectedId = $("#varSelectedId").val();
@@ -320,7 +327,6 @@ function openDlgAddVariabileWorkset() {
 
 function openDlgAddParametriWorkset() {
  // controllaCampoParam();
-   
     $(".rolelist").removeClass('active');
     $(".varlist").removeClass('active');
     $("#varSelectedId").val('');
@@ -329,8 +335,7 @@ function openDlgAddParametriWorkset() {
     $("#roleSelectedName").val('Nessun ruolo selezionato');
     $("#add-parametri-workset-modal").modal('show');
     $("#select-param").change();
-    
-}
+ }
 
 
 function controllaCampoModParam() {
@@ -571,6 +576,10 @@ function eseguiFunzione() {
 }
 function eseguiFunzioneUpdate() {
     $("#formUpdateAssociaRuolo").submit();
+}
+
+function setRuleSet() {
+    $("#formSetRuleset").submit();
 }
 
 function inserisciParams() {
