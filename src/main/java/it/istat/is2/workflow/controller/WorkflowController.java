@@ -60,13 +60,16 @@ import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
+import it.istat.is2.rule.service.RuleService;
 import it.istat.is2.workflow.domain.Elaborazione;
+import it.istat.is2.workflow.domain.Ruleset;
 import it.istat.is2.workflow.domain.TipoCampo;
 import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.domain.BusinessProcess;
 import it.istat.is2.workflow.domain.BusinessStep;
 import it.istat.is2.workflow.domain.StepInstanceParameter;
 import it.istat.is2.workflow.domain.AppRole;
+import it.istat.is2.workflow.domain.ArtifactBFunction;
 import it.istat.is2.workflow.domain.StepVariable;
 import it.istat.is2.workflow.domain.SxTipoVar;
 import it.istat.is2.workflow.domain.Workset;
@@ -93,6 +96,8 @@ public class WorkflowController {
 	private DatasetService datasetService;
 	@Autowired
 	private StepVariableService stepVariableService;
+	@Autowired
+	private RuleService ruleService;
 	@Autowired
 	private LogService logService;
 
@@ -263,9 +268,18 @@ public class WorkflowController {
 
 			}
 		}
+     	List<BusinessProcess> listaBp = elaborazione.getBusinessProcess().getBusinessSubProcesses();
 
-		List<BusinessProcess> listaBp = elaborazione.getBusinessProcess().getBusinessSubProcesses();
-
+     	if( businessFunction.getSxArtifacts().contains(new ArtifactBFunction(IS2Const.ARTIFACT_RULESET))) {
+     		List<StepVariable> stepVariablesRuleset = workflowService.getStepVariablesRuleset(idElaborazione);
+    	   	List<Ruleset> rulesetList=ruleService.findRulesetBySessioneLavoro(elaborazione.getSessioneLavoro());
+    	   	model.addAttribute("stepVariablesRuleset", stepVariablesRuleset);
+    	   	model.addAttribute("rulesetList", rulesetList);
+     	}
+     	
+     	
+     	
+     	
 		model.addAttribute("bProcess", listaBp);
 		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
 		model.addAttribute("stepVList", listaSV);

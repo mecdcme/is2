@@ -40,12 +40,12 @@ import java.util.TimeZone;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;  
+  
 
 import it.istat.is2.app.bean.InputFormBean;
 import it.istat.is2.workflow.domain.BusinessProcess;
@@ -58,12 +58,20 @@ public class Utility {
 	
    public static String printJsonToHtml(String jsonString)  {
 		StringBuffer ret=new StringBuffer();
-		
-		JSONObject jsonObject;
+		JSONParser jSONParser;
+		Object jsonObject;
 		try {
-			jsonObject = new JSONObject(jsonString);
-		ret.append(parseJson(jsonObject,""));
+			jSONParser=new JSONParser(jsonString);
+			jsonObject=	jSONParser.parse();
+			if(jsonObject instanceof JSONObject)
+		 		ret.append(parseJson((JSONObject)jsonObject,""));
+			else if(jsonObject instanceof JSONArray)
+		 		ret.append(getArray(jsonObject,""));
+			else ret.append(jsonString);
 		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			ret.append(jsonString);
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			ret.append(jsonString);
 		}

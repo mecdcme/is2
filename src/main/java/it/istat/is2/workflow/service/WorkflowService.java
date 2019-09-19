@@ -526,8 +526,12 @@ public class WorkflowService {
 	}
 
 	public List<StepVariable> getStepVariablesParametri(Long idElaborazione) {
-		return stepVariableDao.findStepVariablesParametri(new Elaborazione(idElaborazione),
+		return stepVariableDao.findStepVariables(new Elaborazione(idElaborazione),
 				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+	}
+	public List<StepVariable> getStepVariablesRuleset(Long idElaborazione) {
+		return stepVariableDao.findStepVariables(new Elaborazione(idElaborazione),
+				new SxTipoVar(IS2Const.WORKSET_TIPO_RULESET));
 	}
 
 	public List<AppRole> findRuoliByProcess(BusinessProcess businessProcess, int num) {

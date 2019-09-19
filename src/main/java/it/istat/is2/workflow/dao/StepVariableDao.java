@@ -60,7 +60,7 @@ public interface StepVariableDao extends CrudRepository<StepVariable, Integer> {
 			@Param("tipoVar") SxTipoVar sxTipoVar, @Param("tipoCampo") TipoCampo sxTipoCampo,@Param("roleGroup") AppRole appRole);
 	
 	@Query("SELECT st from StepVariable st where st.elaborazione=:elab and st.workset.sxTipoVar!=:tipoVar ORDER BY st.ordine ASC")
-	List<StepVariable> findStepVariablesParametri(@Param("elab") Elaborazione elaborazione,
+	List<StepVariable> findStepVariables(@Param("elab") Elaborazione elaborazione,
 			@Param("tipoVar") SxTipoVar sxTipoVar);
 
 	@Query("SELECT distinct sr from AppRole sr,StepVariable st where st.elaborazione.id=:elab and st.workset.sxTipoVar=:tipoVar and st.tipoCampo=:tipoCampo and st.sxRuoloGruppo=sr ORDER BY st.ordine desc")

@@ -682,6 +682,8 @@ function hidePanels(){
     $("#header-variabili span").removeClass("header-strong");
     $("#card-parametri").hide();
     $("#header-parametri span").removeClass("header-strong");
+    $("#card-ruleset").hide();
+    $("#header-ruleset span").removeClass("header-strong");
     $("#card-execution").hide();
     $("#header-execution span").removeClass("header-strong");
 }

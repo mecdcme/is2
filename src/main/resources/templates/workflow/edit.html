@@ -109,10 +109,13 @@
                                 <div class="card">
                                     <div class="card-header header-tags">
                                         <span id="header-variabili" href="javascript:void(0)" onclick="javascript:showPanel('variabili');" title="Variabili">
-                                            <span class="header-strong">Variabili</span>
+                                            <span  th:text="#{process.variables}"  class="header-strong">Variabili</span>
                                         </span>
                                         <span id="header-parametri" href="javascript:void(0)" onclick="javascript:showPanel('parametri');" title="Parametri">
-                                            <span>Parametri</span>
+                                            <span th:text="#{process.parameters}" >Parametri</span>
+                                        </span>
+                                          <span th:if="${(session.sessioneBean.ruleset != null)}" id="header-ruleset" href="javascript:void(0)" onclick="javascript:showPanel('ruleset');" title="Ruleset">
+                                            <span th:text="#{process.ruleset}">Ruleset</span>
                                         </span>
                                         <span id="header-execution" href="javascript:void(0)" onclick="javascript:showPanel('execution');" title="Runtime">
                                             <span>Runtime</span>
@@ -161,6 +164,53 @@
                                     </div>
                                     <div class="card-body" id="card-parametri" style="display: none">
                                         <table id="parametriTabList" class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 2%"><span>#</span></th>
+                                                    <th><span>Nome Parametro</span></th>
+                                                    <th><span>Valore</span></th>
+                                                    <th><span>Ruolo</span></th>
+                                                    <th><span>I/O</span></th>
+                                                    <th style="width: 1%"></th>
+                                                    <th style="width: 1%"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="paramInstance,stats: ${listaParametriAll}" th:unless="${(listaParametriAll == null) or (listaParametriAll.size() == 0) }">
+                                                    <td><span th:text="${stats.index+1}"></span></td>
+                                                    <td th:text="${paramInstance.nome}"></td>
+                                                    <th:block th:if="${stepParamMap.get(paramInstance.nome)}" th:with="stepP=${stepParamMap.get(paramInstance.nome)}">
+                                                        <td><span th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepP.workset.paramValue)}"></span></td>
+                                                        <td th:text="${stepP.appRole.descr}"></td>
+                                                        <td th:text="${stepP.tipoCampo.nome}"></td>
+                                                        <td>
+                                                            <a href="javascript:void(0);" title="Modifica parametro"
+                                                               th:attr="data-id-elab=${elaborazione.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-id-workset=${stepP.workset.id},data-name-workset=${stepP.workset.nome},data-value-param=${stepP.workset.paramValue},onclick='javascript:openDlgModParametriWorkset(this);'">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </a>
+                                                        </td>
+                                                        <td><a href="javascript:void(0);" title="Elimina parametro"
+                                                               th:attr="data-id-elab=${elaborazione.id},data-id-param=${stepP.id},data-name-param=${stepP.workset.nome},onclick='javascript:mostraDialogEliminaParametro(this);'">
+                                                                <i class="fa fa-trash-o"></i>
+                                                            </a>
+                                                        </td>
+                                                    </th:block>
+                                                    <th:block th:unless="${stepParamMap.get(paramInstance.nome)}">
+                                                        <td colspan="3">&nbsp;</td>
+                                                        <td colspan="2">
+                                                            <a href="javascript:void(0);" title="Modifica parametro"
+                                                                th:attr="data-role-id=${paramInstance.appRole.id},data-param-id=${paramInstance.id},data-param-name=${paramInstance.nome},onclick='javascript:openAddParameter(this);'">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </a>
+                                                        </td>
+                                                    </th:block>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <input type="hidden" id="idparam" name="idparam" value="" />
+                                    </div>
+                                     <div class="card-body" id="card-ruleset" style="display: none">
+                                        <table id="rulesetTabList" class="table table-hover">
                                             <thead>
                                                 <tr>
                                                     <th style="width: 2%"><span>#</span></th>
