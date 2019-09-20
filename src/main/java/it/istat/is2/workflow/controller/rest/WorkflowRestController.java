@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.istat.is2.app.bean.AssociazioneVarRoleBean;
+import it.istat.is2.app.bean.Ruolo;
+import it.istat.is2.app.bean.Variable;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.workflow.domain.BusinessProcess;
@@ -179,11 +182,17 @@ public class WorkflowRestController {
     }
 
     @PostMapping(value = "/associaVariabiliRuolo")
+    @Transactional
    	public void associaVariabiliRuolo(HttpServletResponse response, Model model, @RequestBody AssociazioneVarRoleBean[] associazioneVarRoleBean) throws IOException {
    		Elaborazione elaborazione = workflowService.findElaborazione(associazioneVarRoleBean[0].getIdElaborazione());
-   		workflowService.creaAssociazionVarRole(associazioneVarRoleBean, elaborazione);
+   		for(AssociazioneVarRoleBean varRoleBean : associazioneVarRoleBean) {
+   			Ruolo ruolo = varRoleBean.getRuolo();
+   			for(Variable variable : ruolo.getVariables()) {
+   	   			workflowService.creaAssociazionVarRole(elaborazione,  ruolo, variable);
+   	   		}
+   		}
    		model.addAttribute("elaborazione", elaborazione);
-   		notificationService.addInfoMessage("L'associazione è stata aggiunta");
+   		notificationService.addInfoMessage("Associazione variabile-ruolo completata");
    	}
 
 }

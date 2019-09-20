@@ -54,25 +54,6 @@
                 });
             });
             
-            $( function() {
-                $( "#selectable" ).selectable({
-                	stop: function() {
-                    var result = $( "#select-result" ).empty();
-                    variablesArr = new Array();
-                    $( ".ui-selected", this ).each(function() {
-                    	var currSel = $(this).attr("value");
-                    	console.log("currSel",currSel);
-                    	tmpArr = currSel.split('~');
-                    	variablesArr.push({'idVar':tmpArr[0],'name':tmpArr[1],'labelTab':tmpArr[2]});
-                    	console.log("variablesArr: ",variablesArr);
-                    });
-                    if( $("#roleSelectedId").val() != null && $("#roleSelectedId").val() !== '') {
-                    	$("#btn_dlg_assoc").removeClass('disabled');
-                        $("#btn_dlg_assoc").attr("disabled", false);
-                    }
-                  }
-                });
-              } );
         </script>
 		<link th:href="@{/css/batch/batch.css}" rel="stylesheet"/>
         <link th:href="@{/css/alpaca/alpaca.min.css}" rel="stylesheet" />
@@ -146,7 +127,7 @@
                                             <span id="associazione_vars"></span>
                                         </form>
 
-                                        <table id="worksetTabListq" class="table table-hover">
+                                        <table id="worksetTabList" class="table table-hover">
                                             <thead>
                                                 <tr>
                                                     <th style="width: 2%"><span>#</span></th>
@@ -345,7 +326,7 @@
                                     <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-lg-6">
-                                                <fieldset class="well" style="height: 250px; overflow-y: auto;">
+                                                <fieldset class="well" style="height: 397px; overflow-y: auto;">
                                                     <legend class="well-legend"> Variabili Dataset</legend>
                                                     <input type="hidden" id="varSelectedName" />
                                                     <input type="hidden" id="varSelectedId" /> 
@@ -365,7 +346,7 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <fieldset class="well"
-                                                          style="height: 250px; overflow-y: auto;">
+                                                          style="height: 397px; overflow-y: auto;">
                                                     <legend class="well-legend"> Ruoli </legend>
                                                     <input type="hidden" id="roleSelectedId" /> <input
                                                         type="hidden" id="roleSelectedName" />
