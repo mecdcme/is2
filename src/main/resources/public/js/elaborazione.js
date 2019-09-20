@@ -46,7 +46,6 @@ $(document).ready(function () {
         dom: "<'row'<'col-sm-5'B><'col-sm-7'f>>"
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        scrollX: true,
         paging: false,
         ordering: false,
         buttons: [{
@@ -703,7 +702,14 @@ function hidePanels(){
 }
 
 $( function() {
-    $( "#selectable" ).selectable({
+	
+	$(".ui-widget-content").click( function() {
+	    $(this).toggleClass("ui-selected");
+	});
+	
+	  $("#selectable").bind("mousedown", function(e) {
+          e.metaKey = true;
+      }).selectable({
     	stop: function() {
             var result = $( "#select-result" ).empty();
             variablesArr = new Array();

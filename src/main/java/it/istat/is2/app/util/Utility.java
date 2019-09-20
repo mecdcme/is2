@@ -46,7 +46,6 @@ import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-  
 
 import it.istat.is2.app.bean.InputFormBean;
 import it.istat.is2.workflow.domain.BusinessProcess;
@@ -56,8 +55,7 @@ import it.istat.is2.workflow.domain.SxTipoVar;
 
 public class Utility {
 
-	
-   public static String printJsonToHtml(String jsonString)  {
+	public static String printJsonToHtml(String jsonString)  {
 		StringBuffer ret=new StringBuffer();
 		JSONParser jSONParser;
 		Object jsonObject;
@@ -66,8 +64,8 @@ public class Utility {
 			jsonObject=	jSONParser.parse();
 			if(jsonObject instanceof JSONObject)
 		 		ret.append(parseJson((JSONObject)jsonObject,""));
-			else if(jsonObject instanceof JSONArray)
-		 		ret.append(getArray(jsonObject,""));
+			else if(jsonObject instanceof List)
+		 		ret.append(parseList((List)jsonObject,""));
 			else ret.append(jsonString);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -80,48 +78,96 @@ public class Utility {
 
 		return ret.toString();
 	}
-	public static String getArray(Object object2,String ret) throws JSONException {
+
+	public static String parseList(List list,String ret) throws JSONException {
 		 
-        JSONArray jsonArr = (JSONArray) object2;
+		
+		for (Object object : list) {
+			if(object instanceof List)
+				ret =parseList((List)object,ret);
+			else if(object instanceof Map)
+		 		ret=parseMap((Map)object,ret);
+			else	 
+		 		ret+=object.toString();
+		}
 
-        for (int k = 0; k < jsonArr.length(); k++) {
-     
-            if (jsonArr.get(k) instanceof JSONObject) {
-                   	ret=     parseJson((JSONObject) jsonArr.get(k),ret);
-            } else {
-            	ret+=  jsonArr.get(k);
-           	 
-            }
-    
-        }
-        
         return ret;
     }
 
-    public static String parseJson(JSONObject jsonObject,String ret) throws JSONException  {
-    
-        Iterator<String> iterator =  jsonObject.keys();
-        int len=jsonObject.length();
-        int index=0;
-        while (iterator.hasNext()) {
-      	String obj = iterator.next();
-             if (jsonObject.get(obj) instanceof JSONArray) {
-            	 ret+="<ul>";
-                 ret+=obj;
-               	 ret= getArray(jsonObject.get(obj),ret);
-                 ret+="</ul>";
-           } else {
-        	  if(index==0)  ret+="<li>";
-        	     ret+="<i>";ret+=obj; ret+="</i>:&nbsp;";
-            	 ret+= jsonObject.get(obj);
-            	 ret+="&nbsp;&nbsp;";
-            	  if(index==len-1)  ret+="</li>"; 
-            }
- index++;
-        }
-        return ret;
-    }
-  
+	public static String parseMap(Map jsonObject, String ret) throws JSONException {
+
+		Iterator<String> iterator = jsonObject.keySet().iterator();
+		int len = jsonObject.keySet().size();
+		int index = 0;
+		while (iterator.hasNext()) {
+			String obj = iterator.next();
+			if(jsonObject instanceof List) {
+				ret += "<ul>";
+				ret += obj;
+				ret =parseList((List)jsonObject.get(obj),ret);
+				ret += "</ul>";
+			} else {
+				if (index == 0)
+					ret += "<li>";
+				ret += "<i>";
+				ret += obj;
+				ret += "</i>:&nbsp;";
+				ret += jsonObject.get(obj);
+				ret += "&nbsp;&nbsp;";
+				if (index == len - 1)
+					ret += "</li>";
+			}
+			index++;
+		}
+		return ret;
+	}
+
+	public static String getArray(Object object2, String ret) throws JSONException {
+
+		JSONArray jsonArr = (JSONArray) object2;
+
+		for (int k = 0; k < jsonArr.length(); k++) {
+
+			if (jsonArr.get(k) instanceof JSONObject) {
+				ret = parseJson((JSONObject) jsonArr.get(k), ret);
+			} else {
+				ret += jsonArr.get(k);
+
+			}
+
+		}
+
+		return ret;
+	}
+
+	public static String parseJson(JSONObject jsonObject, String ret) throws JSONException {
+
+		Iterator<String> iterator = jsonObject.keys();
+		int len = jsonObject.length();
+		int index = 0;
+		while (iterator.hasNext()) {
+			String obj = iterator.next();
+			if (jsonObject.get(obj) instanceof JSONArray) {
+				ret += "<ul>";
+				ret += obj;
+				ret = getArray(jsonObject.get(obj), ret);
+				ret += "</ul>";
+			} else {
+				if (index == 0)
+					ret += "<li>";
+				ret += "<i>";
+				ret += obj;
+				ret += "</i>:&nbsp;";
+				ret += jsonObject.get(obj);
+				ret += "&nbsp;&nbsp;";
+				if (index == len - 1)
+					ret += "</li>";
+			}
+			index++;
+		}
+		return ret;
+	}
+
 	public static String getLocalDate() {
 		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"), Locale.ITALY);
 		Date today = calendar.getTime();
@@ -415,13 +461,12 @@ public class Utility {
 				StepVariable stepVariable = iterator.next();
 
 				if (stepVariable.getWorkset().getSxTipoVar().getId().equals(sxTipoVar.getId())) {
-					if(sxTipoVar.getId().equals(IS2Const.WORKSET_TIPO_PARAMETRO))
-					{
-						ArrayList<String> paramList=new ArrayList<>();
+					if (sxTipoVar.getId().equals(IS2Const.WORKSET_TIPO_PARAMETRO)) {
+						ArrayList<String> paramList = new ArrayList<>();
 						paramList.add(stepVariable.getWorkset().getParamValue());
-						ret.put(nomeW,paramList);
-					}
-					else 	ret.put(nomeW, (ArrayList<String>) stepVariable.getWorkset().getValori());
+						ret.put(nomeW, paramList);
+					} else
+						ret.put(nomeW, (ArrayList<String>) stepVariable.getWorkset().getValori());
 				}
 			}
 		}
@@ -447,7 +492,7 @@ public class Utility {
 
 		HashMap<String, ArrayList<StepVariable>> ret = new HashMap<>();
 		for (StepVariable stepVariable : dataList) {
-		System.out.println(stepVariable.getId());
+			System.out.println(stepVariable.getId());
 			ArrayList<StepVariable> stepList = ret.get(stepVariable.getWorkset().getNome());
 			if (stepList == null)
 				stepList = new ArrayList<>();
@@ -542,15 +587,16 @@ public class Utility {
 		return value;
 	}
 
-	public static ArrayList<String> convertToArrayListStringFieldOfObjects(List<?> values,Class<?> classObject,String fieldName)  {
-		ArrayList<String> ret =new ArrayList<String>();
+	public static ArrayList<String> convertToArrayListStringFieldOfObjects(List<?> values, Class<?> classObject,
+			String fieldName) {
+		ArrayList<String> ret = new ArrayList<String>();
 		Field field;
 		try {
 			field = classObject.getDeclaredField(fieldName);
 			for (Object object : values) {
-				 field.setAccessible(true);
-				 Object value = field.get(object);
-				 ret.add(value.toString());
+				field.setAccessible(true);
+				Object value = field.get(object);
+				ret.add(value.toString());
 			}
 		} catch (NoSuchFieldException e) {
 			// TODO Auto-generated catch block
@@ -564,9 +610,9 @@ public class Utility {
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}    
-		
-			return ret;
+		}
+
+		return ret;
 	}
 
 	/**
@@ -636,17 +682,16 @@ public class Utility {
 				StepVariable stepVariable = iterator.next();
 
 				if (stepVariable.getWorkset().getSxTipoVar().getId().equals(sxTipoVar.getId())) {
-					if(sxTipoVar.getId().equals(IS2Const.WORKSET_TIPO_PARAMETRO))
-					{
-					
-						ret.put(nomeW,stepVariable.getWorkset().getParamValue());
+					if (sxTipoVar.getId().equals(IS2Const.WORKSET_TIPO_PARAMETRO)) {
+
+						ret.put(nomeW, stepVariable.getWorkset().getParamValue());
 					}
-					
+
 				}
 			}
 		}
 		return ret;
-		 
+
 	}
 
 }

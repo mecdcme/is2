@@ -79,7 +79,7 @@ function pollJobs() {
 					$('#esegui_' + this.idProcesso).removeClass("not-active");
 					$('#' + this.idProcesso).addClass("success");
 					console.log(this.idProcesso+'-  '+old_status+' '+this.status)
-					if(old_status=='STARTED' && old_status!=this.status) window.location.reload();
+					if( old_status.startsWith("START")  && old_status!=this.status) window.location.reload();
 				} 
 				else {
 					$('#' + this.idProcesso).addClass("waiting");

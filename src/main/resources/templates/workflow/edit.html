@@ -127,7 +127,7 @@
                                             <span id="associazione_vars"></span>
                                         </form>
 
-                                        <table id="worksetTabList" class="table table-hover">
+                                        <table id="worksetTabList" class="table table-hover" style="width: 100%">
                                             <thead>
                                                 <tr>
                                                     <th style="width: 2%"><span>#</span></th>
@@ -170,8 +170,6 @@
                                                     <th style="width: 2%"><span>#</span></th>
                                                     <th><span>Nome Parametro</span></th>
                                                     <th><span>Valore</span></th>
-                                                    <th><span>Ruolo</span></th>
-                                                    <th><span>I/O</span></th>
                                                     <th style="width: 1%"></th>
                                                     <th style="width: 1%"></th>
                                                 </tr>
@@ -182,8 +180,6 @@
                                                     <td th:text="${paramInstance.nome}"></td>
                                                     <th:block th:if="${stepParamMap.get(paramInstance.nome)}" th:with="stepP=${stepParamMap.get(paramInstance.nome)}">
                                                         <td><span th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepP.workset.paramValue)}"></span></td>
-                                                        <td th:text="${stepP.appRole.descr}"></td>
-                                                        <td th:text="${stepP.tipoCampo.nome}"></td>
                                                         <td>
                                                             <a href="javascript:void(0);" title="Modifica parametro"
                                                                th:attr="data-id-elab=${elaborazione.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-id-workset=${stepP.workset.id},data-name-workset=${stepP.workset.nome},data-value-param=${stepP.workset.paramValue},onclick='javascript:openDlgModParametriWorkset(this);'">
@@ -197,13 +193,14 @@
                                                         </td>
                                                     </th:block>
                                                     <th:block th:unless="${stepParamMap.get(paramInstance.nome)}">
-                                                        <td colspan="3">&nbsp;</td>
-                                                        <td colspan="2">
+                                                        <td>&nbsp;</td>
+                                                        <td>
                                                             <a href="javascript:void(0);" title="Modifica parametro"
                                                                 th:attr="data-role-id=${paramInstance.appRole.id},data-param-id=${paramInstance.id},data-param-name=${paramInstance.nome},onclick='javascript:openAddParameter(this);'">
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
                                                         </td>
+                                                             <td >&nbsp;</td>
                                                     </th:block>
                                                 </tr>
                                             </tbody>
@@ -240,13 +237,17 @@
                                                         </td>
                                                     </th:block>
                                                     <th:block th:unless="${stepVariablesRulesetMap.get(rulesetRole.nome)}">
-                                                        <td colspan="3">&nbsp;</td>
-                                                        <td colspan="2">
+                                                        <td>&nbsp;</td>
+                                                         <td>&nbsp;</td>
+                                                          <td>&nbsp;</td>
+                                                           <td>&nbsp;</td>
+                                                        <td >
                                                             <a href="javascript:void(0);" title="Set Resulset"
                                                                 th:attr="data-role-id=${rulesetRole.id},data-param-name=${rulesetRole.nome},onclick='javascript:openSetResulset(this);'">
                                                                 <i class="fa fa-pencil">Add</i>
                                                             </a>
                                                         </td>
+                                                         <td>&nbsp;</td>
                                                     </th:block>
 
                                                 </tr>
@@ -373,15 +374,15 @@
                         <button type="button" class="btn btn-light" data-dismiss="modal">
                             <span th:text="#{associazione.dialog.button.close}">Annulla</span>
                         </button>
-                        <span th:if="${datasetfiles.size()>0}">
-                            <button id="btn_dlg_assoc" type="button"
-                                    class="btn btn-success disabled"
-                                    onclick="associaVar(' + ${datasetfiles} + ')">Associa</button>
-                        </span>
-                        <span th:if="${datasetfiles.size()>0}">
+                         <span th:if="${datasetfiles.size()>0}">
                             <button id="btn_dlg_ins" type="button"
                                     class="btn btn-primary hide" onclick="associaVarToRole()"
                                     data-dismiss="modal">Inserisci</button>
+                        </span>
+                         <span th:if="${datasetfiles.size()>0}">
+                            <button id="btn_dlg_assoc" type="button"
+                                    class="btn btn-success disabled"
+                                    onclick="associaVar(' + ${datasetfiles} + ')">Associa</button>
                         </span>
                     </div>
                 </div>
