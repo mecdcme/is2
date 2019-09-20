@@ -153,7 +153,7 @@ table.dataTable thead>tr>th{
 }
 
 /* Worksession */
-#header-variabili, #header-parametri{
+#header-variabili, #header-parametri, #header-ruleset{
     font-weight: normal;
     border-right: 1px solid #c8ced3;
     padding-right: 7px;
@@ -166,12 +166,19 @@ table.dataTable thead>tr>th{
     padding-right: 7px;
 }
 
+#header-ruleset{
+    font-weight: normal;
+    border-right: 1px solid #c8ced3;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
 #header-execution{
     font-weight: normal;
     padding-left: 7px;
 }
 
-#header-variabili:hover, #header-parametri:hover, #header-execution:hover{
+#header-variabili:hover, #header-parametri:hover, #header-execution:hover, #header-ruleset:hover{
     text-decoration: none;
     cursor: pointer;
 }
@@ -180,7 +187,7 @@ table.dataTable thead>tr>th{
     font-weight: bold !important;
 }
 
-/*Process page*/
+/*Process page */
 #processiList th, #processiList td{
     vertical-align: middle;
 }

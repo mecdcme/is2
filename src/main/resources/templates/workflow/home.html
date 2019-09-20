@@ -145,6 +145,20 @@
                                                                                 </small>
                                                                             </div>
                                                                         </li>
+                                                                            <li class="nav-item dropdown list-inline-item" th:if="${not  #lists.isEmpty(rulesetMissing.get(bProcess.id))}">
+                                                                            <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                                <span>Ruleset</span>
+                                                                                <span class="badge badge-pill badge-danger" th:text="${rulesetMissing.get(bProcess.id).size()}"></span>
+                                                                            </a>
+                                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                                <div class="dropdown-header text-center">
+                                                                                    <strong>Ruleset missing</strong>
+                                                                                </div>
+                                                                                <small>
+                                                                                    <span class="dropdown-item" th:each="item : ${rulesetMissing.get(bProcess.id)}" th:text="${item}"></span>
+                                                                                </small>
+                                                                            </div>
+                                                                        </li>
                                                                     </ul>
                                                                 </li>
                                                             </ul>

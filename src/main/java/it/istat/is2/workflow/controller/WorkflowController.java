@@ -25,7 +25,6 @@ package it.istat.is2.workflow.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -60,13 +59,16 @@ import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
+import it.istat.is2.rule.service.RuleService;
 import it.istat.is2.workflow.domain.Elaborazione;
+import it.istat.is2.workflow.domain.Ruleset;
 import it.istat.is2.workflow.domain.TipoCampo;
 import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.domain.BusinessProcess;
 import it.istat.is2.workflow.domain.BusinessStep;
 import it.istat.is2.workflow.domain.StepInstanceParameter;
 import it.istat.is2.workflow.domain.AppRole;
+import it.istat.is2.workflow.domain.ArtifactBFunction;
 import it.istat.is2.workflow.domain.StepVariable;
 import it.istat.is2.workflow.domain.SxTipoVar;
 import it.istat.is2.workflow.domain.Workset;
@@ -93,6 +95,8 @@ public class WorkflowController {
 	private DatasetService datasetService;
 	@Autowired
 	private StepVariableService stepVariableService;
+	@Autowired
+	private RuleService ruleService;
 	@Autowired
 	private LogService logService;
 
@@ -139,9 +143,13 @@ public class WorkflowController {
 				.findMissingAppRoleySubProcessAndTipoVar(elaborazione, new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
 		HashMap<Long, List<String>> variablesMissing = workflowService
 				.findMissingAppRoleySubProcessAndTipoVar(elaborazione, new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+		
+		HashMap<Long, List<String>> rulesetMissing = workflowService
+				.findMissingAppRoleySubProcessAndTipoVar(elaborazione, new SxTipoVar(IS2Const.WORKSET_TIPO_RULESET));
 
 		model.addAttribute("paramsMissing", paramsMissing);
 		model.addAttribute("variablesMissing", variablesMissing);
+		model.addAttribute("rulesetMissing", rulesetMissing);
 
 		return "workflow/home";
 	}
@@ -233,9 +241,9 @@ public class WorkflowController {
 		BusinessFunction businessFunction = elaborazione.getSessioneLavoro().getBusinessFunction();
 
 		// Carica i Ruoli di input
-		List<AppRole> listaRuoliInput = workflowService.findRuoliByProcess(businessProcessParent, 0);
+		List<AppRole> listaRuoliInput = workflowService.findRuoliByProcess(businessProcessParent, 0, new SxTipoVar (IS2Const.WORKSET_TIPO_VARIABILE));
 		// Carica i Ruoli di input e output
-		List<AppRole> listaRuoliInOut = workflowService.findRuoliByProcess(businessProcessParent, 1);
+		List<AppRole> listaRuoliInOut = workflowService.findRuoliByProcess(businessProcessParent, 1,new SxTipoVar (IS2Const.WORKSET_TIPO_VARIABILE));
 
 		List<StepInstanceParameter> paramsNotAssignedList = new ArrayList<>();
 		List<StepVariable> sVParamsAssignedList = workflowService.getStepVariablesParametri(idElaborazione);
@@ -263,9 +271,26 @@ public class WorkflowController {
 
 			}
 		}
+     	List<BusinessProcess> listaBp = elaborazione.getBusinessProcess().getBusinessSubProcesses();
 
-		List<BusinessProcess> listaBp = elaborazione.getBusinessProcess().getBusinessSubProcesses();
+     	if( businessFunction.getSxArtifacts().contains(new ArtifactBFunction(IS2Const.ARTIFACT_RULESET))) {
+     		List<StepVariable> stepVariablesRuleset = workflowService.getStepVariablesRuleset(idElaborazione);
+     		Map<String, StepVariable> stepVariablesRulesetMap=new HashMap<>();
+     		stepVariablesRuleset.forEach(sxstepVariable -> {
+    		 	stepVariablesRulesetMap.put(sxstepVariable.getAppRole().getNome(), sxstepVariable);
+    		});
+    	   	List<Ruleset> rulesetList=ruleService.findRulesetBySessioneLavoro(elaborazione.getSessioneLavoro());
+    		// Load Ruleset Role
+    		List<AppRole> rulesetRoleList = workflowService.findRuoliByProcess(businessProcessParent, 0, new SxTipoVar (IS2Const.WORKSET_TIPO_RULESET));
 
+    	   	model.addAttribute("stepVariablesRulesetMap", stepVariablesRulesetMap);
+    	   	model.addAttribute("rulesetList", rulesetList);
+    	  	model.addAttribute("rulesetRoleList", rulesetRoleList);
+     	}
+     	
+     	
+     	
+     	
 		model.addAttribute("bProcess", listaBp);
 		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
 		model.addAttribute("stepVList", listaSV);
@@ -482,8 +507,25 @@ public class WorkflowController {
 		notificationService.addInfoMessage("Parametro modificato");
 
 		model.addAttribute("elaborazione", elaborazione);
-		ra.addFlashAttribute("showTabParam", true);
+		ra.addFlashAttribute("showTabParam", "parametri");
 		return "redirect:/ws/editworkingset/" + elaborazione.getId();
 	}
-
+	
+	@RequestMapping(value = "/setresulset", method = RequestMethod.POST)
+	public String setResulset(HttpSession session, Model model, RedirectAttributes ra,
+			@RequestParam("idelaborazione") Long idelaborazione, @RequestParam("idRole") Integer idRole,
+			@RequestParam("idResultSet") Integer idResultset) {
+		
+		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
+		try {
+			workflowService.setResultset(elaborazione, idRole,idResultset);
+			notificationService.addInfoMessage(messages.getMessage("setresulset.ok", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			notificationService.addErrorMessage("Error: " + e.getMessage());
+		}
+	 
+		model.addAttribute("elaborazione", elaborazione);
+		ra.addFlashAttribute("showTab", "resultset");
+		return "redirect:/ws/editworkingset/" + elaborazione.getId();
+	}
 }

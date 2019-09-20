@@ -59,10 +59,7 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a class="btn" title="Show log" href="javascript:void(0)" onclick="javascript:showLog();">
-                                <i class="fa fa-clone"></i>&nbsp;<span>Log</span>
-                            </a>
-                            <a class="btn" title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                            <a title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>

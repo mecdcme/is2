@@ -52,10 +52,7 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a class="btn" title="Show log" href="javascript:void(0)" onclick="javascript:showLog();">
-                                <i class="fa fa-clone"></i>&nbsp;<span>Log</span>
-                            </a>
-                            <a class="btn" title="Chiudi sessione" th:href="@{'/'}">
+                            <a class="breadcrumb-last-item" title="Chiudi sessione" th:href="@{'/'}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -163,7 +160,7 @@
         </div>
 
         <!-- Delete session modal -->
-        <div class="modal fade" id="modalCancellaSessione" role="dialog">
+        <div class="modal fade" id="modalCancellaSessione" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">

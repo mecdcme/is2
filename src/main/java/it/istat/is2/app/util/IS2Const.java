@@ -32,6 +32,7 @@ public interface IS2Const {
     public static final int WORKSET_TIPO_VARIABILE = 1;
     public static final int WORKSET_TIPO_PARAMETRO = 2;
     public static final int WORKSET_TIPO_MODELLO = 3;
+    public static final int WORKSET_TIPO_RULESET = 4;
     public static final int CODICE_APP_SERVICE_R = 100;
     public static final int VARIABILE_TIPO_INPUT = 1;
     public static final int VARIABILE_TIPO_OUTPUT = 2;
@@ -53,4 +54,5 @@ public interface IS2Const {
 	public static final String WF_OUTPUT_ROLES_GROUP = "rolesgroup.output";
 	public static final String ARTIFACT_DATASET = "dataset";
 	public static final String ARTIFACT_RULESET = "ruleset";
+	public static final String TEXT_RULE = "RULE";
 }

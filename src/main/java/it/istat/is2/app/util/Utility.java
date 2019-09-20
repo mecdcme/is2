@@ -25,6 +25,7 @@ package it.istat.is2.app.util;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,12 +41,12 @@ import java.util.TimeZone;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;  
+  
 
 import it.istat.is2.app.bean.InputFormBean;
 import it.istat.is2.workflow.domain.BusinessProcess;
@@ -58,12 +59,20 @@ public class Utility {
 	
    public static String printJsonToHtml(String jsonString)  {
 		StringBuffer ret=new StringBuffer();
-		
-		JSONObject jsonObject;
+		JSONParser jSONParser;
+		Object jsonObject;
 		try {
-			jsonObject = new JSONObject(jsonString);
-		ret.append(parseJson(jsonObject,""));
+			jSONParser=new JSONParser(jsonString);
+			jsonObject=	jSONParser.parse();
+			if(jsonObject instanceof JSONObject)
+		 		ret.append(parseJson((JSONObject)jsonObject,""));
+			else if(jsonObject instanceof JSONArray)
+		 		ret.append(getArray(jsonObject,""));
+			else ret.append(jsonString);
 		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			ret.append(jsonString);
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			ret.append(jsonString);
 		}
@@ -402,8 +411,8 @@ public class Utility {
 		for (Map.Entry<String, ArrayList<StepVariable>> entry : dataMap.entrySet()) {
 			String nomeW = entry.getKey();
 			ArrayList<StepVariable> stepVariables = entry.getValue();
-			for (Iterator iterator = stepVariables.iterator(); iterator.hasNext();) {
-				StepVariable stepVariable = (StepVariable) iterator.next();
+			for (Iterator<StepVariable> iterator = stepVariables.iterator(); iterator.hasNext();) {
+				StepVariable stepVariable = iterator.next();
 
 				if (stepVariable.getWorkset().getSxTipoVar().getId().equals(sxTipoVar.getId())) {
 					if(sxTipoVar.getId().equals(IS2Const.WORKSET_TIPO_PARAMETRO))
@@ -496,7 +505,7 @@ public class Utility {
 		try {
 			String wi = "";
 			for (Iterator<String> iterator = dataMap.keySet().iterator(); iterator.hasNext();) {
-				wi = (String) iterator.next();
+				wi = iterator.next();
 				header.add(wi);
 			}
 
@@ -507,7 +516,7 @@ public class Utility {
 			for (int i = 0; i < size; i++) {
 				List<String> data = new ArrayList<>();
 				for (Iterator<String> iterator = dataMap.keySet().iterator(); iterator.hasNext();) {
-					wi = (String) iterator.next();
+					wi = iterator.next();
 					data.add(dataMap.get(wi).get(i));
 
 				}
@@ -523,7 +532,7 @@ public class Utility {
 		}
 	}
 
-	public static String convertToJsonStringArray(ArrayList<String> values) throws JSONException {
+	public static String string(ArrayList<String> values) throws JSONException {
 		String value = "";
 		JSONArray allDataArray = new JSONArray();
 		for (int index = 0; index < values.size(); index++) {
@@ -531,6 +540,33 @@ public class Utility {
 		}
 		value = allDataArray.toString();
 		return value;
+	}
+
+	public static ArrayList<String> convertToArrayListStringFieldOfObjects(List<?> values,Class<?> classObject,String fieldName)  {
+		ArrayList<String> ret =new ArrayList<String>();
+		Field field;
+		try {
+			field = classObject.getDeclaredField(fieldName);
+			for (Object object : values) {
+				 field.setAccessible(true);
+				 Object value = field.get(object);
+				 ret.add(value.toString());
+			}
+		} catch (NoSuchFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}    
+		
+			return ret;
 	}
 
 	/**
@@ -547,8 +583,8 @@ public class Utility {
 		for (Map.Entry<String, ArrayList<StepVariable>> entry : dataMap.entrySet()) {
 			String nomeW = entry.getKey();
 			ArrayList<StepVariable> stepVariables = entry.getValue();
-			for (Iterator iterator = stepVariables.iterator(); iterator.hasNext();) {
-				StepVariable stepVariable = (StepVariable) iterator.next();
+			for (Iterator<StepVariable> iterator = stepVariables.iterator(); iterator.hasNext();) {
+				StepVariable stepVariable = iterator.next();
 
 				String codeRole = stepVariable.getAppRole().getCod();
 				Integer idTipoVar = stepVariable.getWorkset().getSxTipoVar().getId();
@@ -572,8 +608,8 @@ public class Utility {
 		StepVariable ret = null;
 		ArrayList<StepVariable> stepVariables = dataMap.get(nomeW);
 		if (stepVariables != null) {
-			for (Iterator iterator = stepVariables.iterator(); iterator.hasNext();) {
-				StepVariable stepVariable = (StepVariable) iterator.next();
+			for (Iterator<StepVariable> iterator = stepVariables.iterator(); iterator.hasNext();) {
+				StepVariable stepVariable = iterator.next();
 				if (stepVariable.getAppRole().getCod().equals(appRole.getCod()))
 					ret = stepVariable;
 
@@ -596,8 +632,8 @@ public class Utility {
 		for (Map.Entry<String, ArrayList<StepVariable>> entry : dataMap.entrySet()) {
 			String nomeW = entry.getKey();
 			ArrayList<StepVariable> stepVariables = entry.getValue();
-			for (Iterator iterator = stepVariables.iterator(); iterator.hasNext();) {
-				StepVariable stepVariable = (StepVariable) iterator.next();
+			for (Iterator<StepVariable> iterator = stepVariables.iterator(); iterator.hasNext();) {
+				StepVariable stepVariable = iterator.next();
 
 				if (stepVariable.getWorkset().getSxTipoVar().getId().equals(sxTipoVar.getId())) {
 					if(sxTipoVar.getId().equals(IS2Const.WORKSET_TIPO_PARAMETRO))
