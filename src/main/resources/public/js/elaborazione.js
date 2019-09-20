@@ -162,33 +162,46 @@ function openAddParameter(identifier) {
 	$("#add-parametri-workset-modal").modal('show');
 }
 
+function openSetResulset(identifier) {
+	   var idParam=$(identifier).data('param-id');
+		var idRole=$(identifier).data('role-id');
+		var nameParameter=$(identifier).data('param-name');
+ 
+		$("#set-resulset").modal('show');
+	}
 
 function associaVar() {
-	 var varSelectedId = $("#varSelectedId").val();
-	 var varSelectedName = $("#varSelectedName").val();
-    var labelFile = $("#varLabelFile").val();
-    var roleSelectedName = $("#roleSelectedName").val();
+	var roleSelectedName = $("#roleSelectedName").val();
+	console.log("roleSelectedName",roleSelectedName);
     var roleSelectedId = $("#roleSelectedId").val();
-    var labelFileSet = labelFile;
-	 var idTab = "" + varSelectedId;
-    var li = $( tabTemplate.replace( /#\{href\}/g, "#" + idTab ).replace( /#\{label\}/g, labelFileSet + '-' + varSelectedName) );
-    tabs.find( ".ui-tabs-nav" ).append( li );
-  	 tabs.tabs( "refresh" );
-    tmpVarSel['#var_'+varSelectedId]  =  $('#var_'+varSelectedId).clone();
-  	$('#var_'+varSelectedId).remove();
+    console.log("roleSelectedId",roleSelectedId);
+    var idElab = $("#idelaborazione").val();
+    console.log("idElab",idElab);
   	$("#btn_dlg_ins").removeClass('hide');
   	$("#role_"+roleSelectedId).removeClass('active');
-  	$("#varSelectedId").val("");
-  	$("#roleSelectedId").val("");
-  	$('#btn_dlg_assoc').addClass('disabled');
-  	$('#btn_dlg_assoc').attr( "disabled","disabled");
-  	$("#tab-msg").addClass('hide');
-  	associazioneVarRoleBean.push({'idElaborazione':$("#idelaborazione").val(),'ruolo':{'idRole':roleSelectedId,'name':roleSelectedName,'variables':[{'idVar':varSelectedId,'name':varSelectedName}]}});
+	$("#roleSelectedId").val("");
+	$('#btn_dlg_assoc').addClass('disabled');
+	$('#btn_dlg_assoc').attr( "disabled","disabled");
+	$("#tab-msg").addClass('hide');
+	jQuery.each( variablesArr, function( i, obj ) {
+		  var idTab = obj['idVar'];
+		  console.log("idTab",idTab);
+		  var labelTab = obj['labelTab'];
+		  console.log("labelTab",labelTab);
+		  var li = $( tabTemplate.replace( /#\{href\}/g, "#" + idTab ).replace( /#\{label\}/g, labelTab) );
+		  console.log(li);
+		  tabs.find( ".ui-tabs-nav" ).append( li );
+		  tabs.tabs( "refresh" );
+		  tmpVarSel['#var_'+idTab]  =  $('#var_'+idTab).clone();
+		  $('#var_'+idTab).remove();
+		});
+  	associazioneVarRoleBean.push({'idElaborazione':idElab,'ruolo':{'idRole':roleSelectedId,'name':roleSelectedName,'variables':variablesArr}});
+  	console.log("associazioneVarRoleBean",associazioneVarRoleBean);
 }
        
  function removeSelVarFromTab(id){
-	tmpVarSel['#var_'+id].prependTo("#div_variabili_dataset");
-	$('#var_'+id).removeClass('active');
+	tmpVarSel['#var_'+id].prependTo("#selectable");
+	$('#var_'+id).removeClass('ui-selected');
 	delete tmpVarSel['#var_'+id];
 	delete associazioneVarRoleBean[id];
 	if(Object.entries(tmpVarSel).length === 0 && tmpVarSel.constructor === Object){
@@ -197,7 +210,6 @@ function associaVar() {
 	}
 	const index = associazioneVarRoleBean.findIndex(x => x.idVar === id);
 	if (index !== undefined) associazioneVarRoleBean.splice(index, 1);
-	console.log(JSON.stringify(associazioneVarRoleBean));
  }
  
  function associaVarToRole(){
@@ -320,7 +332,6 @@ function openDlgAddVariabileWorkset() {
 
 function openDlgAddParametriWorkset() {
  // controllaCampoParam();
-   
     $(".rolelist").removeClass('active');
     $(".varlist").removeClass('active');
     $("#varSelectedId").val('');
@@ -329,8 +340,7 @@ function openDlgAddParametriWorkset() {
     $("#roleSelectedName").val('Nessun ruolo selezionato');
     $("#add-parametri-workset-modal").modal('show');
     $("#select-param").change();
-    
-}
+ }
 
 
 function controllaCampoModParam() {
@@ -371,8 +381,8 @@ function setSelectedRole(nomeR, idR) {
     $("#role_" + idR).addClass('active');
     $("#roleSelectedId").val(idR);
     $("#roleSelectedName").val(nomeR);
-    if ($("#varSelectedId").val().length > 0 && $("#roleSelectedId").val().length > 0) {
-        $("#btn_dlg_assoc").removeClass('disabled');
+    if($('.ui-selected').length > 0 ){
+    	$("#btn_dlg_assoc").removeClass('disabled');
         $("#btn_dlg_assoc").attr("disabled", false);
     }
 }
@@ -573,6 +583,10 @@ function eseguiFunzioneUpdate() {
     $("#formUpdateAssociaRuolo").submit();
 }
 
+function setRuleSet() {
+    $("#formSetRuleset").submit();
+}
+
 function inserisciParams() {
 	var value =  JSON.stringify($('#add-param').alpaca().getValue());
 	
@@ -682,6 +696,8 @@ function hidePanels(){
     $("#header-variabili span").removeClass("header-strong");
     $("#card-parametri").hide();
     $("#header-parametri span").removeClass("header-strong");
+    $("#card-ruleset").hide();
+    $("#header-ruleset span").removeClass("header-strong");
     $("#card-execution").hide();
     $("#header-execution span").removeClass("header-strong");
 }
