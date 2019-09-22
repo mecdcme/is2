@@ -25,7 +25,6 @@
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
-        <script th:src="@{/js/table/datatables.min.js}"></script>
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
             var _variabili = [[${colonne.size()}]];
@@ -34,7 +33,8 @@
                 setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
         </script>
-        <script th:src="@{/js/datasetpreview.js}"></script>
+        <script th:src="@{/js/dataset/datasetpreview.js}"></script>
+        <script th:src="@{/js/table/datatables.min.js}"></script>
         <link th:href="@{/css/table/datatables.css}" rel="stylesheet" />
     </head>
     <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">

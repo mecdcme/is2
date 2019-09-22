@@ -40,7 +40,6 @@ $(document).ready(function () {
         lengthChange: true,
         pageLength: 20,
         
-        
         	buttons: [
                 {
                     text: 'Nuova regola',

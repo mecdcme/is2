@@ -25,7 +25,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
-        <script th:src="@{/js/sessioni.js}"></script>
+        <script th:src="@{/js/worksession/sessioni.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
                 setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
@@ -117,7 +117,7 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <table class="table table-condensed" th:if="${listaElaborazioni}" cellspacing="0">
+                                        <table class="table table-condensed" th:if="${listaElaborazioni}" cellspacing="0"  style="width:100%">
                                             <thead>
                                                 <tr th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
                                                     <th><span th:text="#{listasessioni.codice}">codice</span></th>
@@ -153,7 +153,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- row -->
                     </div>
                 </div>
             </main>
@@ -194,12 +193,6 @@
                                 </select>
                                 <span class="help-block"></span>
                             </div>
-                            <!--div class="form-group">
-                                <label class="control-label"> <span>Descrizione:</span></label>
-                                <span th:class="${'el_'+process.id+' els hide'} " th:each="process : ${processesList}">
-                                    <span th:text="${process.descr}"></span>
-                                </span>
-                            </div-->
                         </div>
                     </form>
                     <div class="modal-footer">
@@ -237,6 +230,5 @@
                 </div>
             </div>
         </div>
-        <!-- fine modal elimina -->
     </body>
 </html>

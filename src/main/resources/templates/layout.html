@@ -35,7 +35,7 @@
         <link rel="icon" th:href="@{/img/favicon.ico}" type="image/x-icon"/>
         <title>IS2 Workbench</title>
         <!-- Javascript -->
-        <script th:src="@{/js/jquery-3.1.1.min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/jquery/jquery-3.1.1.min.js}" type="text/javascript"></script>
         <script th:src="@{/js/popper/popper.min.js}" type="text/javascript"></script>
         <script th:src="@{/js/bootstrap.js}" type="text/javascript"></script>
         <script th:src="@{/js/coreui/perfect-scrollbar.min.js}" type="text/javascript"></script>
@@ -161,7 +161,7 @@
             <div class="sidebar" th:fragment="site-aside">
                 <nav class="sidebar-nav">
                     <ul class="nav">
-                        <li class="nav-item">
+                        <li class="nav-item" id="home">
                             <a class="nav-link" th:href="@{/}">
                                 <i class="nav-icon icon-home"></i> Home
                                 <span class="badge badge-primary">NEW</span>

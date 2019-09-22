@@ -81,12 +81,6 @@ public class DatasetController {
     @Autowired
     private LogService logService;
 
-    @RequestMapping("/loadInputFileSessione/{idsessione}")
-    public String carica(Model model, @PathVariable("idsessione") Long idsessione) {
-        model.addAttribute("idsessione", idsessione);
-        return "dataset/load_file";
-    }
-
     @RequestMapping("/viewDataset/{idfile}")
     public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Long idfile) {
 
@@ -126,7 +120,7 @@ public class DatasetController {
         model.addAttribute("variabili", variabiliSum);
         model.addAttribute("dfile", dfile);
 
-        return "dataset/edit";
+        return "dataset/metadata";
     }
 
     @GetMapping(value = "/sessione/mostradataset/{id}")
@@ -182,7 +176,7 @@ public class DatasetController {
         model.addAttribute("dfile", dfile);
         model.addAttribute("variabili", variabiliSum);
 
-        return "dataset/edit";
+        return "dataset/metadata";
     }
 
     @RequestMapping(value = "/loadInputData", method = RequestMethod.POST)

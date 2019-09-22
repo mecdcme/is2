@@ -26,14 +26,14 @@
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
         <script th:src="@{/js/papaParse/papaparse.min.js}"></script>
-        <script th:src="@{/js/fileinput.min.js}"></script>
-        <script th:src="@{/js/uploadruleset.js}"></script>
+        <script th:src="@{/js/fileinput/fileinput.min.js}"></script>
+        <script th:src="@{/js/ruleset/uploadruleset.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
                 setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
         </script>
-        <link rel="stylesheet" th:href="@{/css/fileinput.min.css}" />
+        <link th:href="@{/css/fileinput/fileinput.min.css}" rel="stylesheet" />
     </head>
     <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
         <header th:replace="layout :: site-header"></header>
@@ -139,11 +139,11 @@
                                                     <td style="width: 1%">
                                                         <a href="javascript:void(0)" title="Modifica ruleset" role="button" th:if="${ruleset.datasetFile}" 
                                                            th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',\'' + ${ruleset.descr} + '\', \'' + ${ruleset.datasetFile.id} +'\')'">
-                                                            <i class="fa fa-pencil"></i>
+                                                            <i class="fa fa-edit"></i>
                                                         </a>
                                                         <a href="javascript:void(0)" title="Modifica ruleset" role="button" th:unless="${ruleset.datasetFile}" 
                                                            th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',\'' + ${ruleset.descr} + '\', \'' + 'null' +'\')'">
-                                                            <i class="fa fa-pencil"></i>
+                                                            <i class="fa fa-edit"></i>
                                                         </a>
                                                     </td>
                                                     <td style="width: 1%">
@@ -346,7 +346,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            <i class="fa fa-pencil"></i> 
+                            <i class="fa fa-edit"></i> 
                             <span th:text="#{rules.update.ruleset.dialog.title}">Modifica ruleset</span>
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

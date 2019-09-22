@@ -25,7 +25,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
-        <script th:src="@{/js/sessioni.js}"></script>
+        <script th:src="@{/js/worksession/sessioni.js}"></script>
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
             $(document).ready(function () {
@@ -74,7 +74,7 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <table class="table table-condensed" th:if="${listasessioni}" cellspacing="0">
+                                        <table class="table table-condensed" th:if="${listasessioni}" cellspacing="0" style="width:100%">
                                             <thead>
                                                 <tr th:unless="${(listasessioni == null) or (listasessioni.size() == 0) }">
                                                     <th><span th:text="#{listasessioni.nome}"></span></th>
