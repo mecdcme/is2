@@ -39,22 +39,27 @@
             for (i = 0; i < _paramList.length; i++) {
                 _paramTemplateMap[_paramList[i].nome] = _paramList[i].jsonTemplate;
             }
-            var associazioneVarRoleBean = [];
-            var tmpVarSel = {};
-            var tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
             $(document).ready(function () {
                 setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
                 if (showTabParam) showPanel('parametri');
-                tabs = $("#tabs").tabs();
-                tabs.on("click", "span.ui-icon-close", function() {
-                    var panelId = $(this).closest("li").remove().attr("aria-controls");
-                    $("#" + panelId).remove();
-                    removeSelVarFromTab(panelId);
-                    tabs.tabs("refresh");
-                });
             });
             
+			var matchedVariables = [[${matchedVariables}]];
+
         </script>
+        <script type="text/x-handlebars-template" id="addItemsBtn">
+        {{#if options.hideAddItemsBtn}}
+  			<div class="alpaca-array-toolbar alpaca-array-toolbar-{{toolbarStyle}} btn-group" data-alpaca-array-toolbar-parent-field-id="{{parentFieldId}}" data-alpaca-array-toolbar-field-id="{{fieldId}}" data-alpaca-array-toolbar-item-index="{{itemIndex}}">
+    			{{#each actions}}
+    			<button class="alpaca-array-toolbar-action {{../view.styles.smallButton}}" data-alpaca-array-tollbar-action="{{action}}">
+            	{{#if this.iconClass}}
+            		<i class="{{this.iconClass}}"></i>
+            	{{/if}}
+            	{{#if label}}{{{label}}}{{/if}}
+        	</button> {{/each}}
+  			</div>
+  		{{/if}}
+		</script>
         <link th:href="@{/css/workflow/batch.css}" rel="stylesheet"/>
         <link th:href="@{/css/vendors/alpaca/alpaca.min.css}" rel="stylesheet" />
         <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet" />
@@ -658,6 +663,5 @@
                 </div>
             </div>
         </div>
-
     </body>
 </html>

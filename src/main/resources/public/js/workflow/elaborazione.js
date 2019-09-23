@@ -23,6 +23,9 @@
  */
 var _ctx = $("meta[name='ctx']").attr("content");
 var toggle = true;
+var associazioneVarRoleBean = [];
+var tmpVarSel = {};
+var tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
 
 $(document).ready(function () {
  
@@ -141,23 +144,59 @@ $(document).ready(function () {
         controllaCampoModParam();
     });
     
-         
+    tabs = $("#tabs").tabs();
+    tabs.on("click", "span.ui-icon-close", function() {
+        var panelId = $(this).closest("li").remove().attr("aria-controls");
+        $("#" + panelId).remove();
+        removeSelVarFromTab(panelId);
+        tabs.tabs("refresh");
+    });  
 
 });
 
+var addRow = {
+        	"title": "Add Row",
+	        "click": function() {
+	        	var value = this.getValue();
+	        	value.push({});
+	        	this.setValue(value);
+	        }
+};
+
+var removeRow = {
+        "title": "Remove Row",
+        "click": function() {
+            var value = this.getValue();
+            if (value.length > 0) {
+                value.pop();
+                this.setValue(value);
+            }
+        }
+    };
+
 function openAddParameter(identifier) {
-   var idParam=$(identifier).data('param-id');
+    var idParam=$(identifier).data('param-id');
 	var idRole=$(identifier).data('role-id');
 	var nameParameter=$(identifier).data('param-name');
 	$('#param-text-add').text(nameParameter);
 	$('#param-value').val(nameParameter+'|'+idParam+'|'+idRole);
-	var jsontemplateText=_paramTemplateMap[nameParameter];
-	var jsontemplate=JSON.parse(jsontemplateText);
-	var schema=jsontemplate["schema"];
-	var options=jsontemplate["options"];
-	var dataContent="{\"schema\":"+JSON.stringify(schema)+",\"options\":"+JSON.stringify(options)+"}";
+	var jsontemplateText = _paramTemplateMap[nameParameter];
 	$('#add-param').empty();
-	$('#add-param').alpaca(JSON.parse(jsontemplateText)); 
+	var jsonObj = JSON.parse(jsontemplateText, function (key, value) {
+		  if (key === "addRow") {
+			  return eval('(' + value + ')');
+		  }
+		  else if (key === "removeRow"){
+			  return eval('(' + value + ')');
+		  }
+		  else if (key === "dataSource"){
+			  return eval(value);
+		  }
+		  else {
+		    return value;
+		  }
+		});
+	$('#add-param').alpaca(jsonObj); 
 	$("#add-parametri-workset-modal").modal('show');
 }
 
