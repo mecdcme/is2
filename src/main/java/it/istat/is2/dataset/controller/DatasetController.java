@@ -366,17 +366,17 @@ public class DatasetController {
         logService.save("File " + idDataset + " eliminato con successo");
         notificationService.addInfoMessage("Eliminazione avvenuta con successo");
 
-        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-        sessionBean.getFile().remove(0);
-        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+      //  SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+      //  sessionBean.getFile().remove(0);
+      //  session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
         return "redirect:/sessione/mostradataset/" + sessionelv.getId();
     }
     
     @RequestMapping(value = "/dataset/loadtable", method = RequestMethod.POST)
 	public String loadDatasetFromTable(HttpSession session, HttpServletRequest request, Model model,
-			@ModelAttribute("idsessione") String idsessione, @ModelAttribute("dbschema") String dbschema,
-			@ModelAttribute("tablename") String tablename, @ModelAttribute("fields") String[] fields)
+			@ModelAttribute("idsessione") String idsessione, @RequestParam("dbschema") String dbschema,
+			@RequestParam("tablename") String tablename, @RequestParam("fields") String[] fields)
 			throws IOException {
 		notificationService.removeAllMessages();
 		try {
