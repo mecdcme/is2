@@ -25,14 +25,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
-        <script th:src="@{/js/table/datatables.min.js}"></script>
+        <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
         <script th:src="@{/js/ruleset/rulesetpreview.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
                 setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
         </script>
-        <link th:href="@{/css/table/datatables.css}" rel="stylesheet"/>
+        <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet"/>
     </head>
     <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
         <header th:replace="layout :: site-header"></header>

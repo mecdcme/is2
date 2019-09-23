@@ -26,14 +26,14 @@
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
-        <script th:src="@{/js/table/datatables.min.js}"></script>
-        <script th:src="@{/js/elaborazionewf.js}"></script>
+        <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
+        <script th:src="@{/js/workflow/elaborazionewf.js}"></script>
         <script th:inline="javascript">
             var _idElaborazione = [[${session.sessioneBean.idElaborazione}]];
             var _tipoCampo = [[${tipoCampo.id}]];
             var _roleGroup = [[${currentGroup.id}]];
         </script>
-        <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
+        <link rel="stylesheet" th:href="@{/css/vendors/table/datatables.css}" />
     </head>
     <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
         <header th:replace="layout :: site-header"></header>
