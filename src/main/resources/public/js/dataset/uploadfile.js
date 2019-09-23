@@ -63,6 +63,15 @@ $(document).ready(function () {
     	var datasetid = $('#idDataset').val();      
         window.location = _ctx + '/deleteDataset/' + datasetid;
     });
+    
+    
+    $("#sel-tables").on('change', function(){    
+    	var datasetid=  $('#sel-db').val();
+    	var table=  $('#sel-tables').val();
+    	 $('#check-list-fields').html('');
+    	 commonAjaxCall("GET",_ctx + "/rest/dataset/fields/" + datasetid+'/'+table,'',loadFieldsList);
+    });
+    
 });
 
 function controllaInputText() {	
@@ -219,4 +228,46 @@ function readSomeLines(file, maxlines, forEachLine, onComplete) {
         var slice = file.slice(offset, offset + CHUNK_SIZE);
         fr.readAsArrayBuffer(slice);
     }
+}
+
+
+
+function openDlgLoadTable(){
+	var datasetid=  $('#sel-db').val();
+	commonAjaxCall("GET",_ctx + "/rest/dataset/tables/" + datasetid,'',loadTableList);
+	$('#load-table-db').modal('show');  
+}
+
+
+function loadTableList(data){
+	 $.each(data, function(i, value) {  
+         $('<option></option>', {text:value}).attr('value', value).appendTo('#sel-tables');
+      });
+}
+function loadFieldsList(data){
+	 $.each(data, function(i, value) {  
+		 var li='<li class="list-group-item"><div class="custom-control custom-checkbox">'
+			+'<input type="checkbox" class="custom-control-input" name="fields" value="'+value+'" id="check'+i+'" checked="checked">'
+			+'<label class="custom-control-label" for="check'+i+'">'+value+'</label></div></li>';
+		  $(li).appendTo('#check-list-fields');
+     });
+}
+
+function inviaFormTable() {
+	$('#db-schema').val($('#sel-db').val());
+	$('#table-name').val($('#sel-tables').val());
+	$("#dataset-fields-table").submit();
+
+}
+ 
+// Method to initiate AJAX request
+function commonAjaxCall(type, url, data, callback) {
+    $.ajax({
+        type: type,
+        url: url,
+        data: data,
+        success: function (data) {
+            callback(data);
+        }
+    });
 }

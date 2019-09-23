@@ -187,4 +187,32 @@ public class SqlGenericDao {
 		return resultList;
 	}
 
+	public List<String> findTablesDB(String table_schema) {
+		// TODO Auto-generated method stub
+		Query q = em.createNativeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = :table_schema");
+		q.setParameter("table_schema", table_schema);
+		@SuppressWarnings("unchecked")
+		List<String> resultList = (List<String>) q.getResultList();
+		return resultList;
+	}
+	
+	public List<String> findFieldsTableDB(String table_schema, String table_name) {
+		// TODO Auto-generated method stub
+		Query q = em.createNativeQuery("SELECT COLUMN_NAME  FROM information_schema.columns  WHERE table_schema = :table_schema  AND table_name=:table_name");
+		q.setParameter("table_schema", table_schema);
+		q.setParameter("table_name", table_name);
+		@SuppressWarnings("unchecked")
+		List<String> resultList = (List<String>) q.getResultList();
+		return resultList;
+	}
+
+	public List<String> loadFieldValuesTable(String dbschema, String tablename, String field) {
+		// TODO Auto-generated method stub
+	
+		Query q = em.createNativeQuery("SELECT "+field+"  FROM "+dbschema+"."+tablename );
+	  	@SuppressWarnings("unchecked")
+		List<String> resultList = (List<String>) q.getResultList();
+		return resultList;
+	}
+
 }

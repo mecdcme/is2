@@ -53,117 +53,132 @@ import it.istat.is2.dataset.service.DatasetService;
 @RestController
 public class DatasetControllerRest {
 
-    @Autowired
-    private DatasetService datasetService;
-    @Autowired
-    private NotificationService notificationService;
+	@Autowired
+	private DatasetService datasetService;
+	@Autowired
+	private NotificationService notificationService;
 
-    @GetMapping("/datasetcolonnasql/{dfile}/{rigainf}/{rigasup}")
-    @ResponseBody
-    public List<DatasetColonna> loadDataSetColonnaSql(@PathVariable("dfile") Long dfile, @PathVariable("rigainf") Integer rigainf, @PathVariable("rigasup") Integer rigasup) throws IOException {
-        List<DatasetColonna> df = datasetService.findAllDatasetColonnaSQL(dfile, rigainf, rigasup);
-        return df;
-    }
+	@GetMapping("/datasetcolonnasql/{dfile}/{rigainf}/{rigasup}")
+	@ResponseBody
+	public List<DatasetColonna> loadDataSetColonnaSql(@PathVariable("dfile") Long dfile,
+			@PathVariable("rigainf") Integer rigainf, @PathVariable("rigasup") Integer rigasup) throws IOException {
+		List<DatasetColonna> df = datasetService.findAllDatasetColonnaSQL(dfile, rigainf, rigasup);
+		return df;
+	}
 
-    @RequestMapping(value = "/rest/datasetvalori/{dfile}/{parametri:.+}", method = RequestMethod.POST)
-    public String loadDatasetValori(HttpServletRequest request, Model model, @PathVariable("dfile") Long dfile,
-            @PathVariable("parametri") String parametri, @RequestParam("length") Integer length,
-            @RequestParam("start") Integer start, @RequestParam("draw") Integer draw,
-            @RequestParam Map<String, String> allParams) throws IOException, JSONException {
+	@RequestMapping(value = "/rest/datasetvalori/{dfile}/{parametri:.+}", method = RequestMethod.POST)
+	public String loadDatasetValori(HttpServletRequest request, Model model, @PathVariable("dfile") Long dfile,
+			@PathVariable("parametri") String parametri, @RequestParam("length") Integer length,
+			@RequestParam("start") Integer start, @RequestParam("draw") Integer draw,
+			@RequestParam Map<String, String> allParams) throws IOException, JSONException {
 
-        String indexColunmToOrder = allParams.get("order[0][column]");
-        String nameColumnToOrder = allParams.get("columns[" + indexColunmToOrder + "][data]");
-        String dirColumnOrder = allParams.get("order[0][dir]");
+		String indexColunmToOrder = allParams.get("order[0][column]");
+		String nameColumnToOrder = allParams.get("columns[" + indexColunmToOrder + "][data]");
+		String dirColumnOrder = allParams.get("order[0][dir]");
 
-        HashMap<String, String> parameters = null;
-        String noparams = "noparams";
-        if (!noparams.equals(parametri)) {
-            StringTokenizer st = new StringTokenizer(parametri, "&");
-            StringTokenizer st2 = null;
-            parameters = new HashMap<String, String>();
+		HashMap<String, String> parameters = null;
+		String noparams = "noparams";
+		if (!noparams.equals(parametri)) {
+			StringTokenizer st = new StringTokenizer(parametri, "&");
+			StringTokenizer st2 = null;
+			parameters = new HashMap<String, String>();
 
-            ArrayList<String> nomeValore = null;
-            while (st.hasMoreTokens()) {
-                st2 = new StringTokenizer(st.nextToken(), "=");
-                nomeValore = new ArrayList<String>();
-                while (st2.hasMoreTokens()) {
-                    nomeValore.add(st2.nextToken());
-                }
+			ArrayList<String> nomeValore = null;
+			while (st.hasMoreTokens()) {
+				st2 = new StringTokenizer(st.nextToken(), "=");
+				nomeValore = new ArrayList<String>();
+				while (st2.hasMoreTokens()) {
+					nomeValore.add(st2.nextToken());
+				}
 
-                parameters.put(nomeValore.get(0), nomeValore.get(1));
-            }
-        }
-        String dtb = datasetService.loadDatasetValori(dfile, length, start, draw, parameters, nameColumnToOrder, dirColumnOrder);
+				parameters.put(nomeValore.get(0), nomeValore.get(1));
+			}
+		}
+		String dtb = datasetService.loadDatasetValori(dfile, length, start, draw, parameters, nameColumnToOrder,
+				dirColumnOrder);
 
-        return dtb;
-    }
+		return dtb;
+	}
 
-    @RequestMapping(value = "/rest/setvariabilesum/{idcol}/{idvar}", method = RequestMethod.POST)
-    public DatasetColonna setVarSum(HttpServletRequest request, Model model, @PathVariable("idcol") Long idcol, @PathVariable("idvar") Integer idvar) throws IOException {
+	@RequestMapping(value = "/rest/setvariabilesum/{idcol}/{idvar}", method = RequestMethod.POST)
+	public DatasetColonna setVarSum(HttpServletRequest request, Model model, @PathVariable("idcol") Long idcol,
+			@PathVariable("idvar") Integer idvar) throws IOException {
 
-        DatasetColonna dcol = datasetService.findOneColonna(idcol);
-        TipoVariabileSum sum = new TipoVariabileSum(idvar);
-        dcol.setTipoVariabile(sum);
-        try {
-            dcol = datasetService.salvaColonna(dcol);
-        } catch (Exception e) {
-            notificationService.addErrorMessage("Errore: ", e.getMessage());
-        }
-        return dcol;
-    }
+		DatasetColonna dcol = datasetService.findOneColonna(idcol);
+		TipoVariabileSum sum = new TipoVariabileSum(idvar);
+		dcol.setTipoVariabile(sum);
+		try {
+			dcol = datasetService.salvaColonna(dcol);
+		} catch (Exception e) {
+			notificationService.addErrorMessage("Errore: ", e.getMessage());
+		}
+		return dcol;
+	}
 
-    @RequestMapping(value = "/rest/download/dataset/{tipoFile}/{dfile}", method = RequestMethod.GET)
-    public void downloadWorkset(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("tipoFile") String tipoFile, @PathVariable("dfile") Long dfile) throws Exception {
+	@RequestMapping(value = "/rest/download/dataset/{tipoFile}/{dfile}", method = RequestMethod.GET)
+	public void downloadWorkset(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("tipoFile") String tipoFile, @PathVariable("dfile") Long dfile) throws Exception {
 
-        String fileName = "";
-        String contentType = "";
-        switch (tipoFile) {
-            case "csv":
-                fileName = "dataset.csv";
-                contentType = "text/csv";
-                break;
-            case "pdf":
-                fileName = "dataset.pdf";
-                contentType = "application/pdf";
-                break;
-            case "excel":
-                fileName = "dataset.xlsx";
-                contentType = "application/vnd.ms-excel";
-                break;
-        }
+		String fileName = "";
+		String contentType = "";
+		switch (tipoFile) {
+		case "csv":
+			fileName = "dataset.csv";
+			contentType = "text/csv";
+			break;
+		case "pdf":
+			fileName = "dataset.pdf";
+			contentType = "application/pdf";
+			break;
+		case "excel":
+			fileName = "dataset.xlsx";
+			contentType = "application/vnd.ms-excel";
+			break;
+		}
 
-        response.setHeader("charset", "utf-8");
-        response.setHeader("Content-Type", contentType);
-        response.setHeader("Content-disposition", "attachment; filename=" + fileName);
-        Map<String, List<String>> dataMap = datasetService.loadDatasetValori(dfile);
-        Utility.writeObjectToCSV(response.getWriter(), dataMap);
-    }
+		response.setHeader("charset", "utf-8");
+		response.setHeader("Content-Type", contentType);
+		response.setHeader("Content-disposition", "attachment; filename=" + fileName);
+		Map<String, List<String>> dataMap = datasetService.loadDatasetValori(dfile);
+		Utility.writeObjectToCSV(response.getWriter(), dataMap);
+	}
 
-    @RequestMapping(value = "/rest/dataset/updaterowlist", method = RequestMethod.POST)
-    public String updateOrdineRighe(HttpServletRequest request, Model model,
-            @RequestParam("ordineIds") String ordineIds) throws Exception {
+	@RequestMapping(value = "/rest/dataset/updaterowlist", method = RequestMethod.POST)
+	public String updateOrdineRighe(HttpServletRequest request, Model model,
+			@RequestParam("ordineIds") String ordineIds) throws Exception {
 
-        StringTokenizer stringTokenizerElements = new StringTokenizer(ordineIds, "|");
-        String element = null;
-        String ordine = null;
-        String idcol = null;
-        DatasetColonna datasetCol = new DatasetColonna();
-        while (stringTokenizerElements.hasMoreElements()) {
-            element = stringTokenizerElements.nextElement().toString();
-            StringTokenizer stringTokenizerValues = new StringTokenizer(element, "=");
-            while (stringTokenizerValues.hasMoreElements()) {
-                ordine = stringTokenizerValues.nextElement().toString();
-                idcol = stringTokenizerValues.nextElement().toString();
-            }
-            Long idc = Long.parseLong(idcol);
-            Short ordineC = Short.parseShort(ordine);
-            datasetCol = datasetService.findOneColonna(idc);
+		StringTokenizer stringTokenizerElements = new StringTokenizer(ordineIds, "|");
+		String element = null;
+		String ordine = null;
+		String idcol = null;
+		DatasetColonna datasetCol = new DatasetColonna();
+		while (stringTokenizerElements.hasMoreElements()) {
+			element = stringTokenizerElements.nextElement().toString();
+			StringTokenizer stringTokenizerValues = new StringTokenizer(element, "=");
+			while (stringTokenizerValues.hasMoreElements()) {
+				ordine = stringTokenizerValues.nextElement().toString();
+				idcol = stringTokenizerValues.nextElement().toString();
+			}
+			Long idc = Long.parseLong(idcol);
+			Short ordineC = Short.parseShort(ordine);
+			datasetCol = datasetService.findOneColonna(idc);
 
-            datasetCol.setOrdine(ordineC);
-            datasetService.salvaColonna(datasetCol);
-        }
+			datasetCol.setOrdine(ordineC);
+			datasetService.salvaColonna(datasetCol);
+		}
 
-        return "success";
-    }
+		return "success";
+	}
+
+	@RequestMapping(value = "/rest/dataset/tables/{db}", method = RequestMethod.GET)
+	public List<String> getTablesDB(HttpServletRequest request, Model model, @PathVariable("db") String db)
+			throws IOException {
+		return datasetService.findTablesDB(db);
+	}
+
+	@RequestMapping(value = "/rest/dataset/fields/{db}/{table}", method = RequestMethod.GET)
+	public List<String> getFieldsTableDB(HttpServletRequest request, Model model, @PathVariable("db") String db,
+			@PathVariable("table") String table) throws IOException {
+		return datasetService.findFieldsTableDB(db, table);
+	}
 }

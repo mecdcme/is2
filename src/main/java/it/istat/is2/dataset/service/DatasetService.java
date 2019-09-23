@@ -45,6 +45,7 @@ import org.springframework.stereotype.Service;
 
 import it.istat.is2.app.bean.DataTableBean;
 import it.istat.is2.app.dao.SqlGenericDao;
+import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.dataset.dao.DatasetColonnaDao;
 import it.istat.is2.dataset.dao.DatasetFileDao;
 import it.istat.is2.dataset.dao.TipoVariabileSumDao;
@@ -595,18 +596,9 @@ public class DatasetService {
 				 nuoviDatiColonna.add(temp.get(i));
 			 }
 			 
-			 
-			 
+	 		 
 		 }	
-        	
-        	
-        
-       
-        	
-       
-
-
-         DatasetFile dFile = new DatasetFile();
+            DatasetFile dFile = new DatasetFile();
          dFile.setId(Long.parseLong(idfile));
          nuovaColonna.setDatiColonna(nuoviDatiColonna);
          nuovaColonna.setDatasetFile(dFile);
@@ -622,33 +614,59 @@ public class DatasetService {
         }
     
     public DatasetFile deleteField(String idfile, String idColonna) {
-        
-      	 
-       	
-	    	
-        DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
+          DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
         datasetColonna.delete(colonna);
-        
-        
-        DatasetColonna nuovaColonna = new DatasetColonna();
+         DatasetColonna nuovaColonna = new DatasetColonna();
         List<String> nuoviDatiColonna = new ArrayList<String>();
-        
-
-         DatasetFile dFile = new DatasetFile();
+            DatasetFile dFile = new DatasetFile();
          dFile.setId(Long.parseLong(idfile));
-        
-
-         return dFile;
+          return dFile;
         }
     
-    
-    
-
-    @Transactional
+      @Transactional
     public Boolean deleteDataset(Long idFile) {
         DatasetFile datasetFile = findDataSetFile(idFile);
         datasetColonnaDao.deleteByDatasetFile(datasetFile);
         datasetFileDao.deleteDatasetFile(datasetFile.getId());
         return true;
     }
+  	public List<String> findTablesDB(String db) {
+		// TODO Auto-generated method stub
+		return sqlgenericDao.findTablesDB(db);
+	}
+
+	public List<String> findFieldsTableDB(String db, String table) {
+		// TODO Auto-generated method stub
+		return sqlgenericDao.findFieldsTableDB(db, table);
+	}
+
+	public DatasetFile loadDatasetFromTable(String idsessione, String dbschema, String tablename, String[] fields) {
+		// TODO Auto-generated method stub
+		DatasetFile dFile = new DatasetFile();
+ 	   dFile.setLabelFile(dbschema);
+		TipoDato tipoD = new TipoDato(IS2Const.TIPO_CAMPO_INPUT);
+		dFile.setTipoDato(tipoD);
+		dFile.setSessioneLavoro(new WorkSession(Long.valueOf(idsessione)));
+		dFile.setNomeFile(tablename);
+		dFile.setFormatoFile("DB");
+		dFile.setSeparatore("");
+		dFile.setDataCaricamento(new Date());
+	 	List<DatasetColonna> colonne = new ArrayList<DatasetColonna>();
+	 	for (short i = 0; i < fields.length; i++) {
+			String field = fields[i];
+	 		List<String> vals=sqlgenericDao.loadFieldValuesTable(dbschema,tablename,field);
+			DatasetColonna dc = new DatasetColonna();
+			dc.setDatasetFile(dFile);
+			dc.setNome(field.replaceAll("\\.", "_").toUpperCase());
+			dc.setOrdine(new  Short(i));
+			dc.setValoriSize(vals.size());
+		 	dc.setDatiColonna(vals);
+			colonne.add(dc);
+			
+			dFile.setNumerorighe(vals.size());
+		}
+		dFile.setColonne(colonne);
+		dFile = datasetFileDao.save(dFile);
+ 		return dFile;
+	}
 }

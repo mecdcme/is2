@@ -138,9 +138,9 @@ public class DatasetController {
 
         String etichetta = null;
         if(listaDataset!=null && listaDataset.size()>0) {
-        	etichetta = "DS_" + Integer.toString( listaDataset.size()+1 );
+        	etichetta = "DS" + Integer.toString( listaDataset.size()+1 );
         }else {
-        	etichetta = "DS_1";
+        	etichetta = "DS1";
         }
         session.setAttribute(IS2Const.SESSION_LV, sessionelv);
 
@@ -372,4 +372,20 @@ public class DatasetController {
 
         return "redirect:/sessione/mostradataset/" + sessionelv.getId();
     }
+    
+    @RequestMapping(value = "/dataset/loadtable", method = RequestMethod.POST)
+	public String loadDatasetFromTable(HttpSession session, HttpServletRequest request, Model model,
+			@ModelAttribute("idsessione") String idsessione, @ModelAttribute("dbschema") String dbschema,
+			@ModelAttribute("tablename") String tablename, @ModelAttribute("fields") String[] fields)
+			throws IOException {
+		notificationService.removeAllMessages();
+		try {
+			datasetService.loadDatasetFromTable(idsessione,dbschema,tablename,fields);
+			logService.save("Table " + tablename + " loaded");
+			notificationService.addInfoMessage("Table " + tablename + " loaded");
+		} catch (Exception e) {
+			notificationService.addErrorMessage("Error: "+e.getMessage() );
+		}
+		return "redirect:/sessione/mostradataset/" + idsessione;
+	}
 }
