@@ -765,10 +765,29 @@ public class WorkflowService {
 		
 		 Ruleset ruleset=rulesetDao.findById(idResultset).get();
 		 
+		 StepVariable stepVariableID = new StepVariable();
+		 stepVariableID.setElaborazione(elaborazione);
+		 stepVariableID.setAppRole(new AppRole(idRuolo));
+		 stepVariableID.setOrdine(new Short("1"));
+		 stepVariableID.setTipoCampo(new TipoCampo(IS2Const.TIPO_CAMPO_INPUT));
+		 Workset worksetID = new Workset();
+		 worksetID.setNome("ID");
+		 worksetID.setParamValue(ruleset.getLabelFile());
+		 worksetID.setValori(Utility.convertToArrayListStringFieldOfObjects(ruleset.getRules(),Rule.class,"id"));
+		 worksetID.setValoriSize(ruleset.getRules().size());
+		 worksetID.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_RULESET));
+		 ArrayList<StepVariable> listaStepVID = new ArrayList<>();
+		 listaStepVID.add(stepVariableID);
+		 worksetID.setStepVariables(listaStepVID);
+		 stepVariableID.setWorkset(worksetID);
+	 	 stepVariableDao.save(stepVariableID);
+		 
+		 
+		 
 		 StepVariable stepVariable = new StepVariable();
 		 stepVariable.setElaborazione(elaborazione);
 		 stepVariable.setAppRole(new AppRole(idRuolo));
-		 stepVariable.setOrdine(new Short("1"));
+		 stepVariable.setOrdine(new Short("2"));
 		 stepVariable.setTipoCampo(new TipoCampo(IS2Const.TIPO_CAMPO_INPUT));
 		 Workset workset = new Workset();
 		 workset.setNome(IS2Const.TEXT_RULE);

@@ -8,7 +8,7 @@ $(document).ready(function () {
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         responsive: false,
-        searching: false,
+        searching: true,
         buttons: [{
                 extend: 'csvHtml5',
                 filename: 'usersList',

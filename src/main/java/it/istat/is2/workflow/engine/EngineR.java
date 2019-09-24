@@ -64,6 +64,7 @@ import it.istat.is2.workflow.domain.Workset;
 @Service
 public class EngineR implements EngineService {
 
+	public static final String CONST_RULESET = "ruleset";
 	public static final String SELEMIX_RESULTSET = "sel_out";
 	public static final String SELEMIX_WORKSET = "workset";
 	public static final String SELEMIX_RUOLI_VAR = "role_var";
@@ -107,6 +108,7 @@ public class EngineR implements EngineService {
 	private HashMap<String, ArrayList<String>> worksetVariabili;
 	private HashMap<String, ArrayList<String>> parametriMap;
 	private HashMap<String, ArrayList<String>> modelloMap;
+	private HashMap<String, ArrayList<String>> ruleset;
 	private LinkedHashMap<String, ArrayList<String>> worksetOut;
 	private HashMap<String, ArrayList<String>> ruoliVariabileNome;
 
@@ -139,8 +141,10 @@ public class EngineR implements EngineService {
 		prepareEnv();
 		createConnection(serverRHost, serverRPort);
 		bindInputColumns(worksetVariabili, EngineR.SELEMIX_WORKSET);
-		//bindInputParams(parametriMap);
-		bindInputParams(modelloMap);
+	//	bindInputParams(parametriMap);
+	//	bindInputParams(modelloMap);
+	   // bindInputParams(ruleset,eng);
+		bindInputColumns(ruleset, EngineR.CONST_RULESET);
 		setRuoli(ruoliVariabileNome);
 
 	}
@@ -170,37 +174,39 @@ public class EngineR implements EngineService {
 
 	public void bindInputColumns(HashMap<String, ArrayList<String>> workset, String varR) throws REngineException {
 
-		List<String> keys = new ArrayList<String>(workset.keySet());
-		String listaCampi = "";
+		if (!workset.isEmpty()) {
+			List<String> keys = new ArrayList<String>(workset.keySet());
+			String listaCampi = "";
 
-		int size = keys.size();
-		String chiave0 = keys.get(0);
-		listaCampi += "'" + chiave0 + "',";
-		String key = "";
-		// arrX = workset.get(chiave0).toArray(arrX);
-		String[] arrX = workset.get(chiave0).toArray(new String[workset.get(chiave0).size()]);
+			int size = keys.size();
+			String chiave0 = keys.get(0);
+			listaCampi += "'" + chiave0 + "',";
+			String key = "";
+			// arrX = workset.get(chiave0).toArray(arrX);
+			String[] arrX = workset.get(chiave0).toArray(new String[workset.get(chiave0).size()]);
 
-		connection.assign(varR, arrX);
+			connection.assign(varR, arrX);
 
-		for (int i = 1; i < size; i++) {
-			key = keys.get(i);
-			arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
-			listaCampi += "'" + key + "',";
-			connection.assign("tmp", arrX);
-			String evalstringa = varR + " <- cbind(" + varR + ",tmp)";
-			System.out.println(evalstringa);
-			connection.eval(evalstringa);
+			for (int i = 1; i < size; i++) {
+				key = keys.get(i);
+				arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
+				listaCampi += "'" + key + "',";
+				connection.assign("tmp", arrX);
+				String evalstringa = varR + " <- cbind(" + varR + ",tmp)";
+				System.out.println(evalstringa);
+				connection.eval(evalstringa);
+			}
+
+			listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
+			// assegnazione nome dei campi alle colonne
+			String exec = ((size > 1) ? "col" : "") + "names(" + varR + ") = c(" + listaCampi + ")";
+			// String exec = "colnames(" + varR + ") = c(" + listaCampi + ")";
+			Logger.getRootLogger().debug("Bind input columns names " + exec);
+			if ((size == 1)) {
+				connection.eval(varR + " <- data.frame(" + varR + ")");
+			}
+			connection.eval(exec);
 		}
-
-		listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
-		// assegnazione nome dei campi alle colonne
-		String exec = ((size > 1) ? "col" : "") + "names(" + varR + ") = c(" + listaCampi + ")";
-		// String exec = "colnames(" + varR + ") = c(" + listaCampi + ")";
-		Logger.getRootLogger().debug("Bind input columns names " + exec);
-		if ((size == 1)) {
-			connection.eval(varR + " <- data.frame(" + varR + ")");
-		}
-		connection.eval(exec);
 	}
 
 	@Override
@@ -210,6 +216,8 @@ public class EngineR implements EngineService {
 		// mlest <- ml.est (workset, y=Y,";
 		// Aggiunto il workset nella lista degli argomenti della funzione (by paolinux)
 		istruzione = SELEMIX_RESULTSET + "  <- " + fname + "( " + SELEMIX_WORKSET + ",";
+		if(!ruleset.isEmpty()) istruzione+=CONST_RULESET+", ";
+		
 
 		for (Map.Entry<String, ArrayList<String>> entry : ruoliVariabileNome.entrySet()) {
 			String codiceRuolo = entry.getKey();
@@ -399,6 +407,7 @@ public class EngineR implements EngineService {
 		// PARAMETRI
 		parametriMap = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
 		modelloMap = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_MODELLO));
+		ruleset = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_RULESET));
 		worksetOut = new LinkedHashMap<>();
 
 		// associo il codice ruolo alla variabile
