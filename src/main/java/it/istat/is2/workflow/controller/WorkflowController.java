@@ -223,6 +223,9 @@ public class WorkflowController {
 
 		SessionBean elaSession = new SessionBean(elaborazione.getId(), elaborazione.getNome());
 		session.setAttribute(IS2Const.SESSION_ELABORAZIONE, elaSession);
+		
+		List<String> matchedVariables = new ArrayList<>();
+		
 
 		List<DatasetFile> datasetfiles = datasetService
 				.findDatasetFilesByIdSessioneLavoro(elaborazione.getSessioneLavoro().getId());
@@ -234,8 +237,13 @@ public class WorkflowController {
 
 		});
 
-		List<StepVariable> listaSV = workflowService.getStepVariablesNoValori(idElaborazione,
-				new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+		List<StepVariable> listaSV = workflowService.getStepVariablesNoValori(idElaborazione, new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+		if(listaSV != null && listaSV.size() > 0) {
+			for(StepVariable stepVariable : listaSV) {
+				matchedVariables.add(stepVariable.getWorkset().getNome());
+			}
+		}
+		
 		BusinessProcess businessProcessParent = elaborazione.getBusinessProcess();
 
 		BusinessFunction businessFunction = elaborazione.getSessioneLavoro().getBusinessFunction();
@@ -307,6 +315,7 @@ public class WorkflowController {
 		model.addAttribute("businessProcessParent", businessProcessParent);
 		model.addAttribute("businessFunction", businessFunction);
 		model.addAttribute("showTabParam", showTabParam);
+		model.addAttribute("matchedVariables", matchedVariables);
 		return "workflow/edit";
 
 	}
