@@ -273,7 +273,6 @@ function associaVar() {
  }
 
 function openDlgModParametriWorkset(identifier) {
-		// controllaCampoModParam();
  	var idParam=$(identifier).data('id-param');
 	var idWorkset=$(identifier).data('id-workset');
 	var nameParameter=$(identifier).data('name-workset');
@@ -288,9 +287,25 @@ function openDlgModParametriWorkset(identifier) {
     $('#edit-parameters').val(idWorkset);
      var dataContent="{\"data\":"+ JSON.stringify(data)+",\"schema\":"+JSON.stringify(schema)+",\"options\":"+JSON.stringify(options)+"}";
       $('#edit-param').empty();
-     $('#edit-param').alpaca(JSON.parse(dataContent));
+      var jsonObj = JSON.parse(dataContent, function (key, value) {
+		  if (key === "addRow") {
+			  return eval('(' + value + ')');
+		  }
+		  else if (key === "removeRow"){
+			  return eval('(' + value + ')');
+		  }
+		  else if (key === "dataSource"){
+			  return eval(value);
+		  }
+		  else {
+		    return value;
+		  }
+		});
+     $('#edit-param').alpaca(jsonObj);
      $("#idStepvarMod").val(idParam);
-  $("#mod-parametri-workset-modal").modal("show");
+     $(".alpaca-form-button-addRow").hide();
+     $(".alpaca-form-button-removeRow").hide();
+     $("#mod-parametri-workset-modal").modal("show");
 }
 
 function mostraDialogEliminaParametro(identifier) {
@@ -750,19 +765,17 @@ $( function() {
           e.metaKey = true;
       }).selectable({
     	stop: function() {
+            var result = $( "#select-result" ).empty();
             variablesArr = new Array();
             $( ".ui-selected", this ).each(function() {
             	var currSel = $(this).attr("value");
             	tmpArr = currSel.split('~');
             	variablesArr.push({'idVar':tmpArr[0],'name':tmpArr[1],'labelTab':tmpArr[2]});
             });
-            if( $("#roleSelectedId").val() != null && $("#roleSelectedId").val() !== '' && variablesArr.length > 0) {
+            if( $("#roleSelectedId").val() != null && $("#roleSelectedId").val() !== '') {
             	$("#btn_dlg_assoc").removeClass('disabled');
                 $("#btn_dlg_assoc").attr("disabled", false);
-            }else{
-            	$("#btn_dlg_assoc").attr("disabled", true);
             }
       }
     });
   } );
-
