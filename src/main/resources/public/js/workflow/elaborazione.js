@@ -132,10 +132,6 @@ $(document).ready(function () {
             }]
     });
 
-    $("#nome-var").on("input", function () {
-        controllaCampo();
-    });
-
     $('#value-text').on("keyup", function (e) {
         controllaCampoParam();
     });
@@ -272,41 +268,41 @@ function associaVar() {
   	});
  }
 
-function openDlgModParametriWorkset(identifier) {
- 	var idParam=$(identifier).data('id-param');
-	var idWorkset=$(identifier).data('id-workset');
-	var nameParameter=$(identifier).data('name-workset');
-	$('#param-text-edit').text(nameParameter);
-	var jsontemplateText=_paramTemplateMap[nameParameter];
-    var jsontemplate=JSON.parse(jsontemplateText);
-     var schema=jsontemplate["schema"];
-     var options=jsontemplate["options"];
-     if(!options) options="";
-     var data=$(identifier).data('value-param');
-     if(!data) data="";
-    $('#edit-parameters').val(idWorkset);
-     var dataContent="{\"data\":"+ JSON.stringify(data)+",\"schema\":"+JSON.stringify(schema)+",\"options\":"+JSON.stringify(options)+"}";
-      $('#edit-param').empty();
-      var jsonObj = JSON.parse(dataContent, function (key, value) {
-		  if (key === "addRow") {
-			  return eval('(' + value + ')');
-		  }
-		  else if (key === "removeRow"){
-			  return eval('(' + value + ')');
-		  }
-		  else if (key === "dataSource"){
-			  return eval(value);
-		  }
-		  else {
-		    return value;
-		  }
-		});
-     $('#edit-param').alpaca(jsonObj);
-     $("#idStepvarMod").val(idParam);
-     $(".alpaca-form-button-addRow").hide();
-     $(".alpaca-form-button-removeRow").hide();
-     $("#mod-parametri-workset-modal").modal("show");
-}
+ function openDlgModParametriWorkset(identifier) {
+	 	var idParam=$(identifier).data('id-param');
+		var idWorkset=$(identifier).data('id-workset');
+		var nameParameter=$(identifier).data('name-workset');
+		$('#param-text-edit').text(nameParameter);
+		var jsontemplateText=_paramTemplateMap[nameParameter];
+	    var jsontemplate=JSON.parse(jsontemplateText);
+	     var schema=jsontemplate["schema"];
+	     var options=jsontemplate["options"];
+	     if(!options) options="";
+	     var data=$(identifier).data('value-param');
+	     if(!data) data="";
+	    $('#edit-parameters').val(idWorkset);
+	     var dataContent="{\"data\":"+ JSON.stringify(data)+",\"schema\":"+JSON.stringify(schema)+",\"options\":"+JSON.stringify(options)+"}";
+	      $('#edit-param').empty();
+	      var jsonObj = JSON.parse(dataContent, function (key, value) {
+			  if (key === "addRow") {
+				  return eval('(' + value + ')');
+			  }
+			  else if (key === "removeRow"){
+				  return eval('(' + value + ')');
+			  }
+			  else if (key === "dataSource"){
+				  return eval(value);
+			  }
+			  else {
+			    return value;
+			  }
+			});
+	     $('#edit-param').alpaca(jsonObj);
+	     $("#idStepvarMod").val(idParam);
+	     $(".alpaca-form-button-addRow").hide();
+	     $(".alpaca-form-button-removeRow").hide();
+	     $("#mod-parametri-workset-modal").modal("show");
+	}
 
 function mostraDialogEliminaParametro(identifier) {
 	var idParam=$(identifier).data('id-param');
@@ -684,18 +680,6 @@ function mostraDialogModificaAssociazioneOld(idelab, idstepvar, nomestepvar,
     $("#btn_dlg_assoc_mod").attr("disabled", "disabled");
     $("#modifica-viarabile-workset-modal").modal('show');
 }
-function controllaCampo() {
-    if (($("#filtro1").is(':checked') == true || $("#filtro0").is(':checked') == true)
-            && $("#nome-var").val().length > 0) {
-        $("#btn_dlg_assoc_mod").removeClass('disabled');
-        $("#btn_dlg_assoc_mod").removeAttr('disabled');
-    } else {
-
-        $("#btn_dlg_assoc_mod").addClass('disabled');
-        $("#btn_dlg_assoc_mod").attr("disabled", "disabled");
-    }
-
-}
 
 function controllaCampoParam() {
     if ($("#value-text").val() && $("#value-text").val().length > 0 && $("#value-text").val() != '') {
@@ -710,23 +694,8 @@ function controllaCampoParam() {
 function mostraDialogModificaAssociazione(idelab, idstepvar, nomestepvar, idruolo, flagricerca) {
 
     $("#nome-var").val(nomestepvar);
-    if (($("#filtro1").is(':checked') == true || $("#filtro0").is(':checked') == true) && $("#nome-var").val().length > 0) {
-        $("#btn_dlg_assoc_mod").removeClass('disabled');
-        $("#btn_dlg_assoc_mod").removeAttr('disabled');
-    } else {
-        $("#btn_dlg_assoc_mod").addClass('disabled');
-        $("#btn_dlg_assoc_mod").attr("disabled", "disabled");
-    }
-
     $("#idruolomod").val(idruolo).change();
-    if (flagricerca != 'null') {
-        $("#filtro" + flagricerca).attr("checked", "checked");
-    } else {
-        $("#filtro0").attr("checked", "checked");
-    }
-
-    controllaCampo();
-
+  
     $("filtro:checked").val(idruolo);
     $("#mod_idvariabile").val(idstepvar);
     $("#mod_valore_old").val(nomestepvar);
