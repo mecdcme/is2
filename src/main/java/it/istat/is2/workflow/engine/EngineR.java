@@ -184,7 +184,6 @@ public class EngineR implements EngineService {
 			String key = "";
 			// arrX = workset.get(chiave0).toArray(arrX);
 			String[] arrX = workset.get(chiave0).toArray(new String[workset.get(chiave0).size()]);
-
 			connection.assign(varR, arrX);
 
 			for (int i = 1; i < size; i++) {
@@ -196,16 +195,16 @@ public class EngineR implements EngineService {
 				System.out.println(evalstringa);
 				connection.eval(evalstringa);
 			}
-
+			connection.eval(varR + " <- data.frame(" + varR + ")");
+			 
 			listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
 			// assegnazione nome dei campi alle colonne
-			String exec = ((size > 1) ? "col" : "") + "names(" + varR + ") = c(" + listaCampi + ")";
+			String namecols = ((size > 1) ? "col" : "") + "names(" + varR + ") = c(" + listaCampi + ")";
 			// String exec = "colnames(" + varR + ") = c(" + listaCampi + ")";
-			Logger.getRootLogger().debug("Bind input columns names " + exec);
-			if ((size == 1)) {
-				connection.eval(varR + " <- data.frame(" + varR + ")");
-			}
-			connection.eval(exec);
+			Logger.getRootLogger().debug("Bind input columns names " + namecols);
+			
+			connection.eval(namecols);
+			 
 		}
 	}
 

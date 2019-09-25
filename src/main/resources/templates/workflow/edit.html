@@ -453,7 +453,7 @@
                             <span th:text="#{associazione.dialog.button.close}">Annulla</span>
                         </button>
                         <button id="btn_dlg_assoc_mod" type="button"
-                                class="btn btn-primary disabled towait"
+                                class="btn btn-primary towait"
                                 onclick="modificaRuoloVar()" data-dismiss="modal">Save</button>
                     </div>
                 </div>
@@ -550,7 +550,7 @@
              <form th:action="@{/ws/setresulset}" id="formSetRuleset" method="post">
               <input id="id-elaborazione-ruleset" type="hidden" name="idelaborazione" th:value="${elaborazione.id}" />
               <input id="id-role-ruleset" type="hidden" name="idRole" value="175" />
-              <input id="id-ruleset-ruleset" type="hidden" name=idResultSet value="21" />
+              <input id="id-ruleset-ruleset" type="text" name=idResultSet value="23" />
                </form>   
                  <div class="modal-content ">
                     <div class="modal-header">
@@ -574,7 +574,7 @@
                                                     <div id="div_resultset_list" class="list-group ">
                                                         <a th:each="ruleset, y: ${rulesetList}" th:id="${'rs_'+ruleset.id}" class="list-group-item varlist"
                                                                th:attr="onclick='javascript:setSelectedRuleset(' + ${ruleset.labelFile} + '\', ' + ${ruleset.id} +'\')'"
-                                                               title="Associa variabile"> 
+                                                               title="Set Resulset"> 
                                                                 <span th:text="${ruleset.labelFile+ ' - Rules: '+ ruleset.numeroRighe}"></span>
                                                           </a>
                                                  

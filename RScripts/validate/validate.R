@@ -41,29 +41,40 @@ detect_infeasible <- function(input, inputNames){
   return(output)
 }
 
-confront <- function(workset=workset, ruleset=ruleset,md=MD,rs=RS,...){
+validate_confront <- function(workset=workset, ruleset=ruleset,md=MD,rs=RS,...){
+ 
+    print('---------------validate_confront ------')
+      print(ruleset)
+    #data <-  as.data.frame(workset[,md])
+    data <-  workset[,md,drop = FALSE]
+    print(class(data))
+    rules <- ruleset[,rs,drop = FALSE]
+    print(class(rules)) 
+ 	colnames(data)<- toupper(md)
+   # rules <- as.data.frame(matrix(ruleset[,rs],ncol=length(rs),nrow=nrow(ruleset)))
+    colnames(rules)<- tolower(rs)
+    rules$rule<-toupper(rules$rule)
 
-    data <-  as.data.frame(matrix(workset[,md],ncol=length(md),nrow=nrow(workset)))
-    colnames(data)<- md
-    print(data)
-    rules <- as.data.frame(matrix(ruleset[,rs],ncol=length(rs),nrow=nrow(ruleset)))
-    colnames(rules)<- rs
-    print(data)
-    print(rules)
-    print('----------------------------------------------------------')
 	#stdout <- vector('character')
 	#con <- textConnection('stdout', 'wr', local = TRUE)
-#	sink(con)
-#    cf <- confront(data, rules)
-#	summary(cf)
+	#sink(con)
+ print(str(data))
+         print(rules)
+    v <- validator(.data=rules)
+    print(v)
+    
+    cf <- confront(data, v)
+    print(summary(cf))
 #	aggregate(cf)
 #	head(aggregate(cf,by="record"))
 #	sort(cf)
 #	head(values(cf))
-#	head(cbind(nations,values(cf)))
- #	sink()
- # 	close(con)
- # 	output <- list("cf" = cf, "log" = stdout)
- # 	return(output)
-  return
+#	head(cbind(data,values(cf)))
+#	print(head(cf))
+ 	#sink()
+  	#close(con)
+
+	output <- list("cf" = cf, "log" = "stdout")
+	 print("aaaaaaaaaaaaaaa")
+  	return(output)
 }
