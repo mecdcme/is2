@@ -750,17 +750,19 @@ $( function() {
           e.metaKey = true;
       }).selectable({
     	stop: function() {
-            var result = $( "#select-result" ).empty();
             variablesArr = new Array();
             $( ".ui-selected", this ).each(function() {
             	var currSel = $(this).attr("value");
             	tmpArr = currSel.split('~');
             	variablesArr.push({'idVar':tmpArr[0],'name':tmpArr[1],'labelTab':tmpArr[2]});
             });
-            if( $("#roleSelectedId").val() != null && $("#roleSelectedId").val() !== '') {
+            if( $("#roleSelectedId").val() != null && $("#roleSelectedId").val() !== '' && variablesArr.length > 0) {
             	$("#btn_dlg_assoc").removeClass('disabled');
                 $("#btn_dlg_assoc").attr("disabled", false);
+            }else{
+            	$("#btn_dlg_assoc").attr("disabled", true);
             }
       }
     });
   } );
+
