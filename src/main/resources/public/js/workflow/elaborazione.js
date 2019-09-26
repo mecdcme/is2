@@ -299,8 +299,6 @@ function associaVar() {
 			});
 	     $('#edit-param').alpaca(jsonObj);
 	     $("#idStepvarMod").val(idParam);
-	     $(".alpaca-form-button-addRow").hide();
-	     $(".alpaca-form-button-removeRow").hide();
 	     $("#mod-parametri-workset-modal").modal("show");
 	}
 
