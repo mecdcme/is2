@@ -133,27 +133,41 @@
                 </div>
             </div>
             
-            <!-- Log panel -->
-            <!--div class="card">
-                <div class="card-header">
-                    <span th:text="#{Layout.log.panel}">Log panel</span>
-                    <div class="card-header-actions">
-                        <a class="card-header-action" href="javascript:void(0)"
-                           th:onclick="'javascript:clearLog(\'' + ${session.sessionelv.id} + '\')'" title="Clear log">
-                            <i class="fa fa-trash-o"></i>
-                        </a>
+              <!-- Log panel -->
+            <div class="modal fade" id="modalLog" role="dialog" th:if="${session.sessioneBean}">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <span><i class="fa fa-clone"></i>
+                                    <span th:text="#{Layout.log.panel}">Log panel</span>
+                                    <span>R output</span>
+                                </span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div id="logbox" class="modal-body">
+                            <ul th:if="${not #lists.isEmpty(logs)}">
+                                <li th:each="log : ${logs}">
+                                    <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;
+                                    <span th:text="${log.msg}"></span>
+                                </li>
+                            </ul>
+                            <span th:unless="${not #lists.isEmpty(logs)}"> No message available</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:text="#{Layout.Close}"></span>
+                            </button>
+                            <button type="button" class="btn btn-primary" th:onclick="'javascript:clearLog(' + ${session.sessioneBean.id} + ')'">
+                                <span>Clear</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div id="logbox" class="card-body" style="height: 200px">
-                    <ul th:if="${logs.size()>0}">
-                        <li th:each="log : ${logs}">
-                            <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;
-                            <span th:text="${log.msg}"></span>
-                        </li>
-                    </ul>
-                    <span th:unless="${logs.size()>0}"> No message available</span>
-                </div>
-            </div-->
+            </div>
         </div>
 
         <div class="app-body">

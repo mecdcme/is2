@@ -148,6 +148,10 @@ function callBackShow() {
     }, 1000);
 }
 
+function showLog(){
+    $("#modalLog").modal("show");
+}
+
 function clearLog(idSessione) {
     $.ajax({
         url: _ctx + "/logs/" + idSessione,

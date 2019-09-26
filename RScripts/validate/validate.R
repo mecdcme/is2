@@ -46,8 +46,7 @@ validate_confront <- function(workset=workset, ruleset=ruleset,md=MD,rs=RS,...){
     print('---------------validate_confront ------')
       print(ruleset)
     #data <-  as.data.frame(workset[,md])
-    data <-  workset[,md,drop = FALSE]
-    print(class(data))
+       print(class(data))
     rules <- ruleset[,rs,drop = FALSE]
     print(class(rules)) 
  	colnames(data)<- toupper(md)
@@ -58,7 +57,7 @@ validate_confront <- function(workset=workset, ruleset=ruleset,md=MD,rs=RS,...){
 	#stdout <- vector('character')
 	#con <- textConnection('stdout', 'wr', local = TRUE)
 	#sink(con)
- print(str(data))
+    print(str(data))
          print(rules)
     v <- validator(.data=rules)
     print(v)

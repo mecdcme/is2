@@ -179,30 +179,30 @@ public class EngineR implements EngineService {
 			String listaCampi = "";
 
 			int size = keys.size();
-			String chiave0 = keys.get(0);
-			listaCampi += "'" + chiave0 + "',";
+	//		String chiave0 = keys.get(0);
+	//		listaCampi += "'" + chiave0 + "',";
 			String key = "";
 			// arrX = workset.get(chiave0).toArray(arrX);
-			String[] arrX = workset.get(chiave0).toArray(new String[workset.get(chiave0).size()]);
-			connection.assign(varR, arrX);
-
-			for (int i = 1; i < size; i++) {
+		//	String[] arrX = workset.get(chiave0).toArray(new String[workset.get(chiave0).size()]);
+			//connection.assign(varR, arrX);
+         
+			for (int i = 0; i < size; i++) {
 				key = keys.get(i);
-				arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
+				String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
 				listaCampi += "'" + key + "',";
-				connection.assign("tmp", arrX);
-				String evalstringa = varR + " <- cbind(" + varR + ",tmp)";
-				System.out.println(evalstringa);
-				connection.eval(evalstringa);
+				connection.assign(key, arrX);
+			  //String evalstringa = varR + " <- cbind(" + varR + ",tmp)";
+			//	System.out.println(evalstringa);
+			//	connection.eval(evalstringa);
 			}
-			connection.eval(varR + " <- data.frame(" + varR + ")");
-			 
 			listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
+			connection.eval(varR + " <- data.frame(" + listaCampi + ")");
+			
 			// assegnazione nome dei campi alle colonne
+			
 			String namecols = ((size > 1) ? "col" : "") + "names(" + varR + ") = c(" + listaCampi + ")";
 			// String exec = "colnames(" + varR + ") = c(" + listaCampi + ")";
 			Logger.getRootLogger().debug("Bind input columns names " + namecols);
-			
 			connection.eval(namecols);
 			 
 		}

@@ -168,41 +168,6 @@ table.dataTable thead>tr>th{
     padding: 2px 0px;
 }
 
-/* Worksession */
-#header-variabili, #header-parametri, #header-ruleset{
-    font-weight: normal;
-    border-right: 1px solid #c8ced3;
-    padding-right: 7px;
-}
-
-#header-parametri{
-    font-weight: normal;
-    border-right: 1px solid #c8ced3;
-    padding-left: 7px;
-    padding-right: 7px;
-}
-
-#header-ruleset{
-    font-weight: normal;
-    border-right: 1px solid #c8ced3;
-    padding-left: 7px;
-    padding-right: 7px;
-}
-
-#header-execution{
-    font-weight: normal;
-    padding-left: 7px;
-}
-
-#header-variabili:hover, #header-parametri:hover, #header-execution:hover, #header-ruleset:hover{
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.header-strong{
-    font-weight: bold !important;
-}
-
 /*Process page */
 #processiList th, #processiList td{
     vertical-align: middle;

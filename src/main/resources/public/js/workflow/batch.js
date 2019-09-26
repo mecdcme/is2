@@ -2,9 +2,12 @@ var _ctx = $("meta[name='ctx']").attr("content");
 var toggle = true;
 var stompClient = null;
 
+var pollLog, pollJob;
+
+
 $(document).ready(function() {
-	pollLogs();
-	pollJobs();
+	//pollLogs();
+	//pollJobs();
 });
 
 function esegui(idElaborazione, idProcesso) {
@@ -51,7 +54,7 @@ function pollLogs() {
 			console.log("ERROR polling logs: ", e);
 		},
 		complete : function() {
-			setTimeout(pollLogs, 5000);
+			pollLog = setTimeout(pollLogs, 5000);
 		}
 	});
 }
@@ -92,7 +95,12 @@ function pollJobs() {
 			console.log("ERROR : ", e);
 		},
 		complete : function() {
-			setTimeout(pollJobs, 5000);
+			pollJob = setTimeout(pollJobs, 5000);
 		}
 	});
-}0
+}
+
+function clearPoll(){
+	clearTimeout(pollJob);
+	clearTimeout(pollLog);
+}

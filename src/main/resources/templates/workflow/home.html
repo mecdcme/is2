@@ -31,7 +31,7 @@
             });
         </script>
         <script th:src="@{/js/workflow/batch.js}"></script>
-        <link th:href="@{/css/workflow/batch.css}" rel="stylesheet" />
+        <link th:href="@{/css/workflow/workflow.css}" rel="stylesheet" />
     </head>
     <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
         <header th:replace="layout :: site-header"></header>
@@ -81,7 +81,7 @@
                                                 <i class="fa fa-trash-o"></i>&nbsp;<span>Clean Output</span>
                                             </a>
                                             <a title="Clean Workset" th:href="@{'/ws/cleanallworkset/'+${elaborazione.id}+'/0'}">
-                                                <i class="fa fa-trash-o"></i>&nbsp;<span>Clean All</span>
+                                                <i class="fa fa-undo"></i>&nbsp;<span>Reset</span>
                                             </a>
                                             <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}"> 
                                                 <i class="fa fa-cog"></i>&nbsp;<span>Settings</span>

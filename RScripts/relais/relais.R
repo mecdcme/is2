@@ -8,16 +8,18 @@ rm(list=ls())
 #muTableName=nome della tabella che contenente i parametri stimati, nel caso di stima **affidabile** del modello
 #percorso_fail=path del file contenete le condizionate alla variabile latente, nel caso di stima ** non affidabile** del modello
 #eps,iter parametri del modello EM con valori di default
-print("ok")
+
 
 percorso_fail="FSFail.Rout"
 percorso_allert="FSAllert.Rout"
 
 fellegisunter <- function(workset,ct, nvar=3, ...) {
-  stdout <- vector('character')
-  con <- textConnection('stdout', 'wr', local = TRUE)
-  sink(con)
-  
+ print(workset)
+ str(workset)
+ # stdout <- vector('character')
+  #con <- textConnection('stdout', 'wr', local = TRUE)
+  #sink(con)
+ 
 yy <-  as.data.frame(matrix(as.numeric(workset[,ct]),ncol=length(ct),nrow=nrow(workset)))
 colnames(yy)<- ct
  
@@ -177,14 +179,13 @@ names(var_est)=c("variable","comparison","m","u","p")
  
  roles <- list (FS=names(r_out))
  rolesgroup <- list (FS= c("FS"))
- result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, var_est = var_est, log = stdout)
+ result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, var_est = var_est, log = 'stdout')
  
  print(".........RESULT.............. ")
  print(result)
  
- sink()
-  close(con)
- 
+ #sink()
+ #close(con)
   return(result)
  
 }

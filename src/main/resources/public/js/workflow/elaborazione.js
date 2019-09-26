@@ -45,7 +45,7 @@ $(document).ready(function () {
  	   alert($(this).val()); 
     });
     
-    $("#worksetTabList").DataTable({
+    $("#variablesTable").DataTable({
         dom: "<'row'<'col-sm-5'B><'col-sm-7'f>>"
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -85,23 +85,7 @@ $(document).ready(function () {
                 + "/" + idparam;
     });
 
-    $("#parametriTabList").DataTable({
-        dom: "<'row'<'col-sm-6'B><'col-sm-6'f>>"
-                + "<'row'<'col-sm-12'tr>>"
-                + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        paging: false,
-        ordering: false,
-        buttons: [{
-                className: 'btn-extenal-function btn-light',
-                text: '<i class="fa fa-plus"></i><span> Parametro</span>',
-                action: function (e, dt, node, config) {
-                    openDlgAddParametriWorkset();
-                }
-            }],
-        createdRow: function (row, data, dataIndex) {
-            $(row).attr('id', 'row-' + dataIndex);
-        }
-    });
+   
 
  
     var idElaborazione = 1; // _idElaborazione;
@@ -317,7 +301,7 @@ function mostraDialogEliminaParametro(identifier) {
 
 function cambiaPosizione() {
     var ordineIds = "";
-    var ids = $("#worksetTabList").find(
+    var ids = $("#variablesTable").find(
             "input[name='stepid']");
     for (var i = 0; i < ids.length; i++) {
         ordineIds += i + "=" + ids[i].value + "|";
@@ -479,7 +463,7 @@ function modificaRuoloVar() {
 }
 
 function eliminaRiga(id) {
-    var table = $('#worksetTabList').DataTable();
+    var table = $('#variablesTable').DataTable();
     table.row('#row-' + id).remove().draw();
 }
 

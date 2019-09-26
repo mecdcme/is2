@@ -60,12 +60,12 @@
   			</div>
   		{{/if}}
 		</script>
-        <link th:href="@{/css/workflow/batch.css}" rel="stylesheet"/>
         <link th:href="@{/css/vendors/alpaca/alpaca.min.css}" rel="stylesheet" />
         <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet" />
         <link th:href="@{/css/jquery/jquery-ui.min.css}" rel="stylesheet" />
         <link th:href="@{/css/jquery/tabs-ui.css}" rel="stylesheet"/>
         <link th:href="@{/icons/glyphicon.css}" rel="stylesheet" />
+        <link th:href="@{/css/workflow/workflow.css}" rel="stylesheet"/>
     </head>
     <body
         class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
@@ -132,7 +132,7 @@
                                             <span id="associazione_vars"></span>
                                         </form>
 
-                                        <table id="worksetTabList" class="table table-hover" style="width: 100%">
+                                        <table id="variablesTable" class="table table-condensed" style="width: 100%">
                                             <thead>
                                                 <tr>
                                                     <th style="width: 2%"><span>#</span></th>
@@ -169,14 +169,14 @@
                                         <input type="hidden" id="idstepvar" name="idstepvar" value="" />
                                     </div>
                                     <div class="card-body" id="card-parametri" style="display: none">
-                                        <table id="parametriTabList" class="table table-hover">
+                                        <table id="parametersTable" class="table table-condensed" style="width: 100%">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 2%"><span>#</span></th>
-                                                    <th><span>Nome Parametro</span></th>
-                                                    <th><span>Valore</span></th>
-                                                    <th style="width: 1%"></th>
-                                                    <th style="width: 1%"></th>
+                                                    <th style="width:2%; "><span>#</span></th>
+                                                    <th><span>Name</span></th>
+                                                    <th><span>Value</span></th>
+                                                    <th style="width: 1% "></th>
+                                                    <th style="width: 1% "></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -198,14 +198,14 @@
                                                         </td>
                                                     </th:block>
                                                     <th:block th:unless="${stepParamMap.get(paramInstance.nome)}">
-                                                        <td>&nbsp;</td>
-                                                        <td>
+                                                        <td><i class="fa fa-times" style="color: #f86c6b;"></i> </td>
+                                                         <td>
                                                             <a href="javascript:void(0);" title="Modifica parametro"
                                                                 th:attr="data-role-id=${paramInstance.appRole.id},data-param-id=${paramInstance.id},data-param-name=${paramInstance.nome},onclick='javascript:openAddParameter(this);'">
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
                                                         </td>
-                                                             <td >&nbsp;</td>
+                                                        <td>&nbsp;</td>
                                                     </th:block>
                                                 </tr>
                                             </tbody>
@@ -213,7 +213,7 @@
                                         <input type="hidden" id="idparam" name="idparam" value="" />
                                     </div>
                                      <div class="card-body" id="card-ruleset" style="display: none">
-                                        <table id="rulesetTabList" class="table table-hover">
+                                        <table id="rulesetTable" class="table table-condensed">
                                             <thead>
                                                 <tr>
                                                     <th style="width: 2%"><span>#</span></th>
@@ -264,7 +264,7 @@
                                         <form th:action="@{/ws/associavariabile}" id="formAssociaRuolo" class="form-horizontal" method="post">
                                             <span id="associazione_vars"></span>
                                         </form>
-                                        <table id="worksetRuntimeTabList" class="table table-hover">
+                                        <table id="worksetRuntimeTable" class="table table-condensed">
                                             <thead>
                                                 <tr>
                                                     <th style="width: 8%"><span></span></th>
@@ -343,7 +343,7 @@
 	                                                    		th:id="${'var_'+element.id}"
 	                                                    		th:text="${datasetfile.labelFile+ ' - '+ element.nome}"
 	                                                    		th:value="${element.id} + '~' + ${element.nome} + '~' + ${datasetfile.labelFile+ ' - '+ element.nome} " 
-	                                                    		class="list-group-item varlist" 
+	                                                    		class="list-group-item varlist" th:classappend="${iter.odd}? 'odd' : 'even'"
 	                                                           title="Associa variabile">
 	                                                        </li>
 	                                                    </th:block>
