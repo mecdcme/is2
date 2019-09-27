@@ -489,9 +489,9 @@ public class Utility {
 		return ret;
 	}
 
-	public static Map<String, ArrayList<StepVariable>> getMapNameWorkSetStep(List<StepVariable> dataList) {
+	public static LinkedHashMap<String, ArrayList<StepVariable>> getMapNameWorkSetStep(List<StepVariable> dataList) {
 
-		HashMap<String, ArrayList<StepVariable>> ret = new HashMap<>();
+		LinkedHashMap<String, ArrayList<StepVariable>> ret = new LinkedHashMap<>();
 		for (StepVariable stepVariable : dataList) {
 			System.out.println(stepVariable.getId());
 			ArrayList<StepVariable> stepList = ret.get(stepVariable.getWorkset().getNome());

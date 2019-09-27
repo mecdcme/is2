@@ -64,21 +64,21 @@ import it.istat.is2.workflow.domain.Workset;
 @Service
 public class EngineR implements EngineService {
 
-	public static final String CONST_RULESET = "ruleset";
-	public static final String SELEMIX_RESULTSET = "sel_out";
-	public static final String SELEMIX_WORKSET = "workset";
-	public static final String SELEMIX_RUOLI_VAR = "role_var";
-	public static final String SELEMIX_RUOLI_VAR_OUTPUT = "role_var_out";
-	public static final String SELEMIX_RUOLI_INPUT = "role_in";
-	public static final String SELEMIX_RUOLI_OUTPUT = "ruol_out";
-	public static final String SELEMIX_PARAMETRI = "params";
-	public static final String SELEMIX_MODELLO = "model";
-	public static final String SELEMIX_RUOLO_SKIP_N = "N";
-	public static final String SELEMIX_RESULT_RUOLI = "roles";
-	public static final String RESULT_ROLES_GROUPS = "rolesgroup";
-	public static final String SELEMIX_RESULT_OUTPUT = "out";
-	public static final String SELEMIX_RESULT_PARAM = "mod";
-	public static final String SELEMIX_RESULT_REPORT = "report"; // aggiunto componente dei parametri di uscita
+	public static final String IS2_RULESET = "ruleset";
+	public static final String IS2_RESULTSET = "sel_out";
+	public static final String IS2_WORKSET = "workset";
+	public static final String IS2_RUOLI_VAR = "role_var";
+	public static final String IS2_RUOLI_VAR_OUTPUT = "role_var_out";
+	public static final String IS2_RUOLI_INPUT = "role_in";
+	public static final String IS2_RUOLI_OUTPUT = "ruol_out";
+	public static final String IS2_PARAMETRI = "params";
+	public static final String IS2_MODELLO = "model";
+	public static final String IS2_RUOLO_SKIP_N = "N";
+	public static final String IS2_RESULT_RUOLI = "roles";
+	public static final String IS2_RESULT_ROLES_GROUPS = "rolesgroup";
+	public static final String IS2_RESULT_OUTPUT = "out";
+	public static final String IS2_RESULT_PARAM = "mod";
+	public static final String IS2_RESULT_REPORT = "report"; // aggiunto componente dei parametri di uscita
 
 	@Autowired
 	RuoloDao ruoloDao;
@@ -103,7 +103,7 @@ public class EngineR implements EngineService {
 
 	private Elaborazione elaborazione;
 	private StepInstance stepInstance;
-	private Map<String,  ArrayList<StepVariable>> dataMap;
+	private LinkedHashMap<String, ArrayList<StepVariable>> dataMap;
 	private Map<String, AppRole> ruoliAllMap;
 	private LinkedHashMap<String, ArrayList<String>> worksetVariabili;
 	private LinkedHashMap<String, ArrayList<String>> parametriMap;
@@ -140,11 +140,11 @@ public class EngineR implements EngineService {
 		this.fileScriptR = stepInstance.getAppService().getScript();
 		prepareEnv();
 		createConnection(serverRHost, serverRPort);
-		bindInputColumns(worksetVariabili, EngineR.SELEMIX_WORKSET);
-	//	bindInputParams(parametriMap);
-	//	bindInputParams(modelloMap);
-	   // bindInputParams(ruleset,eng);
-		bindInputColumns(ruleset, EngineR.CONST_RULESET);
+		bindInputColumns(worksetVariabili, EngineR.IS2_WORKSET);
+		// bindInputParams(parametriMap);
+		// bindInputParams(modelloMap);
+		// bindInputParams(ruleset,eng);
+		bindInputColumns(ruleset, EngineR.IS2_RULESET);
 		setRuoli(ruoliVariabileNome);
 
 	}
@@ -172,43 +172,86 @@ public class EngineR implements EngineService {
 		}
 	}
 
-	public void bindInputColumns(LinkedHashMap<String, ArrayList<String>> workset, String varR) throws REngineException {
+	public void bindInputColumns(LinkedHashMap<String, ArrayList<String>> workset, String varR)
+			throws REngineException {
 
 		if (!workset.isEmpty()) {
 			List<String> keys = new ArrayList<String>(workset.keySet());
 			String listaCampi = "";
 			String listaCampiLabel = "";
 			int size = keys.size();
-	//		String chiave0 = keys.get(0);
-	//		listaCampi += "'" + chiave0 + "',";
+			// String chiave0 = keys.get(0);
+			// listaCampi += "'" + chiave0 + "',";
 			String key = "";
 			// arrX = workset.get(chiave0).toArray(arrX);
-		//	String[] arrX = workset.get(chiave0).toArray(new String[workset.get(chiave0).size()]);
-			//connection.assign(varR, arrX);
-         
+			// String[] arrX = workset.get(chiave0).toArray(new
+			// String[workset.get(chiave0).size()]);
+			// connection.assign(varR, arrX);
+
 			for (int i = 0; i < size; i++) {
 				key = keys.get(i);
 				String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
-				listaCampi +=  key + ",";
+				listaCampi += key + ",";
 				listaCampiLabel += "'" + key + "',";
 				connection.assign(key, arrX);
-				try{connection.eval(key	+ "<- as.numeric("+key+")"	);}catch (Exception e) {
-					Logger.getRootLogger().error(e.getMessage());	}
-			  //String evalstringa = varR + " <- cbind(" + varR + ",tmp)";
-			//	System.out.println(evalstringa);
-			//	connection.eval(evalstringa);
+				try {
+					connection.eval(key + "<- as.numeric(" + key + ")");
+				} catch (Exception e) {
+					Logger.getRootLogger().error(e.getMessage());
+				}
+				// String evalstringa = varR + " <- cbind(" + varR + ",tmp)";
+				// System.out.println(evalstringa);
+				// connection.eval(evalstringa);
 			}
 			listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
 			listaCampiLabel = listaCampiLabel.substring(0, listaCampiLabel.length() - 1);
 			connection.eval(varR + " <- data.frame(" + listaCampi + ")");
-			
+
 			// assegnazione nome dei campi alle colonne
-			
+
 			String namecols = ((size > 1) ? "col" : "") + "names(" + varR + ") = c(" + listaCampiLabel + ")";
 			// String exec = "colnames(" + varR + ") = c(" + listaCampi + ")";
 			Logger.getRootLogger().debug("Bind input columns names " + namecols);
 			connection.eval(namecols);
-			 
+
+		}
+	}
+
+	public void bindInputColumns_old(LinkedHashMap<String, ArrayList<String>> workset, String varR)
+			throws REngineException {
+
+		if (!workset.isEmpty()) {
+			List<String> keys = new ArrayList<String>(workset.keySet());
+			String listaCampi = "";
+
+			int size = keys.size();
+			String chiave0 = keys.get(0);
+			listaCampi += "'" + chiave0 + "',";
+			String key = "";
+			// arrX = workset.get(chiave0).toArray(arrX);
+			String[] arrX = workset.get(chiave0).toArray(new String[workset.get(chiave0).size()]);
+
+			connection.assign(varR, arrX);
+
+			for (int i = 1; i < size; i++) {
+				key = keys.get(i);
+				arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
+				listaCampi += "'" + key + "',";
+				connection.assign("tmp", arrX);
+				String evalstringa = varR + " <- cbind(" + varR + ",tmp)";
+				System.out.println(evalstringa);
+				connection.eval(evalstringa);
+			}
+
+			listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
+			// assegnazione nome dei campi alle colonne
+			String exec = ((size > 1) ? "col" : "") + "names(" + varR + ") = c(" + listaCampi + ")";
+			// String exec = "colnames(" + varR + ") = c(" + listaCampi + ")";
+			Logger.getRootLogger().debug("Bind input columns names " + exec);
+			if ((size == 1)) {
+				connection.eval(varR + " <- data.frame(" + varR + ")");
+			}
+			connection.eval(exec);
 		}
 	}
 
@@ -218,9 +261,9 @@ public class EngineR implements EngineService {
 		String fname = stepInstance.getFname();
 		// mlest <- ml.est (workset, y=Y,";
 		// Aggiunto il workset nella lista degli argomenti della funzione (by paolinux)
-		istruzione = SELEMIX_RESULTSET + "  <- " + fname + "( " + SELEMIX_WORKSET + ",";
-		if(!ruleset.isEmpty()) istruzione+=CONST_RULESET+", ";
-		
+		istruzione = IS2_RESULTSET + "  <- " + fname + "( " + IS2_WORKSET + ",";
+		if (!ruleset.isEmpty())
+			istruzione += IS2_RULESET + ", ";
 
 		for (Map.Entry<String, ArrayList<String>> entry : ruoliVariabileNome.entrySet()) {
 			String codiceRuolo = entry.getKey();
@@ -278,8 +321,8 @@ public class EngineR implements EngineService {
 		Logger.getRootLogger().debug("Campi dei ruoli IMPOSTATI (speriamo)");
 	}
 
-	public void getGenericoOutput(LinkedHashMap<String, ArrayList<String>> genericHashMap, String varR, String tipoOutput)
-			throws RserveException, REXPMismatchException {
+	public void getGenericoOutput(LinkedHashMap<String, ArrayList<String>> genericHashMap, String varR,
+			String tipoOutput) throws RserveException, REXPMismatchException {
 		Logger.getRootLogger().debug("Eseguo Get " + tipoOutput);
 		try {
 			RList lista = connection.eval(varR + "$" + tipoOutput).asList();
@@ -374,7 +417,7 @@ public class EngineR implements EngineService {
 		HashMap<String, ArrayList<String>> ruoliInputStep = new HashMap<>();
 		// {P=[P], M=[M], O=[O]}
 		ruoliOutputStep = new LinkedHashMap();
-		ruoliGruppoOutputStep=new LinkedHashMap<>();
+		ruoliGruppoOutputStep = new LinkedHashMap<>();
 
 		for (Iterator<?> iterator = stepInstance.getSxStepPatterns().iterator(); iterator.hasNext();) {
 			StepInstanceAppRole sxStepPattern = (StepInstanceAppRole) iterator.next();
@@ -443,11 +486,11 @@ public class EngineR implements EngineService {
 	public void processOutput() throws Exception {
 		// TODO Auto-generated method stub
 
-		getGenericoOutput(worksetOut, EngineR.SELEMIX_RESULTSET, EngineR.SELEMIX_RESULT_OUTPUT);
-		getGenericoOutput(ruoliOutputStep, EngineR.SELEMIX_RESULTSET, EngineR.SELEMIX_RESULT_RUOLI);
-		getGenericoOutput(parametriOutput, EngineR.SELEMIX_RESULTSET, EngineR.SELEMIX_RESULT_PARAM);
-		getGenericoOutput(parametriOutput, EngineR.SELEMIX_RESULTSET, EngineR.SELEMIX_RESULT_REPORT);
-		getRolesGroup(ruoliGruppoOutputStep, EngineR.SELEMIX_RESULTSET, EngineR.RESULT_ROLES_GROUPS);
+		getGenericoOutput(worksetOut, EngineR.IS2_RESULTSET, EngineR.IS2_RESULT_OUTPUT);
+		getGenericoOutput(ruoliOutputStep, EngineR.IS2_RESULTSET, EngineR.IS2_RESULT_RUOLI);
+		getGenericoOutput(parametriOutput, EngineR.IS2_RESULTSET, EngineR.IS2_RESULT_PARAM);
+		getGenericoOutput(parametriOutput, EngineR.IS2_RESULTSET, EngineR.IS2_RESULT_REPORT);
+		getRolesGroup(ruoliGruppoOutputStep, EngineR.IS2_RESULTSET, EngineR.IS2_RESULT_ROLES_GROUPS);
 		writeLogScriptR();
 		saveOutputDB();
 
@@ -474,7 +517,7 @@ public class EngineR implements EngineService {
 			String ruolo = ruoliOutputStepInversa.get(nomeW);
 			String ruoloGruppo = ruoliGruppoOutputStep.get(ruolo);
 			if (ruolo == null) {
-				ruolo = EngineR.SELEMIX_RUOLO_SKIP_N;
+				ruolo = EngineR.IS2_RUOLO_SKIP_N;
 			}
 			if (ruoloGruppo == null) {
 				ruoloGruppo = RUOLO_SKIP_N;
@@ -482,10 +525,10 @@ public class EngineR implements EngineService {
 			AppRole sxRuolo = ruoliAllMap.get(ruolo);
 			AppRole sxRuoloGruppo = ruoliAllMap.get(ruoloGruppo);
 
-          stepVariable=Utility.retrieveStepVariable(dataMap,nomeW,sxRuolo);
-			
-			if (stepVariable!=null) { // update
-			
+			stepVariable = Utility.retrieveStepVariable(dataMap, nomeW, sxRuolo);
+
+			if (stepVariable != null) { // update
+
 				stepVariable.getWorkset().setValori(value);
 				stepVariable.setTipoCampo(new TipoCampo(IS2Const.TIPO_CAMPO_ELABORATO));
 			} else {
@@ -510,41 +553,7 @@ public class EngineR implements EngineService {
 			stepVariableDao.save(stepVariable);
 		}
 
-	/*	for (Map.Entry<String, ArrayList<String>> entry : parametriOutput.entrySet()) {
-			String nomeW = entry.getKey();
-			ArrayList<String> value = entry.getValue();
-			StepVariable stepVariable;
-
-			if (dataMap.keySet().contains(nomeW)) {
-				stepVariable = dataMap.get(nomeW);
-				stepVariable.getWorkset().setValori(value);
-				stepVariable.setTipoCampo(new TipoCampo(IS2Const.TIPO_CAMPO_ELABORATO));
-
-			} else {
-				stepVariable = new StepVariable();
-				stepVariable.setElaborazione(elaborazione);
-				stepVariable.setTipoCampo(new TipoCampo(IS2Const.TIPO_CAMPO_ELABORATO));
-				String ruolo = ruoliOutputStepInversa.get(nomeW);
-				if (ruolo == null) {
-					ruolo = EngineR.SELEMIX_RUOLO_SKIP_N;
-				}
-				AppRole sxRuolo = ruoliAllMap.get(ruolo);
-				stepVariable.setAppRole(sxRuolo);
-				stepVariable.setOrdine(sxRuolo.getOrdine());
-				Workset workset = new Workset();
-				workset.setNome(nomeW.replaceAll("\\.", "_"));
-				workset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
-				ArrayList<StepVariable> l = new ArrayList<>();
-				l.add(stepVariable);
-				workset.setStepVariables(l);
-				workset.setValori(value);
-				workset.setValoriSize(workset.getValori().size());
-				stepVariable.setWorkset(workset);
-			}
-
-			stepVariableDao.save(stepVariable);
-		}
-*/
+		 
 	}
 
 	/*

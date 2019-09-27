@@ -58,7 +58,7 @@ public class RelaisService {
     final String codResidualB = "RB";
     final String codeFS = "FS";
     final String codeP_POST = "P_POST";
-    final String params_MatchingVariables = "MATCHING VARAIBLES";
+    final String params_MatchingVariables = "MATCHING VARIABLES";
     final String params_ThresholdMatching = "THRESHOLD MATCHING";
     final String params_ThresholdUnMatching = "THRESHOLD UNMATCHING";
 
