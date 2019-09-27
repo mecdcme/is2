@@ -105,10 +105,10 @@ public class EngineR implements EngineService {
 	private StepInstance stepInstance;
 	private Map<String,  ArrayList<StepVariable>> dataMap;
 	private Map<String, AppRole> ruoliAllMap;
-	private HashMap<String, ArrayList<String>> worksetVariabili;
-	private HashMap<String, ArrayList<String>> parametriMap;
-	private HashMap<String, ArrayList<String>> modelloMap;
-	private HashMap<String, ArrayList<String>> ruleset;
+	private LinkedHashMap<String, ArrayList<String>> worksetVariabili;
+	private LinkedHashMap<String, ArrayList<String>> parametriMap;
+	private LinkedHashMap<String, ArrayList<String>> modelloMap;
+	private LinkedHashMap<String, ArrayList<String>> ruleset;
 	private LinkedHashMap<String, ArrayList<String>> worksetOut;
 	private HashMap<String, ArrayList<String>> ruoliVariabileNome;
 
@@ -172,12 +172,12 @@ public class EngineR implements EngineService {
 		}
 	}
 
-	public void bindInputColumns(HashMap<String, ArrayList<String>> workset, String varR) throws REngineException {
+	public void bindInputColumns(LinkedHashMap<String, ArrayList<String>> workset, String varR) throws REngineException {
 
 		if (!workset.isEmpty()) {
 			List<String> keys = new ArrayList<String>(workset.keySet());
 			String listaCampi = "";
-
+			String listaCampiLabel = "";
 			int size = keys.size();
 	//		String chiave0 = keys.get(0);
 	//		listaCampi += "'" + chiave0 + "',";
@@ -189,18 +189,22 @@ public class EngineR implements EngineService {
 			for (int i = 0; i < size; i++) {
 				key = keys.get(i);
 				String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
-				listaCampi += "'" + key + "',";
+				listaCampi +=  key + ",";
+				listaCampiLabel += "'" + key + "',";
 				connection.assign(key, arrX);
+				try{connection.eval(key	+ "<- as.numeric("+key+")"	);}catch (Exception e) {
+					Logger.getRootLogger().error(e.getMessage());	}
 			  //String evalstringa = varR + " <- cbind(" + varR + ",tmp)";
 			//	System.out.println(evalstringa);
 			//	connection.eval(evalstringa);
 			}
 			listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
+			listaCampiLabel = listaCampiLabel.substring(0, listaCampiLabel.length() - 1);
 			connection.eval(varR + " <- data.frame(" + listaCampi + ")");
 			
 			// assegnazione nome dei campi alle colonne
 			
-			String namecols = ((size > 1) ? "col" : "") + "names(" + varR + ") = c(" + listaCampi + ")";
+			String namecols = ((size > 1) ? "col" : "") + "names(" + varR + ") = c(" + listaCampiLabel + ")";
 			// String exec = "colnames(" + varR + ") = c(" + listaCampi + ")";
 			Logger.getRootLogger().debug("Bind input columns names " + namecols);
 			connection.eval(namecols);

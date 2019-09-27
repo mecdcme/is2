@@ -20,9 +20,10 @@ fellegisunter <- function(workset,ct, nvar=3, ...) {
   #con <- textConnection('stdout', 'wr', local = TRUE)
   #sink(con)
  
-yy <-  as.data.frame(matrix(as.numeric(workset[,ct]),ncol=length(ct),nrow=nrow(workset)))
+#yy <-  as.data.frame(matrix(as.numeric(workset[,ct]),ncol=length(ct),nrow=nrow(workset)))
+yy <- workset
 colnames(yy)<- ct
- 
+ print(yy)
 muTableName="muTable"
 varmuTableName="varmuTable"
 eps=0.0000001
@@ -38,7 +39,7 @@ ynew=0
 
 #Crea alcune variabili stringa utili per la parametrizzazione del programma
 variabili<-paste('Freq',paste(paste('V',nvar:1,sep=''),collapse='+'),sep='~')
-
+print(variabili)
 #connssione al db relais
 
 nomimatvar = names(yy)[1:nvar]
@@ -62,6 +63,9 @@ yy1=cbind(x,yy1)
 #assegna i valori iniziali alla matrice yy1
 yy2=as.matrix(log(yy1[,2:(nvar+1)]*ifelse(x>0.9,0.8,0.2)+((1-yy1[,2:(nvar+1)])*ifelse(x>0.9,0.2,0.8))))%*%matrix(rep(1,nvar),nvar)
 yy1[,nvar+2]=((yy1[,1]*0.1+(1-yy1[,1])*0.9)*exp(yy2))*sum(yy1[,nvar+2])/2
+
+print('yy1')
+print(yy1)
 
 #passo M - modello loglineare sulla tabella completa
 while (stop == 0) {
@@ -98,12 +102,13 @@ uvar <- c(uvar,tab[2,1],tab[1,1])
 #Verifica condizione di stima inaffidabile dei parametri
 
 #1 check su stime v1-vn e var latente x (vedi blocco laura)
-ceck = 0;
+check = 0;
+print(nvar)
 for(i in 1:nvar){
 if((l[[i]][1,1]>=l[[i]][2,1] && l[[i]][1,2]>=l[[i]][2,2]) || (l[[i]][1,1]<l[[i]][2,1] && l[[i]][1,2]<l[[i]][2,2]))
- ceck = 1;
+ check = 1;
 }
-if(ceck==1){
+if(check==1){
 #Messaggio di warning non blocante
 # msg = "WARNING: one or more variables give inconsistent estimates."
 #Messaggio di errore blocante

@@ -6,8 +6,8 @@ var pollLog, pollJob;
 
 
 $(document).ready(function() {
-	//pollLogs();
-	//pollJobs();
+	pollLogs();
+	pollJobs();
 });
 
 function esegui(idElaborazione, idProcesso) {

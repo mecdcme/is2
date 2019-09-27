@@ -32,6 +32,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -450,10 +451,10 @@ public class Utility {
 		return headerValuesSelected;
 	}
 
-	public static HashMap<String, ArrayList<String>> getMapWorkSetValues(Map<String, ArrayList<StepVariable>> dataMap,
+	public static LinkedHashMap<String, ArrayList<String>> getMapWorkSetValues(Map<String, ArrayList<StepVariable>> dataMap,
 			SxTipoVar sxTipoVar) {
 
-		HashMap<String, ArrayList<String>> ret = new HashMap<>();
+		LinkedHashMap<String, ArrayList<String>> ret = new LinkedHashMap<>();
 		for (Map.Entry<String, ArrayList<StepVariable>> entry : dataMap.entrySet()) {
 			String nomeW = entry.getKey();
 			ArrayList<StepVariable> stepVariables = entry.getValue();
@@ -621,10 +622,10 @@ public class Utility {
 	 * @param keySet
 	 * @return
 	 */
-	public static HashMap<String, ArrayList<String>> getMapWorkSetValuesInRoles(
+	public static LinkedHashMap<String, ArrayList<String>> getMapWorkSetValuesInRoles(
 			Map<String, ArrayList<StepVariable>> dataMap, SxTipoVar sxTipoVar, Set<String> roles) {
 		// TODO Auto-generated method stub
-		HashMap<String, ArrayList<String>> ret = new HashMap<>();
+		LinkedHashMap<String, ArrayList<String>> ret = new LinkedHashMap<>();
 
 		for (Map.Entry<String, ArrayList<StepVariable>> entry : dataMap.entrySet()) {
 			String nomeW = entry.getKey();
