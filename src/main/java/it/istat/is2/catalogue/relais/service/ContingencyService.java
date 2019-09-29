@@ -24,8 +24,7 @@
 package it.istat.is2.catalogue.relais.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -34,7 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.catalogue.relais.decision.contingencyTable.BlockPatternFreqVector;
+
 
 import it.istat.is2.catalogue.relais.metrics.DiceSimilarity;
 import it.istat.is2.catalogue.relais.metrics.Jaro;
@@ -49,7 +48,6 @@ import it.istat.is2.catalogue.relais.metrics.added.WindowEquality;
 import it.istat.is2.catalogue.relais.metrics.dataStructure.MetricMatchingVariable;
 import it.istat.is2.catalogue.relais.metrics.dataStructure.MetricMatchingVariableVector;
 import it.istat.is2.catalogue.relais.metrics.utility.AbstractStringMetric;
-import it.istat.is2.catalogue.relais.project.ReconciledSchema;
 import lombok.Data;
 
 /**
@@ -62,11 +60,9 @@ public class ContingencyService {
 	private final int DIMMAX = 100000;
 	private String blockingKey;
 	private MetricMatchingVariableVector metricMatchingVariableVector;
-	private BlockPatternFreqVector bpfv;
 	private int numVar;
 	private int dim;
 	private int[][] combinations;
-	private ReconciledSchema rsc;
 	private AbstractStringMetric[] metrics;
 
 
