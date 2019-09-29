@@ -41,7 +41,8 @@ $(document).ready(function () {
         "aoColumnDefs": [{
             "aTargets": ['_all'],
             "mRender": function (data, type, full) {
-                return '<span role="button" title="' + data + '">' + toFixed(data, 3) + '</span>';
+                return '<span role="button" title="' + data + '">' +data  + '</span>';
+            //    return '<span role="button" title="' + data + '">' + toFixed(data,10) + '</span>';
             }
         }],
         drawCallback: function () {

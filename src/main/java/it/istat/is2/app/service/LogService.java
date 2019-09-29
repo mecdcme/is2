@@ -52,7 +52,8 @@ public class LogService {
     }
 
     public List<Log> findByIdSessione(Long idSessione) {
-        return (List<Log>) this.logDao.findByIdSessioneAndTipoOrderByIdDesc(idSessione, IS2Const.OUTPUT_DEFAULT);
+       // return (List<Log>) this.logDao.findByIdSessioneAndTipoOrderByIdDesc(idSessione, IS2Const.OUTPUT_DEFAULT);
+        return (List<Log>) this.logDao.findByIdSessioneOrderByIdDesc(idSessione);
     }
 
     public List<Log> findByIdSessioneAndTipo(Long idSessione, String tipo) {
