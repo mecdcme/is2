@@ -80,7 +80,7 @@
             <ul class="nav navbar-nav d-md-down-none">
                 <li class="nav-item px-3" sec:authorize="hasAuthority('ADMIN')" >
                     <a class="nav-link"  data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        Settings
+                        <span>Settings</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-xl-left">
                         <div class="dropdown-header text-center">
@@ -135,13 +135,12 @@
             
               <!-- Log panel -->
             <div class="modal fade" id="modalLog" role="dialog" th:if="${session.sessioneBean}">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">
                                 <span><i class="fa fa-clone"></i>
                                     <span th:text="#{Layout.log.panel}">Log panel</span>
-                                    <span>R output</span>
                                 </span>
                             </h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">

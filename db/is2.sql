@@ -493,7 +493,7 @@ CREATE TABLE `sx_business_function` (
 
 LOCK TABLES `sx_business_function` WRITE;
 /*!40000 ALTER TABLE `sx_business_function` DISABLE KEYS */;
-INSERT INTO `sx_business_function` VALUES (1,'Record Linkage','The purpose of record linkage is to identify the same real world entity that can be differently represented in data sources, even if unique identifiers are not available or are affected by errors.','RL',1),(2,'Data Editing','Data editing is the process of reviewing the data for consistency, detection of errors and outliers and correction of errors, in order to improve the quality, accuracy and adequacy of the data and make it suitable for the purpose for which it was collected.','EDIT',1),(3,'Data Validation','Data validation is the process of ensuring data have undergone data cleansing to ensure they have data quality, that is, that they are both correct and useful. It uses routines, often called \"validation rules\", that check for correctness, meaningfulness, and security of data that are input to the system.','VALIDATE',1);
+INSERT INTO `sx_business_function` VALUES (1,'Record Linkage','The purpose of record linkage is to identify the same real world entity that can be differently represented in data sources, even if unique identifiers are not available or are affected by errors.','RL',1),(2,'Outlier detection','Detection of units affected by potential influential errors based on the R package SeleMix.','EDIT',1),(3,'Data Validation','Data Validation is an activity verifying whether or not a combination of values is a member of a set of acceptable combination [ESSnet project Validat Foundation].','VALIDATE',1);
 /*!40000 ALTER TABLE `sx_business_function` ENABLE KEYS */;
 UNLOCK TABLES;
 

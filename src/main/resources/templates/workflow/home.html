@@ -77,14 +77,14 @@
                                     <div class="card-header">
                                         <span th:text="#{Layout.Processes}"></span>
                                         <div class="card-header-actions">
+                                            <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}"> 
+                                                <i class="fa fa-cog"></i>&nbsp;<span>Settings</span>
+                                            </a>
                                             <a title="Clean Output" th:href="@{'/ws/cleanallworkset/'+${elaborazione.id}+'/2'}">
-                                                <i class="fa fa-trash-o"></i>&nbsp;<span>Clean Output</span>
+                                                <i class="fa fa-trash-o"></i>&nbsp;<span>Clean</span>
                                             </a>
                                             <a title="Clean Workset" th:href="@{'/ws/cleanallworkset/'+${elaborazione.id}+'/0'}">
                                                 <i class="fa fa-undo"></i>&nbsp;<span>Reset</span>
-                                            </a>
-                                            <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}"> 
-                                                <i class="fa fa-cog"></i>&nbsp;<span>Settings</span>
                                             </a>
                                         </div>
                                     </div>
@@ -94,7 +94,7 @@
                                                 <tr>
                                                     <th><span th:text="#{Layout.Process}">Processo</span></th>
                                                     <th><span th:text="#{Layout.Step}">Step</span></th>
-                                                    <th><span>Settings</span></th>
+                                                    <th class="text-center"><span>Settings</span></th>
                                                     <th class="text-center"><span>Status</span></th>
                                                     <th class="text-center">Actions</th>
                                                     <th class="text-center">Output</th>
@@ -108,7 +108,7 @@
                                                             <span th:text="${bProcess.descr + '('+bProcess.nome+')'}"></span>
                                                         </td>
                                                         <td><span th:text="${bStep.descr + '('+bStep.nome+')'}"></span></td>
-                                                        <td th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}" >
+                                                        <td class="text-center" th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}" >
                                                             <span th:if="${(#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id)))}" class="text-success">
                                                                 <i class="fa fa-check" aria-hidden="true"></i>
                                                             </span>
