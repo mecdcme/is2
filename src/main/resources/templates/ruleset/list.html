@@ -121,7 +121,7 @@
                                             <input type="hidden" value="" name="rulesetType" id="rulesetType" />
                                         </form>
 
-                                        <table id="datasetList" class="table table-condensed" th:if="${listaRuleSet}" cellspacing="0">
+                                        <table id="datasetList" class="table table-sm" th:if="${listaRuleSet}" cellspacing="0">
                                             <thead>
                                                 <tr th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
                                                     <th><span th:text="#{generic.label.name}">Nome</span></th>

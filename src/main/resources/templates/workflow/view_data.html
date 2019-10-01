@@ -94,7 +94,7 @@
                                     </div>
                                     <div class="card-body">
                                         <table id="worksetTab" th:if="${not #lists.isEmpty(stepVList)}"
-                                               class="table table-condensed table-striped" cellspacing="0" width="auto" style="overflow: auto;">
+                                               class="table table-sm table-striped" cellspacing="0" width="auto" style="overflow: auto;">
                                             <thead>
                                                 <tr>
                                                     <th th:each="stepV: ${stepVList}" th:text="${stepV.workset.nome}"></th>
