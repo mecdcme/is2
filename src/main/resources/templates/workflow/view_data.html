@@ -1,0 +1,120 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+        <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+        <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
+        <script th:src="@{/js/workflow/elaborazionewf.js}"></script>
+        <script th:inline="javascript">
+            var _idElaborazione = [[${session.sessioneBean.idElaborazione}]];
+            var _tipoCampo = [[${tipoCampo.id}]];
+            var _roleGroup = [[${currentGroup.id}]];
+        </script>
+        <link rel="stylesheet" th:href="@{/css/vendors/table/datatables.css}" />
+    </head>
+    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+        <header th:replace="layout :: site-header"></header>
+        <!-- Body -->
+        <div class="app-body">
+            <aside th:replace="layout :: site-modals"></aside>
+            <aside th:replace="layout :: site-aside"></aside>
+            <!-- Main container -->
+            <main class="main">
+                <!-- Breadcrumb-->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
+                            <span th:text="${session.sessioneBean.businessFunction.name}"></span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{'/sessione/apri/' + ${session.sessioneBean.id}}">
+                            <span th:text="${session.sessioneBean.nome}"></span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a title="Sessione lavoro" th:if="${session.sessionelv}" 
+                           th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}"> 
+                            <span th:if="${session.sessioneBean.nomeElaborazione}" 
+                                  th:text="${session.sessioneBean.nomeElaborazione}"></span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>Settings</span>
+                    </li>
+                    <!-- Breadcrumb Menu-->
+                    <li class="breadcrumb-menu d-md-down-none">
+                        <div class="btn-group" role="group" aria-label="Button group">
+                            <a class="breadcrumb-last-item" title="Chiudi processo" 
+                                th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}"> 
+                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                            </a>
+                        </div>
+                    </li>
+                </ol>
+                <div class="container-fluid">
+                    <div class="animated fadeIn">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <span th:each="objectGroup,iterStat : ${outputObjects}">
+                                            <a class="card-header-action" th:href="@{'/ws/dataview/'+${elaborazione.id}+'/2/'+${objectGroup.id}}" 
+                                             th:class="nav-padding" th:classappend="!${iterStat.last}? 'bar-right' : ''" > 
+                                                <span th:if="${objectGroup.id} == ${currentGroup.id}" class="font-weight-bold" th:text="${objectGroup.nome}"></span>
+                                                <span th:unless="${objectGroup.id} == ${currentGroup.id}" th:text="${objectGroup.nome}"></span>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="card-body">
+                                        <table id="worksetTab" th:if="${not #lists.isEmpty(stepVList)}"
+                                               class="table table-sm table-striped" cellspacing="0" width="auto" style="overflow: auto;">
+                                            <thead>
+                                                <tr>
+                                                    <th th:each="stepV: ${stepVList}" th:text="${stepV.workset.nome}"></th>
+                                                </tr>
+
+                                            </thead>
+                                        </table>
+                                        <span th:unless="${not #lists.isEmpty(stepVList)}">
+                                            Nessuna elaborazione eseguita
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- row -->
+                    </div>
+                </div>
+            </main>
+        </div>
+        <!-- END MAIN CONTAINER -->
+        <footer th:replace="layout :: site-footer" />
+    </body>
+</html>

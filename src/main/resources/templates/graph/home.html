@@ -1,0 +1,192 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+        <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+        <script th:src="@{/js/plotly/plotly-latest.min.js}"></script>
+        <script th:src="@{/js/jquery-ui.min.js}"></script>        
+        <script th:src="@{/js/graph.js}"></script>
+        <script th:inline="javascript">
+            var _idfile = [[${idfile}]];
+            $(document).ready(function () {
+            setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+            });
+        </script>
+        <link th:href="@{/css/table/datatables.css}" rel="stylesheet"/>
+    </head>
+    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+        <header th:replace="layout :: site-header"></header>
+        <!-- Body -->
+        <div class="app-body">
+            <aside th:replace="layout :: site-modals"></aside>
+            <aside th:replace="layout :: site-aside"></aside>
+            <!-- Main container -->
+            <main class="main">
+                <!-- Breadcrumb-->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:if="${session.sessionelv}" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                            <span>
+                                <span th:text="${session.sessionelv.nome}"></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:if="${session.sessionelv}" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                            <span th:if="${session.sessionelv}">
+                                <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/viewDataset/'+${idfile}}">
+                            <span th:text="${dfile.nomeFile}"></span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <span th:text="#{sessionewf.graph}"></span>
+                    </li>
+                    <!-- Breadcrumb Menu-->
+                    <li class="breadcrumb-menu">
+                        <div class="btn-group" role="group" aria-label="Button group">
+                            <a class="" title="Chiudi analytics" th:href="@{'/viewDataset/'+${idfile}}">
+                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                            </a>
+                        </div>
+                    </li>
+                </ol>
+                <div class="container-fluid">
+                    <div class="animated fadeIn">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-nocolor">
+                                    <div class="card-header">
+                                        <span>Selezione variabili</span>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action graph-action  ">
+                                                <input id="checkbox-filter" type="checkbox">
+                                                    <label class="label-filter" for="checkbox2">Filters</label>
+                                            </a>
+                                            <a  id="scatter" class="card-header-action graph-action" href="javascript:void(0)" onclick="javascript:getData('scatter', 0);" title="select a Scatter chart!"> 
+                                                <i class="fa fa-plus-square-o"></i>&nbsp;<span>Scatter</span>
+                                            </a>
+                                            <a id="box" class="card-header-action graph-action" href="javascript:void(0)" onclick="javascript:getData('box', 0);" title="select a Box plot chart!"> 
+                                                <i  class="fa fa-plus-square-o"></i>&nbsp;<span>Box plot</span>
+                                            </a>
+                                            <a id="bar" class="card-header-action graph-action"  href="javascript:void(0)" onclick="javascript:getData('bar', 0);" title="select a Bar chart!"> 
+                                                <i   class="fa fa-plus-square-o"></i>&nbsp;<span>Bar</span>
+                                            </a>
+                                        </div>
+                                    </div>                            
+                                    <div class="card-body"> 
+                                        <div class="row">
+                                            <div class="col-xs-2">
+                                                <table id="sourceTable" class="table table-striped table-bordered table-hover sortable source-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="round-cell"><span>Variabili Dataset</span></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }">
+                                                            <td><span th:value="${cols.id}" th:text="${cols.nome}"></span></td>
+                                                        </tr>
+                                                        <tr><td colspan="3" class="drop-row round-cell" style="display: none;"></td></tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-xs-2">
+                                                <table id="targetY" class="table table-striped table-bordered table-hover sortable yaxis invisible col-lg-3">
+                                                    <thead>
+                                                        <tr style="border-bottom: 1px solid #ddd">
+                                                            <th class="round-cell"><span>Y axis</span></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr><td colspan="3" class="drop-row round-cell" style="display: none;"></td></tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-xs-2">
+                                                <table id="targetX" class="table table-striped table-bordered table-hover sortable xaxis invisible col-lg-3">
+                                                    <thead>
+                                                        <tr style="border-bottom: 1px solid #ddd">
+                                                            <th class="round-cell"><span>X axis</span></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr><td colspan="3" class="drop-row round-cell" style="display: none;"></td></tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <div class="col-xs-2">
+                                                <table id="filter" class="table table-striped table-bordered table-hover sortable filter invisible">
+                                                    <thead>
+                                                        <tr style="border-bottom: 1px solid #ddd">
+                                                            <th class="round-cell"><span>Filter</span></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr><td colspan="3" class="drop-row round-cell" style="display: none;"></td></tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card card-graph">
+                                    <div class="card-header">
+                                        <span class="graph-title">Chart</span>
+                                        <div class="card-header-actions">                                    
+                                            <a id="select-filter" class="card-header-action invisible">
+                                                <label class="label-filter" for="select-data-filter">Select filter:</label>
+                                                <select id="select-data-filter" >
+                                                    <option value="any">any</option>
+                                                </select>
+                                            </a>
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:getData(passGraphType, 1);" title="Draw Chart!"> 
+                                                <i class="fa fa-pencil-square-o"></i>
+                                                <span>Draw</span>
+                                            </a>
+                                        </div>                            
+                                    </div>
+                                    <div class="card-body"> 
+                                        <div class="row">
+                                            <div  id="datagraph" style="height: 300px;"></div>                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <!-- End body -->
+        <footer th:replace="layout :: site-footer"></footer>
+    </body>
+</html>

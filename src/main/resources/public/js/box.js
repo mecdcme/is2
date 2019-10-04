@@ -21,6 +21,7 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
+var _ctx = $("meta[name='ctx']").attr("content");
 var smallWindow = 560;
 var load = true;
 
@@ -76,8 +77,12 @@ $(function () {
 
 //Set menu active
 function setMenuActive(id) {
-    $("#" + id).addClass("active");
-    $("#" + id + " a").addClass('active').parent().parent().addClass('in').parent();
+    if (id === 0) { //home
+        $("#home a").addClass("active");
+    } else{
+        $("#bf" + id + " a").addClass("active");
+    }
+    
 }
 
 
@@ -141,4 +146,36 @@ function callBackShow() {
     setTimeout(function () {
         $("#center").fadeIn();
     }, 1000);
+}
+
+function showLog(){
+    $("#modalLog").modal("show");
+}
+
+function clearLog(idSessione) {
+    $.ajax({
+        url: _ctx + "/logs/" + idSessione,
+        type: "DELETE",
+        dataType: "JSON",
+        success: function () {
+            $("#logbox").text("No message available");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            writeMsgsError('Error deleting data', 'msgs');
+        }
+    });
+}
+
+function clearRLog(idSessione) {
+    $.ajax({
+        url: _ctx + "/rlogs/" + idSessione,
+        type: "DELETE",
+        dataType: "JSON",
+        success: function () {
+            $("#rbox").text("No message available");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            writeMsgsError('Error deleting data', 'msgs');
+        }
+    });
 }

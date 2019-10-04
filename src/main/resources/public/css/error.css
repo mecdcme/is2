@@ -1,0 +1,57 @@
+.wrapper>footer, .wrapper>section{
+    margin-left: 0px!important;
+}
+
+.container-fluid{
+    margin-top: 40px;
+}
+
+.navbar-default {
+    border-color: #f86c6b!important;
+    border-bottom: 1px solid #f86c6b!important;
+    background-color: #e35153;
+}
+.content-wrapper{
+    margin-top: 0px!important;
+}
+
+.table > tbody > tr > td{
+    border-top: none !important;
+}
+
+.breadcrumb li {
+    font-size: 32px !important;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+.fa-stack-1x{
+    color:#e35153!important;
+}
+
+.card{
+    border: none;
+    background-color: inherit;
+}
+
+.card-body{
+    padding: 30px!important;
+    font-size: 20px;
+}
+
+.error-status{
+    font-family: "Comic Sans MS"!important;
+    font-size: 32px!important;
+    font-weight: 700;
+    color:#f03e3e;
+}
+
+.error-msg{
+    font-family: "Comic Sans MS"!important;
+    font-size: 28px!important;
+    font-weight: 700;
+    color:#f03e3e;
+}

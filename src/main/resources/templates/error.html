@@ -26,52 +26,38 @@
     <head th:fragment="site-head">
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="description" content="IS2 - Workbench"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="IE=10.000" http-equiv="X-UA-Compatible" />
-        <title th:text="#{app.title}">IS2</title>
+        <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+        <meta name="ctx_server" th:content="${#strings.replace(#httpServletRequest.requestURL,#httpServletRequest.requestURI,'')}" />
+        <meta name="localLang" th:content="${#locale}" />
+        <link rel="icon" th:href="@{/img/favicon.ico}" type="image/x-icon"/>
+        <title>IS2 Workbench</title>
         <!-- Javascript -->
-        <script th:src="@{/js/jquery-3.1.1.min.js}" type="text/javascript"></script>
-        <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/vendors/jquery-3.1.1.min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/vendors/popper/popper.min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/bootstrap.js}" type="text/javascript"></script>
+        <script th:src="@{/js/vendors/coreui/coreui.js}" type="text/javascript"></script>
         <script th:src="@{/js/box.js}" type="text/javascript"></script>
         <!-- CSS -->
-        <link th:href="@{/css/custom_bootstrap.css}" rel="stylesheet" />
+        <link th:href="@{/css/coreui/coreui.css}" rel="stylesheet" />
         <link th:href="@{/css/box.css}" rel="stylesheet" />
-        <!-- Fontawesome -->
-        <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+        <!-- Icons -->
+        <link th:href="@{/icons/font-awesome.min.css}" rel="stylesheet" />
+        <link th:href="@{/icons/coreui-icons.css}" rel="stylesheet" />
+        <link th:href="@{/icons/simple-line-icons.css}" rel="stylesheet" />
     </head>
 
     <body>
         <div class="wrapper">
-            <!-- START HEADER -->
-            <header th:replace="layout :: site-header"></header>
-            <aside th:replace="layout :: site-aside"></aside>
-            <!-- START LEFT SIDE BAR -->
-
-            <aside th:fragment="site-aside" th:remove="tag">
-                <aside class="aside">
-                    <div id="sidebar-wrapper" class="aside-inner">
-                        <nav data-sidebar-anyclick-close=""
-                             class="sidebar navbar navbar-primary navbar-fixed-side">
-                            <ul class="nav">
-                                <li id="home" class="nav-body">
-                                    <a href="index.html" title="Home" th:href="@{/}"> <i class="fa fa-home"></i> 
-                                        <span th:text="#{Layout.home}">Home</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </aside>
-            </aside>
-            <!-- END LEFT SIDE BAR -->
-
             <!-- START MAIN CONTAINER -->
             <section>
                 <div class="content-wrapper">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item active" aria-current="page">
-                                <span th:text="#{Error.page}"> Error page </span>
+                            <li class="breadcrumb-item">
+                                <strong>Oops... Si è verificato un errore!</strong>
                             </li>
                         </ol>
                     </nav>
@@ -79,53 +65,47 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-2"></div>
-                        <div class="col-lg-6">
-                            <fieldset class="well">
-                                <div>
-                                    <h1 class="indigo-text center">
-                                        <i class="fa fa-exclamation-triangle"></i>
-                                        <span th:text="#{Error.page.legend}">System Error</span>
-                                    </h1>
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table borderless text-center">
+                                        <tbody>
+                                            <tr>
+                                                <td class="error-status"><span th:text="${status}"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="error-msg"><span>PAGE NOT FOUND</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong th:text="${path}"></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td><span th:text="${message}"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><span th:text="${exception}"></span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="text-center">
+                                        Please contact the system administrator or try to go back 
+                                        <a href="index.html" title="Home" th:href="@{/}"> <i class="fa fa-home"></i> 
+                                            <span th:text="#{Layout.home}">Home</span>
+                                        </a>
+                                    </div>
                                 </div>
-                                <div style="margin-left: 10px; margin-right: 10px;">
-                                    <ul id="messages" th:with="notifyMessages=${session['siteNotificationMessages']}">
-                                        <th:block th:each="msg : ${notifyMessages}">
-                                            <li>					
-                                                <span th:text="${msg.text} "></span> 
-                                                <div th:if="${msg.details}">	
-                                                    <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                        <small>
-                                                            <span class=" menu__icon--close"> <i  class="fa fa-chevron-circle-down" aria-hidden="true"></i></span>
-                                                            <span class=" menu__icon--open"> <i  class="fa fa-chevron-circle-right" aria-hidden="true"></i></span>
-                                                            <span th:text="#{Layout.details}"></span> 
-                                                        </small>
-                                                    </a>
-                                                    <div class="collapse" id="collapseExample">
-                                                        <div class="well"><span th:text="${msg.details}"></span> </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </th:block>
-                                    </ul>
-                                    <span th:if="${notifyMessages}" th:remove="all" th:text="'session.remove(${siteNotificationMessages})'">
-                                    </span>
-                                </div>
-                                <div th:if="${exception}" th:text="${exception}">${exception}</div>
-                                <p>
-                                    <span th:text="#{Error.goto}">Go to</span>
-                                    <a href="index.html" title="Home" th:href="@{/}" class="active"><i class="fa fa-home"></i> <span>Home</span></a>
-                                </p>
-                            </fieldset>
+                            </div>
                         </div>
+                        <div class="col-lg-2"></div>
                     </div>
                 </div>
             </section>
             <!-- END MAIN CONTAINER -->
 
             <!-- START FOOTER-->
-            <div class="p-lg text-center">
+            <footer>
                 <span th:text="#{app.footer.text}">2019 - Istat Statistical Service (IS2)</span><br/>
-            </div>
+            </footer>
             <!-- END FOOTER-->
         </div>
     </body>

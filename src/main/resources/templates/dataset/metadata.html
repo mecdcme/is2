@@ -1,0 +1,186 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+        <script th:inline="javascript">
+            var _idfile = [[${idfile}]];
+            $(document).ready(function () {
+            setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+            });
+        </script>
+        <script th:src="@{/js/dataset/associazionesum.js}"></script>
+        <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
+        <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet" />
+    </head>
+    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+        <header th:replace="layout :: site-header"></header>
+        <!-- Body -->
+        <div class="app-body">
+            <aside th:replace="layout :: site-modals"></aside>
+            <aside th:replace="layout :: site-aside"></aside>
+            <!-- Main container -->
+            <main class="main">
+                <!-- Breadcrumb-->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a title="Sessione lavoro" th:if="${session.sessionelv}" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
+                            <span th:text="${session.sessionelv.nome}"></span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                            <span th:if="${session.sessionelv}">
+                                <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/viewDataset/'+${idfile}}">
+                            <span th:text="${dfile.nomeFile}"></span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <span th:text="#{sessionewf.metadati}"></span>
+                    </li>
+                    <!-- Breadcrumb Menu-->
+                    <li class="breadcrumb-menu">
+                        <div class="btn-group" role="group" aria-label="Button group">
+                            <a class="" title="Chiudi metadati" th:href="@{'/viewDataset/'+${idfile}}">
+                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                            </a>
+                        </div>
+                    </li>
+                </ol>
+                <div class="container-fluid">
+                    <div class="animated fadeIn">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <span th:text="#{sessionewf.metadati}"></span>
+                                    </div>
+                                    <div class="card-body">
+                                        <table id="metadataTab" class="table table-sm table-hover" cellspacing="0" style="width: 100%">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 5%"><span>#</span></th>
+                                                    <th><span>Nome Variabile</span><span class="pull-right"><i class="fa fa-arrows"></i></span></th>
+                                                    <th><span>Tipo Variabile SUM </span></th>
+                                                    <th><span>Filtro</span></th>
+                                                    <th style="width: 5%"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }">
+                                                    <td><i class="fa fa-sort"></i><span th:text="${cols.ordine}"></span></td>
+                                                    <td class="text-left"><span th:text="${cols.nome}"></span></td>
+                                                    <td><span th:text="${cols.tipoVariabile} != null? ${cols.tipoVariabile.nomeTipoVariabileIta}: ''"></span></td>
+                                                    <td align="center">
+                                                        <a href="javascript:void(0)" title="Filtro ricerca" class="disabled">
+                                                            <span th:if="${ cols.filtro==1 }"><i class="fa fa-check"></i></span>
+                                                        </a>
+                                                    </td>
+                                                    <td align="center">
+                                                        <a href="javascript:void(0)"  th:if="${cols.tipoVariabile}"
+                                                           th:attr="onclick='javascript:associaVarSum('+${cols.id}+','+${cols.tipoVariabile.tipoVariabile}+',\''+${cols.nome}+'\','+${cols.filtro}+')'"
+                                                           title="Associa"><i class="fa fa-pencil"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0)"   th:unless="${cols.tipoVariabile}"
+                                                           th:attr="onclick='javascript:associaVarSum('+${cols.id}+',null,\''+${cols.nome}+'\','+${cols.filtro}+')'"
+                                                           title="Associa"> <i class="fa fa-pencil"></i>
+                                                        </a>
+                                                        <input type="hidden" name="colsid" th:value="${cols.id}" />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <!-- End body -->
+        <footer th:replace="layout :: site-footer"></footer>
+
+        <div class="modal fade" id="add-viarabile-sum-modal" role="dialog">
+            <div class="modal-dialog modal-md" role="document">
+                <form th:action="@{/associaVarSum}" id="formAssociaVarSum" method="post">
+                    <input type="hidden" name = "idfile" th:value="${idfile}" />
+                    <input type="hidden" id="sumSelectedId" name = "idsum" />
+                    <input type="hidden" id="sumFiltro" name = "filtro" value='0'/>
+                    <input type="hidden" id="varSelectedId" name = "idvar"/>
+                    <div class="modal-content ">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-cog"></i>
+                                <span>Associazione variabile SUM</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body form">
+                            <div class="form-group">
+                                <label class="control-label" text="Variabile Selezionata "><span>Nome: </span></label>
+                                <input name="valore" id="varSelected" title="Nome variabile" class="form-control" type="text"/>
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label"> <span id="funzione">Class. SUM:</span></label>
+                                <select  id="sumSelection" class="form-control">
+                                    <option  th:each="sum: ${variabili}" th:value="${sum.tipoVariabile}" th:text="${sum.nomeTipoVariabileIta}"></option>							
+                                </select>
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" th:text="#{update.filtro.label}+':'  "><span>Filtro:</span></label>
+                                <div id="radio_container">                                                 
+                                    <input id="filtro1" type="radio" title="Aggiungi" name="flagRicerca" value="1" /> S&Iacute;
+                                    <input id="filtro0" type="radio" title="Escludi" name="flagRicerca" value="0" /> No
+                                </div>   
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:text="#{associazione.dialog.button.close}">Annulla</span>
+                            </button>
+                            <button id="btn_dlg_assoc" type="button" class="btn btn-primary disabled towait" onclick="inserisciVarSum()" data-dismiss="modal">
+                                <span>Salva</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

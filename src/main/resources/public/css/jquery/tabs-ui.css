@@ -1,0 +1,118 @@
+
+.hide {
+	display: none;
+}
+
+#tabs {
+	margin-top: 1em;
+	border: none;
+}
+
+#tabs li .ui-icon-close {
+	float: left;
+	margin: 0.4em 0.2em 0 0;
+	cursor: pointer;
+}
+
+.ui-tabs .ui-tabs-panel {
+	background: #ededed;
+	border-width: thin;
+}
+
+.ui-widget-header {
+	border: 0px solid #dddddd;
+	background: none;
+	color: none;
+	font-weight: bold;
+}
+
+.ui-tabs .ui-tabs-nav {
+	margin: 0;
+	padding: 0;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default,
+	.ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover,
+	html .ui-button.ui-state-disabled:active {
+	font-weight: normal;
+	color: #cccccc;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active,
+	a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover
+	{
+	border: 1px solid #cccccc;
+	background: #ededed;
+	font-weight: bold;
+	color: #cccccc;
+}
+
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited,
+	.ui-icon, .ui-button:active .ui-icon {
+	color: #444444;
+}
+
+#tabs li .ui-icon-close {
+	float: left;
+	margin: 0.4em 0.2em 0 0;
+	cursor: pointer;
+}
+
+.ui-tabs .ui-tabs-nav li {
+	list-style: none;
+	float: left;
+	position: relative;
+	top: 0;
+	margin: 7px -10px 0 15px;
+	border-bottom-width: 0;
+	padding: 0;
+	white-space: nowrap;
+	background: #20A8D8;
+}
+
+#tab-msg {
+	margin: 7px .2em 0 15px;
+	color: #FF0000;
+	padding: 3px;
+	font-weight: bold;
+}
+
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited,
+	a.ui-button, a:link.ui-button, a:visited.ui-button, .ui-button {
+	color: #FFFFFF;
+	font-weight: bold;
+}
+
+.ui-widget-header .ui-icon {
+	background-image: url(../img/ui-icons_ffffff_256x240.png);
+}
+
+#tabs.ui-tabs ul.ui-tabs-nav .ui-tabs-anchor {
+	cursor: default;
+}
+
+#selectable .ui-selecting {
+	background: #20A8D8;
+}
+
+#selectable .ui-selected {
+	background: #20A8D8;
+	color: white;
+}
+
+#selectable {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	width: 91%;
+}
+
+#selectable li {
+	padding: 0.75rem 1.25rem;
+	font-size: 1em;
+	height: 45px;
+}
+
+#selectable .ui-selected {
+    color: #000000;
+}

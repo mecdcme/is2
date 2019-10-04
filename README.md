@@ -1,10 +1,9 @@
 [![Build Status](https://travis-ci.org/I3S-ESSnet/is2.svg?branch=master)](https://travis-ci.org/I3S-ESSnet/is2) [![Docker hub](https://img.shields.io/docker/cloud/automated/i3sessnet/is2.svg?label=is2%20docker)](https://cloud.docker.com/u/i3sessnet/repository/docker/i3sessnet/is2) [![Docker hub](https://img.shields.io/docker/cloud/automated/i3sessnet/is2-mysql.svg?label=is2-mysql%20docker)](https://cloud.docker.com/u/i3sessnet/repository/docker/i3sessnet/is2-mysql)
 
 # IS2
-A runtime environment to execute statistical services
+A runtime environment to execute statistical services. IS2 is a workbench that offers a set of tools for data analysis and processing. 
 
 ## What you’ll need
-
 In order to build the IS2 application, your environment should fulfill the following requirements:
 
 * A favorite text editor or IDE
@@ -13,16 +12,20 @@ In order to build the IS2 application, your environment should fulfill the follo
 * Mysql Server 8.0 or later
 
 ## What you’ll build
+IS2 is a workbench that, regardless of the statistical method executed, provides the following functionalities:
 
-You’ll build a template web application that will provide out of the box :
-* Authentication & authorization;
-* Responsive graphical interface (html, css, js):
-  * Tables with enhanced interaction controls (search, export, sorting, etc.);
-  * Charts;
-* Server side components:
-  * CRUD (insert, delete, update);
-  * Search filters;
-  
+1.	Upload and management of input data and metadata;
+2.	Setting of variables and parameters needed by an algorithm, written in Java, R or PL/SQL; 
+3.	Algorithm execution;
+4.	Analysis of output data and reports.
+
+The main concepts in the context of IS2 are:
+1.	Work Session: a work session is a logical environment that allows to upload and preprocess your data. The system provides a set of functionalities to create new variables by transforming the existing ones, or select a subset of records and/or variables.
+2.	Processing Session: by mapping initial data with standardized metadata, input data are transformed in working data. In this step, the user can classify and manage the information to process by: i) assigning specific roles to some variables (e.g. identification variable, classification, core variables); ii) selecting auxiliary information (if needed); iii) setting the model parameters. 
+3.	Run method: working data, with their standardized data structures, can be processed by one or more iterations of the statistical method. The result of each iteration is stored in standardized data structures (output data).
+4.	Analyse output: this process step can be used to perform quality checks and/or to calculate statistical indicators to assess the outcome of each iteration.
+
+
 ## How to build
 Download and unzip the source code in your workspace `IS2_PATH`.
 Before building the application you must create a MySQL database. From the command line go to MySQL installation directory `MYSQL_PATH`:
@@ -31,7 +34,7 @@ cd MYSQL_PATH\bin;
 mysql -u db_username -p
 mysql> create database is2;
 ```
-Then create the tables needed to run the application, using the script `is2.sql` stored in the `IS2_PATH/db` folder:
+Then create the tables needed to run the application, using the script `is2.sql` stored in the [IS2_PATH/db](db/is2.sql) folder:
 ```
 mysql> use is2;
 mysql> source is2.sql
@@ -64,7 +67,6 @@ based Applications, with an embedded Tomcat, that you can "just run".
 ```
 java –jar is2.jar
 ```
-In the docs folder you will find a complete userguide with useful information that will help you to understand is2 project.
 
 
 Dockerize the MySQL database

@@ -1,0 +1,234 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+        <script th:src="@{/js/worksession/sessioni.js}"></script>
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+            });
+        </script>
+    </head>
+    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+        <header th:replace="layout :: site-header"></header>
+        <!-- Body -->
+        <div class="app-body">
+            <aside th:replace="layout :: site-modals"></aside>
+            <aside th:replace="layout :: site-aside"></aside>
+            <!-- Main container -->
+            <main class="main">
+                <!-- Breadcrumb-->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
+                            <span th:text="${session.sessioneBean.businessFunction.name}"></span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span th:text="${session.sessioneBean.nome}"></span>
+                    </li>
+                    <!-- Breadcrumb Menu-->
+                    <li class="breadcrumb-menu">
+                        <div class="btn-group" role="group" aria-label="Button group">
+                            <a class="breadcrumb-last-item" title="Chiudi sessione" 
+                               th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
+                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                            </a>
+                        </div>
+                    </li>
+                </ol>
+                <div class="container-fluid">
+                    <div class="animated fadeIn">
+                        <div class="row">
+                            <div class="col-6 col-lg-3" th:if="${(session.sessioneBean.file != null)}">
+                                <div class="card">
+                                    <div class="card-body p-3 d-flex align-items-center">
+                                        <a th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                            <i class="fa fa-database bg-primary p-3 font-2xl mr-3"></i>
+                                        </a>
+                                        <div>
+                                            <a th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                                <div class="text-value-sm text-primary">
+                                                    <span th:text="${session.sessioneBean.file.size()}" ></span>
+                                                </div>
+                                            </a>
+                                            <div class="text-muted text-uppercase font-weight-bold small">Dataset</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-3" th:if="${(session.sessioneBean.ruleset != null)}">
+                                <div class="card">
+                                    <div class="card-body p-3 d-flex align-items-center">
+                                        <a th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                                            <i class="fa fa-wrench bg-primary p-3 font-2xl mr-3"></i>
+                                        </a>
+                                        <div>
+                                            <a th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                                                <div class="text-value-sm text-primary">
+                                                    <span th:text="${session.sessioneBean.ruleset.size()}" ></span>
+                                                </div>
+                                            </a>
+                                            <div class="text-muted text-uppercase font-weight-bold small">Ruleset</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- row -->
+                        <input id="idsessionelv" type="hidden" value="${session.sessionelv.id}" />
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fa fa-bars"></i>
+                                        <span th:text="#{lista.elaborazioni.legend}">Lista processi</span>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaElaborazione();" title="Nuova elaborazione"> 
+                                                <i class="fa fa-plus-square-o"></i>
+                                                <span th:text="#{label.button.nuovo.processo}">Nuovo processo</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-sm" th:if="${listaElaborazioni}" cellspacing="0"  style="width:100%">
+                                            <thead>
+                                                <tr th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
+                                                    <th><span th:text="#{listasessioni.codice}">codice</span></th>
+                                                    <th><span th:text="#{listasessioni.nome}">nome</span></th>
+                                                    <th><span th:text="#{listasessioni.descrizione}">Descrizione</span></th>
+                                                    <th><span th:text="#{listasessioni.processo}">Processo</span></th>
+                                                    <th><span th:text="#{listasessioni.data.creazione}">data creazione</span></th>
+                                                    <th colspan="2"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="elaborazione : ${listaElaborazioni}"
+                                                    th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
+                                                    <td th:id="${'elabid_'+ elaborazione.id}" th:text="${elaborazione.id}"></td>
+                                                    <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.nome}"></td>
+                                                    <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.descrizione}"></td>
+                                                    <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${elaborazione.businessProcess.nome}"></td>
+                                                    <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${#dates.format(elaborazione.dataElaborazione, 'dd/MM/yyyy HH:mm')}"></td>
+                                                    <td style="width: 1%">
+                                                        <a class='towait' title="Visualizza elaborazione" th:href="@{'/ws/home/'+${elaborazione.id}}"> 
+                                                            <i class="fa fa-folder-open"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td style="width: 1%">
+                                                        <a title="Elimina elaborazione" href="javascript:void(0);" role="button" th:onclick="'javascript:eliminaElaborazione(\'' + ${elaborazione.id} + '\', \'' + ${session.sessionelv.id} + '\')'">												
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <!-- End body -->
+        <footer th:replace="layout :: site-footer" />
+
+        <!-- New process modal -->
+        <div class="modal fade" id="nuova-elaborazione-modal" role="dialog">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content ">
+                    <form th:action="@{/sessione/nuovoworkingset}" id="form" method="post">
+                        <input type="hidden" th:name="idsessione" th:value="${session.sessionelv.id}" />
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-sitemap"></i>
+                                <span th:text="#{nuova.elaborazione.dialog.title}">Nuova Elaborazione</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body form">
+                            <div class="form-group">
+                                <label class="control-label" th:text="#{nuova.sessione.nome}+'*:'"><span>Nome</span></label>
+                                <input name="nome" id="nome-elab" title="Descrizione" class="form-control" type="text" />
+                                <span class="help-block"><small class="text-danger" id="nomesesserror"></small></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" th:text="#{nuova.sessione.descrizione}+':'"><span>Descrizione</span></label>
+                                <input name="descrizione" title="note" class="form-control" type="text" />
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label"> <span id="funzione"  th:text="#{nuova.elaborazione.process}+':'">Processo *:</span></label>
+                                <select name="idfunzione" id="funzioni" class="form-control">
+                                    <option th:each="process : ${processesList}" th:value="${process.id}" th:text="${process.nome}"></option>
+                                </select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">
+                            <span th:text="#{Layout.Close}">Annulla</span>
+                        </button>
+                        <button type="button" id="btn-submit-ne" class="btn btn-primary">
+                            <span th:text="#{session.button.save}">Salva</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete process modal -->
+        <div class="modal fade" id="modalCancellaElaborazione" tabindex="-1"
+             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body"><span id="msg_elaboraz"></span></div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="" id="id_sessione_del" value="" /> 
+                        <input type="hidden" name="" id="id_elaborazione_del" value="" />
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Chiudi</button>
+                        <button type="button" id="btn_delete_elab" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
