@@ -85,10 +85,10 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:each="objectGroup,iterStat : ${outputObjects}">
-                                            <a class="card-header-action" th:href="@{'/ws/dataview/'+${elaborazione.id}+'/2/'+${objectGroup.id}}"  > 
-                                                <span th:if="${objectGroup.id} == ${currentGroup.id}" th:class="!${iterStat.last}? 'header-strong bar-right' : 'header-strong'" 
-                                                      th:text="${objectGroup.nome}"></span>
-                                                <span th:unless="${objectGroup.id} == ${currentGroup.id}" th:class="!${iterStat.last}? 'bar-right'" th:text="${objectGroup.nome}"></span>
+                                            <a class="card-header-action" th:href="@{'/ws/dataview/'+${elaborazione.id}+'/2/'+${objectGroup.id}}" 
+                                             th:class="nav-padding" th:classappend="!${iterStat.last}? 'bar-right' : ''" > 
+                                                <span th:if="${objectGroup.id} == ${currentGroup.id}" class="font-weight-bold" th:text="${objectGroup.nome}"></span>
+                                                <span th:unless="${objectGroup.id} == ${currentGroup.id}" th:text="${objectGroup.nome}"></span>
                                             </a>
                                         </span>
                                     </div>
