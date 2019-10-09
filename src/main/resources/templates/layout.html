@@ -40,9 +40,11 @@
         <script th:src="@{/js/bootstrap.js}" type="text/javascript"></script>
         <script th:src="@{/js/vendors/coreui/perfect-scrollbar.min.js}" type="text/javascript"></script>
         <script th:src="@{/js/vendors/coreui/coreui.js}" type="text/javascript"></script>
+        <script th:src="@{/js/vendors/toastr/toastr.min.js}" type="text/javascript"></script>
         <script th:src="@{/js/box.js}" type="text/javascript"></script>
         <!-- CSS -->
         <link th:href="@{/css/coreui/coreui.css}" rel="stylesheet" />
+        <link th:href="@{/css/vendors/toastr/toastr.css}" rel="stylesheet" />
         <link th:href="@{/css/box.css}" rel="stylesheet" />
         <!-- Icons -->
         <link th:href="@{/icons/font-awesome.min.css}" rel="stylesheet" />
@@ -78,6 +80,11 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <ul class="nav navbar-nav d-md-down-none">
+                <li class="nav-item px-3" sec:authorize="hasAuthority('ADMIN')" >
+                    <a class="nav-link" th:href="@{/team}" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span>Team</span>
+                    </a>
+                </li>
                 <li class="nav-item px-3" sec:authorize="hasAuthority('ADMIN')" >
                     <a class="nav-link"  data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                         <span>Settings</span>
@@ -154,7 +161,7 @@
                                     <span th:text="${log.msg}"></span>
                                 </li>
                             </ul>
-                            <span th:unless="${not #lists.isEmpty(logs)}"> No message available</span>
+                            <span th:unless="${not #lists.isEmpty(logs)}">No message available</span>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-light" data-dismiss="modal">

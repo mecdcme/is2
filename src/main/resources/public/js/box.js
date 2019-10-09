@@ -25,44 +25,38 @@ var _ctx = $("meta[name='ctx']").attr("content");
 var smallWindow = 560;
 var load = true;
 
+/* Toastr options */
+toastr.options = {
+  "closeButton": false,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": false,
+  "positionClass": "toast-top-center",
+  "preventDuplicates": false,
+  "onclick": null,
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+};
+
+/* Toastr usage
+ * 
+ * toastr["info"]("Session saved!", "Success")
+ * 
+ * */
+
 $(document).ajaxError(function (e, request, errorThrown, exception) {
-    if (request.status == "302") {
+    if (request.status === "302") {
         window.location = request.getResponseHeader('location');
     }
 });
 
-function doToggling(w) {
-    if (w <= smallWindow) {
-        $("aside").addClass("toggle-off");
-        $("section").addClass("toggle-off");
-        $("footer").addClass("toggle-off");
-    } else {
-        $("aside").fadeIn();
-        $("aside").removeClass("toggle-off");
-        $("section").removeClass("toggle-off");
-        $("footer").removeClass("toggle-off");
-    }
-}
-
-function toggleMenu() {
-    var w = 0;
-    if (load) {
-        w = $(window).width();
-    } else if ($("aside").hasClass("toggle-off")) {
-        w = smallWindow + 1;
-    }
-    doToggling(w);
-    load = false;
-}
-
-
-
-$(window).resize(function () {
-    doToggling($(window).width());
-});
-
 $(function () {
-    toggleMenu();
     $('.towait').click(function () {
         $('#loading').modal('show');
     });
@@ -72,7 +66,6 @@ $(function () {
     }, 4000);
 
     $('.modal').modal({show: false, backdrop: 'static', keyboard: false})
-
 });
 
 //Set menu active
@@ -84,7 +77,6 @@ function setMenuActive(id) {
     }
     
 }
-
 
 function format(n) {
     return ("" + n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
