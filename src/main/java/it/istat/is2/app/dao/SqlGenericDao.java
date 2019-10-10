@@ -122,8 +122,59 @@ public class SqlGenericDao {
 		return resultList;
 	}
 
+	
+	public List<Object[]> findDatasetIdColAndName(Long dFile) {
+
+		    Query qf = em.createNativeQuery("SELECT idcol,nome FROM SX_DATASET_COLONNA ss WHERE ss.dataset_file=:dFile order by 1 asc ");
+		    qf.setParameter("dFile", dFile);
+		    @SuppressWarnings("unchecked")
+		    List<Object[]>  resulFieldstList = (List<Object[]>) qf.getResultList();
+			return resulFieldstList;
+			}
 
 
+	public List<Object[]> findDatasetDataViewParamsbyQuery( List<Object[]>  resulFieldstList,  Long dFile, Integer rigaInf, Integer rigaSup,
+			HashMap<String, String> paramsFilter,   String nameColumnToOrder,String dirColumnOrder) {
+ 
+		 	String query = "with ss_model as ("
+				+ "       SELECT ss.idcol AS idcol, ss.nome AS nome, ss.ordine, t.idx, t.v "
+				+ "       FROM  SX_DATASET_COLONNA ss, json_table( CONVERT(  ss.daticolonna USING utf8), '$[*]' columns ( idx FOR ORDINALITY, v text path '$[0]') ) t " 
+				+ "         where ss.dataset_file=:dFile),"
+				+ "       ss_pivot as ("
+				+ "         SELECT ss_model.idx,ss_model.idcol, ";
+		for (Object[] field : resulFieldstList) {
+			query +=" MAX(IF(ss_model.idcol = "+field[0]+", ss_model.v, NULL )) AS "+field[1]+",";
+		}
+		query=query.substring(0,query.length()-1);
+		query+=" FROM ss_model " + 
+			   " GROUP BY ss_model.idx) " + 
+				" select  tabres.*, COUNT(*) OVER() AS total_rows from ss_pivot  tabres" ;
+		
+	 	if (paramsFilter != null) {
+			String where=" WHERE ";
+			for (String key : paramsFilter.keySet()) {  
+				where+= " tabres."+key+"=:"+key+" AND"; 
+		       } 
+			query+=where.substring(0,where.length()-3);
+		}
+		// SORT		
+		if(  nameColumnToOrder != null && !"".equals(nameColumnToOrder)) query+=" ORDER BY tabres."+nameColumnToOrder+" "+dirColumnOrder;
+		query+=" LIMIT "+rigaInf+","+rigaSup;
+				
+		
+		Query q = em.createNativeQuery(query);
+		q.setParameter("dFile", dFile);
+		if (paramsFilter != null) {
+			for (String key : paramsFilter.keySet()) {
+				String value = paramsFilter.get(key);
+				q.setParameter(key, value);
+			}
+		}
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = (List<Object[]>) q.getResultList();
+		return resultList;
+	}
+	
 	public List<DatasetColonna> findDatasetColonnaParamsbyQuery(@Param("dFile") Long dFile,
 			@Param("riga_inf") Integer rigaInf, @Param("riga_sup") Integer rigaSup,
 			HashMap<String, String> paramsFilter, @Param("nameColumnToOrder") String nameColumnToOrder,
@@ -186,6 +237,9 @@ public class SqlGenericDao {
 		List<DatasetColonna> resultList = (List<DatasetColonna>) q.getResultList();
 		return resultList;
 	}
+	
+	
+	
 
 	public List<String> findTablesDB(String table_schema) {
 		// TODO Auto-generated method stub

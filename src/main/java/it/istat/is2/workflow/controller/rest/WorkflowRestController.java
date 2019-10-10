@@ -74,7 +74,7 @@ public class WorkflowRestController {
 	private NotificationService notificationService;
 
     @RequestMapping(value = "/worksetvalori/{idelaborazione}/{tipoCampo}/{groupRole}/{paramsFilter:.+}", method = RequestMethod.GET)
-    public String loadDatasetValori2(HttpServletRequest request, Model model,
+    public String loadDatasetValoriWorkset(HttpServletRequest request, Model model,
             @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("tipoCampo") Integer tipoCampo,@PathVariable("groupRole") Integer groupRole,
             @PathVariable("paramsFilter") String paramsFilter, @RequestParam("length") Integer length,
             @RequestParam("start") Integer start, @RequestParam("draw") Integer draw) throws IOException, JSONException {
