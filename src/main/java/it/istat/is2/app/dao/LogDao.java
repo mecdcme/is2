@@ -39,6 +39,8 @@ public interface LogDao extends CrudRepository<Log, Long> {
     public void save(Optional<Log> log);
 
     public List<Log> findByIdSessioneOrderByIdDesc(Long idSessione);
+    
+    public List<Log> findByIdSessioneOrderByIdAsc(Long idSessione);
 
     public List<Log> findByIdSessioneAndTipoOrderByIdDesc(Long idSessione, String tipo);
     
