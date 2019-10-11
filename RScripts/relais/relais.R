@@ -14,17 +14,15 @@ rm(list=ls())
 #percorso_fail="FSFail.Rout"
 #percorso_allert="FSAllert.Rout"
 
-fellegisunter <- function(workset,ct, nvar=3, ...) {
+fellegisunter <- function(workset,ct, ...) {
  stdout <- vector('character')
  con <- textConnection('stdout', 'wr', local = TRUE)
  sink(con)
- #print(is.numeric(workset$NAME))
- # {workset$NAME<- as.numeric(workset$NAME)}
- #print(str(workset))
- #nvar=length(ct)
+ print(str(workset))
+ nvar=length(ct)-1
  #yy <-  as.data.frame(matrix(as.numeric(workset[,ct]),ncol=length(ct),nrow=nrow(workset)))
  yy <- workset
- print(workset)
+ #print(workset)
  colnames(yy)<- ct
  #print(yy)	 
 	muTableName="muTable"

@@ -150,7 +150,7 @@ function clearLog(idSessione) {
         type: "DELETE",
         dataType: "JSON",
         success: function () {
-            $("#logbox").text("No message available");
+            $(".logbox").text("No message available");
         },
         error: function (jqXHR, textStatus, errorThrown) {
             writeMsgsError('Error deleting data', 'msgs');

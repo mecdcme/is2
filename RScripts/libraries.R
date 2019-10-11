@@ -9,6 +9,5 @@ print("Loading libraries...")
 checkAndInstall("validate")
 checkAndInstall("validatetools")
 checkAndInstall("errorlocate")
-checkAndInstall("varhandle")
-library("varhandle")
+
 print("Loading libraries...ok ")

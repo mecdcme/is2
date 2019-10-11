@@ -42,9 +42,9 @@ import javax.persistence.Table;
 
 import it.istat.is2.app.domain.User;
 import it.istat.is2.dataset.domain.DatasetFile;
+import it.istat.is2.rule.domain.Ruleset;
 import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.BusinessFunction;
-import it.istat.is2.workflow.domain.Ruleset;
 
 import javax.persistence.Temporal;
 import lombok.Data;

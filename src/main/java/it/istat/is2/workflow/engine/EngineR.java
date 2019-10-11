@@ -79,6 +79,7 @@ public class EngineR implements EngineService {
 	public static final String IS2_RESULT_OUTPUT = "out";
 	public static final String IS2_RESULT_PARAM = "mod";
 	public static final String IS2_RESULT_REPORT = "report"; // aggiunto componente dei parametri di uscita
+	public static final String IS2_R_NA_VALUE = "NA"; //
 
 	@Autowired
 	RuoloDao ruoloDao;
@@ -190,13 +191,16 @@ public class EngineR implements EngineService {
 
 			for (int i = 0; i < size; i++) {
 				key = keys.get(i);
+				
 				String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
 				listaCampi += key + ",";
 				listaCampiLabel += "'" + key + "',";
 				connection.assign(key, arrX);
 				try {
-					connection.eval("if (all(check.numeric("+key+"))){ "+key + "<- as.numeric(" + key + ")}");
-				} catch (Exception e) {
+					if(isNumeric(arrX)) {
+						connection.eval(key + " <- as.numeric(" + key + ")");
+					} 
+               		} catch (Exception e) {
 					Logger.getRootLogger().error(e.getMessage());
 				}
 				// String evalstringa = varR + " <- cbind(" + varR + ",tmp)";
@@ -215,6 +219,21 @@ public class EngineR implements EngineService {
 			connection.eval(namecols);
 
 		}
+	}
+
+	 
+	private boolean isNumeric(String[] arrX) {
+		// TODO Auto-generated method stub
+		for (String elem : arrX) {
+			if (elem.isEmpty() || IS2_R_NA_VALUE.equalsIgnoreCase(elem))
+				continue;
+			try {
+				Double.parseDouble(elem);
+			} catch (NumberFormatException | NullPointerException nfe) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public void bindInputColumns_old(LinkedHashMap<String, ArrayList<String>> workset, String varR)

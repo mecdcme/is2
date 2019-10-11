@@ -121,11 +121,12 @@
                                             <input type="hidden" value="" name="rulesetType" id="rulesetType" />
                                         </form>
 
-                                        <table id="datasetList" class="table table-sm" th:if="${listaRuleSet}" cellspacing="0">
+                                        <table id="rulesetList" class="table table-sm" th:if="${listaRuleSet}" cellspacing="0">
                                             <thead>
                                                 <tr th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
                                                     <th><span th:text="#{generic.label.name}">Nome</span></th>
                                                     <th><span th:text="#{generic.label.description}">Descrizione</span></th>
+                                                    <th><span th:text="#{generic.label.dataset}">Dataset</span></th>
                                                     <th><span th:text="#{listaDataset.numeroregole}">N. regole</span></th>
                                                     <th colspan="3"></th>
                                                 </tr>
@@ -135,7 +136,14 @@
                                                     th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
                                                     <td th:text="${ruleset.labelFile}"></td>
                                                     <td th:text="${ruleset.descr}"></td>
-                                                    <td th:text="${ruleset.numeroRighe}"></td>
+                                                    <td>
+                                                        <span th:if="${ruleset.datasetFile}" th:text="${ruleset.datasetFile.nomeFile}"></span>
+                                                        <span th:unless="${ruleset.datasetFile}">-</span>
+                                                    </td>
+                                                    <td>
+                                                        <span th:if="${ruleset.numeroRighe}" th:text="${ruleset.numeroRighe}"></span>
+                                                        <span th:unless="${ruleset.numeroRighe}">-</span>
+                                                    </td>
                                                     <td style="width: 1%">
                                                         <a href="javascript:void(0)" title="Modifica ruleset" role="button" th:if="${ruleset.datasetFile}" 
                                                            th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',\'' + ${ruleset.descr} + '\', \'' + ${ruleset.datasetFile.id} +'\')'">

@@ -31,6 +31,8 @@ import lombok.EqualsAndHashCode;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import it.istat.is2.rule.domain.Ruleset;
+
 import java.util.List;
 
 /**

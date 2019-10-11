@@ -25,10 +25,11 @@ package it.istat.is2.rule.controller.rest;
 
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
+import it.istat.is2.rule.domain.Rule;
+import it.istat.is2.rule.domain.Ruleset;
 import it.istat.is2.rule.forms.RuleCreateForm;
 import it.istat.is2.rule.service.RuleService;
-import it.istat.is2.workflow.domain.Rule;
-import it.istat.is2.workflow.domain.Ruleset;
+
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

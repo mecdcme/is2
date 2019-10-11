@@ -59,9 +59,9 @@ import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
+import it.istat.is2.rule.domain.Ruleset;
 import it.istat.is2.rule.service.RuleService;
 import it.istat.is2.workflow.domain.Elaborazione;
-import it.istat.is2.workflow.domain.Ruleset;
 import it.istat.is2.workflow.domain.TipoCampo;
 import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.domain.BusinessProcess;
@@ -147,9 +147,27 @@ public class WorkflowController {
 		HashMap<Long, List<String>> rulesetMissing = workflowService
 				.findMissingAppRoleySubProcessAndTipoVar(elaborazione, new SxTipoVar(IS2Const.WORKSET_TIPO_RULESET));
 
+		//all in paramterers
+		for (Map.Entry<Long, List<String>> entry : variablesMissing.entrySet()) {
+			Long key = entry.getKey();
+			List<String> value = entry.getValue();
+			List<String> list=paramsMissing.get(key);
+			if(list==null) list=new ArrayList<>();
+			list.addAll(value);
+			paramsMissing.put(key, list);
+	   }
+		for (Map.Entry<Long, List<String>> entry : rulesetMissing.entrySet()) {
+			Long key = entry.getKey();
+			List<String> value = entry.getValue();
+			List<String> list=paramsMissing.get(key);
+			if(list==null) list=new ArrayList<>();
+			list.addAll(value);
+			paramsMissing.put(key, list);
+	   }
+		
 		model.addAttribute("paramsMissing", paramsMissing);
-		model.addAttribute("variablesMissing", variablesMissing);
-		model.addAttribute("rulesetMissing", rulesetMissing);
+		model.addAttribute("variablesMissing", new HashMap<>());
+		model.addAttribute("rulesetMissing", new HashMap<>());
 
 		return "workflow/home";
 	}
