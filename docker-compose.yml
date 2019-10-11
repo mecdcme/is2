@@ -1,0 +1,22 @@
+version: '3'
+services:
+  app:
+    image: i3sessnet/is2:latest
+    #build:
+    #  context: .
+    #  dockerfile: app.Dockerfile
+    entrypoint: ["/usr/app/wait-for", "--timeout=60", "db:3306", "--", "java", "-jar", "/usr/app/is2.jar"]
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/IS2?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true
+    depends_on:
+      - db
+  db:
+    image: i3sessnet/is2-mysql:latest
+    command: mysqld --default-authentication-plugin=mysql_native_password
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080

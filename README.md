@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/I3S-ESSnet/is2.svg?branch=master)](https://travis-ci.org/I3S-ESSnet/is2) [![Docker hub](https://img.shields.io/docker/cloud/automated/i3sessnet/is2.svg?label=is2%20docker)](https://cloud.docker.com/u/i3sessnet/repository/docker/i3sessnet/is2) [![Docker hub](https://img.shields.io/docker/cloud/automated/i3sessnet/is2-mysql.svg?label=is2-mysql%20docker)](https://cloud.docker.com/u/i3sessnet/repository/docker/i3sessnet/is2-mysql)
+
 # IS2
 A runtime environment to execute statistical services. IS2 is a workbench that offers a set of tools for data analysis and processing. 
 
@@ -63,8 +65,28 @@ The application is built using the open source framework Spring Boot, which gene
 executable jar (that can be run from the command line). Spring Boot creates a stand-alone Spring 
 based Applications, with an embedded Tomcat, that you can "just run".
 ```
-java –jar  is2.jar
+java –jar is2.jar
 ```
+
+
+Dockerize the MySQL database
+```
+docker build -t i3sessnet/is2-mysql . -f db.Dockerfile
+docker run -p 3306:3306 i3sessnet/is2-mysql
+```
+
+Dockerize the web application
+```
+docker build -t i3sessnet/is2 . -f app.Dockerfile
+docker run -p 8080:8080 i3sessnet/is2 
+```
+
+Docker compose
+```
+docker-compose up
+```
+The application will be at http://localhost:8080/is2 If you want to inspect the database you can use the 
+[Adminer](https://hub.docker.com/_/adminer/) application at http://localhost:8081/ 
 
 ## License
 IS2 is EUPL-licensed
