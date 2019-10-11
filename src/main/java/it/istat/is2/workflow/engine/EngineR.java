@@ -195,7 +195,7 @@ public class EngineR implements EngineService {
 				listaCampiLabel += "'" + key + "',";
 				connection.assign(key, arrX);
 				try {
-					connection.eval(key + "<- as.numeric(" + key + ")");
+					connection.eval("if (all(check.numeric("+key+"))){ "+key + "<- as.numeric(" + key + ")}");
 				} catch (Exception e) {
 					Logger.getRootLogger().error(e.getMessage());
 				}

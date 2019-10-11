@@ -182,12 +182,9 @@ public class WorkflowController {
 
 		try {
 			workflowService.cleanAllWorkset(idelaborazione,flagIO);
-			notificationService
-					.addInfoMessage(messages.getMessage("workset.clean.ok", null, LocaleContextHolder.getLocale()));
-
+			notificationService.addInfoMessage(messages.getMessage("workset.clean.ok", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
-			notificationService
-					.addErrorMessage(messages.getMessage("workset.clean.error", null, LocaleContextHolder.getLocale()));
+			notificationService.addErrorMessage(messages.getMessage("workset.clean.error", null, LocaleContextHolder.getLocale()));
 		}
 		return "redirect:/ws/home/" + idelaborazione;
 	}

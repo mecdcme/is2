@@ -50,9 +50,6 @@ public class WorkFlowBatchController {
     WorkFlowBatchService workFlowBatchService;
 
     @Autowired
-    private JobExplorer jobExplorer;
-
-    @Autowired
     JobOperator jobOperator;
 
     @Autowired

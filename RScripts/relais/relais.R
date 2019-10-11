@@ -1,3 +1,4 @@
+library(varhandle)
 #eliminazione di ogni precedente elaborazione (pulizia memoria)
 rm(list=ls())
 #Programma valido per una variabile latente dicotomica e k variabili manifeste dicotomiche
@@ -17,9 +18,13 @@ fellegisunter <- function(workset,ct, nvar=3, ...) {
  stdout <- vector('character')
  con <- textConnection('stdout', 'wr', local = TRUE)
  sink(con)
- 
+ #print(is.numeric(workset$NAME))
+ # {workset$NAME<- as.numeric(workset$NAME)}
+ #print(str(workset))
+ #nvar=length(ct)
  #yy <-  as.data.frame(matrix(as.numeric(workset[,ct]),ncol=length(ct),nrow=nrow(workset)))
  yy <- workset
+ print(workset)
  colnames(yy)<- ct
  #print(yy)	 
 	muTableName="muTable"
@@ -181,8 +186,8 @@ fellegisunter <- function(workset,ct, nvar=3, ...) {
  # print(".........RESULT.............. ")
  #print(result)
  
- #sink()
- #close(con)
+ sink()
+ close(con)
  return(result)
  
 }

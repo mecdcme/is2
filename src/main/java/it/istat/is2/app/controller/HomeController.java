@@ -54,4 +54,11 @@ public class HomeController {
                 
         return "index";
     }
+    
+    @RequestMapping("/team")
+    public String team(HttpSession session, Model model) {
+        notificationService.removeAllMessages();
+        
+        return "team";
+    }
 }

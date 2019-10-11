@@ -12,6 +12,7 @@ library(univOutl)
 library(simputation)
 library(VIM)
 library(rspa)
+library(varhandle)
 
 print("End Loading script Validate.R")
 
@@ -41,29 +42,28 @@ detect_infeasible <- function(input, inputNames){
   return(output)
 }
 
-validate_confront <- function(workset=workset, ruleset=ruleset,md=MD,rs=RS,...){
+validate_confront <- function(workset=Workset, rules=Ruleset,md=MD,rs=RS,...){
  
-    print('---------------validate_confront ------')
-      print(ruleset)
-    #data <-  as.data.frame(workset[,md])
-       print(class(data))
-    rules <- ruleset[,rs,drop = FALSE]
-    print(class(rules)) 
- 	colnames(data)<- toupper(md)
-   # rules <- as.data.frame(matrix(ruleset[,rs],ncol=length(rs),nrow=nrow(ruleset)))
+  str(workset)
+ if(is.numeric(workset$TFR)) workset$TFR<-as.numeric(workset$TFR)
+  if(is.numeric(workset$CONTR)) workset$CONTR<-as.numeric(workset$CONTR)
+ if(is.numeric(workset$INFMORT))  workset$INFMORT<-as.numeric(workset$INFMORT)
+ if(is.numeric(workset$INFMORT))  workset$INFMORT <-as.numeric(workset$GDP )
+  str(workset)
     colnames(rules)<- tolower(rs)
     rules$rule<-toupper(rules$rule)
-
 	#stdout <- vector('character')
 	#con <- textConnection('stdout', 'wr', local = TRUE)
 	#sink(con)
-    print(str(data))
-         print(rules)
+    #print(rules)
     v <- validator(.data=rules)
-    print(v)
-    
-    cf <- confront(data, v)
+    # print('---------------v ------')
+    #print(v)
+    #print(str(workset))
+    cf <- confront(workset, v)
+    print('--------------- summary(cf) ------')
     print(summary(cf))
+        
 #	aggregate(cf)
 #	head(aggregate(cf,by="record"))
 #	sort(cf)

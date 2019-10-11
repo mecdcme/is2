@@ -28,23 +28,22 @@ var tmpVarSel = {};
 var tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
 
 $(document).ready(function () {
- 
+
     $("#contenuto_file").hide();
     showPanel('variabili');
-    
-    $('form input').on('keypress', function(e) {
+
+    $('form input').on('keypress', function (e) {
         return e.which !== 13;
     });
 
-    
-    $('#add-param > input').on("change paste keyup", function() {
-    	   alert($(this).val()); 
+    $('#add-param > input').on("change paste keyup", function () {
+        alert($(this).val());
     });
-    
-    $('#edit-param > input').on("change paste keyup", function() {
- 	   alert($(this).val()); 
+
+    $('#edit-param > input').on("change paste keyup", function () {
+        alert($(this).val());
     });
-    
+
     $("#variablesTable").DataTable({
         dom: "<'row'<'col-sm-5'B><'col-sm-7'f>>"
                 + "<'row'<'col-sm-12'tr>>"
@@ -62,7 +61,6 @@ $(document).ready(function () {
             $(row).attr('id', 'row-' + dataIndex);
         }
     });
-
 
     var listVarSize = $("#check_vrs").val();
     if (listVarSize == 0) {
@@ -85,9 +83,6 @@ $(document).ready(function () {
                 + "/" + idparam;
     });
 
-   
-
- 
     var idElaborazione = 1; // _idElaborazione;
 
     $("#worksetTab").DataTable({
@@ -123,178 +118,175 @@ $(document).ready(function () {
     $('#value-text-mod').on("keyup", function (e) {
         controllaCampoModParam();
     });
-    
+
     tabs = $("#tabs").tabs();
-    tabs.on("click", "span.ui-icon-close", function() {
+    tabs.on("click", "span.ui-icon-close", function () {
         var panelId = $(this).closest("li").remove().attr("aria-controls");
         $("#" + panelId).remove();
         removeSelVarFromTab(panelId);
         tabs.tabs("refresh");
-    });  
+    });
 
 });
 
 var addRow = {
-        	"title": "Add Row",
-	        "click": function() {
-	        	var value = this.getValue();
-	        	value.push({});
-	        	this.setValue(value);
-	        }
+    "title": "Add Row",
+    "click": function () {
+        var value = this.getValue();
+        value.push({});
+        this.setValue(value);
+    }
 };
 
 var removeRow = {
-        "title": "Remove Row",
-        "click": function() {
-            var value = this.getValue();
-            if (value.length > 0) {
-                value.pop();
-                this.setValue(value);
-            }
+    "title": "Remove Row",
+    "click": function () {
+        var value = this.getValue();
+        if (value.length > 0) {
+            value.pop();
+            this.setValue(value);
         }
-    };
+    }
+};
 
 function openAddParameter(identifier) {
-    var idParam=$(identifier).data('param-id');
-	var idRole=$(identifier).data('role-id');
-	var nameParameter=$(identifier).data('param-name');
-	$('#param-text-add').text(nameParameter);
-	$('#param-value').val(nameParameter+'|'+idParam+'|'+idRole);
-	var jsontemplateText = _paramTemplateMap[nameParameter];
-	$('#add-param').empty();
-	var jsonObj = JSON.parse(jsontemplateText, function (key, value) {
-		  if (key === "addRow") {
-			  return eval('(' + value + ')');
-		  }
-		  else if (key === "removeRow"){
-			  return eval('(' + value + ')');
-		  }
-		  else if (key === "dataSource"){
-			  return eval(value);
-		  }
-		  else {
-		    return value;
-		  }
-		});
-	$('#add-param').alpaca(jsonObj); 
-	$("#add-parametri-workset-modal").modal('show');
+    var idParam = $(identifier).data('param-id');
+    var idRole = $(identifier).data('role-id');
+    var nameParameter = $(identifier).data('param-name');
+    $('#param-text-add').text(nameParameter);
+    $('#param-value').val(nameParameter + '|' + idParam + '|' + idRole);
+    var jsontemplateText = _paramTemplateMap[nameParameter];
+    $('#add-param').empty();
+    var jsonObj = JSON.parse(jsontemplateText, function (key, value) {
+        if (key === "addRow") {
+            return eval('(' + value + ')');
+        } else if (key === "removeRow") {
+            return eval('(' + value + ')');
+        } else if (key === "dataSource") {
+            return eval(value);
+        } else {
+            return value;
+        }
+    });
+    $('#add-param').alpaca(jsonObj);
+    $("#add-parametri-workset-modal").modal('show');
 }
 
 function openSetResulset(identifier) {
-	   var idParam=$(identifier).data('param-id');
-		var idRole=$(identifier).data('role-id');
-		var nameParameter=$(identifier).data('param-name');
- 
-		$("#set-resulset").modal('show');
-	}
+    var idParam = $(identifier).data('param-id');
+    var idRole = $(identifier).data('role-id');
+    var nameParameter = $(identifier).data('param-name');
+
+    $("#set-resulset").modal('show');
+}
 
 function associaVar() {
-	var roleSelectedName = $("#roleSelectedName").val();
-	console.log("roleSelectedName",roleSelectedName);
+    var roleSelectedName = $("#roleSelectedName").val();
+    console.log("roleSelectedName", roleSelectedName);
     var roleSelectedId = $("#roleSelectedId").val();
-    console.log("roleSelectedId",roleSelectedId);
+    console.log("roleSelectedId", roleSelectedId);
     var idElab = $("#idelaborazione").val();
-    console.log("idElab",idElab);
-  	$("#btn_dlg_ins").removeClass('hide');
-  	$("#role_"+roleSelectedId).removeClass('active');
-	$("#roleSelectedId").val("");
-	$('#btn_dlg_assoc').addClass('disabled');
-	$('#btn_dlg_assoc').attr( "disabled","disabled");
-	$("#tab-msg").addClass('hide');
-	jQuery.each( variablesArr, function( i, obj ) {
-		  var idTab = obj['idVar'];
-		  console.log("idTab",idTab);
-		  var labelTab = obj['labelTab'];
-		  console.log("labelTab",labelTab);
-		  var li = $( tabTemplate.replace( /#\{href\}/g, "#" + idTab ).replace( /#\{label\}/g, labelTab) );
-		  console.log(li);
-		  tabs.find( ".ui-tabs-nav" ).append( li );
-		  tabs.tabs( "refresh" );
-		  tmpVarSel['#var_'+idTab]  =  $('#var_'+idTab).clone();
-		  $('#var_'+idTab).remove();
-		});
-  	associazioneVarRoleBean.push({'idElaborazione':idElab,'ruolo':{'idRole':roleSelectedId,'name':roleSelectedName,'variables':variablesArr}});
-  	console.log("associazioneVarRoleBean",associazioneVarRoleBean);
+    console.log("idElab", idElab);
+    $("#btn_dlg_ins").removeClass('hide');
+    $("#role_" + roleSelectedId).removeClass('active');
+    $("#roleSelectedId").val("");
+    $('#btn_dlg_assoc').addClass('disabled');
+    $('#btn_dlg_assoc').attr("disabled", "disabled");
+    $("#tab-msg").addClass('hide');
+    jQuery.each(variablesArr, function (i, obj) {
+        var idTab = obj['idVar'];
+        console.log("idTab", idTab);
+        var labelTab = obj['labelTab'];
+        console.log("labelTab", labelTab);
+        var li = $(tabTemplate.replace(/#\{href\}/g, "#" + idTab).replace(/#\{label\}/g, labelTab));
+        console.log(li);
+        tabs.find(".ui-tabs-nav").append(li);
+        tabs.tabs("refresh");
+        tmpVarSel['#var_' + idTab] = $('#var_' + idTab).clone();
+        $('#var_' + idTab).remove();
+    });
+    associazioneVarRoleBean.push({'idElaborazione': idElab, 'ruolo': {'idRole': roleSelectedId, 'name': roleSelectedName, 'variables': variablesArr}});
+    console.log("associazioneVarRoleBean", associazioneVarRoleBean);
 }
-       
- function removeSelVarFromTab(id){
-	tmpVarSel['#var_'+id].prependTo("#selectable");
-	$('#var_'+id).removeClass('ui-selected');
-	delete tmpVarSel['#var_'+id];
-	delete associazioneVarRoleBean[id];
-	if(Object.entries(tmpVarSel).length === 0 && tmpVarSel.constructor === Object){
-		$("#btn_dlg_ins").addClass('hide');
-		$("#tab-msg").removeClass('hide');
-	}
-	const index = associazioneVarRoleBean.findIndex(x => x.idVar === id);
-	if (index !== undefined) associazioneVarRoleBean.splice(index, 1);
- }
- 
- function associaVarToRole(){
-	    var id_elaborazione = $("#idelaborazione").val();
-	 	var myUrl = $("meta[name='ctx']").attr("content") + "/rest/ws/associaVariabiliRuolo";
-  	 $.ajax({
-  		url: myUrl,
-  		headers : {
-           'Accept' : 'application/json',
-           'Content-Type' : 'application/json'
-       },
-       type: "POST",
-       async:false,
-  	    data : JSON.stringify(associazioneVarRoleBean),
-  	    success: function () {
-			console.log("success! ");
-			window.location.href = $("meta[name='ctx']").attr("content") + "/ws/editworkingset/"+ id_elaborazione;
-       },
-       error: function (jqXHR, textStatus, errorThrown) {
-           console.log('Error!', errorThrown);
-       }
-  	});
- }
 
- function openDlgModParametriWorkset(identifier) {
-	 	var idParam=$(identifier).data('id-param');
-		var idWorkset=$(identifier).data('id-workset');
-		var nameParameter=$(identifier).data('name-workset');
-		$('#param-text-edit').text(nameParameter);
-		var jsontemplateText=_paramTemplateMap[nameParameter];
-	    var jsontemplate=JSON.parse(jsontemplateText);
-	     var schema=jsontemplate["schema"];
-	     var options=jsontemplate["options"];
-	     if(!options) options="";
-	     var data=$(identifier).data('value-param');
-	     if(!data) data="";
-	    $('#edit-parameters').val(idWorkset);
-	     var dataContent="{\"data\":"+ JSON.stringify(data)+",\"schema\":"+JSON.stringify(schema)+",\"options\":"+JSON.stringify(options)+"}";
-	      $('#edit-param').empty();
-	      var jsonObj = JSON.parse(dataContent, function (key, value) {
-			  if (key === "addRow") {
-				  return eval('(' + value + ')');
-			  }
-			  else if (key === "removeRow"){
-				  return eval('(' + value + ')');
-			  }
-			  else if (key === "dataSource"){
-				  return eval(value);
-			  }
-			  else {
-			    return value;
-			  }
-			});
-	     $('#edit-param').alpaca(jsonObj);
-	     $("#idStepvarMod").val(idParam);
-	     $("#mod-parametri-workset-modal").modal("show");
-	}
+function removeSelVarFromTab(id) {
+    tmpVarSel['#var_' + id].prependTo("#selectable");
+    $('#var_' + id).removeClass('ui-selected');
+    delete tmpVarSel['#var_' + id];
+    delete associazioneVarRoleBean[id];
+    if (Object.entries(tmpVarSel).length === 0 && tmpVarSel.constructor === Object) {
+        $("#btn_dlg_ins").addClass('hide');
+        $("#tab-msg").removeClass('hide');
+    }
+    const index = associazioneVarRoleBean.findIndex(x => x.idVar === id);
+    if (index !== undefined)
+        associazioneVarRoleBean.splice(index, 1);
+}
+
+function associaVarToRole() {
+    var id_elaborazione = $("#idelaborazione").val();
+    var myUrl = $("meta[name='ctx']").attr("content") + "/rest/ws/associaVariabiliRuolo";
+    $.ajax({
+        url: myUrl,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        type: "POST",
+        async: false,
+        data: JSON.stringify(associazioneVarRoleBean),
+        success: function () {
+            console.log("success! ");
+            window.location.href = $("meta[name='ctx']").attr("content") + "/ws/editworkingset/" + id_elaborazione;
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log('Error!', errorThrown);
+        }
+    });
+}
+
+function openDlgModParametriWorkset(identifier) {
+    var idParam = $(identifier).data('id-param');
+    var idWorkset = $(identifier).data('id-workset');
+    var nameParameter = $(identifier).data('name-workset');
+    $('#param-text-edit').text(nameParameter);
+    var jsontemplateText = _paramTemplateMap[nameParameter];
+    var jsontemplate = JSON.parse(jsontemplateText);
+    var schema = jsontemplate["schema"];
+    var options = jsontemplate["options"];
+    if (!options)
+        options = "";
+    var data = $(identifier).data('value-param');
+    if (!data)
+        data = "";
+    $('#edit-parameters').val(idWorkset);
+    var dataContent = "{\"data\":" + JSON.stringify(data) + ",\"schema\":" + JSON.stringify(schema) + ",\"options\":" + JSON.stringify(options) + "}";
+    $('#edit-param').empty();
+    var jsonObj = JSON.parse(dataContent, function (key, value) {
+        if (key === "addRow") {
+            return eval('(' + value + ')');
+        } else if (key === "removeRow") {
+            return eval('(' + value + ')');
+        } else if (key === "dataSource") {
+            return eval(value);
+        } else {
+            return value;
+        }
+    });
+    $('#edit-param').alpaca(jsonObj);
+    $("#idStepvarMod").val(idParam);
+    $("#mod-parametri-workset-modal").modal("show");
+}
 
 function mostraDialogEliminaParametro(identifier) {
-	var idParam=$(identifier).data('id-param');
-	var idelab=$(identifier).data('id-elab');
-	var nameParam=$(identifier).data('name-param');
-	
+    var idParam = $(identifier).data('id-param');
+    var idelab = $(identifier).data('id-elab');
+    var nameParam = $(identifier).data('name-param');
+
     $("#idparam").val(idParam);
     $("#idelab").val(idelab);
     $("#nomeParametro").text(nameParam);
-   
+
     $("#modal-cancella-parametro").modal("show");
 }
 
@@ -362,7 +354,7 @@ function openDlgAddVariabileWorkset() {
 }
 
 function openDlgAddParametriWorkset() {
- // controllaCampoParam();
+    // controllaCampoParam();
     $(".rolelist").removeClass('active');
     $(".varlist").removeClass('active');
     $("#varSelectedId").val('');
@@ -371,7 +363,7 @@ function openDlgAddParametriWorkset() {
     $("#roleSelectedName").val('Nessun ruolo selezionato');
     $("#add-parametri-workset-modal").modal('show');
     $("#select-param").change();
- }
+}
 
 
 function controllaCampoModParam() {
@@ -412,8 +404,8 @@ function setSelectedRole(nomeR, idR) {
     $("#role_" + idR).addClass('active');
     $("#roleSelectedId").val(idR);
     $("#roleSelectedName").val(nomeR);
-    if($('.ui-selected').length > 0 ){
-    	$("#btn_dlg_assoc").removeClass('disabled');
+    if ($('.ui-selected').length > 0) {
+        $("#btn_dlg_assoc").removeClass('disabled');
         $("#btn_dlg_assoc").attr("disabled", false);
     }
 }
@@ -528,6 +520,7 @@ function associaRuoloVar(nomeR, idR) {
 function rimuoviInputVarAssociata(idr, idvar) {
     $("#span_" + idr + "_" + idvar + "").html("");
 }
+
 function caricaBProcessiByFunzione() {
     var id_funzione = $("#funzioni :selected").val();
     $.ajax({
@@ -538,12 +531,12 @@ function caricaBProcessiByFunzione() {
             var content = "<div class='col-lg-4'><label class='control-label'>"
                     + "<span id='process'>Business Process:</span></label></div><div class='col-lg-8'>"
                     + "<select id='processi' name='processo' class='form-control'>";
-            $(jQuery.parseJSON(JSON.stringify(data))).each(
-                    function () {
-                        var id = this.id;
-                        var descr = this.descr;
-                        content += "<option value='" + id + "'>" + descr + "</option>";
-                    });
+            
+            $(jQuery.parseJSON(JSON.stringify(data))).each(function () {
+                var id = this.id;
+                var descr = this.descr;
+                content += "<option value='" + id + "'>" + descr + "</option>";
+            });
             content += "</select></div>";
             $("#bprocess").html(content);
             // carico direttamente la combo bsteps
@@ -554,6 +547,7 @@ function caricaBProcessiByFunzione() {
         }
     });
 }
+
 function caricaBStepsByProcess() {
     var id_process = $("#processi :selected").val();
     $.ajax({
@@ -602,14 +596,17 @@ function visualizzaVariabiliAssociate() {
         }
     });
 }
+
 function eliminaAssociazioni() {
     $("#vars_content").html("");
     $("#associazione_vars").html("");
     attivaBottone();
 }
+
 function eseguiFunzione() {
     $("#formAssociaRuolo").submit();
 }
+
 function eseguiFunzioneUpdate() {
     $("#formUpdateAssociaRuolo").submit();
 }
@@ -619,16 +616,16 @@ function setRuleSet() {
 }
 
 function inserisciParams() {
-	var value =  JSON.stringify($('#add-param').alpaca().getValue());
-	
+    var value = JSON.stringify($('#add-param').alpaca().getValue());
+
     $("#valoreParam").val(value);
     $("#formAssociaParam").submit();
 }
 
 function modificaParam() {
-	var value =  JSON.stringify($('#edit-param').alpaca().getValue());
+    var value = JSON.stringify($('#edit-param').alpaca().getValue());
     $("#valoreParamMod").val(value);
-   $("#formModAssociaParam").submit();
+    $("#formModAssociaParam").submit();
 }
 
 function mostraDialogEliminaAssociazione(idelab, idstepvar, nomestepvar) {
@@ -638,15 +635,13 @@ function mostraDialogEliminaAssociazione(idelab, idstepvar, nomestepvar) {
     $("#modalCancellaAssociazione").modal("show");
 }
 
-
 function test() {
     alert($("#nome-var").val().length);
     ($("#filtro1").prop("checked") != false || $("#filtro0").prop("checked") != false)
             && $("#nome-var").val().length > 0
 }
 
-function mostraDialogModificaAssociazioneOld(idelab, idstepvar, nomestepvar,
-        idruolo, flagricerca) {
+function mostraDialogModificaAssociazioneOld(idelab, idstepvar, nomestepvar, idruolo, flagricerca) {
     $("#mod_idruolo").val(idruolo);
     $("#mod_idvariabile").val(idstepvar);
     $("#mod_nomevariabile").val(nomestepvar);
@@ -677,7 +672,7 @@ function mostraDialogModificaAssociazione(idelab, idstepvar, nomestepvar, idruol
 
     $("#nome-var").val(nomestepvar);
     $("#idruolomod").val(idruolo).change();
-  
+
     $("filtro:checked").val(idruolo);
     $("#mod_idvariabile").val(idstepvar);
     $("#mod_valore_old").val(nomestepvar);
@@ -689,13 +684,13 @@ function mostraDialogModificaAssociazione(idelab, idstepvar, nomestepvar, idruol
     $("#modifica-viarabile-workset-modal").modal('show');
 }
 
-function showPanel(idPanel){
+function showPanel(idPanel) {
     hidePanels();
     $("#card-" + idPanel).show();
-    $("#header-" + idPanel +" span").addClass("header-strong");
+    $("#header-" + idPanel + " span").addClass("header-strong");
 }
 
-function hidePanels(){
+function hidePanels() {
     $("#card-variabili").hide();
     $("#header-variabili span").removeClass("header-strong");
     $("#card-parametri").hide();
@@ -706,27 +701,26 @@ function hidePanels(){
     $("#header-execution span").removeClass("header-strong");
 }
 
-$( function() {
-	
-	$(".ui-widget-content").click( function() {
-	    $(this).toggleClass("ui-selected");
-	});
-	
-	  $("#selectable").bind("mousedown", function(e) {
-          e.metaKey = true;
-      }).selectable({
-    	stop: function() {
-            var result = $( "#select-result" ).empty();
+$(function () {
+    $(".ui-widget-content").click(function () {
+        $(this).toggleClass("ui-selected");
+    });
+
+    $("#selectable").bind("mousedown", function (e) {
+        e.metaKey = true;
+    }).selectable({
+        stop: function () {
+            var result = $("#select-result").empty();
             variablesArr = new Array();
-            $( ".ui-selected", this ).each(function() {
-            	var currSel = $(this).attr("value");
-            	tmpArr = currSel.split('~');
-            	variablesArr.push({'idVar':tmpArr[0],'name':tmpArr[1],'labelTab':tmpArr[2]});
+            $(".ui-selected", this).each(function () {
+                var currSel = $(this).attr("value");
+                tmpArr = currSel.split('~');
+                variablesArr.push({'idVar': tmpArr[0], 'name': tmpArr[1], 'labelTab': tmpArr[2]});
             });
-            if( $("#roleSelectedId").val() != null && $("#roleSelectedId").val() !== '') {
-            	$("#btn_dlg_assoc").removeClass('disabled');
+            if ($("#roleSelectedId").val() != null && $("#roleSelectedId").val() !== '') {
+                $("#btn_dlg_assoc").removeClass('disabled');
                 $("#btn_dlg_assoc").attr("disabled", false);
             }
-      }
+        }
     });
-  } );
+});

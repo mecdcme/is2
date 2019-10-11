@@ -43,23 +43,21 @@
                 setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
                 if (showTabParam) showPanel('parametri');
             });
-            
-			var matchedVariables = [[${matchedVariables}]];
-
+            var matchedVariables = [[${matchedVariables}]];
         </script>
         <script type="text/x-handlebars-template" id="addItemsBtn">
         {{#if options.hideAddItemsBtn}}
-  			<div class="alpaca-array-toolbar alpaca-array-toolbar-{{toolbarStyle}} btn-group" data-alpaca-array-toolbar-parent-field-id="{{parentFieldId}}" data-alpaca-array-toolbar-field-id="{{fieldId}}" data-alpaca-array-toolbar-item-index="{{itemIndex}}">
-    			{{#each actions}}
-    			<button class="alpaca-array-toolbar-action {{../view.styles.smallButton}}" data-alpaca-array-tollbar-action="{{action}}">
+            <div class="alpaca-array-toolbar alpaca-array-toolbar-{{toolbarStyle}} btn-group" data-alpaca-array-toolbar-parent-field-id="{{parentFieldId}}" data-alpaca-array-toolbar-field-id="{{fieldId}}" data-alpaca-array-toolbar-item-index="{{itemIndex}}">
+            {{#each actions}}
+                <button class="alpaca-array-toolbar-action {{../view.styles.smallButton}}" data-alpaca-array-tollbar-action="{{action}}">
             	{{#if this.iconClass}}
-            		<i class="{{this.iconClass}}"></i>
+                    <i class="{{this.iconClass}}"></i>
             	{{/if}}
             	{{#if label}}{{{label}}}{{/if}}
         	</button> {{/each}}
-  			</div>
-  		{{/if}}
-		</script>
+            </div>
+        {{/if}}
+        </script>
         <link th:href="@{/css/vendors/alpaca/alpaca.min.css}" rel="stylesheet" />
         <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet" />
         <link th:href="@{/css/jquery/jquery-ui.min.css}" rel="stylesheet" />
@@ -108,8 +106,7 @@
 
                 <div class="container-fluid">
                     <div class="animated fadeIn">
-                        <input id="idelaborazione" type="hidden" name="elaborazione"
-                               th:value="${elaborazione.id}" />
+                        <input id="idelaborazione" type="hidden" name="elaborazione" th:value="${elaborazione.id}" />
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -169,14 +166,14 @@
                                         <input type="hidden" id="idstepvar" name="idstepvar" value="" />
                                     </div>
                                     <div class="card-body" id="card-parametri" style="display: none">
-                                        <table id="parametersTable" class="table table-sm" style="width: 100%">
+                                        <table id="parametersTable" class="table table-sm" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th style="width:2%; "><span>#</span></th>
+                                                    <th style="width:2%;"><span>#</span></th>
                                                     <th><span>Name</span></th>
                                                     <th><span>Value</span></th>
-                                                    <th style="width: 1% "></th>
-                                                    <th style="width: 1% "></th>
+                                                    <th style="width:1%;"></th>
+                                                    <th style="width:1%;"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -198,7 +195,7 @@
                                                         </td>
                                                     </th:block>
                                                     <th:block th:unless="${stepParamMap.get(paramInstance.nome)}">
-                                                        <td><i class="fa fa-times" style="color: #f86c6b;"></i> </td>
+                                                        <td><i class="fa fa-times" style="color: #f86c6b;"></i></td>
                                                          <td>
                                                             <a href="javascript:void(0);" title="Modifica parametro"
                                                                 th:attr="data-role-id=${paramInstance.appRole.id},data-param-id=${paramInstance.id},data-param-name=${paramInstance.nome},onclick='javascript:openAddParameter(this);'">
