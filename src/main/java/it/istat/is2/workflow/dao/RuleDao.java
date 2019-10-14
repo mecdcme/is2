@@ -26,9 +26,9 @@ package it.istat.is2.workflow.dao;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
- 
-import it.istat.is2.workflow.domain.Rule;
-import it.istat.is2.workflow.domain.Ruleset;
+import it.istat.is2.rule.domain.Rule;
+import it.istat.is2.rule.domain.Ruleset;
+
 import java.util.List;
 
 @Repository

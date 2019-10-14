@@ -33,10 +33,10 @@ function pollLogs() {
         dataType: 'json',
         cache: true,
         success: function (data) {
-            $('#logList').remove();
+            $('.logList').remove();
             $('#noLogList').remove();
-            $('#logBox').remove();
-            var ulList = $("#logbox").append("<ul id='logList'></ul>").find(
+            $('.logBox').remove();
+            var ulList = $(".logbox").append("<ul class='logList'></ul>").find(
                     'ul');
             jQuery.each(data, function () {
                 ulList.append('<li>'
@@ -47,6 +47,9 @@ function pollLogs() {
                 }) + ' ' + new Date(this.msgTime).toLocaleTimeString()
                         + ' - ' + this.msg + '</li>');
             });
+            
+           
+            $('.logBox').scrollTop =    $('.logBox').scrollHeight;
         },
         error: function (e) {
             alert("Error polling jobs");

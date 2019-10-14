@@ -29,6 +29,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import it.istat.is2.rule.domain.Ruleset;
 import lombok.Data;
 
 import java.util.ArrayList;

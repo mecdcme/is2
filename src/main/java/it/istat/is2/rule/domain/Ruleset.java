@@ -21,7 +21,7 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.workflow.domain;
+package it.istat.is2.rule.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -29,6 +29,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import it.istat.is2.dataset.domain.DatasetFile;
+import it.istat.is2.workflow.domain.BusinessStep;
 import it.istat.is2.worksession.domain.WorkSession;
 import lombok.Data;
 

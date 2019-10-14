@@ -154,7 +154,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div id="logbox" class="modal-body">
+                        <div   class="modal-body logbox">
                             <ul th:if="${not #lists.isEmpty(logs)}">
                                 <li th:each="log : ${logs}">
                                     <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;

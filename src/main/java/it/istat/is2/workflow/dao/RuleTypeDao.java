@@ -28,7 +28,8 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import it.istat.is2.workflow.domain.RuleType;
+
+import it.istat.is2.rule.domain.RuleType;
 
 
 @Repository

@@ -1,0 +1,10 @@
+language: java
+services:
+- docker
+before_install:
+- docker build -t i3sessnet/is2 -f app.Dockerfile .
+- docker build -t i3sessnet/is2-mysql -f db.Dockerfile .
+notifications:
+  slack:
+    secure: C2E6ITN9vYLBASozja6Jass1vwnTsUtPYcfC4kRdHNHBTe5pYfO6zar3LPy5HlWI2+5pMuB+8TEGT9mDBeCN/mBeGSeBEBI1KFIK0qfL6NHjMgWTXfU9yK9LTF+GN+F599+AAtIZ04WZwXEuGvO+gdX0Rrq3ZhiK9ldJIjfBw12RQlG9bh+cE798Qtjq7TMDYAuuK5H3CcLLA6mzXG5jcAAaGEdbRzs1qtt0KOHulf6GG1FA4BZbsDPy8nOwR9Fs0ancmC2+Natne5DZWVxLgqWgUYOgnh6V8bvYvxhKUquUmGi8UQ/wmjEpMH7Sx6oWqikI26toU9P1nRhsskqWjrc+TyjmTFSVOazMt3O+gMWMmcC5RphjpZZFon+BvE0DjCUrUAEECJ8tSAjknLmrMF1oXpGQLf3hxW7/ctE0ClsP8QntY9wB1IJFypC1saEzMDyh3eCGh7WGyHkd8of2Rctb4Rmab86K/TJk2KYvZRNXu7yjMthxvK3OrP63EMyIvmgBVVVFFkbo54B/WnJN9kQw97p0EFtxyiLWVjh+lmBmM6AHulNAIZ/fOKeG0QgATxCSM2wk8+oF5EqisZ6I5b2DLkp3OZXqqzdESyy576BZ2UR/I4/poJrNfm+7Fk8xWo4+N75y5iwYSb0eTytnId8acMylxrrP92BV6xgAQTM=
+    

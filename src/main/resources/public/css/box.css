@@ -161,19 +161,19 @@ table.dataTable thead>tr>th{
 }
 
 /* Log panel */
-#logbox, #rbox{
+.logbox, #rbox{
     height: 178px;
     overflow-y: auto;
     font-family: monospace;
     font-size: 12px;
 }
 
-#logbox ul{
+.logbox ul{
     list-style-type: none;
     padding-left: 4px;
 }
 
-#logbox ul > li{
+.logbox ul > li{
     padding: 2px 0px;
 }
 

@@ -25,6 +25,9 @@ package it.istat.is2.rule.service;
 
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.dataset.domain.DatasetFile;
+import it.istat.is2.rule.domain.Rule;
+import it.istat.is2.rule.domain.RuleType;
+import it.istat.is2.rule.domain.Ruleset;
 import it.istat.is2.rule.engine.EngineValidate;
 import static it.istat.is2.rule.engine.EngineValidate.INPUT_NAMES_PREFIX;
 import it.istat.is2.rule.forms.RuleCreateForm;
@@ -33,9 +36,6 @@ import it.istat.is2.workflow.dao.RuleDao;
 import it.istat.is2.workflow.dao.RuleTypeDao;
 import it.istat.is2.workflow.dao.RulesetDao;
 import it.istat.is2.workflow.domain.Classification;
-import it.istat.is2.workflow.domain.Rule;
-import it.istat.is2.workflow.domain.RuleType;
-import it.istat.is2.workflow.domain.Ruleset;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
 

@@ -21,7 +21,7 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.workflow.domain;
+package it.istat.is2.rule.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;
