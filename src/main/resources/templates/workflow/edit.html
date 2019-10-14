@@ -244,8 +244,8 @@
                                                           <td>&nbsp;</td>
                                                            <td>&nbsp;</td>
                                                         <td >
-                                                            <a href="javascript:void(0);" title="Set Resulset"
-                                                                th:attr="data-role-id=${rulesetRole.id},data-param-name=${rulesetRole.nome},onclick='javascript:openSetResulset(this);'">
+                                                            <a href="javascript:void(0);" title="Set Ruleset"
+                                                                th:attr="data-role-id=${rulesetRole.id},data-param-name=${rulesetRole.nome},onclick='javascript:openSetRuleset(this);'">
                                                                 <i class="fa fa-pencil">Add</i>
                                                             </a>
                                                         </td>
@@ -411,7 +411,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body 	">
+                        <div class="modal-body">
                             <div class="form-body">
                                 <div class="row">
                                     <div class="col-lg-3">
@@ -541,71 +541,93 @@
             </div>
         </div>
 
-<!-- Set Resulset -->
-        <div class="modal fade" id="set-resulset" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-             <form th:action="@{/ws/setresulset}" id="formSetRuleset" method="post">
-              <input id="id-elaborazione-ruleset" type="hidden" name="idelaborazione" th:value="${elaborazione.id}" />
-              <input id="id-role-ruleset" type="hidden" name="idRole" value="175" />
-              <input id="id-ruleset-ruleset" type="text" name=idResultSet value="23" />
-               </form>   
-                 <div class="modal-content ">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="fa fa-plus"></i>
-                            <span>Set ResulSet</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body form">
-                        <div class="form-body">
-                           <div th:if="${not #lists.isEmpty(rulesetList)}">
-                         
-                                 <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="row">
-                                             <fieldset class="well" style="height: 250px; overflow-y: auto;">
-                                                    <legend class="well-legend"> ResulSet List</legend>
-                                                    <div id="div_resultset_list" class="list-group ">
-                                                        <a th:each="ruleset, y: ${rulesetList}" th:id="${'rs_'+ruleset.id}" class="list-group-item varlist"
-                                                               th:attr="onclick='javascript:setSelectedRuleset(' + ${ruleset.labelFile} + '\', ' + ${ruleset.id} +'\')'"
-                                                               title="Set Resulset"> 
-                                                                <span th:text="${ruleset.labelFile+ ' - Rules: '+ ruleset.numeroRighe}"></span>
-                                                          </a>
-                                                 
-                                                    </div>
-                                                </fieldset>
-                                          </div>
-                                    </div>
-                                </div>
-                               
-                            </div>
-                            <div th:unless="${not #lists.isEmpty(rulesetList)}">
-                                <span>No ResulSet</span>
-                            </div>
+<!-- Set Ruleset -->
+    <div
+        class="modal fade"
+        id="set-ruleset"
+        role="dialog">
+        <div
+            class="modal-dialog"
+            role="document">
+            <form
+                th:action="@{/ws/setruleset}"
+                id="formSetRuleset"
+                method="post">
+                <input
+                    id="id-elaborazione-ruleset"
+                    type="hidden"
+                    name="idelaborazione"
+                    th:value="${elaborazione.id}" /> <input
+                    id="id-role-ruleset"
+                    type="hidden"
+                    name="idRole"
+                    value="175" /> <input
+                    id="id-ruleset-ruleset"
+                    type="text"
+                    name=idRuleset
+                    value="23" />
+            </form>
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa fa-plus"></i>
+                        <span>Set Ruleset</span>
+                    </h5>
+                    <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div th:if="${not #lists.isEmpty(rulesetList)}">
+                           <label>Ruleset List</label>
+                                <div
+                                    id="div_ruleset_list"
+                                    class="list-group ">
+                                    <a
+                                        th:each="ruleset, y: ${rulesetList}"
+                                        th:id="${'rs_'+ruleset.id}"
+                                        class="list-group-item varlist"
+                                        th:attr="onclick='javascript:setSelectedRuleset( ' + ${ruleset.id} +'\')'"
+                                        title="Set Ruleset"> <span th:text="${ruleset.labelFile} +' - Rules:' +  (${ruleset.numeroRighe}?${ruleset.numeroRighe}:0)"></span>
+                                    </a>
+
+                             </div>
+                        </div>
+                        <div th:unless="${not #lists.isEmpty(rulesetList)}">
+                            <span>No Ruleset</span>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:text="#{associazione.dialog.button.close}">Annulla</span>
-                        </button>
-                 
-                        <span th:if="${not #lists.isEmpty(rulesetList)}">
-                            <button id="btn_dlg_setrs"  type="button"
-                                    class="btn btn-primary " onclick="setRuleSet()"
-                                    data-dismiss="modal">Save</button>
-                        </span>
-                    </div>
                 </div>
-         
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-light"
+                        data-dismiss="modal">
+                        <span  th:text="#{associazione.dialog.button.close}">Annulla</span>
+                    </button>
+
+                    <span th:if="${not #lists.isEmpty(rulesetList)}">
+                        <button
+                            id="btn_dlg_setrs"
+                            type="button"
+                            class="btn btn-primary "
+                            onclick="submitSetRuleSet()"
+                            data-dismiss="modal">Save</button>
+                    </span>
+                </div>
             </div>
+
         </div>
+    </div>
 
 
 
-        <!-- Delete variable/role bind-->
+    <!-- Delete variable/role bind-->
         <div class="modal fade" id="modalCancellaAssociazione" tabindex="-1"
              role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">

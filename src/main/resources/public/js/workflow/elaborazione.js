@@ -172,12 +172,12 @@ function openAddParameter(identifier) {
     $("#add-parametri-workset-modal").modal('show');
 }
 
-function openSetResulset(identifier) {
+function openSetRuleset(identifier) {
     var idParam = $(identifier).data('param-id');
     var idRole = $(identifier).data('role-id');
     var nameParameter = $(identifier).data('param-name');
 
-    $("#set-resulset").modal('show');
+    $("#set-ruleset").modal('show');
 }
 
 function associaVar() {
@@ -611,7 +611,7 @@ function eseguiFunzioneUpdate() {
     $("#formUpdateAssociaRuolo").submit();
 }
 
-function setRuleSet() {
+function submitSetRuleSet() {
     $("#formSetRuleset").submit();
 }
 
