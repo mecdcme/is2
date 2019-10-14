@@ -423,7 +423,7 @@ function setModSelectedRole(nomeR, idR) {
 function setSelectedRuleset(idR) {
     $(".rulesetlist").removeClass('active');
     $("#ruleset_" + idR).addClass('active');
-    $("#rid-ruleset-selected").val(idR);
+    $("#id-ruleset-selected").val(idR);
    
 }
 

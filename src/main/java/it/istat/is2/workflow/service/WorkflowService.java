@@ -585,7 +585,7 @@ public class WorkflowService {
 
     }
 
-    public void setResultset(Elaborazione elaborazione, Integer idRuolo, Integer idResultset) {
+    public void setRuleset(Elaborazione elaborazione, Integer idRuolo, Integer idResultset) {
 
         Ruleset ruleset = rulesetDao.findById(idResultset).get();
 

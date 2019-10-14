@@ -535,14 +535,14 @@ public class WorkflowController {
 		return "redirect:/ws/editworkingset/" + elaborazione.getId();
 	}
 	
-	@RequestMapping(value = "/setresulset", method = RequestMethod.POST)
-	public String setResulset(HttpSession session, Model model, RedirectAttributes ra,
+	@RequestMapping(value = "/setruleset", method = RequestMethod.POST)
+	public String setRuleset(HttpSession session, Model model, RedirectAttributes ra,
 			@RequestParam("idelaborazione") Long idelaborazione, @RequestParam("idRole") Integer idRole,
-			@RequestParam("idResultSet") Integer idResultset) {
+			@RequestParam("idRuleset") Integer idRuleset) {
 		
 		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
 		try {
-			workflowService.setResultset(elaborazione, idRole,idResultset);
+			workflowService.setRuleset(elaborazione, idRole,idRuleset);
 			notificationService.addInfoMessage(messages.getMessage("setresulset.ok", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
 			notificationService.addErrorMessage("Error: " + e.getMessage());
