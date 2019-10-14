@@ -421,14 +421,10 @@ function setModSelectedRole(nomeR, idR) {
 }
 
 function setSelectedRuleset(idR) {
-    $(".rolelist").removeClass('active');
-    $("#role_" + idR).addClass('active');
-    $("#roleSelectedId").val(idR);
-    $("#roleSelectedName").val(nomeR);
-    if ($('.ui-selected').length > 0) {
-        $("#btn_dlg_assoc").removeClass('disabled');
-        $("#btn_dlg_assoc").attr("disabled", false);
-    }
+    $(".rulesetlist").removeClass('active');
+    $("#ruleset_" + idR).addClass('active');
+    $("#rid-ruleset-selected").val(idR);
+   
 }
 
 function inserisciRuoloVar() {

@@ -562,7 +562,7 @@
                     type="hidden"
                     name="idRole"
                     value="175" /> <input
-                    id="id-ruleset-ruleset"
+                    id="id-ruleset-selected"
                     type="text"
                     name=idRuleset
                     value="23" />
@@ -590,8 +590,8 @@
                                     class="list-group ">
                                     <a
                                         th:each="ruleset, y: ${rulesetList}"
-                                        th:id="${'rs_'+ruleset.id}"
-                                        class="list-group-item varlist"
+                                        th:id="${'ruleset_'+ruleset.id}"
+                                        class="list-group-item rulesetlist"
                                         th:attr="onclick='javascript:setSelectedRuleset( ' + ${ruleset.id} +'\')'"
                                         title="Set Ruleset"> <span th:text="${ruleset.labelFile} +' - Rules:' +  (${ruleset.numeroRighe}?${ruleset.numeroRighe}:0)"></span>
                                     </a>
