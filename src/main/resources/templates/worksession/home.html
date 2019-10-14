@@ -110,7 +110,7 @@
                                         <i class="fa fa-bars"></i>
                                         <span th:text="#{lista.elaborazioni.legend}">Lista processi</span>
                                         <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaElaborazione();" title="Nuova elaborazione"> 
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaElaborazione();" th:title="#{label.button.nuova.elaborazione}"> 
                                                 <i class="fa fa-plus-square-o"></i>
                                                 <span th:text="#{label.button.nuovo.processo}">Nuovo processo</span>
                                             </a>
@@ -137,12 +137,12 @@
                                                     <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${elaborazione.businessProcess.nome}"></td>
                                                     <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${#dates.format(elaborazione.dataElaborazione, 'dd/MM/yyyy HH:mm')}"></td>
                                                     <td style="width: 1%">
-                                                        <a class='towait' title="Visualizza elaborazione" th:href="@{'/ws/home/'+${elaborazione.id}}"> 
+                                                        <a class='towait' th:title="#{sessionewf.show.title.elab}" th:href="@{'/ws/home/'+${elaborazione.id}}"> 
                                                             <i class="fa fa-folder-open"></i>
                                                         </a>
                                                     </td>
                                                     <td style="width: 1%">
-                                                        <a title="Elimina elaborazione" href="javascript:void(0);" role="button" th:onclick="'javascript:eliminaElaborazione(\'' + ${elaborazione.id} + '\', \'' + ${session.sessionelv.id} + '\')'">												
+                                                        <a th:title="#{sessionewf.del.title.elab}" href="javascript:void(0);" role="button" th:onclick="'javascript:eliminaElaborazione(\'' + ${elaborazione.id} + '\', \'' + ${session.sessionelv.id} + '\')'">												
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
@@ -214,7 +214,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">
-                            <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
+                            <i class="fa fa-trash"></i>&nbsp;<span th:text="#{sessionewf.confirm.del}">Conferma eliminazione</span>
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>

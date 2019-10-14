@@ -77,5 +77,6 @@ function eliminaElaborazione(ide, ids) {
     $('#id_elaborazione_del').val(ide);
     $('#id_sessione_del').val(ids);
     $('#msg_elaboraz').text("Eliminare l'elaborazione con id " + ide + "?");
+    //$('#msg_elaboraz').text("Confirmm delete elabotion id " + ide + "?");
     $('#modalCancellaElaborazione').modal('show');
 }
