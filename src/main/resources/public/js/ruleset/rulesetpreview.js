@@ -23,7 +23,6 @@
  */
 var _ctx = $("meta[name='ctx']").attr("content");
 
-
 $(document).ready(function () {
     $("#dataview").DataTable({
 
@@ -35,54 +34,51 @@ $(document).ready(function () {
                 "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         autoWidth: false,
         responsive: true,
-        ordering: false,
+        ordering: true,
         searching: true,
         lengthChange: true,
         pageLength: 20,
-        
-        	buttons: [
-                {
-                    text: 'Nuova regola',
-                    title: 'New rule',
-                    className: 'btn-light',
-                    action: function (e, dt, node, config) {
-                        newRule();
-                    }
-                },                          
-                {
-                    extend: 'csvHtml5',
-                    filename: 'download',
-                    title: 'download',
-                    className: 'btn-light',
-                    action: function (e, dt, node, config) {
-                        scaricaDataset(e, 'csv', ID);
-                    }
-                }],             
-        
-        
+        order: [[ 2, "asc" ]],
+        columnDefs: [{
+          targets: 'no-sort',
+          orderable: false
+        }],
+        buttons: [{
+                text: 'Nuova regola',
+                title: 'New rule',
+                className: 'btn-light mr-1',
+                action: function (e, dt, node, config) {
+                    newRule();
+                }
+            },
+            {
+                extend: 'csvHtml5',
+                filename: 'download',
+                title: 'download',
+                className: 'btn-light mr-1',
+                action: function (e, dt, node, config) {
+                    scaricaDataset(e, 'csv', ID);
+                }
+            }],
         language: {
             paginate: {
                 "previous": "Prev"
             }
         }
     });
-    if ( $('#dataset_div').length > 0 ) {    	
-    	
-    	$("#dataview").DataTable().button().add( 1, {    		
+    if ($('#dataset_div').length > 0) {
+        $("#dataview").DataTable().button().add(1, {
             title: 'Show variables',
-            className: 'btn-light',          
-            action: function ( e, dt, node, config ) {
-            	mostraVariabili();
+            className: 'btn-light',
+            action: function (e, dt, node, config) {
+                mostraVariabili();
             },
             text: 'Mostra variabili'
-        } );
-	}
-    
-    
+        });
+    }
 
-    
     $("#dataset_div").hide();
-    
+
     $('#btnDelete').click(function () {
         var ruleId = $('#ruleId').val();
         $.ajax({
@@ -97,9 +93,7 @@ $(document).ready(function () {
         });
     });
 
-
     $('#btnEdit').click(function () {
-
         $.ajax({
             url: _ctx + "/rules/",
             type: "PUT",
@@ -113,57 +107,61 @@ $(document).ready(function () {
             }
         });
     });
-   
-
 });
 
 function scaricaDataset(e, param, idDFile) {
     e.preventDefault();
     window.location = _ctx + '/rest/download/dataset/' + param + '/' + idDFile;
 }
-function chiudiDivVariabili(){
-	$("#dataset_div").hide();
+
+function chiudiDivVariabili() {
+    $("#dataset_div").hide();
 }
 
 function inviaFormNewRule() {
     $("#ruleText").val($("#rule_text").val());
     $("#ruleDesc").val($("#rule_desc").val());
-	$("#ruleType").val($("#rule_tipo").val());  
-	$("#classification").val($("#classification_l").val());
-	$("#inputNewRuleForm").submit();
+    $("#ruleType").val($("#rule_tipo").val());
+    $("#classification").val($("#classification_l").val());
+    $("#inputNewRuleForm").submit();
 }
-function inviaFormNewVarRule() {    
+
+function inviaFormNewVarRule() {
     $("#ruleText").val($("#rule_text_v").val());
-    $("#ruleDesc").val($("#rule_desc_v").val());	
-	$("#classification").val($("#classification_v").val());	
-	$("#inputNewRuleForm").submit();
+    $("#ruleDesc").val($("#rule_desc_v").val());
+    $("#classification").val($("#classification_v").val());
+    $("#inputNewRuleForm").submit();
 }
-function modificaRegola() {    
+
+function modificaRegola() {
     $("#ruleText").val($("#rule_text_v").val());
-    $("#ruleDesc").val($("#rule_desc_v").val());	
-	$("#classification").val($("#classification_v").val());	
-	$("#inputNewRuleForm").submit();
+    $("#ruleDesc").val($("#rule_desc_v").val());
+    $("#classification").val($("#classification_v").val());
+    $("#inputNewRuleForm").submit();
 }
-function newRule() {    
+
+function newRule() {
     $('#newruledialog').modal('show');
 }
-function mostraVariabili() {    
-	$("#dataset_div").show();
+
+function mostraVariabili() {
+    $("#dataset_div").show();
 }
+
 function addRule(id_variable, nome_variabile) {
-	$('#nome_var').text(nome_variabile);
-	$('#idcol').val(id_variable);	
+    $('#nome_var').text(nome_variabile);
+    $('#idcol').val(id_variable);
     $('#addrulevariable').modal('show');
 }
 
-function editRule(id, rule, descr, classif) {	
+function editRule(id, rule, descr, classif) {
     $('#editRuleId').val(id);
     $('#editRuleText').val(rule);
-    if(descr=='null'){
-    	$('#descrizione_edit').val(''); 
-    }else{
-    	$('#descrizione_edit').val(descr);    
-    }    
+    if (descr == 'null') {
+        $('#descrizione_edit').val('');
+    } else {
+        $('#descrizione_edit').val(descr);
+    }
     $("#classification_edit").val(classif);
     $('#modalEditRule').modal('show');
 }

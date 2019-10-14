@@ -109,7 +109,7 @@
                                             </div>
                                         </form> 
 
-                                        <table id="datasetList" class="table" th:if="${listaDataset}" cellspacing="0" style="width:100%">
+                                        <table id="datasetList" class="table table-sm" th:if="${listaDataset}" cellspacing="0" style="width:100%">
                                             <thead>
                                                 <tr th:unless="${(listaDataset == null) or (listaDataset.size() == 0) }">                                                
                                                     <th><span th:text="#{listaDataset.nome}">Nome</span></th>

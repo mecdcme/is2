@@ -81,10 +81,10 @@
                                             <i class="fa fa-caret-square-o-right"></i>&nbsp;
                                             <span th:text="#{ruleset.package.validate.contrad}"></span>
                                         </a> 
-                                        <a class="card-header-action" href="javascript:void(0)" title="Nuova regola" th:onclick="'javascript:runValidate(' + ${ruleset.id} + ')'">
+                                        <!--a class="card-header-action" href="javascript:void(0)" title="Nuova regola" th:onclick="'javascript:runValidate(' + ${ruleset.id} + ')'">
                                             <i class="fa fa-caret-square-o-right"></i>&nbsp;
                                             <span th:text="#{ruleset.package.validate.redundant}"></span>
-                                        </a>
+                                        </a-->
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -92,28 +92,31 @@
                                         <thead>
                                             <tr>
                                                 <th>Regola</th>
-                                                <th>Variabile</th>
-                                                <th>Classificazione</th>
-                                                <th width="1%"></th>
-                                                <th width="1%"></th>
-                                                <th width="1%"></th>
+                                                <!--th>Variabile</th-->
+                                                <th class="text-center no-sort">Classificazione</th>
+                                                <th width="1%" class="text-center">Status</th>
+                                                <th width="1%" class="no-sort"></th>
+                                                <th width="1%" class="no-sort"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:each="rule : ${rules}" th:classappend="${rule.errcode > 0} ? table-warning : table-ok">
+                                            <tr th:each="rule : ${rules}">
                                                 <td><span th:text="${#strings.abbreviate(rule.rule,50)}" th:title="${rule.rule}"></span></td>
-                                                <td>
+                                                <!--td>
                                                     <span th:if="${session.dfile != null}" th:title="${rule.variabile}"
                                                           th:text="${#strings.abbreviate(rule.sxRuleset.datasetFile.getNomeColFormId(rule.variabile),50)}"></span>
-                                                </td>
-                                                <td th:if="${ rule.sxClassification != null }">
+                                                </td-->
+                                                <td class="text-center" th:if="${rule.sxClassification != null}">
                                                     <span th:text="${#strings.abbreviate(rule.sxClassification.nome,50)}" th:title="${rule.sxClassification.nome}"></span>
                                                 </td>
-                                                <td th:unless="${ rule.sxClassification != null }"><span></span></td>
-                                                <td style="width: 1%">
+                                                <td th:unless="${rule.sxClassification != null}"><span></span></td>
+                                                <td class="text-center">
                                                     <a th:if="${rule.errcode > 0}" href="javascript:void(0)" th:title="#{ruleset.package.validate.incoherent}" role="button"
                                                        th:attr="onclick='javascript:runIsContradicted(' + ${rule.id} + ')'">
-                                                        <i class="fa fa-wrench"></i>
+                                                        <i class="fa fa-times" style="color:#f86c6b"></i><span style="display: none">1</span>
+                                                    </a>
+                                                    <a th:unless="${rule.errcode > 0}" th:title="#{ruleset.package.validate.incoherent}" role="button">
+                                                        <i class="fa fa-check" style="color:#4dbd74"></i><span style="display: none">2</span>
                                                     </a>
                                                 </td>
                                                 <td style="width: 1%">
@@ -132,7 +135,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="card" th:if="${session.dfile != null}" id="dataset_div">
+                            <!--div class="card" th:if="${session.dfile != null}" id="dataset_div">
                                 <div class="card-header">
                                     <span th:text="${session.dfile.nomeFile}">Nome dataset</span>
                                     <div class="btn-group pull-right" role="group">
@@ -164,7 +167,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            </div-->
                         </div>
                     </div>
                 </div>
@@ -186,7 +189,7 @@
         <!-- New Rule Dialog -->
         <div class="modal fade" id="newruledialog" tabindex="-1" role="dialog" 
              aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
@@ -235,7 +238,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            <i class="fa fa-pencil"></i>
+                            <i class="fa fa-pencil-square-o"></i>
                             <span th:text="#{ruleset.rule.edit}">Edit regola</span>
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

@@ -68,6 +68,7 @@ button:focus{
 
 .dropdown-item.active, .dropdown-item:active{
     background-color: #f0f3f5;
+    color: #23282c;
 }
 /* Login */
 .essnet{
@@ -148,6 +149,14 @@ table.dataTable thead>tr>th{
 
 .reorder .fa-arrows{
     color: #c8ced3;
+}
+
+.page-link{
+    padding: 0.3rem 0.5rem;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    margin: 7px 0 0 0!important;
 }
 
 /* Menu */
