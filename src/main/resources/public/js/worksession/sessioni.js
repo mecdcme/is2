@@ -71,6 +71,7 @@ function openNuovaElaborazione() {
 }
 function eliminaSessioneLavoro(id) {
     $('#id_sessione_del').val(id);
+    $('#del_msg').text(_remove_msg_dialog);
     $('#modalCancellaSessione').modal('show');
 }
 function eliminaElaborazione(ide, ids) {

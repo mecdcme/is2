@@ -31,6 +31,7 @@
             $(document).ready(function () {
                 setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
+            var _remove_msg_dialog = [[#{confirm.elimination.message}]];
         </script>
     </head>
     <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
@@ -52,7 +53,7 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a class="breadcrumb-last-item" title="Chiudi sessione" th:href="@{'/'}">
+                            <a class="breadcrumb-last-item" th:title="#{session.button.close}" th:href="@{'/'}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -67,9 +68,9 @@
                                         <i class="fa fa-bars"></i>
                                         <span th:text="#{lista.sessioni.legend}">Lista sessioni</span>
                                         <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaSessioneWF();" title="Nuova elaborazione"> 
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaSessioneWF();" th:title="#{label.button.session}"> 
                                                 <i class="fa fa-plus-square-o"></i>
-                                                <span th:text="#{label.button.sessioni}">Nuova sessione</span>
+                                                <span th:text="#{label.button.session}">Nuova sessione</span>
                                             </a>
                                         </div>
                                     </div>
@@ -98,10 +99,10 @@
                                                     <td th:unless="${(sessione.listaElaborazioni!=null) and (sessione.listaElaborazioni.size()>0)}">-</td>
                                                     <td th:id="${'sesdata_'+ sessione.dataCreazione}" th:text="${#dates.format(sessione.dataCreazione, 'dd/MM/yyyy HH:mm')}"></td>
                                                     <td style="width: 1%">
-                                                        <a class="towait" title="Visualizza elaborazioni" th:href="@{'/sessione/apri/'+${sessione.id}}"> <i class="fa fa-folder-open"></i></a>
+                                                        <a class="towait" th:title="#{title.button.show.process}" th:href="@{'/sessione/apri/'+${sessione.id}}"> <i class="fa fa-folder-open"></i></a>
                                                     </td>
                                                     <td style="width: 1%">
-                                                        <a title="Cancella elaborazioni" role="button" href="javascript:void(0);" th:onclick="'javascript:eliminaSessioneLavoro(\'' + ${sessione.id} + '\')'"><i class="fa fa-trash"></i></a>
+                                                        <a th:title="#{title.button.delete.process}" role="button" href="javascript:void(0);" th:onclick="'javascript:eliminaSessioneLavoro(\'' + ${sessione.id} + '\')'"><i class="fa fa-trash"></i></a>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -135,24 +136,24 @@
                         <div class="modal-body form">
                             <div class="form-group">
                                 <label class="control-label" th:text="#{nuova.sessione.nome}+'*'"><span>Nome</span></label>
-                                <input name="nome" id="nome-sessione" title="Nome" class="form-control" type="text" />
+                                <input name="nome" id="nome-sessione" th:title="#{generic.label.name}" class="form-control" type="text" />
                                 <span class="help-block">
                                     <small class="text-danger" id="nomesesserror"></small>
                                 </span>
                             </div>
                             <div class="form-group">
                                 <label class="control-label" th:text="#{nuova.sessione.descrizione}"> <span>Descrizione</span></label>
-                                <input name="descrizione" title="Descrizione" class="form-control" type="text" />
+                                <input name="descrizione" th:title="#{generic.label.description}" class="form-control" type="text" />
                                 <span class="help-block"></span>
                             </div>
                         </div>
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:text="#{Layout.Close}">Annulla</span>
+                            <span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
                         </button>
                         <button type="button" id="btn-submit-ns" class=" btn btn-primary">
-                            <span th:text="#{session.button.save}">Salva</span>
+                            <span th:title="#{session.button.save}" th:text="#{session.button.save}">Salva</span>
                         </button>
                     </div>
                 </div>
@@ -165,17 +166,17 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">
-                            <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
+                            <i class="fa fa-trash"></i>&nbsp;<span th:text="#{confirm.elimination.title}">Conferma eliminazione</span>
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">Eliminare la sessione selezionata e il suo contenuto?</div>
+                    <div class="modal-body" id="del_msg">Eliminare la sessione selezionata e il suo contenuto?</div>
                     <div class="modal-footer">
                         <input type="hidden" name="" id="id_sessione_del" value="" />
-                        <button type="button" class="btn btn-light" data-dismiss="modal">Chiudi</button>
-                        <button type="button" id="btn_delete" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
+                        <button type="button" class="btn btn-light" data-dismiss="modal" th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</button>
+                        <button type="button" id="btn_delete" class="btn btn-primary towait" data-dismiss="modal" th:title="#{generic.delete.button.label}" th:text="#{generic.delete.button.label}">Elimina</button>
                     </div>
                 </div>
             </div>
