@@ -57,7 +57,7 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a class="breadcrumb-last-item" title="Chiudi sessione" 
+                            <a class="breadcrumb-last-item" th:title="#{generic.title.close.button}" 
                                th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
