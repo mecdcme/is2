@@ -43,11 +43,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.istat.is2.app.bean.NotificationMessage;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.forms.UserCreateForm;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.service.UserService;
-import it.istat.is2.app.service.NotificationService.NotificationMessage;
+
 
 @RestController
 public class UserRestController {

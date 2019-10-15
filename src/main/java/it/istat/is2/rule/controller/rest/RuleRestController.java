@@ -23,6 +23,7 @@
  */
 package it.istat.is2.rule.controller.rest;
 
+import it.istat.is2.app.bean.NotificationMessage;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.rule.domain.Rule;
@@ -57,9 +58,8 @@ public class RuleRestController {
 
     @Autowired
     private NotificationService notificationService;
-
     @Autowired
-    MessageSource messages;
+    private MessageSource messages;
 
     @GetMapping("/rules")
     public List<Rule> ruleslist(Model model) {
@@ -76,7 +76,7 @@ public class RuleRestController {
     }
 
     @PostMapping("/rules")
-    public List<NotificationService.NotificationMessage> newRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,
+    public List<NotificationMessage> newRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,
             BindingResult bindingResult) {
 
         notificationService.removeAllMessages();
@@ -97,7 +97,7 @@ public class RuleRestController {
     }
 
     @PutMapping("/rules")
-    public List<NotificationService.NotificationMessage> updateRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,
+    public List<NotificationMessage> updateRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,
             BindingResult bindingResult) {
 
         notificationService.removeAllMessages();
@@ -119,7 +119,7 @@ public class RuleRestController {
     }
 
     @DeleteMapping("/rules/{id}")
-    public List<NotificationService.NotificationMessage> deleteRule(@PathVariable("id") Integer id) {
+    public List<NotificationMessage> deleteRule(@PathVariable("id") Integer id) {
 
         notificationService.removeAllMessages();
        

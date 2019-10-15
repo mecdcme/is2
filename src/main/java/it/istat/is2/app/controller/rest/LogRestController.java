@@ -23,6 +23,7 @@
  */
 package it.istat.is2.app.controller.rest;
 
+import it.istat.is2.app.bean.NotificationMessage;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
@@ -47,7 +48,7 @@ public class LogRestController {
     private LogService logService;
 
     @DeleteMapping("/logs/{sessionId}")
-    public List<NotificationService.NotificationMessage> deleteLogs(@PathVariable("sessionId") Long sessionId) {
+    public List<NotificationMessage> deleteLogs(@PathVariable("sessionId") Long sessionId) {
 
         notificationService.removeAllMessages();
 
@@ -62,7 +63,7 @@ public class LogRestController {
     }
     
     @DeleteMapping("/rlogs/{sessionId}")
-    public List<NotificationService.NotificationMessage> deleteRLogs(@PathVariable("sessionId") Long sessionId) {
+    public List<NotificationMessage> deleteRLogs(@PathVariable("sessionId") Long sessionId) {
 
         notificationService.removeAllMessages();
 

@@ -56,7 +56,7 @@ function displayMessages(){
         
         if(msg_type === "SUCCESS"){
             toastr["success"]("", msg_text);
-        } else if (msg_type == "DANGER"){
+        } else if (msg_type == "ERROR"){
             toastr["error"]("", msg_text);
         }
     });

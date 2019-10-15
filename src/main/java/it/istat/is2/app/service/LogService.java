@@ -95,7 +95,7 @@ public class LogService {
         SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
 
         Log log = new Log();
-        if (sessionBean != null) {
+        if (sessionBean != null && sessionBean.getId()!=null ) {
             log.setIdSessione(sessionBean.getId());
         } else{
             log.setIdSessione(new Long(-1));

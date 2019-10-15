@@ -215,7 +215,11 @@
                                                 <tr>
                                                     <th style="width: 2%"><span>#</span></th>
                                                     <th><span>Rule Set</span></th>
-                                           
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th style="width: 1%"></th>
+                                                    <th style="width: 1%"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -240,10 +244,10 @@
                                                     </th:block>
                                                     <th:block th:unless="${stepVariablesRulesetMap.get(rulesetRole.nome)}">
                                                         <td>&nbsp;</td>
-                                                         <td>&nbsp;</td>
-                                                          <td>&nbsp;</td>
-                                                           <td>&nbsp;</td>
-                                                        <td >
+                                                        <td>&nbsp;</td>
+                                                        <td>&nbsp;</td>
+                                                        <td>&nbsp;</td>
+                                                        <td>
                                                             <a href="javascript:void(0);" title="Set Ruleset"
                                                                 th:attr="data-role-id=${rulesetRole.id},data-param-name=${rulesetRole.nome},onclick='javascript:openSetRuleset(this);'">
                                                                 <i class="fa fa-pencil">Add</i>

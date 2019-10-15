@@ -31,88 +31,71 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import it.istat.is2.app.bean.NotificationMessage;
+
 @Service
 public class NotificationService {
 
-    public static final String NOTIFY_MSG_SESSION_KEY = "siteNotificationMessages";
+	public static final String NOTIFY_MSG_SESSION_KEY = "siteNotificationMessages";
 
-    @Autowired
-    private HttpSession httpSession;
+	@Autowired
+	private HttpSession httpSession;
 
-    public void addInfoMessage(String msg) {
-        addNotificationMessage(NotificationMessageType.SUCCESS, msg, "");
-    }
+	public void addInfoMessage(String msg) {
+		addNotificationMessage(NotificationMessage.TYPE_SUCCESS, msg, "");
+	}
 
-    public void addInfoMessage(String msg, String details) {
-        addNotificationMessage(NotificationMessageType.SUCCESS, msg, details);
-    }
+	public void addInfoMessage(String msg, String details) {
+		addNotificationMessage(NotificationMessage.TYPE_SUCCESS, msg, details);
+	}
 
-    public void addErrorMessage(String msg) {
-        addNotificationMessage(NotificationMessageType.DANGER, msg, "");
-    }
+	public void addErrorMessage(String msg) {
+		addNotificationMessage(NotificationMessage.TYPE_ERROR, msg, "");
+	}
 
-    public void addErrorMessage(String msg, String details) {
-        addNotificationMessage(NotificationMessageType.DANGER, msg, details);
-    }
+	public void addErrorMessage(String msg, String details) {
+		addNotificationMessage(NotificationMessage.TYPE_ERROR, msg, details);
+	}
 
-    public void removeAllMessages() {
-        if (httpSession != null) {
-            httpSession.removeAttribute(NOTIFY_MSG_SESSION_KEY);
-        }
-    }
+	public void removeAllMessages() {
+		if (httpSession != null) {
+			httpSession.removeAttribute(NOTIFY_MSG_SESSION_KEY);
+		}
+	}
 
-    @SuppressWarnings("unchecked")
-    private void addNotificationMessage(NotificationMessageType type, String msg, String details) {
-        List<NotificationMessage> notifyMessages = (List<NotificationMessage>) httpSession.getAttribute(NOTIFY_MSG_SESSION_KEY);
-        if (notifyMessages == null) {
-            notifyMessages = new ArrayList<NotificationMessage>();
-        }
-        notifyMessages.add(new NotificationMessage(type, msg, details));
-        httpSession.setAttribute(NOTIFY_MSG_SESSION_KEY, notifyMessages);
-    }
+	@SuppressWarnings("unchecked")
+	private void addNotificationMessage(String type, String msg, String details) {
+		List<NotificationMessage> notifyMessages = (List<NotificationMessage>) httpSession
+				.getAttribute(NOTIFY_MSG_SESSION_KEY);
+		if (notifyMessages == null) {
+			notifyMessages = new ArrayList<NotificationMessage>();
+		}
+		notifyMessages.add(new NotificationMessage(type, msg, details));
+		httpSession.setAttribute(NOTIFY_MSG_SESSION_KEY, notifyMessages);
+	}
 
-    @SuppressWarnings("unchecked")
-    public List<NotificationMessage> getNotificationMessages() {
-        List<NotificationMessage> notifyMessages = (List<NotificationMessage>) httpSession.getAttribute(NOTIFY_MSG_SESSION_KEY);
-        if (notifyMessages == null) {
-            notifyMessages = new ArrayList<NotificationMessage>();
-        }
-        return notifyMessages;
-    }
+	@SuppressWarnings("unchecked")
+	public List<NotificationMessage> getNotificationMessages() {
+		List<NotificationMessage> notifyMessages = (List<NotificationMessage>) httpSession
+				.getAttribute(NOTIFY_MSG_SESSION_KEY);
+		if (notifyMessages == null) {
+			notifyMessages = new ArrayList<NotificationMessage>();
+		}
+		return notifyMessages;
+	}
 
-    public enum NotificationMessageType {
-        SUCCESS, DANGER
-    }
+	public void addMessage(NotificationMessage messsage) {
+		if (messsage.getText() != null) {
 
-    public class NotificationMessage {
-        
-        NotificationMessageType type;
-        String text;
-        String details;
+			@SuppressWarnings("unchecked")
+			List<NotificationMessage> notifyMessages = (List<NotificationMessage>) httpSession
+					.getAttribute(NOTIFY_MSG_SESSION_KEY);
+			if (notifyMessages == null) {
+				notifyMessages = new ArrayList<NotificationMessage>();
+			}
+			notifyMessages.add(messsage);
+			httpSession.setAttribute(NOTIFY_MSG_SESSION_KEY, notifyMessages);
+		}
+	}
 
-        public NotificationMessage(NotificationMessageType type, String text) {
-            this.type = type;
-            this.text = text;
-            this.details = "";
-        }
-
-        public NotificationMessage(NotificationMessageType type, String text, String details) {
-            this.type = type;
-            this.text = text;
-            this.details = details;
-
-        }
-
-        public NotificationMessageType getType() {
-            return type;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public String getDetails() {
-            return details;
-        }
-    }
 }
