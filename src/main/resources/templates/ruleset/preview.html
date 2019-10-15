@@ -91,6 +91,7 @@
                                     <table id="dataview" class="table table-striped " cellspacing="0" width="auto" style="overflow: auto;">
                                         <thead>
                                             <tr>
+                                                <th width="1%">#</th>
                                                 <th>Regola</th>
                                                 <!--th>Variabile</th-->
                                                 <th class="text-center no-sort">Classificazione</th>
@@ -100,7 +101,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:each="rule : ${rules}">
+                                            <tr th:each="rule, counter : ${rules}">
+                                                <td><span th:text="${counter.count}"></span><span th:text="${rule.id}" style="display: none"></span></td>
                                                 <td><span th:text="${#strings.abbreviate(rule.rule,50)}" th:title="${rule.rule}"></span></td>
                                                 <!--td>
                                                     <span th:if="${session.dfile != null}" th:title="${rule.variabile}"

@@ -22,7 +22,7 @@ public class EngineValidate {
     public static final String OUTPUT = "output";
     public static final String VALIDATE_FOLDER = "validate";
     public static final String VALIDATE_SRC = "validate.R";
-    public static final String FUNCTION_DETECT_INFEASIBLE = "detect_infeasible";
+    public static final String FUNCTION_DETECT_INFEASIBLE = "is2_detect_infeasible";
     
     @Value("${serverR.host}")
     private String serverRHost;

@@ -16,13 +16,14 @@ library(rspa)
 
 print("End Loading script Validate.R")
 
-detect_infeasible <- function(input, inputNames){
+is2_detect_infeasible <- function(input, inputNames){
   
+  #redirect stdout to a string
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
   sink(con)
   
-  rules_inc <- vector('character')
+  rules_inf <- vector('character')
   rules <- validator(.data=input)
   names(rules) <- inputNames
   print(head(rules, 10))
@@ -30,19 +31,19 @@ detect_infeasible <- function(input, inputNames){
   rule_infeasible <- is_infeasible(rules)
   print(rule_infeasible)
   if (rule_infeasible == TRUE){
-	rules_inc <- detect_infeasible_rules(rules)
-	print(rules_inc)
+	rules_inf <- detect_infeasible_rules(rules)
+	print(rules_inf)
   }
   
   sink()
   close(con)
   
-  output <- list("rules" = rules_inc, "log" = stdout)
+  output <- list("rules" = rules_inf, "log" = stdout)
   
   return(output)
 }
 
-validate_confront <- function(workset=Workset, rules=Ruleset,md=MD,rs=RS,...){
+is2_validate_confront <- function(workset=Workset, rules=Ruleset,md=MD,rs=RS,...){
  
     print(str(workset))
     colnames(rules)<- tolower(rs)

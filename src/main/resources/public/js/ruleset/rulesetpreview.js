@@ -24,8 +24,8 @@
 var _ctx = $("meta[name='ctx']").attr("content");
 
 $(document).ready(function () {
+    
     $("#dataview").DataTable({
-
         drawCallback: function () {
             $(".loading").hide();
         },
@@ -66,6 +66,7 @@ $(document).ready(function () {
             }
         }
     });
+    
     if ($('#dataset_div').length > 0) {
         $("#dataview").DataTable().button().add(1, {
             title: 'Show variables',

@@ -70,6 +70,16 @@ button:focus{
     background-color: #f0f3f5;
     color: #23282c;
 }
+
+/* Loading dialog*/
+#loading .modal-dialog{
+    margin-top: 10rem;
+}
+
+.loading-span{
+    padding-left: 10px;
+}
+
 /* Login */
 .essnet{
     padding-top: 35px;

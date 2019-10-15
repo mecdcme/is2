@@ -127,14 +127,14 @@
 
         <!-- LOADING DATA -->
         <div th:fragment="site-modals">
-            <div class="modal fade" id="modalCancellaParametro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <div class="spinner-border text-primary" role="status">
+                            <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem;">
                                 <span class="sr-only">Loading...</span>
                             </div>
-                            <span>Loading...</span>
+                            <span class="loading-span">Loading...</span>
                         </div>
                     </div>
                 </div>
