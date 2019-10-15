@@ -76,7 +76,7 @@ public class WorkSessionController {
 
     @GetMapping(value = "/sessione/mostraSessioni/{idBusinessFunction}")
     public String mostraSessioni(HttpSession session, Model model, @AuthenticationPrincipal User user, @PathVariable("idBusinessFunction") Long idBusinessFunction) {
-        notificationService.removeAllMessages();
+        //notificationService.removeAllMessages();
 
         SessionBean sessionBean = new SessionBean();
         BusinessFunction businessFunction = businessFunctionService.findBFunctionById(idBusinessFunction);

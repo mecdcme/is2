@@ -34,9 +34,9 @@ toastr.options = {
   "positionClass": "toast-top-center",
   "preventDuplicates": false,
   "onclick": null,
-  "showDuration": "300",
+  "showDuration": "200",
   "hideDuration": "1000",
-  "timeOut": "5000",
+  "timeOut": "3000",
   "extendedTimeOut": "1000",
   "showEasing": "swing",
   "hideEasing": "linear",
@@ -49,6 +49,18 @@ toastr.options = {
  * toastr["info"]("Session saved!", "Success")
  * 
  * */
+function displayMessages(){
+    $("#messages li").each(function(index, element) {
+        var msg_type = $(element).find("span:first").text();
+        var msg_text = $(element).find("span:last").text();
+        
+        if(msg_type === "SUCCESS"){
+            toastr["success"]("", msg_text);
+        } else if (msg_type == "DANGER"){
+            toastr["error"]("", msg_text);
+        }
+    });
+}
 
 $(document).ajaxError(function (e, request, errorThrown, exception) {
     if (request.status === "302") {
@@ -65,7 +77,10 @@ $(function () {
         $("#messages-container").fadeOut();
     }, 4000);
 
-    $('.modal').modal({show: false, backdrop: 'static', keyboard: false})
+    $('.modal').modal({show: false, backdrop: 'static', keyboard: false});
+    
+    displayMessages();
+    
 });
 
 //Set menu active

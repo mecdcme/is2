@@ -55,18 +55,12 @@
         <!-- START HEADER -->
         <header th:fragment="site-header" class="app-header navbar">
             <!-- MESSAGES CONTAINER-->
-            <div id="messages-container" th:if="${session['siteNotificationMessages']}">
+            <div th:if="${session['siteNotificationMessages']}" style="display: none">
                 <ul id="messages" th:with="notifyMessages=${session['siteNotificationMessages']}">
-                    <th:block th:each="msg : ${notifyMessages}">
-                        <li style="list-style-type: none;" th:class="${'alert alert-'+#strings.toLowerCase(msg.type)+' fade in alert-dismissible'}">
-                            <strong th:text="${msg.type +'! '}">Danger!</strong>
-                            <span style="padding-left: 3px; padding-right: 10px;" th:text="${msg.text}"></span> 
-                            <a data-dismiss="alert" title="close" data-target="#messages-container" href="#messages-container">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </li>
-                    </th:block>
-                    <span th:if="${notifyMessages}" th:remove="all" th:text="${#session.removeAttribute('siteNotificationMessages')}"> </span>
+                    <li th:each="msg : ${notifyMessages}">
+                        <span th:text="${msg.type}"></span>
+                        <span th:text="${msg.text}"></span>
+                    </li>
                 </ul>
             </div>
 
@@ -139,8 +133,8 @@
                     </div>
                 </div>
             </div>
-            
-              <!-- Log panel -->
+
+            <!-- Log panel -->
             <div class="modal fade" id="modalLog" role="dialog" th:if="${session.sessioneBean}">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">

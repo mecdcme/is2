@@ -207,7 +207,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
   pointer-events: auto;
   overflow: hidden;
   margin: 0 0 6px;
-  padding: 8px 10px 6px 50px;
+  padding: 10px 10px 4px 48px;
   width: 250px;
   -moz-border-radius: 3px 3px 3px 3px;
   -webkit-border-radius: 3px 3px 3px 3px;
@@ -260,10 +260,10 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 #toast-container .toast:before {
     position: relative;
     font-family: simple-line-icons;
-    font-size: 24px;
+    font-size: 22px;
     line-height: 18px;
     float: left;
-    margin: 13px 0 0 -35px
+    margin: 3px 0 5px -35px
 }
 
 #toast-container .toast-warning:before {
