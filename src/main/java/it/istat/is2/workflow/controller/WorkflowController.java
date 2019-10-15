@@ -426,6 +426,7 @@ public class WorkflowController {
 		return "redirect:/sessione/apri/" + idsessione;
 	}
 
+	/*
 	@GetMapping(value = "/dobproc/{idelaborazione}/{idBProc}")
 	public String dobproc(HttpSession session, Model model, @PathVariable("idelaborazione") Long idelaborazione,
 			@PathVariable("idBProc") Long idBProc) throws REngineException {
@@ -455,7 +456,7 @@ public class WorkflowController {
 
 		return "workflow/home";
 	}
-
+*/
 	@RequestMapping(value = "/associavariabile", method = RequestMethod.POST)
 	public String associavariabileWS(HttpSession session, Model model,
 			@ModelAttribute("associazioneVarFormBean") AssociazioneVarFormBean form) {

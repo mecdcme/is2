@@ -27,10 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.istat.is2.app.bean.NotificationMessage;
 import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.LogService;
+import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
 
 @RequestMapping("/rest")
@@ -39,6 +41,8 @@ public class WorkFlowBatchController {
 
     @Autowired
     JobLauncher jobLauncher;
+    @Autowired
+    private NotificationService notificationService;
 
     @Autowired
     Job doBusinessProc;
@@ -56,17 +60,19 @@ public class WorkFlowBatchController {
     JobRepository jobRepository;
 
     @RequestMapping(value = "/batch/{idElaborazione}/{idBProc}", method = RequestMethod.GET)
-    public String doBatch(HttpSession session, Model model, @AuthenticationPrincipal User user,
+    public List<NotificationMessage> doBatch(HttpSession session, Model model, @AuthenticationPrincipal User user,
             @PathVariable("idElaborazione") Long idElaborazione, @PathVariable("idBProc") Long idBProc)
             throws NoSuchJobException {
+    	notificationService.removeAllMessages();
         JobParameters jobParameters = new JobParametersBuilder().addLong("idElaborazione", idElaborazione)
                 .addLong("idBProc", idBProc).addLong("time", System.currentTimeMillis()).toJobParameters();
         try {
             jobLauncher.run(doBusinessProc, jobParameters);
-        } catch (JobParametersInvalidException | JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException | JobRestartException e) {
+        } catch (Exception e) {
             logService.save(e.getMessage());
         }
-        return null;
+        
+        return notificationService.getNotificationMessages();
     }
 
     @GetMapping("/batch/logs")

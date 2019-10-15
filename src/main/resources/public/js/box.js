@@ -51,14 +51,10 @@ toastr.options = {
  * */
 function displayMessages(){
     $("#messages li").each(function(index, element) {
-        var msg_type = $(element).find("span:first").text();
+        var msg_type = $(element).find("span:first").text().toLowerCase();
         var msg_text = $(element).find("span:last").text();
         
-        if(msg_type === "SUCCESS"){
-            toastr["success"]("", msg_text);
-        } else if (msg_type == "ERROR"){
-            toastr["error"]("", msg_text);
-        }
+        toastr[msg_type]("", msg_text);
     });
 }
 

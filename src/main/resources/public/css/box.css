@@ -181,7 +181,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 
 /* Log panel */
 .logbox, #rbox{
-    height: 178px;
+    height: 250px;
     overflow-y: auto;
     font-family: monospace;
     font-size: 12px;

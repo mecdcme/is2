@@ -36,7 +36,7 @@ import java.util.StringTokenizer;
 
 import javax.transaction.Transactional;
 
-import org.apache.log4j.Logger;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,7 +54,6 @@ import it.istat.is2.dataset.domain.DatasetColonna;
 import it.istat.is2.rule.domain.Rule;
 import it.istat.is2.rule.domain.Ruleset;
 import it.istat.is2.workflow.batch.WorkFlowBatchDao;
-import it.istat.is2.workflow.dao.BusinessProcessDao;
 import it.istat.is2.workflow.dao.ElaborazioneDao;
 import it.istat.is2.workflow.dao.RulesetDao;
 import it.istat.is2.workflow.dao.RuoloDao;
@@ -65,7 +64,6 @@ import it.istat.is2.workflow.dao.TipoCampoDao;
 import it.istat.is2.workflow.dao.WorkSetDao;
 import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.BusinessProcess;
-import it.istat.is2.workflow.domain.BusinessStep;
 import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.StepInstance;
 import it.istat.is2.workflow.domain.StepInstanceAppRole;
@@ -75,8 +73,6 @@ import it.istat.is2.workflow.domain.SxTipoVar;
 import it.istat.is2.workflow.domain.TipoCampo;
 import it.istat.is2.workflow.domain.TipoIO;
 import it.istat.is2.workflow.domain.Workset;
-import it.istat.is2.workflow.engine.EngineFactory;
-import it.istat.is2.workflow.engine.EngineService;
 import it.istat.is2.worksession.dao.WorkSessionDao;
 import it.istat.is2.worksession.domain.WorkSession;
 
@@ -98,19 +94,17 @@ public class WorkflowService {
     @Autowired
     private DatasetColonnaDao datasetColonnaDao;
     @Autowired
-    private BusinessProcessDao businessProcessDao;
-    @Autowired
     private StepInstanceDao stepInstanceDao;
     @Autowired
     private StepInstanceParameterDao stepInstanceParameterDao;
+
     @Autowired
-    TipoCampoDao sxTipoCampoDao;
+    private TipoCampoDao sxTipoCampoDao;
     @Autowired
     private SqlGenericDao sqlGenericDao;
     @Autowired
-    private EngineFactory engineFactory;
-    @Autowired
     private WorkFlowBatchDao workFlowBatchDao;
+
 
     public WorkSession findSessioneLavoro(Long id) {
         return sessioneDao.findById(id).get();
@@ -197,7 +191,7 @@ public class WorkflowService {
         return ret;
     }
 
-    public Elaborazione doStep(Elaborazione elaborazione, StepInstance stepInstance) throws Exception {
+  /*  public Elaborazione doStep(Elaborazione elaborazione, StepInstance stepInstance) throws Exception {
         EngineService engine = engineFactory.getEngine(stepInstance.getAppService().getInterfaccia());
         try {
             engine.init(elaborazione, stepInstance);
@@ -206,7 +200,8 @@ public class WorkflowService {
 
         } catch (Exception e) {
             Logger.getRootLogger().error(e.getMessage());
-
+            notificationService.addErrorMessage("Error: " + e.getMessage());
+            logService.save("Error: " + e.getMessage());
             throw (e);
         } finally {
             engine.destroy();
@@ -214,7 +209,7 @@ public class WorkflowService {
 
         return elaborazione;
     }
-
+*/
     public List<StepVariable> getStepVariables(Long idelaborazione) {
         return stepVariableDao.findByElaborazione(new Elaborazione(idelaborazione));
     }
@@ -300,7 +295,7 @@ public class WorkflowService {
 
         stepVariableDao.save(stepVariable);
     }
-
+/*
     public Elaborazione doBusinessProc(Elaborazione elaborazione, Long idBProc) throws Exception {
         BusinessProcess businessProcess = businessProcessDao.findById(idBProc).orElse(new BusinessProcess());
         for (Iterator<?> iterator = businessProcess.getBusinessSteps().iterator(); iterator.hasNext();) {
@@ -312,7 +307,7 @@ public class WorkflowService {
         }
         return elaborazione;
     }
-
+*/
     public List<StepVariable> getStepVariablesNoValori(Long idelaborazione, SxTipoVar sxTipoVar) {
         return stepVariableDao.findByElaborazioneNoValori(new Elaborazione(idelaborazione), sxTipoVar);
     }

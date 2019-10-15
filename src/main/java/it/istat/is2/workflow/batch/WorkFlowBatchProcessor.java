@@ -2,6 +2,7 @@ package it.istat.is2.workflow.batch;
 
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import it.istat.is2.app.service.LogService;
+import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.workflow.dao.BusinessProcessDao;
 import it.istat.is2.workflow.domain.Elaborazione;
 import it.istat.is2.workflow.domain.BusinessProcess;
@@ -41,7 +43,9 @@ public class WorkFlowBatchProcessor implements ItemReader<Elaborazione> {
     EngineFactory engineFactory;
 
     @Autowired
-    LogService logService;
+    private LogService logService;
+    @Autowired
+	private NotificationService notificationService;
 
     @Override
     public Elaborazione read()
@@ -60,12 +64,15 @@ public class WorkFlowBatchProcessor implements ItemReader<Elaborazione> {
 
     public Elaborazione doStep(Elaborazione elaborazione, StepInstance stepInstance) throws Exception {
         EngineService engine = engineFactory.getEngine(stepInstance.getAppService().getInterfaccia());
+       
         try {
             engine.init(elaborazione, stepInstance);
             engine.doAction();
             engine.processOutput();
         } catch (Exception e) {
-            throw (e);
+         	 Logger.getRootLogger().error(e.getMessage());
+             notificationService.addErrorMessage("Error: " + e.getMessage());
+             throw (e);
         } finally {
             engine.destroy();
         }

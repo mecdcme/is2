@@ -53,7 +53,7 @@ public class LogRestController {
         notificationService.removeAllMessages();
 
         try {
-            logService.deleteByIdSessioneAndTipo(sessionId, IS2Const.OUTPUT_DEFAULT);
+            logService.deleteByIdSessione(sessionId);
             notificationService.addInfoMessage(messages.getMessage("user.created", null, LocaleContextHolder.getLocale()));
         } catch (Exception e) {
             notificationService.addErrorMessage("Error: " + e.getMessage());

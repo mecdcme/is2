@@ -45,7 +45,9 @@ is2_detect_infeasible <- function(input, inputNames){
 
 is2_validate_confront <- function(workset=Workset, rules=Ruleset,md=MD,rs=RS,...){
  
-    print(str(workset))
+    #print(str(workset))
+    #print(str(rules))
+    #   print(rules)
     colnames(rules)<- tolower(rs)
     rules$rule<-toupper(rules$rule)
 	stdout <- vector('character')
@@ -54,7 +56,7 @@ is2_validate_confront <- function(workset=Workset, rules=Ruleset,md=MD,rs=RS,...
     #print(rules)
     v <- validator(.data=rules)
     # print('---------------v ------')
-    # print(v)
+     print(v)
     # print(str(workset))
     cf <- confront(workset, v)
     # print('--------------- summary(cf) ------')
