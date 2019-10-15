@@ -74,10 +74,9 @@ function eliminaSessioneLavoro(id) {
     $('#del_msg').text(_remove_msg_dialog);
     $('#modalCancellaSessione').modal('show');
 }
-function eliminaElaborazione(ide, ids) {
+function eliminaElaborazione(ide, ids, p_name) {
     $('#id_elaborazione_del').val(ide);
     $('#id_sessione_del').val(ids);
-    $('#msg_elaboraz').text("Eliminare l'elaborazione con id " + ide + "?");
-    //$('#msg_elaboraz').text("Confirmm delete elabotion id " + ide + "?");
+    $('#msg_process').text(_remove_process_msg + " " + p_name + "?");    
     $('#modalCancellaElaborazione').modal('show');
 }
