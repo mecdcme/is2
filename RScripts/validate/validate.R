@@ -72,7 +72,7 @@ is2_validate_confront <- function(workset=Workset, rules=Ruleset,md=MD,rs=RS,...
 	
 		
 	# pdf("checks.pdf")
-	barplot(cf)
+	#barplot(cf)
 	# dev.off()
 	
 	#------------------------

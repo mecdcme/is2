@@ -36,6 +36,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -50,88 +51,78 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RuleRestController {
 
-    @Autowired
-    private LogService logService;
+	@Autowired
+	private LogService logService;
 
-    @Autowired
-    private RuleService ruleService;
+	@Autowired
+	private RuleService ruleService;
 
-    @Autowired
-    private NotificationService notificationService;
-    @Autowired
-    private MessageSource messages;
+	@Autowired
+	private NotificationService notificationService;
+	@Autowired
+	private MessageSource messages;
 
-    @GetMapping("/rules")
-    public List<Rule> ruleslist(Model model) {
+	@GetMapping("/rules")
+	public List<Rule> ruleslist(Model model) {
 
-        List<Rule> rules = ruleService.findAll();
-        return rules;
-    }
+		List<Rule> rules = ruleService.findAll();
+		return rules;
+	}
 
-    @GetMapping("/rules/runvalidate/{idRuleset}")
-    public void runValidate(@PathVariable("idRuleset") Integer idRuleset) {
+	@GetMapping("/rules/runvalidate/{idRuleset}")
+	public ResponseEntity<?> runValidate(@PathVariable("idRuleset") Integer idRuleset) {
+		notificationService.removeAllMessages();
+		Ruleset ruleSet = ruleService.findRulesetById(idRuleset);
+		try {
+			ruleService.runValidate(ruleSet);
+			notificationService
+					.addInfoMessage(messages.getMessage("run.ok", null, LocaleContextHolder.getLocale()));
 
-        Ruleset ruleSet = ruleService.findRulesetById(idRuleset);
-        ruleService.runValidate(ruleSet);
-    }
+		} catch (Exception e) {
+			notificationService.addErrorMessage("Error: " + e.getMessage());
 
-    @PostMapping("/rules")
-    public List<NotificationMessage> newRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,
-            BindingResult bindingResult) {
+		}
+		return ResponseEntity.ok(notificationService.getNotificationMessages());
+	}
 
-        notificationService.removeAllMessages();
-        if (!bindingResult.hasErrors()) {
-            try {
-                ruleService.save(form);
-                notificationService.addInfoMessage(messages.getMessage("rule.created", null, LocaleContextHolder.getLocale()));
-            } catch (Exception e) {
-                notificationService.addErrorMessage("Error: " + e.getMessage());
-            }
-        } else {
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error : errors) {
-                notificationService.addErrorMessage(error.getField() + " - " + error.getDefaultMessage());
-            }
-        }
-        return notificationService.getNotificationMessages();
-    }
+	@PostMapping("/rules")
+	public ResponseEntity<?> newRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,
+			BindingResult bindingResult) {
 
-    @PutMapping("/rules")
-    public List<NotificationMessage> updateRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,
-            BindingResult bindingResult) {
+		notificationService.removeAllMessages();
+		if (!bindingResult.hasErrors()) {
+			try {
+				ruleService.save(form);
+				notificationService
+						.addInfoMessage(messages.getMessage("rule.created", null, LocaleContextHolder.getLocale()));
+			} catch (Exception e) {
+				notificationService.addErrorMessage("Error: " + e.getMessage());
+			}
+		} else {
+			List<FieldError> errors = bindingResult.getFieldErrors();
+			for (FieldError error : errors) {
+				notificationService.addErrorMessage(error.getField() + " - " + error.getDefaultMessage());
+			}
+		}
+		return ResponseEntity.ok(notificationService.getNotificationMessages());
+	}
 
-        notificationService.removeAllMessages();
-        if (!bindingResult.hasErrors()) {
+	
+	@DeleteMapping("/rules/{id}")
+	public ResponseEntity<?> deleteRule(@PathVariable("id") Integer id) {
 
-            try {
-                ruleService.update(form);
-                notificationService.addInfoMessage(messages.getMessage("rule.updated", null, LocaleContextHolder.getLocale()));
-            } catch (Exception e) {
-                notificationService.addErrorMessage("Error: " + e.getMessage());
-            }
-        } else {
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error : errors) {
-                notificationService.addErrorMessage(error.getField() + " - " + error.getDefaultMessage());
-            }
-        }
-        return notificationService.getNotificationMessages();
-    }
+		notificationService.removeAllMessages();
 
-    @DeleteMapping("/rules/{id}")
-    public List<NotificationMessage> deleteRule(@PathVariable("id") Integer id) {
+		try {
+			ruleService.delete(id);
+			notificationService
+					.addInfoMessage(messages.getMessage("rule.deleted", null, LocaleContextHolder.getLocale()));
 
-        notificationService.removeAllMessages();
-       
-        try {
-            ruleService.delete(id);
-            notificationService.addInfoMessage(messages.getMessage("user.deleted", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			notificationService.addErrorMessage("Error: " + e.getMessage());
+		}
 
-        } catch (Exception e) {
-            notificationService.addErrorMessage("Error: " + e.getMessage());
-        }
-
-        return notificationService.getNotificationMessages();
-    }
+		return ResponseEntity.ok(notificationService.getNotificationMessages());
+	}
 
 }

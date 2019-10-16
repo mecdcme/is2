@@ -90,10 +90,10 @@ public class RuleService {
         return sxClassificationDao.findById(idclassification);
     }
 
-    public void runValidate(Ruleset ruleset) {
+    public void runValidate(Ruleset ruleset) throws Exception {
         Rule rule;
         Integer ruleId;
-        List<Rule> rules = ruleDao.findByRuleset(ruleset);
+        List<Rule> rules = ruleDao.findByRulesetOrderByIdAsc(ruleset);
         
         //Reset error status of rules
         for (int i = 0; i < rules.size(); i++) {
@@ -128,17 +128,18 @@ public class RuleService {
             }
         } catch (Exception e) {
             Logger.getRootLogger().error(e.getMessage());
+            throw e;
         } finally {
             engine.destroy();
         }
 
     }
 
-    public int loadRules(File fileRules, String idsessione, String etichetta, String idclassificazione, String separatore, String nomeFile, String descrizione, Integer skipFirstLine) {
+    public int loadRules(File fileRules, String idsessione, String etichetta, String labelCodeRule, String idclassificazione, String separatore, String nomeFile, String descrizione, Integer skipFirstLine) {
         String pathTmpFile = fileRules.getAbsolutePath().replace("\\", "/");
         WorkSession sessionelv = sessioneLavoroService.getSessione(Long.parseLong(idsessione));
         Ruleset ruleset = new Ruleset();
-
+        int counter=1;  
         Reader in = null;
         char delimiter = 9;
         try {
@@ -170,6 +171,7 @@ public class RuleService {
             regola.setRule(formula);          
             regola.setSxClassification(classificazione);
             regola.setRuleset(ruleset);
+            regola.setCode(labelCodeRule+(counter++));
             ruleset.getRules().add(regola);
 
         }
@@ -208,7 +210,7 @@ public class RuleService {
     }
 
     public List<Rule> findRules(Ruleset ruleset) {
-        return ruleDao.findByRuleset(ruleset);
+        return ruleDao.findByRulesetOrderByIdAsc(ruleset);
     }
 
     public Rule findRuleByid(Integer ruleId) {
@@ -236,6 +238,7 @@ public class RuleService {
         if (rule != null) {
             rule.setRule(ruleForm.getRule());
             rule.setDescr(ruleForm.getDescrizione());
+            rule.setCode(ruleForm.getCodeRule());
             rule.setSxClassification(classif);
             ruleDao.save(rule);
         }

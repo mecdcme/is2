@@ -96,6 +96,7 @@
                                             <input type="hidden" value="" name="labelFile" id="labelFile" />
                                             <input type="hidden" value="" name="classificazione" id="classificazione" />
                                             <input type="hidden" value="" name="skipFirstLine" id="skipFisrtLine" />
+                                            <input type="hidden" value="" name="labelCodeRule" id="labelCodeRule" />
                                             <div id="upload" class="row">
                                                 <div class="col-lg-8">
                                                     <div class="form-group">
@@ -148,7 +149,7 @@
                                                         <a th:href="@{'/rule/viewRules/'+${ruleset.id}}" title="Visualizza ruleset">
                                                             <i class="fa fa-search"></i>
                                                         </a>
-                                                    </td>
+                                                    </td>       
                                                     <td style="width: 1%">
                                                         <a href="javascript:void(0)" title="Modifica ruleset" role="button" th:if="${ruleset.datasetFile}" 
                                                            th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',\'' + ${ruleset.descr} + '\', \'' + ${ruleset.datasetFile.id} +'\')'">
@@ -159,7 +160,7 @@
                                                             <i class="fa fa-edit"></i>
                                                         </a>
                                                     </td>
-                                                    <td style="width: 1%">
+                                                  	<td style="width: 1%">
                                                         <a href="javascript:void(0)" title="Elimina ruleset" role="button"
                                                            th:attr="onclick='javascript:eliminaRuleset(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',' + ${session.sessionelv.id} +')'">
                                                             <i class="fa fa-trash"></i>
@@ -263,11 +264,11 @@
                             <input type="radio" name="skip_line" value="0" checked="checked" /> No
                         </div>
                         <div class="form-group row">
-                            <div class="col-4">
-                                <label th:text="#{file.logical.name}" >Etichetta:</label>
+                            <div class="col-3">
+                                <label th:text="#{ruleset.file.label}" >Etichetta:</label>
                                 <input id="label_file" class="form-control" th:value="${etichetta}" type="text"/>  
                             </div>
-                            <div class="col-4">
+                            <div class="col-5">
                                 <label th:text="#{rules.classification.type}">Classificazione:</label>
                                 <select id="tipo_regola" class="form-control">
                                     <option th:each="classif : ${listaClassificazioni}" 
@@ -282,6 +283,10 @@
                                     <option value=';'>;</option>
                                     <option value='0'>tab</option>
                                 </select>
+                            </div>
+                             <div class="col-2">
+                                <label th:text="#{rule.code.label}" >Label Code Rule:</label>
+                                <input id="label-code-rule" class="form-control" value="R" type="text"/>  
                             </div>
                         </div>
                         <div class="form-group">

@@ -39,6 +39,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.log4j.Logger;
@@ -47,6 +51,7 @@ import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import it.istat.is2.app.bean.InputFormBean;
 import it.istat.is2.workflow.domain.BusinessProcess;
@@ -666,13 +671,7 @@ public class Utility {
 
 		return ret;
 	}
-
-	/**
-	 * @param dataMap
-	 * @param sxTipoVar
-	 * @return
-	 */
-	public static Map<String, String> getMapWorkSetValuesParams(Map<String, ArrayList<StepVariable>> dataMap,
+ 	public static Map<String, String> getMapWorkSetValuesParams(Map<String, ArrayList<StepVariable>> dataMap,
 			SxTipoVar sxTipoVar) {
 		// TODO Auto-generated method stub
 		HashMap<String, String> ret = new HashMap<>();
@@ -694,5 +693,5 @@ public class Utility {
 		return ret;
 
 	}
-
+ 	
 }

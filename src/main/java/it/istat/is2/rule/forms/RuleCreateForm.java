@@ -14,14 +14,12 @@ public class RuleCreateForm {
     
     @NotNull
     private Integer ruleId;
-    
     @NotNull
     private Integer ruleSetId;
-    
     @NotNull
     @Size(max = 500)
     private String rule;
-    @NotNull
+    private String codeRule;
     private String descrizione;
     @NotNull
     private Short classificazione;

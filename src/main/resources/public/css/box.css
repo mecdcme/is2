@@ -285,3 +285,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 #toast-container .toast-success:before {
     content: "\e080"
 }
+label.error {
+  color: red;
+  font-weight: bold;
+}

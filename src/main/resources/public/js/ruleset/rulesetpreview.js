@@ -108,23 +108,55 @@ $(document).ready(function () {
             }
         });
     });
+    
+    
+    $("#inputNewRuleForm").validate({
+         rules : {          
+        	ruleCode : {
+             required : true
+            },
+            ruleText : {
+                required : true,
+             } 
+        },
+          messages: {
+        	ruleCode: "*Field required",
+            ruleText: "*Field required"
+        },
+        submitHandler: function(form) {
+        	$('#loading').modal('show');
+        	$('#newruledialog').modal('hide');
+            form.submit();
+        }
+    });
+    $("#editForm").validate({
+        rules : {          
+        	rule : {
+            required : true
+           } 
+       },
+         messages: {
+        	 rule: "*Field required" 
+       },
+       submitHandler: function(form) {
+       	$('#loading').modal('show');
+       	$('#modalEditRule').modal('hide');
+           form.submit();
+       }
+   });
+    
 });
 
-function scaricaDataset(e, param, idDFile) {
-    e.preventDefault();
-    window.location = _ctx + '/rest/download/dataset/' + param + '/' + idDFile;
-}
 
 function chiudiDivVariabili() {
     $("#dataset_div").hide();
 }
 
 function inviaFormNewRule() {
-    $("#ruleText").val($("#rule_text").val());
-    $("#ruleDesc").val($("#rule_desc").val());
-    $("#ruleType").val($("#rule_tipo").val());
-    $("#classification").val($("#classification_l").val());
     $("#inputNewRuleForm").submit();
+}
+function inviaFormEditRule() {
+    $("#editForm").submit();
 }
 
 function inviaFormNewVarRule() {
@@ -133,6 +165,8 @@ function inviaFormNewVarRule() {
     $("#classification").val($("#classification_v").val());
     $("#inputNewRuleForm").submit();
 }
+
+
 
 function modificaRegola() {
     $("#ruleText").val($("#rule_text_v").val());
@@ -155,9 +189,15 @@ function addRule(id_variable, nome_variabile) {
     $('#addrulevariable').modal('show');
 }
 
-function editRule(id, rule, descr, classif) {
-    $('#editRuleId').val(id);
-    $('#editRuleText').val(rule);
+function editRule(identifier){
+	var idRole = $(identifier).data('rule-id');
+	var codeRole = $(identifier).data('rule-code');
+	var rule = $(identifier).data('rule-rule');
+	var descr = $(identifier).data('rule-descr');
+	var classif = $(identifier).data('rule-class-id');
+  	$('#editRuleId').val(idRole);
+    $('#rule').val(rule);
+    $('#editCodeRule').val(codeRole);
     if (descr == 'null') {
         $('#descrizione_edit').val('');
     } else {

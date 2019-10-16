@@ -40,6 +40,7 @@ import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.rule.domain.Rule;
 import it.istat.is2.rule.domain.Ruleset;
+import it.istat.is2.rule.forms.RuleCreateForm;
 import it.istat.is2.rule.service.RuleService;
 import it.istat.is2.workflow.domain.Classification;
 import it.istat.is2.worksession.domain.WorkSession;
@@ -52,15 +53,23 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import org.assertj.core.internal.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -93,6 +102,7 @@ public class RuleController {
         String descrizione = form.getDescrizione();
         // è il nome logico assegnato dall'utente ed è quello visualizzato nelle viste
         String etichetta = form.getLabelFile();
+        String labelCodeRule = (!form.getLabelCodeRule().isEmpty())?form.getLabelCodeRule():"R";
         String idclassificazione = form.getClassificazione();
         String separatore = form.getDelimiter();
         String idsessione = form.getIdsessione();
@@ -115,7 +125,7 @@ public class RuleController {
         if (check == false) {
             File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());
 
-            int rules = ruleService.loadRules(fileRules, idsessione, etichetta, idclassificazione, separatore, nomeFile, descrizione, skipFirstLine);
+            int rules = ruleService.loadRules(fileRules, idsessione, etichetta,labelCodeRule, idclassificazione, separatore, nomeFile, descrizione, skipFirstLine);
             logService.save("Caricate " + rules + " regole");
 
             SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
@@ -249,6 +259,7 @@ public class RuleController {
         String descrRule = form.getRuleDesc();
         Integer idRuleset = form.getIdruleset();
         String textRule = form.getRuleText();
+        String textCode = form.getRuleCode();
         short idclassification = form.getClassification();
         Integer idVar = form.getIdcol();
 
@@ -261,6 +272,7 @@ public class RuleController {
         sxrule.setDescr(descrRule);
         sxrule.setActive((short) 1);
         sxrule.setRule(textRule);
+        sxrule.setCode(textCode);
         sxrule.setRuleset(ruleset);
         sxrule.setSxClassification(classification);
         sxrule.setVariabile(idVar);
@@ -270,26 +282,40 @@ public class RuleController {
 
         try {
             ruleService.saveRuleSet(ruleset);
+            notificationService.addInfoMessage("Salvataggio avvenuto con successo.");
         } catch (Exception e) {
             notificationService.addErrorMessage(messages.getMessage("rules.save.error", null, LocaleContextHolder.getLocale()), e.getMessage());
         }
-
-        notificationService.addInfoMessage("Salvataggio avvenuto con successo.");
-        WorkSession sessionelv = sessioneLavoroService.getSessione(new Long(form.getIdsessione()));
-
-        ruleset.setSessioneLavoro(sessionelv);
-        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-
-        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
-        model.addAttribute("ruleset", ruleset);
-
-        ruleService.saveRuleSet(ruleset);
+ 
         return "redirect:/rule/viewRules/" + ruleset.getId();
 
     }
+    
+    @PostMapping("/editRule")
+	public String updateRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,
+			BindingResult bindingResult) {
+
+		notificationService.removeAllMessages();
+		if (!bindingResult.hasErrors()) {
+
+			try {
+				ruleService.update(form);
+				notificationService.addInfoMessage(messages.getMessage("rule.updated", null, LocaleContextHolder.getLocale()));
+			} catch (Exception e) {
+				notificationService.addErrorMessage("Error: " + e.getMessage());
+			}
+		} else {
+			List<FieldError> errors = bindingResult.getFieldErrors();
+			for (FieldError error : errors) {
+				notificationService.addErrorMessage(error.getField() + " - " + error.getDefaultMessage());
+			}
+		}
+		  return "redirect:/rule/viewRules/" + form.getRuleSetId();
+	}
+    
 
     @GetMapping(value = "/viewRuleset/{id}")
-    public String mostraroleset(HttpSession session, Model model, @PathVariable("id") Long id) {
+    public String mostraruleset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
         List<Log> logs = logService.findByIdSessione(id);
         List<Log> rlogs = logService.findByIdSessioneAndTipo(id, OUTPUT_R);
@@ -311,7 +337,7 @@ public class RuleController {
 
         if (listaRuleSet != null && listaRuleSet.size() > 0) {
             String progressivo = Integer.toString(listaRuleSet.size() + 1);
-            etichetta = "RS_" + progressivo;
+            etichetta = "RS" + progressivo;
 
             List<Ruleset> listaRS = ruleService.findRulesetBySessioneLavoro(sessionelv);
 
@@ -323,12 +349,12 @@ public class RuleController {
                 if (etichetta.equals(label)) {
                     int prog = Integer.parseInt(progressivo);
                     prog++;
-                    etichetta = "RS_" + prog;
+                    etichetta = "RS" + prog;
                 }
             }
 
         } else {
-            etichetta = "RS_1";
+            etichetta = "RS1";
         }
 
         Ruleset rs;
@@ -354,10 +380,10 @@ public class RuleController {
     }
 
     @RequestMapping("/viewRules/{idfile}")
-    public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Integer idfile) {
+    public String viewRules(HttpSession session, Model model, @PathVariable("idfile") Integer idfile) {
 
         session.removeAttribute("dfile");
-        notificationService.removeAllMessages();
+     
         List<Log> logs = logService.findByIdSessione();
         List<Log> rlogs = logService.findByIdSessioneAndTipo(OUTPUT_R);
         // TODO: Controllare findRulesetById
@@ -399,9 +425,6 @@ public class RuleController {
         logService.save("Set di regole con id " + idRuleset + " eliminato con successo");
         notificationService.addInfoMessage("Eliminazione avvenuta con successo");
 
-        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-        sessionBean.getRuleset().remove(0);
-        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
         return "redirect:/rule/viewRuleset/" + idSessione;
     }

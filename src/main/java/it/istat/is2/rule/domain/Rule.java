@@ -48,6 +48,9 @@ public class Rule implements Serializable {
 
     @Column(name = "ACTION")
     private String action;
+    
+    @Column(name = "code")
+    private String code;
 
     private Short active;
 

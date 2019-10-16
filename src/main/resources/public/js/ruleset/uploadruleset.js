@@ -182,6 +182,7 @@ function inviaFormRulesetFile() {
         $("#desc").val($("#desc_file").val());
         $("#delimiter").val($("#delimiter_sel").val());
         $("#classificazione").val($("#tipo_regola").val());
+        $("#labelCodeRule").val($("#label-code-rule").val());
         var radioValue = $("input[name='skip_line']:checked").val();
         $("#skipFisrtLine").val(radioValue);
         $("#inputFileRulesetForm").submit();

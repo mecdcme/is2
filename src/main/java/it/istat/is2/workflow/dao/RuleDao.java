@@ -34,7 +34,7 @@ import java.util.List;
 @Repository
 public interface RuleDao extends CrudRepository<Rule,Integer> {
     
-  List<Rule> findByRuleset(Ruleset ruleset);
+  List<Rule> findByRulesetOrderByIdAsc(Ruleset ruleset);
   Integer countByRuleset(Ruleset ruleset);
  
 }

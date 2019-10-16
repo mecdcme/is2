@@ -32,6 +32,7 @@ public class NewRuleFormBean implements Serializable {
 	private String ruleName;	
 	private short ruleType;
 	private String ruleDesc;
+	private String ruleCode;
 	private String ruleText;
 	private String idsessione;
 	private Integer idruleset;
