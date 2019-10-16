@@ -35,13 +35,13 @@ $(document).ready(function () {
     $("#scegliHeader").hide();
     $("#lnk_opzioni_avanzate").hide();
     $("#upload_file").hide();
-    
+
     $("#delimiter_sel").change(function () {
         $("#delimiter").val($("#delimiter_sel").val());
     });
 
     $("#file").fileinput({showCaption: false, dropZoneEnabled: false});
-    
+
     $("#file").change(function () { // bCheck is a input type button
         filename = $("input.file-caption-name").attr("title");
         $("#delimiter").val($("#delimiter_sel").val());
@@ -53,47 +53,45 @@ $(document).ready(function () {
         } else { // no file was selected        	
             alert("Nessun file caricato!");
             return false;
-        };
+        }
+        ;
     });
     controllaInputText();
     $('#label_file').on("keyup", function (e) {
-    	controllaInputText();
+        controllaInputText();
     });
     $('#btn_delete_dataset').click(function () {
-    	var datasetid = $('#idDataset').val();      
+        var datasetid = $('#idDataset').val();
         window.location = _ctx + '/deleteDataset/' + datasetid;
     });
-    
-    
-    $("#sel-tables").on('change', function(){    
-    	var datasetid=  $('#sel-db').val();
-    	var table=  $('#sel-tables').val();
-    	 $('#check-list-fields').html('');
-    	 commonAjaxCall("GET",_ctx + "/rest/dataset/fields/" + datasetid+'/'+table,'',loadFieldsList);
+
+
+    $("#sel-tables").on('change', function () {
+        var datasetid = $('#sel-db').val();
+        var table = $('#sel-tables').val();
+        $('#check-list-fields').html('');
+        commonAjaxCall("GET", _ctx + "/rest/dataset/fields/" + datasetid + '/' + table, '', loadFieldsList);
     });
-    
+
 });
 
-function controllaInputText() {	
-    if ($("#label_file").val().length > 0 && $("#label_file").val() != '') {		
+function controllaInputText() {
+    if ($("#label_file").val().length > 0 && $("#label_file").val() != '') {
         $("#btn-invia-file").removeClass('disabled');
         $("#btn-invia-file").removeAttr('disabled');
-    }else{
-	$("#btn-invia-file").addClass('disabled');
+    } else {
+        $("#btn-invia-file").addClass('disabled');
         $("#btn-invia-file").attr("disabled", "disabled");
     }
 }
-function showUploadDiv() {
-	if ($("#upload_file").css("display") == "none") {
-		$("#upload_file").show();
-	} else {
-		$("#upload_file").hide();
-	}
+function browseFiles() {
+    $("#file").click();
 }
-function eliminaDataset(idDataset, nomeFile) {	
-    $("#idDataset").val(idDataset);    
+
+function eliminaDataset(idDataset, nomeFile) {
+    $("#idDataset").val(idDataset);
     $('#msg_elim_dataset').text("Eliminare il dataset " + nomeFile + "?");
-    $('#modalCancellaDataset').modal('show');    
+    $('#modalCancellaDataset').modal('show');
 }
 function eliminaElaborazione(ide, ids) {
     $('#id_elaborazione_del').val(ide);
@@ -161,7 +159,7 @@ function preview() {
         }
         previewString += line;
         console.log("Line: " + (lineno++) + line);
-        
+
     }, function onComplete() {
         console.log('Read all lines');
         $("#PreviewTextarea").val(previewString);
@@ -171,8 +169,8 @@ function preview() {
 function inviaFormFile() {
     var fileName = document.getElementById('file').files[0];
     if (fileName) { // returns true if the string is not empty
-    	var a = $("#label_f").val($("#label_file").val());
-    	var b = $("#tipo_dat").val($("#tipo_dato").val());    	
+        var a = $("#label_f").val($("#label_file").val());
+        var b = $("#tipo_dat").val($("#tipo_dato").val());
         $("#inputFileForm").submit();
     } else { // no file was selected        	
         $("#errorUplodFile").modal('toggle');
@@ -232,34 +230,34 @@ function readSomeLines(file, maxlines, forEachLine, onComplete) {
 
 
 
-function openDlgLoadTable(){
-	var datasetid=  $('#sel-db').val();
-	commonAjaxCall("GET",_ctx + "/rest/dataset/tables/" + datasetid,'',loadTableList);
-	$('#load-table-db').modal('show');  
+function openDlgLoadTable() {
+    var datasetid = $('#sel-db').val();
+    commonAjaxCall("GET", _ctx + "/rest/dataset/tables/" + datasetid, '', loadTableList);
+    $('#load-table-db').modal('show');
 }
 
 
-function loadTableList(data){
-	 $.each(data, function(i, value) {  
-         $('<option></option>', {text:value}).attr('value', value).appendTo('#sel-tables');
-      });
+function loadTableList(data) {
+    $.each(data, function (i, value) {
+        $('<option></option>', {text: value}).attr('value', value).appendTo('#sel-tables');
+    });
 }
-function loadFieldsList(data){
-	 $.each(data, function(i, value) {  
-		 var li='<li class="list-group-item"><div class="custom-control custom-checkbox">'
-			+'<input type="checkbox" class="custom-control-input" name="fields" value="'+value+'" id="check'+i+'" checked="checked">'
-			+'<label class="custom-control-label" for="check'+i+'">'+value+'</label></div></li>';
-		  $(li).appendTo('#check-list-fields');
-     });
+function loadFieldsList(data) {
+    $.each(data, function (i, value) {
+        var li = '<li class="list-group-item"><div class="custom-control custom-checkbox">'
+                + '<input type="checkbox" class="custom-control-input" name="fields" value="' + value + '" id="check' + i + '" checked="checked">'
+                + '<label class="custom-control-label" for="check' + i + '">' + value + '</label></div></li>';
+        $(li).appendTo('#check-list-fields');
+    });
 }
 
 function inviaFormTable() {
-	$('#db-schema').val($('#sel-db').val());
-	$('#table-name').val($('#sel-tables').val());
-	$("#dataset-fields-table").submit();
+    $('#db-schema').val($('#sel-db').val());
+    $('#table-name').val($('#sel-tables').val());
+    $("#dataset-fields-table").submit();
 
 }
- 
+
 // Method to initiate AJAX request
 function commonAjaxCall(type, url, data, callback) {
     $.ajax({

@@ -80,9 +80,9 @@
                                                 <i class="fa fa-plus-square-o"></i>
                                                 <span th:text="#{ruleset.new.ruleset}"></span>
                                             </a>
-                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:showUploadDiv();" 
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:browseFiles();" 
                                                title="Carica file di regole">
-                                                <i class="fa fa-plus-square-o"></i>
+                                                <i class="fa fa-upload"></i>
                                                 <span th:text="#{ruleset.new.file.ruleset}"></span>
                                             </a>
                                         </div>
@@ -145,6 +145,11 @@
                                                         <span th:unless="${ruleset.numeroRighe}">-</span>
                                                     </td>
                                                     <td style="width: 1%">
+                                                        <a th:href="@{'/rule/viewRules/'+${ruleset.id}}" title="Visualizza ruleset">
+                                                            <i class="fa fa-search"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td style="width: 1%">
                                                         <a href="javascript:void(0)" title="Modifica ruleset" role="button" th:if="${ruleset.datasetFile}" 
                                                            th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',\'' + ${ruleset.descr} + '\', \'' + ${ruleset.datasetFile.id} +'\')'">
                                                             <i class="fa fa-edit"></i>
@@ -154,11 +159,6 @@
                                                             <i class="fa fa-edit"></i>
                                                         </a>
                                                     </td>
-                                                    <td style="width: 1%">
-                                                        <a th:href="@{'/rule/viewRules/'+${ruleset.id}}" title="Visualizza ruleset">
-                                                            <i class="fa fa-search"></i>
-                                                        </a>
-                                                    </td>												
                                                     <td style="width: 1%">
                                                         <a href="javascript:void(0)" title="Elimina ruleset" role="button"
                                                            th:attr="onclick='javascript:eliminaRuleset(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',' + ${session.sessionelv.id} +')'">

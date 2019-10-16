@@ -23,6 +23,10 @@
  */
 
 /* Global */
+body{
+    font-size: 0.8rem;
+}
+
 button:focus{
     outline: none;
 }
@@ -46,7 +50,7 @@ button:focus{
 
 .breadcrumb-menu a:hover{
     color: #167495!important;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .nav-padding{

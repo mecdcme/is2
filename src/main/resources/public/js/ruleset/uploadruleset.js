@@ -129,13 +129,11 @@ function creaContenuto(data, delimiter) {
     $("#separator").val(delimiter);
     $("#titolo").html("Intestazione file:");
 }
-function showUploadDiv() {
-    if ($("#upload").css("display") == "none") {
-        $("#upload").show();
-    } else {
-        $("#upload").hide();
-    }
+
+function browseFiles() {
+    $("#file").click();
 }
+
 function openNewRulesetDialog() {
     var action = /* [[@{/rule/newRuleset}]] */_ctx + '/rule/newRuleset';
     $("#inputNewRulesetForm").attr("action", action);
