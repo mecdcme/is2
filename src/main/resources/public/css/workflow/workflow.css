@@ -1,125 +1,139 @@
 .error {
-	color: #f86c6b;
-	font-weight: bold;
+    color: #f86c6b;
+    font-weight: bold;
 }
 
 .success {
-	color: #4dbd74;
-	font-weight: bold;
+    color: #4dbd74;
+    font-weight: bold;
 }
 
 .waiting {
-	color: orange;
-	font-weight: bold;
+    color: orange;
+    font-weight: bold;
 }
 
 .hidden {
-	display: none;
+    display: none;
 }
 
 .not-active {
-	pointer-events: none;
-	cursor: default;
-	text-decoration: none;
-	color: darkgrey;
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    color: darkgrey;
 }
 
 /* Worksession */
 #header-variabili, #header-parametri, #header-ruleset {
-	font-weight: normal;
-	border-right: 1px solid #c8ced3;
-	padding-right: 7px;
+    font-weight: normal;
+    border-right: 1px solid #c8ced3;
+    padding-right: 7px;
 }
 
 #header-parametri {
-	font-weight: normal;
-	border-right: 1px solid #c8ced3;
-	padding-left: 7px;
-	padding-right: 7px;
+    font-weight: normal;
+    border-right: 1px solid #c8ced3;
+    padding-left: 7px;
+    padding-right: 7px;
 }
 
 #header-ruleset {
-	font-weight: normal;
-	border-right: 1px solid #c8ced3;
-	padding-left: 7px;
-	padding-right: 7px;
+    font-weight: normal;
+    border-right: 1px solid #c8ced3;
+    padding-left: 7px;
+    padding-right: 7px;
 }
 
 #header-execution {
-	font-weight: normal;
-	padding-left: 7px;
+    font-weight: normal;
+    padding-left: 7px;
 }
 
 #header-variabili:hover, #header-parametri:hover, #header-execution:hover,
-	#header-ruleset:hover {
-	text-decoration: none;
-	cursor: pointer;
+#header-ruleset:hover {
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .header-strong {
-	font-weight: bold !important;
+    font-weight: bold !important;
 }
 
 .dropdown-item a:hover {
-	text-decoration: none;
-	cursor: pointer;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 #tabs {
-	margin-top: 0px;
-	margin-bottom: 5px;
+    margin-top: 0px;
+    margin-bottom: 5px;
 }
 
 #tab-msg {
-	margin: 0px; padding-left : 12px;
-	color: #f86c6b;
-	padding-left: 12px;
+    margin: 0px; padding-left : 12px;
+    color: #f86c6b;
+    padding-left: 12px;
 }
 
 legend {
-	font-size: 1.2rem;
+    font-size: 1.2rem;
 }
 
 #selectable .ui-selected, #selectable .ui-selecting {
-	background-color: #20a8d8 !important;
-	color: white;
+    background-color: #20a8d8 !important;
+    color: white;
 }
 
 #selectable li {
-	height: 40px;
-	cursor: pointer;
-	padding: 0.5rem 1.2rem;
+    height: 35px;
+    cursor: pointer;
+    padding: 0.4rem 1.0rem 0.1rem 1.0rem;
 }
 
 #selectable .even {
-	background-color: #e4e7ea;
+    background-color: #e4e7ea;
 }
 
 #selectable .odd {
-	background-color: white;
+    background-color: white;
 }
 
 .list-group-item {
-	padding: 0.5rem 1.2rem;
-	cursor: pointer;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
 }
 
 .list-group-item.active {
-	color: white !important;
+    color: white !important;
 }
 
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited,
-	a.ui-button, a:link.ui-button, a:visited.ui-button, .ui-button {
-	font-weight: normal;
-	cursor: pointer;
+a.ui-button, a:link.ui-button, a:visited.ui-button, .ui-button {
+    font-weight: normal;
+    cursor: pointer;
 }
 
 .ui-tabs .ui-tabs-nav li {
-	border-radius: 3px;
-	margin: 0px 0px 5px 10px;
-	border: none;
+    border-radius: 3px;
+    margin: 0px 0px 5px 10px;
+    border: none;
+}
+
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    float: left;
+    padding: 0.35rem 0.7rem;
+    text-decoration: none;
+}
+
+#card-parametri{
+    overflow-x: auto;
 }
 
 #parametersTable li {
-	list-style-type: none;
+    list-style-type: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 500px;
 }
