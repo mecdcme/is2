@@ -79,7 +79,11 @@
                                 <div class="card-header">
                                     <span th:text="${ruleset.labelFile}"></span>
                                     <div class="card-header-actions">
-                                        <a class="card-header-action" href="javascript:void(0)" title="Nuova regola" th:onclick="'javascript:runValidate(' + ${ruleset.id} + ')'">
+                                       <a class="card-header-action" title="Show log" href="javascript:void(0)" onclick="javascript:showLog();">
+                                            <i class="fa fa-clone"></i>&nbsp;<span>Log</span>
+                                        </a>
+                                    
+                                        <a class="card-header-action towait" th:href="@{'/rule/runvalidate/'+${ruleset.id}}" title="Validate">
                                             <i class="fa fa-caret-square-o-right"></i>&nbsp;
                                             <span th:text="#{ruleset.package.validate.contrad}"></span>
                                         </a> 
@@ -93,6 +97,8 @@
                                     <table id="dataview" class="table table-striped " cellspacing="0" width="auto" style="overflow: auto;">
                                         <thead>
                                             <tr>
+                                                <th th:if="${validatesRules}" width="1%" class="text-center">Validate</th>
+                                                <th th:if="${infeasibleRules}" width="1%" class="text-center">Contra</th>
                                                 <th>Codice</th>
                                                 <th>Regola</th>
                                                 <!--th>Variabile</th-->
@@ -104,7 +110,23 @@
                                         </thead>
                                         <tbody>
                                             <tr th:each="rule, counter : ${rules}">
-                                                 <td><span th:text="${rule.code}"></span></td>
+                                              <td  th:if="${validatesRules}" class="text-center">
+                                                    <span th:if="${#lists.contains(validatesRules, rule.code)}"  th:title="#{ruleset.package.validate.incoherent}">
+                                                        <i class="fa fa-check" style="color:#4dbd74"></i><span style="display: none">2</span>
+                                                    </span>
+                                                     <span th:unless="${#lists.contains(validatesRules, rule.code)}"  th:title="#{ruleset.package.validate.incoherent}">
+                                                       <i class="fa fa-times" style="color:#f86c6b"></i><span style="display: none">1</span>
+                                                    </span>
+                                                </td>
+                                                <td  th:if="${infeasibleRules}" class="text-center">
+                                                    <span th:if="${!#lists.contains(validatesRules, rule.code) or #lists.contains(infeasibleRules, rule.code)}"  th:title="#{ruleset.package.validate.incoherent}">
+                                                        <i class="fa fa-times" style="color:#f86c6b"></i><span style="display: none">1</span>
+                                                    </span>
+                                                     <span th:unless="${!#lists.contains(validatesRules, rule.code) or #lists.contains(infeasibleRules, rule.code)}"  th:title="#{ruleset.package.validate.incoherent}">
+                                                        <i class="fa fa-check" style="color:#4dbd74"></i><span style="display: none">2</span>
+                                                    </span>
+                                                </td>
+                                                <td><span th:text="${rule.code}"></span></td>
                                                 <td><span th:text="${#strings.abbreviate(rule.rule,50)}" th:title="${rule.rule}"></span></td>
                                                 <!--td>
                                                     <span th:if="${session.dfile != null}" th:title="${rule.variabile}"

@@ -161,8 +161,8 @@ public class DatasetController {
         dcol.setFiltro(new Short(filtro));
         try {
             datasetService.salvaColonna(dcol);
-            notificationService.addInfoMessage("Salvataggio avvenuto con successo!");
-        } catch (Exception e) {
+            notificationService.addInfoMessage(messages.getMessage("generic.save.success", null, LocaleContextHolder.getLocale()));
+       } catch (Exception e) {
             notificationService.addErrorMessage("Errore: ", e.getMessage());
 
         }
@@ -212,8 +212,7 @@ public class DatasetController {
         try {
             datasetService.salva(campiL, valoriHeaderNum, labelFile, tipoDato, separatore, form.getDescrizione(), idsessione);
             logService.save("File " + labelFile + " salvato con successo");
-            notificationService.addInfoMessage("Salvataggio avvenuto con successo.");
-
+            notificationService.addInfoMessage(messages.getMessage("generic.save.success", null, LocaleContextHolder.getLocale()));
             SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
             sessionBean.getFile().add(form.getDescrizione());
             session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
