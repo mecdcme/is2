@@ -22,12 +22,17 @@ is2_detect_infeasible <- function(input, inputNames){
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
   sink(con)
-  
+  newrules <- data.frame(rule = input, name = inputNames,label =inputNames )
+  print(newrules)
+   
   rules_inf <- vector('character')
-  rules <- validator(.data=input)
-  names(rules) <- inputNames
-  print(head(rules, 10))
-  print(summary(rules))
+  rules <- validator(.data=newrules)
+  rules_validate <- vector('character')
+   
+  for(x in 1:length(rules$rules)) {rules_validate <- c(rules_validate, names(description(rules$rules[[x]]))) 	}
+  #print(rules_validate)
+  #print(head(rules, 10))
+  #print(summary(rules))
   rule_infeasible <- is_infeasible(rules)
   print(rule_infeasible)
   if (rule_infeasible == TRUE){
@@ -37,9 +42,7 @@ is2_detect_infeasible <- function(input, inputNames){
   
   sink()
   close(con)
-  
-  output <- list("rules" = rules_inf, "log" = stdout)
-  
+  output <- list("rules" = rules_inf, "validates"=rules_validate, "log" = stdout)
   return(output)
 }
 

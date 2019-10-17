@@ -7,8 +7,15 @@ package it.istat.is2.rule.engine;
 
 import it.istat.is2.app.service.LogService;
 import static it.istat.is2.app.util.IS2Const.OUTPUT_R;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.rosuda.REngine.RList;
 import org.rosuda.REngine.Rserve.RConnection;
+import org.rosuda.REngine.Rserve.RserveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,13 +39,12 @@ public class EngineValidate {
     private String pathR;
     private RConnection connection;
     private RList out;
-    private String[] result;
-    private String[] rlog;
+    
 
     @Autowired
     private LogService logService;
 
-    public void connect() throws Exception {
+    public void connect() throws  RserveException {
 
         logService.save("Connecting to R server...");
 
@@ -60,15 +66,23 @@ public class EngineValidate {
         logService.save("Validate R script loaded");
     }
 
-    public String[] detectInfeasibleRules(String[]input, String[]inputNames) throws Exception {
-
+    public Map<String,List<String>> detectInfeasibleRules(String[]input, String[]inputNames) throws Exception {
+    	 
+    	String[] result;
+        String[] rlog;
+        String[] validates;
+        Map<String,List<String>>  ret=new HashMap<String, List<String>>();       
+        
         connection.assign(INPUT, input);
         connection.assign(INPUT_NAMES, inputNames);
         connection.eval(INPUT + " <- data.frame(rule=" + INPUT + ")");
         out = connection.eval(FUNCTION_DETECT_INFEASIBLE + "(" + INPUT + ", " + INPUT_NAMES + ")").asList();
 
         result = out.at("rules").asStrings();
+        validates = out.at("validates").asStrings();
         rlog = out.at("log").asStrings();
+        ret.put("infeasibleRules", Arrays.asList(result));
+        ret.put("validatesRules", Arrays.asList(validates));
         
         for(int i = 0; i < rlog.length; i++){
              logService.save(rlog[i], OUTPUT_R);
@@ -76,7 +90,7 @@ public class EngineValidate {
         
         logService.save("Script completed!");
         
-        return result;
+        return ret;
     }
 
     public void destroy() {

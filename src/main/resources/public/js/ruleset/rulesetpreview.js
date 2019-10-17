@@ -55,10 +55,7 @@ $(document).ready(function () {
                 extend: 'csvHtml5',
                 filename: 'download',
                 title: 'download',
-                className: 'btn-light mr-1',
-                action: function (e, dt, node, config) {
-                    scaricaDataset(e, 'csv', ID);
-                }
+                className: 'btn-light mr-1'
             }],
         language: {
             paginate: {

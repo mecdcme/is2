@@ -69,21 +69,6 @@ public class RuleRestController {
 		return rules;
 	}
 
-	@GetMapping("/rules/runvalidate/{idRuleset}")
-	public ResponseEntity<?> runValidate(@PathVariable("idRuleset") Integer idRuleset) {
-		notificationService.removeAllMessages();
-		Ruleset ruleSet = ruleService.findRulesetById(idRuleset);
-		try {
-			ruleService.runValidate(ruleSet);
-			notificationService
-					.addInfoMessage(messages.getMessage("run.ok", null, LocaleContextHolder.getLocale()));
-
-		} catch (Exception e) {
-			notificationService.addErrorMessage("Error: " + e.getMessage());
-
-		}
-		return ResponseEntity.ok(notificationService.getNotificationMessages());
-	}
 
 	@PostMapping("/rules")
 	public ResponseEntity<?> newRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,

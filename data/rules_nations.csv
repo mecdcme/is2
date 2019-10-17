@@ -1,0 +1,9 @@
+rule;names;label
+region %in% c('Africa','Americas','Asia','Europe','Oceania');rule1;Region domain
+TFR > 0;rule2;TFR positivity
+GDP > 0;rule3;GDP positivity
+contr > 0;rule4;contr positivity
+infmort > 0;rule5;infant mortality positivity
+TFR <= 0.048 * GDP;rule6;ratio between TFR and GDP
+contr <= 0.195 * GDP;rule7;ratio between contr and GDP
+infmort <= 0.716 * GDP;rule8;ratio between infant mortality and GDP

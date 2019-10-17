@@ -23,6 +23,7 @@
  */
 package it.istat.is2.rule.service;
 
+import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.rule.domain.Rule;
@@ -44,13 +45,22 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.log4j.Logger;
+import org.rosuda.REngine.REngineException;
+import org.rosuda.REngine.Rserve.RConnection;
+import org.rosuda.REngine.Rserve.RserveException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -68,10 +78,14 @@ public class RuleService {
     private ClassificationDao sxClassificationDao;
     @Autowired
     private EngineValidate engine;
+    @Autowired
+	private NotificationService notificationService;
+    @Autowired
+	private MessageSource messages;
 
     private String[] input;
     private String[] inputNames;
-    private String[] out;
+     
 
     public List<Rule> findAll() {
         return (List<Rule>) this.ruleDao.findAll();
@@ -90,50 +104,46 @@ public class RuleService {
         return sxClassificationDao.findById(idclassification);
     }
 
-    public void runValidate(Ruleset ruleset) throws Exception {
-        Rule rule;
-        Integer ruleId;
-        List<Rule> rules = ruleDao.findByRulesetOrderByIdAsc(ruleset);
-        
-        //Reset error status of rules
-        for (int i = 0; i < rules.size(); i++) {
-            rules.get(i).setErrcode(0);
-        }
-        ruleDao.saveAll(rules);
-        
-        //Create array of rules for R
-        input = new String[rules.size()];
-        for (int i = 0; i < rules.size(); i++) {
-            input[i] = rules.get(i).getRule().toUpperCase();
-        }
+	public Map<String,List<String>> runValidate(Ruleset ruleset) throws Exception {
+		Rule rule;
+		Integer ruleId;
+		Map<String,List<String>> ret=new HashMap<String, List<String>>();
+	 	List<Rule> rules = ruleDao.findByRulesetOrderByIdAsc(ruleset);
 
-        //Create array of names for R
-        inputNames = new String[rules.size()];
-        for (int i = 0; i < rules.size(); i++) {
-            inputNames[i] = INPUT_NAMES_PREFIX + rules.get(i).getId();
+		// Reset error status of rules
+		for (int i = 0; i < rules.size(); i++) {
+			rules.get(i).setErrcode(0);
+		}
+		ruleDao.saveAll(rules);
+
+		// Create array of rules for R
+		input = new String[rules.size()];
+		for (int i = 0; i < rules.size(); i++) {
+			input[i] = rules.get(i).getRule().toUpperCase();
+		}
+
+		// Create array of names for R
+		inputNames = new String[rules.size()];
+		for (int i = 0; i < rules.size(); i++) {
+			inputNames[i] = rules.get(i).getCode();
+		}
+
+		try {
+			engine.connect();
+			ret = engine.detectInfeasibleRules(input, inputNames);
+		} catch (RserveException e) {
+			Logger.getRootLogger().error(e.getMessage());
+			notificationService.addErrorMessage(messages.getMessage("r.connectiom.error", null, LocaleContextHolder.getLocale()),e.getMessage()); 
+			throw  e;
+		} catch (Exception e) {
+			notificationService.addErrorMessage("Error: " + e.getMessage());
+			Logger.getRootLogger().error(e.getMessage());
+			throw  e;
+		} finally {
+         engine.destroy();
         }
-
-        try {
-            engine.connect();
-
-            out = engine.detectInfeasibleRules(input, inputNames);
-            //Save error codes of infeasible rules 
-            for (int i = 0; i < out.length; i++) {
-                ruleId = Integer.valueOf(out[i].replace(INPUT_NAMES_PREFIX, ""));
-                rule = ruleDao.findById(ruleId).orElse(null);
-                if (rule != null) {
-                    rule.setErrcode(1);
-                    ruleDao.save(rule);
-                }
-            }
-        } catch (Exception e) {
-            Logger.getRootLogger().error(e.getMessage());
-            throw e;
-        } finally {
-            engine.destroy();
-        }
-
-    }
+		return ret;
+	}
 
     public int loadRules(File fileRules, String idsessione, String etichetta, String labelCodeRule, String idclassificazione, String separatore, String nomeFile, String descrizione, Integer skipFirstLine) {
         String pathTmpFile = fileRules.getAbsolutePath().replace("\\", "/");
