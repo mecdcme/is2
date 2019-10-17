@@ -27,4 +27,17 @@ public class BusinessFunctionBean implements Serializable {
         this.id = id;
         this.name = name;
     }
+    
+    public BusinessFunctionBean(Long id, String name, boolean hasRuleset){
+        this.id = id;
+        this.name = name;
+        this.hasRuleSet = hasRuleset;
+    }
+    
+    public BusinessFunctionBean(Long id, String name, String description, boolean hasRuleset){
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.hasRuleSet = hasRuleset;
+    }
 }

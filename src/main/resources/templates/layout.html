@@ -186,34 +186,40 @@
                         <li class="nav-title">Business functions</li>
                         <li class="nav-item" th:each="businessFunction, iter : ${session.businessFunctionList}" th:id="'bf'+${businessFunction.id}">
                             <a class="nav-link" th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}">
-                                <i class="nav-icon icon-star"></i> <span th:text="${businessFunction.nome}"></span></a>
+                                <i class="nav-icon icon-star"></i> <span th:text="${businessFunction.name}"></span></a>
                         </li>
-                        <!--li class="nav-item nav-dropdown">
+                        <li class="nav-item nav-dropdown" th:if="${(session.sessioneBean!=null) and (session.sessioneBean.id>0)}">
                             <a class="nav-link nav-dropdown-toggle" href="#">
-                                <i class="nav-icon icon-star"></i> Icons</a>
+                                <i class="nav-icon icon-star"></i> Test</a>
                             <ul class="nav-dropdown-items">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="icons/coreui-icons.html">
-                                        <i class="nav-icon icon-star"></i> CoreUI Icons
-                                        <span class="badge badge-success">NEW</span>
+                                    <a class="nav-link" href="#">
+                                        <span th:text="${session.sessioneBean.nome}"></span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="icons/flags.html">
-                                        <i class="nav-icon icon-star"></i> Flags</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="icons/font-awesome.html">
-                                        <i class="nav-icon icon-star"></i> Font Awesome
-                                        <span class="badge badge-secondary">4.7</span>
+                                    <a class="nav-link" href="#">
+                                        <i class="nav-icon icon-doc"></i>
+                                        <span>Dataset</span>
+                                        <span class="badge badge-primary">2</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="icons/simple-line-icons.html">
-                                        <i class="nav-icon icon-star"></i> Simple Line Icons</a>
+                                    <a class="nav-link" href="#">
+                                        <i class="nav-icon icon-wrench"></i>
+                                        <span>Ruleset</span>
+                                        <span class="badge badge-primary">2</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="nav-icon icon-calculator"></i>
+                                        <span>Process</span>
+                                        <span class="badge badge-primary">2</span>
+                                    </a>
                                 </li>
                             </ul>
-                        </li-->
+                        </li>
                     </ul>
                 </nav>
             </div>

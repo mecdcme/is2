@@ -87,7 +87,7 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:if="${session.sessionelv}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
+                        <a title="Sessione lavoro" th:if="${session.sessioneBean}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
                             <span th:if="${session.sessioneBean.nomeElaborazione}" th:text="${session.sessioneBean.nomeElaborazione}"></span>
                         </a>
                     </li>

@@ -54,7 +54,7 @@ function displayMessages(){
         var msg_type = $(element).find("span:first").text().toLowerCase();
         var msg_text = $(element).find("span:last").text();
         
-        toastr[msg_type]("", msg_text);
+        toastr[msg_type](msg_text);
     });
 }
 

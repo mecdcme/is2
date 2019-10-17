@@ -142,8 +142,7 @@ public class DatasetController {
         }else {
         	etichetta = "DS1";
         }
-        session.setAttribute(IS2Const.SESSION_LV, sessionelv);
-
+        
         model.addAttribute("listaTipoDato", listaTipoDato);
         model.addAttribute("listaDataset", listaDataset);
         model.addAttribute("logs", logs);

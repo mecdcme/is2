@@ -103,7 +103,7 @@
                             </div>
                         </div>
                         <!-- row -->
-                        <input id="idsessionelv" type="hidden" value="${session.sessionelv.id}" />
+                        <input id="idsessioneBean" type="hidden" value="${session.sessioneBean.id}" />
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -111,7 +111,8 @@
                                         <i class="fa fa-bars"></i>
                                         <span th:text="#{lista.elaborazioni.legend}">Lista processi</span>
                                         <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaElaborazione();" th:title="#{label.button.nuova.elaborazione}"> 
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaElaborazione();" 
+                                               th:title="#{label.button.nuova.elaborazione}"> 
                                                 <i class="fa fa-plus-square-o"></i>
                                                 <span th:text="#{label.button.nuovo.processo}">Nuovo processo</span>
                                             </a>
@@ -144,7 +145,7 @@
                                                     </td>
                                                     <td style="width: 1%">
                                                         <a th:title="#{sessionewf.del.process.title.button}" href="javascript:void(0);" role="button"                                                        
-                                                        	th:attr="onclick='javascript:eliminaElaborazione(' + ${elaborazione.id} + ', \'' + ${session.sessionelv.id} + '\',\'' + ${elaborazione.nome} + '\')'">											
+                                                        	th:attr="onclick='javascript:eliminaElaborazione(' + ${elaborazione.id} + ', \'' + ${session.sessioneBean.id} + '\',\'' + ${elaborazione.nome} + '\')'">											
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
@@ -167,7 +168,7 @@
             <div class="modal-dialog " role="document">
                 <div class="modal-content ">
                     <form th:action="@{/sessione/nuovoworkingset}" id="form" method="post">
-                        <input type="hidden" th:name="idsessione" th:value="${session.sessionelv.id}" />
+                        <input type="hidden" th:name="idsessione" th:value="${session.sessioneBean.id}" />
                         <div class="modal-header">
                             <h5 class="modal-title">
                                 <i class="fa fa-sitemap"></i>

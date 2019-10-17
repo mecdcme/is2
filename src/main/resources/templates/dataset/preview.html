@@ -52,13 +52,13 @@
                         <a th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:if="${session.sessionelv}" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
-                            <span th:text="${session.sessionelv.nome}"></span>
+                        <a title="Sessione lavoro" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
+                            <span th:text="${session.sessioneBean.nome}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
-                            <span th:if="${session.sessionelv}">
+                        <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                            <span th:if="${session.sessioneBean}">
                                 <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
                             </span>
                         </a>
@@ -85,7 +85,7 @@
                             <a class="btn d-md-down-none" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
                                 <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>
                             </a>
-                            <a class="btn" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
+                            <a class="btn" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>

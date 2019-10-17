@@ -48,15 +48,15 @@
                 <!-- Breadcrumb-->
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a th:if="${session.sessionelv}" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                        <a th:if="${session.sessioneBean}" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
                             <span>
-                                <span th:text="${session.sessionelv.nome}"></span>
+                                <span th:text="${session.sessioneBean.nome}"></span>
                             </span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:if="${session.sessionelv}" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessionelv.id}}">
-                            <span th:if="${session.sessionelv}">
+                        <a th:if="${session.sessioneBean}" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                            <span th:if="${session.sessioneBean}">
                                 <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
                             </span>
                         </a>

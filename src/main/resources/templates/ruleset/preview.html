@@ -50,8 +50,8 @@
                         <a th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
-                            <span th:text="${session.sessionelv.nome}"></span>
+                        <a title="Sessione lavoro" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
+                            <span th:text="${session.sessioneBean.nome}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">

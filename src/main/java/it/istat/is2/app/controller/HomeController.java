@@ -23,6 +23,7 @@
  */
 package it.istat.is2.app.controller;
 
+import it.istat.is2.app.bean.BusinessFunctionBean;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.istat.is2.app.service.NotificationService;
+import it.istat.is2.app.util.IS2Const;
+import it.istat.is2.workflow.domain.ArtifactBFunction;
 import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.service.BusinessFunctionService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.ui.Model;
 
@@ -40,25 +44,34 @@ public class HomeController {
 
     @Autowired
     private BusinessFunctionService businessFunctionService;
-    
+
     @Autowired
     private NotificationService notificationService;
 
     @RequestMapping("/")
     public String home(HttpSession session, Model model) {
         notificationService.removeAllMessages();
-        
+
         List<BusinessFunction> businessFunctionList = businessFunctionService.findBFunctions();
-        
-        session.setAttribute("businessFunctionList", businessFunctionList);
-                
+
+        List<BusinessFunctionBean> businessFunctionBeanList = new ArrayList();
+        for (BusinessFunction bf : businessFunctionList) {
+            if (bf.getSxArtifacts().contains(new ArtifactBFunction(IS2Const.ARTIFACT_RULESET))) {
+                businessFunctionBeanList.add(new BusinessFunctionBean(bf.getId(), bf.getNome(), bf.getDescr(), true));
+            } else{
+                businessFunctionBeanList.add(new BusinessFunctionBean(bf.getId(), bf.getNome(), bf.getDescr(), false));
+            }
+        }
+
+        session.setAttribute(IS2Const.SESSION_BUSINESS_FUNCTIONS, businessFunctionBeanList);
+
         return "index";
     }
-    
+
     @RequestMapping("/team")
     public String team(HttpSession session, Model model) {
         notificationService.removeAllMessages();
-        
+
         return "team";
     }
 }

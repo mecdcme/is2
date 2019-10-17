@@ -55,11 +55,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.assertj.core.internal.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,7 +67,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -102,7 +99,7 @@ public class RuleController {
         String descrizione = form.getDescrizione();
         // è il nome logico assegnato dall'utente ed è quello visualizzato nelle viste
         String etichetta = form.getLabelFile();
-        String labelCodeRule = (!form.getLabelCodeRule().isEmpty())?form.getLabelCodeRule():"R";
+        String labelCodeRule = (!form.getLabelCodeRule().isEmpty()) ? form.getLabelCodeRule() : "R";
         String idclassificazione = form.getClassificazione();
         String separatore = form.getDelimiter();
         String idsessione = form.getIdsessione();
@@ -125,7 +122,7 @@ public class RuleController {
         if (check == false) {
             File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());
 
-            int rules = ruleService.loadRules(fileRules, idsessione, etichetta,labelCodeRule, idclassificazione, separatore, nomeFile, descrizione, skipFirstLine);
+            int rules = ruleService.loadRules(fileRules, idsessione, etichetta, labelCodeRule, idclassificazione, separatore, nomeFile, descrizione, skipFirstLine);
             logService.save("Caricate " + rules + " regole");
 
             SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
@@ -141,7 +138,7 @@ public class RuleController {
             @AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") NewRulesetFormBean form) throws IOException {
 
         notificationService.removeAllMessages();
-        
+
         List<Log> logs = logService.findByIdSessione(Long.parseLong(form.getIdsessione()));
         List<Log> rlogs = logService.findByIdSessioneAndTipo(Long.parseLong(form.getIdsessione()), OUTPUT_R);
 
@@ -184,7 +181,7 @@ public class RuleController {
 
                 model.addAttribute("listaClassificazioni", listaClassificazioni);
             } else {
-                
+
                 listaClassificazioni = new ArrayList<>();
                 Classification nullClass = new Classification();
                 nullClass.setId((short) -1);
@@ -286,33 +283,32 @@ public class RuleController {
         } catch (Exception e) {
             notificationService.addErrorMessage(messages.getMessage("rules.save.error", null, LocaleContextHolder.getLocale()), e.getMessage());
         }
- 
+
         return "redirect:/rule/viewRules/" + ruleset.getId();
 
     }
-    
+
     @PostMapping("/editRule")
-	public String updateRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,
-			BindingResult bindingResult) {
+    public String updateRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,
+            BindingResult bindingResult) {
 
-		notificationService.removeAllMessages();
-		if (!bindingResult.hasErrors()) {
+        notificationService.removeAllMessages();
+        if (!bindingResult.hasErrors()) {
 
-			try {
-				ruleService.update(form);
-				notificationService.addInfoMessage(messages.getMessage("rule.updated", null, LocaleContextHolder.getLocale()));
-			} catch (Exception e) {
-				notificationService.addErrorMessage("Error: " + e.getMessage());
-			}
-		} else {
-			List<FieldError> errors = bindingResult.getFieldErrors();
-			for (FieldError error : errors) {
-				notificationService.addErrorMessage(error.getField() + " - " + error.getDefaultMessage());
-			}
-		}
-		  return "redirect:/rule/viewRules/" + form.getRuleSetId();
-	}
-    
+            try {
+                ruleService.update(form);
+                notificationService.addInfoMessage(messages.getMessage("rule.updated", null, LocaleContextHolder.getLocale()));
+            } catch (Exception e) {
+                notificationService.addErrorMessage("Error: " + e.getMessage());
+            }
+        } else {
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors) {
+                notificationService.addErrorMessage(error.getField() + " - " + error.getDefaultMessage());
+            }
+        }
+        return "redirect:/rule/viewRules/" + form.getRuleSetId();
+    }
 
     @GetMapping(value = "/viewRuleset/{id}")
     public String mostraruleset(HttpSession session, Model model, @PathVariable("id") Long id) {
@@ -367,8 +363,6 @@ public class RuleController {
 
         List<Classification> listaClassificazioni = ruleService.findAllClassifications();
 
-        session.setAttribute(IS2Const.SESSION_LV, sessionelv);
-
         model.addAttribute("listaDatasetFile", listaDSFile);
         model.addAttribute("listaRuleSet", listaRuleSet);
         model.addAttribute("listaClassificazioni", listaClassificazioni);
@@ -383,7 +377,7 @@ public class RuleController {
     public String viewRules(HttpSession session, Model model, @PathVariable("idfile") Integer idfile) {
 
         session.removeAttribute("dfile");
-     
+
         List<Log> logs = logService.findByIdSessione();
         List<Log> rlogs = logService.findByIdSessioneAndTipo(OUTPUT_R);
         // TODO: Controllare findRulesetById
@@ -424,7 +418,6 @@ public class RuleController {
 
         logService.save("Set di regole con id " + idRuleset + " eliminato con successo");
         notificationService.addInfoMessage("Eliminazione avvenuta con successo");
-
 
         return "redirect:/rule/viewRuleset/" + idSessione;
     }

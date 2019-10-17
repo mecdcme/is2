@@ -28,6 +28,7 @@ public interface IS2Const {
     public static final String SESSION_BEAN = "sessioneBean";
     public static final String SESSION_LV = "sessionelv";
     public static final String SESSION_ELABORAZIONE = "elaborazione";
+    public static final String SESSION_BUSINESS_FUNCTIONS = "businessFunctionList";
     public static final String WORKINGSET = "workingset";
     public static final int WORKSET_TIPO_VARIABILE = 1;
     public static final int WORKSET_TIPO_PARAMETRO = 2;

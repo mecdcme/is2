@@ -50,12 +50,12 @@
                             <div class="card text-white" th:classappend="${iter.odd} ? bg-primary : bg-danger">
                                 <div class="card-header">
                                     <i class="icon-star"></i>
-                                    <span th:text="${businessFunction.nome}"></span>
+                                    <span th:text="${businessFunction.name}"></span>
                                 </div>
                                 <div class="card-body">
-                                    <p th:text="${businessFunction.descr}"></p>
+                                    <p th:text="${businessFunction.description}"></p>
                                     <a title="Regole" th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}" style="color:white">
-                                        Go to <span th:text="${businessFunction.nome}"></span> <i class="fa fa-arrow-right"></i>
+                                        Go to <span th:text="${businessFunction.name}"></span> <i class="fa fa-arrow-right"></i>
                                     </a>
                                 </div>
                             </div>

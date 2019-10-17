@@ -49,8 +49,13 @@
                         <a th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:if="${session.sessionelv}" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}"> 
-                            <span th:text="${session.sessionelv.nome}"></span>
+                        <a th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
+                            <span th:text="${session.sessioneBean.businessFunction.name}"></span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a title="Sessione lavoro" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
+                            <span th:text="${session.sessioneBean.nome}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
@@ -59,7 +64,7 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessionelv.id}}">
+                            <a title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -68,7 +73,7 @@
 
                 <div class="container-fluid">
                     <div class="animated fadeIn">
-                        <input id="idsessionelv" type="hidden"value="${session.sessionelv.id}" />
+                        <input id="idsessioneBean" type="hidden"value="${session.sessioneBean.id}" />
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -91,7 +96,7 @@
                                         <form id="inputFileRulesetForm" th:action="@{'/rule/loadRulesFile'}" method="post" enctype="multipart/form-data">
                                             <input type="hidden" value="" name="name" id="nomeF" />
                                             <input type="hidden" value="" name="descrizione" id="desc" />
-                                            <input type="hidden" th:value="${session.sessionelv.id}" th:name="idsessione" />
+                                            <input type="hidden" th:value="${session.sessioneBean.id}" th:name="idsessione" />
                                             <input type="hidden" value="" name="delimiter" id="delimiter" />
                                             <input type="hidden" value="" name="labelFile" id="labelFile" />
                                             <input type="hidden" value="" name="classificazione" id="classificazione" />
@@ -114,7 +119,7 @@
                                             </div>
                                         </form>
                                         <form id="inputNewRulesetForm" action="" method="post" enctype="multipart/form-data">
-                                            <input type="hidden" th:value="${session.sessionelv.id}" th:name="idsessione" />
+                                            <input type="hidden" th:value="${session.sessioneBean.id}" th:name="idsessione" />
                                             <input type="hidden" value="" name="rulesetId" id="rulesetId" />
                                             <input type="hidden" value="" name="rulesetName" id="rulesetName" />
                                             <input type="hidden" value="" name="dataset" id="dataset" />
@@ -162,7 +167,7 @@
                                                     </td>
                                                   	<td style="width: 1%">
                                                         <a href="javascript:void(0)" title="Elimina ruleset" role="button"
-                                                           th:attr="onclick='javascript:eliminaRuleset(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',' + ${session.sessionelv.id} +')'">
+                                                           th:attr="onclick='javascript:eliminaRuleset(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',' + ${session.sessioneBean.id} +')'">
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
