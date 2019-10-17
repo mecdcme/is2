@@ -544,7 +544,7 @@ public class WorkflowController {
 		Elaborazione elaborazione = workflowService.findElaborazione(idelaborazione);
 		try {
 			workflowService.setRuleset(elaborazione, idRole,idRuleset);
-			notificationService.addInfoMessage(messages.getMessage("setresulset.ok", null, LocaleContextHolder.getLocale()));
+			notificationService.addInfoMessage(messages.getMessage("process.setresulset.ok", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
 			notificationService.addErrorMessage("Error: " + e.getMessage());
 		}

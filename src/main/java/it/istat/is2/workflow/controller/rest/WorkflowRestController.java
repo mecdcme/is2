@@ -182,16 +182,9 @@ public class WorkflowRestController {
     }
 
     @PostMapping(value = "/associaVariabiliRuolo")
-    @Transactional
-   	public void associaVariabiliRuolo(HttpServletResponse response, Model model, @RequestBody AssociazioneVarRoleBean[] associazioneVarRoleBean) throws IOException {
+    public void associaVariabiliRuolo(HttpServletResponse response, Model model, @RequestBody AssociazioneVarRoleBean[] associazioneVarRoleBean) throws IOException {
    		Elaborazione elaborazione = workflowService.findElaborazione(associazioneVarRoleBean[0].getIdElaborazione());
-   		for(AssociazioneVarRoleBean varRoleBean : associazioneVarRoleBean) {
-   			Ruolo ruolo = varRoleBean.getRuolo();
-   			for(Variable variable : ruolo.getVariables()) {
-   	   			workflowService.creaAssociazionVarRole(elaborazione,  ruolo, variable);
-   	   		}
-   		}
-   		model.addAttribute("elaborazione", elaborazione);
+   		workflowService.creaAssociazionVarRole(elaborazione,associazioneVarRoleBean);	
    		notificationService.addInfoMessage("Associazione variabile-ruolo completata");
    	}
 

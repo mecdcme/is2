@@ -127,6 +127,9 @@ $(document).ready(function () {
         tabs.tabs("refresh");
     });
 
+   
+    
+    
 });
 
 var addRow = {
@@ -186,6 +189,8 @@ function associaVar() {
     var roleSelectedId = $("#roleSelectedId").val();
     console.log("roleSelectedId", roleSelectedId);
     var idElab = $("#idelaborazione").val();
+    var prefixDataset = $("#check-prefix-dataset").is(':checked');
+    
     console.log("idElab", idElab);
     $("#btn_dlg_ins").removeClass('hide');
     $("#role_" + roleSelectedId).removeClass('active');
@@ -205,7 +210,7 @@ function associaVar() {
         tmpVarSel['#var_' + idTab] = $('#var_' + idTab).clone();
         $('#var_' + idTab).remove();
     });
-    associazioneVarRoleBean.push({'idElaborazione': idElab, 'ruolo': {'idRole': roleSelectedId, 'name': roleSelectedName, 'variables': variablesArr}});
+    associazioneVarRoleBean.push({'idElaborazione': idElab,'prefixDataset':prefixDataset, 'ruolo': {'idRole': roleSelectedId, 'name': roleSelectedName, 'variables': variablesArr}});
     console.log("associazioneVarRoleBean", associazioneVarRoleBean);
 }
 
@@ -730,4 +735,10 @@ $(function () {
             }
         }
     });
+       
+   
+    $('#check-vars-select-all').click(function() {
+        var checked = $(this).prop('checked');
+      //  $('#checkboxes').find('input:checkbox').prop('checked', checked);
+      });
 });

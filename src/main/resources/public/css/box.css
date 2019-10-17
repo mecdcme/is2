@@ -295,3 +295,8 @@ label.error {
     color: red;
     font-weight: bold;
 }
+
+input[type="checkbox"],
+input[type="checkbox"]+label{
+  cursor:pointer;
+  }

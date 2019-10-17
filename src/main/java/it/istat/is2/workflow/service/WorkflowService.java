@@ -44,6 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.istat.is2.app.bean.AssociazioneVarFormBean;
+import it.istat.is2.app.bean.AssociazioneVarRoleBean;
 import it.istat.is2.app.bean.Ruolo;
 import it.istat.is2.app.bean.Variable;
 import it.istat.is2.app.dao.SqlGenericDao;
@@ -526,41 +527,55 @@ public class WorkflowService {
         return null;
     }
 
-    public void creaAssociazionVarRole(Elaborazione elaborazione, Ruolo ruolo, Variable variable) {
-        List<AppRole> ruoliAll = ruoloDao.findAll();
-        Map<Integer, AppRole> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
-        List<StepVariable> listaVar = elaborazione.getStepVariables();
-        ArrayList<StepVariable> listaStepV = new ArrayList<>();
-        DatasetColonna dscolonna = null;
-        Workset workset = null;
-        StepVariable sxStepVariable = new StepVariable();
-        sxStepVariable.setElaborazione(elaborazione);
-        AppRole appRole = ruoliAllMap.get((int) ruolo.getIdRole());
+	@Transactional
+	public void creaAssociazionVarRole(Elaborazione elaborazione, AssociazioneVarRoleBean[] associazioneVarRoleBean) {
+		List<AppRole> ruoliAll = ruoloDao.findAll();
+		Map<Integer, AppRole> ruoliAllMap = Utility.getMapRuoliById(ruoliAll);
+		List<StepVariable> listaVar = elaborazione.getStepVariables();
 
-        for (int i = 0; i < listaVar.size(); i++) {
-            if (listaVar.get(i).getWorkset() != null && variable.getName().equals(listaVar.get(i).getWorkset().getNome())
-                    && appRole.getId().equals(listaVar.get(i).getAppRole().getId())) {
-                workset = listaVar.get(i).getWorkset();
-            }
-        }
+		for (AssociazioneVarRoleBean varRoleBean : associazioneVarRoleBean) {
+			Ruolo ruolo = varRoleBean.getRuolo();
+			boolean prefixDataset= varRoleBean.isPrefixDataset();
+			for (Variable variable : ruolo.getVariables()) {
 
-        if (workset == null) {
-            workset = new Workset();
-            dscolonna = datasetColonnaDao.findById(variable.getIdVar()).orElse(null);
-            workset.setNome(dscolonna.getDatasetFile().getLabelFile() + "_" + dscolonna.getNome().replaceAll("\\.", "_"));
-            workset.setValori(dscolonna.getDatiColonna());
-            workset.setValoriSize(workset.getValori().size());
-        }
-        sxStepVariable.setAppRole(appRole);
-        sxStepVariable.setOrdine(appRole.getOrdine());
-        sxStepVariable.setTipoCampo(new TipoCampo(IS2Const.TIPO_CAMPO_INPUT));
-        workset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
-        listaStepV.add(sxStepVariable);
-        workset.setStepVariables(listaStepV);
-        sxStepVariable.setWorkset(workset);
-        stepVariableDao.save(sxStepVariable);
-    }
+				ArrayList<StepVariable> listaStepV = new ArrayList<>();
+				DatasetColonna dscolonna = null;
+				Workset workset = null;
+				StepVariable sxStepVariable = new StepVariable();
+				sxStepVariable.setElaborazione(elaborazione);
+				AppRole appRole = ruoliAllMap.get((int) ruolo.getIdRole());
 
+				for (int i = 0; i < listaVar.size(); i++) {
+					if (listaVar.get(i).getWorkset() != null
+							&& variable.getName().equals(listaVar.get(i).getWorkset().getNome())
+							&& appRole.getId().equals(listaVar.get(i).getAppRole().getId())) {
+						workset = listaVar.get(i).getWorkset();
+					}
+				}
+
+				if (workset == null) {
+					workset = new Workset();
+					dscolonna = datasetColonnaDao.findById(variable.getIdVar()).orElse(null);
+					String nameWorkset = "";
+					if (prefixDataset)
+						nameWorkset = dscolonna.getDatasetFile().getLabelFile() + "_";
+					nameWorkset += dscolonna.getNome().replaceAll("\\.", "_");
+					workset.setNome(nameWorkset);
+					workset.setValori(dscolonna.getDatiColonna());
+					workset.setValoriSize(workset.getValori().size());
+				}
+				sxStepVariable.setAppRole(appRole);
+				sxStepVariable.setOrdine(appRole.getOrdine());
+				sxStepVariable.setTipoCampo(new TipoCampo(IS2Const.TIPO_CAMPO_INPUT));
+				workset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
+				listaStepV.add(sxStepVariable);
+				workset.setStepVariables(listaStepV);
+				sxStepVariable.setWorkset(workset);
+				stepVariableDao.save(sxStepVariable);
+			}
+		}
+	}
+	
     @Transactional
     public void cleanAllWorkset(Long idelaborazione, Integer flagIO) {
 
