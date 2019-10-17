@@ -180,7 +180,7 @@
                         <li class="nav-item" id="home">
                             <a class="nav-link" th:href="@{/}">
                                 <i class="nav-icon icon-home"></i> Home
-                                <span class="badge badge-primary">NEW</span>
+                                <span class="badge badge-primary">Version 0.9</span>
                             </a>
                         </li>
                         <li class="nav-title">Business functions</li>
@@ -193,22 +193,22 @@
                                 <i class="nav-icon icon-star"></i> Test</a>
                             <ul class="nav-dropdown-items">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
                                         <span th:text="${session.sessioneBean.nome}"></span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                         <i class="nav-icon icon-doc"></i>
                                         <span>Dataset</span>
-                                        <span class="badge badge-primary">2</span>
+                                        <span class="badge badge-primary"><span th:text="${session.sessioneBean.file.size()}"></span></span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
                                         <i class="nav-icon icon-wrench"></i>
                                         <span>Ruleset</span>
-                                        <span class="badge badge-primary">2</span>
+                                        <span class="badge badge-primary"><span th:text="${session.sessioneBean.ruleset.size()}"></span></span>
                                     </a>
                                 </li>
                                 <li class="nav-item">

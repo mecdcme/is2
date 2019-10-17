@@ -152,8 +152,8 @@ public class WorkSessionController {
         sessionBean.setId(id);
         sessionBean.setNome(sessionelv.getNome());
 
-        List<String> files = null;
-        List<String> rulesets = null;
+        List<String> files;
+        List<String> rulesets;
 
         if (sessionelv.getBusinessFunction().getSxArtifacts().contains(new ArtifactBFunction(IS2Const.ARTIFACT_DATASET))) {
             files = new ArrayList();
@@ -163,6 +163,7 @@ public class WorkSessionController {
                     files.add(datasetFile.getNomeFile());
                 }
             }
+            sessionBean.setFile(files);
         }
         if (sessionelv.getBusinessFunction().getSxArtifacts().contains(new ArtifactBFunction(IS2Const.ARTIFACT_RULESET))) {
             rulesets = new ArrayList();
@@ -171,10 +172,9 @@ public class WorkSessionController {
                     rulesets.add(ruleset.getNomeFile());
                 }
             }
+            sessionBean.setRuleset(rulesets);
         }
-        sessionBean.setFile(files);
-        sessionBean.setRuleset(rulesets);
-
+        
         session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
         model.addAttribute("processesList", processesList);
