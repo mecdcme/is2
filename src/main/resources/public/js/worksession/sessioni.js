@@ -43,16 +43,16 @@ $(document).ready(function () {
     });
     $("#btn-submit-ns").click(function () {
         var nomesess = $('#nome-sessione').val();
-        if (nomesess.length < 1) {
-            $("#nomesesserror").text("*Il campo nome è obbligatorio");
+        if (nomesess.length < 1) {           
+            $("#nomesesserror").text(_mandatory_field);
         } else {
             $("#form").submit();
         }
     });
     $("#btn-submit-ne").click(function () {
         var nomeelab = $('#nome-elab').val();
-        if (nomeelab.length < 1) {
-            $("#nomesesserror").text("*Il campo nome è obbligatorio");
+        if (nomeelab.length < 1) {            
+            $("#nomesesserror").text(_mandatory_field);
         } else {
             $("#form").submit();
         }
