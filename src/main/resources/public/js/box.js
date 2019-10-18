@@ -152,7 +152,7 @@ function callBackShow() {
 }
 
 function showLog(){
-    $("#modalLog").modal("show");
+    $("#modalRLog").modal("show");
 }
 
 function clearLog(idSessione) {
