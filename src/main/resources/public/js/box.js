@@ -81,11 +81,11 @@ $(function () {
 
 //Set menu active
 function setMenuActive(id) {
-    if (id === 0) { //home
-        $("#home a").addClass("active");
-    } else{
-        $("#bf" + id + " a").addClass("active");
-    }
+//    if (id === 0) { //home
+//        $("#home a").addClass("active");
+//    } else{
+//        $("#bf" + id + " a").addClass("active");
+//    }
     
 }
 

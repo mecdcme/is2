@@ -50,10 +50,12 @@ public class SessionBean implements Serializable {
         this.nome = nome;
         this.file = new ArrayList<>();
         this.ruleset = new ArrayList<>();
+        this.idElaborazione = new Long(0);
     }
 
     public SessionBean() {
         this.file = new ArrayList<>();
         this.ruleset = new ArrayList<>();
+        this.idElaborazione = new Long(0);
     }
 }

@@ -184,16 +184,21 @@
                             </a>
                         </li>
                         <li class="nav-title">Business functions</li>
-                        <li class="nav-item" th:each="businessFunction, iter : ${session.businessFunctionList}" th:id="'bf'+${businessFunction.id}">
-                            <a class="nav-link" th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}">
-                                <i class="nav-icon icon-star"></i> <span th:text="${businessFunction.name}"></span></a>
-                        </li>
-                        <li class="nav-item nav-dropdown" th:if="${(session.sessioneBean!=null) and (session.sessioneBean.id>0)}">
-                            <a class="nav-link nav-dropdown-toggle" href="#">
-                                <i class="nav-icon icon-star"></i> Test</a>
-                            <ul class="nav-dropdown-items">
+                        <li th:each="businessFunction, iter : ${session.businessFunctionList}" th:id="'bf'+${businessFunction.id}"
+                            th:classappend="${(session.sessioneBean!=null) and (session.sessioneBean.businessFunction.id == businessFunction.id) and (session.sessioneBean.id>0)}? 'nav-item nav-dropdown': 'nav-item'">
+                            <a class ="nav-link nav-dropdown-toggle" th:href="@{#}"
+                               th:if="${(session.sessioneBean!=null) and (session.sessioneBean.businessFunction.id == businessFunction.id) and (session.sessioneBean.id>0)}">
+                                <i class="nav-icon icon-star"></i> <span th:text="${businessFunction.name}"></span>
+                            </a>
+                            <a th:unless="${(session.sessioneBean!=null) and (session.sessioneBean.businessFunction.id == businessFunction.id) and (session.sessioneBean.id>0)}"
+                               class ="nav-link " th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}">
+                                <i class="nav-icon icon-star"></i> <span th:text="${businessFunction.name}"></span>
+                            </a>
+                            <ul class="nav-dropdown-items" 
+                                th:if="${(session.sessioneBean!=null) and (session.sessioneBean.businessFunction.id == businessFunction.id) and (session.sessioneBean.id>0)}">
                                 <li class="nav-item">
                                     <a class="nav-link" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
+                                        <i class="nav-icon icon-arrow-right"></i>
                                         <span th:text="${session.sessioneBean.nome}"></span>
                                     </a>
                                 </li>
@@ -212,14 +217,17 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" th:if="${session.sessioneBean.idElaborazione > 0}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
+                                        <i class="nav-icon icon-calculator"></i>
+                                        <span th:text="${session.sessioneBean.nomeElaborazione}">Process</span>
+                                    </a>
+                                    <a class="nav-link" th:unless="${session.sessioneBean.idElaborazione > 0}" th:href="@{#}">
                                         <i class="nav-icon icon-calculator"></i>
                                         <span>Process</span>
-                                        <span class="badge badge-primary">2</span>
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li>   
                     </ul>
                 </nav>
             </div>

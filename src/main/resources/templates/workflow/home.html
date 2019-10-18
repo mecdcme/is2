@@ -27,7 +27,7 @@
         <head th:include="layout :: site-head" th:remove="tag" />
         <script th:inline="javascript">
             $(document).ready(function () {
-                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+            //setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
         </script>
         <script th:src="@{/js/workflow/batch.js}"></script>
@@ -124,7 +124,7 @@
                                                                                 </div>
                                                                                 <small>
                                                                                     <span class="dropdown-item" th:each="item : ${variablesMissing.get(bProcess.id)}" >
-                                                                                     <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}" th:text="${item}"> </a>
+                                                                                        <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}" th:text="${item}"> </a>
                                                                                     </span>
                                                                                 </small>
                                                                             </div>
@@ -140,12 +140,12 @@
                                                                                 </div>
                                                                                 <small>
                                                                                     <span class="dropdown-item" th:each="item : ${paramsMissing.get(bProcess.id)}" >
-                                                                                     <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}" th:text="${item}"> </a>
+                                                                                        <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}" th:text="${item}"> </a>
                                                                                     </span>
                                                                                 </small>
                                                                             </div>
                                                                         </li>
-                                                                            <li class="nav-item dropdown list-inline-item" th:if="${not  #lists.isEmpty(rulesetMissing.get(bProcess.id))}">
+                                                                        <li class="nav-item dropdown list-inline-item" th:if="${not  #lists.isEmpty(rulesetMissing.get(bProcess.id))}">
                                                                             <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                                                                 <span>Ruleset</span>
                                                                                 <span class="badge badge-pill badge-danger" th:text="${rulesetMissing.get(bProcess.id).size()}"></span>
@@ -156,7 +156,7 @@
                                                                                 </div>
                                                                                 <small>
                                                                                     <span class="dropdown-item" th:each="item : ${rulesetMissing.get(bProcess.id)}" >
-                                                                                     <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}" th:text="${item}"> </a>
+                                                                                        <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}" th:text="${item}"> </a>
                                                                                     </span>
                                                                                 </small>
                                                                             </div>
@@ -177,7 +177,7 @@
                                                         </td>
                                                         <td th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}"  class="text-center">
                                                             <a th:name="link" class="towait not-active" title="View Output" th:id="'output_'+${bProcess.id}"
-                                                                th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.is2.app.util.IS2Const).VARIABILE_TIPO_OUTPUT}}" style="vertical-align: middle">
+                                                               th:href="@{'/ws/dataview/'+${elaborazione.id}+'/'+${T(it.istat.is2.app.util.IS2Const).VARIABILE_TIPO_OUTPUT}}" style="vertical-align: middle">
                                                                 <i class="fa fa-table" aria-hidden="true"></i>  
                                                             </a>
                                                         </td>
@@ -195,9 +195,9 @@
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
-                                          <span th:text="#{Layout.log.console}">Log console</span>
+                                        <span th:text="#{Layout.log.console}">Log console</span>
                                         <div class="card-header-actions">
-                                           <a
+                                            <a
                                                 title="Clean Log"
                                                 href="javascript:void(0)"
                                                 th:onclick="'javascript:clearLog(' + ${session.sessioneBean.id} + ')'">
@@ -212,14 +212,12 @@
                                                 <span th:text="${log.msg}"></span>
                                             </li>
                                         </ul>
-                                        <span
-                                            th:unless="${not #lists.isEmpty(logs)}">No
-                                            message available</span>
+                                        <span th:unless="${not #lists.isEmpty(logs)}">No message available</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                     </div>
+                    </div>
                 </div>
             </main>
         </div>
