@@ -84,4 +84,8 @@ public class Ruleset implements Serializable {
         this.rules = new ArrayList<Rule>();
     }
 
+    public Ruleset(Integer id) {
+    	this.id=id;
+        this.rules = new ArrayList<Rule>();
+    }
 }

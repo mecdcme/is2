@@ -292,7 +292,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
     content: "\e080"
 }
 label.error {
-    color: red;
+    color: #f86c6b;
     font-weight: bold;
 }
 

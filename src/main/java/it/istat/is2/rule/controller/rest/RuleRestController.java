@@ -24,14 +24,25 @@
 package it.istat.is2.rule.controller.rest;
 
 import it.istat.is2.app.bean.NotificationMessage;
+import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
+import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.rule.domain.Rule;
 import it.istat.is2.rule.domain.Ruleset;
 import it.istat.is2.rule.forms.RuleCreateForm;
 import it.istat.is2.rule.service.RuleService;
+import it.istat.is2.workflow.domain.Classification;
 
+import static it.istat.is2.app.util.IS2Const.OUTPUT_R;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -69,6 +80,29 @@ public class RuleRestController {
 		return rules;
 	}
 
+	 @SuppressWarnings("unchecked")
+	 @GetMapping("/rest/runvalidater/{idRuleset}/{rfunction}")
+	    public  ResponseEntity<?>  runValidateR(HttpSession session, Model model, @PathVariable("idRuleset") Integer idRuleset,@PathVariable("rfunction") String rfunction) {
+	        notificationService.removeAllMessages();
+	       
+	        Map<String,Object> resulVal=new HashMap<String,Object>();
+	        try {
+	             resulVal = (Map<String, Object>) ruleService.runValidateR(idRuleset,rfunction);
+	            for (Entry<String, Object> me : resulVal.entrySet()) {
+	                model.addAttribute(me.getKey().toString(), me.getValue());
+	            }
+	        } catch (Exception e) {
+	            //notificationService.addErrorMessage("Error: " + e.getMessage());
+	        }
+	   
+	        List<Log> rlogs = logService.findByIdSessioneAndTipo(OUTPUT_R);
+	        resulVal.put("rlogs", rlogs);
+	        resulVal.put("rfunction", rfunction);
+	      
+	        return ResponseEntity.ok(resulVal);
+
+	    }
+	
 
 	@PostMapping("/rules")
 	public ResponseEntity<?> newRule(@Valid @ModelAttribute("ruleCreateForm") RuleCreateForm form,

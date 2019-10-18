@@ -23,9 +23,10 @@
  */
 var _ctx = $("meta[name='ctx']").attr("content");
 
+var table;
 $(document).ready(function () {
     
-    $("#dataview").DataTable({
+	table=  $("#dataview").DataTable({
         drawCallback: function () {
             $(".loading").hide();
         },
@@ -39,11 +40,15 @@ $(document).ready(function () {
         lengthChange: true,
         pageLength: 20,
         order: [[ 2, "asc" ]],
-        columnDefs: [{
+        columnDefs: [ {
+            "targets": [ 0,1 ],
+            "visible": false,
+            "searchable": false
+        },{
           targets: 'no-sort',
           orderable: false
         }],
-        buttons: [{
+         buttons: [{
                 text: 'Nuova regola',
                 title: 'New rule',
                 className: 'btn-light mr-1',
@@ -226,6 +231,31 @@ function runValidate(idRuleset) {
     });
 
 }
+
+
+function runValidateR(rfunction,idRuleset,col) {
+    $('#loading').modal('show');
+    $.ajax({
+        url: _ctx + "/rest/runvalidater/" + idRuleset+'/'+rfunction,
+        type: "GET",
+        success: function (data) {
+        	var respTrue='<i class="fa fa-check" style="color:#4dbd74"></i><span style="display: none">2</span>';
+        	var respFalse='<i class="fa fa-times" style="color:#f86c6b"></i><span style="display: none">1</span>';
+        	table.column( col ).visible( true );
+            var ris=data[rfunction];
+        	$.each( ris.key, function( index, value ){
+        		  $('#'+rfunction+'_'+value).html(ris.value[index]?respTrue:respFalse) ;
+      		  });
+        	  $('#loading').modal('hide');
+           
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error loading data');
+        }
+    });
+
+}
+
 
 function runIsContradicted(idRule) {
     $('#loading').modal('show');

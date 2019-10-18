@@ -110,16 +110,10 @@ public class RuleService {
 		Map<String,List<String>> ret=new HashMap<String, List<String>>();
 	 	List<Rule> rules = ruleDao.findByRulesetOrderByIdAsc(ruleset);
 
-		// Reset error status of rules
-		for (int i = 0; i < rules.size(); i++) {
-			rules.get(i).setErrcode(0);
-		}
-		ruleDao.saveAll(rules);
-
 		// Create array of rules for R
 		input = new String[rules.size()];
 		for (int i = 0; i < rules.size(); i++) {
-			input[i] = rules.get(i).getRule().toUpperCase();
+			input[i] = rules.get(i).getRule();
 		}
 
 		// Create array of names for R
@@ -271,5 +265,45 @@ public class RuleService {
         ruleDao.deleteById(ruleId);
         
     }
+
+	/**
+	 * @param ruleset
+	 * @param function
+	 * @return
+	 */
+	public Map<String, ?> runValidateR(Integer rulesetId, String function) throws Exception {
+		// TODO Auto-generated method stub
+		
+		Map<String,Object> ret=new HashMap<String, Object>();
+	 	List<Rule> rules = ruleDao.findByRulesetOrderByIdAsc(new Ruleset(rulesetId) );
+
+		// Create array of rules for R
+		input = new String[rules.size()];
+		for (int i = 0; i < rules.size(); i++) {
+			input[i] = rules.get(i).getRule();
+		}
+
+		// Create array of names for R
+		inputNames = new String[rules.size()];
+		for (int i = 0; i < rules.size(); i++) {
+			inputNames[i] = rules.get(i).getCode();
+		}
+
+		try {
+			engine.connect();
+			ret = engine.runFunction(function,input, inputNames);
+		} catch (RserveException e) {
+			Logger.getRootLogger().error(e.getMessage());
+			notificationService.addErrorMessage(messages.getMessage("r.connectiom.error", null, LocaleContextHolder.getLocale()),e.getMessage()); 
+			throw  e;
+		} catch (Exception e) {
+			notificationService.addErrorMessage("Error: " + e.getMessage());
+			Logger.getRootLogger().error(e.getMessage());
+			throw  e;
+		} finally {
+         engine.destroy();
+        }
+		return ret;
+	}
 
 }

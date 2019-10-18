@@ -739,6 +739,21 @@ $(function () {
    
     $('#check-vars-select-all').click(function() {
         var checked = $(this).prop('checked');
-      //  $('#checkboxes').find('input:checkbox').prop('checked', checked);
+        
+        selectSelectableElement($("#selectable"), $("#selectable li:lt(3)"));
       });
 });
+
+function selectSelectableElement (selectableContainer, elementsToSelect)
+{
+    // add unselecting class to all elements in the styleboard canvas except the ones to select
+    $(".ui-selected", selectableContainer).not(elementsToSelect).removeClass("ui-selected").addClass("ui-unselecting");
+    
+    // add ui-selecting class to the elements to select
+    $(elementsToSelect).not(".ui-selected").addClass("ui-selecting");
+
+    // trigger the mouse stop event (this will select all .ui-selecting elements, and deselect all .ui-unselecting elements)
+    selectableContainer.data("selectable").stop(null);
+}
+
+

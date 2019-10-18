@@ -65,6 +65,10 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
+                            <a title="Show log" href="javascript:void(0)" onclick="javascript:showLog();">
+                              <i class="fa fa-clone"></i>&nbsp;<span>Log</span>
+                            </a>
+                            &nbsp;        
                             <a title="Chiudi ruleset" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
@@ -79,11 +83,11 @@
                                 <div class="card-header">
                                     <span th:text="${ruleset.labelFile}"></span>
                                     <div class="card-header-actions">
-                                       <a class="card-header-action" title="Show log" href="javascript:void(0)" onclick="javascript:showLog();">
-                                            <i class="fa fa-clone"></i>&nbsp;<span>Log</span>
-                                        </a>
-                                    
-                                        <a class="card-header-action towait" th:href="@{'/rule/runvalidate/'+${ruleset.id}}" title="Validate">
+                                      <a class="card-header-action towait" href="javascript:void(0)" title="Validate" th:onclick="'javascript:runValidateR(\'validate\',' + ${ruleset.id} + ',0)'">
+                                            <i class="fa fa-caret-square-o-right"></i>&nbsp;
+                                            <span th:text="#{ruleset.package.validate}"></span>
+                                        </a> 
+                                        <a class="card-header-action towait" href="javascript:void(0)" title="Infeasible" th:onclick="'javascript:runValidateR(\'infeasible\',' + ${ruleset.id} + ',1)'">
                                             <i class="fa fa-caret-square-o-right"></i>&nbsp;
                                             <span th:text="#{ruleset.package.validate.contrad}"></span>
                                         </a> 
@@ -97,37 +101,22 @@
                                     <table id="dataview" class="table table-striped " cellspacing="0" width="auto" style="overflow: auto;">
                                         <thead>
                                             <tr>
-                                                <th th:if="${validatesRules}" width="1%" class="text-center">Validate</th>
-                                                <th th:if="${infeasibleRules}" width="1%" class="text-center">Contra</th>
-                                                <th>Codice</th>
+                                                <th width="1%" class="text-center validate"  >Validate</th>
+                                                <th width="1%" class="text-center infeasible">Contrad</th>
+                                                <th width="5%">Codice</th>
                                                 <th>Regola</th>
                                                 <!--th>Variabile</th-->
                                                 <th class="text-center no-sort">Classificazione</th>
-                                                <th width="1%" class="text-center">Status</th>
                                                 <th width="1%" class="no-sort"></th>
                                                 <th width="1%" class="no-sort"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr th:each="rule, counter : ${rules}">
-                                              <td  th:if="${validatesRules}" class="text-center">
-                                                    <span th:if="${#lists.contains(validatesRules, rule.code)}"  th:title="#{ruleset.package.validate.incoherent}">
-                                                        <i class="fa fa-check" style="color:#4dbd74"></i><span style="display: none">2</span>
-                                                    </span>
-                                                     <span th:unless="${#lists.contains(validatesRules, rule.code)}"  th:title="#{ruleset.package.validate.incoherent}">
-                                                       <i class="fa fa-times" style="color:#f86c6b"></i><span style="display: none">1</span>
-                                                    </span>
-                                                </td>
-                                                <td  th:if="${infeasibleRules}" class="text-center">
-                                                    <span th:if="${!#lists.contains(validatesRules, rule.code) or #lists.contains(infeasibleRules, rule.code)}"  th:title="#{ruleset.package.validate.incoherent}">
-                                                        <i class="fa fa-times" style="color:#f86c6b"></i><span style="display: none">1</span>
-                                                    </span>
-                                                     <span th:unless="${!#lists.contains(validatesRules, rule.code) or #lists.contains(infeasibleRules, rule.code)}"  th:title="#{ruleset.package.validate.incoherent}">
-                                                        <i class="fa fa-check" style="color:#4dbd74"></i><span style="display: none">2</span>
-                                                    </span>
-                                                </td>
+                                              <td class="text-center validate"  ><span th:id="${'validate_'+rule.code}"></span></td>
+                                                <td class="text-center infeasible" ><span th:id="${'infeasible_'+rule.code}"></span></td>
                                                 <td><span th:text="${rule.code}"></span></td>
-                                                <td><span th:text="${#strings.abbreviate(rule.rule,50)}" th:title="${rule.rule}"></span></td>
+                                                <td><span th:text="${#strings.abbreviate(rule.rule,150)}" th:title="${rule.rule}"></span></td>
                                                 <!--td>
                                                     <span th:if="${session.dfile != null}" th:title="${rule.variabile}"
                                                           th:text="${#strings.abbreviate(rule.sxRuleset.datasetFile.getNomeColFormId(rule.variabile),50)}"></span>
@@ -136,16 +125,7 @@
                                                     <span th:text="${#strings.abbreviate(rule.sxClassification.nome,50)}" th:title="${rule.sxClassification.nome}"></span>
                                                 </td>
                                                 <td th:unless="${rule.sxClassification != null}"><span></span></td>
-                                                <td class="text-center">
-                                                    <a th:if="${rule.errcode > 0}" href="javascript:void(0)" th:title="#{ruleset.package.validate.incoherent}" role="button"
-                                                       th:attr="onclick='javascript:runIsContradicted(' + ${rule.id} + ')'">
-                                                        <i class="fa fa-times" style="color:#f86c6b"></i><span style="display: none">1</span>
-                                                    </a>
-                                                    <a th:unless="${rule.errcode > 0}" th:title="#{ruleset.package.validate.incoherent}" role="button">
-                                                        <i class="fa fa-check" style="color:#4dbd74"></i><span style="display: none">2</span>
-                                                    </a>
-                                                </td>
-                                                <td style="width: 1%">
+                                                 <td style="width: 1%">
                                                     <a href="javascript:void(0)" title="Edit regola" role="button"
                                                        th:attr="data-rule-id=${rule.id}, data-rule-code=${rule.code},data-rule-rule=${rule.rule},data-rule-descr=${rule.descr},data-rule-class-id= ${rule.sxClassification.id}, onclick='javascript:editRule(this);'">
                                                         <i class="fa fa-edit"></i>
@@ -205,7 +185,7 @@
         <!-- New Rule Dialog -->
         <div class="modal fade" id="newruledialog" tabindex="-1" role="dialog" 
              aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
@@ -258,7 +238,7 @@
         <!-- Edit Rule Dialog -->
         <div class="modal fade" id="modalEditRule" tabindex="-1" role="dialog" 
              aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">

@@ -10,6 +10,7 @@ import static it.istat.is2.app.util.IS2Const.OUTPUT_R;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ public class EngineValidate {
     public static final String VALIDATE_FOLDER = "validate";
     public static final String VALIDATE_SRC = "validate.R";
     public static final String FUNCTION_DETECT_INFEASIBLE = "is2_detect_infeasible";
+    public static final String PREFIX_FUNCTION_ = "is2_";
     
     @Value("${serverR.host}")
     private String serverRHost;
@@ -99,5 +101,33 @@ public class EngineValidate {
         }
         logService.save("Connection to R server closed!");
     }
+
+	
+	public Map<String, Object> runFunction(String functionName, String[] input, String[] inputNames) throws Exception  {
+		// TODO Auto-generated method stub
+		String[] result;
+        String[] rlog;
+        Object validates;
+        Map<String,Object>  ret=new HashMap<String, Object>();       
+        
+        connection.assign(INPUT, input);
+        connection.assign(INPUT_NAMES, inputNames);
+        connection.eval(INPUT + " <- data.frame(rule=" + INPUT + ")");
+        out = connection.eval(PREFIX_FUNCTION_+ functionName + "(" + INPUT + ", " + INPUT_NAMES + ")").asList();
+
+        for (Iterator iterator = out.keySet().iterator(); iterator.hasNext();) {
+			     	String key = (String) iterator.next();
+			     	 ret.put(key, out.at(key).asNativeJavaObject());
+			
+		}
+        rlog = out.at("log").asStrings();
+           for(int i = 0; i < rlog.length; i++){
+             logService.save(rlog[i], OUTPUT_R);
+        }
+        
+        logService.save("Script completed!");
+        
+        return ret;
+	}
 
 }
