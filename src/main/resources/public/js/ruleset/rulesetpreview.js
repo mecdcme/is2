@@ -244,7 +244,7 @@ function runValidateR(rfunction,idRuleset,col) {
         	table.column( col ).visible( true );
             var ris=data[rfunction];
         	$.each( ris.key, function( index, value ){
-        		  $('#'+rfunction+'_'+value).html(ris.value[index]?respTrue:respFalse) ;
+        		  $('#'+rfunction+'_'+value).html(ris.value[index].toLowerCase() == 'true'?respTrue:respFalse) ;
       		  });
         	  $('#loading').modal('hide');
            
