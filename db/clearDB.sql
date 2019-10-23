@@ -12,6 +12,7 @@ truncate table  sx_log;
 truncate table  x_step_variable;
 truncate table  sx_workset;
 truncate table sx_ruleset;
+truncate table sx_rule;
 truncate table sx_elaborazione;
 truncate table sx_sessione_lavoro; 
 truncate table sx_step_variable;
