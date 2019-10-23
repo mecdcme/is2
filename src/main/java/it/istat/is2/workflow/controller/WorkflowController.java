@@ -46,6 +46,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.istat.is2.app.bean.AssociazioneVarFormBean;
 import it.istat.is2.app.bean.BusinessProcessParentBean;
+import it.istat.is2.app.bean.NotificationMessage;
 import it.istat.is2.app.bean.BusinessProcessBean;
 import it.istat.is2.app.bean.ProcessStepBean;
 import it.istat.is2.app.bean.SessionBean;
@@ -416,8 +417,19 @@ public class WorkflowController {
 	public String eliminaWS(HttpSession session, Model model, @AuthenticationPrincipal User user,
 			@PathVariable("idelaborazione") Long idelaborazione, @PathVariable("idsessione") Long idsessione) {
 		notificationService.removeAllMessages();
-		notificationService.addInfoMessage("L'elaborazione è stata rimossa.");
-		workflowService.eliminaElaborazione(idelaborazione);
+		
+		
+		
+		
+		try {
+			workflowService.eliminaElaborazione(idelaborazione);
+			notificationService.addInfoMessage(
+	                messages.getMessage("process.removed.message", null, LocaleContextHolder.getLocale()));	
+		}catch(Exception e) {
+			notificationService.addErrorMessage(
+                    messages.getMessage("process.removing.error", null, LocaleContextHolder.getLocale()), e.getMessage());
+		}
+		
 		List<WorkSession> listasessioni = sessioneLavoroService.getSessioneList(user);
 		model.addAttribute("listasessioni", listasessioni);
 

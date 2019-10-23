@@ -137,7 +137,7 @@ public class WorkSessionController {
     @GetMapping(value = "/sessione/apri/{id}")
     public String apriSessione(HttpSession session, Model model, @PathVariable("id") Long id) {
 
-        notificationService.removeAllMessages();
+        //notificationService.removeAllMessages();
 
         List<Log> logs = logService.findByIdSessione(id);
 
@@ -185,10 +185,10 @@ public class WorkSessionController {
     }
 
     @RequestMapping(value = "/sessione/nuovoworkingset", method = RequestMethod.POST)
-    public String nuovoWorkingSet(HttpSession session, Model model, @AuthenticationPrincipal User user,
+    public String nuovoWorkingSet(HttpSession session, RedirectAttributes ra, Model model, @AuthenticationPrincipal User user,
             @ModelAttribute("elaborazioneFormBean") ElaborazioneFormBean form) {
-        notificationService.removeAllMessages();
-
+        notificationService.removeAllMessages();      
+        
         session.setAttribute(IS2Const.WORKINGSET, "workingset");
         WorkSession sessionelv = sessioneLavoroService.getSessione(form.getIdsessione());
         try {
@@ -199,12 +199,19 @@ public class WorkSessionController {
             elaborazione.setDataElaborazione(new Date());
             elaborazione.setBusinessProcess(businessProcessService.findBProcessById(form.getIdfunzione()));
 
-            elaborazioneService.salvaElaborazione(elaborazione);
-            logService.save("Elaborazione " + elaborazione.getNome() + " creata con successo");
-            notificationService.addInfoMessage("Elaborazione creata.");
-        } catch (Exception e) {
-            notificationService.addErrorMessage("Errore creazione elaborazione", e.getMessage());
-        }
+            elaborazioneService.salvaElaborazione(elaborazione);                     
+            
+            notificationService.addInfoMessage(
+                    messages.getMessage("creation.process.success", null, LocaleContextHolder.getLocale()));             
+           
+            logService.save("Elaborazione " + elaborazione.getNome() + " creata con successo");          
+            
+        } catch (Exception e) {  
+        	
+        	notificationService.addErrorMessage(
+                    messages.getMessage("process.create.error", null, LocaleContextHolder.getLocale()), e.getMessage());        	
+        }                
+       
         return "redirect:/sessione/apri/" + sessionelv.getId();
     }
 
