@@ -33,32 +33,64 @@ $(document).ready(function () {
 
     $("#funzioni").change();
     $('#btn_delete').click(function () {
-        var ids = $('#id_sessione_del').val();
-        window.location = _ctx + '/sessione/elimina/' + ids;
+    	delete_session();
     });
     $('#btn_delete_elab').click(function () {
-        var ids = $('#id_sessione_del').val();
-        var ide = $('#id_elaborazione_del').val();
-        window.location = _ctx + '/ws/elimina/' + ide + "/" + ids;
+    	delete_process();
     });
     $("#btn-submit-ns").click(function () {
-        var nomesess = $('#nome-sessione').val();
-        if (nomesess.length < 1) {           
-            $("#nomesesserror").text(_mandatory_field);
-        } else {
-            $("#form").submit();
-        }
+    	check_and_send_req();
     });
     $("#btn-submit-ne").click(function () {
-        var nomeelab = $('#nome-elab').val();
-        if (nomeelab.length < 1) {            
-            $("#nomesesserror").text(_mandatory_field);
-        } else {
-            $("#form").submit();
-        }
+    	check_and_send_elab_req();
     });
+    
+    $( "#nuova-sessione-modal" ).keydown(function( event ) { 
+    	  if ( event.which == 13 ) {
+    		  check_and_send_req();
+    	  }
+    });
+    $( "#modalCancellaSessione" ).keydown(function( event ) {
+    	  if ( event.which == 13 ) {
+    		  delete_session();
+    	  }
+    });
+    $( "#nuova-elaborazione-modal" ).keydown(function( event ) { 
+  	  if ( event.which == 13 ) {
+  		check_and_send_elab_req();
+  	  }
+    });
+    $( "#modalCancellaElaborazione" ).keydown(function( event ) { 
+    	  if ( event.which == 13 ) {
+    		  delete_process();
+    	  }
+      });
 });
-
+function delete_session(){
+	var ids = $('#id_sessione_del').val();
+    window.location = _ctx + '/sessione/elimina/' + ids;
+}
+function delete_process(){
+	var ids = $('#id_sessione_del').val();
+    var ide = $('#id_elaborazione_del').val();
+    window.location = _ctx + '/ws/elimina/' + ide + "/" + ids;
+}
+function check_and_send_req(){
+	var nomesess = $('#nome-sessione').val();
+    if (nomesess.length < 1) {           
+        $("#nomesesserror").text(_mandatory_field);
+    } else {
+        $("#form").submit();
+    }
+}
+function check_and_send_elab_req(){
+	var nomeelab = $('#nome-elab').val();
+    if (nomeelab.length < 1) {            
+        $("#nomesesserror").text(_mandatory_field);
+    } else {
+        $("#form").submit();
+    }
+}
 function openNuovaSessioneWF() {
     $("#nomesesserror").text('');
     $('#nuova-sessione-modal').modal('show');
