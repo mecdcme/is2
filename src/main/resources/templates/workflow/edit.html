@@ -44,6 +44,7 @@
                 if (showTabParam) showPanel('parametri');
             });
             var matchedVariables = [[${matchedVariables}]];
+            var _variable_btn = [[#{btn.title.variable}]];
         </script>
         <script type="text/x-handlebars-template" id="addItemsBtn">
         {{#if options.hideAddItemsBtn}}
@@ -111,17 +112,17 @@
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-header header-tags">
-                                        <span id="header-variabili" href="javascript:void(0)" onclick="javascript:showPanel('variabili');" title="Variabili">
+                                        <span id="header-variabili" href="javascript:void(0)" onclick="javascript:showPanel('variabili');" th:title="#{process.variables}">
                                             <span  th:text="#{process.variables}"  class="header-strong">Variabili</span>
                                         </span>
-                                        <span id="header-parametri" href="javascript:void(0)" onclick="javascript:showPanel('parametri');" title="Parametri">
+                                        <span id="header-parametri" href="javascript:void(0)" onclick="javascript:showPanel('parametri');" th:title="#{process.parameters}">
                                             <span th:text="#{process.parameters}" >Parametri</span>
                                         </span>
-                                          <span th:if="${(session.sessioneBean.ruleset != null)}" id="header-ruleset" href="javascript:void(0)" onclick="javascript:showPanel('ruleset');" title="Ruleset">
+                                          <span th:if="${(session.sessioneBean.ruleset != null)}" id="header-ruleset" href="javascript:void(0)" onclick="javascript:showPanel('ruleset');" th:title="#{process.ruleset}">
                                             <span th:text="#{process.ruleset}">Ruleset</span>
                                         </span>
-                                        <span id="header-execution" href="javascript:void(0)" onclick="javascript:showPanel('execution');" title="Runtime">
-                                            <span>Runtime</span>
+                                        <span id="header-execution" href="javascript:void(0)" onclick="javascript:showPanel('execution');" th:title="#{process.runtime}">
+                                            <span th:text="#{process.runtime}">Runtime</span>
                                         </span>
                                     </div>
                                     <div class="card-body" id="card-variabili">
@@ -133,8 +134,8 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 2%"><span>#</span></th>
-                                                    <th><span>Ruolo</span></th>
-                                                    <th><span>Nome Variabile</span></th>
+                                                    <th><span th:text="#{process.ruolo}">Role</span></th>
+                                                    <th><span th:text="#{process.varName}">Variable name</span></th>
                                                     <th style="width: 1%"></th>
                                                     <th style="width: 1%"></th>
                                                 </tr>
@@ -269,8 +270,8 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 8%"><span></span></th>
-                                                    <th><span>Ruolo</span></th>
-                                                    <th><span>Nome Variabile</span></th>
+                                                    <th><span th:text="#{process.ruolo}">Role</span></th>
+                                                    <th><span th:text="#{process.varName}">Variable name</span></th>
                                                     <th style="width: 1%"></th>
                                                     <th style="width: 1%"></th>
                                                 </tr>
@@ -314,9 +315,9 @@
                     <div class="modal-header">
                         <h5 class="modal-title">
                             <i class="fa fa-plus"></i>
-                            <span>Nuova associazione variabile</span>
+                            <span th:text="#{process.newAssociationVar}">New variable association</span>
                         </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button th:title="#{generic.title.close.button}" type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -387,13 +388,13 @@
                             </div>
                             </div>
                             <div th:unless="${datasetfiles.size()>0}">
-                                <span>No variables availables, load a dataset!</span>
+                                <span th:text="#{process.dialog.dataset.message}">No variables availables, load a dataset!</span>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:text="#{associazione.dialog.button.close}">Annulla</span>
+                            <span th:title="#{associazione.dialog.button.close}" th:text="#{associazione.dialog.button.close}">Close</span>
                         </button>
                          <span th:if="${datasetfiles.size()>0}">
                             <button id="btn_dlg_ins" type="button"

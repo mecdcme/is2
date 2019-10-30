@@ -52,7 +52,7 @@ $(document).ready(function () {
         ordering: false,
         buttons: [{
                 className: 'btn-extenal-function btn-light',
-                text: '<i class="fa fa-plus"></i><span> Variabile</span>',
+                text: '<i class="fa fa-plus"></i><span> '+_variable_btn+'</span>',
                 action: function (e, dt, node, config) {
                     openDlgAddVariabileWorkset();
                 }
