@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="card-body">
                                     <p th:text="${businessFunction.description}"></p>
-                                    <a title="Regole" th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}" style="color:white">
+                                    <a th:title="${businessFunction.name}" th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}" style="color:white">
                                         Go to <span th:text="${businessFunction.name}"></span> <i class="fa fa-arrow-right"></i>
                                     </a>
                                 </div>
