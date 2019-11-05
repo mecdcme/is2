@@ -49,7 +49,7 @@
                 <!-- Breadcrumb-->
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a th:href="@{/}">Home</a>
+                        <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span th:text="#{Userlist.userlist}"></span>
@@ -57,7 +57,7 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a class="breadcrumb-last-item" title="Chiudi gestione utenti" th:href="@{'/'}">
+                            <a class="breadcrumb-last-item" th:title="#{user.link.close}" th:href="@{'/'}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -73,7 +73,7 @@
                                         <i class="fa fa-bars"></i>
                                         <span th:text="#{Userlist.userlist}">Lista utenti</span>
                                         <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:add_user();" title="Nuovo utente"> 
+                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:add_user();" th:title="#{user.title.adduser}"> 
                                                 <i class="fa fa-plus-square-o"></i>
                                                 <span th:text="#{Userlist.adduser}">Add User</span>
                                             </a>
@@ -160,10 +160,10 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btnClose" class="btn btn-light" data-dismiss="modal" onclick="close()">
-                            <span th:text="#{Userlist.close}">Close</span>
+                            <span th:title="#{generic.title.close.button}" th:text="#{Userlist.close}">Close</span>
                         </button>
                         <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">
-                            <span th:text="#{Userlist.save}">Save</span>
+                            <span th:title="#{Userlist.save}" th:text="#{Userlist.save}">Save</span>
                         </button>
                     </div>
                 </div>

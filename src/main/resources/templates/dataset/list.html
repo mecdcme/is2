@@ -41,15 +41,15 @@
                 <!-- Breadcrumb-->
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a th:href="@{/}">Home</a>
+                        <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
+                        <a th:title="${session.sessioneBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
                             <span th:text="${session.sessioneBean.businessFunction.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
+                        <a th:title="#{session.link.title}" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
                             <span th:text="${session.sessioneBean.nome}"></span>
                         </a>
                     </li>
@@ -59,7 +59,7 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
+                            <a th:title="#{close.data.link.title}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -77,12 +77,12 @@
                                         <span th:text="#{lista.dataset.legend}">Lista dataset</span>
                                         <div class="card-header-actions">
                                             <a class="card-header-action" href="javascript:void(0)" 
-                                               onclick="javascript:browseFiles()" title="Carica file"> 
+                                               onclick="javascript:browseFiles()" th:title="#{upload.file.link.title}"> 
                                                 <i class="fa fa-upload"></i>
                                                 <span th:text="#{ruleset.new.file.ruleset}"></span>
                                             </a>
                                              <a class="card-header-action" href="javascript:void(0)" 
-                                               onclick="javascript:openDlgLoadTable();" title="Load Table from Database"> 
+                                               onclick="javascript:openDlgLoadTable();" th:title="#{upload.db.table.link.title}"> 
                                                 <i class="fa fa-database"></i>
                                                 <span th:text="#{dataset.load.table}"></span>
                                             </a>
@@ -128,10 +128,10 @@
                                                     <td th:text="${dataset.numerorighe}"></td>
                                                     <td th:unless="${dataset.tipoDato != null}" th:text="null"></td>
                                                     <td style="width: 1%">
-                                                        <a th:if="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza dataset" th:href="@{'/viewDataset/'+${dataset.id}}"> 
+                                                        <a th:if="${dataset.tipoDato.nome == 'INPUT'}" class='towait' th:title="#{show.dataset.link.title}" th:href="@{'/viewDataset/'+${dataset.id}}"> 
                                                             <i class="fa fa-search"></i>
                                                         </a>
-                                                        <a th:unless="${dataset.tipoDato.nome == 'INPUT'}" class='towait' title="Visualizza ruleset" th:href="@{'/viewRuleset/'+${dataset.id}}"> 
+                                                        <a th:unless="${dataset.tipoDato.nome == 'INPUT'}" class='towait' th:title="#{show.ruleset.link.title}" th:href="@{'/viewRuleset/'+${dataset.id}}"> 
                                                             <i class="fa fa-search"></i>
                                                         </a>
                                                     </td>
@@ -149,8 +149,8 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <span th:if="${(listaDataset == null) or (listaDataset.size() == 0)}">
-                                            Non sono presenti dataset per la sessione di lavoro.
+                                        <span th:if="${(listaDataset == null) or (listaDataset.size() == 0)}" th:text="#{listaDataset.nodataset.message}">
+                                            No dataset available for this session.
                                         </span>
                                     </div>
                                 </div>
@@ -255,7 +255,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:text="#{Layout.Close}">Annulla</span>
+                            <span th:title="#{generic.title.close.button}" th:text="#{Layout.Close}">Annulla</span>
                         </button>
                         <button type="button" id="btn-invia-file" class="btn btn-primary towait disabled"
                                 onclick="inviaFormFile();" th:title="#{submit.button.title}"
@@ -310,7 +310,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-dismiss="modal">
-                        <span th:text="#{Layout.Close}">Annulla</span>
+                        <span th:title="#{generic.title.close.button}" th:text="#{Layout.Close}">Annulla</span>
                     </button>
                     <button type="button" id="btn-invia-table"
                         class="btn btn-primary towait "

@@ -46,15 +46,15 @@
                 <!-- Breadcrumb-->
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a th:href="@{/}">Home</a>
+                        <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
+                        <a th:title="${session.sessioneBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
                             <span th:text="${session.sessioneBean.businessFunction.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
+                        <a th:title="#{session.link.title}" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
                             <span th:text="${session.sessioneBean.nome}"></span>
                         </a>
                     </li>
@@ -64,7 +64,7 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a title="Chiudi area dati" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
+                            <a th:title="#{close.data.link.title}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -81,12 +81,12 @@
                                         <span th:text="#{ruleset.list.label}">Lista ruleset</span>									
                                         <div class="card-header-actions">
                                             <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNewRulesetDialog();" 
-                                               title="Nuovo ruleset">
+                                               th:title="#{new.ruleset.link.title}">
                                                 <i class="fa fa-plus-square-o"></i>
                                                 <span th:text="#{ruleset.new.ruleset}"></span>
                                             </a>
                                             <a class="card-header-action" href="javascript:void(0)" onclick="javascript:browseFiles();" 
-                                               title="Carica file di regole">
+                                               th:title="#{upload.rule.file.link.title}">
                                                 <i class="fa fa-upload"></i>
                                                 <span th:text="#{ruleset.new.file.ruleset}"></span>
                                             </a>
@@ -174,8 +174,8 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <span th:if="${(listaRuleSet == null) or (listaRuleSet.size() == 0)}">
-                                            Non sono presenti file di regole per la sessione di lavoro.
+                                        <span th:if="${(listaRuleSet == null) or (listaRuleSet.size() == 0)}" th:text="#{no.file.available.message}">
+                                            No file available for this session.
                                         </span>
                                     </div>
                                 </div>
@@ -265,8 +265,8 @@
                         </div>
                         <div class="form-group">
                             <label th:text="#{file.skip.first.line}">Salta prima riga:</label>
-                            <input type="radio" name="skip_line" value="1" /> Si
-                            <input type="radio" name="skip_line" value="0" checked="checked" /> No
+                            <input type="radio" name="skip_line" value="1" th:text="' '+ #{radio.button.yes.label}"/>
+                            <input type="radio" name="skip_line" value="0" checked="checked" th:text="' '+ #{radio.button.no.label}"/>
                         </div>
                         <div class="form-group row">
                             <div class="col-3">
