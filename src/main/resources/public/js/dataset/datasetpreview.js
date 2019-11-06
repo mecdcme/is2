@@ -397,7 +397,7 @@ $(document).ready(function () {
 
     if ($(".param-filter").length == 0) {
         $("#bottoneRicerca").hide();
-        $("#no_filters_msg").text("Non ci sono filtri di ricerca impostati.");
+        $("#no_filters_msg").text(_no_search_filters);
     }
 });
 
