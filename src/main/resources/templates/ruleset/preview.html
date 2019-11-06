@@ -31,6 +31,8 @@
             $(document).ready(function () {
                 setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
+            var _new_role = [[#{rules.new.rule}]]
+            var _delete_msg = [[#{rule.delete.message}]]
         </script>
         <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet"/>
    
@@ -69,7 +71,7 @@
                               <i class="fa fa-clone"></i>&nbsp;<span>Log</span>
                             </a>
                             &nbsp;        
-                            <a title="Chiudi ruleset" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                            <a th:title="#{ruleset.button.close}" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -103,10 +105,10 @@
                                             <tr>
                                                 <th width="1%" class="text-center validate"  >Validate</th>
                                                 <th width="1%" class="text-center infeasible">Contrad</th>
-                                                <th width="5%">Codice</th>
-                                                <th>Regola</th>
+                                                <th width="5%" th:text="#{ruleset.code.label}">Codice</th>
+                                                <th th:text="#{ruleset.rule.label}">Regola</th>
                                                 <!--th>Variabile</th-->
-                                                <th class="text-center no-sort">Classificazione</th>
+                                                <th class="text-center no-sort" th:text="#{rule.type.label}">Classificazione</th>
                                                 <th width="1%" class="no-sort"></th>
                                                 <th width="1%" class="no-sort"></th>
                                             </tr>
@@ -126,13 +128,13 @@
                                                 </td>
                                                 <td th:unless="${rule.sxClassification != null}"><span></span></td>
                                                  <td style="width: 1%">
-                                                    <a href="javascript:void(0)" title="Edit regola" role="button"
+                                                    <a href="javascript:void(0)" th:title="#{ruleset.rule.edit}" role="button"
                                                        th:attr="data-rule-id=${rule.id}, data-rule-code=${rule.code},data-rule-rule=${rule.rule},data-rule-descr=${rule.descr},data-rule-class-id= ${rule.sxClassification.id}, onclick='javascript:editRule(this);'">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
                                                 </td>
                                                 <td style="width: 1%">
-                                                    <a href="javascript:void(0)" title="Delete" role="button" th:attr="onclick='javascript:deleteRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">
+                                                    <a href="javascript:void(0)" th:title="#{ruleset.delete.role.button}" role="button" th:attr="onclick='javascript:deleteRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">
                                                         <i class="fa fa-trash-o"></i>
                                                     </a>
                                                 </td>
@@ -365,13 +367,13 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">
                             <i class="fa fa-trash"></i>&nbsp;
-                            <span>Conferma eliminazione</span>
+                            <span th:text="#{confirm.elimination.title}">Conferma eliminazione</span>
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body"> Eliminare la regola &nbsp;<span></span>?
+                    <div class="modal-body"><span></span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-dismiss="modal">

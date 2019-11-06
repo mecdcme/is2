@@ -49,7 +49,7 @@ $(document).ready(function () {
           orderable: false
         }],
          buttons: [{
-                text: 'Nuova regola',
+                text: _new_role,
                 title: 'New rule',
                 className: 'btn-light mr-1',
                 action: function (e, dt, node, config) {
@@ -211,7 +211,8 @@ function editRule(identifier){
 
 function deleteRule(id, rule) {
     $('#ruleId').val(id);
-    $('#modalDeleteRule .modal-body span').text(rule);
+    var msg = _delete_msg + " " + rule + "?";
+    $('#modalDeleteRule .modal-body span').text(msg);
     $('#modalDeleteRule').modal('show');
 
 }
