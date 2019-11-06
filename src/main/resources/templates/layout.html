@@ -255,11 +255,11 @@
                                 <li class="nav-item">
                                     <a class="nav-link" th:if="${session.sessioneBean.idElaborazione > 0}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
                                         <i class="nav-icon icon-calculator"></i>
-                                        <span th:text="${session.sessioneBean.nomeElaborazione}">Process</span>
+                                        <span th:title="${session.sessioneBean.nomeElaborazione}" th:text="${session.sessioneBean.nomeElaborazione}">Process</span>
                                     </a>
                                     <a class="nav-link" th:unless="${session.sessioneBean.idElaborazione > 0}" th:href="@{#}">
                                         <i class="nav-icon icon-calculator"></i>
-                                        <span>Process</span>
+                                        <span th:title=#{Layout.Process}>Process</span>
                                     </a>
                                 </li>
                             </ul>

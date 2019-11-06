@@ -43,15 +43,15 @@
             <main class="main">
                 <!-- Breadcrumb-->
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:title="#{home.link.title}" th:href="@{/}">Home</a></li>
                     <li class="breadcrumb-item">
                         <a th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
-                            <span th:text="${session.sessioneBean.businessFunction.name}"></span>
+                            <span th:title="${session.sessioneBean.businessFunction.name}" th:text="${session.sessioneBean.businessFunction.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
                         <a th:href="@{'/sessione/apri/' + ${session.sessioneBean.id}}">
-                            <span th:text="${session.sessioneBean.nome}"></span>
+                            <span th:title="${session.sessioneBean.nome}" th:text="${session.sessioneBean.nome}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
@@ -74,7 +74,7 @@
                                     <div class="card-header">
                                         <span th:text="#{Layout.Processes}"></span>
                                         <div class="card-header-actions">
-                                            <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}"> 
+                                            <a title="Settings Workset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}"> 
                                                 <i class="fa fa-cog"></i>&nbsp;<span>Settings</span>
                                             </a>
                                             <a title="Clean Output" th:href="@{'/ws/cleanallworkset/'+${elaborazione.id}+'/2'}">
@@ -140,7 +140,7 @@
                                                                                 </div>
                                                                                 <small>
                                                                                     <span class="dropdown-item" th:each="item : ${paramsMissing.get(bProcess.id)}" >
-                                                                                        <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}" th:text="${item}"> </a>
+                                                                                        <a title="Settings Workset" th:href="@{'/ws/editworkingset/'+${elaborazione.id}}" th:text="${item}"> </a>
                                                                                     </span>
                                                                                 </small>
                                                                             </div>
