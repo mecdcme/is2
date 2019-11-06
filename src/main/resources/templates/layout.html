@@ -78,30 +78,30 @@
             <ul class="nav navbar-nav d-md-down-none">
                 <li class="nav-item px-3" sec:authorize="hasAuthority('ADMIN')" >
                     <a class="nav-link" th:href="@{/team}" role="button" aria-haspopup="true" aria-expanded="false">
-                        <span>Team</span>
+                        <span th:title="#{Layout.team.link}">Team</span>
                     </a>
                 </li>
                 <li class="nav-item px-3" sec:authorize="hasAuthority('ADMIN')" >
                     <a class="nav-link"  data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <span>Settings</span>
+                        <span th:title="#{Layout.settings.link}">Settings</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-xl-left">
                         <div class="dropdown-header text-center">
                             <strong>IS<sup>2</sup> Workbench</strong>
                         </div>
-                        <a class="dropdown-item" th:href="@{/}">
+                        <a class="dropdown-item" th:title="#{Layout.server.conf}" th:href="@{/}">
                             <i class="fa fa-server"></i> Server configuration</a>
-                        <a class="dropdown-item" th:href="@{/users/userlist}">
+                        <a class="dropdown-item" th:title="#{Layout.user.settings}" th:href="@{/users/userlist}">
                             <i class="fa fa-users"></i><span th:text="#{Layout.users}"></span></a>
                     </div>
                 </li>
             </ul>
             <ul class="nav navbar-nav ml-auto">
                 <li class="nav-item" style="min-width: 35px; border-right: 1px solid #e4e7ea">
-                    <a class="nav-link" href="?language=it_IT">ITA</a>
+                    <a class="nav-link" href="?language=it_IT" th:title="#{Layout.switch.ita.lang}">ITA</a>
                 </li>
                 <li class="nav-item" style="min-width: 40px;">
-                    <a class="nav-link" href="?language=en_US">ENG</a>
+                    <a class="nav-link" href="?language=en_US" th:title="#{Layout.switch.eng.lang}">ENG</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -111,9 +111,9 @@
                         <div class="dropdown-header text-center">
                             <strong>Account</strong>
                         </div>
-                        <a class="dropdown-item" th:href="@{/users/edituser}">
+                        <a class="dropdown-item" th:href="@{/users/edituser}" th:title="#{Layout.link.user.profile}">
                             <i class="icons cui-user"></i> Profile</a>
-                        <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/users/logout}">
+                        <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/users/logout}" th:title="#{Layout.link.user.logout}">
                             <i class="icons cui-account-logout"></i> Logout</a>
                     </div>
                 </li>
@@ -214,7 +214,7 @@
                 <nav class="sidebar-nav">
                     <ul class="nav">
                         <li class="nav-item" id="home">
-                            <a class="nav-link" th:href="@{/}">
+                            <a class="nav-link" th:href="@{/}" th:title="#{home.link.title}">
                                 <i class="nav-icon icon-home"></i> Home
                                 <span class="badge badge-primary">Version 0.9</span>
                             </a>
@@ -224,31 +224,31 @@
                             th:classappend="${(session.sessioneBean!=null) and (session.sessioneBean.businessFunction.id == businessFunction.id) and (session.sessioneBean.id>0)}? 'nav-item nav-dropdown': 'nav-item'">
                             <a class ="nav-link nav-dropdown-toggle" th:href="@{#}"
                                th:if="${(session.sessioneBean!=null) and (session.sessioneBean.businessFunction.id == businessFunction.id) and (session.sessioneBean.id>0)}">
-                                <i class="nav-icon icon-star"></i> <span th:text="${businessFunction.name}"></span>
+                                <i class="nav-icon icon-star"></i> <span th:title=${businessFunction.name} th:text="${businessFunction.name}"></span>
                             </a>
                             <a th:unless="${(session.sessioneBean!=null) and (session.sessioneBean.businessFunction.id == businessFunction.id) and (session.sessioneBean.id>0)}"
                                class ="nav-link " th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}">
-                                <i class="nav-icon icon-star"></i> <span th:text="${businessFunction.name}"></span>
+                                <i class="nav-icon icon-star"></i> <span th:title=${businessFunction.name} th:text="${businessFunction.name}"></span>
                             </a>
                             <ul class="nav-dropdown-items" 
                                 th:if="${(session.sessioneBean!=null) and (session.sessioneBean.businessFunction.id == businessFunction.id) and (session.sessioneBean.id>0)}">
                                 <li class="nav-item">
                                     <a class="nav-link" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
                                         <i class="nav-icon icon-arrow-right"></i>
-                                        <span th:text="${session.sessioneBean.nome}"></span>
+                                        <span th:title=${session.sessioneBean.nome} th:text="${session.sessioneBean.nome}"></span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                         <i class="nav-icon icon-doc"></i>
-                                        <span>Dataset</span>
+                                        <span th:title=#{dataset.link.title}>Dataset</span>
                                         <span class="badge badge-primary"><span th:text="${session.sessioneBean.file.size()}"></span></span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
                                         <i class="nav-icon icon-wrench"></i>
-                                        <span>Ruleset</span>
+                                        <span th:title=#{ruleset.link.title}>Ruleset</span>
                                         <span class="badge badge-primary"><span th:text="${session.sessioneBean.ruleset.size()}"></span></span>
                                     </a>
                                 </li>
