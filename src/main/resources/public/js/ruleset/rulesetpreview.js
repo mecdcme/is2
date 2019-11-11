@@ -211,7 +211,13 @@ function editRule(identifier){
 
 function deleteRule(id, rule) {
     $('#ruleId').val(id);
-    var msg = _delete_msg + " " + rule + "?";
+    
+    var str_msg = "DELETE";
+    if(_delete_msg.toUpperCase().includes(str_msg)){
+    	var msg = _delete_msg.replace("*", rule) + "?";
+    }else{    	
+        var msg = _delete_msg + " " + rule + "?";
+    }    
     $('#modalDeleteRule .modal-body span').text(msg);
     $('#modalDeleteRule').modal('show');
 
