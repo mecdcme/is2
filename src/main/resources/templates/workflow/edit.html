@@ -76,19 +76,19 @@
             <!-- Main container -->
             <main class="main"> <!-- Breadcrumb-->
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:title="#{home.link.title}" th:href="@{/}">Home</a></li>
                     <li class="breadcrumb-item">
-                        <a th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
+                        <a th:title="${session.sessioneBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
                             <span th:text="${session.sessioneBean.businessFunction.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:href="@{'/sessione/apri/' + ${session.sessioneBean.id}}">
+                        <a th:title="${session.sessioneBean.nome}" th:href="@{'/sessione/apri/' + ${session.sessioneBean.id}}">
                             <span th:text="${session.sessioneBean.nome}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:if="${session.sessioneBean}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
+                        <a th:title="${session.sessioneBean.nomeElaborazione}" th:if="${session.sessioneBean}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
                             <span th:if="${session.sessioneBean.nomeElaborazione}" th:text="${session.sessioneBean.nomeElaborazione}"></span>
                         </a>
                     </li>
@@ -98,7 +98,7 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu d-md-down-none">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a class="breadcrumb-last-item" title="Chiudi processo" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
+                            <a class="breadcrumb-last-item" th:title="#{process.close.title}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -336,7 +336,7 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <fieldset class="well" style="height: 397px; overflow-y: auto;">
-                                                    <legend class="well-legend"> Variabili Dataset</legend>
+                                                    <legend class="well-legend" th:text="#{process.dataset.variables.label}"> Variabili Dataset</legend>
                                                     <input type="hidden" id="varSelectedName" />
                                                     <input type="hidden" id="varSelectedId" /> 
                                                     <input type="hidden" id="varLabelFile" />
@@ -356,7 +356,7 @@
                                             <div class="col-lg-6">
                                                 <fieldset class="well"
                                                           style="height: 397px; overflow-y: auto;">
-                                                    <legend class="well-legend"> Ruoli </legend>
+                                                    <legend class="well-legend" th:text="#{process.dataset.roles.label}"> Ruoli </legend>
                                                     <input type="hidden" id="roleSelectedId" /> <input
                                                         type="hidden" id="roleSelectedName" />
                                                     <div class="list-group" id="div_lista_ruoli">
@@ -404,7 +404,7 @@
                          <span th:if="${datasetfiles.size()>0}">
                             <button id="btn_dlg_assoc" type="button"
                                     class="btn btn-success disabled"
-                                    onclick="associaVar(' + ${datasetfiles} + ')">Associa</button>
+                                    onclick="associaVar(' + ${datasetfiles} + ')" th:title="#{process.dialog.button.link}" th:text="#{process.dialog.button.link}">Associa</button>
                         </span>
                     </div>
                 </div>

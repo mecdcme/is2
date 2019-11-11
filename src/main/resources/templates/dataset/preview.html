@@ -32,6 +32,7 @@
             $(document).ready(function () {
                 setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
             });
+            var _no_search_filters = [[#{dataset.no.search.filters}]];
         </script>
         <script th:src="@{/js/dataset/datasetpreview.js}"></script>
         <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
@@ -49,15 +50,15 @@
                 <!-- Breadcrumb-->
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a th:href="@{/}">Home</a>
+                        <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
+                        <a th:title="${session.sessioneBean.nome}" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
                             <span th:text="${session.sessioneBean.nome}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                        <a class="" th:title="#{sessionewf.listadataset}" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                             <span th:if="${session.sessioneBean}">
                                 <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
                             </span>
@@ -79,13 +80,13 @@
                                 <li><a class="dropdown-item" th:onclick="'javascript:openRepairModal()'" href="#"><span th:text="#{dataset.fieldRepair}"></span></a></li>
                                 <li><a class="dropdown-item" th:onclick="'javascript:openDeleteModal()'" href="#"><span th:text="#{dataset.fieldDelete}"></span></a></li> 
                             </ul-->
-                            <a class="btn d-md-down-none" id="btn_graph" title="Data analytics" th:href="@{'/graph/home/'+${idfile}}">
+                            <a class="btn d-md-down-none" id="btn_graph" th:title="#{dataset.link.analytics.title}" th:href="@{'/graph/home/'+${idfile}}">
                                 <i class="fa fa-image"></i>&nbsp;<span th:text="#{sessionewf.graph}"></span>
                             </a>
-                            <a class="btn d-md-down-none" id="btn_metadati" title="Classificazione Sum delle Variabili" th:href="@{'/metadatiDataset/'+${idfile}}">
+                            <a class="btn d-md-down-none" id="btn_metadati" th:title="#{dataset.link.classification.title}" th:href="@{'/metadatiDataset/'+${idfile}}">
                                 <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>
                             </a>
-                            <a class="btn" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                            <a class="btn" th:title="#{close.data.link.title}" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -98,7 +99,7 @@
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <span>Filtri di ricerca</span>
+                                        <span th:text=#{dataset.search.filters}>Filtri di ricerca</span>
                                     </div>
                                     <div class="card-body">
                                         <span id="no_filters_msg"></span>
@@ -120,7 +121,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:each="file, iterStat : ${files}">
-                                            <a th:href="@{'/viewDataset/'+${file.id}}" title="Nuova elaborazione" 
+                                            <a th:href="@{'/viewDataset/'+${file.id}}" th:title="${file.nomeFile}" 
                                                th:class="nav-padding" th:classappend="!${iterStat.last}? 'bar-right' : ''" > 
                                                 <span th:if="${file.id} == ${idfile}" class="font-weight-bold" th:text="${file.nomeFile}"></span>
                                                 <span th:unless="${file.id} == ${idfile}" th:text="${file.nomeFile}"></span>
