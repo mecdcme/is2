@@ -54,7 +54,7 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:title="#{session.link.title}" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
+                        <a th:title="${session.sessioneBean.nome}" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
                             <span th:text="${session.sessioneBean.nome}"></span>
                         </a>
                     </li>
@@ -151,22 +151,22 @@
                                                         <span th:unless="${ruleset.numeroRighe}">-</span>
                                                     </td>
                                                     <td style="width: 1%">
-                                                        <a th:href="@{'/rule/viewRules/'+${ruleset.id}}" title="Visualizza ruleset">
+                                                        <a th:href="@{'/rule/viewRules/'+${ruleset.id}}" th:title="#{ruleset.showdata.title.button}">
                                                             <i class="fa fa-search"></i>
                                                         </a>
                                                     </td>       
                                                     <td style="width: 1%">
-                                                        <a href="javascript:void(0)" title="Modifica ruleset" role="button" th:if="${ruleset.datasetFile}" 
+                                                        <a href="javascript:void(0)" th:title="#{ruleset.update.title.button}" role="button" th:if="${ruleset.datasetFile}" 
                                                            th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',\'' + ${ruleset.descr} + '\', \'' + ${ruleset.datasetFile.id} +'\')'">
                                                             <i class="fa fa-edit"></i>
                                                         </a>
-                                                        <a href="javascript:void(0)" title="Modifica ruleset" role="button" th:unless="${ruleset.datasetFile}" 
+                                                        <a href="javascript:void(0)" th:title="#{ruleset.update.title.button}" role="button" th:unless="${ruleset.datasetFile}" 
                                                            th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',\'' + ${ruleset.descr} + '\', \'' + 'null' +'\')'">
                                                             <i class="fa fa-edit"></i>
                                                         </a>
                                                     </td>
                                                   	<td style="width: 1%">
-                                                        <a href="javascript:void(0)" title="Elimina ruleset" role="button"
+                                                        <a href="javascript:void(0)" th:title="#{ruleset.delete.title.button}" role="button"
                                                            th:attr="onclick='javascript:eliminaRuleset(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',' + ${session.sessioneBean.id} +')'">
                                                             <i class="fa fa-trash"></i>
                                                         </a>
