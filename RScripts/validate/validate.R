@@ -17,7 +17,7 @@ library(rspa)
 print("End Loading script Validate.R")
 
 is2_validate <- function(input, inputNames){
-  
+  print(input)
   #redirect stdout to a string
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
