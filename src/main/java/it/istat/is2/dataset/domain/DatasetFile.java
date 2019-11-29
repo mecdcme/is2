@@ -44,16 +44,15 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import it.istat.is2.workflow.domain.TipoDato;
 import it.istat.is2.worksession.domain.WorkSession;
+import it.istat.is2.workflow.domain.DataTypeCls;
+
 import javax.persistence.Temporal;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(exclude = "sessioneLavoro")
 @Entity
-@Table(name = "SX_DATASET_FILE")
+@Table(name = "IS2_DATASET_FILE")
 public class DatasetFile implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,37 +60,34 @@ public class DatasetFile implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
-    @Column(name = "ID_UTENTE")
-    private Integer idUtente;
-    @Column(name = "NUMERO_RIGHE")
-    private Integer numerorighe;
-    @Column(name = "FORMATOFILE")
-    private String formatoFile;
-    @Column(name = "LABEL_FILE")
-    private String labelFile;
-    @Column(name = "SEPARATORE")
-    private String separatore;
-    @Column(name = "NOMEFILE")
-    private String nomeFile;
-    @Column(name = "DATACARICAMENTO")
+    @Column(name = "FILE_NAME")
+    private String fileName;
+   
+    @Column(name = "FILE_LABEL")
+    private String fileLabel;
+    @Column(name = "FILE_FORMAT")
+    private String fileFormat;
+    @Column(name = "FIELD_SEPARATOR")
+    private String fieldSeparator;
+    @Column(name = "TOTAL_ROWS")
+    private Integer totalRows;
+    @Column(name = "LAST_UPDATE")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dataCaricamento;
-    @Column(name = "NOTE")
-    private String note;
-
+    private Date lastUpdate;
+  
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "TIPODATO", nullable = true)
-    private TipoDato tipoDato;
+    @JoinColumn(name = "CLS_DATA_TYPE_ID", nullable = true)
+    private DataTypeCls dataType;
 
     @OneToOne
-    @JoinColumn(name = "sessione_lavoro")
-    private WorkSession sessioneLavoro;
+    @JoinColumn(name = "WORK_SESSION_ID")
+    private WorkSession workSession;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, mappedBy = "datasetFile", orphanRemoval = true)
     @JsonManagedReference
-    @OrderBy(value = "ordine ASC")
-    private List<DatasetColonna> colonne;
-    
+    @OrderBy(value = "orderCode ASC")
+    private List<DatasetColumn> columns;
+
     public DatasetFile(Long id) {
         super();
         this.id = id;
@@ -102,26 +98,24 @@ public class DatasetFile implements Serializable {
 
     }
 
-    public Short getNumCol() {
-        // TODO Auto-generated method stub
-        return (short) colonne.size();
+    public Short getSizeCol() {
+        return (short) columns.size();
     }
-    
-    public String getNomeColFormId(String id){
-    	DatasetColonna dsc;
-        String nomeCol = "";
-    	
-        if(id!=null) {
-        	int id2 = Integer.parseInt(id);
-        	for(int i=0; i<this.colonne.size(); i++) {
-        		dsc = colonne.get(i);
-        		if(dsc.getId()==id2){
-        			nomeCol = dsc.getNome();
-        		}
-        	}
+
+    public String getNameColFormId(String id) {
+        DatasetColumn dsc;
+        String nameCol = "";
+
+        if (id != null) {
+            int id2 = Integer.parseInt(id);
+            for (int i = 0; i < this.columns.size(); i++) {
+                dsc = columns.get(i);
+                if (dsc.getId() == id2) {
+                    nameCol = dsc.getName();
+                }
+            }
         }
-        
-        
-    	return nomeCol;
+
+        return nameCol;
     }
 }

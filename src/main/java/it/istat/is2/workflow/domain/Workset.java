@@ -26,59 +26,48 @@ package it.istat.is2.workflow.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 import it.istat.is2.app.domain.converter.ListToStringConverter;
 import lombok.Data;
-import lombok.Getter;
-import lombok.AccessLevel;
 
 import java.util.List;
 
-/**
- * The persistent class for the SX_WORKSET database table.
- *
- */
 @Data
 @Entity
-@Table(name = "SX_WORKSET")
-@NamedQuery(name = "Workset.findAll", query = "SELECT s FROM Workset s")
+@Table(name = "IS2_WORKSET")
 public class Workset implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID", nullable = false)
     private Long id;
-
-    private String nome;
-
-    @Column(name = "valori_size")
-    private Integer valoriSize;
-
-    @Column(name = "valori")
+    @Column(name = "NAME")
+    private String name;
+ 
+    @Column(name = "ORDER_CODE")
+    private Short orderCode;
+    @Column(name = "CONTENT")
     @Convert(converter = ListToStringConverter.class)
-    private List<String> valori;
-    
-    @Column(name = "param_value")
-    private String paramValue;
-    
-    @Transient
-    @Getter(AccessLevel.NONE)
-    private String valoriStr;
-    // bi-directional many-to-one association to SxTipoVar
-    @ManyToOne
-    @JoinColumn(name = "TIPO_VAR")
-    private SxTipoVar sxTipoVar;
+    private List<String> contents;
 
-    // bi-directional many-to-one association to SxVarPattern
-    @OneToMany(mappedBy = "workset")
-    private List<StepVariable> stepVariables;
+    @Column(name = "CONTENT_SIZE")
+    private Integer contentSize;
+    
+    @Column(name = "VALUE_PARAMETER")
+    private String paramValue;
+
+    @ManyToOne
+    @JoinColumn(name = "CLS_DATA_TYPE_ID")
+    private DataTypeCls dataType;
+
+    @OneToMany(mappedBy = "workset",cascade = CascadeType.REMOVE)
+    private List<StepRuntime> stepRuntimes;
 
     public String getValoriStr() {
         String ret = "";
-        for (int i = 0; i < valori.size(); i++) {
-            ret += valori.get(i) + " ";
+        for (int i = 0; i < contents.size(); i++) {
+            ret += contents.get(i) + " ";
         }
         String ret2 = ret.trim();
         return ret2;

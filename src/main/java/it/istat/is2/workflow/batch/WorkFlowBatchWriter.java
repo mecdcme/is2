@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.batch.item.ItemWriter;
 
-import it.istat.is2.workflow.domain.Elaborazione;
+import it.istat.is2.workflow.domain.DataProcessing;
 
-public class WorkFlowBatchWriter implements ItemWriter<Elaborazione> {
+public class WorkFlowBatchWriter implements ItemWriter<DataProcessing> {
 
 	@Override
-	public void write(List<? extends Elaborazione> items) throws Exception {
+	public void write(List<? extends DataProcessing> items) throws Exception {
 		
 	}
 

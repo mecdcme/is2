@@ -25,19 +25,29 @@ package it.istat.is2.app.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import lombok.Data;
+
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import it.istat.is2.worksession.domain.WorkSession;
+import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "sx_log")
+@Table(name = "IS2_LOG")
 @DynamicUpdate
 public class Log implements Serializable{
     
@@ -47,18 +57,18 @@ public class Log implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    
     @Column(name = "msg")
     private String msg;
-    
-    @Column(name = "tipo")
-    private String tipo;
-    
+    @Column(name = "type")
+    private String type;
     @Column(name = "msg_time")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date msgTime;
     
-    @Column(name = "id_sessione")
-    private Long idSessione;
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "work_session_ID")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private WorkSession workSession;
     
 }

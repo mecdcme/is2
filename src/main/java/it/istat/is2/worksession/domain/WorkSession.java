@@ -37,13 +37,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.rule.domain.Ruleset;
-import it.istat.is2.workflow.domain.Elaborazione;
+import it.istat.is2.workflow.domain.DataProcessing;
 import it.istat.is2.workflow.domain.BusinessFunction;
 
 import javax.persistence.Temporal;
@@ -51,7 +51,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "SX_SESSIONE_LAVORO")
+@Table(name = "IS2_WORK_SESSION")
 public class WorkSession implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -60,31 +60,34 @@ public class WorkSession implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    @OneToOne
-    @JoinColumn(name = "id_utente")
-    private User user;
-
-    @Column(name = "data_creazione")
+    @Column(name = "descr")
+    private String descr;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "last_update")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dataCreazione;
-    @Column(name = "descrizione")
-    private String descrizione;
-    @Column(name = "nome")
-    private String nome;
+    private Date lastUpdate;
 
-    @OneToMany(mappedBy = "sessioneLavoro", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Elaborazione> listaElaborazioni;
-
-    @OneToMany(mappedBy = "sessioneLavoro", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<DatasetFile> datasetFiles;
-
-    @OneToMany(mappedBy = "sessioneLavoro", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Ruleset> ruleSets;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "BFUNCTION", nullable = false)
-    private BusinessFunction  businessFunction;
+    @JoinColumn(name = "BUSINESS_FUNCTION_ID", nullable = false)
+    private BusinessFunction businessFunction;
+    
+    @OneToMany(mappedBy = "workSession", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<DataProcessing> dataProcessings;
+
+    @OneToMany(mappedBy = "workSession", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<DatasetFile> datasetFiles;
+
+    @OneToMany(mappedBy = "workSession", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Ruleset> ruleSets;
+
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER,mappedBy="workSession", orphanRemoval=true)
+    private List<Log> logs;
+    
 
     public WorkSession(Long id) {
         super();

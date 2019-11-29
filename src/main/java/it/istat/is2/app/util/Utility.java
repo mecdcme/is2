@@ -55,9 +55,10 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import it.istat.is2.app.bean.InputFormBean;
 import it.istat.is2.workflow.domain.BusinessProcess;
+import it.istat.is2.workflow.domain.DataTypeCls;
+import it.istat.is2.workflow.domain.StepRuntime;
 import it.istat.is2.workflow.domain.AppRole;
-import it.istat.is2.workflow.domain.StepVariable;
-import it.istat.is2.workflow.domain.SxTipoVar;
+
 
 public class Utility {
 
@@ -456,37 +457,37 @@ public class Utility {
 		return headerValuesSelected;
 	}
 
-	public static LinkedHashMap<String, ArrayList<String>> getMapWorkSetValues(Map<String, ArrayList<StepVariable>> dataMap,
-			SxTipoVar sxTipoVar) {
+	public static LinkedHashMap<String, ArrayList<String>> getMapWorkSetValues(Map<String, ArrayList<StepRuntime>> dataMap,
+			DataTypeCls dataType) {
 
 		LinkedHashMap<String, ArrayList<String>> ret = new LinkedHashMap<>();
-		for (Map.Entry<String, ArrayList<StepVariable>> entry : dataMap.entrySet()) {
+		for (Map.Entry<String, ArrayList<StepRuntime>> entry : dataMap.entrySet()) {
 			String nomeW = entry.getKey();
-			ArrayList<StepVariable> stepVariables = entry.getValue();
-			for (Iterator<StepVariable> iterator = stepVariables.iterator(); iterator.hasNext();) {
-				StepVariable stepVariable = iterator.next();
+			ArrayList<StepRuntime> stepRuntimes = entry.getValue();
+			for (Iterator<StepRuntime> iterator = stepRuntimes.iterator(); iterator.hasNext();) {
+				StepRuntime stepRuntime = iterator.next();
 
-				if (stepVariable.getWorkset().getSxTipoVar().getId().equals(sxTipoVar.getId())) {
-					if (sxTipoVar.getId().equals(IS2Const.WORKSET_TIPO_PARAMETRO)) {
+				if (stepRuntime.getWorkset().getDataType().getId().equals(dataType.getId())) {
+					if (dataType.getId().equals(IS2Const.DATA_TYPE_PARAMETER)) {
 						ArrayList<String> paramList = new ArrayList<>();
-						paramList.add(stepVariable.getWorkset().getParamValue());
+						paramList.add(stepRuntime.getWorkset().getParamValue());
 						ret.put(nomeW, paramList);
 					} else
-						ret.put(nomeW, (ArrayList<String>) stepVariable.getWorkset().getValori());
+						ret.put(nomeW, (ArrayList<String>) stepRuntime.getWorkset().getContents());
 				}
 			}
 		}
 		return ret;
 	}
 
-	public static Map<String, ArrayList<StepVariable>> getMapCodiceRuoloStepVariabili(List<StepVariable> dataList) {
+	public static Map<String, ArrayList<StepRuntime>> getMapCodiceRuoloStepVariabili(List<StepRuntime> dataList) {
 
-		HashMap<String, ArrayList<StepVariable>> ret = new HashMap<>();
-		for (StepVariable stepV : dataList) {
-			String codR = stepV.getAppRole().getCod();
-			ArrayList<StepVariable> lista = ret.get(codR);
+		HashMap<String, ArrayList<StepRuntime>> ret = new HashMap<>();
+		for (StepRuntime stepV : dataList) {
+			String codR = stepV.getAppRole().getCode();
+			ArrayList<StepRuntime> lista = ret.get(codR);
 			if (lista == null) {
-				lista = new ArrayList<StepVariable>();
+				lista = new ArrayList<StepRuntime>();
 			}
 			lista.add(stepV);
 			ret.put(codR, lista);
@@ -494,16 +495,16 @@ public class Utility {
 		return ret;
 	}
 
-	public static LinkedHashMap<String, ArrayList<StepVariable>> getMapNameWorkSetStep(List<StepVariable> dataList) {
+	public static LinkedHashMap<String, ArrayList<StepRuntime>> getMapNameWorkSetStep(List<StepRuntime> dataList) {
 
-		LinkedHashMap<String, ArrayList<StepVariable>> ret = new LinkedHashMap<>();
-		for (StepVariable stepVariable : dataList) {
-			System.out.println(stepVariable.getId());
-			ArrayList<StepVariable> stepList = ret.get(stepVariable.getWorkset().getNome());
+		LinkedHashMap<String, ArrayList<StepRuntime>> ret = new LinkedHashMap<>();
+		for (StepRuntime stepRuntime : dataList) {
+			System.out.println(stepRuntime.getId());
+			ArrayList<StepRuntime> stepList = ret.get(stepRuntime.getWorkset().getName());
 			if (stepList == null)
 				stepList = new ArrayList<>();
-			stepList.add(stepVariable);
-			ret.put(stepVariable.getWorkset().getNome(), stepList);
+			stepList.add(stepRuntime);
+			ret.put(stepRuntime.getWorkset().getName(), stepList);
 		}
 		return ret;
 	}
@@ -513,7 +514,7 @@ public class Utility {
 		HashMap<String, AppRole> ret = new HashMap<>();
 		for (AppRole appRoles : ruoliAll) {
 
-			ret.put(appRoles.getCod(), appRoles);
+			ret.put(appRoles.getCode(), appRoles);
 		}
 		return ret;
 	}
@@ -594,55 +595,43 @@ public class Utility {
 	}
 
 	public static ArrayList<String> convertToArrayListStringFieldOfObjects(List<?> values, Class<?> classObject,
-			String fieldName) {
+			String fieldName)
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		ArrayList<String> ret = new ArrayList<String>();
 		Field field;
-		try {
+		 
 			field = classObject.getDeclaredField(fieldName);
 			for (Object object : values) {
 				field.setAccessible(true);
 				Object value = field.get(object);
 				ret.add(value.toString());
 			}
-		} catch (NoSuchFieldException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		 
 		return ret;
 	}
 
 	/**
 	 * @param dataMap
-	 * @param sxTipoVar
+	 * @param dataType
 	 * @param keySet
 	 * @return
 	 */
 	public static LinkedHashMap<String, ArrayList<String>> getMapWorkSetValuesInRoles(
-			Map<String, ArrayList<StepVariable>> dataMap, SxTipoVar sxTipoVar, Set<String> roles) {
+			Map<String, ArrayList<StepRuntime>> dataMap, DataTypeCls dataType, Set<String> roles) {
 		// TODO Auto-generated method stub
 		LinkedHashMap<String, ArrayList<String>> ret = new LinkedHashMap<>();
 
-		for (Map.Entry<String, ArrayList<StepVariable>> entry : dataMap.entrySet()) {
+		for (Map.Entry<String, ArrayList<StepRuntime>> entry : dataMap.entrySet()) {
 			String nomeW = entry.getKey();
-			ArrayList<StepVariable> stepVariables = entry.getValue();
-			for (Iterator<StepVariable> iterator = stepVariables.iterator(); iterator.hasNext();) {
-				StepVariable stepVariable = iterator.next();
+			ArrayList<StepRuntime> stepRuntimes = entry.getValue();
+			for (Iterator<StepRuntime> iterator = stepRuntimes.iterator(); iterator.hasNext();) {
+				StepRuntime stepRuntime = iterator.next();
 
-				String codeRole = stepVariable.getAppRole().getCod();
-				Integer idTipoVar = stepVariable.getWorkset().getSxTipoVar().getId();
+				String codeRole = stepRuntime.getAppRole().getCode();
+				Integer idTipoVar = stepRuntime.getWorkset().getDataType().getId();
 
-				if (roles.contains(codeRole) && idTipoVar.equals(sxTipoVar.getId())) {
-					ret.put(nomeW, (ArrayList<String>) stepVariable.getWorkset().getValori());
+				if (roles.contains(codeRole) && idTipoVar.equals(dataType.getId())) {
+					ret.put(nomeW, (ArrayList<String>) stepRuntime.getWorkset().getContents());
 				}
 			}
 		}
@@ -655,15 +644,15 @@ public class Utility {
 	 * @param sxRuolo
 	 * @return
 	 */
-	public static StepVariable retrieveStepVariable(Map<String, ArrayList<StepVariable>> dataMap, String nomeW,
+	public static StepRuntime retrieveStepRuntime(Map<String, ArrayList<StepRuntime>> dataMap, String nomeW,
 			AppRole appRole) {
-		StepVariable ret = null;
-		ArrayList<StepVariable> stepVariables = dataMap.get(nomeW);
-		if (stepVariables != null) {
-			for (Iterator<StepVariable> iterator = stepVariables.iterator(); iterator.hasNext();) {
-				StepVariable stepVariable = iterator.next();
-				if (stepVariable.getAppRole().getCod().equals(appRole.getCod()))
-					ret = stepVariable;
+		StepRuntime ret = null;
+		ArrayList<StepRuntime> stepRuntimes = dataMap.get(nomeW);
+		if (stepRuntimes != null) {
+			for (Iterator<StepRuntime> iterator = stepRuntimes.iterator(); iterator.hasNext();) {
+				StepRuntime stepRuntime = iterator.next();
+				if (stepRuntime.getAppRole().getCode().equals(appRole.getCode()))
+					ret = stepRuntime;
 
 			}
 
@@ -671,20 +660,20 @@ public class Utility {
 
 		return ret;
 	}
- 	public static Map<String, String> getMapWorkSetValuesParams(Map<String, ArrayList<StepVariable>> dataMap,
-			SxTipoVar sxTipoVar) {
+ 	public static Map<String, String> getMapWorkSetValuesParams(Map<String, ArrayList<StepRuntime>> dataMap,
+			DataTypeCls dataType) {
 		// TODO Auto-generated method stub
 		HashMap<String, String> ret = new HashMap<>();
-		for (Map.Entry<String, ArrayList<StepVariable>> entry : dataMap.entrySet()) {
+		for (Map.Entry<String, ArrayList<StepRuntime>> entry : dataMap.entrySet()) {
 			String nomeW = entry.getKey();
-			ArrayList<StepVariable> stepVariables = entry.getValue();
-			for (Iterator<StepVariable> iterator = stepVariables.iterator(); iterator.hasNext();) {
-				StepVariable stepVariable = iterator.next();
+			ArrayList<StepRuntime> stepRuntimes = entry.getValue();
+			for (Iterator<StepRuntime> iterator = stepRuntimes.iterator(); iterator.hasNext();) {
+				StepRuntime stepRuntime = iterator.next();
 
-				if (stepVariable.getWorkset().getSxTipoVar().getId().equals(sxTipoVar.getId())) {
-					if (sxTipoVar.getId().equals(IS2Const.WORKSET_TIPO_PARAMETRO)) {
+				if (stepRuntime.getWorkset().getDataType().getId().equals(dataType.getId())) {
+					if (dataType.getId().equals(IS2Const.DATA_TYPE_PARAMETER)) {
 
-						ret.put(nomeW, stepVariable.getWorkset().getParamValue());
+						ret.put(nomeW, stepRuntime.getWorkset().getParamValue());
 					}
 
 				}

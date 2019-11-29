@@ -26,60 +26,42 @@ package it.istat.is2.rule.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import it.istat.is2.workflow.domain.Classification;
 import lombok.Data;
 
-/**
- * The persistent class for the SX_RULE database table.
- *
- */
 @Data
 @Entity
-@Table(name = "SX_RULE")
-@NamedQuery(name = "Rule.findAll", query = "SELECT s FROM Rule s")
+@Table(name = "IS2_RULE")
 public class Rule implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID", nullable = false)
     private Integer id;
-
-    @Column(name = "ACTION")
-    private String action;
-    
-    @Column(name = "code")
+    @Column(name = "CODE")
     private String code;
-
-    private Short active;
-
-    private Short blockrule;
-
+    @Column(name = "NAME")
+    private String name;
+    @Column(name = "DESCR")
     private String descr;
-
-    private String eccezione;
-
-    private Integer errcode;
-
-    private String nome;
-
+    @Column(name = "BLOCKING")
+    private Integer blocking;
+    @Column(name = "ERROR_CODE")
+    private Integer errorCode;
+    @Column(name = "ACTIVE")
+    private Short active;
+    @Column(name = "RULE")
     private String rule;
-    
-    private Integer variabile;
-
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "RTYPE", nullable = true)
-    private RuleType ruleType;
+    @Column(name = "VARIABLE_ID")
+    private Integer variableId;
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "CLASS", nullable = true)
-    private Classification sxClassification;
-
+    @JoinColumn(name = "CLS_RULE_ID", nullable = true)
+    private RuleCls ruleType;
+    
     @ManyToOne
-    @JoinColumn(name = "RULESET")
+    @JoinColumn(name = "RULESET_ID")
     private Ruleset ruleset;
 
-    public Rule() {
-    }
 }

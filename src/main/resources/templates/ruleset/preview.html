@@ -29,7 +29,7 @@
         <script th:src="@{/js/ruleset/rulesetpreview.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
-                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+                setMenuActive([[${session.sessionBean.businessFunction.id}]]);
             });
             var _new_role = [[#{rules.new.rule}]]
             var _delete_msg = [[#{rule.delete.message}]]
@@ -52,17 +52,17 @@
                         <a th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
-                            <span th:text="${session.sessioneBean.nome}"></span>
+                        <a title="Sessione lavoro" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}"> 
+                            <span th:text="${session.sessionBean.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a title="Chiudi ruleset" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                        <a title="Chiudi ruleset" th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}">
                             <span th:text="#{ruleset.list.label}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <span th:text="${ruleset.nomeFile}"></span>
+                        <span th:text="${ruleset.fileName}"></span>
                     </li>
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
@@ -71,7 +71,7 @@
                               <i class="fa fa-clone"></i>&nbsp;<span>Log</span>
                             </a>
                             &nbsp;        
-                            <a th:title="#{ruleset.button.close}" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                            <a th:title="#{ruleset.button.close}" th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -83,7 +83,7 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <span th:text="${ruleset.labelFile}"></span>
+                                    <span th:text="${ruleset.fileLabel}"></span>
                                     <div class="card-header-actions">
                                       <a class="card-header-action towait" href="javascript:void(0)" title="Validate" th:onclick="'javascript:runValidateR(\'validate\',' + ${ruleset.id} + ',0)'">
                                             <i class="fa fa-caret-square-o-right"></i>&nbsp;
@@ -123,13 +123,13 @@
                                                     <span th:if="${session.dfile != null}" th:title="${rule.variabile}"
                                                           th:text="${#strings.abbreviate(rule.sxRuleset.datasetFile.getNomeColFormId(rule.variabile),50)}"></span>
                                                 </td-->
-                                                <td class="text-center" th:if="${rule.sxClassification != null}">
-                                                    <span th:text="${#strings.abbreviate(rule.sxClassification.nome,50)}" th:title="${rule.sxClassification.nome}"></span>
+                                                <td class="text-center" th:if="${rule.ruleType != null}">
+                                                    <span th:text="${#strings.abbreviate(rule.ruleType.name,50)}" th:title="${rule.ruleType.name}"></span>
                                                 </td>
-                                                <td th:unless="${rule.sxClassification != null}"><span></span></td>
+                                                <td th:unless="${rule.ruleType != null}"><span></span></td>
                                                  <td style="width: 1%">
                                                     <a href="javascript:void(0)" th:title="#{ruleset.rule.edit}" role="button"
-                                                       th:attr="data-rule-id=${rule.id}, data-rule-code=${rule.code},data-rule-rule=${rule.rule},data-rule-descr=${rule.descr},data-rule-class-id= ${rule.sxClassification.id}, onclick='javascript:editRule(this);'">
+                                                       th:attr="data-rule-id=${rule.id}, data-rule-code=${rule.code},data-rule-rule=${rule.rule},data-rule-descr=${rule.descr},data-rule-class-id= ${rule.ruleType.id}, onclick='javascript:editRule(this);'">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
                                                 </td>
@@ -145,7 +145,7 @@
                             </div>
                             <!--div class="card" th:if="${session.dfile != null}" id="dataset_div">
                                 <div class="card-header">
-                                    <span th:text="${session.dfile.nomeFile}">Nome dataset</span>
+                                    <span th:text="${session.dfile.fileName}">Nome dataset</span>
                                     <div class="btn-group pull-right" role="group">
                                         <a class="" title="Chiudi riquadro" href="javascript:void(0)" th:attr="onclick='javascript:chiudiDivVariabili()'">
                                             <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
@@ -163,10 +163,10 @@
                                         </thead>
                                         <tbody>
                                             <tr th:each="cols: ${session.dfile.colonne}" th:unless="${(session.dfile.colonne == null) or (session.dfile.colonne.size() == 0) }">
-                                                <td><span th:text="${cols.nome}"></span></td>
+                                                <td><span th:text="${cols.name}"></span></td>
                                                 <td align="center">
                                                     <a href="javascript:void(0)" th:unless="${cols.tipoVariabile}" title="Aggiungi regola"
-                                                       th:attr="onclick='javascript:addRule('+${cols.id}+',\''+${cols.nome}+ '\')'">
+                                                       th:attr="onclick='javascript:addRule('+${cols.id}+',\''+${cols.name}+ '\')'">
                                                         <i class="fa fa-plus-square-o"></i>
                                                     </a>
                                                     <input type="hidden" name="colsid" th:value="${cols.id}" />
@@ -200,7 +200,7 @@
                     </div>
                     <div class="modal-body">
                      <form id="inputNewRuleForm" th:action="@{'/rule/newRule'}" method="post" >
-                           <input type="hidden" th:value="${session.sessioneBean.id}" name="idsessione" />
+                           <input type="hidden" th:value="${session.sessionBean.id}" name="idsessione" />
                            <input type="hidden" th:value="${ruleset.id}" name="idruleset" />
                     <div class="form-group">
                             <label class="control-label" th:text="#{generic.code}+'*'"> Codice:</label>
@@ -219,7 +219,7 @@
                             <select id="classification_l" name="classification" class="form-control">
                                 <option th:each="classificazione : ${listaClassificazioni}"
                                         th:value="${classificazione.id}"
-                                        th:text="${classificazione.nome}"></option>
+                                        th:text="${classificazione.name}"></option>
                             </select>
                         </div>
                     </form>      
@@ -278,7 +278,7 @@
                                         <select name="classificazione" id="classification_edit" class="form-control">
                                             <option th:each="classificazione : ${listaClassificazioni}"
                                                     th:value="${classificazione.id}"
-                                                    th:text="${classificazione.nome}"></option>
+                                                    th:text="${classificazione.name}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -338,7 +338,7 @@
                                         <select id="classification_v" class="form-control">
                                             <option th:each="classificazione : ${listaClassificazioni}"
                                                     th:value="${classificazione.id}"
-                                                    th:text="${classificazione.nome}"></option>
+                                                    th:text="${classificazione.name}"></option>
                                         </select>
                                     </div>
                                 </div>

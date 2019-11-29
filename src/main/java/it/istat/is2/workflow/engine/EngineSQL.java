@@ -25,14 +25,14 @@ package it.istat.is2.workflow.engine;
 
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.workflow.domain.Elaborazione;
+import it.istat.is2.workflow.domain.DataProcessing;
 import it.istat.is2.workflow.domain.StepInstance;
 
 @Service
 public class EngineSQL implements EngineService {
 
     @Override
-    public void init(Elaborazione elaborazione, StepInstance stepInstance) throws Exception {
+    public void init(DataProcessing elaborazione, StepInstance stepInstance) throws Exception {
         // TODO	
     }
 

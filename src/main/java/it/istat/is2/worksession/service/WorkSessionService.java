@@ -53,31 +53,31 @@ public class WorkSessionService {
 
     public WorkSession getSessioneByIdFile(Long id) {
         DatasetFile dataset = datasetService.findDataSetFile(id);
-        return dataset.getSessioneLavoro();
+        return dataset.getWorkSession();
     }
 
     public List<WorkSession> getSessioneList(User user) {
-        return sessioneDao.findByUserOrderByDataCreazioneDesc(user);
+        return sessioneDao.findByUserOrderByLastUpdateDesc(user);
     }
     
     public List<WorkSession> getSessioneList(User user, Long idBusinessFunction) {
         BusinessFunction businessFunction = new BusinessFunction(idBusinessFunction);
-        return sessioneDao.findByUserAndBusinessFunctionOrderByDataCreazioneDesc(user, businessFunction);
+        return sessioneDao.findByUserAndBusinessFunctionOrderByLastUpdateDesc(user, businessFunction);
     }
 
-    public WorkSession nuovaSessioneLavoro(String username, String descrizione, String nome, Long idBusinessFunction) {
+    public WorkSession newWorkSession(String username, String descr, String name, Long idBusinessFunction) {
         User user = userService.findByEmail(username);
         WorkSession sl = new WorkSession();
         BusinessFunction businessFunction = new BusinessFunction(idBusinessFunction);
-        sl.setDataCreazione(new Date());
-        sl.setDescrizione(descrizione);
+        sl.setLastUpdate(new Date());
+        sl.setDescr(descr);
         sl.setBusinessFunction(businessFunction);
-        sl.setNome(nome);
+        sl.setName(name);
         sl.setUser(user);
         return sessioneDao.save(sl);
     }
 
-    public boolean eliminaSessioneLavoro(Long idsessione) {
+    public boolean deleteWorkSession(Long idsessione) {
         sessioneDao.deleteById(idsessione);
         return true;
     }

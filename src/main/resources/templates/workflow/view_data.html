@@ -27,9 +27,9 @@
         <head th:include="layout :: site-head" th:remove="tag" />
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
         <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
-        <script th:src="@{/js/workflow/elaborazionewf.js}"></script>
+        <script th:src="@{/js/workflow/dataProcessingwf.js}"></script>
         <script th:inline="javascript">
-            var _idElaborazione = [[${session.sessioneBean.idElaborazione}]];
+            var _idElaborazione = [[${session.sessionBean.dataProcessingId}]];
             var _tipoCampo = [[${tipoCampo.id}]];
             var _roleGroup = [[${currentGroup.id}]];
         </script>
@@ -49,20 +49,20 @@
                         <a th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
-                            <span th:text="${session.sessioneBean.businessFunction.name}"></span>
+                        <a th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
+                            <span th:text="${session.sessionBean.businessFunction.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:href="@{'/sessione/apri/' + ${session.sessioneBean.id}}">
-                            <span th:text="${session.sessioneBean.nome}"></span>
+                        <a th:href="@{'/sessione/apri/' + ${session.sessionBean.id}}">
+                            <span th:text="${session.sessionBean.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:if="${session.sessioneBean}" 
-                           th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}"> 
-                            <span th:if="${session.sessioneBean.nomeElaborazione}" 
-                                  th:text="${session.sessioneBean.nomeElaborazione}"></span>
+                        <a title="Sessione lavoro" th:if="${session.sessionBean}" 
+                           th:href="@{'/ws/home/'+${session.sessionBean.dataProcessingId}}"> 
+                            <span th:if="${session.sessionBean.dataProcessingName}" 
+                                  th:text="${session.sessionBean.dataProcessingName}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
@@ -72,7 +72,7 @@
                     <li class="breadcrumb-menu d-md-down-none">
                         <div class="btn-group" role="group" aria-label="Button group">
                             <a class="breadcrumb-last-item" title="Chiudi processo" 
-                                th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}"> 
+                                th:href="@{'/ws/home/'+${session.sessionBean.dataProcessingId}}"> 
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -85,24 +85,24 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <span th:each="objectGroup,iterStat : ${outputObjects}">
-                                            <a class="card-header-action" th:href="@{'/ws/dataview/'+${elaborazione.id}+'/2/'+${objectGroup.id}}" 
+                                            <a class="card-header-action" th:href="@{'/ws/dataview/'+${dataProcessing.id}+'/2/'+${objectGroup.id}}" 
                                              th:class="nav-padding" th:classappend="!${iterStat.last}? 'bar-right' : ''" > 
-                                                <span th:if="${objectGroup.id} == ${currentGroup.id}" class="font-weight-bold" th:text="${objectGroup.nome}"></span>
-                                                <span th:unless="${objectGroup.id} == ${currentGroup.id}" th:text="${objectGroup.nome}"></span>
+                                                <span th:if="${objectGroup.id} == ${currentGroup.id}" class="font-weight-bold" th:text="${objectGroup.name}"></span>
+                                                <span th:unless="${objectGroup.id} == ${currentGroup.id}" th:text="${objectGroup.name}"></span>
                                             </a>
                                         </span>
                                     </div>
                                     <div class="card-body">
-                                        <table id="worksetTab" th:if="${not #lists.isEmpty(stepVList)}"
+                                        <table id="worksetTab" th:if="${not #lists.isEmpty(stepRList)}"
                                                class="table table-sm table-striped" cellspacing="0" width="auto" style="overflow: auto;">
                                             <thead>
                                                 <tr>
-                                                    <th th:each="stepV: ${stepVList}" th:text="${stepV.workset.nome}"></th>
+                                                    <th th:each="stepV: ${stepRList}" th:text="${stepV.workset.name}"></th>
                                                 </tr>
 
                                             </thead>
                                         </table>
-                                        <span th:unless="${not #lists.isEmpty(stepVList)}">
+                                        <span th:unless="${not #lists.isEmpty(stepRList)}">
                                             Nessuna elaborazione eseguita
                                         </span>
                                     </div>

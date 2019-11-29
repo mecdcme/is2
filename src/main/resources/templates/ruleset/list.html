@@ -30,7 +30,7 @@
         <script th:src="@{/js/ruleset/uploadruleset.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
-                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+                setMenuActive([[${session.sessionBean.businessFunction.id}]]);
             });
         </script>
         <link th:href="@{/css/vendors/fileinput/fileinput.min.css}" rel="stylesheet" />
@@ -49,13 +49,13 @@
                         <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:title="${session.sessioneBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
-                            <span th:text="${session.sessioneBean.businessFunction.name}"></span>
+                        <a th:title="${session.sessionBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
+                            <span th:text="${session.sessionBean.businessFunction.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:title="${session.sessioneBean.nome}" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
-                            <span th:text="${session.sessioneBean.nome}"></span>
+                        <a th:title="${session.sessionBean.name}" th:if="${session.sessionBean}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}"> 
+                            <span th:text="${session.sessionBean.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
@@ -64,7 +64,7 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a th:title="#{close.data.link.title}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
+                            <a th:title="#{close.data.link.title}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -73,7 +73,7 @@
 
                 <div class="container-fluid">
                     <div class="animated fadeIn">
-                        <input id="idsessioneBean" type="hidden"value="${session.sessioneBean.id}" />
+                        <input id="idsessioneBean" type="hidden"value="${session.sessionBean.id}" />
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -96,7 +96,7 @@
                                         <form id="inputFileRulesetForm" th:action="@{'/rule/loadRulesFile'}" method="post" enctype="multipart/form-data">
                                             <input type="hidden" value="" name="name" id="nomeF" />
                                             <input type="hidden" value="" name="descrizione" id="desc" />
-                                            <input type="hidden" th:value="${session.sessioneBean.id}" th:name="idsessione" />
+                                            <input type="hidden" th:value="${session.sessionBean.id}" th:name="idsessione" />
                                             <input type="hidden" value="" name="delimiter" id="delimiter" />
                                             <input type="hidden" value="" name="labelFile" id="labelFile" />
                                             <input type="hidden" value="" name="classificazione" id="classificazione" />
@@ -119,7 +119,7 @@
                                             </div>
                                         </form>
                                         <form id="inputNewRulesetForm" action="" method="post" enctype="multipart/form-data">
-                                            <input type="hidden" th:value="${session.sessioneBean.id}" th:name="idsessione" />
+                                            <input type="hidden" th:value="${session.sessionBean.id}" th:name="idsessione" />
                                             <input type="hidden" value="" name="rulesetId" id="rulesetId" />
                                             <input type="hidden" value="" name="rulesetName" id="rulesetName" />
                                             <input type="hidden" value="" name="dataset" id="dataset" />
@@ -140,15 +140,15 @@
                                             <tbody>
                                                 <tr th:each="ruleset : ${listaRuleSet}"
                                                     th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
-                                                    <td th:text="${ruleset.labelFile}"></td>
+                                                    <td th:text="${ruleset.fileLabel}"></td>
                                                     <td th:text="${ruleset.descr}"></td>
                                                     <td>
-                                                        <span th:if="${ruleset.datasetFile}" th:text="${ruleset.datasetFile.nomeFile}"></span>
+                                                        <span th:if="${ruleset.datasetFile}" th:text="${ruleset.datasetFile.fileName}"></span>
                                                         <span th:unless="${ruleset.datasetFile}">-</span>
                                                     </td>
                                                     <td>
-                                                        <span th:if="${ruleset.numeroRighe}" th:text="${ruleset.numeroRighe}"></span>
-                                                        <span th:unless="${ruleset.numeroRighe}">-</span>
+                                                        <span th:if="${ruleset.rulesTotal}" th:text="${ruleset.rulesTotal}"></span>
+                                                        <span th:unless="${ruleset.rulesTotal}">-</span>
                                                     </td>
                                                     <td style="width: 1%">
                                                         <a th:href="@{'/rule/viewRules/'+${ruleset.id}}" th:title="#{ruleset.showdata.title.button}">
@@ -157,17 +157,17 @@
                                                     </td>       
                                                     <td style="width: 1%">
                                                         <a href="javascript:void(0)" th:title="#{ruleset.update.title.button}" role="button" th:if="${ruleset.datasetFile}" 
-                                                           th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',\'' + ${ruleset.descr} + '\', \'' + ${ruleset.datasetFile.id} +'\')'">
+                                                           th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.fileLabel} + '\',\'' + ${ruleset.descr} + '\', \'' + ${ruleset.datasetFile.id} +'\')'">
                                                             <i class="fa fa-edit"></i>
                                                         </a>
                                                         <a href="javascript:void(0)" th:title="#{ruleset.update.title.button}" role="button" th:unless="${ruleset.datasetFile}" 
-                                                           th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',\'' + ${ruleset.descr} + '\', \'' + 'null' +'\')'">
+                                                           th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.fileLabel} + '\',\'' + ${ruleset.descr} + '\', \'' + 'null' +'\')'">
                                                             <i class="fa fa-edit"></i>
                                                         </a>
                                                     </td>
                                                   	<td style="width: 1%">
                                                         <a href="javascript:void(0)" th:title="#{ruleset.delete.title.button}" role="button"
-                                                           th:attr="onclick='javascript:eliminaRuleset(' + ${ruleset.id} + ', \'' + ${ruleset.labelFile} + '\',' + ${session.sessioneBean.id} +')'">
+                                                           th:attr="onclick='javascript:eliminaRuleset(' + ${ruleset.id} + ', \'' + ${ruleset.fileLabel} + '\',' + ${session.sessionBean.id} +')'">
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
@@ -277,7 +277,7 @@
                                 <label th:text="#{rules.classification.type}">Classificazione:</label>
                                 <select id="tipo_regola" class="form-control">
                                     <option th:each="classif : ${listaClassificazioni}" 
-                                            th:value="${classif.id}" th:text="${classif.nome}" th:selected="${classif.id==7}">
+                                            th:value="${classif.id}" th:text="${classif.name}" th:selected="${classif.id==7}">
                                     </option>
                                 </select>
                             </div>
@@ -339,7 +339,7 @@
                             <label class="control-label" th:text="#{ruleset.dataset.label}">Dataset:</label>
                             <select id="dataset_file" class="form-control">
                                 <option th:each="dataset : ${listaDatasetFile}"
-                                        th:value="${dataset.id}" th:text="${dataset.nomeFile}">
+                                        th:value="${dataset.id}" th:text="${dataset.fileName}">
                                 </option>
                             </select>
                         </div>
@@ -384,7 +384,7 @@
                             <label class="control-label" th:text="#{ruleset.dataset.label}">Dataset:</label>
                             <select id="dataset_file_upd" class="form-control">
                                 <option th:each="dataset : ${listaDatasetFile}"
-                                        th:value="${dataset.id}" th:text="${dataset.nomeFile}">
+                                        th:value="${dataset.id}" th:text="${dataset.fileName}">
                                 </option>
                             </select>
                         </div>

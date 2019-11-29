@@ -24,16 +24,13 @@
 package it.istat.is2.catalogue.relais.service;
 
 import java.util.ArrayList;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.stereotype.Service;
-
-
+import org.springframework.stereotype.Component;
 
 import it.istat.is2.catalogue.relais.metrics.DiceSimilarity;
 import it.istat.is2.catalogue.relais.metrics.Jaro;
@@ -55,7 +52,7 @@ import lombok.Data;
  *
  */
 @Data
-@Service
+@Component
 public class ContingencyService {
 	private final int DIMMAX = 100000;
 	private String blockingKey;

@@ -27,37 +27,32 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import java.util.List;
 
-/**
- * The persistent class for the SX_APP_SERVICE database table.
- *
- */
 @Data
 @Entity
-@Table(name = "SX_APP_SERVICE")
-@NamedQuery(name = "AppService.findAll", query = "SELECT s FROM AppService s")
+@Table(name = "IS2_APP_SERVICE")
 public class AppService implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     private Integer id;
-
+    @Column(name = "NAME")
+    private String name;
+    @Column(name = "DESCR")
     private String descr;
+    @Column(name = "IMPLEMENTATION_LANGUAGE")
+    private String language;
+    @Column(name = "SOURCE")
+    private String source;
 
-    private String interfaccia;
-
-    private String nome;
-
-    private String script;
-
-    private Integer codice;
-
-    @OneToMany(mappedBy = "appService")
-    @JsonBackReference
-    private List<AppRole> appRoles;
+    @ManyToOne
+    @JoinColumn(name = "BUSINESS_SERVICE_ID")
+    @JsonManagedReference
+    private BusinessService businessService;
 
     @JsonBackReference
     @OneToMany(mappedBy = "appService")
@@ -65,8 +60,8 @@ public class AppService implements Serializable {
 
     public AppService() {
     }
-    
+
     public AppService(Integer id) {
-    	this.id=id;
+        this.id = id;
     }
 }

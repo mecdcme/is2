@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-import it.istat.is2.workflow.domain.Elaborazione;
+import it.istat.is2.workflow.domain.DataProcessing;
 
 @Configuration
 @EnableBatchProcessing
@@ -60,7 +60,7 @@ public class WorkFlowBatchConfig extends DefaultBatchConfigurer implements Batch
 
     @Bean
     public Step doStep() {
-        return steps.get("doStep").<Elaborazione, Elaborazione>chunk(1)
+        return steps.get("doStep").<DataProcessing, DataProcessing>chunk(1)
                 .reader(workFlowBatchProcessor).writer(new WorkFlowBatchWriter()).build();
     }
 

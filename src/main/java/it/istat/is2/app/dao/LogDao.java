@@ -24,9 +24,10 @@
 package it.istat.is2.app.dao;
 
 import it.istat.is2.app.domain.Log;
+import it.istat.is2.worksession.domain.WorkSession;
+
 import java.util.List;
 import java.util.Optional;
-import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -38,18 +39,18 @@ public interface LogDao extends CrudRepository<Log, Long> {
 
     public void save(Optional<Log> log);
 
-    public List<Log> findByIdSessioneOrderByIdDesc(Long idSessione);
+    public List<Log> findByWorkSessionOrderByIdDesc(WorkSession idWorkSession);
     
-    public List<Log> findByIdSessioneOrderByIdAsc(Long idSessione);
+    public List<Log> findByWorkSessionOrderByIdAsc(WorkSession idWorkSession);
 
-    public List<Log> findByIdSessioneAndTipoOrderByIdDesc(Long idSessione, String tipo);
+    public List<Log> findByWorkSessionAndTypeOrderByIdDesc(WorkSession idWorkSession, String type);
     
-    public List<Log> findByIdSessioneAndTipoOrderByIdAsc(Long idSessione, String tipo);
+    public List<Log> findByWorkSessionAndTypeOrderByIdAsc(WorkSession idWorkSession, String type);
 
-    public int deleteByIdSessione(Long idSessione);
+    public int deleteByWorkSession(WorkSession workSession);
     
     @Modifying
-    @Query("delete from Log lg where lg.idSessione = :idSessione and lg.tipo = :tipo")
-    public int deleteByIdSessioneAndTipo(@Param("idSessione") Long idSessione, @Param("tipo") String tipo);
+    @Query("delete from Log lg where lg.workSession = :idWorkSession and lg.type = :type")
+    public int deleteByWorkSessionAndType(@Param("idWorkSession") Long idWorkSession, @Param("type") String type);
 
 }

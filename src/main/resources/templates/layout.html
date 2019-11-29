@@ -137,7 +137,7 @@
             </div>
 
             <!-- Log panel -->
-            <div class="modal fade" id="modalLog" role="dialog" th:if="${session.sessioneBean}">
+            <div class="modal fade" id="modalLog" role="dialog" th:if="${session.sessionBean}">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -163,7 +163,7 @@
                             <button type="button" class="btn btn-light" data-dismiss="modal">
                                 <span th:text="#{Layout.Close}"></span>
                             </button>
-                            <button type="button" class="btn btn-primary" th:onclick="'javascript:clearLog(' + ${session.sessioneBean.id} + ')'">
+                            <button type="button" class="btn btn-primary" th:onclick="'javascript:clearLog(' + ${session.sessionBean.id} + ')'">
                                 <span>Clear</span>
                             </button>
                         </div>
@@ -171,7 +171,7 @@
                 </div>
             </div>
             
-            <div class="modal fade" id="modalRLog" role="dialog" th:if="${session.sessioneBean}">
+            <div class="modal fade" id="modalRLog" role="dialog" th:if="${session.sessionBean}">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -197,7 +197,7 @@
                             <button type="button" class="btn btn-light" data-dismiss="modal">
                                 <span th:text="#{Layout.Close}"></span>
                             </button>
-                            <button type="button" class="btn btn-primary" th:onclick="'javascript:clearLog(' + ${session.sessioneBean.id} + ')'">
+                            <button type="button" class="btn btn-primary" th:onclick="'javascript:clearLog(' + ${session.sessionBean.id} + ')'">
                                 <span>Clear</span>
                             </button>
                         </div>
@@ -221,43 +221,43 @@
                         </li>
                         <li class="nav-title">Business functions</li>
                         <li th:each="businessFunction, iter : ${session.businessFunctionList}" th:id="'bf'+${businessFunction.id}"
-                            th:classappend="${(session.sessioneBean!=null) and (session.sessioneBean.businessFunction.id == businessFunction.id) and (session.sessioneBean.id>0)}? 'nav-item nav-dropdown': 'nav-item'">
+                            th:classappend="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}? 'nav-item nav-dropdown': 'nav-item'">
                             <a class ="nav-link nav-dropdown-toggle" th:href="@{#}"
-                               th:if="${(session.sessioneBean!=null) and (session.sessioneBean.businessFunction.id == businessFunction.id) and (session.sessioneBean.id>0)}">
+                               th:if="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}">
                                 <i class="nav-icon icon-star"></i> <span th:title=${businessFunction.name} th:text="${businessFunction.name}"></span>
                             </a>
-                            <a th:unless="${(session.sessioneBean!=null) and (session.sessioneBean.businessFunction.id == businessFunction.id) and (session.sessioneBean.id>0)}"
+                            <a th:unless="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}"
                                class ="nav-link " th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}">
                                 <i class="nav-icon icon-star"></i> <span th:title=${businessFunction.name} th:text="${businessFunction.name}"></span>
                             </a>
                             <ul class="nav-dropdown-items" 
-                                th:if="${(session.sessioneBean!=null) and (session.sessioneBean.businessFunction.id == businessFunction.id) and (session.sessioneBean.id>0)}">
+                                th:if="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}">
                                 <li class="nav-item">
-                                    <a class="nav-link" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
+                                    <a class="nav-link" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}">
                                         <i class="nav-icon icon-arrow-right"></i>
-                                        <span th:title=${session.sessioneBean.nome} th:text="${session.sessioneBean.nome}"></span>
+                                        <span th:title=${session.sessionBean.name} th:text="${session.sessionBean.name}"></span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                    <a class="nav-link" th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}">
                                         <i class="nav-icon icon-doc"></i>
                                         <span th:title=#{dataset.link.title}>Dataset</span>
-                                        <span class="badge badge-primary"><span th:text="${session.sessioneBean.file.size()}"></span></span>
+                                        <span class="badge badge-primary"><span th:text="${session.sessionBean.file.size()}"></span></span>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                                <li class="nav-item" th:if="${session.sessionBean.ruleset != null}">
+                                    <a class="nav-link" th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}">
                                         <i class="nav-icon icon-wrench"></i>
                                         <span th:title=#{ruleset.link.title}>Ruleset</span>
-                                        <span class="badge badge-primary"><span th:text="${session.sessioneBean.ruleset.size()}"></span></span>
+                                        <span class="badge badge-primary"><span th:text="${session.sessionBean.ruleset.size()}"></span></span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" th:if="${session.sessioneBean.idElaborazione > 0}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
+                                    <a class="nav-link" th:if="${session.sessionBean.dataProcessingId > 0}" th:href="@{'/ws/home/'+${session.sessionBean.dataProcessingId}}">
                                         <i class="nav-icon icon-calculator"></i>
-                                        <span th:title="${session.sessioneBean.nomeElaborazione}" th:text="${session.sessioneBean.nomeElaborazione}">Process</span>
+                                        <span th:title="${session.sessionBean.dataProcessingName}" th:text="${session.sessionBean.dataProcessingName}">Process</span>
                                     </a>
-                                    <a class="nav-link" th:unless="${session.sessioneBean.idElaborazione > 0}" th:href="@{#}">
+                                    <a class="nav-link" th:unless="${session.sessionBean.dataProcessingId > 0}" th:href="@{#}">
                                         <i class="nav-icon icon-calculator"></i>
                                         <span th:title=#{Layout.Process}>Process</span>
                                     </a>

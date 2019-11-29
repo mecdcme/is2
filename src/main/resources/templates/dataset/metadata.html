@@ -28,7 +28,7 @@
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
             $(document).ready(function () {
-            setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+            setMenuActive([[${session.sessionBean.businessFunction.id}]]);
             });
         </script>
         <script th:src="@{/js/dataset/associazionesum.js}"></script>
@@ -49,13 +49,13 @@
                         <a th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
-                            <span th:text="${session.sessioneBean.nome}"></span>
+                        <a title="Sessione lavoro" th:if="${session.sessionBean}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}"> 
+                            <span th:text="${session.sessionBean.nome}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
-                            <span th:if="${session.sessioneBean}">
+                        <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}">
+                            <span th:if="${session.sessionBean}">
                                 <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
                             </span>
                         </a>

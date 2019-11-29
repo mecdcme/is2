@@ -46,14 +46,14 @@ import it.istat.is2.app.bean.NotificationMessage;
 import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.domain.User;
-import it.istat.is2.app.service.ElaborazioneService;
+import it.istat.is2.app.service.DataProcessingService;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.rule.domain.Ruleset;
-import it.istat.is2.workflow.domain.Elaborazione;
-import it.istat.is2.workflow.domain.ArtifactBFunction;
+import it.istat.is2.workflow.domain.DataProcessing;
+import it.istat.is2.workflow.domain.ViewDataType;
 import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.domain.BusinessProcess;
 import it.istat.is2.workflow.service.BusinessFunctionService;
@@ -66,11 +66,11 @@ import java.util.ArrayList;
 public class WorkSessionController {
 
     @Autowired
-    private WorkSessionService sessioneLavoroService;
+    private WorkSessionService workSessionService;
     @Autowired
     private NotificationService notificationService;
     @Autowired
-    private ElaborazioneService elaborazioneService;
+    private DataProcessingService dataProcessingService;
     @Autowired
     private BusinessProcessService businessProcessService;
     @Autowired
@@ -90,11 +90,11 @@ public class WorkSessionController {
         SessionBean sessionBean = new SessionBean();
         BusinessFunction businessFunction = businessFunctionService.findBFunctionById(idBusinessFunction);
         BusinessFunctionBean businessFunctionBean = new BusinessFunctionBean(businessFunction.getId(),
-                businessFunction.getNome());
+                businessFunction.getName());
         sessionBean.setBusinessFunction(businessFunctionBean);
         session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
-        List<WorkSession> listasessioni = sessioneLavoroService.getSessioneList(user, idBusinessFunction);
+        List<WorkSession> listasessioni = workSessionService.getSessioneList(user, idBusinessFunction);
         model.addAttribute("listasessioni", listasessioni);
 
         return "worksession/list";
@@ -107,11 +107,11 @@ public class WorkSessionController {
         notificationService.removeAllMessages();
         NotificationMessage message;
         try {
-            WorkSession sessionelv = sessioneLavoroService.nuovaSessioneLavoro(user.getEmail(), descrizione, nome,
+            WorkSession workSession = workSessionService.newWorkSession(user.getEmail(), descrizione, nome,
                     idBusinessFunction);
             message = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
-                    "session.created.success", new Object[]{sessionelv.getNome()}, LocaleContextHolder.getLocale()));
-            logService.save("Sessione " + sessionelv.getNome() + " creata con successo");
+                    "session.created.success", new Object[]{workSession.getName()}, LocaleContextHolder.getLocale()));
+    
         } catch (Exception e) {
             message = new NotificationMessage(NotificationMessage.TYPE_ERROR,
                     messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
@@ -125,11 +125,11 @@ public class WorkSessionController {
     public String apriSesElab(HttpSession session, Model model, @AuthenticationPrincipal User user,
             @PathVariable("idSessione") Long idSessione, @PathVariable("idElaborazione") Long idElaborazione) {
 
-        WorkSession sessionelv = sessioneLavoroService.getSessione(idSessione);
-        if (sessionelv.getDatasetFiles() != null) {
+        WorkSession workSession = workSessionService.getSessione(idSessione);
+        if (workSession.getDatasetFiles() != null) {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
         }
-        session.setAttribute(IS2Const.SESSION_BEAN, new SessionBean(idSessione, sessionelv.getNome()));
+        session.setAttribute(IS2Const.SESSION_BEAN, new SessionBean(idSessione, workSession.getName()));
 
         return "redirect:/ws/home/" + idElaborazione;
     }
@@ -141,35 +141,35 @@ public class WorkSessionController {
 
         List<Log> logs = logService.findByIdSessione(id);
 
-        WorkSession sessionelv = sessioneLavoroService.getSessione(id);
+        WorkSession workSession = workSessionService.getSessione(id);
         SessionBean sessionBean;
 
-        List<Elaborazione> listaElaborazioni = elaborazioneService.getElaborazioneList(sessionelv);
+        List<DataProcessing> listaElaborazioni = dataProcessingService.getDataProcessingList(workSession);
         List<BusinessProcess> processesList = businessProcessService
-                .findBProcessByIdFunction(sessionelv.getBusinessFunction().getId());
+                .findBProcessByIdFunction(workSession.getBusinessFunction().getId());
         
         sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
         sessionBean.setId(id);
-        sessionBean.setNome(sessionelv.getNome());
+        sessionBean.setName(workSession.getName());
 
         List<String> files;
         List<String> rulesets;
 
-        if (sessionelv.getBusinessFunction().getSxArtifacts().contains(new ArtifactBFunction(IS2Const.ARTIFACT_DATASET))) {
-            files = new ArrayList();
-            if (sessionelv.getDatasetFiles() != null) {
+        if (workSession.getBusinessFunction().getViewDataType().contains(new ViewDataType(IS2Const.VIEW_DATATYPE_DATASET))) {
+            files = new ArrayList<String>();
+            if (workSession.getDatasetFiles() != null) {
                 session.setAttribute(IS2Const.SESSION_DATASET, true);
-                for (DatasetFile datasetFile : sessionelv.getDatasetFiles()) {
-                    files.add(datasetFile.getNomeFile());
+                for (DatasetFile datasetFile : workSession.getDatasetFiles()) {
+                    files.add(datasetFile.getFileName());
                 }
             }
             sessionBean.setFile(files);
         }
-        if (sessionelv.getBusinessFunction().getSxArtifacts().contains(new ArtifactBFunction(IS2Const.ARTIFACT_RULESET))) {
-            rulesets = new ArrayList();
-            if (sessionelv.getRuleSets() != null) {
-                for (Ruleset ruleset : sessionelv.getRuleSets()) {
-                    rulesets.add(ruleset.getNomeFile());
+        if (workSession.getBusinessFunction().getViewDataType().contains(new ViewDataType(IS2Const.VIEW_DATATYPE_RULESET))) {
+            rulesets = new ArrayList<String>();
+            if (workSession.getRuleSets() != null) {
+                for (Ruleset ruleset : workSession.getRuleSets()) {
+                    rulesets.add(ruleset.getFileName());
                 }
             }
             sessionBean.setRuleset(rulesets);
@@ -190,21 +190,21 @@ public class WorkSessionController {
         notificationService.removeAllMessages();      
         
         session.setAttribute(IS2Const.WORKINGSET, "workingset");
-        WorkSession sessionelv = sessioneLavoroService.getSessione(form.getIdsessione());
+        WorkSession workSession = workSessionService.getSessione(form.getIdsessione());
         try {
-            Elaborazione elaborazione = new Elaborazione();
-            elaborazione.setSessioneLavoro(sessionelv);
-            elaborazione.setDescrizione(form.getDescrizione());
-            elaborazione.setNome(form.getNome());
-            elaborazione.setDataElaborazione(new Date());
+            DataProcessing elaborazione = new DataProcessing();
+            elaborazione.setWorkSession(workSession);
+            elaborazione.setDescr(form.getDescrizione());
+            elaborazione.setName(form.getNome());
+            elaborazione.setLastUpdate(new Date());
             elaborazione.setBusinessProcess(businessProcessService.findBProcessById(form.getIdfunzione()));
 
-            elaborazioneService.salvaElaborazione(elaborazione);                     
+            dataProcessingService.saveDataProcessing(elaborazione);                     
             
             notificationService.addInfoMessage(
                     messages.getMessage("creation.process.success", null, LocaleContextHolder.getLocale()));             
            
-            logService.save("Elaborazione " + elaborazione.getNome() + " creata con successo");          
+            logService.save("Elaborazione " + elaborazione.getName() + " creata con successo");          
             
         } catch (Exception e) {  
         	
@@ -212,7 +212,7 @@ public class WorkSessionController {
                     messages.getMessage("process.create.error", null, LocaleContextHolder.getLocale()), e.getMessage());        	
         }                
        
-        return "redirect:/sessione/apri/" + sessionelv.getId();
+        return "redirect:/sessione/apri/" + workSession.getId();
     }
 
     @GetMapping(value = "/sessione/workingset/{id}")
@@ -226,7 +226,7 @@ public class WorkSessionController {
             @PathVariable("idBusinessFunction") Long idBusinessFunction) {
         session.removeAttribute(IS2Const.SESSION_BEAN);
         session.removeAttribute(IS2Const.SESSION_DATASET);
-        session.removeAttribute(IS2Const.SESSION_ELABORAZIONE);
+        session.removeAttribute(IS2Const.SESSION_DATAPROCESSING);
         return "redirect:/sessione/mostraSessioni/" + idBusinessFunction;
     }
 
@@ -235,16 +235,16 @@ public class WorkSessionController {
             @PathVariable("idsessione") Long idsessione) {
         notificationService.removeAllMessages();
         NotificationMessage message;
-        WorkSession sessionelv = sessioneLavoroService.getSessione(idsessione);
-        if (sessioneLavoroService.eliminaSessioneLavoro(idsessione)) {
+        WorkSession workSession = workSessionService.getSessione(idsessione);
+        if (workSessionService.deleteWorkSession(idsessione)) {
             message = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
-                    "session.removed.success", new Object[]{sessionelv.getNome()}, LocaleContextHolder.getLocale()));
+                    "session.removed.success", new Object[]{workSession.getName()}, LocaleContextHolder.getLocale()));
         } else {
             message = new NotificationMessage(NotificationMessage.TYPE_ERROR,
                     messages.getMessage("session.removed.success", null, LocaleContextHolder.getLocale()));
         }
         SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-        session.removeAttribute(IS2Const.SESSION_ELABORAZIONE);
+        session.removeAttribute(IS2Const.SESSION_DATAPROCESSING);
         ra.addFlashAttribute("message", message);
         return "redirect:/sessione/mostraSessioni/" + sessionBean.getBusinessFunction().getId();
     }

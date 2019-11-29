@@ -26,6 +26,9 @@ package it.istat.is2.workflow.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 
 import java.util.List;
@@ -36,77 +39,45 @@ import java.util.List;
  */
 @Data
 @Entity
-@Table(name = "SX_APP_ROLE")
+@Table(name = "IS2_APP_ROLE")
 @NamedQuery(name = "AppRole.findAll", query = "SELECT s FROM AppRole s")
 public class AppRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "ID")
     private Integer id;
-
-    private String cod;
-
+    @Column(name = "NAME")
+    private String name;
+    @Column(name = "DESCR")
     private String descr;
-
-    private String nome;
-
-    private Short ordine;
-
-    // bi-directional many-to-one association to AppService
+    @Column(name = "CODE")
+    private String code;
+    @Column(name = "ORDER")
+    private Short order;
+    
     @ManyToOne
-    @JoinColumn(name = "SERVIZIO")
-    private AppService appService;
-
-    // bi-directional many-to-one association to SxStepPattern
+    @JoinColumn(name = "CLS_DATA_TYPE_ID")
+    private DataTypeCls dataType;
+ 
+    @JsonBackReference
+    @ManyToMany(mappedBy = "appRoles")
+    private List<BusinessService> businessServices;
+    
+    @JsonBackReference
     @OneToMany(mappedBy = "appRole")
-    private List<StepInstanceAppRole> sxStepPatterns;
-
-    // bi-directional many-to-one association to SxVarPattern
-    @OneToMany(mappedBy = "appRole")
-    private List<StepVariable> sxVarPatterns;
-
-    // bi-directional many-to-one association to SxTipoVar
+    private  List<StepInstanceSignature> stepInstanceSignatures;
+    
     @ManyToOne
-    @JoinColumn(name = "TIPO_VAR")
-    private SxTipoVar sxTipoVar;
+    @JoinColumn(name = "PARAMETER_ID")
+    private Parameter parameter;
 
     public AppRole() {
     }
-    
+
     public AppRole(Integer id) {
-    	this.id=id;
+        this.id = id;
     }
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AppRole other = (AppRole) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
 
 }

@@ -51,6 +51,7 @@ public class ListToStringConverter implements AttributeConverter<List<String>, S
 
 		value = allDataArray.toString();
 		}
+		
 		return value;
 	}
 

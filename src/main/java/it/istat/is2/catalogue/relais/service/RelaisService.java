@@ -23,7 +23,6 @@
  */
 package it.istat.is2.catalogue.relais.service;
 
-import it.istat.is2.app.service.LogService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -31,19 +30,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.util.IS2Const;
-import it.istat.is2.catalogue.relais.dao.RelaisGenericDao;
-import it.istat.is2.workflow.dao.RuoloDao;
-import it.istat.is2.workflow.dao.StepVariableDao;
-import it.istat.is2.workflow.domain.AppRole;
+
 
 /**
  * @author framato
  *
  */
-@Service
+@Component
 public class RelaisService {
 
     final int stepService = 250;
@@ -62,19 +59,14 @@ public class RelaisService {
     final String params_ThresholdMatching = "THRESHOLD MATCHING";
     final String params_ThresholdUnMatching = "THRESHOLD UNMATCHING";
 
-    @Autowired
-    RuoloDao ruoloDao;
-
-    @Autowired
-    StepVariableDao stepVariableDao;
-
+ 
     @Autowired
     private LogService logService;
 
     @Autowired
     private ContingencyService contingencyService;
 
-    public Map<?, ?> contengencyTable(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+    public Map<?, ?> contingencyTable(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
             Map<String, ArrayList<String>> worksetVariabili, Map<String, String> parametriMap) throws Exception {
 
         Map<String, Map<?, ?>> returnOut = new HashMap<>();
@@ -307,5 +299,6 @@ public class RelaisService {
         });
 
     }
+
 
 }

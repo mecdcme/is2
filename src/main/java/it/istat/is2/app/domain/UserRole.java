@@ -37,19 +37,18 @@ import javax.persistence.Table;
 
 @Data
 @Entity
-@Table(name = "sx_user_roles")
+@Table(name = "IS2_USER_ROLES")
 public class UserRole implements Serializable {
 
     private static final long serialVersionUID = 12233L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "ID")
     private Short id;
-
-    @Column(name = "role")
+    @Column(name = "ROLE")
     private String role;
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;

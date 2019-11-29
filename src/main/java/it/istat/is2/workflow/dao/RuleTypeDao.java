@@ -29,13 +29,13 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import it.istat.is2.rule.domain.RuleType;
+import it.istat.is2.rule.domain.RuleCls;
 
 
 @Repository
-public interface RuleTypeDao extends CrudRepository<RuleType,Integer> {
+public interface RuleTypeDao extends CrudRepository<RuleCls,Integer> {
  
-	List<RuleType> findAll();	
+	List<RuleCls> findAll();	
 	
-	RuleType findById(Short id);
+	RuleCls findById(Short id);
 }

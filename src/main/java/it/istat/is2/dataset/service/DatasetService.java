@@ -45,13 +45,13 @@ import org.springframework.stereotype.Service;
 import it.istat.is2.app.bean.DataTableBean;
 import it.istat.is2.app.dao.SqlGenericDao;
 import it.istat.is2.app.util.IS2Const;
-import it.istat.is2.dataset.dao.DatasetColonnaDao;
+import it.istat.is2.dataset.dao.DatasetColumnDao;
 import it.istat.is2.dataset.dao.DatasetFileDao;
-import it.istat.is2.dataset.dao.TipoVariabileSumDao;
-import it.istat.is2.dataset.domain.DatasetColonna;
+import it.istat.is2.dataset.dao.StatisticalVariableClsDao;
+import it.istat.is2.dataset.domain.DatasetColumn;
 import it.istat.is2.dataset.domain.DatasetFile;
-import it.istat.is2.dataset.domain.TipoVariabileSum;
-import it.istat.is2.workflow.domain.TipoDato;
+import it.istat.is2.dataset.domain.StatisticalVariableCls;
+import it.istat.is2.workflow.domain.DataTypeCls;
 import it.istat.is2.worksession.dao.WorkSessionDao;
 import it.istat.is2.worksession.domain.WorkSession;
 
@@ -61,57 +61,56 @@ public class DatasetService {
 	@Autowired
 	private DatasetFileDao datasetFileDao;
 	@Autowired
-	private DatasetColonnaDao datasetColonnaDao;
+	private DatasetColumnDao datasetColumnDao;
 	@Autowired
 	private SqlGenericDao sqlgenericDao;
 	@Autowired
 	private WorkSessionDao sessioneLavoroDao;
 	@Autowired
-	private TipoVariabileSumDao variabileSumDao;
-	@Autowired
-	private DatasetColonnaDao datasetColonna;
+	private StatisticalVariableClsDao variabileSumDao;
+	
 
-	public DatasetFile salva(HashMap<String, ArrayList<String>> campi, HashMap<Integer, String> valoriHeaderNum,
+	public DatasetFile save(HashMap<String, ArrayList<String>> campi, HashMap<Integer, String> valoriHeaderNum,
 			String labelFile, Integer tipoDato, String separatore, String desc, String idsessione) throws Exception {
 
 		DatasetFile dFile = new DatasetFile();
 
-		dFile.setLabelFile(labelFile);
-		TipoDato tipoD = new TipoDato();
+		dFile.setFileLabel(labelFile);
+		DataTypeCls tipoD = new DataTypeCls();
 		tipoD.setId(tipoDato);
-		dFile.setTipoDato(tipoD);
-		dFile.setSessioneLavoro(sessioneLavoroDao.findById(Long.parseLong(idsessione)).get());
-		dFile.setNomeFile(desc);
-		dFile.setFormatoFile("CSV");
-		dFile.setSeparatore(separatore);
-		dFile.setDataCaricamento(new Date());
-		dFile.setNumerorighe(campi.get(valoriHeaderNum.get(0)).size());
-		List<DatasetColonna> colonne = new ArrayList<DatasetColonna>();
+		dFile.setDataType(tipoD);
+		dFile.setWorkSession(sessioneLavoroDao.findById(Long.parseLong(idsessione)).get());
+		dFile.setFileName(desc);
+		dFile.setFileFormat("CSV");
+		dFile.setFieldSeparator(separatore);
+		dFile.setLastUpdate(new Date());
+		dFile.setTotalRows(campi.get(valoriHeaderNum.get(0)).size());
+		List<DatasetColumn> colonne = new ArrayList<DatasetColumn>();
 		short ord = 0;
 
 		for (int i = 0; i < valoriHeaderNum.size(); i++) {
 			String kCampi = valoriHeaderNum.get(i);
 			ArrayList<String> vals = campi.get(kCampi);
-			DatasetColonna dc = new DatasetColonna();
+			DatasetColumn dc = new DatasetColumn();
 			dc.setDatasetFile(dFile);
-			dc.setNome(kCampi.replaceAll("\\.", "_"));
-			dc.setOrdine(new Short(ord));
-			dc.setValoriSize(vals.size());
+			dc.setName(kCampi.replaceAll("\\.", "_"));
+			dc.setOrderCode(new Short(ord));
+			dc.setContentSize(vals.size());
 			ord += 1;
-			dc.setDatiColonna(vals);
+			dc.setContents(vals);
 			colonne.add(dc);
 		}
-		dFile.setColonne(colonne);
+		dFile.setColumns(colonne);
 		dFile = datasetFileDao.save(dFile);
 
 		return dFile;
 	}
 
-	public DatasetColonna salvaColonna(DatasetColonna dcol) throws Exception {
+	public DatasetColumn salvaColonna(DatasetColumn dcol) throws Exception {
 
-		DatasetColonna dC;
+		DatasetColumn dC;
 		try {
-			dC = datasetColonnaDao.save(dcol);
+			dC = datasetColumnDao.save(dcol);
 		} catch (Exception e) {
 			return null;
 		}
@@ -128,8 +127,8 @@ public class DatasetService {
 		return datasetFileDao.findById(id).orElse(null);
 	}
 
-	public List<DatasetFile> findDatasetFilesByIdSessioneLavoro(Long id) {
-		return datasetFileDao.findDatasetFilesBySessioneLavoro(new WorkSession(id));
+	public List<DatasetFile> findDatasetFilesByIdWorkSession(Long id) {
+		return datasetFileDao.findDatasetFilesByWorkSession(new WorkSession(id));
 	}
 
 	public DatasetFile findDataSetFileSQL(Long id) {
@@ -142,30 +141,30 @@ public class DatasetService {
 		return dataList;
 	}
 
-	public List<DatasetColonna> findAllDatasetColonnaSQL(Long dFile, Integer rigaInf, Integer rigaSup) {
-		List<DatasetColonna> dataList = datasetColonnaDao.findDatasetColonnabyQuery(dFile, rigaInf, rigaSup);
+	public List<DatasetColumn> findAllDatasetColumnSQL(Long dFile, Integer rigaInf, Integer rigaSup) {
+		List<DatasetColumn> dataList = datasetColumnDao.findDatasetColumnbyQuery(dFile, rigaInf, rigaSup);
 		return dataList;
 	}
 
-	public List<DatasetColonna> findAllNomeColonne(Long dFile) {
-		return datasetColonnaDao.findNomebyfile(new DatasetFile(dFile));
+	public List<DatasetColumn> findAllNameColum(Long dFile) {
+		return datasetColumnDao.findNamebyFile(new DatasetFile(dFile));
 	}
 
-	public List<DatasetColonna> findAllNomeColonne(DatasetFile dFile) {
-		return datasetColonnaDao.findNomebyfile(dFile);
+	public List<DatasetColumn> findAllNameColum(DatasetFile dFile) {
+		return datasetColumnDao.findNamebyFile(dFile);
 	}
 
-	public DatasetColonna findOneColonna(Long dFile) {
-		return datasetColonnaDao.findById(dFile).orElse(null);
+	public DatasetColumn findOneColonna(Long dFile) {
+		return datasetColumnDao.findById(dFile).orElse(null);
 	}
 
 	public Integer findNumeroRighe(Long dFile) {
-		return datasetFileDao.findNumeroRighe(dFile);
+		return datasetFileDao.findTotalRows(dFile);
 	}
 
 	public DataTableBean loadDatasetValoriTest(Long dfile, Integer length, Integer start, Integer draw,
 			HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) {
-		List<DatasetColonna> dataList = sqlgenericDao.findDatasetColonnaParamsbyQuery(dfile, start, start + length,
+		List<DatasetColumn> dataList = sqlgenericDao.findDatasetColumnParamsbyQuery(dfile, start, start + length,
 				parametri, nameColumnToOrder, dirColumnOrder);
 		Integer numRighe = 1;
 
@@ -175,11 +174,11 @@ public class DatasetService {
 		db.setRecordsTotal(numRighe);
 		List<Collection<HashMap<String, String>>> tabella = new ArrayList<Collection<HashMap<String, String>>>();
 
-		for (int i = 0; i < dataList.get(0).getDatiColonna().size(); i++) {
+		for (int i = 0; i < dataList.get(0).getContents().size(); i++) {
 			List<HashMap<String, String>> riga = new ArrayList<HashMap<String, String>>();
 			for (int j = 0; j < dataList.size(); j++) {
 				HashMap<String, String> dato = new HashMap<>();
-				dato.put(dataList.get(j).getNome(), dataList.get(j).getDatiColonna().get(i));
+				dato.put(dataList.get(j).getName(), dataList.get(j).getContents().get(i));
 				riga.add(dato);
 			}
 			tabella.add(riga);
@@ -218,20 +217,20 @@ public class DatasetService {
 		return obj.toString();
 	}
 
-	public List<DatasetColonna> findAllDatasetColonnaQueryFilter(Long dFile, Integer rigaInf, Integer rigaSup,
+	public List<DatasetColumn> findAllDatasetColumnQueryFilter(Long dFile, Integer rigaInf, Integer rigaSup,
 			String filterFieldName, String filterFieldValue, List<String> fieldSelect) {
-		List<DatasetColonna> dataList = datasetColonnaDao.findDatasetColonnabyQueryFilter(dFile, rigaInf, rigaSup,
+		List<DatasetColumn> dataList = datasetColumnDao.findDatasetColumnbyQueryFilter(dFile, rigaInf, rigaSup,
 				filterFieldName, filterFieldValue, fieldSelect);
 		return dataList;
 	}
 
-	public List<TipoVariabileSum> findAllVariabiliSum() {
-		Iterable<TipoVariabileSum> variabileSum = variabileSumDao.findAllVariables();
-		return (List<TipoVariabileSum>) variabileSum;
+	public List<StatisticalVariableCls> findAllVariabiliSum() {
+		Iterable<StatisticalVariableCls> variabileSum = variabileSumDao.findAllVariables();
+		return (List<StatisticalVariableCls>) variabileSum;
 	}
 
-	public List<DatasetColonna> findByDatasetFile(DatasetFile idfile) {
-		return datasetColonnaDao.findNomebyfile(idfile);
+	public List<DatasetColumn> findByDatasetFile(DatasetFile idfile) {
+		return datasetColumnDao.findNamebyFile(idfile);
 
 	}
 
@@ -239,9 +238,9 @@ public class DatasetService {
 		DatasetFile datasetFile = findDataSetFile(idfile);
 
 		Map<String, List<String>> ret = new LinkedHashMap<>();
-		for (Iterator<?> iterator = datasetFile.getColonne().iterator(); iterator.hasNext();) {
-			DatasetColonna dc = (DatasetColonna) iterator.next();
-			ret.put(dc.getNome(), dc.getDatiColonna());
+		for (Iterator<?> iterator = datasetFile.getColumns().iterator(); iterator.hasNext();) {
+			DatasetColumn dc = (DatasetColumn) iterator.next();
+			ret.put(dc.getName(), dc.getContents());
 		}
 		return ret;
 	}
@@ -249,12 +248,12 @@ public class DatasetService {
 	public DatasetFile createField(String idfile, String idColonna, String commandField, String charOrString,
 			String upperLower, String newField, String columnOrder, String numRows) {
 
-		DatasetColonna nuovaColonna = new DatasetColonna();
-		DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
-		List<String> datiColonna = colonna.getDatiColonna();
-		// cambia i valori della colonna
+		DatasetColumn nuovaColonna = new DatasetColumn();
+		DatasetColumn colum = findOneColonna(Long.parseLong(idColonna));
+		List<String> datiColonna = colum.getContents();
+		// cambia i valori della colum
 		List<String> datiColonnaTemp = new ArrayList();
-		// cambia i valori della colonna
+		// cambia i valori della colum
 		switch (commandField) {
 		case "0001":
 			if (upperLower.equals("low")) {
@@ -370,12 +369,12 @@ public class DatasetService {
 		DatasetFile dFile = new DatasetFile();
 		dFile.setId(Long.parseLong(idfile));
 		nuovaColonna.setDatasetFile(dFile);
-		nuovaColonna.setNome(newField);
-		nuovaColonna.setOrdine((short) Integer.parseInt(columnOrder));
-		nuovaColonna.setValoriSize(datiColonna.size());
+		nuovaColonna.setName(newField);
+		nuovaColonna.setOrderCode((short) Integer.parseInt(columnOrder));
+		nuovaColonna.setContentSize(datiColonna.size());
 
-		nuovaColonna.setDatiColonna(datiColonnaTemp);
-		datasetColonna.save(nuovaColonna);
+		nuovaColonna.setContents(datiColonnaTemp);
+		datasetColumnDao.save(nuovaColonna);
 
 		return dFile;
 	}
@@ -421,8 +420,8 @@ public class DatasetService {
 		for (int i = 0; i < naturaDeiCampi.size(); i++) {
 
 			if (naturaDeiCampi.get(i).equals("id")) {
-				DatasetColonna colonna = findOneColonna(Long.parseLong(campiDaConcatenare.get(i)));
-				originalFields.add(colonna.getDatiColonna());
+				DatasetColumn colum = findOneColonna(Long.parseLong(campiDaConcatenare.get(i)));
+				originalFields.add(colum.getContents());
 
 			}
 			if (naturaDeiCampi.get(i).equals("se")) {
@@ -432,7 +431,7 @@ public class DatasetService {
 			}
 		}
 
-		DatasetColonna nuovaColonna = new DatasetColonna();
+		DatasetColumn nuovaColonna = new DatasetColumn();
 
 		for (int i = 0; i < Integer.parseInt(numRows); i++) {
 			String temp = "";
@@ -442,7 +441,7 @@ public class DatasetService {
 			}
 			campoConcatenato.add(temp);
 		}
-		nuovaColonna.setDatiColonna(campoConcatenato);
+		nuovaColonna.setContents(campoConcatenato);
 
 		//
 
@@ -450,12 +449,12 @@ public class DatasetService {
 		DatasetFile dFile = new DatasetFile();
 		dFile.setId(Long.parseLong(idfile));
 		nuovaColonna.setDatasetFile(dFile);
-		nuovaColonna.setNome(newField);
-		nuovaColonna.setOrdine((short) Integer.parseInt(columnOrder));
-		nuovaColonna.setValoriSize(Integer.parseInt(numRows));
+		nuovaColonna.setName(newField);
+		nuovaColonna.setOrderCode((short) Integer.parseInt(columnOrder));
+		nuovaColonna.setContentSize(Integer.parseInt(numRows));
 
 		// nuovaColonna.setDatiColonna(datiColonnaTemp);
-		datasetColonna.save(nuovaColonna);
+		datasetColumnDao.save(nuovaColonna);
 
 		return dFile;
 	}
@@ -466,8 +465,8 @@ public class DatasetService {
 		List<String> campo1 = new ArrayList<String>();
 		List<String> campo2 = new ArrayList<String>();
 
-		DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
-		List<String> temp = colonna.getDatiColonna();
+		DatasetColumn colum = findOneColonna(Long.parseLong(idColonna));
+		List<String> temp = colum.getContents();
 		String tempString = "";
 		Integer indice;
 		int firstIndex = 0;
@@ -549,25 +548,25 @@ public class DatasetService {
 		}
 		;
 
-		DatasetColonna nuovaColonna1 = new DatasetColonna();
-		DatasetColonna nuovaColonna2 = new DatasetColonna();
+		DatasetColumn nuovaColonna1 = new DatasetColumn();
+		DatasetColumn nuovaColonna2 = new DatasetColumn();
 
-		nuovaColonna1.setDatiColonna(campo1);
-		nuovaColonna2.setDatiColonna(campo2);
+		nuovaColonna1.setContents(campo1);
+		nuovaColonna2.setContents(campo2);
 
 		DatasetFile dFile = new DatasetFile();
 		dFile.setId(Long.parseLong(idfile));
 		nuovaColonna1.setDatasetFile(dFile);
-		nuovaColonna1.setNome(field1);
-		nuovaColonna1.setOrdine((short) Integer.parseInt(columnOrder));
-		nuovaColonna1.setValoriSize(Integer.parseInt(numRows));
+		nuovaColonna1.setName(field1);
+		nuovaColonna1.setOrderCode((short) Integer.parseInt(columnOrder));
+		nuovaColonna1.setContentSize(Integer.parseInt(numRows));
 		nuovaColonna2.setDatasetFile(dFile);
-		nuovaColonna2.setNome(field2);
-		nuovaColonna2.setOrdine((short) (Integer.parseInt(columnOrder) + 1));
-		nuovaColonna2.setValoriSize(Integer.parseInt(numRows));
+		nuovaColonna2.setName(field2);
+		nuovaColonna2.setOrderCode((short) (Integer.parseInt(columnOrder) + 1));
+		nuovaColonna2.setContentSize(Integer.parseInt(numRows));
 
-		datasetColonna.save(nuovaColonna1);
-		datasetColonna.save(nuovaColonna2);
+		datasetColumnDao.save(nuovaColonna1);
+		datasetColumnDao.save(nuovaColonna2);
 
 		return dFile;
 	}
@@ -583,9 +582,9 @@ public class DatasetService {
 			}
 		}
 
-		DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
-		List<String> temp = colonna.getDatiColonna();
-		DatasetColonna nuovaColonna = new DatasetColonna();
+		DatasetColumn colum = findOneColonna(Long.parseLong(idColonna));
+		List<String> temp = colum.getContents();
+		DatasetColumn nuovaColonna = new DatasetColumn();
 		List<String> nuoviDatiColonna = new ArrayList<String>();
 
 		for (int i = 0; i < temp.size(); i++) {
@@ -600,22 +599,20 @@ public class DatasetService {
 		}
 		DatasetFile dFile = new DatasetFile();
 		dFile.setId(Long.parseLong(idfile));
-		nuovaColonna.setDatiColonna(nuoviDatiColonna);
+		nuovaColonna.setContents(nuoviDatiColonna);
 		nuovaColonna.setDatasetFile(dFile);
-		nuovaColonna.setNome(fieldName);
-		nuovaColonna.setOrdine((short) Integer.parseInt(numColonne));
-		nuovaColonna.setValoriSize(Integer.parseInt(numRighe));
+		nuovaColonna.setName(fieldName);
+		nuovaColonna.setOrderCode((short) Integer.parseInt(numColonne));
+		nuovaColonna.setContentSize(Integer.parseInt(numRighe));
 
-		datasetColonna.save(nuovaColonna);
+		datasetColumnDao.save(nuovaColonna);
 
 		return dFile;
 	}
 
 	public DatasetFile deleteField(String idfile, String idColonna) {
-		DatasetColonna colonna = findOneColonna(Long.parseLong(idColonna));
-		datasetColonna.delete(colonna);
-		DatasetColonna nuovaColonna = new DatasetColonna();
-		List<String> nuoviDatiColonna = new ArrayList<String>();
+		DatasetColumn colum = findOneColonna(Long.parseLong(idColonna));
+		datasetColumnDao.delete(colum);
 		DatasetFile dFile = new DatasetFile();
 		dFile.setId(Long.parseLong(idfile));
 		return dFile;
@@ -624,7 +621,7 @@ public class DatasetService {
 	@Transactional
 	public Boolean deleteDataset(Long idFile) {
 		DatasetFile datasetFile = findDataSetFile(idFile);
-		datasetColonnaDao.deleteByDatasetFile(datasetFile);
+		datasetColumnDao.deleteByDatasetFile(datasetFile);
 		datasetFileDao.deleteDatasetFile(datasetFile.getId());
 		return true;
 	}
@@ -642,29 +639,29 @@ public class DatasetService {
 	public DatasetFile loadDatasetFromTable(String idsessione, String dbschema, String tablename, String[] fields) {
 		// TODO Auto-generated method stub
 		DatasetFile dFile = new DatasetFile();
-		dFile.setLabelFile(dbschema);
-		TipoDato tipoD = new TipoDato(IS2Const.TIPO_CAMPO_INPUT);
-		dFile.setTipoDato(tipoD);
-		dFile.setSessioneLavoro(new WorkSession(Long.valueOf(idsessione)));
-		dFile.setNomeFile(tablename);
-		dFile.setFormatoFile("DB");
-		dFile.setSeparatore("");
-		dFile.setDataCaricamento(new Date());
-		List<DatasetColonna> colonne = new ArrayList<DatasetColonna>();
+		dFile.setFileLabel(dbschema);
+		DataTypeCls tipoD = new DataTypeCls(IS2Const.DATA_TYPE_DATASET);
+		dFile.setDataType(tipoD);
+		dFile.setWorkSession(new WorkSession(Long.valueOf(idsessione)));
+		dFile.setFileName(tablename);
+		dFile.setFileFormat("DB");
+		dFile.setFieldSeparator("");
+		dFile.setLastUpdate(new Date());
+		List<DatasetColumn> colonne = new ArrayList<DatasetColumn>();
 		for (short i = 0; i < fields.length; i++) {
 			String field = fields[i];
 			List<String> vals = sqlgenericDao.loadFieldValuesTable(dbschema, tablename, field);
-			DatasetColonna dc = new DatasetColonna();
+			DatasetColumn dc = new DatasetColumn();
 			dc.setDatasetFile(dFile);
-			dc.setNome(field.replaceAll("\\.", "_").toUpperCase());
-			dc.setOrdine(new Short(i));
-			dc.setValoriSize(vals.size());
-			dc.setDatiColonna(vals);
+			dc.setName(field.replaceAll("\\.", "_").toUpperCase());
+			dc.setOrderCode(new Short(i));
+			dc.setContentSize(vals.size());
+			dc.setContents(vals);
 			colonne.add(dc);
 
-			dFile.setNumerorighe(vals.size());
+			dFile.setTotalRows(vals.size());
 		}
-		dFile.setColonne(colonne);
+		dFile.setColumns(colonne);
 		dFile = datasetFileDao.save(dFile);
 		return dFile;
 	}

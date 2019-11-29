@@ -32,8 +32,6 @@ import it.istat.is2.rule.domain.Rule;
 import it.istat.is2.rule.domain.Ruleset;
 import it.istat.is2.rule.forms.RuleCreateForm;
 import it.istat.is2.rule.service.RuleService;
-import it.istat.is2.workflow.domain.Classification;
-
 import static it.istat.is2.app.util.IS2Const.OUTPUT_R;
 
 import java.util.ArrayList;

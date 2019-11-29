@@ -29,7 +29,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import it.istat.is2.dataset.domain.DatasetFile;
-import it.istat.is2.workflow.domain.BusinessStep;
+import it.istat.is2.workflow.domain.ProcessStep;
 import it.istat.is2.worksession.domain.WorkSession;
 import lombok.Data;
 
@@ -37,55 +37,49 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * The persistent class for the SX_RULESET database table.
- *
- */
 @Data
 @Entity
-@Table(name = "SX_RULESET")
-@NamedQuery(name = "Ruleset.findAll", query = "SELECT s FROM Ruleset s")
+@Table(name = "IS2_RULESET")
 public class Ruleset implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID", nullable = false)
     private Integer id;
+    @Column(name = "FILE_NAME")
+    private String fileName;
+    @Column(name = "FILE_LABEL")
+    private String fileLabel;
     @Column(name = "DESCR")
     private String descr;
-    @Column(name = "NUMERO_RIGHE")
-    private Integer numeroRighe;
-    @Column(name = "NOME_FILE")
-    private String nomeFile;
-    @Column(name = "LABEL_FILE")
-    private String labelFile;
-    @Column(name = "DATA_CARICAMENTO")
+    @Column(name = "RULES_TOTAL")
+    private Integer rulesTotal;
+    @Column(name = "LAST_UPDATE")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dataCaricamento;
-    @OneToOne
-    @JoinColumn(name = "SESSIONE_LAVORO")
-    private WorkSession sessioneLavoro;
+    private Date lastUpdate;
 
-    @OneToMany(mappedBy = "ruleset")
-    @JsonBackReference
-    private List<BusinessStep> businessSteps;
+    @OneToOne
+    @JoinColumn(name = "WORK_SESSION_ID")
+    private WorkSession workSession;
+
+    @OneToOne
+    @JoinColumn(name = "DATASET_ID")
+    private DatasetFile datasetFile;
+
+    
 
     @OneToMany(mappedBy = "ruleset", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<Rule> rules;   
-    
-    @OneToOne
-    @JoinColumn(name = "DATASET")
-    private DatasetFile datasetFile;
+    private List<Rule> rules;
 
     public Ruleset() {
-        this.rules = new ArrayList<Rule>();
+        this.rules = new ArrayList<>();
     }
 
     public Ruleset(Integer id) {
-    	this.id=id;
-        this.rules = new ArrayList<Rule>();
+        this.id = id;
+        this.rules = new ArrayList<>();
     }
 }

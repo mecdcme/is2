@@ -31,22 +31,25 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
-import it.istat.is2.catalogue.relais.service.RelaisService;
-import it.istat.is2.workflow.dao.RuoloDao;
-import it.istat.is2.workflow.dao.StepVariableDao;
-import it.istat.is2.workflow.domain.Elaborazione;
-import it.istat.is2.workflow.domain.TipoCampo;
+
+import it.istat.is2.workflow.dao.AppRoleDao;
+import it.istat.is2.workflow.dao.StepRuntimeDao;
 import it.istat.is2.workflow.domain.AppRole;
+import it.istat.is2.workflow.domain.DataProcessing;
+import it.istat.is2.workflow.domain.DataTypeCls;
 import it.istat.is2.workflow.domain.StepInstance;
-import it.istat.is2.workflow.domain.StepInstanceAppRole;
-import it.istat.is2.workflow.domain.StepVariable;
-import it.istat.is2.workflow.domain.SxTipoVar;
+import it.istat.is2.workflow.domain.StepInstanceSignature;
+import it.istat.is2.workflow.domain.StepRuntime;
+import it.istat.is2.workflow.domain.TypeIO;
 import it.istat.is2.workflow.domain.Workset;
 
 /**
@@ -56,16 +59,18 @@ import it.istat.is2.workflow.domain.Workset;
 @Service
 public class EngineJava implements EngineService {
 
+  
     @Autowired
-    RelaisService relaisService;
+    AppRoleDao ruoloDao;
     @Autowired
-    RuoloDao ruoloDao;
+    StepRuntimeDao stepVariableDao;
     @Autowired
-    StepVariableDao stepVariableDao;
+    private  ApplicationContext context;
+ 
 
-    private Elaborazione elaborazione;
+    private DataProcessing dataProcessing;
     private StepInstance stepInstance;
-    private Map<String, ArrayList<StepVariable>> dataMap;
+    private Map<String, ArrayList<StepRuntime>> dataMap;
     private Map<String, AppRole> ruoliAllMap;
     private Map<String, ArrayList<String>> worksetVariabili;
     private Map<String, String> parametriMap;
@@ -84,9 +89,9 @@ public class EngineJava implements EngineService {
     }
 
     @Override
-    public void init(Elaborazione elaborazione, StepInstance stepInstance) throws Exception {
+    public void init(DataProcessing elaborazione, StepInstance stepInstance) throws Exception {
         // Create a connection to Rserve instance running on default port 6311
-        this.elaborazione = elaborazione;
+        this.dataProcessing = elaborazione;
         this.stepInstance = stepInstance;
         prepareEnv();
     }
@@ -98,12 +103,13 @@ public class EngineJava implements EngineService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void doAction() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        String fname = stepInstance.getFname();
-        // Method method = RelaisService.class.getDeclaredMethod(fname);
-        Method method = ReflectionUtils.findMethod(RelaisService.class, fname, Long.class, Map.class, Map.class, Map.class);
-
-        resultOut = (Map<String, Map<?, ?>>) method.invoke(relaisService, elaborazione.getId(), ruoliVariabileNome, worksetVariabili, parametriMap);
+    public void doAction() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, InstantiationException {
+        String fname = stepInstance.getMethod();
+        String fnameClassName = stepInstance.getAppService().getSource();
+        Class<?>  fnameClass=Class.forName(fnameClassName);
+        Method method = ReflectionUtils.findMethod( fnameClass, fname, Long.class, Map.class, Map.class, Map.class);
+        Object instance=  context.getBean(fnameClass);
+        resultOut = (Map<String, Map<?, ?>>) method.invoke(instance, dataProcessing.getId(), ruoliVariabileNome, worksetVariabili, parametriMap);
         worksetOut = (Map<String, Map<?, ?>>) resultOut.get(IS2Const.WF_OUTPUT_WORKSET);
         ruoliOutputStep = (LinkedHashMap<String, ArrayList<String>>) resultOut.get(IS2Const.WF_OUTPUT_ROLES);
         ruoliGruppoOutputStep = (HashMap<String, String>) resultOut.get(IS2Const.WF_OUTPUT_ROLES_GROUP);
@@ -112,7 +118,7 @@ public class EngineJava implements EngineService {
     public void prepareEnv() {
 
         // get all roles by service
-        ruoliAllMap = ruoloDao.findByServiceAsCodMap(stepInstance.getAppService());
+        ruoliAllMap = ruoloDao.findByServiceAsCodMap(stepInstance.getAppService().getBusinessService());
 
         // REcupero dei ruoli di INPUT e OUTUPT e dalle istanze
         // {S=[S], X=[X], Y=[Y], Z=[Z]}
@@ -120,37 +126,37 @@ public class EngineJava implements EngineService {
         // {P=[P], M=[M], O=[O]}
         ruoliOutputStep = new LinkedHashMap<String, ArrayList<String>>();
 
-        for (Iterator<?> iterator = stepInstance.getSxStepPatterns().iterator(); iterator.hasNext();) {
-            StepInstanceAppRole sxStepPattern = (StepInstanceAppRole) iterator.next();
-            if (sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_INPUT) {
-                ArrayList<String> listv = ruoliInputStep.get(sxStepPattern.getAppRole().getCod());
+        for (Iterator<?> iterator = stepInstance.getStepInstanceSignatures().iterator(); iterator.hasNext();) {
+            StepInstanceSignature sxStepPattern = (StepInstanceSignature) iterator.next();
+            if (sxStepPattern.getTypeIO().equals(new TypeIO(IS2Const.TYPE_IO_INPUT))) {
+                ArrayList<String> listv = ruoliInputStep.get(sxStepPattern.getAppRole().getCode());
                 if (listv == null) {
                     listv = new ArrayList<>();
                 }
-                listv.add(sxStepPattern.getAppRole().getCod());
-                ruoliInputStep.put(sxStepPattern.getAppRole().getCod(), listv);
-            } else if (sxStepPattern.getTipoIO().getId().intValue() == IS2Const.VARIABILE_TIPO_OUTPUT) {
-                ArrayList<String> listv = ruoliOutputStep.get(sxStepPattern.getAppRole().getCod());
+                listv.add(sxStepPattern.getAppRole().getCode());
+                ruoliInputStep.put(sxStepPattern.getAppRole().getCode(), listv);
+            } else if (sxStepPattern.getTypeIO().equals(new TypeIO(IS2Const.TYPE_IO_OUTPUT))) {
+                ArrayList<String> listv = ruoliOutputStep.get(sxStepPattern.getAppRole().getCode());
                 if (listv == null) {
                     listv = new ArrayList<>();
                 }
-                listv.add(sxStepPattern.getAppRole().getCod());
-                ruoliOutputStep.put(sxStepPattern.getAppRole().getCod(), listv);
+                listv.add(sxStepPattern.getAppRole().getCode());
+                ruoliOutputStep.put(sxStepPattern.getAppRole().getCode(), listv);
             }
         }
 
         //Recupero workset di input 
-        List<StepVariable> dataList = stepVariableDao.findByElaborazione(elaborazione);
+        List<StepRuntime> dataList = stepVariableDao.findByDataProcessing(dataProcessing);
         // mappa delle colonne workset <nome campo, oggetto stepv>
         dataMap = Utility.getMapNameWorkSetStep(dataList);
         // mappa delle colonne workset <nome campo, oggetto stepv>
-        Map<String, ArrayList<StepVariable>> dataRuoliStepVarMap = Utility.getMapCodiceRuoloStepVariabili(dataList);
+        Map<String, ArrayList<StepRuntime>> dataRuoliStepVarMap = Utility.getMapCodiceRuoloStepVariabili(dataList);
         // mappa delle colonne workset <nome,lista valori>
-        worksetVariabili = Utility.getMapWorkSetValuesInRoles(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE), ruoliInputStep.keySet());
+        worksetVariabili = Utility.getMapWorkSetValuesInRoles(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE), ruoliInputStep.keySet());
 
         // PARAMETRI
-        parametriMap = Utility.getMapWorkSetValuesParams(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_PARAMETRO));
-        modelloMap = Utility.getMapWorkSetValues(dataMap, new SxTipoVar(IS2Const.WORKSET_TIPO_MODELLO));
+        parametriMap = Utility.getMapWorkSetValuesParams(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
+        modelloMap = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_MODEL));
         worksetOut = new HashMap<>();
 
         // associo il codice ruolo alla variabile
@@ -158,16 +164,16 @@ public class EngineJava implements EngineService {
         ruoliVariabileNome = new LinkedHashMap<>();
         parametriOutput = new LinkedHashMap<>();
 
-        for (Map.Entry<String, ArrayList<StepVariable>> entry : dataRuoliStepVarMap.entrySet()) {
+        for (Map.Entry<String, ArrayList<StepRuntime>> entry : dataRuoliStepVarMap.entrySet()) {
             String codR = entry.getKey();
-            ArrayList<StepVariable> listSVariable = entry.getValue();
-            for (Iterator<StepVariable> iterator = listSVariable.iterator(); iterator.hasNext();) {
-                StepVariable stepVariable = (StepVariable) iterator.next();
+            ArrayList<StepRuntime> listSVariable = entry.getValue();
+            for (Iterator<StepRuntime> iterator = listSVariable.iterator(); iterator.hasNext();) {
+                StepRuntime stepVariable = (StepRuntime) iterator.next();
                 ArrayList<String> listv = ruoliVariabileNome.get(codR);
                 if (listv == null) {
                     listv = new ArrayList<>();
                 }
-                listv.add(stepVariable.getWorkset().getNome());
+                listv.add(stepVariable.getWorkset().getName());
                 ruoliVariabileNome.put(codR, listv);
             }
         }
@@ -189,7 +195,7 @@ public class EngineJava implements EngineService {
             for (Map.Entry<String, ArrayList<String>> entryWS : outContent.entrySet()) {
                 String nomeW = entryWS.getKey();
                 ArrayList<String> value = entryWS.getValue();
-                StepVariable stepVariable;
+                StepRuntime stepVariable;
                 //String ruolo = ruoliOutputStepInversa.get(nomeW);
                 String ruolo = nameOut;
                 String ruoloGruppo = ruoliGruppoOutputStep.get(ruolo);
@@ -202,28 +208,29 @@ public class EngineJava implements EngineService {
                 AppRole sxRuolo = ruoliAllMap.get(ruolo);
                 AppRole sxRuoloGruppo = ruoliAllMap.get(ruoloGruppo);
 
-                stepVariable = Utility.retrieveStepVariable(dataMap, nomeW, sxRuolo);
+                stepVariable = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
 
                 if (stepVariable != null) { // update
 
-                    stepVariable.getWorkset().setValori(value);
-                    stepVariable.setTipoCampo(new TipoCampo(IS2Const.TIPO_CAMPO_ELABORATO));
+                    stepVariable.getWorkset().setContents(value);
+                    stepVariable.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
                 } else {
-                    stepVariable = new StepVariable();
-                    stepVariable.setElaborazione(elaborazione);
-                    stepVariable.setTipoCampo(new TipoCampo(IS2Const.TIPO_CAMPO_ELABORATO));
+                    stepVariable = new StepRuntime();
+                    stepVariable.setDataProcessing(dataProcessing);
+                    stepVariable.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
 
                     stepVariable.setAppRole(sxRuolo);
-                    stepVariable.setSxRuoloGruppo(sxRuoloGruppo);
-                    stepVariable.setOrdine(sxRuolo.getOrdine());
+                    stepVariable.setDataType(sxRuolo.getDataType());
+                    stepVariable.setRoleGroup(sxRuoloGruppo);
+                    stepVariable.setOrderCode(sxRuolo.getOrder());
                     Workset workset = new Workset();
-                    workset.setNome(nomeW.replaceAll("\\.", "_"));
-                    workset.setSxTipoVar(new SxTipoVar(IS2Const.WORKSET_TIPO_VARIABILE));
-                    ArrayList<StepVariable> l = new ArrayList<>();
+                    workset.setName(nomeW.replaceAll("\\.", "_"));
+                    workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
+                    ArrayList<StepRuntime> l = new ArrayList<>();
                     l.add(stepVariable);
-                    workset.setStepVariables(l);
-                    workset.setValori(value);
-                    workset.setValoriSize(workset.getValori().size());
+                    workset.setStepRuntimes(l);
+                    workset.setContents(value);
+                    workset.setContentSize(workset.getContents().size());
                     stepVariable.setWorkset(workset);
                 }
 
@@ -236,5 +243,7 @@ public class EngineJava implements EngineService {
     public void destroy() {
         // TODO Auto-generated method stub
     }
+
+ 
 
 }

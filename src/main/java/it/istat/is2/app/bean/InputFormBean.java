@@ -40,7 +40,7 @@ public class InputFormBean implements Serializable {
 	private String tipo;
 	private String labelFile;
 	private String labelCodeRule;
-	private Integer tipoDato;
+	private Integer fileType;
 	private String covariate;
 	private String predizioni;
 	private int numeroCampi;

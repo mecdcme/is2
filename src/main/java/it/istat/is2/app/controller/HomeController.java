@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
-import it.istat.is2.workflow.domain.ArtifactBFunction;
+import it.istat.is2.workflow.domain.ViewDataType;
 import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.service.BusinessFunctionService;
 import java.util.ArrayList;
@@ -56,10 +56,10 @@ public class HomeController {
 
         List<BusinessFunctionBean> businessFunctionBeanList = new ArrayList();
         for (BusinessFunction bf : businessFunctionList) {
-            if (bf.getSxArtifacts().contains(new ArtifactBFunction(IS2Const.ARTIFACT_RULESET))) {
-                businessFunctionBeanList.add(new BusinessFunctionBean(bf.getId(), bf.getNome(), bf.getDescr(), true));
+            if (bf.getViewDataType().contains(new ViewDataType(IS2Const.VIEW_DATATYPE_RULESET))) {
+                businessFunctionBeanList.add(new BusinessFunctionBean(bf.getId(), bf.getName(), bf.getDescr(), true));
             } else{
-                businessFunctionBeanList.add(new BusinessFunctionBean(bf.getId(), bf.getNome(), bf.getDescr(), false));
+                businessFunctionBeanList.add(new BusinessFunctionBean(bf.getId(), bf.getName(), bf.getDescr(), false));
             }
         }
 

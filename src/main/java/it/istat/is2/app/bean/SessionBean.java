@@ -32,30 +32,30 @@ import lombok.Data;
 @Data
 public class SessionBean implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private Long id;
-    private String nome;
-    private List<String> file;
-    private List<String> ruleset;
-    private Long idElaborazione;
-    private String nomeElaborazione;
-    private BusinessProcessParentBean businessProcess;
-    private BusinessFunctionBean businessFunction;
-    private Long tipoRuleset;
-    private Long dataset;
+	private Long id;
+	private String name;
+	private List<String> file;
+	private List<String> ruleset;
+	private Long dataProcessingId;
+	private String dataProcessingName;
+	private BusinessProcessParentBean businessProcess;
+	private BusinessFunctionBean businessFunction;
+	private Long rulesetType;
+	private Long dataset;
 
-    public SessionBean(Long id, String nome) {
-        this.id = id;
-        this.nome = nome;
-        this.file = new ArrayList<>();
-        this.ruleset = new ArrayList<>();
-        this.idElaborazione = new Long(0);
-    }
+	public SessionBean(Long id, String name) {
+		this.id = id;
+		this.name = name;
+		this.file = new ArrayList<>();
+		this.ruleset = new ArrayList<>();
+		this.dataProcessingId = new Long(0);
+	}
 
-    public SessionBean() {
-        this.file = new ArrayList<>();
-        this.ruleset = new ArrayList<>();
-        this.idElaborazione = new Long(0);
-    }
+	public SessionBean() {
+		//this.file = new ArrayList<>();
+		//this.ruleset = new ArrayList<>();
+		this.dataProcessingId = new Long(0);
+	}
 }

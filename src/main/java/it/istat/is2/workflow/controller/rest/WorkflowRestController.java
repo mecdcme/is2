@@ -35,6 +35,8 @@ import javax.transaction.Transactional;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,12 +52,12 @@ import it.istat.is2.app.bean.Variable;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.workflow.domain.BusinessProcess;
-import it.istat.is2.workflow.domain.BusinessStep;
-import it.istat.is2.workflow.domain.Elaborazione;
-import it.istat.is2.workflow.domain.StepVariable;
+import it.istat.is2.workflow.domain.ProcessStep;
+import it.istat.is2.workflow.domain.DataProcessing;
+import it.istat.is2.workflow.domain.StepRuntime;
 import it.istat.is2.workflow.service.BusinessProcessService;
 import it.istat.is2.workflow.service.BusinessStepService;
-import it.istat.is2.workflow.service.StepVariableService;
+import it.istat.is2.workflow.service.StepRuntimeService;
 import it.istat.is2.workflow.service.WorkflowService;
 
 @RequestMapping("/rest/ws")
@@ -69,9 +71,11 @@ public class WorkflowRestController {
     @Autowired
     private BusinessStepService businessStepService;
     @Autowired
-    StepVariableService stepVariableService;
+    StepRuntimeService stepVariableService;
     @Autowired
 	private NotificationService notificationService;
+    @Autowired
+	private MessageSource messages;
 
     @RequestMapping(value = "/worksetvalori/{idelaborazione}/{tipoCampo}/{groupRole}/{paramsFilter:.+}", method = RequestMethod.GET)
     public String loadDatasetValoriWorkset(HttpServletRequest request, Model model,
@@ -95,7 +99,7 @@ public class WorkflowRestController {
                 parameters.put(nomeValore.get(0), nomeValore.get(1));
             }
         }
-        String dtb = workflowService.loadWorkSetValoriByElaborazione(idelaborazione, tipoCampo,groupRole, length, start, draw, parameters);
+        String dtb = workflowService.loadWorkSetValoriByDataProcessing(idelaborazione, tipoCampo,groupRole, length, start, draw, parameters);
 
         return dtb;
     }
@@ -110,19 +114,19 @@ public class WorkflowRestController {
     }
 
     @RequestMapping(value = "/loadBSteps/{idprocess}", method = RequestMethod.GET)
-    public List<BusinessStep> loadComboBSteps(HttpServletRequest request, Model model,
+    public List<ProcessStep> loadComboBSteps(HttpServletRequest request, Model model,
             @PathVariable("idprocess") Long idprocess) throws IOException {
 
-        List<BusinessStep> listaBStep = businessStepService.findBStepByIdProcess(idprocess);
+        List<ProcessStep> listaBStep = businessStepService.findBStepByIdProcess(idprocess);
 
         return listaBStep;
     }
 
     @RequestMapping(value = "/loadVarsByStep/{idelab}/{idstep}", method = RequestMethod.GET)
-    public List<StepVariable> loadVarsByStep(HttpServletRequest request, Model model,
+    public List<StepRuntime> loadVarsByStep(HttpServletRequest request, Model model,
             @PathVariable("idelab") Long idelab, @PathVariable("idstep") Integer idstep) throws IOException {
 
-        List<StepVariable> listaVarAssociate = stepVariableService.findBStepByIdProcess(idelab, idstep);
+        List<StepRuntime> listaVarAssociate = stepVariableService.findBStepByIdProcess(idelab, idstep);
 
         return listaVarAssociate;
     }
@@ -151,7 +155,7 @@ public class WorkflowRestController {
         response.setHeader("charset", "utf-8");
         response.setHeader("Content-Type", contentType);
         response.setHeader("Content-disposition", "attachment; filename=" + fileName);
-        Map<String, List<String>> dataMap = workflowService.loadWorkSetValoriByElaborazioneRoleGroupMap(idelab,groupRole);
+        Map<String, List<String>> dataMap = workflowService.loadWorkSetValoriByDataProcessingRoleGroupMap(idelab,groupRole);
         Utility.writeObjectToCSV(response.getWriter(), dataMap);
     }
 
@@ -163,7 +167,7 @@ public class WorkflowRestController {
         String element = null;
         String ordine = null;
         String idstepvar = null;
-        StepVariable stepVariable = new StepVariable();
+        StepRuntime stepVariable = new StepRuntime();
         while (stringTokenizerElements.hasMoreElements()) {
             element = stringTokenizerElements.nextElement().toString();
             StringTokenizer stringTokenizerValues = new StringTokenizer(element, "=");
@@ -174,18 +178,12 @@ public class WorkflowRestController {
             Integer idstep =Integer.parseInt(idstepvar);
             Short ordineS = Short.parseShort(ordine);
             stepVariable = stepVariableService.findById(idstep).get();
-            stepVariable.setOrdine(ordineS);
-            stepVariableService.updateStepVar(stepVariable);
+            stepVariable.setOrderCode(ordineS);
+            stepVariableService.updateStepRuntime(stepVariable);
         }
 
         return "success";
     }
 
-    @PostMapping(value = "/associaVariabiliRuolo")
-    public void associaVariabiliRuolo(HttpServletResponse response, Model model, @RequestBody AssociazioneVarRoleBean[] associazioneVarRoleBean) throws IOException {
-   		Elaborazione elaborazione = workflowService.findElaborazione(associazioneVarRoleBean[0].getIdElaborazione());
-   		workflowService.creaAssociazionVarRole(elaborazione,associazioneVarRoleBean);	
-   		notificationService.addInfoMessage("Associazione variabile-ruolo completata");
-   	}
-
+    
 }

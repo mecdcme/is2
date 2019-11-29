@@ -88,7 +88,7 @@ public class UserController {
 		userf.setName(user.getName());
 
 		userf.setRole(user.getRole().getId());
-		userf.setUserid(user.getUserid());
+		userf.setUserid(user.getId());
 		model.addAttribute("userCreateForm", userf);
 
 		List<UserRole> allRoles = userService.findAllRoles();

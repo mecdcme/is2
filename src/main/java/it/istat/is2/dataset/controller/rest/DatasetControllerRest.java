@@ -46,8 +46,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.Utility;
-import it.istat.is2.dataset.domain.DatasetColonna;
-import it.istat.is2.dataset.domain.TipoVariabileSum;
+import it.istat.is2.dataset.domain.DatasetColumn;
+import it.istat.is2.dataset.domain.StatisticalVariableCls;
 import it.istat.is2.dataset.service.DatasetService;
 
 @RestController
@@ -60,9 +60,9 @@ public class DatasetControllerRest {
 
 	@GetMapping("/datasetcolonnasql/{dfile}/{rigainf}/{rigasup}")
 	@ResponseBody
-	public List<DatasetColonna> loadDataSetColonnaSql(@PathVariable("dfile") Long dfile,
+	public List<DatasetColumn> loadDataSetColonnaSql(@PathVariable("dfile") Long dfile,
 			@PathVariable("rigainf") Integer rigainf, @PathVariable("rigasup") Integer rigasup) throws IOException {
-		List<DatasetColonna> df = datasetService.findAllDatasetColonnaSQL(dfile, rigainf, rigasup);
+		List<DatasetColumn> df = datasetService.findAllDatasetColumnSQL(dfile, rigainf, rigasup);
 		return df;
 	}
 
@@ -101,12 +101,12 @@ public class DatasetControllerRest {
 	}
 
 	@RequestMapping(value = "/rest/setvariabilesum/{idcol}/{idvar}", method = RequestMethod.POST)
-	public DatasetColonna setVarSum(HttpServletRequest request, Model model, @PathVariable("idcol") Long idcol,
+	public DatasetColumn setVarSum(HttpServletRequest request, Model model, @PathVariable("idcol") Long idcol,
 			@PathVariable("idvar") Integer idvar) throws IOException {
 
-		DatasetColonna dcol = datasetService.findOneColonna(idcol);
-		TipoVariabileSum sum = new TipoVariabileSum(idvar);
-		dcol.setTipoVariabile(sum);
+		DatasetColumn dcol = datasetService.findOneColonna(idcol);
+		StatisticalVariableCls sum = new StatisticalVariableCls(idvar);
+		dcol.setVariabileType(sum);
 		try {
 			dcol = datasetService.salvaColonna(dcol);
 		} catch (Exception e) {
@@ -151,7 +151,7 @@ public class DatasetControllerRest {
 		String element = null;
 		String ordine = null;
 		String idcol = null;
-		DatasetColonna datasetCol = new DatasetColonna();
+		DatasetColumn datasetCol = new DatasetColumn();
 		while (stringTokenizerElements.hasMoreElements()) {
 			element = stringTokenizerElements.nextElement().toString();
 			StringTokenizer stringTokenizerValues = new StringTokenizer(element, "=");
@@ -163,7 +163,7 @@ public class DatasetControllerRest {
 			Short ordineC = Short.parseShort(ordine);
 			datasetCol = datasetService.findOneColonna(idc);
 
-			datasetCol.setOrdine(ordineC);
+			datasetCol.setOrderCode(ordineC);
 			datasetService.salvaColonna(datasetCol);
 		}
 

@@ -31,47 +31,37 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * The persistent class for the SX_STEP_INSTANCE database table.
- *
- */
 @Data
 @Entity
-@Table(name = "SX_STEP_INSTANCE")
+@Table(name = "IS2_STEP_INSTANCE")
 @NamedQuery(name = "StepInstance.findAll", query = "SELECT s FROM StepInstance s")
 public class StepInstance implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "ID")
     private Long id;
-
+    @Column(name = "METHOD")
+    private String method;
+    @Column(name = "DESCR")
     private String descr;
+    @Column(name = "LABEL")
+    private String label;
 
-    private String etichetta;
-
-    private String fname;
-    
-    // bi-directional many-to-one association to SxAppInstance
     @ManyToMany(mappedBy = "stepInstances", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
-    private List<BusinessStep> businessSteps;
+    private List<ProcessStep> processSteps;
 
-    // bi-directional many-to-one association to AppService
     @ManyToOne
-    @JoinColumn(name = "SERVIZIO")
+    @JoinColumn(name = "APP_SERVICE_ID")
     @JsonBackReference
     private AppService appService;
-
-    // bi-directional many-to-one association to SxStepPattern
+    
+    // bi-directional many-to-one association to StepInstanceSignature
     @OneToMany(mappedBy = "stepInstance")
     @JsonBackReference
-    private List<StepInstanceAppRole> sxStepPatterns;
-
-    // bi-directional many-to-one association to SxParPattern
-    @OneToMany(mappedBy = "stepInstance")
-    @JsonBackReference
-    private List<StepInstanceParameter> sxParPatterns;
+    private List<StepInstanceSignature> stepInstanceSignatures;
 
     public StepInstance() {
     }

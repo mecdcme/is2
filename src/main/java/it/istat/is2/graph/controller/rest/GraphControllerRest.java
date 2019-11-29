@@ -23,7 +23,7 @@
  */
 package it.istat.is2.graph.controller.rest;
 
-import it.istat.is2.dataset.domain.DatasetColonna;
+import it.istat.is2.dataset.domain.DatasetColumn;
 import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.graph.bean.Coordinate;
 import it.istat.is2.graph.bean.GraphData;
@@ -45,12 +45,12 @@ public class GraphControllerRest {
     private DatasetService datasetService;
 
     @GetMapping("/rest/graph/getColumns/{ids}")
-    public List<DatasetColonna> getColumns(HttpServletRequest request, @PathVariable("ids") List<Integer> ids) {
-        List<DatasetColonna> colonne = new ArrayList();
-        DatasetColonna colonna;
+    public List<DatasetColumn> getColumns(HttpServletRequest request, @PathVariable("ids") List<Integer> ids) {
+        List<DatasetColumn> colonne = new ArrayList();
+        DatasetColumn colonna;
         for (Integer id : ids) {
             colonna = datasetService.findOneColonna(new Long(id));
-            System.out.println("Nome colonna " + colonna.getNome());
+            System.out.println("Nome colonna " + colonna.getName());
             colonne.add(colonna);
         }
         return colonne;
@@ -61,8 +61,8 @@ public class GraphControllerRest {
         List<String> valorix;
         List<String> valoriy;
         List<Point> points = new ArrayList();
-        valorix = datasetService.findOneColonna(new Long(ids.get(0))).getDatiColonna();
-        valoriy = datasetService.findOneColonna(new Long(ids.get(1))).getDatiColonna();
+        valorix = datasetService.findOneColonna(new Long(ids.get(0))).getContents();
+        valoriy = datasetService.findOneColonna(new Long(ids.get(1))).getContents();
         for (int i = 0; i < valorix.size(); i++) {
             points.add(new Point(valorix.get(i), valoriy.get(i)));
         }
@@ -72,8 +72,8 @@ public class GraphControllerRest {
     @GetMapping("/rest/graph/getCoordinates/{ids}")
     public Coordinate geCoordinates(HttpServletRequest request, @PathVariable("ids") List<Integer> ids) {
         Coordinate coordinateXY = new Coordinate();
-        coordinateXY.setX(datasetService.findOneColonna(new Long(ids.get(0))).getDatiColonna());
-        coordinateXY.setY(datasetService.findOneColonna(new Long(ids.get(1))).getDatiColonna());
+        coordinateXY.setX(datasetService.findOneColonna(new Long(ids.get(0))).getContents());
+        coordinateXY.setY(datasetService.findOneColonna(new Long(ids.get(1))).getContents());
         return coordinateXY;
     }
 
@@ -84,19 +84,19 @@ public class GraphControllerRest {
         Map<String, List<String>> filterData = new HashMap<>();
         for (Integer filter : filters) {
             if (filter > 0) {
-                filterData.put(datasetService.findOneColonna(new Long(filter)).getNome(), datasetService.findOneColonna(new Long(filter)).getDatiColonna());
+                filterData.put(datasetService.findOneColonna(new Long(filter)).getName(), datasetService.findOneColonna(new Long(filter)).getContents());
             }
         }
         Map<String, List<String>> xData = new HashMap<>();
         for (Integer x: xAxis) {
             if (x > 0) {
-                xData.put(datasetService.findOneColonna(new Long(x)).getNome(), datasetService.findOneColonna(new Long(x)).getDatiColonna());
+                xData.put(datasetService.findOneColonna(new Long(x)).getName(), datasetService.findOneColonna(new Long(x)).getContents());
             }
         }
         Map<String, List<String>> yData = new HashMap<>();
         for (Integer y: yAxis) {
             if (y > 0) {
-                yData.put(datasetService.findOneColonna(new Long(y)).getNome(), datasetService.findOneColonna(new Long(y)).getDatiColonna());
+                yData.put(datasetService.findOneColonna(new Long(y)).getName(), datasetService.findOneColonna(new Long(y)).getContents());
             }
         }
 

@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.workflow.dao.BusinessProcessDao;
-import it.istat.is2.workflow.domain.Elaborazione;
+import it.istat.is2.workflow.domain.DataProcessing;
 import it.istat.is2.workflow.domain.BusinessProcess;
-import it.istat.is2.workflow.domain.BusinessStep;
+import it.istat.is2.workflow.domain.ProcessStep;
 import it.istat.is2.workflow.domain.StepInstance;
 import it.istat.is2.workflow.engine.EngineFactory;
 import it.istat.is2.workflow.engine.EngineService;
@@ -25,7 +25,7 @@ import it.istat.is2.workflow.service.WorkflowService;
 
 @Component
 @StepScope
-public class WorkFlowBatchProcessor implements ItemReader<Elaborazione> {
+public class WorkFlowBatchProcessor implements ItemReader<DataProcessing> {
 
     @Value("#{jobParameters['idElaborazione']}")
     private Long idElaborazione;
@@ -48,12 +48,12 @@ public class WorkFlowBatchProcessor implements ItemReader<Elaborazione> {
 	private NotificationService notificationService;
 
     @Override
-    public Elaborazione read()
+    public DataProcessing read()
             throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        Elaborazione elaborazione = workflowService.findElaborazione(idElaborazione);
+        DataProcessing elaborazione = workflowService.findDataProcessing(idElaborazione);
         BusinessProcess businessProcess = businessProcessDao.findById(idBProc).orElse(new BusinessProcess());
         for (Iterator<?> iterator = businessProcess.getBusinessSteps().iterator(); iterator.hasNext();) {
-            BusinessStep businessStep = (BusinessStep) iterator.next();
+            ProcessStep businessStep = (ProcessStep) iterator.next();
             for (Iterator<?> iteratorStep = businessStep.getStepInstances().iterator(); iteratorStep.hasNext();) {
                 StepInstance stepInstance = (StepInstance) iteratorStep.next();
                 elaborazione = doStep(elaborazione, stepInstance);
@@ -62,8 +62,8 @@ public class WorkFlowBatchProcessor implements ItemReader<Elaborazione> {
         return null;
     }
 
-    public Elaborazione doStep(Elaborazione elaborazione, StepInstance stepInstance) throws Exception {
-        EngineService engine = engineFactory.getEngine(stepInstance.getAppService().getInterfaccia());
+    public DataProcessing doStep(DataProcessing elaborazione, StepInstance stepInstance) throws Exception {
+        EngineService engine = engineFactory.getEngine(stepInstance.getAppService().getLanguage());
        
         try {
             engine.init(elaborazione, stepInstance);

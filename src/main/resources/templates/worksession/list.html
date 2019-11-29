@@ -29,7 +29,7 @@
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
             $(document).ready(function () {
-                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+                setMenuActive([[${session.sessionBean.businessFunction.id}]]);
             });
             var _remove_msg_dialog = [[#{session.elimination.message}]];
             var _mandatory_field = [[#{newsession.dialog.mandatory.field}]];
@@ -49,7 +49,7 @@
                         <a th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <span th:text="${session.sessioneBean.businessFunction.name}"></span>
+                        <span th:text="${session.sessionBean.businessFunction.name}"></span>
                     </li>
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
@@ -79,26 +79,26 @@
                                         <table class="table table-sm" th:if="${listasessioni}" cellspacing="0" style="width:100%">
                                             <thead>
                                                 <tr th:unless="${(listasessioni == null) or (listasessioni.size() == 0) }">
-                                                    <th><span th:text="#{listasessioni.nome}"></span></th>
-                                                    <th><span th:text="#{listasessioni.descrizione}"></span></th>
-                                                    <th><span th:text="#{listasessioni.nome.file}"></span></th>
-                                                    <th><span th:text="#{listasessioni.nome.regole}"></span></th>
-                                                    <th><span th:text="#{listasessioni.nome.elaborazione}"></span></th>
+                                                    <th><span th:text="#{listasessioni.name}"></span></th>
+                                                    <th><span th:text="#{listasessioni.descr}"></span></th>
+                                                    <th><span th:text="#{listasessioni.name.file}"></span></th>
+                                                    <th><span th:text="#{listasessioni.name.regole}"></span></th>
+                                                    <th><span th:text="#{listasessioni.name.elaborazione}"></span></th>
                                                     <th><span th:text="#{listasessioni.data.creazione}"></span></th>
                                                     <th colspan="2"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr th:each="sessione : ${listasessioni}" th:unless="${(listasessioni == null) or (listasessioni.size() == 0) }">
-                                                    <td th:id="${'sesnome_'+ sessione.id}" th:text="${sessione.nome}"></td>
-                                                    <td th:id="${'sesdesc_'+ sessione.id}" th:text="${sessione.descrizione}"></td>
+                                                    <td th:id="${'sesnome_'+ sessione.id}" th:text="${sessione.name}"></td>
+                                                    <td th:id="${'sesdesc_'+ sessione.id}" th:text="${sessione.descr}"></td>
                                                     <td th:if="${(sessione.datasetFiles!=null) and (sessione.datasetFiles.size()>0)}" th:text="${sessione.datasetFiles.size()}"></td>
                                                     <td th:unless="${(sessione.datasetFiles!=null) and (sessione.datasetFiles.size()>0)}">-</td>
                                                     <td th:if="${(sessione.ruleSets!=null) and (sessione.ruleSets.size()>0)}" th:text="${sessione.ruleSets.size()}"></td>
                                                     <td th:unless="${(sessione.ruleSets!=null) and (sessione.ruleSets.size()>0)}">-</td>
-                                                    <td th:if="${(sessione.listaElaborazioni!=null) and (sessione.listaElaborazioni.size()>0)}" th:text="${sessione.listaElaborazioni.size()}"></td>
-                                                    <td th:unless="${(sessione.listaElaborazioni!=null) and (sessione.listaElaborazioni.size()>0)}">-</td>
-                                                    <td th:id="${'sesdata_'+ sessione.dataCreazione}" th:text="${#dates.format(sessione.dataCreazione, 'dd/MM/yyyy HH:mm')}"></td>
+                                                    <td th:if="${(sessione.dataProcessings!=null) and (sessione.dataProcessings.size()>0)}" th:text="${sessione.dataProcessings.size()}"></td>
+                                                    <td th:unless="${(sessione.dataProcessings!=null) and (sessione.dataProcessings.size()>0)}">-</td>
+                                                    <td th:id="${'sesdata_'+ sessione.lastUpdate}" th:text="${#dates.format(sessione.lastUpdate, 'dd/MM/yyyy HH:mm')}"></td>
                                                     <td style="width: 1%">
                                                         <a class="towait" th:title="#{title.button.show.process}" th:href="@{'/sessione/apri/'+${sessione.id}}"> <i class="fa fa-folder-open"></i></a>
                                                     </td>
@@ -124,7 +124,7 @@
             <div class="modal-dialog " role="document">
                 <div class="modal-content ">
                     <form th:action="@{/sessione/nuovasessione}" id="form" class="form-horizontal" method="post">
-                        <input type="hidden" name="idBusinessFunction" th:value="${session.sessioneBean.businessFunction.id}"/>
+                        <input type="hidden" name="idBusinessFunction" th:value="${session.sessionBean.businessFunction.id}"/>
                         <div class="modal-header">
                             <h5 class="modal-title">
                                 <i class="fa fa-folder-open"></i>
@@ -136,14 +136,14 @@
                         </div>
                         <div class="modal-body form">
                             <div class="form-group">
-                                <label class="control-label" th:text="#{nuova.sessione.nome}+'*'"><span>Nome</span></label>
+                                <label class="control-label" th:text="#{nuova.sessione.name}+'*'"><span>Nome</span></label>
                                 <input name="nome" id="nome-sessione" th:title="#{generic.label.name}" class="form-control" type="text" />
                                 <span class="help-block">
                                     <small class="text-danger" id="nomesesserror"></small>
                                 </span>
                             </div>
                             <div class="form-group">
-                                <label class="control-label" th:text="#{nuova.sessione.descrizione}"> <span>Descrizione</span></label>
+                                <label class="control-label" th:text="#{nuova.sessione.descr}"> <span>Descrizione</span></label>
                                 <input name="descrizione" th:title="#{generic.label.description}" class="form-control" type="text" />
                                 <span class="help-block"></span>
                             </div>

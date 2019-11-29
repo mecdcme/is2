@@ -27,16 +27,14 @@ import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.rule.domain.Rule;
-import it.istat.is2.rule.domain.RuleType;
+import it.istat.is2.rule.domain.RuleCls;
 import it.istat.is2.rule.domain.Ruleset;
 import it.istat.is2.rule.engine.EngineValidate;
 import static it.istat.is2.rule.engine.EngineValidate.INPUT_NAMES_PREFIX;
 import it.istat.is2.rule.forms.RuleCreateForm;
-import it.istat.is2.workflow.dao.ClassificationDao;
 import it.istat.is2.workflow.dao.RuleDao;
 import it.istat.is2.workflow.dao.RuleTypeDao;
 import it.istat.is2.workflow.dao.RulesetDao;
-import it.istat.is2.workflow.domain.Classification;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
 
@@ -75,8 +73,6 @@ public class RuleService {
     @Autowired
     private RulesetDao rulesetDao;
     @Autowired
-    private ClassificationDao sxClassificationDao;
-    @Autowired
     private EngineValidate engine;
     @Autowired
 	private NotificationService notificationService;
@@ -91,17 +87,12 @@ public class RuleService {
         return (List<Rule>) this.ruleDao.findAll();
     }
 
-    public List<RuleType> findAllRuleType() {
-        return (List<RuleType>) ruleTypeDao.findAll();
+    public List<RuleCls> findAllRuleType() {
+        return (List<RuleCls>) ruleTypeDao.findAll();
     }
-    public List<Classification> findAllClassifications() {
-        return (List<Classification>) sxClassificationDao.findAll();
-    }
-    public RuleType findRuleTypeById(short idrule) {
+ 
+    public RuleCls findRuleTypeById(short idrule) {
         return ruleTypeDao.findById(idrule);
-    }
-    public Classification findClassificationById(short idclassification) {
-        return sxClassificationDao.findById(idclassification);
     }
 
 	public Map<String,List<String>> runValidate(Ruleset ruleset) throws Exception {
@@ -119,7 +110,7 @@ public class RuleService {
 		// Create array of names for R
 		inputNames = new String[rules.size()];
 		for (int i = 0; i < rules.size(); i++) {
-			inputNames[i] = rules.get(i).getCode();
+			inputNames[i] = rules.get(i).getName();
 		}
 
 		try {
@@ -160,7 +151,7 @@ public class RuleService {
         }
 
         String formula = null;
-        Classification classificazione = new Classification();
+        RuleCls classificazione = new RuleCls();
         classificazione.setId(Short.parseShort(idclassificazione));
         Iterator<CSVRecord> itr = records.iterator();
         // If skipFirstLine equals 1 skips first line
@@ -173,18 +164,18 @@ public class RuleService {
             Rule regola = new Rule();
             regola.setActive((short) 1);
             regola.setRule(formula);          
-            regola.setSxClassification(classificazione);
+            regola.setRuleType(classificazione);
             regola.setRuleset(ruleset);
             regola.setCode(labelCodeRule+(counter++));
             ruleset.getRules().add(regola);
 
         }
 
-        ruleset.setNomeFile(nomeFile);
+        ruleset.setFileName(nomeFile);
         ruleset.setDescr(descrizione);
-        ruleset.setLabelFile(etichetta);
-        ruleset.setNumeroRighe(ruleset.getRules().size());
-        ruleset.setSessioneLavoro(sessionelv);
+        ruleset.setFileLabel(etichetta);
+        ruleset.setRulesTotal(ruleset.getRules().size());
+        ruleset.setWorkSession(sessionelv);
 
         ruleset = rulesetDao.save(ruleset);
 
@@ -207,7 +198,7 @@ public class RuleService {
     }
     
     public List<Ruleset> findRulesetBySessioneLavoro(WorkSession sessionlv) {
-        return rulesetDao.findBySessioneLavoro(sessionlv);
+        return rulesetDao.findByWorkSession(sessionlv);
     }
     public Ruleset findRulesetById(Integer id) {        
         return rulesetDao.findById(id).orElse(null);
@@ -238,12 +229,12 @@ public class RuleService {
 
         Rule rule = ruleDao.findById(ruleForm.getRuleId()).orElse(null);
 
-        Classification classif = findClassificationById(ruleForm.getClassificazione());
+        RuleCls classif = findRuleTypeById(ruleForm.getClassificazione());
         if (rule != null) {
             rule.setRule(ruleForm.getRule());
             rule.setDescr(ruleForm.getDescrizione());
             rule.setCode(ruleForm.getCodeRule());
-            rule.setSxClassification(classif);
+            rule.setRuleType(classif);
             ruleDao.save(rule);
         }
 
@@ -258,7 +249,7 @@ public class RuleService {
         if(rule != null){
             ruleSet = rule.getRuleset();
             numberOfRules = ruleDao.countByRuleset(ruleSet);
-            ruleSet.setNumeroRighe(numberOfRules - 1);
+            ruleSet.setRulesTotal(numberOfRules - 1);
             rulesetDao.save(ruleSet);
         }
         

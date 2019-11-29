@@ -36,6 +36,8 @@ import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.dao.LogDao;
 import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.util.IS2Const;
+import it.istat.is2.worksession.domain.WorkSession;
+
 import java.util.ArrayList;
 
 @Service
@@ -53,18 +55,18 @@ public class LogService {
 
     public List<Log> findByIdSessione(Long idSessione) {
        // return (List<Log>) this.logDao.findByIdSessioneAndTipoOrderByIdDesc(idSessione, IS2Const.OUTPUT_DEFAULT);
-        return (List<Log>) this.logDao.findByIdSessioneOrderByIdAsc(idSessione);
+        return (List<Log>) this.logDao.findByWorkSessionOrderByIdAsc(new WorkSession(idSessione));
     }
 
     public List<Log> findByIdSessioneAndTipo(Long idSessione, String tipo) {
-        return (List<Log>) this.logDao.findByIdSessioneAndTipoOrderByIdAsc(idSessione, tipo);
+        return (List<Log>) this.logDao.findByWorkSessionAndTypeOrderByIdAsc(new WorkSession(idSessione), tipo);
     }
         
     public List<Log> findByIdSessione() {
          SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
          List<Log> logs;
          if (sessionBean != null) {
-             logs = this.logDao.findByIdSessioneAndTipoOrderByIdDesc(sessionBean.getId(),IS2Const.OUTPUT_DEFAULT);
+             logs = this.logDao.findByWorkSessionAndTypeOrderByIdDesc(new WorkSession(sessionBean.getId()),IS2Const.OUTPUT_DEFAULT);
          } else{
              logs = new ArrayList<>();
          }
@@ -75,7 +77,7 @@ public class LogService {
          SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
          List<Log> logs;
          if (sessionBean != null) {
-             logs = this.logDao.findByIdSessioneAndTipoOrderByIdAsc(sessionBean.getId(),tipo);
+             logs = this.logDao.findByWorkSessionAndTypeOrderByIdAsc(new WorkSession(sessionBean.getId()),tipo);
          } else{
              logs = new ArrayList<>();
          }
@@ -83,11 +85,11 @@ public class LogService {
     }
     
     public int deleteByIdSessione(Long idSessione) {
-        return this.logDao.deleteByIdSessione(idSessione);
+        return this.logDao.deleteByWorkSession(new WorkSession(idSessione));
     }
     
     public int deleteByIdSessioneAndTipo(Long idSessione, String tipo) {
-        return this.logDao.deleteByIdSessioneAndTipo(idSessione, tipo);
+        return this.logDao.deleteByWorkSessionAndType(idSessione, tipo);
     }
     
     public void save(String msg) {
@@ -96,12 +98,12 @@ public class LogService {
 
         Log log = new Log();
         if (sessionBean != null && sessionBean.getId()!=null ) {
-            log.setIdSessione(sessionBean.getId());
+            log.setWorkSession(new WorkSession(sessionBean.getId()));
         } else{
-            log.setIdSessione(new Long(-1));
+        	 log.setWorkSession(new WorkSession());
         }
         log.setMsg(msg);
-        log.setTipo(IS2Const.OUTPUT_DEFAULT);
+        log.setType(IS2Const.OUTPUT_DEFAULT);
         log.setMsgTime(new Date());
 
         this.logDao.save(log);
@@ -113,12 +115,12 @@ public class LogService {
 
         Log log = new Log();
         if (sessionBean != null) {
-            log.setIdSessione(sessionBean.getId());
+            log.setWorkSession(new WorkSession(sessionBean.getId()));
         } else{
-            log.setIdSessione(new Long(-1));
+        	  log.setWorkSession(null);
         }
         log.setMsg(msg);
-        log.setTipo(tipo);
+        log.setType(tipo);
         log.setMsgTime(new Date());
 
         this.logDao.save(log);

@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 
 import it.istat.is2.workflow.dao.BusinessStepDao;
 import it.istat.is2.workflow.domain.BusinessProcess;
-import it.istat.is2.workflow.domain.BusinessStep;
+import it.istat.is2.workflow.domain.ProcessStep;
 
 @Service
 public class BusinessStepService {
@@ -40,13 +40,13 @@ public class BusinessStepService {
     @Autowired
     BusinessStepDao businessStepDao;
 
-    public List<BusinessStep> findBStepByIdProcess(Long idprocess) {
+    public List<ProcessStep> findBStepByIdProcess(Long idprocess) {
         List<BusinessProcess> businessProcesses = new ArrayList<>();
         businessProcesses.add(new BusinessProcess(idprocess));
         return businessStepDao.findByBusinessProcesses(businessProcesses);
     }
 
-    public Optional<BusinessStep> findBusinessStep(Long idbstep) {
+    public Optional<ProcessStep> findBusinessStep(Long idbstep) {
         return businessStepDao.findById(idbstep);
     }
 }

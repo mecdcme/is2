@@ -30,36 +30,38 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
-/**
- * The persistent class for the SX_BUSINESS_FUNCTION database table.
- *
- */
 @Data
 @Entity
-@Table(name = "SX_BUSINESS_FUNCTION")
-@NamedQuery(name = "BusinessFunction.findAll", query = "SELECT s FROM BusinessFunction s")
+@Table(name = "IS2_BUSINESS_FUNCTION")
 public class BusinessFunction implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name="ID")
     private Long id;
-
+    @Column(name="NAME")
+    private String name;
+    @Column(name="DESCR")
     private String descr;
-
-    private String etichetta;
-
-    private String nome;
+    @Column(name="LABEL")
+    private String label;
+    @Column(name="ACTIVE")
+    private Short active;
 
     @JsonManagedReference
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "SX_BFUNC_BPROCESS", joinColumns = @JoinColumn(name = "BFUNCTION"), inverseJoinColumns = @JoinColumn(name = "BPROCESS"))
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name = "is2_link_function_process", joinColumns = {
+        @JoinColumn(name = "BUSINESS_FUNCTION_ID", referencedColumnName = "ID", nullable = false)}, inverseJoinColumns = {
+        @JoinColumn(name = "BUSINESS_PROCESS_ID", referencedColumnName = "ID", nullable = false)})
     private List<BusinessProcess> businessProcesses;
 
     @JsonManagedReference
     @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "SX_BFUNCTION_ARTIFACTBFUNCTION", joinColumns = @JoinColumn(name = "BFUNCTION"), inverseJoinColumns = @JoinColumn(name = "ARTIFACT"))
-    private List<ArtifactBFunction> sxArtifacts;
+    @JoinTable(name = "is2_link_function_view_data_type", joinColumns = {
+        @JoinColumn(name = "BUSINESS_FUNCTION_ID", referencedColumnName = "ID", nullable = false)}, inverseJoinColumns = {
+        @JoinColumn(name = "VIEW_DATA_TYPE_ID", referencedColumnName = "ID", nullable = false)})
+    private List<ViewDataType> viewDataType;
 
     public BusinessFunction() {
     }

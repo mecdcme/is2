@@ -30,7 +30,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 
@@ -41,7 +41,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "sx_users")
+@Table(name = "IS2_USERS")
 @DynamicUpdate
 public class User implements Serializable {
 
@@ -49,42 +49,37 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userid")
-    private Long userid;
-
-    @Column(name = "password", length = 100)
-    private String password;
-
+    @Column(name = "ID")
+    private Long id;
     @Email
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "EMAIL", unique = true, nullable = false)
     private String email;
-
-    @Column(name = "name", length = 100)
+    @Column(name = "NAME")
     private String name;
-
-    @Column(name = "surname", length = 100)
+    @Column(name = "SURNAME")
     private String surname;
-
- 
-    @OneToOne
-    @JoinColumn(name = "roleid")
+    @Column(name = "PASSWORD")
+    private String password;
+    
+    @ManyToOne
+    @JoinColumn(name = "ROLE_ID")
     private UserRole role;
 
     public User() {
 
     }
 
-    public User(String email, String fullname) {
+    public User(String email) {
         this.email = email;
     }
 
-    public User(Long userid, String email, String fullname) {
-        this.userid = userid;
+    public User(Long userid, String email) {
+        this.id = userid;
         this.email = email;
     }
 
     public User(User user) {
-        this.userid = user.userid;
+        this.id = user.id;
         this.name = user.name;
         this.surname = user.surname;
         this.email = user.email;
@@ -93,6 +88,6 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + userid + ", email='" + email + '\'' + ", passwordHash='" + password + '\'' + '}';
+        return "User{" + "id=" + id + ", email='" + email + '\'' + ", passwordHash='" + password + '\'' + '}';
     }
 }

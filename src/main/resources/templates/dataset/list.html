@@ -44,13 +44,13 @@
                         <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:title="${session.sessioneBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
-                            <span th:text="${session.sessioneBean.businessFunction.name}"></span>
+                        <a th:title="${session.sessionBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
+                            <span th:text="${session.sessionBean.businessFunction.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:title="#{session.link.title}" th:if="${session.sessioneBean}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}"> 
-                            <span th:text="${session.sessioneBean.nome}"></span>
+                        <a th:title="#{session.link.title}" th:if="${session.sessionBean}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}"> 
+                            <span th:text="${session.sessionBean.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
@@ -59,7 +59,7 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a th:title="#{close.data.link.title}" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
+                            <a th:title="#{close.data.link.title}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -68,7 +68,7 @@
 
                 <div class="container-fluid">
                     <div class="animated fadeIn">
-                        <input id="idsessioneBean" type="hidden" value="${session.sessioneBean.id}" />
+                        <input id="idsessionBean" type="hidden" value="${session.sessionBean.id}" />
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -91,10 +91,10 @@
                                     <div class="card-body">
                                         <form id="inputFileForm" th:action="@{'/loadInputData'}" method="post" enctype="multipart/form-data">
                                             <input type="hidden" value="" name="descrizione" id="desc" /> 
-                                            <input type="hidden" th:value="${session.sessioneBean.id}" th:name="idsessione" />
+                                            <input type="hidden" th:value="${session.sessionBean.id}" th:name="idsessione" />
                                             <input type="hidden" value="" name="delimiter" id="delimiter" />
                                             <input type="hidden" value="" name="labelFile" id="label_f" />
-                                            <input type="hidden" value="" name="tipoDato" id="tipo_dat" />
+                                            <input type="hidden" value="" name="fileType" id="tipo_dat" />
                                             <div id="upload" class="row">
                                                 <div class="col-lg-8">
                                                     <div id="upload_file" class="form-group">
@@ -109,32 +109,29 @@
                                             </div>
                                         </form> 
 
-                                        <table id="datasetList" class="table table-sm" th:if="${listaDataset}" cellspacing="0" style="width:100%">
+                                        <table id="datasetList" class="table table-sm" th:if="${datasetList}" cellspacing="0" style="width:100%">
                                             <thead>
-                                                <tr th:unless="${(listaDataset == null) or (listaDataset.size() == 0) }">                                                
-                                                    <th><span th:text="#{listaDataset.nome}">Nome</span></th>
-                                                    <th><span th:text="#{listaDataset.label}">Label</span></th>
-                                                    <th><span th:text="#{listaDataset.formatofile}">Formato</span></th>
-                                                    <th><span th:text="#{listaDataset.numerorighe}">N. Righe</span></th>
+                                                <tr th:unless="${(datasetList == null) or (datasetList.size() == 0) }">                                                
+                                                    <th><span th:text="#{datasetList.name}">Nome</span></th>
+                                                    <th><span th:text="#{datasetList.label}">Label</span></th>
+                                                    <th><span th:text="#{datasetList.fileformat}">Formato</span></th>
+                                                    <th><span th:text="#{datasetList.totalRows}">N. Righe</span></th>
                                                     <th colspan="2"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="dataset : ${listaDataset}"
-                                                    th:unless="${(listaDataset == null) or (listaDataset.size() == 0) }">
-                                                    <td th:text="${dataset.nomeFile}"></td>
-                                                    <td th:text="${dataset.labelFile}"></td>
-                                                    <td th:text="${dataset.formatoFile}"></td>
-                                                    <td th:text="${dataset.numerorighe}"></td>
-                                                    <td th:unless="${dataset.tipoDato != null}" th:text="null"></td>
+                                                <tr th:each="dataset : ${datasetList}"
+                                                    th:unless="${(datasetList == null) or (datasetList.size() == 0) }">
+                                                    <td th:text="${dataset.fileName}"></td>
+                                                    <td th:text="${dataset.fileLabel}"></td>
+                                                    <td th:text="${dataset.fileFormat}"></td>
+                                                    <td th:text="${dataset.totalRows}"></td>
+                                                    <td th:unless="${dataset.dataType != null}" th:text="null"></td>
                                                     <td style="width: 1%">
-                                                        <a th:if="${dataset.tipoDato.nome == 'INPUT'}" class='towait' th:title="#{show.dataset.link.title}" th:href="@{'/viewDataset/'+${dataset.id}}"> 
+                                                        <a class='towait' th:title="#{show.dataset.link.title}" th:href="@{'/viewDataset/'+${dataset.id}}"> 
                                                             <i class="fa fa-search"></i>
                                                         </a>
-                                                        <a th:unless="${dataset.tipoDato.nome == 'INPUT'}" class='towait' th:title="#{show.ruleset.link.title}" th:href="@{'/viewRuleset/'+${dataset.id}}"> 
-                                                            <i class="fa fa-search"></i>
-                                                        </a>
-                                                    </td>
+                                                   </td>
                                                     <!--td style="width: 1%">
                                                         <a th:href="@{'/graph/home/'+${dataset.id}}" title="Analytics">												
                                                             <i class="fa fa-image"></i>
@@ -142,14 +139,14 @@
                                                     </td-->
                                                     <td style="width: 1%">
                                                         <a href="javascript:void(0)" th:title="#{dataset.lista.elimina}" role="button"
-                                                           th:attr="onclick='javascript:eliminaDataset(' + ${dataset.id} + ', \'' + ${dataset.nomeFile} + '\')'">												
+                                                           th:attr="onclick='javascript:eliminaDataset(' + ${dataset.id} + ', \'' + ${dataset.fileName} + '\')'">												
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <span th:if="${(listaDataset == null) or (listaDataset.size() == 0)}" th:text="#{listaDataset.nodataset.message}">
+                                        <span th:if="${(datasetList == null) or (datasetList.size() == 0)}" th:text="#{datasetList.nodataset.message}">
                                             No dataset available for this session.
                                         </span>
                                     </div>
@@ -237,9 +234,9 @@
                             <div class="col-3">
                                 <label th:text="#{file.data.type}"><span>Tipo dato:</span></label>
                                 <select id="tipo_dato" class="form-control">
-                                    <option th:each="tipod : ${listaTipoDato}"
+                                    <option th:each="tipod : ${fileTypeList}"
                                             th:value="${tipod.id}"
-                                            th:text="${tipod.nome}">
+                                            th:text="${tipod.name}">
                                     </option>
                                 </select>     
                             </div>
@@ -285,7 +282,7 @@
                     <form id="dataset-fields-table" th:action="@{'/dataset/loadtable'}"
                         method="post">
                         <input type="hidden" value="" name="dbschema" id="db-schema" />
-                        <input type="hidden" th:value="${session.sessioneBean.id}" th:name="idsessione" />
+                        <input type="hidden" th:value="${session.sessionBean.id}" th:name="idsessione" />
                         <input type="hidden" value="" name="tablename" id="table-name" />
                         <div class="form-group row">
                             <div class="col-4">

@@ -28,7 +28,7 @@
         <script th:src="@{/js/worksession/sessioni.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
-                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+                setMenuActive([[${session.sessionBean.businessFunction.id}]]);
             });
             var _remove_process_msg = [[#{process.elimination.message}]];
             var _mandatory_field = [[#{newsession.dialog.mandatory.field}]];
@@ -48,18 +48,18 @@
                         <a th:href="@{/}">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
-                            <span th:text="${session.sessioneBean.businessFunction.name}"></span>
+                        <a th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
+                            <span th:text="${session.sessionBean.businessFunction.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <span th:text="${session.sessioneBean.nome}"></span>
+                        <span th:text="${session.sessionBean.name}"></span>
                     </li>
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu">
                         <div class="btn-group" role="group" aria-label="Button group">
                             <a class="breadcrumb-last-item" th:title="#{generic.title.close.button}" 
-                               th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
+                               th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -68,16 +68,16 @@
                 <div class="container-fluid">
                     <div class="animated fadeIn">
                         <div class="row">
-                            <div class="col-4 col-lg-3" th:if="${(session.sessioneBean.file != null)}">
+                            <div class="col-4 col-lg-3" th:if="${(session.sessionBean.file != null)}">
                                 <div class="card">
                                     <div class="card-body p-2 d-flex align-items-center">
-                                        <a th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                        <a th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}">
                                             <i class="fa fa-file-text bg-primary p-3 font-2xl mr-3"></i>
                                         </a>
                                         <div>
-                                            <a th:href="@{'/sessione/mostradataset/'+${session.sessioneBean.id}}">
+                                            <a th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}">
                                                 <div class="text-value-sm text-primary">
-                                                    <span th:text="${session.sessioneBean.file.size()}" ></span>
+                                                    <span th:text="${session.sessionBean.file.size()}" ></span>
                                                 </div>
                                             </a>
                                             <div class="text-muted text-uppercase font-weight-bold small">Dataset</div>
@@ -85,16 +85,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4 col-lg-3" th:if="${(session.sessioneBean.ruleset != null)}">
+                            <div class="col-4 col-lg-3" th:if="${(session.sessionBean.ruleset != null)}">
                                 <div class="card">
                                     <div class="card-body p-2 d-flex align-items-center">
-                                        <a th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                                        <a th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}">
                                             <i class="fa fa-wrench bg-primary p-3 font-2xl mr-3"></i>
                                         </a>
                                         <div>
-                                            <a th:href="@{'/rule/viewRuleset/'+${session.sessioneBean.id}}">
+                                            <a th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}">
                                                 <div class="text-value-sm text-primary">
-                                                    <span th:text="${session.sessioneBean.ruleset.size()}" ></span>
+                                                    <span th:text="${session.sessionBean.ruleset.size()}" ></span>
                                                 </div>
                                             </a>
                                             <div class="text-muted text-uppercase font-weight-bold small">Ruleset</div>
@@ -104,7 +104,7 @@
                             </div>
                         </div>
                         <!-- row -->
-                        <input id="idsessioneBean" type="hidden" value="${session.sessioneBean.id}" />
+                        <input id="idsessionBean" type="hidden" value="${session.sessionBean.id}" />
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -124,8 +124,8 @@
                                             <thead>
                                                 <tr th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
                                                     <th><span th:text="#{listasessioni.codice}">codice</span></th>
-                                                    <th><span th:text="#{listasessioni.nome}">nome</span></th>
-                                                    <th><span th:text="#{listasessioni.descrizione}">Descrizione</span></th>
+                                                    <th><span th:text="#{listasessioni.name}">nome</span></th>
+                                                    <th><span th:text="#{listasessioni.descr}">Descrizione</span></th>
                                                     <th><span th:text="#{listasessioni.processo}">Processo</span></th>
                                                     <th><span th:text="#{listasessioni.data.creazione}">data creazione</span></th>
                                                     <th colspan="2"></th>
@@ -135,10 +135,10 @@
                                                 <tr th:each="elaborazione : ${listaElaborazioni}"
                                                     th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
                                                     <td th:id="${'elabid_'+ elaborazione.id}" th:text="${elaborazione.id}"></td>
-                                                    <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.nome}"></td>
-                                                    <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.descrizione}"></td>
-                                                    <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${elaborazione.businessProcess.nome}"></td>
-                                                    <td th:id="${'elabdata_'+ elaborazione.dataElaborazione}" th:text="${#dates.format(elaborazione.dataElaborazione, 'dd/MM/yyyy HH:mm')}"></td>
+                                                    <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.name}"></td>
+                                                    <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.descr}"></td>
+                                                    <td th:id="${'elabdata_'+ elaborazione.lastUpdate}" th:text="${elaborazione.businessProcess.name}"></td>
+                                                    <td th:id="${'elabdata_'+ elaborazione.lastUpdate}" th:text="${#dates.format(elaborazione.lastUpdate, 'dd/MM/yyyy HH:mm')}"></td>
                                                     <td style="width: 1%">
                                                         <a class='towait' th:title="#{sessionewf.show.process.title.button}" th:href="@{'/ws/home/'+${elaborazione.id}}"> 
                                                             <i class="fa fa-folder-open"></i>
@@ -146,7 +146,7 @@
                                                     </td>
                                                     <td style="width: 1%">
                                                         <a th:title="#{sessionewf.del.process.title.button}" href="javascript:void(0);" role="button"                                                        
-                                                        	th:attr="onclick='javascript:eliminaElaborazione(' + ${elaborazione.id} + ', \'' + ${session.sessioneBean.id} + '\',\'' + ${elaborazione.nome} + '\')'">											
+                                                        	th:attr="onclick='javascript:eliminaElaborazione(' + ${elaborazione.id} + ', \'' + ${session.sessionBean.id} + '\',\'' + ${elaborazione.name} + '\')'">											
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </td>
@@ -169,7 +169,7 @@
             <div class="modal-dialog " role="document">
                 <div class="modal-content ">
                     <form th:action="@{/sessione/nuovoworkingset}" id="form" method="post">
-                        <input type="hidden" th:name="idsessione" th:value="${session.sessioneBean.id}" />
+                        <input type="hidden" th:name="idsessione" th:value="${session.sessionBean.id}" />
                         <div class="modal-header">
                             <h5 class="modal-title">
                                 <i class="fa fa-sitemap"></i>
@@ -181,19 +181,19 @@
                         </div>
                         <div class="modal-body form">
                             <div class="form-group">
-                                <label class="control-label" th:text="#{nuova.sessione.nome}+'*:'"><span>Nome</span></label>
+                                <label class="control-label" th:text="#{nuova.sessione.name}+'*:'"><span>Nome</span></label>
                                 <input name="nome" id="nome-elab" th:title="#{generic.label.name}" class="form-control" type="text" />
                                 <span class="help-block"><small class="text-danger" id="nomesesserror"></small></span>
                             </div>
                             <div class="form-group">
-                                <label class="control-label" th:text="#{nuova.sessione.descrizione}+':'"><span>Descrizione</span></label>
+                                <label class="control-label" th:text="#{nuova.sessione.descr}+':'"><span>Descrizione</span></label>
                                 <input name="descrizione" th:title="#{generic.label.description}" class="form-control" type="text" />
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label class="control-label"> <span id="funzione" th:text="#{nuova.elaborazione.process}+':'">Processo *:</span></label>
                                 <select name="idfunzione" id="funzioni" class="form-control" th:title="#{nuova.elaborazione.process}">
-                                    <option th:each="process : ${processesList}" th:value="${process.id}" th:text="${process.nome}"></option>
+                                    <option th:each="process : ${processesList}" th:value="${process.id}" th:text="${process.name}"></option>
                                 </select>
                                 <span class="help-block"></span>
                             </div>

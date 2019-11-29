@@ -40,6 +40,6 @@ public interface RulesetDao extends CrudRepository<Ruleset,Integer> {
 	
 	List<Ruleset> findAll();
 	
-	List<Ruleset> findBySessioneLavoro(WorkSession sessionelv);
+	List<Ruleset> findByWorkSession(WorkSession workSession);
  
 }

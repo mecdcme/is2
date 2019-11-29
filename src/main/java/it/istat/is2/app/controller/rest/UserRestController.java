@@ -129,7 +129,7 @@ public class UserRestController {
         notificationService.removeAllMessages();
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (id.compareTo(user.getUserid()) == 0) {
+        if (id.compareTo(user.getId()) == 0) {
             notificationService.addErrorMessage(messages.getMessage("user.error.delete", null,LocaleContextHolder.getLocale()));
         } else {
             try {

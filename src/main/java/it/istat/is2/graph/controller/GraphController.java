@@ -34,10 +34,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
-import it.istat.is2.dataset.domain.DatasetColonna;
+import it.istat.is2.dataset.domain.DatasetColumn;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
-import it.istat.is2.workflow.service.TipoDatoService;
+import it.istat.is2.workflow.service.DataTypeService;
 import it.istat.is2.worksession.service.WorkSessionService;
 
 @Controller
@@ -52,9 +52,9 @@ public class GraphController {
     @Autowired
     private MessageSource messages;
     @Autowired
-    private WorkSessionService sessioneLavoroService;
+    private WorkSessionService workSessionService;
     @Autowired
-    private TipoDatoService tipoDatoService;
+    private DataTypeService dataTypeService;
     @Autowired
     private LogService logService;
 
@@ -63,7 +63,7 @@ public class GraphController {
 
         DatasetFile dfile = datasetService.findDataSetFile(idfile);
 
-        List<DatasetColonna> colonne = datasetService.findAllNomeColonne(idfile);
+        List<DatasetColumn> colonne = datasetService.findAllNameColum(idfile);
         
         model.addAttribute("colonne", colonne);
         model.addAttribute("idfile", idfile);

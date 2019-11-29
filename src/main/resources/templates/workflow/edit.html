@@ -26,21 +26,21 @@
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
-        <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
-        <script th:src="@{/js/vendors/alpaca/handlebars.min.js}"></script>
-        <script th:src="@{/js/vendors/alpaca/alpaca.min.js}"></script>
+        <script th:src="@{/js/vendors/table/datatables.min.js}"  type="text/javascript"></script>
+        <script th:src="@{/js/vendors/alpaca/handlebars.min.js}"  type="text/javascript"></script>
+        <script th:src="@{/js/vendors/alpaca/alpaca.min.js}"  type="text/javascript"></script>
         <script th:src="@{/js/jquery-ui.min.js}" type="text/javascript"></script>
-        <script th:src="@{/js/workflow/elaborazione.js}"></script>
+        <script th:src="@{/js/workflow/dataProcessing.js}"  type="text/javascript"></script>
         <script th:inline="javascript">
             var showTabParam = [[${showTabParam}]];
             var _idfile = [[${idfile}]];
             var _paramTemplateMap = {};
-            var _paramList = [[${listaParametriAll}]]
+            var _paramList = [[${parameterListAll}]]
             for (i = 0; i < _paramList.length; i++) {
-                _paramTemplateMap[_paramList[i].nome] = _paramList[i].jsonTemplate;
+                _paramTemplateMap[_paramList[i].appRole.parameter.name] = _paramList[i].appRole.parameter.jsonTemplate;
             }
             $(document).ready(function () {
-                setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
+                setMenuActive([[${session.sessionBean.businessFunction.id}]]);
                 if (showTabParam) showPanel('parametri');
             });
             var matchedVariables = [[${matchedVariables}]];
@@ -78,18 +78,18 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a th:title="#{home.link.title}" th:href="@{/}">Home</a></li>
                     <li class="breadcrumb-item">
-                        <a th:title="${session.sessioneBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessioneBean.businessFunction.id}}">
-                            <span th:text="${session.sessioneBean.businessFunction.name}"></span>
+                        <a th:title="${session.sessionBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
+                            <span th:text="${session.sessionBean.businessFunction.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:title="${session.sessioneBean.nome}" th:href="@{'/sessione/apri/' + ${session.sessioneBean.id}}">
-                            <span th:text="${session.sessioneBean.nome}"></span>
+                        <a th:title="${session.sessionBean.name}" th:href="@{'/sessione/apri/' + ${session.sessionBean.id}}">
+                            <span th:text="${session.sessionBean.name}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:title="${session.sessioneBean.nomeElaborazione}" th:if="${session.sessioneBean}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
-                            <span th:if="${session.sessioneBean.nomeElaborazione}" th:text="${session.sessioneBean.nomeElaborazione}"></span>
+                        <a th:title="${session.sessionBean.dataProcessingName}" th:if="${session.sessionBean}" th:href="@{'/ws/home/'+${session.sessionBean.dataProcessingId}}">
+                            <span th:if="${session.sessionBean.dataProcessingName}" th:text="${session.sessionBean.dataProcessingName}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item">
@@ -98,7 +98,7 @@
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu d-md-down-none">
                         <div class="btn-group" role="group" aria-label="Button group">
-                            <a class="breadcrumb-last-item" th:title="#{process.close.title}" th:href="@{'/ws/home/'+${session.sessioneBean.idElaborazione}}">
+                            <a class="breadcrumb-last-item" th:title="#{process.close.title}" th:href="@{'/ws/home/'+${session.sessionBean.dataProcessingId}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
@@ -107,7 +107,7 @@
 
                 <div class="container-fluid">
                     <div class="animated fadeIn">
-                        <input id="idelaborazione" type="hidden" name="elaborazione" th:value="${elaborazione.id}" />
+                        <input id="dataProcessingId" type="hidden" name="dataProcessing" th:value="${dataProcessing.id}" />
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -118,7 +118,7 @@
                                         <span id="header-parametri" href="javascript:void(0)" onclick="javascript:showPanel('parametri');" th:title="#{process.parameters}">
                                             <span th:text="#{process.parameters}" >Parametri</span>
                                         </span>
-                                          <span th:if="${(session.sessioneBean.ruleset != null)}" id="header-ruleset" href="javascript:void(0)" onclick="javascript:showPanel('ruleset');" th:title="#{process.ruleset}">
+                                          <span th:if="${(session.sessionBean.ruleset != null)}" id="header-ruleset" href="javascript:void(0)" onclick="javascript:showPanel('ruleset');" th:title="#{process.ruleset}">
                                             <span th:text="#{process.ruleset}">Ruleset</span>
                                         </span>
                                         <span id="header-execution" href="javascript:void(0)" onclick="javascript:showPanel('execution');" th:title="#{process.runtime}">
@@ -141,30 +141,30 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="stepV,stats: ${stepVList}"
-                                                    th:unless="${(stepVList == null) or (stepVList.size() == 0) or (stepV.tipoCampo.nome == 'OUTPUT')}"
-                                                    data-th-attr="stepid=${stepV.id}">
+                                                <tr th:each="stepR,stats: ${stepRList}"
+                                                    th:unless="${(stepRList == null) or (stepRList.size() == 0) or (stepR.typeIO.name == 'OUTPUT')}"
+                                                    data-th-attr="stepid=${stepR.id}">
                                                     <td><span th:text="${stats.index+1}"></span></td>
-                                                    <td th:text="${stepV.appRole.nome}"></td>
-                                                    <td th:text="${stepV.workset.nome}"></td>
+                                                    <td th:text="${stepR.appRole.name}"></td>
+                                                    <td th:text="${stepR.workset.name}"></td>
                                                     <td>
                                                         <a href="javascript:void(0)" title="Modifica associazione" class="disabled"
-                                                           th:attr="onclick='javascript:mostraDialogModificaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.workset.nome} + '\', ' + ${stepV.appRole.id} + ', ' + ${stepV.flagRicerca} + ')'"> 
+                                                           th:attr="onclick='javascript:mostraDialogModificaAssociazione(' + ${dataProcessing.id} + ', ' + ${stepR.id} + ', \'' + ${stepR.workset.name} + '\', ' + ${stepR.appRole.id} + ')'"> 
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
                                                     </td>
                                                     <td>
                                                         <a href="javascript:void(0)" title="Elimina associazione"
-                                                           th:attr="onclick='javascript:mostraDialogEliminaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.workset.nome} + '\')'">
+                                                           th:attr="onclick='javascript:mostraDialogEliminaAssociazione(' + ${dataProcessing.id} + ', ' + ${stepR.id} + ', \'' + ${stepR.workset.name} + '\')'">
                                                             <i class="fa fa-trash-o"></i>
                                                         </a> 
-                                                        <input type="hidden" name="stepid" th:value="${stepV.id}" />
+                                                        <input type="hidden" name="stepid" th:value="${stepR.id}" />
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                         <input type="hidden" id="idelab" name="idelab" value="" />
-                                        <input type="hidden" id="idstepvar" name="idstepvar" value="" />
+                                        <input type="hidden" id="idstepVar" name="idstepVar" value="" />
                                     </div>
                                     <div class="card-body" id="card-parametri" style="display: none">
                                         <table id="parametersTable" class="table table-sm" style="width:100%">
@@ -178,33 +178,34 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="paramInstance,stats: ${listaParametriAll}" th:unless="${(listaParametriAll == null) or (listaParametriAll.size() == 0) }">
+                                                <tr th:each="paramSignInstance,stats: ${parameterListAll}" th:unless="${(parameterListAll == null) or (parameterListAll.size() == 0) }">
                                                     <td><span th:text="${stats.index+1}"></span></td>
-                                                    <td th:text="${paramInstance.nome}"></td>
-                                                    <th:block th:if="${stepParamMap.get(paramInstance.nome)}" th:with="stepP=${stepParamMap.get(paramInstance.nome)}">
+                                                    <td th:text="${paramSignInstance.appRole.parameter.name}"></td>
+                                                    <th:block th:if="${stepParamMap.get(paramSignInstance.appRole.parameter.name)}" th:with="stepP=${stepParamMap.get(paramSignInstance.appRole.parameter.name)}">
                                                         <td><span th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepP.workset.paramValue)}"></span></td>
                                                         <td>
                                                             <a href="javascript:void(0);" title="Modifica parametro"
-                                                               th:attr="data-id-elab=${elaborazione.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-id-workset=${stepP.workset.id},data-name-workset=${stepP.workset.nome},data-value-param=${stepP.workset.paramValue},onclick='javascript:openDlgModParametriWorkset(this);'">
+                                                               th:attr="data-id-elab=${dataProcessing.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-id-workset=${stepP.workset.id},data-name-workset=${stepP.workset.name},data-value-param=${stepP.workset.paramValue},onclick='javascript:openDlgModParametriWorkset(this);'">
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
                                                         </td>
                                                         <td><a href="javascript:void(0);" title="Elimina parametro"
-                                                               th:attr="data-id-elab=${elaborazione.id},data-id-param=${stepP.id},data-name-param=${stepP.workset.nome},onclick='javascript:mostraDialogEliminaParametro(this);'">
+                                                               th:attr="data-id-elab=${dataProcessing.id},data-id-param=${stepP.id},data-name-param=${stepP.workset.name},onclick='javascript:mostraDialogEliminaParametro(this);'">
                                                                 <i class="fa fa-trash-o"></i>
                                                             </a>
                                                         </td>
                                                     </th:block>
-                                                    <th:block th:unless="${stepParamMap.get(paramInstance.nome)}">
+                                                    <th:block th:unless="${stepParamMap.get(paramSignInstance.appRole.parameter.name)}">
                                                         <td><i class="fa fa-times" style="color: #f86c6b;"></i></td>
                                                          <td>
                                                             <a href="javascript:void(0);" title="Modifica parametro"
-                                                                th:attr="data-role-id=${paramInstance.appRole.id},data-param-id=${paramInstance.id},data-param-name=${paramInstance.nome},onclick='javascript:openAddParameter(this);'">
+                                                                th:attr="data-role-id=${paramSignInstance.appRole.id},data-param-id=${paramSignInstance.appRole.parameter.id},data-param-name=${paramSignInstance.appRole.parameter.name},onclick='javascript:openAddParameter(this);'">
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
                                                         </td>
                                                         <td>&nbsp;</td>
                                                     </th:block>
+                                                  
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -226,31 +227,31 @@
                                             <tbody>
                                                 <tr th:each="rulesetRole,stats: ${rulesetRoleList}" th:unless="${(rulesetRoleList == null) or (rulesetRoleList.size() == 0) }">
                                                     <td><span th:text="${stats.index+1}"></span></td>
-                                                    <td th:text="${rulesetRole.nome}"></td>
-                                                        <th:block th:if="${stepVariablesRulesetMap.get(rulesetRole.nome)}" th:with="stepP=${stepVariablesRulesetMap.get(rulesetRole.nome)}">
+                                                    <td th:text="${rulesetRole.name}"></td>
+                                                        <th:block th:if="${stepRuntimesRulesetMap.get(rulesetRole.name)}" th:with="stepP=${stepRuntimesRulesetMap.get(rulesetRole.name)}">
                                                         <td><span th:text="${stepP.workset.paramValue}"></span></td>
                                                         <td th:text="${stepP.appRole.descr}"></td>
-                                                        <td th:text="${stepP.tipoCampo.nome}"></td>
+                                                        <td th:text="${stepP.typeIO.name}"></td>
                                                         <td>
                                                             <a href="javascript:void(0);" title="Modifica parametro"
-                                                               th:attr="data-id-elab=${elaborazione.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-id-workset=${stepP.workset.id},data-name-workset=${stepP.workset.nome},data-value-param=${stepP.workset.paramValue},onclick='javascript:openDlgModParametriWorkset(this);'">
+                                                               th:attr="data-id-elab=${dataProcessing.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-id-workset=${stepP.workset.id},data-name-workset=${stepP.workset.name},data-value-param=${stepP.workset.paramValue},onclick='javascript:openDlgModParametriWorkset(this);'">
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
                                                         </td>
                                                         <td><a href="javascript:void(0);" title="Elimina parametro"
-                                                               th:attr="data-id-elab=${elaborazione.id},data-id-param=${stepP.id},data-name-param=${stepP.workset.nome},onclick='javascript:mostraDialogEliminaParametro(this);'">
+                                                               th:attr="data-id-elab=${dataProcessing.id},data-id-param=${stepP.id},data-name-param=${stepP.workset.name},onclick='javascript:mostraDialogEliminaParametro(this);'">
                                                                 <i class="fa fa-trash-o"></i>
                                                             </a>
                                                         </td>
                                                     </th:block>
-                                                    <th:block th:unless="${stepVariablesRulesetMap.get(rulesetRole.nome)}">
+                                                    <th:block th:unless="${stepRuntimesRulesetMap.get(rulesetRole.name)}">
                                                         <td>&nbsp;</td>
                                                         <td>&nbsp;</td>
                                                         <td>&nbsp;</td>
                                                         <td>&nbsp;</td>
                                                         <td>
                                                             <a href="javascript:void(0);" title="Set Ruleset"
-                                                                th:attr="data-role-id=${rulesetRole.id},data-param-name=${rulesetRole.nome},onclick='javascript:openSetRuleset(this);'">
+                                                                th:attr="data-role-id=${rulesetRole.id},data-param-name=${rulesetRole.name},onclick='javascript:openSetRuleset(this);'">
                                                                 <i class="fa fa-pencil">Add</i>
                                                             </a>
                                                         </td>
@@ -263,10 +264,7 @@
                                         <input type="hidden" id="idparam" name="idparam" value="" />
                                     </div>
                                     <div class="card-body" id="card-execution" style="display: none">
-                                        <form th:action="@{/ws/associavariabile}" id="formAssociaRuolo" class="form-horizontal" method="post">
-                                            <span id="associazione_vars"></span>
-                                        </form>
-                                        <table id="worksetRuntimeTable" class="table table-sm">
+                                      <table id="worksetRuntimeTable" class="table table-sm">
                                             <thead>
                                                 <tr>
                                                     <th style="width: 8%"><span></span></th>
@@ -277,22 +275,22 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="stepV,stats: ${stepVList}" th:unless="${(stepVList == null) or (stepVList.size() == 0)}" data-th-attr="stepid=${stepV.id}">
+                                                <tr th:each="stepR,stats: ${stepRList}" th:unless="${(stepRList == null) or (stepRList.size() == 0)}" data-th-attr="stepid=${stepR.id}">
                                                     <td><span th:text="${stats.index+1}"></span></td>
-                                                    <td th:text="${stepV.appRole.nome}"></td>
-                                                    <td th:text="${stepV.workset.nome}"></td>
+                                                    <td th:text="${stepR.appRole.name}"></td>
+                                                    <td th:text="${stepR.workset.name}"></td>
                                                     <td>
                                                         <a href="javascript:void(0)" title="Modifica associazione" class="disabled"
-                                                           th:attr="onclick='javascript:mostraDialogModificaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.workset.nome} + '\', ' + ${stepV.appRole.id} + ', ' + ${stepV.flagRicerca} + ')'"> 
+                                                           th:attr="onclick='javascript:mostraDialogModificaAssociazione(' + ${dataProcessing.id} + ', ' + ${stepR.id} + ', \'' + ${stepR.workset.name} + '\', ' + ${stepR.appRole.id} + ')'"> 
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
                                                     </td>
                                                     <td>
                                                         <a href="javascript:void(0)" title="Elimina associazione"
-                                                           th:attr="onclick='javascript:mostraDialogEliminaAssociazione(' + ${elaborazione.id} + ', ' + ${stepV.id} + ', \'' + ${stepV.workset.nome} + '\')'">
+                                                           th:attr="onclick='javascript:mostraDialogEliminaAssociazione(' + ${dataProcessing.id} + ', ' + ${stepR.id} + ', \'' + ${stepR.workset.name} + '\')'">
                                                             <i class="fa fa-trash-o"></i>
                                                         </a>
-                                                        <input type="hidden" name="stepid" th:value="${stepV.id}" />
+                                                        <input type="hidden" name="stepid" th:value="${stepR.id}" />
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -342,10 +340,10 @@
                                                     <input type="hidden" id="varLabelFile" />
                                                     <ol id="selectable">
 	                                                    <th:block th:each="datasetfile ,iter: ${datasetfiles}">
-	                                                    	<li th:each="element, y: ${datasetfile.colonne}" 
+	                                                    	<li th:each="element, y: ${datasetfile.columns}" 
 	                                                    		th:id="${'var_'+element.id}"
-	                                                    		th:text="${datasetfile.labelFile+ ' - '+ element.nome}"
-	                                                    		th:value="${element.id} + '~' + ${element.nome} + '~' + ${datasetfile.labelFile+ ' - '+ element.nome} " 
+	                                                    		th:text="${datasetfile.FileLabel+ ' - '+ element.name}"
+	                                                    		th:value="${element.id} + '~' + ${element.name} + '~' + ${datasetfile.FileLabel+ ' - '+ element.name} " 
 	                                                    		class="list-group-item varlist" th:classappend="${iter.odd}? 'odd' : 'even'"
 	                                                           title="Associa variabile">
 	                                                        </li>
@@ -363,8 +361,8 @@
                                                         <a th:each="ruolo, y: ${listaRuoliInput}"
                                                            class="list-group-item rolelist"
                                                            th:id="${'role_'+ruolo.id}"
-                                                           th:attr="onclick='javascript:setSelectedRole(\'' + ${ruolo.nome} + '\',' + ${ruolo.id} + ')'"
-                                                           title="Scelta ruolo"> <span th:text="${ruolo.nome}"></span>
+                                                           th:attr="onclick='javascript:setSelectedRole(\'' + ${ruolo.name} + '\',' + ${ruolo.id} + ')'"
+                                                           title="Scelta ruolo"> <span th:text="${ruolo.name}"></span>
                                                         </a>
                                                     </div>
                                                 </fieldset>
@@ -418,8 +416,8 @@
                 <div class="modal-content ">
                     <form th:action="@{/ws/updateassociavariabile}"
                           id="formUpdateAssociaRuolo" class="form-horizontal" method="post">
-                        <input type="hidden" name="variabile" id="mod_idvariabile" /> <input
-                            type="hidden" name="valoreOld" id="mod_valore_old" />
+                        <input type="hidden" name="variable" id="mod_idvariabile" /> <input
+                            type="hidden" name="valueOld" id="mod_valore_old" />
                         <span id="update_associazione_vars"></span>
                         <div class="modal-header">
                             <h5 class="modal-title">
@@ -436,10 +434,10 @@
                                 <div class="row">
                                     <div class="col-lg-3">
                                         <label class="control-label"
-                                               th:text="#{update.nome.label}+':'  "> <span>nome</span></label>
+                                               th:text="#{update.name.label}+':'  "> <span>nome</span></label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <input name="valore" id="nome-var" title="Nome variabile"
+                                        <input name="value" id="nome-var" title="Nome variabile"
                                                class="form-control" type="text" onkeyup="controllaCampo()" />
                                         <span class="help-block">
                                             <small class="text-danger" id="nomevarerror"></small>
@@ -453,9 +451,9 @@
                                                 id="funzione">ruolo</span></label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <select name="ruolo" id="idruolomod" class="form-control">
+                                        <select name="role" id="idruolomod" class="form-control">
                                             <option th:each="ruolo : ${listaRuoliInOut}"
-                                                    th:value="${ruolo.id}" th:text="${ruolo.nome}"></option>
+                                                    th:value="${ruolo.id}" th:text="${ruolo.name}"></option>
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
@@ -463,7 +461,7 @@
 
                             </div>
                         </div>
-                        <input type="hidden" name="flagRicerca" value="0" />
+                      
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-dismiss="modal">
@@ -482,8 +480,8 @@
             <div class="modal-dialog modal-xl" role="document">
                 <form th:action="@{/ws/assegnaparametri}" id="formAssociaParam"
                       method="post">
-                    <input id="id_elaborazione" type="hidden" name="idelaborazione"
-                           th:value="${elaborazione.id}" /> <input id="valoreParam"
+                    <input id="id_dataProcessing" type="hidden" name="dataProcessingId"
+                           th:value="${dataProcessing.id}" /> <input id="valoreParam"
                            type="hidden" name="valoreParam" value="" />
                     <div class="modal-content ">
                         <div class="modal-header">
@@ -523,10 +521,10 @@
             <div class="modal-dialog modal-xl" role="document">
                 <form th:action="@{/ws/modificaparametro}" id="formModAssociaParam"
                       method="post">
-                    <input id="id_elaborazione" type="hidden" name="idelaborazione"
-                           th:value="${elaborazione.id}" /> <input id="valoreParamMod"
+                    <input id="id_dataProcessing" type="hidden" name="dataProcessingId"
+                           th:value="${dataProcessing.id}" /> <input id="valoreParamMod"
                            type="hidden" name="valoreParam" value="" /> <input
-                           id="idStepvarMod" type="hidden" name="idStepvarMod" value="" /> <input
+                           id="idStepRunMod" type="hidden" name="idStepRunMod" value="" /> <input
                            type="hidden" name="parametri" id="edit-parameters" />
                     <div class="modal-content ">
                         <div class="modal-header">
@@ -574,14 +572,11 @@
                 id="formSetRuleset"
                 method="post">
                 <input
-                    id="id-elaborazione-ruleset"
+                    id="id-dataProcessing-ruleset"
                     type="hidden"
-                    name="idelaborazione"
-                    th:value="${elaborazione.id}" /> <input
-                    id="id-role-ruleset"
-                    type="hidden"
-                    name="idRole"
-                    value="175" /> <input
+                    name="dataProcessingId"
+                    th:value="${dataProcessing.id}" /> 
+                 <input
                     id="id-ruleset-selected"
                     type="hidden"
                     name=idRuleset
@@ -613,7 +608,7 @@
                                         th:id="${'ruleset_'+ruleset.id}"
                                         class="list-group-item rulesetlist"
                                         th:attr="onclick='javascript:setSelectedRuleset( ' + ${ruleset.id} +')'"
-                                        title="Set Ruleset"> <span th:text="${ruleset.labelFile} +' - Rules:' +  (${ruleset.numeroRighe}?${ruleset.numeroRighe}:0)"></span>
+                                        title="Set Ruleset"> <span th:text="${ruleset.FileLabel} +' - Rules:' +  (${ruleset.rulesTotal}?${ruleset.rulesTotal}:0)"></span>
                                     </a>
 
                              </div>
@@ -663,7 +658,7 @@
                     </div>
                     <div class="modal-body">
                         Eliminare l'associazione per la variabile
-                        <span id="nomeStepVar"></span>
+                        <span id="nomestepRar"></span>
                         ?
                     </div>
                     <div class="modal-footer">

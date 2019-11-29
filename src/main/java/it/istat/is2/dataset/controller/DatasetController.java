@@ -53,12 +53,12 @@ import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.app.util.IS2Const;
-import it.istat.is2.dataset.domain.DatasetColonna;
+import it.istat.is2.dataset.domain.DatasetColumn;
 import it.istat.is2.dataset.domain.DatasetFile;
-import it.istat.is2.dataset.domain.TipoVariabileSum;
+import it.istat.is2.dataset.domain.StatisticalVariableCls;
 import it.istat.is2.dataset.service.DatasetService;
-import it.istat.is2.workflow.domain.TipoDato;
-import it.istat.is2.workflow.service.TipoDatoService;
+import it.istat.is2.workflow.domain.DataTypeCls;
+import it.istat.is2.workflow.service.DataTypeService;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -75,9 +75,9 @@ public class DatasetController {
     @Autowired
     private MessageSource messages;
     @Autowired
-    private WorkSessionService sessioneLavoroService;
+    private WorkSessionService workSessionService;
     @Autowired
-    private TipoDatoService tipoDatoService;
+    private DataTypeService dataTypeService;
     @Autowired
     private LogService logService;
 
@@ -87,14 +87,14 @@ public class DatasetController {
         notificationService.removeAllMessages();
 
         DatasetFile dfile = datasetService.findDataSetFile(idfile);
-        List<DatasetColonna> colonne = datasetService.findAllNomeColonne(idfile);
-        List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();
-        Integer numRighe = dfile.getNumerorighe();
+        List<DatasetColumn> colonne = datasetService.findAllNameColum(idfile);
+        List<StatisticalVariableCls> variabiliSum = datasetService.findAllVariabiliSum();
+        Integer numRighe = dfile.getTotalRows();
         
         SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
         List<DatasetFile> files = null;
         if (sessionBean != null) {
-            files = datasetService.findDatasetFilesByIdSessioneLavoro(sessionBean.getId());
+            files = datasetService.findDatasetFilesByIdWorkSession(sessionBean.getId());
         }
         
         model.addAttribute("colonne", colonne);
@@ -112,8 +112,8 @@ public class DatasetController {
 
         DatasetFile dfile = datasetService.findDataSetFile(idfile);
 
-        List<DatasetColonna> colonne = datasetService.findAllNomeColonne(idfile);
-        List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();
+        List<DatasetColumn> colonne = datasetService.findAllNameColum(idfile);
+        List<StatisticalVariableCls> variabiliSum = datasetService.findAllVariabiliSum();
 
         model.addAttribute("colonne", colonne);
         model.addAttribute("idfile", idfile);
@@ -124,27 +124,28 @@ public class DatasetController {
     }
 
     @GetMapping(value = "/sessione/mostradataset/{id}")
-    public String mostradataset(HttpSession session, Model model, @PathVariable("id") Long id) {
+    public String viewDataset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
         List<Log> logs = logService.findByIdSessione(id);
 
-        WorkSession sessionelv = sessioneLavoroService.getSessione(id);
-        if (sessionelv.getDatasetFiles() != null) {
+        WorkSession sessionelv = workSessionService.getSessione(id);
+        if (sessionelv.getDatasetFiles() != null && !sessionelv.getDatasetFiles().isEmpty()) {
             session.setAttribute(IS2Const.SESSION_DATASET, true);
         }
 
-        List<DatasetFile> listaDataset = sessionelv.getDatasetFiles();
-        List<TipoDato> listaTipoDato = tipoDatoService.findListTipoDato();
-
+        List<DatasetFile> datasetList = sessionelv.getDatasetFiles();
+        List<DataTypeCls> fileTypeList =new ArrayList<>();
+        fileTypeList.add(dataTypeService.findById(IS2Const.DATA_TYPE_VARIABLE));
+         
         String etichetta = null;
-        if(listaDataset!=null && listaDataset.size()>0) {
-        	etichetta = "DS" + Integer.toString( listaDataset.size()+1 );
+        if(datasetList!=null && datasetList.size()>0) {
+        	etichetta = "DS" + Integer.toString( datasetList.size()+1 );
         }else {
         	etichetta = "DS1";
         }
         
-        model.addAttribute("listaTipoDato", listaTipoDato);
-        model.addAttribute("listaDataset", listaDataset);
+        model.addAttribute("fileTypeList", fileTypeList);
+        model.addAttribute("datasetList", datasetList);
         model.addAttribute("logs", logs);
         model.addAttribute("etichetta", etichetta);
         return "dataset/list";
@@ -154,11 +155,11 @@ public class DatasetController {
     public String caricaMetadati(Model model, String idfile, String idvar, String filtro, String idsum) {
 
         DatasetFile dfile = datasetService.findDataSetFile(new Long(idfile));
-        DatasetColonna dcol = datasetService.findOneColonna(Long.parseLong(idvar));
-        TipoVariabileSum sum = new TipoVariabileSum(Integer.parseInt(idsum));
+        DatasetColumn dcol = datasetService.findOneColonna(Long.parseLong(idvar));
+        StatisticalVariableCls sum = new StatisticalVariableCls(Integer.parseInt(idsum));
 
-        dcol.setTipoVariabile(sum);
-        dcol.setFiltro(new Short(filtro));
+        dcol.setVariabileType(sum);
+      
         try {
             datasetService.salvaColonna(dcol);
             notificationService.addInfoMessage(messages.getMessage("generic.save.success", null, LocaleContextHolder.getLocale()));
@@ -167,8 +168,8 @@ public class DatasetController {
 
         }
 
-        List<DatasetColonna> colonne = datasetService.findAllNomeColonne(Long.parseLong(idfile));
-        List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();
+        List<DatasetColumn> colonne = datasetService.findAllNameColum(Long.parseLong(idfile));
+        List<StatisticalVariableCls> variabiliSum = datasetService.findAllVariabiliSum();
 
         model.addAttribute("colonne", colonne);
         model.addAttribute("idfile", idfile);
@@ -185,7 +186,7 @@ public class DatasetController {
         notificationService.removeAllMessages();
 
         String labelFile = form.getLabelFile();
-        Integer tipoDato = form.getTipoDato();
+        Integer tipoDato = form.getFileType();
         String separatore = form.getDelimiter();
         String idsessione = form.getIdsessione();
 
@@ -210,7 +211,7 @@ public class DatasetController {
         }
 
         try {
-            datasetService.salva(campiL, valoriHeaderNum, labelFile, tipoDato, separatore, form.getDescrizione(), idsessione);
+            datasetService.save(campiL, valoriHeaderNum, labelFile, tipoDato, separatore, form.getDescrizione(), idsessione);
             logService.save("File " + labelFile + " salvato con successo");
             notificationService.addInfoMessage(messages.getMessage("generic.save.success", null, LocaleContextHolder.getLocale()));
             SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
@@ -234,8 +235,8 @@ public class DatasetController {
         DatasetFile dFile = datasetService.createField(idfile, idColonna, commandField, charOrString, upperLower,
                 newField, columnOrder, numRows);
 
-        List<DatasetColonna> colonne = datasetService.findAllNomeColonne(Long.parseLong(idfile));
-        List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();
+        List<DatasetColumn> colonne = datasetService.findAllNameColum(Long.parseLong(idfile));
+        List<StatisticalVariableCls> variabiliSum = datasetService.findAllVariabiliSum();
 
         model.addAttribute("colonne", colonne);
         model.addAttribute("idfile", idfile);
@@ -253,8 +254,8 @@ public class DatasetController {
 
         DatasetFile dFile = datasetService.createMergedField(idfile, columnOrder, numRows, fieldsToMerge, newField);
 
-        List<DatasetColonna> colonne = datasetService.findAllNomeColonne(Long.parseLong(idfile));
-        List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();
+        List<DatasetColumn> colonne = datasetService.findAllNameColum(Long.parseLong(idfile));
+        List<StatisticalVariableCls> variabiliSum = datasetService.findAllVariabiliSum();
 
         model.addAttribute("colonne", colonne);
         model.addAttribute("idfile", idfile);
@@ -272,8 +273,8 @@ public class DatasetController {
 
 		DatasetFile dFile = datasetService.createParsedFields(idfile, idColonna, columnOrder, numRows, executeCommand, commandValue, startTo, newField1, newField2);
 
-		List<DatasetColonna> colonne = datasetService.findAllNomeColonne(Long.parseLong(idfile));
-		List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();
+		List<DatasetColumn> colonne = datasetService.findAllNameColum(Long.parseLong(idfile));
+		List<StatisticalVariableCls> variabiliSum = datasetService.findAllVariabiliSum();
 
 		model.addAttribute("colonne", colonne);
 		model.addAttribute("idfile", idfile);
@@ -294,7 +295,7 @@ public class DatasetController {
 		
 		
 		
-		List<DatasetColonna> colonne = datasetService.findAllNomeColonne(Long.parseLong(idfile));
+		List<DatasetColumn> colonne = datasetService.findAllNameColum(Long.parseLong(idfile));
 		
 
 		model.addAttribute("colonne", colonne);
@@ -341,7 +342,7 @@ public class DatasetController {
 		DatasetFile dFile = datasetService.createFixedField(idDataset, idColonna, valoriHeaderNum, campiL,
 				fieldName, numColonne, numRighe);
 		
-		List<DatasetColonna> colonne = datasetService.findAllNomeColonne(Long.parseLong(idDataset));
+		List<DatasetColumn> colonne = datasetService.findAllNameColum(Long.parseLong(idDataset));
 
 		model.addAttribute("colonne", colonne);
 		model.addAttribute("idfile", idDataset);
@@ -359,7 +360,7 @@ public class DatasetController {
 
         notificationService.removeAllMessages();
 
-        WorkSession sessionelv = sessioneLavoroService.getSessioneByIdFile(idDataset);
+        WorkSession sessionelv = workSessionService.getSessioneByIdFile(idDataset);
         datasetService.deleteDataset(idDataset);
         logService.save("File " + idDataset + " eliminato con successo");
         notificationService.addInfoMessage("Eliminazione avvenuta con successo");

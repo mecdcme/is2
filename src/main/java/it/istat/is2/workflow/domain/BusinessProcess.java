@@ -29,56 +29,47 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import it.istat.is2.rule.domain.Ruleset;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The persistent class for the SX_BUSINESS_PROCESS database table.
- *
- */
 @Data
 @Entity
-@Table(name = "SX_BUSINESS_PROCESS")
-@NamedQuery(name = "BusinessProcess.findAll", query = "SELECT s FROM BusinessProcess s")
+@Table(name = "IS2_BUSINESS_PROCESS")
 public class BusinessProcess implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name="ID")
     private Long id;
-
+    @Column(name="NAME")
+    private String name;  
+    @Column(name="DESCR")
     private String descr;
-
-    private String etichetta;
-
-    private String nome;
+    @Column(name="LABEL")
+    private String label;
+    @Column(name="ORDER")
+    private Short order;
 
     @JsonBackReference
     @ManyToMany(mappedBy = "businessProcesses")
     private List<BusinessFunction> businessFunctions;
 
-    // bi-directional many-to-one association to Ruleset
-    @ManyToOne
-    @JoinColumn(name = "REGOLE")
-    @JsonManagedReference
-    private Ruleset sxRuleset;
-
-    @JsonManagedReference
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "SX_BPROCESS_BSTEP", joinColumns = @JoinColumn(name = "BPROCESS"), inverseJoinColumns = @JoinColumn(name = "BSTEP"))
-    private List<BusinessStep> businessSteps;
-
-    @OneToMany(mappedBy = "sxBProcessParent")
-    private List<BusinessProcess> businessSubProcesses = new ArrayList<>();
-
     @JsonManagedReference
     @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "parent")
-    private BusinessProcess sxBProcessParent;
+    @JoinColumn(name = "PARENT")
+    private BusinessProcess businessProcessParent;
 
+    @JsonManagedReference
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name = "is2_link_process_step", joinColumns = @JoinColumn(name = "BUSINESS_PROCESS_ID"), inverseJoinColumns = @JoinColumn(name = "PROCESS_STEP_ID"))
+    private List<ProcessStep> businessSteps;
+
+    @OneToMany(mappedBy = "businessProcessParent")
+    private List<BusinessProcess> businessSubProcesses = new ArrayList<>();
+    
     public BusinessProcess() {
     }
 

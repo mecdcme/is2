@@ -37,8 +37,8 @@ import it.istat.is2.worksession.domain.WorkSession;
 @Repository
 public interface WorkSessionDao extends CrudRepository<WorkSession, Long> {
 
-    List<WorkSession> findByUserOrderByDataCreazioneDesc(@Param("user") User user);
-    List<WorkSession> findByUserAndBusinessFunctionOrderByDataCreazioneDesc(@Param("user") User user, @Param("businessFunction") BusinessFunction businessFunction);
+    List<WorkSession> findByUserOrderByLastUpdateDesc(@Param("user") User user);
+    List<WorkSession> findByUserAndBusinessFunctionOrderByLastUpdateDesc(@Param("user") User user, @Param("businessFunction") BusinessFunction businessFunction);
 
     @Override
     Optional<WorkSession> findById(@Param("id") Long id);
