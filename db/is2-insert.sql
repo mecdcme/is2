@@ -108,7 +108,6 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `O
 -- -----------------------------------------------------
 INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`) 
 	VALUES  
-		(100,'SeleMix','Selective editing via Mixture models'),
 		(200,'Relais','Record Linkage at Istat'),
 		(300,'Validate','R Data Validation');
 
@@ -163,7 +162,6 @@ INSERT INTO `is2_link_function_view_data_type` (`BUSINESS_FUNCTION_ID`, `VIEW_DA
 -- -----------------------------------------------------
 INSERT INTO `is2_app_service` (`ID`, `NAME`, `DESCR`, `IMPLEMENTATION_LANGUAGE`, `SOURCE`, `BUSINESS_SERVICE_ID`) 
 	VALUES  
-		(100,'SeleMix','R package implementing selective editing algorithms','R','SS_selemix.r',100),
 		(200,'Relais R','R package implementing record linkage methods','R','relais/relais.R',200),
 		(250,'Relais Java','Java package implementing record linkage methods','JAVA','it.istat.is2.catalogue.relais.service.RelaisService',200),
 		(300,'Validate','R package implementing a set of data validation functions','R','validate/validate.r',300);
