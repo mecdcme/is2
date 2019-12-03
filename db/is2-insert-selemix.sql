@@ -8,9 +8,9 @@ SET FOREIGN_KEY_CHECKS=0;
 -- -----------------------------------------------------
 -- BUSINESS_PROCESS
 -- -----------------------------------------------------
-INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) VALUES (75,'Selezione Errori Influenti ','Esegue la stima, predizione e valuta gli errori influenti automaticamente in due step','Selezione2S',NULL,1);
-INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) VALUES (160,'Stima e selezione','Esecuzione del processo di stima, predizione e selezione automatica','Bistep',75,1);
-
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) VALUES (80,'Selezione Errori Influenti multi process','Esegue la stima, predizione e valuta gli errori influenti in due processi successivi','Selezione2P',NULL,1);
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) VALUES (110,'Stima e Predizione','Escuzione del processo di stima e predizione','Estimates',80,1);
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) VALUES (130,'Editing Selettivo','Esecuzione del processo di selezione dei valori influenti','Selection',80,2);
 -- -----------------------------------------------------
 -- CATALOGUE OF BUSINESS SERVICES
 -- -----------------------------------------------------
@@ -39,13 +39,13 @@ INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`)  V
 -- MANY TO MANY RELATION -> BUSINESS_FUNCTION - BUSINESS_PROCESS
 -- -----------------------------------------------------
 INSERT INTO `is2_link_function_process` (`BUSINESS_FUNCTION_ID`, `BUSINESS_PROCESS_ID`)
-	VALUES (2,75);
+	VALUES (2,80);
 
 -- -----------------------------------------------------
 -- MANY TO MANY RELATION -> BUSINESS_PROCESS - PROCESS_STEP
 -- -----------------------------------------------------
 INSERT INTO `is2_link_process_step` (`BUSINESS_PROCESS_ID`, `PROCESS_STEP_ID`) 
-	VALUES (160,10),(160,30);
+	VALUES (110,10),(130,30);
 -- -----------------------------------------------------
 -- 
 -- SECTION PROCESS DESIGN - END
