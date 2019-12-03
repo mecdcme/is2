@@ -49,7 +49,7 @@ public class GraphControllerRest {
         List<DatasetColumn> colonne = new ArrayList();
         DatasetColumn colonna;
         for (Integer id : ids) {
-            colonna = datasetService.findOneColonna(new Long(id));
+            colonna = datasetService.findOneColonna(Long.valueOf(id));
             System.out.println("Nome colonna " + colonna.getName());
             colonne.add(colonna);
         }
@@ -61,8 +61,8 @@ public class GraphControllerRest {
         List<String> valorix;
         List<String> valoriy;
         List<Point> points = new ArrayList();
-        valorix = datasetService.findOneColonna(new Long(ids.get(0))).getContents();
-        valoriy = datasetService.findOneColonna(new Long(ids.get(1))).getContents();
+        valorix = datasetService.findOneColonna(Long.valueOf(ids.get(0))).getContents();
+        valoriy = datasetService.findOneColonna(Long.valueOf(ids.get(1))).getContents();
         for (int i = 0; i < valorix.size(); i++) {
             points.add(new Point(valorix.get(i), valoriy.get(i)));
         }
@@ -72,8 +72,8 @@ public class GraphControllerRest {
     @GetMapping("/rest/graph/getCoordinates/{ids}")
     public Coordinate geCoordinates(HttpServletRequest request, @PathVariable("ids") List<Integer> ids) {
         Coordinate coordinateXY = new Coordinate();
-        coordinateXY.setX(datasetService.findOneColonna(new Long(ids.get(0))).getContents());
-        coordinateXY.setY(datasetService.findOneColonna(new Long(ids.get(1))).getContents());
+        coordinateXY.setX(datasetService.findOneColonna(Long.valueOf(ids.get(0))).getContents());
+        coordinateXY.setY(datasetService.findOneColonna(Long.valueOf(ids.get(1))).getContents());
         return coordinateXY;
     }
 
@@ -84,19 +84,19 @@ public class GraphControllerRest {
         Map<String, List<String>> filterData = new HashMap<>();
         for (Integer filter : filters) {
             if (filter > 0) {
-                filterData.put(datasetService.findOneColonna(new Long(filter)).getName(), datasetService.findOneColonna(new Long(filter)).getContents());
+                filterData.put(datasetService.findOneColonna(Long.valueOf(filter)).getName(), datasetService.findOneColonna(Long.valueOf(filter)).getContents());
             }
         }
         Map<String, List<String>> xData = new HashMap<>();
         for (Integer x: xAxis) {
             if (x > 0) {
-                xData.put(datasetService.findOneColonna(new Long(x)).getName(), datasetService.findOneColonna(new Long(x)).getContents());
+                xData.put(datasetService.findOneColonna(Long.valueOf(x)).getName(), datasetService.findOneColonna(Long.valueOf(x)).getContents());
             }
         }
         Map<String, List<String>> yData = new HashMap<>();
         for (Integer y: yAxis) {
             if (y > 0) {
-                yData.put(datasetService.findOneColonna(new Long(y)).getName(), datasetService.findOneColonna(new Long(y)).getContents());
+                yData.put(datasetService.findOneColonna(Long.valueOf(y)).getName(), datasetService.findOneColonna(Long.valueOf(y)).getContents());
             }
         }
 

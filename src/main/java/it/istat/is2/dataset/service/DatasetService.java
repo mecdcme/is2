@@ -94,7 +94,7 @@ public class DatasetService {
 			DatasetColumn dc = new DatasetColumn();
 			dc.setDatasetFile(dFile);
 			dc.setName(kCampi.replaceAll("\\.", "_"));
-			dc.setOrderCode(new Short(ord));
+			dc.setOrderCode(Short.valueOf(ord));
 			dc.setContentSize(vals.size());
 			ord += 1;
 			dc.setContents(vals);
@@ -200,7 +200,7 @@ public class DatasetService {
 		JSONObject obj = new JSONObject();
 		if (dataList.size() > 0) {
 			String rows=dataList.get(0)[resulFieldstList.size()+offset].toString();
-			numRighe = new Integer(rows);
+			numRighe = Integer.valueOf(rows);
 			for (Object[] row : dataList) {
 				JSONObject obji = new JSONObject();
 				for (int j = 0; j < resulFieldstList.size(); j++) {
@@ -654,7 +654,7 @@ public class DatasetService {
 			DatasetColumn dc = new DatasetColumn();
 			dc.setDatasetFile(dFile);
 			dc.setName(field.replaceAll("\\.", "_").toUpperCase());
-			dc.setOrderCode(new Short(i));
+			dc.setOrderCode(Short.valueOf(i));
 			dc.setContentSize(vals.size());
 			dc.setContents(vals);
 			colonne.add(dc);

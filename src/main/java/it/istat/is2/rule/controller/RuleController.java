@@ -108,7 +108,7 @@ public class RuleController {
         String separatore = form.getDelimiter();
         String idsessione = form.getIdsessione();
         Integer skipFirstLine = form.getSkipFirstLine();
-        WorkSession sessionelv = workSessionService.getSessione(new Long(form.getIdsessione()));
+        WorkSession sessionelv = workSessionService.getSessione(Long.valueOf(form.getIdsessione()));
 
         List<Ruleset> listaRS = ruleService.findRulesetBySessioneLavoro(sessionelv);
         boolean check = false;
@@ -157,7 +157,7 @@ public class RuleController {
 
         String nomeRuleset = form.getRulesetName();
 
-        WorkSession workSession = workSessionService.getSessione(new Long(form.getIdsessione()));
+        WorkSession workSession = workSessionService.getSessione(Long.valueOf(form.getIdsessione()));
 
         List<Ruleset> listaRS = ruleService.findRulesetBySessioneLavoro(workSession);
         boolean check = false;
@@ -230,7 +230,7 @@ public class RuleController {
 
         Ruleset ruleset = ruleService.findRulesetById(Integer.parseInt(form.getRulesetId()));
         String nomeRuleset = form.getRulesetName();
-        WorkSession workSession = workSessionService.getSessione(new Long(form.getIdsessione()));
+        WorkSession workSession = workSessionService.getSessione(Long.valueOf(form.getIdsessione()));
 
         List<Ruleset> listRS = ruleService.findAllRuleset();
         listRS.remove(ruleset);
@@ -333,7 +333,7 @@ public class RuleController {
         List<DatasetFile> listaDSFile = new ArrayList<>();
 
         DatasetFile fakeFile = new DatasetFile();
-        fakeFile.setId(new Long(-1));
+        fakeFile.setId(Long.valueOf(-1));
         fakeFile.setFileName("--");
         listaDSFile.add(fakeFile);
 

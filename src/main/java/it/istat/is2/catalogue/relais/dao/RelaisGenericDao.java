@@ -150,7 +150,7 @@ public class RelaisGenericDao {
 		em.clear();
 
 		Query q = em.createNativeQuery(query);
-		q.setParameter("indexAllItems", new Long(indexAllItems));
+		q.setParameter("indexAllItems", Long.valueOf(indexAllItems));
 		q.setParameter("valuesToAppend", valuesToAppend);
 		q.setParameter("idWorKsetDB", idWorKsetDB);
 
@@ -170,7 +170,7 @@ public class RelaisGenericDao {
 		em.clear();
 
 		Query q = em.createNativeQuery(query);
-		q.setParameter("indexAllItems", new Long(indexAllItems));
+		q.setParameter("indexAllItems", Long.valueOf(indexAllItems));
 		q.setParameter("valuesToAppend", valuesToAppend);
 		q.setParameter("idWorKsetDB", idWorKsetDB);
 

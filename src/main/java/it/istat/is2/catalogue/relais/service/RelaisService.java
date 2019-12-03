@@ -115,13 +115,13 @@ public class RelaisService {
 
         for (int iA = 0; iA < sizeA; iA++) {
             Map<String, String> valuesI = new HashMap<>();
-            final Integer innerIA = new Integer(iA);
+            final Integer innerIA = Integer.valueOf(iA);
             variabileNomeListMA.forEach(varnameMA -> {
                 valuesI.put(varnameMA, worksetVariabili.get(varnameMA).get(innerIA));
             });
 
             for (int iB = 0; iB < sizeB; iB++) {
-                final Integer innerIB = new Integer(iB);
+                final Integer innerIB = Integer.valueOf(iB);
                 variabileNomeListMB.forEach(varnameMB -> {
                     valuesI.put(varnameMB, worksetVariabili.get(varnameMB).get(innerIB));
                 });
@@ -241,13 +241,13 @@ public class RelaisService {
         indexItems = 0;
         for (int iA = 0; iA < sizeA; iA++) {
             Map<String, String> valuesI = new HashMap<>();
-            final Integer innerIA = new Integer(iA);
+            final Integer innerIA = Integer.valueOf(iA);
             variabileNomeListMA.forEach(varnameMA -> {
                 valuesI.put(varnameMA, worksetVariabili.get(varnameMA).get(innerIA));
             });
 
             for (int iB = 0; iB < sizeB; iB++) {
-                final Integer innerIB = new Integer(iB);
+                final Integer innerIB = Integer.valueOf(iB);
                 variabileNomeListMB.forEach(varnameMB -> {
                     valuesI.put(varnameMB, worksetVariabili.get(varnameMB).get(innerIB));
                 });

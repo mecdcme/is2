@@ -222,7 +222,7 @@ public class FileHandler {
         CSVRecord riga = itr2.next();
         HashMap<Integer, ArrayList<String>> campiMap = new HashMap<Integer, ArrayList<String>>();
         for (int i = 0; i < riga.size(); i++) {
-            campiMap.put(new Integer(i), new ArrayList<String>());
+            campiMap.put(Integer.valueOf(i), new ArrayList<String>());
         }
         if (itr.hasNext()) {
             // Salta l'intestazione

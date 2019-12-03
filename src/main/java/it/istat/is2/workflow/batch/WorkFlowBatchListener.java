@@ -67,7 +67,7 @@ public class WorkFlowBatchListener extends JobExecutionListenerSupport {
         if (sessionBean != null) {
             batch.setIdSessione(sessionBean.getId());
         } else {
-            batch.setIdSessione(new Long(-1));
+            batch.setIdSessione(Long.valueOf(-1));
         }
         logService.save(msg);
         if (jobExecution.getAllFailureExceptions().size() > 0) {

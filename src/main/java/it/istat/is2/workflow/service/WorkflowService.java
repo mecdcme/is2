@@ -226,7 +226,7 @@ public class WorkflowService {
             stepRuntime.setDataProcessing(dataProcessing);
             String idr = form.getRole()[i];
             String nomeVar = form.getValue()[i];
-            AppRole sxruolo = appRolesAllMap.get(new Integer(idr));
+            AppRole sxruolo = appRolesAllMap.get(Integer.valueOf(idr));
             workset = null;
             for (int y = 0; y < varList.size(); y++) {
                 if (varList.get(y).getWorkset() != null && nomeVar.equals(varList.get(y).getWorkset().getName())
@@ -268,7 +268,7 @@ public class WorkflowService {
         String idr = form.getRole()[0];
         String nomeVar = form.getValue()[0];
         String nomeOld = form.getValueOld();
-        AppRole sxruolo = appRolesAllMap.get(new Integer(idr));
+        AppRole sxruolo = appRolesAllMap.get(Integer.valueOf(idr));
         workset = null;
 
         for (int y = 0; y < varList.size(); y++) {
@@ -339,7 +339,7 @@ public class WorkflowService {
                 idparam = stringTokenizer.nextToken();
                 ruoloparam = stringTokenizer.nextToken();
             }
-            sxruolo = appRolesAllMap.get(new Integer(ruoloparam));
+            sxruolo = appRolesAllMap.get(Integer.valueOf(ruoloparam));
             StepRuntime stepRuntime = new StepRuntime();
             stepRuntime.setDataProcessing(dataProcessing);
             stepRuntime.setAppRole(sxruolo);
@@ -368,7 +368,7 @@ public class WorkflowService {
             String[] all_parametri = form.getParameters();
             String idWorkset = all_parametri[i];
 
-            Workset workset = workSetDao.findById(new Long(idWorkset)).get();
+            Workset workset = workSetDao.findById(Long.valueOf(idWorkset)).get();
             String value = form.getValue()[i];
             workset.setParamValue(value);
             workSetDao.save(workset);
@@ -439,7 +439,7 @@ public class WorkflowService {
         for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
             StepInstance stepInstance = (StepInstance) iterator.next();
             List<StepInstanceSignature> sxsetpppList = stepInstanceSignatureDao.findAllStepSignaturesByStepAndTypeIO(stepInstance, new TypeIO(IS2Const.TYPE_IO_INPUT),
-                    new DataTypeCls(new Integer(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETRO
+                    new DataTypeCls(Integer.valueOf(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETRO
             ret.addAll(sxsetpppList);
         }
         return ret;
@@ -460,7 +460,7 @@ public class WorkflowService {
                 List<StepInstanceSignature> sxsetpppList = stepInstanceSignatureDao
                         .findAllStepSignaturesByStepAndTypeIO(stepInstance,
                                 new TypeIO(IS2Const.TYPE_IO_INPUT),
-                                new DataTypeCls(new Integer(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETRO
+                                new DataTypeCls(Integer.valueOf(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETRO
                 paramsList.addAll(sxsetpppList);
             }
             ret.put(suBusinessProcess.getId(), paramsList);
@@ -584,7 +584,7 @@ public class WorkflowService {
 
         List<StepRuntime> list = getStepRuntimes(idDataProcessing);
         for (StepRuntime step : list) {
-            if (flagIO.equals(new Integer(0)) || step.getDataType().getId().equals(flagIO)) {
+            if (flagIO.equals(Integer.valueOf(0)) || step.getDataType().getId().equals(flagIO)) {
                 stepRuntimeDao.deleteById(step.getId());
             }
         }
@@ -606,13 +606,13 @@ public class WorkflowService {
         StepRuntime stepRuntimeID = new StepRuntime();
         stepRuntimeID.setDataProcessing(dataProcessing);
         stepRuntimeID.setAppRole(appRole);
-        stepRuntimeID.setOrderCode(new Short("1"));
+        stepRuntimeID.setOrderCode(Short.valueOf("1"));
         stepRuntimeID.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
         stepRuntimeID.setTypeIO(new TypeIO(IS2Const.TYPE_IO_INPUT));
         Workset worksetID = new Workset();
         worksetID.setName("ID");
         worksetID.setParamValue(ruleset.getFileLabel());
-        worksetID.setOrderCode(new Short("1"));
+        worksetID.setOrderCode(Short.valueOf("1"));
         worksetID.setContents(Utility.convertToArrayListStringFieldOfObjects(ruleset.getRules(), Rule.class, "id"));
         worksetID.setContentSize(ruleset.getRules().size());
         worksetID.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
@@ -625,12 +625,12 @@ public class WorkflowService {
         StepRuntime stepRuntime = new StepRuntime();
         stepRuntime.setDataProcessing(dataProcessing);
         stepRuntime.setAppRole(appRole);
-        stepRuntime.setOrderCode(new Short("2"));
+        stepRuntime.setOrderCode(Short.valueOf("2"));
         stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
         stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_INPUT));
         Workset workset = new Workset();
         workset.setName(IS2Const.TEXT_RULE);
-        workset.setOrderCode(new Short("1"));
+        workset.setOrderCode(Short.valueOf("1"));
         workset.setParamValue(ruleset.getFileLabel());
         workset.setContents(Utility.convertToArrayListStringFieldOfObjects(ruleset.getRules(), Rule.class, "rule"));
         workset.setContentSize(ruleset.getRules().size());

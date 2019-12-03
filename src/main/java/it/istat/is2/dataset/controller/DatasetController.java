@@ -154,7 +154,7 @@ public class DatasetController {
     @RequestMapping(value = "/associaVarSum", method = RequestMethod.POST)
     public String caricaMetadati(Model model, String idfile, String idvar, String filtro, String idsum) {
 
-        DatasetFile dfile = datasetService.findDataSetFile(new Long(idfile));
+        DatasetFile dfile = datasetService.findDataSetFile(Long.valueOf(idfile));
         DatasetColumn dcol = datasetService.findOneColonna(Long.parseLong(idvar));
         StatisticalVariableCls sum = new StatisticalVariableCls(Integer.parseInt(idsum));
 
