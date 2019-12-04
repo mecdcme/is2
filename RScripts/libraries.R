@@ -13,5 +13,6 @@ checkAndInstall("univOutl")
 checkAndInstall("simputation")
 checkAndInstall("VIM")
 checkAndInstall("rspa")
+checkAndInstall("SeleMix")
 
 print("Loading libraries...ok ")

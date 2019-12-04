@@ -157,7 +157,7 @@ public class RelaisService {
     }
 
     public Map<?, ?> resultTables(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
-            Map<String, ArrayList<String>> worksetVariabili, Map<String, String> parametriMap) throws Exception {
+            Map<String, ArrayList<String>> worksetIn, Map<String, String> parametriMap) throws Exception {
 
         Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
         Map<String, Map<?, ?>> worksetOut = new LinkedHashMap<>();
@@ -184,13 +184,13 @@ public class RelaisService {
             if (codeP_POST.equals(pPostVarname)) {
                 indexItems = 0;
 
-                for (String pPostValue : worksetVariabili.get(pPostVarname)) {
+                for (String pPostValue : worksetIn.get(pPostVarname)) {
                     if (Float.parseFloat(pPostValue) >= Float.parseFloat(paramTU)) {
                         StringBuffer pattern = new StringBuffer();
 
                         for (String ctVarname : ruoliVariabileNome.get(codContengencyTable)) {
                             if (!ctVarname.equals(IS2Const.WORKSET_FREQUENCY)) {
-                                String p = worksetVariabili.get(ctVarname).get(indexItems);
+                                String p = worksetIn.get(ctVarname).get(indexItems);
                                 pattern.append(Double.valueOf(p).intValue());
                             }
                         }
@@ -229,8 +229,8 @@ public class RelaisService {
 
         String firstFiledMA = ruoliVariabileNome.get(codeMatchingA).get(0);
         String firstFiledMB = ruoliVariabileNome.get(codeMatchingB).get(0);
-        int sizeA = worksetVariabili.get(firstFiledMA).size();
-        int sizeB = worksetVariabili.get(firstFiledMB).size();
+        int sizeA = worksetIn.get(firstFiledMA).size();
+        int sizeB = worksetIn.get(firstFiledMB).size();
 
         contingencyService.init(parametriMap.get(params_MatchingVariables));
         variabileNomeListOut.forEach(varname -> {
@@ -243,13 +243,13 @@ public class RelaisService {
             Map<String, String> valuesI = new HashMap<>();
             final Integer innerIA = Integer.valueOf(iA);
             variabileNomeListMA.forEach(varnameMA -> {
-                valuesI.put(varnameMA, worksetVariabili.get(varnameMA).get(innerIA));
+                valuesI.put(varnameMA, worksetIn.get(varnameMA).get(innerIA));
             });
 
             for (int iB = 0; iB < sizeB; iB++) {
                 final Integer innerIB = Integer.valueOf(iB);
                 variabileNomeListMB.forEach(varnameMB -> {
-                    valuesI.put(varnameMB, worksetVariabili.get(varnameMB).get(innerIB));
+                    valuesI.put(varnameMB, worksetIn.get(varnameMB).get(innerIB));
                 });
                 String pattern = contingencyService.getPattern(valuesI);
                 if (patternMatching.contains(pattern)) {

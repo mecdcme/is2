@@ -78,6 +78,7 @@ import it.istat.is2.worksession.domain.WorkSession;
 @Service
 public class WorkflowService {
 
+	private final String PATTERN_NAME="\\.|\\s"; 
 	@Autowired
 	private WorkSessionDao workSessionDao;
 	@Autowired
@@ -238,7 +239,7 @@ public class WorkflowService {
 				workset = new Workset();
 				DatasetColumn dscolumn = datasetColumnDao.findById((Long.parseLong(form.getVariable()[i]))).get();
 				workset.setName(
-						dscolumn.getDatasetFile().getFileLabel() + "_" + dscolumn.getName().replaceAll("\\.", "_"));
+						dscolumn.getDatasetFile().getFileLabel() + "_" + dscolumn.getName().replaceAll(PATTERN_NAME, "_"));
 				workset.setContents(dscolumn.getContents());
 				workset.setContentSize(workset.getContents().size());
 			}
@@ -281,7 +282,7 @@ public class WorkflowService {
 			workset = new Workset();
 			DatasetColumn dscolumn = datasetColumnDao.findById((Long.parseLong(form.getVariable()[0])))
 					.orElse(new DatasetColumn());
-			workset.setName(dscolumn.getName().replaceAll("\\.", "_"));
+			workset.setName(dscolumn.getName().replaceAll(PATTERN_NAME, "_"));
 			workset.setContents(dscolumn.getContents());
 			workset.setContentSize(workset.getContents().size());
 		}
@@ -345,7 +346,7 @@ public class WorkflowService {
 			stepRuntime.setDataProcessing(dataProcessing);
 			stepRuntime.setAppRole(sxruolo);
 			Workset workset = new Workset();
-			workset.setName(nomeparam);
+			workset.setName(nomeparam.replaceAll(PATTERN_NAME, "_"));
 			stepRuntime.setOrderCode(sxruolo.getOrder());
 			stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
 			stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_INPUT));
@@ -567,7 +568,7 @@ public class WorkflowService {
 					String nameWorkset = "";
 					if (prefixDataset)
 						nameWorkset = dscolumn.getDatasetFile().getFileLabel() + "_";
-					nameWorkset += dscolumn.getName().replaceAll("\\.", "_");
+					nameWorkset += dscolumn.getName().replaceAll(PATTERN_NAME, "_");
 					workset.setName(nameWorkset);
 					workset.setContents(dscolumn.getContents());
 					workset.setContentSize(workset.getContents().size());

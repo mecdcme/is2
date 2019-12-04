@@ -109,7 +109,6 @@ public class EngineR implements EngineService {
 	private Map<String, AppRole> ruoliAllMap;
 	private LinkedHashMap<String, ArrayList<String>> worksetVariabili;
 	private LinkedHashMap<String, ArrayList<String>> parametriMap;
-	private LinkedHashMap<String, ArrayList<String>> modelloMap;
 	private LinkedHashMap<String, ArrayList<String>> ruleset;
 	private LinkedHashMap<String, ArrayList<String>> worksetOut;
 	private HashMap<String, ArrayList<String>> ruoliVariabileNome;
@@ -143,9 +142,7 @@ public class EngineR implements EngineService {
 		prepareEnv();
 		createConnection(serverRHost, serverRPort);
 		bindInputColumns(worksetVariabili, EngineR.IS2_WORKSET);
-		// bindInputParams(parametriMap);
-		// bindInputParams(modelloMap);
-		// bindInputParams(ruleset,eng);
+	    bindInputColumns(parametriMap, EngineR.IS2_PARAMETRI);
 		bindInputColumns(ruleset, EngineR.IS2_RULESET);
 		setRuoli(ruoliVariabileNome);
 
@@ -472,7 +469,6 @@ public class EngineR implements EngineService {
 				ruoliInputStep.keySet());
 		// PARAMETRI
 		parametriMap = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
-		modelloMap = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_MODEL));
 		ruleset = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
 		worksetOut = new LinkedHashMap<>();
 

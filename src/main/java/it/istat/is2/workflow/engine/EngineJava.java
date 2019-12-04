@@ -72,9 +72,8 @@ public class EngineJava implements EngineService {
     private StepInstance stepInstance;
     private Map<String, ArrayList<StepRuntime>> dataMap;
     private Map<String, AppRole> ruoliAllMap;
-    private Map<String, ArrayList<String>> worksetVariabili;
+    private Map<String, ArrayList<String>> worksetInput;
     private Map<String, String> parametriMap;
-    private Map<String, ArrayList<String>> modelloMap;
     private Map<String, Map<?, ?>> worksetOut;
     private Map<String, Map<?, ?>> resultOut;
     private LinkedHashMap<String, ArrayList<String>> ruoliVariabileNome;
@@ -109,7 +108,7 @@ public class EngineJava implements EngineService {
         Class<?>  fnameClass=Class.forName(fnameClassName);
         Method method = ReflectionUtils.findMethod( fnameClass, fname, Long.class, Map.class, Map.class, Map.class);
         Object instance=  context.getBean(fnameClass);
-        resultOut = (Map<String, Map<?, ?>>) method.invoke(instance, dataProcessing.getId(), ruoliVariabileNome, worksetVariabili, parametriMap);
+        resultOut = (Map<String, Map<?, ?>>) method.invoke(instance, dataProcessing.getId(), ruoliVariabileNome, worksetInput, parametriMap);
         worksetOut = (Map<String, Map<?, ?>>) resultOut.get(IS2Const.WF_OUTPUT_WORKSET);
         ruoliOutputStep = (LinkedHashMap<String, ArrayList<String>>) resultOut.get(IS2Const.WF_OUTPUT_ROLES);
         ruoliGruppoOutputStep = (HashMap<String, String>) resultOut.get(IS2Const.WF_OUTPUT_ROLES_GROUP);
@@ -152,11 +151,10 @@ public class EngineJava implements EngineService {
         // mappa delle colonne workset <nome campo, oggetto stepv>
         Map<String, ArrayList<StepRuntime>> dataRuoliStepVarMap = Utility.getMapCodiceRuoloStepVariabili(dataList);
         // mappa delle colonne workset <nome,lista valori>
-        worksetVariabili = Utility.getMapWorkSetValuesInRoles(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE), ruoliInputStep.keySet());
+        worksetInput = Utility.getMapWorkSetValuesInRoles(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE), ruoliInputStep.keySet());
 
         // PARAMETRI
         parametriMap = Utility.getMapWorkSetValuesParams(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
-        modelloMap = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_MODEL));
         worksetOut = new HashMap<>();
 
         // associo il codice ruolo alla variabile

@@ -91,8 +91,12 @@ library("SeleMix")
 
 
 #stima completa
-mlest <- function(workset, y, x=NULL, ...) {
+mlest <- function(workset, s=S,x=X,y=Y,z=Z, ...) {
   #environment check
+   stdout <- vector('character')
+  con <- textConnection('stdout', 'wr', local = TRUE)
+  
+  
   if(missing(y)) stop('iSS Error: Missing TARGET Variable(s)')
   y <- matrix(as.numeric(workset[,Y]),ncol=length(Y),nrow=nrow(workset))
   if(!missing(x)) x <- matrix(as.numeric(workset[,X]),ncol=length(X),nrow=nrow(workset))
@@ -108,6 +112,7 @@ mlest <- function(workset, y, x=NULL, ...) {
   if(!exists("max.iter"))  max.iter=500
   
   #calcolo funzione
+  print("-------#calcolo funzione")
   est <- ml.est(y=y, x=x, model = model, lambda= as.numeric(lambda),  w= as.numeric(w), lambda.fix=lambda.fix, w.fix=w.fix, eps=as.numeric(eps), max.iter=as.numeric(max.iter), t.outl= as.numeric(t.outl), graph=FALSE)
   if(length(workset)>1) ypred <- matrix(est$ypred,nrow=nrow(workset),ncol=length(Y))
   else ypred <- as.matrix(est$ypred)
@@ -128,7 +133,8 @@ mlest <- function(workset, y, x=NULL, ...) {
   mod <- list(B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w )
   #setting output roles 
   roles <- list (P= predname, O="outlier", M=names(mod), G=names(report))
-  result <-list( out=data.frame(out,out1), roles= roles, mod=mod, report = report)
+  result <-list( out=data.frame(out,out1), roles= roles, mod=mod, report = report, "log" = stdout)
+  
   return(result)
 }
 
