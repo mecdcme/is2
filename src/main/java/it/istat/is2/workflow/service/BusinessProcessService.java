@@ -48,4 +48,15 @@ public class BusinessProcessService {
     public BusinessProcess findBProcessById(long idprocess) {
         return businessProcessDao.findById(idprocess).orElse(null);
     }
+    public List<BusinessProcess>  findAllProcesses() {
+        return businessProcessDao.findAllProcesses();
+    }
+	
+    public List<BusinessProcess>  findAllSubProcesses() {
+        return businessProcessDao.findAllSubProcesses();
+    }
+	public List<BusinessProcess> findAll() {
+		// TODO Auto-generated method stub
+		return businessProcessDao.findAll();
+	}
 }

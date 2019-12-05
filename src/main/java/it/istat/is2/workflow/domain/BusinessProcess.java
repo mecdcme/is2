@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class BusinessProcess implements Serializable {
     private String label;
     @Column(name="ORDER")
     private Short order;
+   
 
     @JsonBackReference
     @ManyToMany(mappedBy = "businessProcesses")
@@ -70,6 +72,9 @@ public class BusinessProcess implements Serializable {
     @OneToMany(mappedBy = "businessProcessParent")
     private List<BusinessProcess> businessSubProcesses = new ArrayList<>();
     
+    
+
+    
     public BusinessProcess() {
     }
 
@@ -79,3 +84,6 @@ public class BusinessProcess implements Serializable {
     }
 
 }
+
+
+

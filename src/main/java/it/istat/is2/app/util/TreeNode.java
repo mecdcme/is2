@@ -21,38 +21,52 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.workflow.service;
+package it.istat.is2.app.util;
 
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+public class TreeNode<T> implements Iterable<TreeNode<T>> {
 
-import it.istat.is2.workflow.dao.ProcessStepDao;
-import it.istat.is2.workflow.domain.BusinessProcess;
-import it.istat.is2.workflow.domain.ProcessStep;
-import it.istat.is2.workflow.domain.StepInstance;
+    T data;
+    TreeNode<T> parent;
+    List<TreeNode<T>> children;
 
-@Service
-public class BusinessStepService {
-
-    @Autowired
-    ProcessStepDao processStepDao;
-
-    public List<ProcessStep> findBStepByIdProcess(Long idprocess) {
-        List<BusinessProcess> businessProcesses = new ArrayList<>();
-        businessProcesses.add(new BusinessProcess(idprocess));
-        return processStepDao.findByBusinessProcesses(businessProcesses);
+    public TreeNode(T data) {
+        this.data = data;
+        this.children = new LinkedList<TreeNode<T>>();
     }
 
-    public Optional<ProcessStep> findBusinessStep(Long idbstep) {
-        return processStepDao.findById(idbstep);
+    public TreeNode<T> addChild(T child) {
+        TreeNode<T> childNode = new TreeNode<T>(child);
+        childNode.parent = this;
+        this.children.add(childNode);
+        return childNode;
     }
 
-	public List<StepInstance> findAll() {
+	@Override
+	public Iterator<TreeNode<T>> iterator() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public T getData() {
+		return data;
+	}
+
+	public List<TreeNode<T>> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<TreeNode<T>> children) {
+		this.children = children;
+	}
+
+	public void setData(T data) {
+		this.data = data;
+	}
+
+    // other features ...
+
 }

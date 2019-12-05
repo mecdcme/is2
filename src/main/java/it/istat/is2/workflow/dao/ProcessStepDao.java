@@ -30,9 +30,10 @@ import org.springframework.stereotype.Repository;
 import it.istat.is2.workflow.domain.ProcessStep;
 
 @Repository
-public interface BusinessStepDao extends CrudRepository<ProcessStep,Long> {
+public interface ProcessStepDao extends CrudRepository<ProcessStep,Long> {
 
 	List<ProcessStep> findAll();
 	@SuppressWarnings("rawtypes")
 	List<ProcessStep> findByBusinessProcesses(@Param("idprocess")List businessProcess);
+
 }
