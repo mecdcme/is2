@@ -133,8 +133,16 @@ mlest <- function(workset, s=S,x=X,y=Y,z=Z, ...) {
   mod <- list(B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w )
   #setting output roles 
   roles <- list (P= predname, O="outlier", M=names(mod), G=names(report))
-  result <-list( out=data.frame(out,out1), roles= roles, mod=mod, report = report, "log" = stdout)
+  r_out<-data.frame(out,out1)
+  rolesgroup <- list (P= names(r_out), G= c("M","G"))
+  result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, mod=mod, report = report, log = stdout)
   
+  #roles <- list (FS=names(r_out))
+  #rolesgroup <- list (FS= c("FS"))
+  #result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, var_est = var_est, log = stdout)
+  
+  sink()
+  close(con)
   return(result)
 }
 
