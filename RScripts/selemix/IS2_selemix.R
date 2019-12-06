@@ -93,7 +93,7 @@ library("SeleMix")
 #stima completa
 is2_mlest <- function(workset,params, s=S,x=X,y=Y,z=Z, ...) {
   #environment check
-     print(class(params))
+     print(params)
     print("----")
    print(x)
     print("----")

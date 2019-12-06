@@ -141,7 +141,7 @@ public class EngineR implements EngineService {
 		prepareEnv();
 		createConnection(serverRHost, serverRPort);
 		bindInputColumns(worksetVariabili, EngineR.IS2_WORKSET);
-	    bindInputColumns(parametriMap, EngineR.IS2_PARAMETRI);
+		bindInputColumnsParams(parametriMap, EngineR.IS2_PARAMETRI);
 		bindInputColumns(ruleset, EngineR.IS2_RULESET);
 		setRuoli(ruoliVariabileNome);
 
@@ -218,6 +218,40 @@ public class EngineR implements EngineService {
 		}
 	}
 
+	
+	public void bindInputColumnsParams(LinkedHashMap<String, ArrayList<String>> workset, String varR)
+			throws REngineException {
+
+		if (!workset.isEmpty()) {
+			List<String> keys = new ArrayList<String>(workset.keySet());
+			String listaCampi = "";
+			String listaCampiLabel = "";
+			int size = keys.size();
+			String key = "";
+		
+			for (int i = 0; i < size; i++) {
+				key = keys.get(i);
+				
+				String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
+				listaCampi += key + ",";
+				listaCampiLabel += "'" + key + "',";
+				connection.assign(key, arrX);
+			}
+			listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
+			listaCampiLabel = listaCampiLabel.substring(0, listaCampiLabel.length() - 1);
+			connection.eval(varR + " <- c(" + listaCampi + ")");
+
+			// assegnazione nome dei campi alle colonne
+
+			String namecols = ((size > 1) ? "col" : "") + "names(" + varR + ") = c(" + listaCampiLabel + ")";
+			// String exec = "colnames(" + varR + ") = c(" + listaCampi + ")";
+			Logger.getRootLogger().debug("Bind input columns names " + namecols);
+			connection.eval(namecols);
+
+		}
+	}
+
+	
 	 
 	private boolean isNumeric(String[] arrX) {
 		// TODO Auto-generated method stub
