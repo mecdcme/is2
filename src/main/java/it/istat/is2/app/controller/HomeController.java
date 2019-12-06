@@ -27,9 +27,12 @@ import it.istat.is2.app.bean.BusinessFunctionBean;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import it.istat.is2.app.service.AdministrationService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.workflow.domain.ViewDataType;
@@ -38,15 +41,19 @@ import it.istat.is2.workflow.service.BusinessFunctionService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.ui.Model;
-
+ 
 @Controller
 public class HomeController {
 
     @Autowired
     private BusinessFunctionService businessFunctionService;
-
+    @Autowired
+    private AdministrationService administrationService;
+    @Autowired
+	private MessageSource messages;
     @Autowired
     private NotificationService notificationService;
+    
 
     @RequestMapping("/")
     public String home(HttpSession session, Model model) {
@@ -73,5 +80,27 @@ public class HomeController {
         notificationService.removeAllMessages();
 
         return "team";
+    }
+    @RequestMapping("/admin")
+    public String admin(HttpSession session, Model model) {
+        notificationService.removeAllMessages();
+
+        return "admin/home";
+    }
+    
+    @RequestMapping("/startr")
+    public String startR(HttpSession session, Model model) {
+        notificationService.removeAllMessages();
+        
+    	try {
+    		  administrationService.startR();
+			notificationService.addInfoMessage(
+	                messages.getMessage("generic.success", null, LocaleContextHolder.getLocale()));	
+		}catch(Exception e) {
+			notificationService.addErrorMessage(
+                    messages.getMessage("generic.error", null, LocaleContextHolder.getLocale()), e.getMessage());
+		}
+         
+        return "admin/home";
     }
 }

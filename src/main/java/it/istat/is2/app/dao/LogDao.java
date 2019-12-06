@@ -28,6 +28,9 @@ import it.istat.is2.worksession.domain.WorkSession;
 
 import java.util.List;
 import java.util.Optional;
+
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -47,10 +50,13 @@ public interface LogDao extends CrudRepository<Log, Long> {
     
     public List<Log> findByWorkSessionAndTypeOrderByIdAsc(WorkSession idWorkSession, String type);
 
-    public int deleteByWorkSession(WorkSession workSession);
     
     @Modifying
     @Query("delete from Log lg where lg.workSession = :idWorkSession and lg.type = :type")
     public int deleteByWorkSessionAndType(@Param("idWorkSession") Long idWorkSession, @Param("type") String type);
-
+    
+    @Modifying
+    @Query("delete from Log lg where lg.workSession.id = :idWorkSession")
+    public int deleteByWorkSession(@Param("idWorkSession") Long idWorkSession);
+    
 }

@@ -600,8 +600,8 @@ public class WorkflowService {
 		if (jobInstanceIds != null && jobInstanceIds.size() > 0) {
 			for (int i = 0; i < jobInstanceIds.size(); i++) {
 			 
-				workFlowBatchDao.deleteBatchJobExecutionContextById(jobInstanceIds.get(i));
-				workFlowBatchDao.deleteBatchJobExecutionById(jobInstanceIds.get(i));
+			//	workFlowBatchDao.deleteBatchJobExecutionContextById(jobInstanceIds.get(i));
+			//	workFlowBatchDao.deleteBatchJobExecutionById(jobInstanceIds.get(i));
 				workFlowBatchDao.deleteJobInstanceById(jobInstanceIds.get(i));
 			}
 		}

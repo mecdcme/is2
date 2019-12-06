@@ -48,14 +48,13 @@ import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.workflow.dao.AppRoleDao;
 import it.istat.is2.workflow.dao.StepRuntimeDao;
+import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.DataProcessing;
 import it.istat.is2.workflow.domain.DataTypeCls;
-import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.StepInstance;
 import it.istat.is2.workflow.domain.StepInstanceSignature;
 import it.istat.is2.workflow.domain.StepRuntime;
 import it.istat.is2.workflow.domain.TypeIO;
-import it.istat.is2.workflow.domain.DataTypeCls;
 import it.istat.is2.workflow.domain.Workset;
 
 /**
@@ -277,10 +276,10 @@ public class EngineR implements EngineService {
 
 		String fname = stepInstance.getMethod();
 		// mlest <- ml.est (workset, y=Y,";
-		// Aggiunto il workset nella lista degli argomenti della funzione (by paolinux)
+		// Aggiunto il workset  e params nella lista degli argomenti della funzione (by paolinux)
 		istruzione = IS2_RESULTSET + "  <- " + fname + "( " + IS2_WORKSET + ",";
-		if (!ruleset.isEmpty())
-			istruzione += IS2_RULESET + ", ";
+		if (!parametriMap.isEmpty()) istruzione += IS2_PARAMETRI + ", ";
+		if (!ruleset.isEmpty()) istruzione += IS2_RULESET + ", ";
 
 		for (Map.Entry<String, ArrayList<String>> entry : ruoliVariabileNome.entrySet()) {
 			String codiceRuolo = entry.getKey();

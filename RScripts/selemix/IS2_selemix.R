@@ -91,8 +91,15 @@ library("SeleMix")
 
 
 #stima completa
-mlest <- function(workset, s=S,x=X,y=Y,z=Z, ...) {
+is2_mlest <- function(workset,params, s=S,x=X,y=Y,z=Z, ...) {
   #environment check
+     print(class(params))
+    print("----")
+   print(x)
+    print("----")
+    print(y)
+	 print("----")
+  print(z)
    stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
   
@@ -168,7 +175,7 @@ strata.mlest <- function(workset, y, x=NULL, s, ...) {
 }
 
 #Predizione da modello
-ypred <- function(workset, y, x=NULL, ... ) {
+is2_ypred <- function(workset, y, x=NULL, ... ) {
 	if(!exists("model"))  model="LN"
 	if(!exists("t.outl"))  t.outl=0.5
 	
@@ -219,7 +226,7 @@ strata.ypred <- function(workset, y, x=NULL, s, ...) {
 }
 
 #editing selettivo
-seledit <- function(workset, y, p, ...) {
+is2_seledit <- function(workset, y, p, ...) {
     #controllo environment
 	if(missing(y)|missing(p)) {
 		stop('iSS Error: Missing TARGET or PREDICTION Variable(s)')

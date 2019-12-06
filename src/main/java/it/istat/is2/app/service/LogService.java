@@ -50,23 +50,23 @@ public class LogService {
     private HttpSession httpSession;
 
     public List<Log> findAll() {
-        return (List<Log>) this.logDao.findAll();
+        return (List<Log>) logDao.findAll();
     }
 
     public List<Log> findByIdSessione(Long idSessione) {
        // return (List<Log>) this.logDao.findByIdSessioneAndTipoOrderByIdDesc(idSessione, IS2Const.OUTPUT_DEFAULT);
-        return (List<Log>) this.logDao.findByWorkSessionOrderByIdAsc(new WorkSession(idSessione));
+        return (List<Log>) logDao.findByWorkSessionOrderByIdAsc(new WorkSession(idSessione));
     }
 
     public List<Log> findByIdSessioneAndTipo(Long idSessione, String tipo) {
-        return (List<Log>) this.logDao.findByWorkSessionAndTypeOrderByIdAsc(new WorkSession(idSessione), tipo);
+        return (List<Log>) logDao.findByWorkSessionAndTypeOrderByIdAsc(new WorkSession(idSessione), tipo);
     }
         
     public List<Log> findByIdSessione() {
          SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
          List<Log> logs;
          if (sessionBean != null) {
-             logs = this.logDao.findByWorkSessionAndTypeOrderByIdDesc(new WorkSession(sessionBean.getId()),IS2Const.OUTPUT_DEFAULT);
+             logs = logDao.findByWorkSessionAndTypeOrderByIdDesc(new WorkSession(sessionBean.getId()),IS2Const.OUTPUT_DEFAULT);
          } else{
              logs = new ArrayList<>();
          }
@@ -77,19 +77,19 @@ public class LogService {
          SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
          List<Log> logs;
          if (sessionBean != null) {
-             logs = this.logDao.findByWorkSessionAndTypeOrderByIdAsc(new WorkSession(sessionBean.getId()),tipo);
+             logs = logDao.findByWorkSessionAndTypeOrderByIdAsc(new WorkSession(sessionBean.getId()),tipo);
          } else{
              logs = new ArrayList<>();
          }
         return logs;
     }
     
-    public int deleteByIdSessione(Long idSessione) {
-        return this.logDao.deleteByWorkSession(new WorkSession(idSessione));
+    public void deleteByIdSessione(Long idSessione) {
+         logDao.deleteByWorkSession(idSessione);
     }
     
     public int deleteByIdSessioneAndTipo(Long idSessione, String tipo) {
-        return this.logDao.deleteByWorkSessionAndType(idSessione, tipo);
+        return logDao.deleteByWorkSessionAndType(idSessione, tipo);
     }
     
     public void save(String msg) {
@@ -123,7 +123,7 @@ public class LogService {
         log.setType(tipo);
         log.setMsgTime(new Date());
 
-        this.logDao.save(log);
+        logDao.save(log);
     }
     
     

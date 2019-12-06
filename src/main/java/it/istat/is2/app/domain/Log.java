@@ -26,6 +26,7 @@ package it.istat.is2.app.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -68,7 +69,6 @@ public class Log implements Serializable{
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "work_session_ID")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private WorkSession workSession;
     
 }
