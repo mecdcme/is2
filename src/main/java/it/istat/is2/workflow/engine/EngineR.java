@@ -64,22 +64,6 @@ import it.istat.is2.workflow.domain.Workset;
 @Service
 public class EngineR implements EngineService {
 
-	public static final String IS2_RULESET = "ruleset";
-	public static final String IS2_RESULTSET = "sel_out";
-	public static final String IS2_WORKSET = "workset";
-	public static final String IS2_RUOLI_VAR = "role_var";
-	public static final String IS2_RUOLI_VAR_OUTPUT = "role_var_out";
-	public static final String IS2_RUOLI_INPUT = "role_in";
-	public static final String IS2_RUOLI_OUTPUT = "ruol_out";
-	public static final String IS2_PARAMETRI = "params";
-	public static final String IS2_MODELLO = "model";
-	public static final String IS2_RUOLO_SKIP_N = "N";
-	public static final String IS2_RESULT_RUOLI = "roles";
-	public static final String IS2_RESULT_ROLES_GROUPS = "rolesgroup";
-	public static final String IS2_RESULT_OUTPUT = "out";
-	public static final String IS2_RESULT_PARAM = "mod";
-	public static final String IS2_RESULT_REPORT = "report"; // aggiunto componente dei parametri di uscita
-	public static final String IS2_R_NA_VALUE = "NA"; //
 
 	@Autowired
 	AppRoleDao ruoloDao;
@@ -140,9 +124,10 @@ public class EngineR implements EngineService {
 		this.fileScriptR = stepInstance.getAppService().getSource();
 		prepareEnv();
 		createConnection(serverRHost, serverRPort);
-		bindInputColumns(worksetVariabili, EngineR.IS2_WORKSET);
-		bindInputColumnsParams(parametriMap, EngineR.IS2_PARAMETRI);
-		bindInputColumns(ruleset, EngineR.IS2_RULESET);
+		bindInputColumns(worksetVariabili,WORKSET);
+		bindInputColumns(parametriMap, PARAMETERS);
+		//bindInputColumnsParams(parametriMap, PARAMETERS);
+		bindInputColumns(ruleset, EngineR.RULESET);
 		setRuoli(ruoliVariabileNome);
 
 	}
@@ -236,6 +221,7 @@ public class EngineR implements EngineService {
 				listaCampi += key + ",";
 				listaCampiLabel += "'" + key + "',";
 				connection.assign(key, arrX);
+				 
 			}
 			listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
 			listaCampiLabel = listaCampiLabel.substring(0, listaCampiLabel.length() - 1);
@@ -246,7 +232,7 @@ public class EngineR implements EngineService {
 			String namecols = ((size > 1) ? "col" : "") + "names(" + varR + ") = c(" + listaCampiLabel + ")";
 			// String exec = "colnames(" + varR + ") = c(" + listaCampi + ")";
 			Logger.getRootLogger().debug("Bind input columns names " + namecols);
-			connection.eval(namecols);
+			//connection.eval(namecols);
 
 		}
 	}
@@ -256,7 +242,7 @@ public class EngineR implements EngineService {
 	private boolean isNumeric(String[] arrX) {
 		// TODO Auto-generated method stub
 		for (String elem : arrX) {
-			if (elem.isEmpty() || IS2_R_NA_VALUE.equalsIgnoreCase(elem))
+			if (elem.isEmpty() || R_NA_VALUE.equalsIgnoreCase(elem))
 				continue;
 			try {
 				Double.parseDouble(elem);
@@ -311,9 +297,9 @@ public class EngineR implements EngineService {
 		String fname = stepInstance.getMethod();
 		// mlest <- ml.est (workset, y=Y,";
 		// Aggiunto il workset  e params nella lista degli argomenti della funzione (by paolinux)
-		istruzione = IS2_RESULTSET + "  <- " + fname + "( " + IS2_WORKSET + ",";
-		if (!parametriMap.isEmpty()) istruzione += IS2_PARAMETRI + ", ";
-		if (!ruleset.isEmpty()) istruzione += IS2_RULESET + ", ";
+		istruzione = RESULTSET + "  <- " + fname + "( " + WORKSET + ",";
+		if (!parametriMap.isEmpty()) istruzione += PARAMETERS + ",";
+		if (!ruleset.isEmpty()) istruzione += RULESET + ", ";
 
 		for (Map.Entry<String, ArrayList<String>> entry : ruoliVariabileNome.entrySet()) {
 			String codiceRuolo = entry.getKey();
@@ -535,11 +521,11 @@ public class EngineR implements EngineService {
 	public void processOutput() throws Exception {
 		// TODO Auto-generated method stub
 
-		getGenericoOutput(worksetOut, EngineR.IS2_RESULTSET, EngineR.IS2_RESULT_OUTPUT);
-		getGenericoOutput(ruoliOutputStep, EngineR.IS2_RESULTSET, EngineR.IS2_RESULT_RUOLI);
-		getGenericoOutput(parametriOutput, EngineR.IS2_RESULTSET, EngineR.IS2_RESULT_PARAM);
-		getGenericoOutput(parametriOutput, EngineR.IS2_RESULTSET, EngineR.IS2_RESULT_REPORT);
-		getRolesGroup(ruoliGruppoOutputStep, EngineR.IS2_RESULTSET, EngineR.IS2_RESULT_ROLES_GROUPS);
+		getGenericoOutput(worksetOut, RESULTSET, RESULT_OUTPUT);
+		getGenericoOutput(ruoliOutputStep, RESULTSET, RESULT_RUOLI);
+		getGenericoOutput(parametriOutput, RESULTSET, RESULT_PARAM);
+		getGenericoOutput(parametriOutput, RESULTSET, RESULT_REPORT);
+		getRolesGroup(ruoliGruppoOutputStep, RESULTSET,RESULT_ROLES_GROUPS);
 		writeLogScriptR();
 		saveOutputDB();
 
@@ -566,7 +552,7 @@ public class EngineR implements EngineService {
 			String ruolo = ruoliOutputStepInversa.get(nomeW);
 			String ruoloGruppo = ruoliGruppoOutputStep.get(ruolo);
 			if (ruolo == null) {
-				ruolo = EngineR.IS2_RUOLO_SKIP_N;
+				ruolo = RUOLO_SKIP_N;
 			}
 			if (ruoloGruppo == null) {
 				ruoloGruppo = RUOLO_SKIP_N;
@@ -602,6 +588,51 @@ public class EngineR implements EngineService {
 			stepRuntimeDao.save(stepRuntime);
 		}
 
+		
+		// save output Parameter  DB
+		for (Map.Entry<String, ArrayList<String>> entry : parametriOutput.entrySet()) {
+			String nomeW = entry.getKey();
+			ArrayList<String> value = entry.getValue();
+			StepRuntime stepRuntime;
+			String ruolo = ruoliOutputStepInversa.get(nomeW);
+			String ruoloGruppo = ruoliGruppoOutputStep.get(ruolo);
+			if (ruolo == null) {
+				ruolo = RUOLO_SKIP_N;
+			}
+			if (ruoloGruppo == null) {
+				ruoloGruppo = RUOLO_SKIP_N;
+			}
+			AppRole sxRuolo = ruoliAllMap.get(ruolo);
+			AppRole sxRuoloGruppo = ruoliAllMap.get(ruoloGruppo);
+
+			stepRuntime = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
+
+			if (stepRuntime != null) { // update
+
+				stepRuntime.getWorkset().setContents(value);
+				stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+			} else {
+				stepRuntime = new StepRuntime();
+				stepRuntime.setDataProcessing(dataProcessing);
+				stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+				stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
+				stepRuntime.setAppRole(sxRuolo);
+				stepRuntime.setRoleGroup(sxRuoloGruppo);
+				stepRuntime.setOrderCode(sxRuolo.getOrder());
+				Workset workset = new Workset();
+				workset.setName(nomeW.replaceAll("\\.", "_"));
+				workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
+				ArrayList<StepRuntime> l = new ArrayList<>();
+				l.add(stepRuntime);
+				workset.setStepRuntimes(l);
+				workset.setContents(value);
+				workset.setContentSize(workset.getContents().size());
+				stepRuntime.setWorkset(workset);
+			}
+
+			stepRuntimeDao.save(stepRuntime);
+		}
+		
 		 
 	}
 
