@@ -109,7 +109,7 @@ public class DesignController {
          
        
   
-        return "workflow/settings";
+        return "design/process_design.html";
 
     }
 	
