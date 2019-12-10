@@ -23,36 +23,40 @@
  */
 package it.istat.is2.workflow.engine;
 
-
-
 import org.springframework.stereotype.Service;
-
 
 import it.istat.is2.workflow.domain.DataProcessing;
 import it.istat.is2.workflow.domain.StepInstance;
+
 @Service
 public interface EngineService {
-	public static final String RESULTSET = "sel_out";
-	public static final String WORKSET = "workset";
-	public static final String RUOLI_VAR = "role_var";
-	public static final String RUOLI_VAR_OUTPUT = "role_var_out";
-	public static final String RUOLI_INPUT = "role_in";
-	public static final String RUOLI_OUTPUT = "ruol_out";
-	public static final String PARAMETRI = "params";
-	public static final String MODELLO = "model";
-	public static final String RUOLO_SKIP_N = "N";
-	public static final String RESULT_RUOLI = "roles";
-	public static final String RESULT_OUTPUT = "out";
-	public static final String RESULT_PARAM = "mod";
-	public static final String RESULT_REPORT = "report"; // aggiunto componente dei parametri di uscita
 
+    public static final String RESULTSET = "sel_out";
+    public static final String WORKSET = "workset";
+    public static final String RUOLI_VAR = "role_var";
+    public static final String RUOLI_VAR_OUTPUT = "role_var_out";
+    public static final String RUOLI_INPUT = "role_in";
+    public static final String RUOLI_OUTPUT = "ruol_out";
+    public static final String PARAMETERS = "wsparams";
+    public static final String MODELLO = "model";
+    public static final String RUOLO_SKIP_N = "N";
+    public static final String RESULT_ROLES = "roles";
+    public static final String RESULT_OUTPUT = "out";
+    public static final String RESULT_PARAM = "mod";
+    public static final String RESULT_REPORT = "report"; // aggiunto componente dei parametri di uscita
+    public static final String RULESET = "ruleset";
+    public static final String R_PARAMETRI = "wsparams";
+    public static final String RESULT_ROLES_GROUPS = "rolesgroup";
+    public static final String R_NA_VALUE = "NA"; //
 
-	public void init(DataProcessing elaborazione, StepInstance stepInstance) throws Exception;
-        public void init() throws Exception;
-	public void doAction()throws Exception;
-	public void processOutput() throws Exception;
-	public void destroy();
- 
-      
+    public void init(DataProcessing elaborazione, StepInstance stepInstance) throws Exception;
+
+    public void init() throws Exception;
+
+    public void doAction() throws Exception;
+
+    public void processOutput() throws Exception;
+
+    public void destroy();
 
 }

@@ -91,23 +91,17 @@ library("SeleMix")
 
 
 #stima completa
-is2_mlest <- function(workset,params, s=S,x=X,y=Y,z=Z, ...) {
+is2_mlest <- function(workset,wsparams,s=S,x=X,y=Y,z=Z, ...) {
   #environment check
-     print(params)
-    print("----")
-   print(x)
-    print("----")
-    print(y)
-	 print("----")
-  print(z)
-   stdout <- vector('character')
-  con <- textConnection('stdout', 'wr', local = TRUE)
-  
-  
+  print(wsparams)
+  # stdout <- vector('character')
+  #con <- textConnection('stdout', 'wr', local = TRUE)
+
   if(missing(y)) stop('iSS Error: Missing TARGET Variable(s)')
   y <- matrix(as.numeric(workset[,Y]),ncol=length(Y),nrow=nrow(workset))
   if(!missing(x)) x <- matrix(as.numeric(workset[,X]),ncol=length(X),nrow=nrow(workset))
-  
+   
+    print("------- #parameter check")
   #parameter check
   if(!exists("model"))  model="LN" #da controllare
   if(!exists("t.outl"))  t.outl=0.5
@@ -142,14 +136,14 @@ is2_mlest <- function(workset,params, s=S,x=X,y=Y,z=Z, ...) {
   roles <- list (P= predname, O="outlier", M=names(mod), G=names(report))
   r_out<-data.frame(out,out1)
   rolesgroup <- list (P= names(r_out), G= c("M","G"))
-  result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, mod=mod, report = report, log = stdout)
+  result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, mod=mod, report = report, log = 'stdout')
   
   #roles <- list (FS=names(r_out))
   #rolesgroup <- list (FS= c("FS"))
   #result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, var_est = var_est, log = stdout)
   
-  sink()
-  close(con)
+  #sink()
+  #close(con)
   return(result)
 }
 
