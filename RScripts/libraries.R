@@ -14,5 +14,6 @@ checkAndInstall("simputation")
 checkAndInstall("VIM")
 checkAndInstall("rspa")
 checkAndInstall("SeleMix")
+checkAndInstall("rjson")
 
 print("Loading libraries...ok ")

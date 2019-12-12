@@ -31,25 +31,28 @@ import it.istat.is2.workflow.domain.StepInstance;
 @Service
 public interface EngineService {
 
-    public static final String RESULTSET = "sel_out";
-    public static final String WORKSET = "workset";
-    public static final String RUOLI_VAR = "role_var";
-    public static final String RUOLI_VAR_OUTPUT = "role_var_out";
-    public static final String RUOLI_INPUT = "role_in";
-    public static final String RUOLI_OUTPUT = "ruol_out";
-    public static final String PARAMETERS = "wsparams";
-    public static final String MODELLO = "model";
-    public static final String RUOLO_SKIP_N = "N";
-    public static final String RESULT_ROLES = "roles";
-    public static final String RESULT_OUTPUT = "out";
-    public static final String RESULT_PARAM = "mod";
-    public static final String RESULT_REPORT = "report"; // aggiunto componente dei parametri di uscita
+	//GENERIC INPUT
+	public static final String WORKSET_IN = "workset_in";
+	public static final String PARAMETERS_IN = "params_in";
+	public static final String ROLES_IN = "roles_in";
+	
+	//GENERIC OUTPUT
+	public static final String WORKSET_OUT = "workset_out"; //Output container
+    public static final String PARAMETERS_OUT = "params_out";
+    public static final String REPORT_OUT = "report_out";
+    public static final String ROLES_OUT = "roles_out";
+    public static final String ROLES_GROUP_OUT = "rolesgroup_out";
+    public static final String RESULTSET = "resultset";
+    
+    //RULESET
     public static final String RULESET = "ruleset";
-    public static final String R_PARAMETRI = "wsparams";
-    public static final String RESULT_ROLES_GROUPS = "rolesgroup";
-    public static final String R_NA_VALUE = "NA"; //
+    
+    //DEFAULT VALUES
+    public static final String ROLE_DEFAULT = "N";
+    public static final String DEFAULT_NA = "NA"; //
+    
 
-    public void init(DataProcessing elaborazione, StepInstance stepInstance) throws Exception;
+    public void init(DataProcessing dataProcessing, StepInstance stepInstance) throws Exception;
 
     public void init() throws Exception;
 

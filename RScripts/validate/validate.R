@@ -101,7 +101,7 @@ is2_detect_infeasible <- function(input, inputNames){
 	rules_inf <- detect_infeasible_rules(rules)
 	print(rules_inf)
   }
-   sink()
+  sink()
   close(con)
   output <- list("rules" = rules_inf, "validates"=rules_validate, "log" = stdout)
   return(output)

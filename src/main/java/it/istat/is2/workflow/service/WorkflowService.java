@@ -513,10 +513,10 @@ public class WorkflowService {
 				for (Iterator<StepInstanceSignature> iteratorAppRoles = stepInstance.getStepInstanceSignatures()
 						.iterator(); iteratorAppRoles.hasNext();) {
 					{
-						StepInstanceSignature stepInstanceAppRole = iteratorAppRoles.next();
-						if (stepInstanceAppRole.getTypeIO().equals(new TypeIO(IS2Const.TYPE_IO_INPUT))
-								&& stepInstanceAppRole.getIsRequerid()) {
-							AppRole ar = stepInstanceAppRole.getAppRole();
+						StepInstanceSignature stepInstanceSignature = iteratorAppRoles.next();
+						if (stepInstanceSignature.getTypeIO().equals(new TypeIO(IS2Const.TYPE_IO_INPUT))
+								&& stepInstanceSignature.getIsRequerid()) {
+							AppRole ar = stepInstanceSignature.getAppRole();
 							if (ar.getDataType().equals(dataType) && !stepRuntimesRoles.contains(ar)) {
 								roleNameSet.add(ar.getName());
 							}

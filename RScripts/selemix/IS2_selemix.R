@@ -21,27 +21,26 @@
 #   
 #  @version 1.0.0
 #
-#eliminazione di ogni precedente elaborazione (pulizia memoria)
 rm(list=ls())
-#caricamento libreria
 library("SeleMix")
+library("rjson")
 
 #   Lista Ruoli
 #0	SKIP				N	VARIABILE NON UTILIZZATA
 #1	IDENTIFICATIVO		I	CHIAVE OSSERVAZIONE
-#2	TARGET			    Y	VARIABILE DI OGGETTO DI ANALISI
-#3	COVARIATA		    X	VARIABILE INDIPENDENTE
-#4	PREDIZIONE		  	P	VARIABILE DI PREDIZIONE
-#5	OUTLIER			    O	FLAG OUTLIER
+#2	TARGET			  Y	VARIABILE DI OGGETTO DI ANALISI
+#3	COVARIATA		  X	VARIABILE INDIPENDENTE
+#4	PREDIZIONE			P	VARIABILE DI PREDIZIONE
+#5	OUTLIER			  O	FLAG OUTLIER
 #6	PESO				W	PESO CAMPIONARIO
-#7	ERRORE			    E	ERRORE INFLUENTE
-#8	RANKING			    R	INFLUENCE RANKING
-#9	OUTPUT			    T	VARIABILE DI OUTPUT
-#10	STRATO			    S	PARTIZIONAMENTO DEL DATASET
-#11	PARAMETRI		    Z	PARAMETRI DI ESERCIZIO
-#12	MODELLO			    M	MODELLO DATI
-#13	SCORE			    F	INFLUENCE SCORE
-#14	REPORT			    G	PARAMETRO DI OUTPUT / REPORT
+#7	ERRORE			  E	ERRORE INFLUENTE
+#8	RANKING			  R	INFLUENCE RANKING
+#9	OUTPUT			  T	VARIABILE DI OUTPUT
+#10	STRATO			  S	PARTIZIONAMENTO DEL DATASET
+#11	PARAMETRI		  Z	PARAMETRI DI ESERCIZIO
+#12	MODELLO			  M	MODELLO DATI
+#13	SCORE			  F	INFLUENCE SCORE
+#14	REPORT			  G	PARAMETRO DI OUTPUT / REPORT
 
 
 # Lista oggetti Bridge Java - R
@@ -91,60 +90,74 @@ library("SeleMix")
 
 
 #stima completa
-is2_mlest <- function(workset,wsparams,s=S,x=X,y=Y,z=Z, ...) {
-  #environment check
-  print(wsparams)
-  # stdout <- vector('character')
-  #con <- textConnection('stdout', 'wr', local = TRUE)
-
-  if(missing(y)) stop('iSS Error: Missing TARGET Variable(s)')
-  y <- matrix(as.numeric(workset[,Y]),ncol=length(Y),nrow=nrow(workset))
-  if(!missing(x)) x <- matrix(as.numeric(workset[,X]),ncol=length(X),nrow=nrow(workset))
-   
-    print("------- #parameter check")
-  #parameter check
-  if(!exists("model"))  model="LN" #da controllare
-  if(!exists("t.outl"))  t.outl=0.5
-  if(!exists("lambda"))  lambda=3
-  if(!exists("w"))  w=0.05
-  if(!exists("lambda.fix"))  lambda.fix=FALSE
-  if(!exists("w.fix"))  w.fix=FALSE
-  if(!exists("eps"))  eps=1e-7
-  if(!exists("max.iter"))  max.iter=500
-  
-  #calcolo funzione
-  print("-------#calcolo funzione")
-  est <- ml.est(y=y, x=x, model = model, lambda= as.numeric(lambda),  w= as.numeric(w), lambda.fix=lambda.fix, w.fix=w.fix, eps=as.numeric(eps), max.iter=as.numeric(max.iter), t.outl= as.numeric(t.outl), graph=FALSE)
-  if(length(workset)>1) ypred <- matrix(est$ypred,nrow=nrow(workset),ncol=length(Y))
-  else ypred <- as.matrix(est$ypred)
-  
-  #reimpostazione nomi delle variabili
-  out <- data.frame(tau=est$tau, outlier=est$outlier, pattern=est$pattern)
-  predname = c()
-  out1 = c()
-  for(i in 1:ncol(ypred)) {
-    pred = ypred[,i]
-    predname = c(predname, paste("YPRED",i,sep="_"))
-    out1 <- cbind(out1,pred)
-  }
-  out1=data.frame(out1)
-  colnames(out1) <- predname
-  #output parameters
-  report <- list(n.outlier = sum(est$outlier), missing = sum(as.numeric(est$pattern)),  is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)
-  mod <- list(B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w )
-  #setting output roles 
-  roles <- list (P= predname, O="outlier", M=names(mod), G=names(report))
-  r_out<-data.frame(out,out1)
-  rolesgroup <- list (P= names(r_out), G= c("M","G"))
-  result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, mod=mod, report = report, log = 'stdout')
-  
-  #roles <- list (FS=names(r_out))
-  #rolesgroup <- list (FS= c("FS"))
-  #result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, var_est = var_est, log = stdout)
-  
-  #sink()
-  #close(con)
-  return(result)
+is2_mlest <- function( workset, roles, wsparams,...) {
+ 	
+	stdout <- vector('character')
+	con <- textConnection('stdout', 'wr', local = TRUE)
+	
+    x <- workset[roles$X]
+	y <- workset[roles$Y]
+	
+	#Default params
+	model="LN"
+	t.outl=0.5
+	lambda=3
+	w=0.05
+	lambda.fix=FALSE
+	w.fix=FALSE
+	eps=1e-7
+	max.iter=500	
+	
+	#Parameter check
+	print(wsparams)
+	if(exists(wsparams)){
+		if(exists(wsparams$model)) model=wsparams$model
+		if(exists(wsparams$t.outl)) t.outl=wsparams$t.outl
+		if(exists(wsparams$lambda)) lambda=wsparams$lambda
+		if(exists(wsparams$w)) w=wsparams$w
+		if(exists(wsparams$lambda.fix)) lambda.fix=wsparams$lambda.fix
+		if(exists(wsparams$w.fix)) w.fix=wsparams$w.fix
+		if(exists(wsparams$eps)) eps=wsparams$eps
+		if(exists(wsparams$max.iter)) max.iter=wsparams$max.iter
+ 	}
+	
+	#Execute algorithm (mettere un try catch)
+	
+	est <- ml.est(y=y, x=x, model = model, lambda= as.numeric(lambda),  w= as.numeric(w), lambda.fix=lambda.fix, w.fix=w.fix, eps=as.numeric(eps), max.iter=as.numeric(max.iter), t.outl= as.numeric(t.outl), graph=FALSE)
+	if(length(workset)>1) ypred <- matrix(est$ypred,nrow=nrow(workset),ncol=length(roles$Y))
+	else ypred <- as.matrix(est$ypred)
+	
+	#reimpostazione nomi delle variabili
+	outp <- data.frame(tau=est$tau, outlier=est$outlier, pattern=est$pattern)
+	predname = c()
+	out1 = c()
+	for(i in 1:ncol(ypred)) {
+		pred = ypred[,i]
+		predname = c(predname, paste("YPRED",i,sep="_"))
+		out1 <- cbind(out1,pred)
+	}
+	out1=data.frame(out1)
+	colnames(out1) <- predname
+	#output parameters
+	report <- list(n.outlier = sum(est$outlier), missing = sum(as.numeric(est$pattern)),  is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)
+	mod <- list(B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w )
+	#param_mod <- list( MODEL = toJSON(mod))
+    param_mod <- mod	
+	
+	# param_report <- list( REPORT = toJSON(report))
+	param_report <-  report
+	#setting output roles 
+	 
+	roles <- list (P= c(roles$X,roles$Y, predname,names(outp)), O="outlier", M=names(mod), G=names(report))
+	r_out<-cbind(x,y,outp,out1)
+	rolesgroup <- list (P= c("P", "O"),  M="M",G="G")
+	print(rolesgroup)
+	#result <-list( workset_out=r_out, roles_out=roles,rolesgroup_out=rolesgroup, params_out=mod, report=report, log=stdout)
+	result <-list( workset_out=r_out, roles_out=roles,rolesgroup_out=rolesgroup, params_out=param_mod, report_out=param_report, log=stdout)
+	
+	sink()
+	close(con)
+	return(result)
 }
 
 #eseguzione strato

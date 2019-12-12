@@ -482,7 +482,7 @@ public class Utility {
 
 	public static Map<String, ArrayList<StepRuntime>> getMapCodiceRuoloStepVariabili(List<StepRuntime> dataList) {
 
-		HashMap<String, ArrayList<StepRuntime>> ret = new HashMap<>();
+		LinkedHashMap<String, ArrayList<StepRuntime>> ret = new LinkedHashMap<>();
 		for (StepRuntime stepV : dataList) {
 			String codR = stepV.getAppRole().getCode();
 			ArrayList<StepRuntime> lista = ret.get(codR);

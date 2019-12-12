@@ -198,10 +198,10 @@ public class EngineJava implements EngineService {
                 String ruolo = nameOut;
                 String ruoloGruppo = ruoliGruppoOutputStep.get(ruolo);
                 if (ruolo == null) {
-                    ruolo = RUOLO_SKIP_N;
+                    ruolo = ROLE_DEFAULT;
                 }
                 if (ruoloGruppo == null) {
-                    ruoloGruppo = RUOLO_SKIP_N;
+                    ruoloGruppo = ROLE_DEFAULT;
                 }
                 AppRole sxRuolo = ruoliAllMap.get(ruolo);
                 AppRole sxRuoloGruppo = ruoliAllMap.get(ruoloGruppo);
