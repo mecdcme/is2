@@ -90,7 +90,7 @@ library("rjson")
 
 
 #stima completa
-is2_mlest <- function( workset, roles, wsparams,...) {
+is2_mlest <- function( workset, roles, wsparams=NULL,...) {
  	
 	stdout <- vector('character')
 	con <- textConnection('stdout', 'wr', local = TRUE)
@@ -110,15 +110,18 @@ is2_mlest <- function( workset, roles, wsparams,...) {
 	
 	#Parameter check
 	print(wsparams)
-	if(exists(wsparams)){
-		if(exists(wsparams$model)) model=wsparams$model
-		if(exists(wsparams$t.outl)) t.outl=wsparams$t.outl
-		if(exists(wsparams$lambda)) lambda=wsparams$lambda
-		if(exists(wsparams$w)) w=wsparams$w
-		if(exists(wsparams$lambda.fix)) lambda.fix=wsparams$lambda.fix
-		if(exists(wsparams$w.fix)) w.fix=wsparams$w.fix
-		if(exists(wsparams$eps)) eps=wsparams$eps
-		if(exists(wsparams$max.iter)) max.iter=wsparams$max.iter
+	if(!is.null(wsparams)){
+	
+	print("asdfffffffffffffffffffffffffffffffffffffffffffff")
+	print(wsparams$model)
+		if(exists("wsparams$model")) model=wsparams$model
+		if(exists("wsparams$t.outl")) t.outl=wsparams$t.outl
+		if(exists("wsparams$lambda")) lambda=wsparams$lambda
+		if(exists("wsparams$w")) w=wsparams$w
+		if(exists("wsparams$lambda.fix")) lambda.fix=wsparams$lambda.fix
+		if(exists("wsparams$w.fix")) w.fix=wsparams$w.fix
+		if(exists("wsparams$eps")) eps=wsparams$eps
+		if(exists("wsparams$max.iter")) max.iter=wsparams$max.iter
  	}
 	
 	#Execute algorithm (mettere un try catch)

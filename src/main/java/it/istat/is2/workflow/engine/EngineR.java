@@ -121,7 +121,7 @@ public class EngineR implements EngineService {
 		prepareEnv();
 		createConnection(serverRHost, serverRPort);
 		bindInputColumns(worksetVariables, WORKSET_IN);
-		bindInputColumns(parametersMap, PARAMETERS_IN);
+		bindInputColumnsParams(parametersMap, PARAMETERS_IN);
 		bindInputColumns(ruleset, RULESET);
 		setRuoli(variablesRolesMap);
 
@@ -179,13 +179,7 @@ public class EngineR implements EngineService {
 			listaCampiLabel = listaCampiLabel.substring(0, listaCampiLabel.length() - 1);
 
 			connection.eval(varR + " <- data.frame(" + listaCampi + ")"); // Create a data frame
-
-			// Assign the correct name to each vector in the data frame
-			// String namecols = "colnames(" + varR + ") = c(" + listaCampiLabel + ")";
-
-			// Logger.getRootLogger().debug("Bind input columns names " + namecols);
-			// connection.eval(namecols);
-
+ 
 		}
 	}
 
@@ -210,13 +204,8 @@ public class EngineR implements EngineService {
 			}
 			listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
 			listaCampiLabel = listaCampiLabel.substring(0, listaCampiLabel.length() - 1);
-			connection.eval(varR + " <- c(" + listaCampi + ")");
-
-			// assegnazione nome dei campi alle colonne
-			String namecols = ((size > 1) ? "col" : "") + "names(" + varR + ") = c(" + listaCampiLabel + ")";
-			// String exec = "colnames(" + varR + ") = c(" + listaCampi + ")";
-			Logger.getRootLogger().debug("Bind input columns names " + namecols);
-			// connection.eval(namecols);
+			connection.eval(varR + " <- list(" + listaCampi + ")");
+ 
 
 		}
 	}
@@ -280,12 +269,12 @@ public class EngineR implements EngineService {
 		// mlest <- ml.est (workset, y=Y,";
 		// Aggiunto il workset e params nella lista degli argomenti della funzione (by
 		// paolinux)
-		command = RESULTSET + "  <- " + fname + "( " + WORKSET_IN + "," + ROLES_IN + ", ";
+		command = RESULTSET + "  <- " + fname + "( " + WORKSET_IN + "," + ROLES_IN + ",";
 		if (!parametersMap.isEmpty()) {
 			command += PARAMETERS_IN + ",";
 		}
 		if (!ruleset.isEmpty()) {
-			command += RULESET + ", ";
+			command += RULESET + ",";
 		}
 		/*
 		 * for (Map.Entry<String, ArrayList<String>> entry :

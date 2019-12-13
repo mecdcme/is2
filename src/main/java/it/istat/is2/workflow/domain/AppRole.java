@@ -80,4 +80,37 @@ public class AppRole implements Serializable {
         this.id = id;
     }
 
+	 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AppRole other = (AppRole) obj;
+		if (businessServices == null) {
+			if (other.businessServices != null)
+				return false;
+		} else if (!businessServices.equals(other.businessServices))
+			return false;
+		if (code == null) {
+			if (other.code != null)
+				return false;
+		} else if (!code.equals(other.code))
+			return false;
+		return true;
+	}
+
+	 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((businessServices == null) ? 0 : businessServices.hashCode());
+		result = prime * result + ((code == null) ? 0 : code.hashCode());
+		return result;
+	}
+
 }

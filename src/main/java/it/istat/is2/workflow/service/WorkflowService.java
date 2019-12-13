@@ -464,7 +464,7 @@ public class WorkflowService {
 				StepInstance stepInstance = (StepInstance) iterator.next();
 				List<StepInstanceSignature> sxsetpppList = stepInstanceSignatureDao
 						.findAllStepSignaturesByStepAndTypeIO(stepInstance, new TypeIO(IS2Const.TYPE_IO_INPUT),
-								new DataTypeCls(Integer.valueOf(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETRO
+								new DataTypeCls(Integer.valueOf(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETER
 				paramsList.addAll(sxsetpppList);
 			}
 			ret.put(suBusinessProcess.getId(), paramsList);
@@ -587,11 +587,12 @@ public class WorkflowService {
 	}
 
 	@Transactional
-	public void cleanAllWorkset(Long idDataProcessing, Integer flagIO) {
+	public void cleanAllWorkset(Long idDataProcessing, Short flagIO) {
 
+	
 		List<StepRuntime> list = getStepRuntimes(idDataProcessing);
 		for (StepRuntime step : list) {
-			if (flagIO.equals(Integer.valueOf(0)) || step.getDataType().getId().equals(flagIO)) {
+			if (flagIO.equals( new Short("0")) || step.getTypeIO().equals(new TypeIO(flagIO))) {
 				stepRuntimeDao.deleteById(step.getId());
 			}
 		}
