@@ -181,7 +181,7 @@
                                                 <tr th:each="paramSignInstanceAppRole,stats: ${parameterListAll}" th:unless="${(parameterListAll == null) or (parameterListAll.size() == 0) }">
                                                     <td><span th:text="${stats.index+1}"></span></td>
                                                     <td th:text="${paramSignInstanceAppRole.parameter.name}"></td>
-                                                    <th:block th:if="${stepParamMap.get(paramSignInstanceAppRole.parameter.name)}" th:with="stepP=${stepParamMap.get(paramSignInstanceAppRole.parameter.name)}">
+                                                    <th:block th:if="${stepParamMap.get(paramSignInstanceAppRole.code)}" th:with="stepP=${stepParamMap.get(paramSignInstanceAppRole.code)}">
                                                         <td><span th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepP.workset.paramValue)}"></span></td>
                                                         <td>
                                                             <a href="javascript:void(0);" title="Modifica parametro"
@@ -195,7 +195,7 @@
                                                             </a>
                                                         </td>
                                                     </th:block>
-                                                    <th:block th:unless="${stepParamMap.get(paramSignInstanceAppRole.parameter.name)}">
+                                                    <th:block th:unless="${stepParamMap.get(paramSignInstanceAppRole.code)}">
                                                         <td><i class="fa fa-times" style="color: #f86c6b;"></i></td>
                                                          <td>
                                                             <a href="javascript:void(0);" title="Modifica parametro"

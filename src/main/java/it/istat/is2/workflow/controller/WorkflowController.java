@@ -275,8 +275,8 @@ public class WorkflowController {
 		Map<String, StepRuntime> stepParamMap=new HashMap<>();
 	 	ArrayList<String> paramAssigned = new ArrayList<>();
 		sVParamsAssignedList.forEach(stepRuntime -> {
-			paramAssigned.add(stepRuntime.getWorkset().getName());
-			stepParamMap.put(stepRuntime.getWorkset().getName(), stepRuntime);
+			paramAssigned.add(stepRuntime.getAppRole().getCode());
+			stepParamMap.put(stepRuntime.getAppRole().getCode(), stepRuntime);
 		});
 
 		Map<Long, List<StepInstanceSignature>> paramsAllBPPMap = workflowService
@@ -289,7 +289,7 @@ public class WorkflowController {
 			
 			for (StepInstanceSignature stepInstanceSignature : listparams) {
 			if(!paramsAllBPPList.contains(stepInstanceSignature.getAppRole()))	paramsAllBPPList.add(stepInstanceSignature.getAppRole());	
-				if (!paramAssigned.contains(stepInstanceSignature.getAppRole().getParameter().getName())) {
+				if (!paramAssigned.contains(stepInstanceSignature.getAppRole().getCode())) {
 					paramsNotAssignedList.add(stepInstanceSignature.getAppRole());
 				
 				}
@@ -302,7 +302,7 @@ public class WorkflowController {
      		List<StepRuntime> stepRuntimesRuleset = workflowService.getStepRuntimesRuleset(dataProcessingId);
      		Map<String, StepRuntime> stepRuntimesRulesetMap=new HashMap<>();
      		stepRuntimesRuleset.forEach(sxstepRuntime -> {
-    		 	stepRuntimesRulesetMap.put(sxstepRuntime.getAppRole().getName(), sxstepRuntime);
+    		 	stepRuntimesRulesetMap.put(sxstepRuntime.getAppRole().getCode(), sxstepRuntime);
     		});
     	   	List<Ruleset> rulesetList=ruleService.findRulesetBySessioneLavoro(dataProcessing.getWorkSession());
     		// Load Ruleset Role

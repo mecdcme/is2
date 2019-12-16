@@ -14,11 +14,13 @@ rm(list=ls())
 #percorso_fail="FSFail.Rout"
 #percorso_allert="FSAllert.Rout"
 
-fellegisunter <- function(workset,ct, ...) {
- stdout <- vector('character')
- con <- textConnection('stdout', 'wr', local = TRUE)
- sink(con)
- print(str(workset))
+fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
+ #stdout <- vector('character')
+ #con <- textConnection('stdout', 'wr', local = TRUE)
+ #sink(con)
+
+ ct <- roles$CT
+ print(ct)
  nvar=length(ct)-1
  #yy <-  as.data.frame(matrix(as.numeric(workset[,ct]),ncol=length(ct),nrow=nrow(workset)))
  yy <- workset
@@ -179,13 +181,14 @@ fellegisunter <- function(workset,ct, ...) {
 	
  roles <- list (FS=names(r_out))
  rolesgroup <- list (FS= c("FS"))
- result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, var_est = var_est, log = stdout)
+ print (r_out)
+ result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, var_est = var_est, log = 'stdout')
  
  # print(".........RESULT.............. ")
  #print(result)
  
- sink()
- close(con)
+ #sink()
+ #close(con)
  return(result)
  
 }
