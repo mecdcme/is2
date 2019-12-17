@@ -162,30 +162,7 @@ public class DatasetService {
 		return datasetFileDao.findTotalRows(dFile);
 	}
 
-	public DataTableBean loadDatasetValoriTest(Long dfile, Integer length, Integer start, Integer draw,
-			HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) {
-		List<DatasetColumn> dataList = sqlgenericDao.findDatasetColumnParamsbyQuery(dfile, start, start + length,
-				parametri, nameColumnToOrder, dirColumnOrder);
-		Integer numRighe = 1;
-
-		DataTableBean db = new DataTableBean();
-		db.setDraw(draw);
-		db.setRecordsFiltered(numRighe);
-		db.setRecordsTotal(numRighe);
-		List<Collection<HashMap<String, String>>> tabella = new ArrayList<Collection<HashMap<String, String>>>();
-
-		for (int i = 0; i < dataList.get(0).getContents().size(); i++) {
-			List<HashMap<String, String>> riga = new ArrayList<HashMap<String, String>>();
-			for (int j = 0; j < dataList.size(); j++) {
-				HashMap<String, String> dato = new HashMap<>();
-				dato.put(dataList.get(j).getName(), dataList.get(j).getContents().get(i));
-				riga.add(dato);
-			}
-			tabella.add(riga);
-		}
-		db.setData(tabella);
-		return db;
-	}
+ 
 
 	public String loadDatasetValori(Long dfile, Integer length, Integer start, Integer draw,
 			HashMap<String, String> parametri, String nameColumnToOrder, String dirColumnOrder) throws JSONException {
@@ -193,7 +170,7 @@ public class DatasetService {
 		int offset=2;
 		List<Object[]> resulFieldstList = sqlgenericDao.findDatasetIdColAndName(dfile);
 		List<Object[]> dataList = sqlgenericDao.findDatasetDataViewParamsbyQuery(resulFieldstList, dfile, start,
-				start + length, parametri, nameColumnToOrder, dirColumnOrder);
+				length, parametri, nameColumnToOrder, dirColumnOrder);
 
 		Integer numRighe = 0;
 		JSONArray data = new JSONArray();

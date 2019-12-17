@@ -15,9 +15,9 @@ rm(list=ls())
 #percorso_allert="FSAllert.Rout"
 
 fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
- #stdout <- vector('character')
- #con <- textConnection('stdout', 'wr', local = TRUE)
- #sink(con)
+ stdout <- vector('character')
+ con <- textConnection('stdout', 'wr', local = TRUE)
+ sink(con)
 
  ct <- roles$CT
  print(ct)
@@ -181,14 +181,13 @@ fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 	
  roles <- list (FS=names(r_out))
  rolesgroup <- list (FS= c("FS"))
- print (r_out)
- result <-list( out=r_out, roles= roles,rolesgroup= rolesgroup, var_est = var_est, log = 'stdout')
+
+ result <-list( workset_out=r_out, roles_out= roles,rolesgroup_out= rolesgroup, var_est = var_est, log = stdout)
  
- # print(".........RESULT.............. ")
- #print(result)
- 
- #sink()
- #close(con)
+
+
+ sink()
+ close(con)
  return(result)
  
 }

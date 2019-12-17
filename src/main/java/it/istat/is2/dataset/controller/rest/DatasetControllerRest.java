@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,17 +61,18 @@ public class DatasetControllerRest {
 
 	@GetMapping("/datasetcolonnasql/{dfile}/{rigainf}/{rigasup}")
 	@ResponseBody
-	public List<DatasetColumn> loadDataSetColonnaSql(@PathVariable("dfile") Long dfile,
+	public ResponseEntity<?> loadDataSetColonnaSql(@PathVariable("dfile") Long dfile,
 			@PathVariable("rigainf") Integer rigainf, @PathVariable("rigasup") Integer rigasup) throws IOException {
 		List<DatasetColumn> df = datasetService.findAllDatasetColumnSQL(dfile, rigainf, rigasup);
-		return df;
+		return ResponseEntity.ok(df);
 	}
 
 	@RequestMapping(value = "/rest/datasetvalori/{dfile}/{parametri:.+}", method = RequestMethod.POST)
-	public String loadDatasetValori(HttpServletRequest request, Model model, @PathVariable("dfile") Long dfile,
-			@PathVariable("parametri") String parametri, @RequestParam("length") Integer length,
-			@RequestParam("start") Integer start, @RequestParam("draw") Integer draw,
-			@RequestParam Map<String, String> allParams) throws IOException, JSONException {
+	public ResponseEntity<?> loadDatasetValori(HttpServletRequest request, Model model,
+			@PathVariable("dfile") Long dfile, @PathVariable("parametri") String parametri,
+			@RequestParam("length") Integer length, @RequestParam("start") Integer start,
+			@RequestParam("draw") Integer draw, @RequestParam Map<String, String> allParams)
+			throws IOException, JSONException {
 
 		String indexColunmToOrder = allParams.get("order[0][column]");
 		String nameColumnToOrder = allParams.get("columns[" + indexColunmToOrder + "][data]");
@@ -97,11 +99,11 @@ public class DatasetControllerRest {
 		String dtb = datasetService.loadDatasetValori(dfile, length, start, draw, parameters, nameColumnToOrder,
 				dirColumnOrder);
 
-		return dtb;
+		return ResponseEntity.ok(dtb);
 	}
 
 	@RequestMapping(value = "/rest/setvariabilesum/{idcol}/{idvar}", method = RequestMethod.POST)
-	public DatasetColumn setVarSum(HttpServletRequest request, Model model, @PathVariable("idcol") Long idcol,
+	public ResponseEntity<?> setVarSum(HttpServletRequest request, Model model, @PathVariable("idcol") Long idcol,
 			@PathVariable("idvar") Integer idvar) throws IOException {
 
 		DatasetColumn dcol = datasetService.findOneColonna(idcol);
@@ -112,7 +114,7 @@ public class DatasetControllerRest {
 		} catch (Exception e) {
 			notificationService.addErrorMessage("Errore: ", e.getMessage());
 		}
-		return dcol;
+		return ResponseEntity.ok(dcol);
 	}
 
 	@RequestMapping(value = "/rest/download/dataset/{tipoFile}/{dfile}", method = RequestMethod.GET)
@@ -144,7 +146,7 @@ public class DatasetControllerRest {
 	}
 
 	@RequestMapping(value = "/rest/dataset/updaterowlist", method = RequestMethod.POST)
-	public String updateOrdineRighe(HttpServletRequest request, Model model,
+	public ResponseEntity<?> updateOrdineRighe(HttpServletRequest request, Model model,
 			@RequestParam("ordineIds") String ordineIds) throws Exception {
 
 		StringTokenizer stringTokenizerElements = new StringTokenizer(ordineIds, "|");
@@ -167,18 +169,18 @@ public class DatasetControllerRest {
 			datasetService.salvaColonna(datasetCol);
 		}
 
-		return "success";
+		return ResponseEntity.ok("success");
 	}
 
 	@RequestMapping(value = "/rest/dataset/tables/{db}", method = RequestMethod.GET)
-	public List<String> getTablesDB(HttpServletRequest request, Model model, @PathVariable("db") String db)
+	public ResponseEntity<?> getTablesDB(HttpServletRequest request, Model model, @PathVariable("db") String db)
 			throws IOException {
-		return datasetService.findTablesDB(db);
+		return ResponseEntity.ok(datasetService.findTablesDB(db));
 	}
 
 	@RequestMapping(value = "/rest/dataset/fields/{db}/{table}", method = RequestMethod.GET)
-	public List<String> getFieldsTableDB(HttpServletRequest request, Model model, @PathVariable("db") String db,
+	public ResponseEntity<?> getFieldsTableDB(HttpServletRequest request, Model model, @PathVariable("db") String db,
 			@PathVariable("table") String table) throws IOException {
-		return datasetService.findFieldsTableDB(db, table);
+		return ResponseEntity.ok(datasetService.findFieldsTableDB(db, table));
 	}
 }

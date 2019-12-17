@@ -59,7 +59,68 @@ public class SqlGenericDao {
 		return result;
 	}
 
-	public List<Workset> findWorkSetDatasetColumnByQuery(Long idDataProcessing, Integer typeIO, Integer groupRole,
+	public List<Object[]> findWorKSetDataViewParamsbyQuery( List<Object[]>  resulFieldstList,  Long idDataProcessing, Integer typeIO, Integer groupRole, Integer rigaInf, Integer length,
+			HashMap<String, String> paramsFilter,   String nameColumnToOrder,String dirColumnOrder) {
+ 
+	 	String query = "with ss_model as ("
+			+ " SELECT "
+			+ "        ss.id AS idwscol, "
+			+ "        ss.name AS name, "
+			+ "        ss.order_code,"
+			+ "		   ss.CLS_DATA_TYPE_ID as CLS_DATA_TYPE_ID,"
+			+ "        ss.value_parameter as value_parameter,"
+			+ "		   ss.content_size, "
+			+ "        t.idx, t.v "
+			+ " FROM   "
+			+ "      IS2_WORKSET ss,  IS2_STEP_RUNTIME sv, json_table(ss.content , '$[*]' columns( idx FOR ORDINALITY,  v TEXT  path '$[0]')     ) t	 " 
+			+ " WHERE  "
+			+ "        sv.data_processing_id=:idDataProcessing and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id and ss.CLS_DATA_TYPE_ID=1 "
+			+ " ) ,"
+			+ " ss_pivot as ("
+			+ "  SELECT "
+			+ "        ss_model.idx,"
+			+ "        ss_model.idwscol, ";
+	
+		for (Object[] field : resulFieldstList) {
+			query += " MAX(IF(ss_model.idwscol = " + field[0] + ", ss_model.v, NULL )) AS `" + field[1] + "`,";
+		}
+		
+		query = query.substring(0, query.length() - 1);
+		
+		query += " FROM ss_model GROUP BY ss_model.idx) "
+				+ " SELECT tabres.*, COUNT(*) OVER() AS total_rows from ss_pivot tabres";
+
+		if (paramsFilter != null) {
+			String where = " WHERE ";
+			for (String key : paramsFilter.keySet()) {
+				where += " tabres." + key + "=:" + key + " AND";
+			}
+			query += where.substring(0, where.length() - 3);
+		}
+		
+		// SORT
+		if (nameColumnToOrder != null && !"".equals(nameColumnToOrder))
+			query += " ORDER BY tabres." + nameColumnToOrder + " " + dirColumnOrder;
+		query += " LIMIT " + rigaInf + ", "+length ;
+
+		Query q = em.createNativeQuery(query);
+		q.setParameter("idDataProcessing", idDataProcessing);
+		q.setParameter("groupRole", groupRole);
+		q.setParameter("typeIO", typeIO);
+		
+		if (paramsFilter != null) {
+			for (String key : paramsFilter.keySet()) {
+				String value = paramsFilter.get(key);
+				q.setParameter(key, value);
+			}
+		}
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = (List<Object[]>) q.getResultList();
+		return resultList;
+	}
+	
+	
+	public List<Workset> findWorkSetDatasetColumnByQuery_old(Long idDataProcessing, Integer typeIO, Integer groupRole,
 			Integer row_inf, Integer row_sup, HashMap<String, String> paramsFilter) {
 
 		String query = " " 
@@ -124,43 +185,65 @@ public class SqlGenericDao {
 	
 	public List<Object[]> findDatasetIdColAndName(Long dFile) {
 
-		    Query qf = em.createNativeQuery("SELECT id,name FROM IS2_DATASET_COLUMN ss WHERE ss.dataset_file_ID=:dFile order by 1 asc ");
-		    qf.setParameter("dFile", dFile);
-		    @SuppressWarnings("unchecked")
-		    List<Object[]>  resulFieldstList = (List<Object[]>) qf.getResultList();
-			return resulFieldstList;
-			}
+	    Query qf = em.createNativeQuery("SELECT id,name FROM IS2_DATASET_COLUMN ss WHERE ss.dataset_file_ID=:dFile order by 1 asc ");
+	    qf.setParameter("dFile", dFile);
+	    @SuppressWarnings("unchecked")
+	    List<Object[]>  resulFieldstList = (List<Object[]>) qf.getResultList();
+		return resulFieldstList;
+	}
+	
+	public List<Object[]> findWorsetIdColAndName(Long idDataProcessing,Integer typeIO, Integer groupRole) {
+
+	    Query qf = em.createNativeQuery("SELECT ss.ID,ss.NAME from   IS2_WORKSET ss,  IS2_STEP_RUNTIME sv  where  sv.data_processing_id=:idDataProcessing and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id and ss.CLS_DATA_TYPE_ID=1  order by 1 asc ");
+	    qf.setParameter("idDataProcessing", idDataProcessing);
+	    qf.setParameter("typeIO", typeIO);
+	    qf.setParameter("groupRole", groupRole);
+	    @SuppressWarnings("unchecked")
+	    List<Object[]>  resulFieldstList = (List<Object[]>) qf.getResultList();
+		return resulFieldstList;
+	}
 
 
-	public List<Object[]> findDatasetDataViewParamsbyQuery( List<Object[]>  resulFieldstList,  Long dFile, Integer rigaInf, Integer rigaSup,
+	public List<Object[]> findDatasetDataViewParamsbyQuery( List<Object[]>  resulFieldstList,  Long dFile, Integer rigaInf, Integer length,
 			HashMap<String, String> paramsFilter,   String nameColumnToOrder,String dirColumnOrder) {
  
-		 	String query = "with ss_model as ("
-				+ " SELECT ss.id AS id, ss.name AS name, ss.order_code, t.idx, t.v "
-				+ " FROM  IS2_DATASET_COLUMN ss, json_table( CONVERT(  ss.content USING utf8), '$[*]' columns ( idx FOR ORDINALITY, v text path '$[0]') ) t " 
-				+ " where ss.dataset_file_id=:dFile),"
-				+ " ss_pivot as ("
-				+ "  SELECT ss_model.idx,ss_model.id, ";
+	 	String query = "with ss_model as ("
+			+ " SELECT "
+			+ "        ss.id AS iddscol, "
+			+ "        ss.name AS name, "
+			+ "        ss.order_code, "
+			+ "        t.idx, t.v "
+			+ " FROM   "
+			+ "        IS2_DATASET_COLUMN ss, json_table( CONVERT(  ss.content USING utf8), '$[*]' columns ( idx FOR ORDINALITY, v text path '$[0]') ) t " 
+			+ " WHERE  "
+			+ "        ss.dataset_file_id=:dFile),"
+			+ " ss_pivot as ("
+			+ "  SELECT "
+			+ "        ss_model.idx,"
+			+ "        ss_model.iddscol, ";
+	
 		for (Object[] field : resulFieldstList) {
-			query +=" MAX(IF(ss_model.id = "+field[0]+", ss_model.v, NULL )) AS "+field[1]+",";
+			query += " MAX(IF(ss_model.iddscol = " + field[0] + ", ss_model.v, NULL )) AS `" + field[1] + "`,";
 		}
-		query=query.substring(0,query.length()-1);
-		query+=" FROM ss_model " + 
-			   " GROUP BY ss_model.idx) " + 
-				" select  tabres.*, COUNT(*) OVER() AS total_rows from ss_pivot  tabres" ;
 		
-	 	if (paramsFilter != null) {
-			String where=" WHERE ";
-			for (String key : paramsFilter.keySet()) {  
-				where+= " tabres."+key+"=:"+key+" AND"; 
-		       } 
-			query+=where.substring(0,where.length()-3);
+		query = query.substring(0, query.length() - 1);
+		
+		query += " FROM ss_model GROUP BY ss_model.idx) "
+				+ " SELECT tabres.*, COUNT(*) OVER() AS total_rows from ss_pivot tabres";
+
+		if (paramsFilter != null) {
+			String where = " WHERE ";
+			for (String key : paramsFilter.keySet()) {
+				where += " tabres." + key + "=:" + key + " AND";
+			}
+			query += where.substring(0, where.length() - 3);
 		}
-		// SORT		
-		if(  nameColumnToOrder != null && !"".equals(nameColumnToOrder)) query+=" ORDER BY tabres."+nameColumnToOrder+" "+dirColumnOrder;
-		query+=" LIMIT "+rigaInf+","+rigaSup;
-				
 		
+		// SORT
+		if (nameColumnToOrder != null && !"".equals(nameColumnToOrder))
+			query += " ORDER BY tabres." + nameColumnToOrder + " " + dirColumnOrder;
+		query += " LIMIT " + rigaInf + ","+length ;
+
 		Query q = em.createNativeQuery(query);
 		q.setParameter("dFile", dFile);
 		if (paramsFilter != null) {
@@ -174,66 +257,7 @@ public class SqlGenericDao {
 		return resultList;
 	}
 	
-	public List<DatasetColumn> findDatasetColumnParamsbyQuery(@Param("dFile") Long dFile,
-			@Param("row_inf") Integer rigaInf, @Param("row_sup") Integer rigaSup,
-			HashMap<String, String> paramsFilter, @Param("nameColumnToOrder") String nameColumnToOrder,
-			@Param("dirColumnOrder") String dirColumnOrder) {
-
-		String query = " "
-				+ "SELECT "
-				+ "   ss1.id AS id, "
-				+ "   ss1.name AS name,  "
-				+ "   ss1.order AS order, "
-				+ "   ss1.DATASET_FILE AS dataset_file, "
-				+ "   ss1.DataType AS DataType, "
-				+ "   ss1.paginationTotalRows AS valori_size, "
-				+ "   concat('[', group_concat( concat('\"',ss1.v,'\"')"
-				+ "	  ORDER BY ss1.idx ASC),']' ) AS   values "
-				+ "   FROM ( "
-				+ "      SELECT rs.*, max(rs.adx) OVER() AS paginationTotalRows"
-				+ "         FROM ("
-				+ "           SELECT ss.id AS id, "
-				+ "                  ss.name AS name,    "
-				+ "                  ss.order,    "
-				+ "                  ss.DATASET_FILE AS dataset_file, "
-				+ "                  ss.DataType AS DataType,   "
-				+ "                  t.idx, "
-				+ "                  t.v, "
-				+ "                  DENSE_RANK () OVER (ORDER BY t.idx) AS adx "
-				+ "          FROM "
-				+ "                 IS2_DATASET_COLUMN ss, "
-				+ "                 json_table( CONVERT(  ss.values USING utf8), '$[*]'  columns ( idx FOR ORDINALITY, v text path '$[0]')"
-				+ "    )t "
-				+ "where  ss.dataset_file=:dFile";
-
-		if (paramsFilter != null) {
-			for (String key : paramsFilter.keySet()) {  
-
-				query += "  and t.idx in( select f.idx  FROM   IS2_DATASET_COLUMN si, json_table( CONVERT( si.values USING utf8), '$[*]' columns ( idx FOR ORDINALITY, v text path '$[0]'))f "
-						+ "  where si.dataset_file=:dFile   and si.name=:n_" + key + " and f.v=:v_" + key + ")";
-
-			} 
-		}
-
-		query += "  order by adx asc " + "  ) rs " + " ) ss1 "
-				+ "  where  ss1.adx    >:row_inf     and  ss1.adx <= :row_sup"
-				+ "	    group by ss1.id,ss1.name, ss1.order, ss1.FILTRO  , ss1.DATASET_FILE, ss1.DataType, ss1.paginationTotalRows ";
-
-		Query q = em.createNativeQuery(query, DatasetColumn.class);
-		q.setParameter("dFile", dFile);
-		q.setParameter("row_inf", rigaInf);
-		q.setParameter("row_sup", rigaSup);
-		if (paramsFilter != null) {
-			for (String key : paramsFilter.keySet()) {
-				String value = paramsFilter.get(key);
-				q.setParameter("n_" + key, key);
-				q.setParameter("v_" + key, value);
-			}
-		}
-		@SuppressWarnings("unchecked")
-		List<DatasetColumn> resultList = (List<DatasetColumn>) q.getResultList();
-		return resultList;
-	}
+	 
 	
 	
 	

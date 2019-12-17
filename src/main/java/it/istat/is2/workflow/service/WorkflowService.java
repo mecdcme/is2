@@ -143,11 +143,48 @@ public class WorkflowService {
 
 		return obj.toString();
 	}
-
+	
 	public String loadWorkSetValoriByDataProcessing(Long idDataProcessing, Integer typeIO, Integer groupRole,
 			Integer length, Integer start, Integer draw, HashMap<String, String> paramsFilter) throws JSONException {
 
-		List<Workset> dataList = sqlGenericDao.findWorkSetDatasetColumnByQuery(idDataProcessing, typeIO, groupRole,
+		int offset=2;
+		List<Object[]> resulFieldstList = sqlGenericDao.findWorsetIdColAndName(idDataProcessing,typeIO, groupRole);
+		List<Object[]> dataList = sqlGenericDao.findWorKSetDataViewParamsbyQuery(resulFieldstList, idDataProcessing, typeIO, groupRole, start, length, paramsFilter, null, null);
+		// start, start + length, query_filter);
+		Integer numRighe = 0;
+		 
+		JSONObject obj = new JSONObject();
+		JSONArray data = new JSONArray();
+	 	if (dataList.size() > 0) {
+			String rows=dataList.get(0)[resulFieldstList.size()+offset].toString();
+			numRighe = Integer.valueOf(rows);
+			for (Object[] row : dataList) {
+				JSONObject obji = new JSONObject();
+				for (int j = 0; j < resulFieldstList.size(); j++) {
+					obji.put((String) resulFieldstList.get(j)[1], row[j+offset]);
+				}
+				data.put(obji);
+			}
+		}
+		obj.put("data", data);
+		obj.put("draw", draw);
+		obj.put("recordsTotal", numRighe);
+		obj.put("recordsFiltered", numRighe);
+		
+		
+		
+		
+		
+		
+		
+		return obj.toString();
+	}
+
+
+	public String loadWorkSetValoriByDataProcessing_old(Long idDataProcessing, Integer typeIO, Integer groupRole,
+			Integer length, Integer start, Integer draw, HashMap<String, String> paramsFilter) throws JSONException {
+
+		List<Workset> dataList = sqlGenericDao.findWorkSetDatasetColumnByQuery_old(idDataProcessing, typeIO, groupRole,
 				start, start + length, paramsFilter);
 		// start, start + length, query_filter);
 		Integer numRighe = 0;
@@ -176,7 +213,7 @@ public class WorkflowService {
 
 	public List<Workset> loadWorkSetValoriByDataProcessing(Long idDataProcessing, Integer typeIO, Integer groupRole,
 			HashMap<String, String> paramsFilter) {
-		List<Workset> dataList = sqlGenericDao.findWorkSetDatasetColumnByQuery(idDataProcessing, typeIO, groupRole, 0,
+		List<Workset> dataList = sqlGenericDao.findWorkSetDatasetColumnByQuery_old(idDataProcessing, typeIO, groupRole, 0,
 				null, paramsFilter);
 		return dataList;
 	}
@@ -196,20 +233,7 @@ public class WorkflowService {
 		return ret;
 	}
 
-	/*
-	 * public DataProcessing doStep(DataProcessing dataProcessing, StepInstance
-	 * stepInstance) throws Exception { EngineService engine =
-	 * engineFactory.getEngine(stepInstance.getAppService().getInterfaccia()); try {
-	 * engine.init(dataProcessing, stepInstance); engine.doAction();
-	 * engine.processOutput();
-	 * 
-	 * } catch (Exception e) { Logger.getRootLogger().error(e.getMessage());
-	 * notificationService.addErrorMessage("Error: " + e.getMessage());
-	 * logService.save("Error: " + e.getMessage()); throw (e); } finally {
-	 * engine.destroy(); }
-	 * 
-	 * return dataProcessing; }
-	 */
+	 
 	public List<StepRuntime> getStepRuntimes(Long idDataProcessing) {
 		return stepRuntimeDao.findByDataProcessing(new DataProcessing(idDataProcessing));
 	}

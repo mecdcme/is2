@@ -72,10 +72,6 @@ public class WorkflowRestController {
     private BusinessStepService businessStepService;
     @Autowired
     StepRuntimeService stepVariableService;
-    @Autowired
-	private NotificationService notificationService;
-    @Autowired
-	private MessageSource messages;
 
     @RequestMapping(value = "/worksetvalori/{idelaborazione}/{tipoCampo}/{groupRole}/{paramsFilter:.+}", method = RequestMethod.GET)
     public String loadDatasetValoriWorkset(HttpServletRequest request, Model model,
