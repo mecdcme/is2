@@ -23,7 +23,7 @@
 #
 rm(list=ls())
 library("SeleMix")
-library("rjson")
+library("jsonlite")
 
 #   Lista Ruoli
 #0	SKIP				N	VARIABILE NON UTILIZZATA
@@ -88,9 +88,20 @@ library("rjson")
 #X <- "X1"
 #S <- "S1"
 
+#prova passaggio parametri in json
+ml_est_json = function(original_request) {
+    request = fromJSON(original_request)
+    
+    final_result <- is2_mlest(request$workset, request$roles, request$wsparams)
+    
+    JSON_result = toJSON(final_result)
+    return(JSON_result)
+}
+
+
 
 #stima completa
-is2_mlest <- function( workset, roles, wsparams,...) {
+is2_mlest <- function( workset, roles, wsparams=NULL,...) {
  	
 	stdout <- vector('character')
 	con <- textConnection('stdout', 'wr', local = TRUE)
@@ -110,15 +121,18 @@ is2_mlest <- function( workset, roles, wsparams,...) {
 	
 	#Parameter check
 	print(wsparams)
-	if(exists(wsparams)){
-		if(exists(wsparams$model)) model=wsparams$model
-		if(exists(wsparams$t.outl)) t.outl=wsparams$t.outl
-		if(exists(wsparams$lambda)) lambda=wsparams$lambda
-		if(exists(wsparams$w)) w=wsparams$w
-		if(exists(wsparams$lambda.fix)) lambda.fix=wsparams$lambda.fix
-		if(exists(wsparams$w.fix)) w.fix=wsparams$w.fix
-		if(exists(wsparams$eps)) eps=wsparams$eps
-		if(exists(wsparams$max.iter)) max.iter=wsparams$max.iter
+	if(!is.null(wsparams)){
+	
+	print("asdfffffffffffffffffffffffffffffffffffffffffffff")
+	print(wsparams$model)
+		if(exists("wsparams$model")) model=wsparams$model
+		if(exists("wsparams$t.outl")) t.outl=wsparams$t.outl
+		if(exists("wsparams$lambda")) lambda=wsparams$lambda
+		if(exists("wsparams$w")) w=wsparams$w
+		if(exists("wsparams$lambda.fix")) lambda.fix=wsparams$lambda.fix
+		if(exists("wsparams$w.fix")) w.fix=wsparams$w.fix
+		if(exists("wsparams$eps")) eps=wsparams$eps
+		if(exists("wsparams$max.iter")) max.iter=wsparams$max.iter
  	}
 	
 	#Execute algorithm (mettere un try catch)
@@ -160,7 +174,7 @@ is2_mlest <- function( workset, roles, wsparams,...) {
 	return(result)
 }
 
-#eseguzione strato
+#esecuzione strato
 strata.mlest <- function(workset, y, x=NULL, s, ...) {
   #sistemazione dell'input
   strata <- as.factor(workset[,S])
@@ -211,7 +225,7 @@ is2_ypred <- function(workset, y, x=NULL, ... ) {
 	return(result)
 }
 
-#eseguzione strato
+#esecuzione strato
 strata.ypred <- function(workset, y, x=NULL, s, ...) {
   #sistemazione dell'input
   strata <- as.factor(workset[,S])
@@ -258,7 +272,7 @@ is2_seledit <- function(workset, y, p, ...) {
 	return(result)
 }
 
-#eseguzione strato
+#esecuzione strato
 strata.seledit <- function(workset, y, p, s, ...) {
   #sistemazione dell'input
   strata <- as.factor(workset[,S])
