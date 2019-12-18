@@ -511,8 +511,9 @@ public class EngineR implements EngineService {
 	public void processOutput() throws Exception {
 		getGenericOutput(worksetOut, RESULTSET, WORKSET_OUT);
 		getGenericOutput(rolesOut, RESULTSET, ROLES_OUT);
-		getGenericOutput(worksetOut, RESULTSET, PARAMETERS_OUT);
-		getGenericOutput(worksetOut, RESULTSET, REPORT_OUT);
+		getGenericParamterOutput(parameterOut, RESULTSET, PARAMETERS_OUT);
+		getGenericParamterOutput(parameterOut, RESULTSET, REPORT_OUT);
+		//getGenericOutput(worksetOut, RESULTSET, REPORT_OUT);
 		getRolesGroup(rolesGroupOut, RESULTSET, ROLES_GROUP_OUT);
 		writeLogScriptR();
 		saveOutputDB();

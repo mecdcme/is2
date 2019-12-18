@@ -23,7 +23,7 @@
 #
 rm(list=ls())
 library("SeleMix")
-library("jsonlite")
+library("rjson")
 
 #   Lista Ruoli
 #0	SKIP				N	VARIABILE NON UTILIZZATA
@@ -155,14 +155,15 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
 	#output parameters
 	report <- list(n.outlier = sum(est$outlier), missing = sum(as.numeric(est$pattern)),  is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)
 	mod <- list(B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w )
-	#param_mod <- list( MODEL = toJSON(mod))
-    param_mod <- mod	
+	param_mod <- list( Model = toJSON(mod))
+    #param_mod <- mod	
 	
-	# param_report <- list( REPORT = toJSON(report))
-	param_report <-  report
+	param_report <- list( Report = toJSON(report))
+	#param_report <-  report
 	#setting output roles 
 	 
-	roles <- list (P= c(roles$X,roles$Y, predname,names(outp)), O="outlier", M=names(mod), G=names(report))
+	#roles <- list (P= c(roles$X,roles$Y, predname,names(outp)), O="outlier", M=names(mod), G=names(report))
+	roles <- list (P= c(roles$X,roles$Y, predname,names(outp)), O="outlier", M="Model",G="Report")
 	r_out<-cbind(x,y,outp,out1)
 	rolesgroup <- list (P= c("P", "O"),  M="M",G="G")
 	print(rolesgroup)
