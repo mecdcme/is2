@@ -120,67 +120,6 @@ public class SqlGenericDao {
 	}
 	
 	
-	public List<Workset> findWorkSetDatasetColumnByQuery_old(Long idDataProcessing, Integer typeIO, Integer groupRole,
-			Integer row_inf, Integer row_sup, HashMap<String, String> paramsFilter) {
-
-		String query = " " 
-				+ "SELECT rs1.id as id, "
-				+ "   rs1.name as name, "
-				+ "	  rs1.order_code as order_code, "
-				+ "   rs1.CLS_DATA_TYPE_ID as CLS_DATA_TYPE_ID, "
-				+ "   rs1.value_parameter as value_parameter, "
-				+ "   rs1.paginationTotalRows as content_size,"
-				+ "   concat('[', group_concat( concat('\"',rs1.v,'\"')" 
-				+ "   ORDER BY rs1.idx ASC),']' ) AS content "
-				+ "FROM ("
-				+ "   select rs.*, max(rs.adx) OVER( PARTITION BY rs.id)  as paginationTotalRows  "
-				+ "      FROM ("
-				+ "         select  ss.id as id, "
-				+ "         ss.name as name, "
-				+ "         ss.order_code, "
-				+ "         ss.CLS_DATA_TYPE_ID as CLS_DATA_TYPE_ID, " 
-				+ "         ss.value_parameter as value_parameter, "  
-				+ "         ss.content_size, "
-				+ "         t.idx, "
-				+ "         t.v,"
-				+ "         DENSE_RANK() OVER(ORDER BY t.idx) as adx  "
-				+ "         from "
-				+"              IS2_WORKSET ss, "
-				+ "             IS2_STEP_RUNTIME sv, "
-				+ "             json_table(ss.content , '$[*]' columns( idx FOR ORDINALITY,  v TEXT  path '$[0]')"
-				+ "     ) t"
-				+ "	where  sv.data_processing_id=:idDataProcessing and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id and ss.CLS_DATA_TYPE_ID=1 ";
-		if (paramsFilter != null) {
-			for (String key : paramsFilter.keySet()) {
-
-				query += " and t.idx in( select f.idx from IS2_WORKSET si, IS2_STEP_RUNTIME ssv,json_table( si.content, '$[*]'  columns "
-						+ "(  idx FOR ORDINALITY, v TEXT path '$[0]') ) f "
-						+ " where  ssv.data_processing_id=:idDataProcessing  and (:groupRole is null ||ssv.ROLE_GROUP=:groupRole)  and ssv.CLS_TYPE_IO_ID=:typeIO and ssv.WORKSET_ID=si.id  and si.name=:n_"
-						+ key + " and f.v=:v_" + key + " ) ";
-			}
-		}
-		query += "  order by t.idx asc " + "  ) rs " + " ) rs1 "
-				+ "  where  rs1.adx    >:row_inf     and  rs1.adx <= :row_sup"
-				+ "	   group by rs1.id,rs1.name, rs1.order_code  , rs1.CLS_DATA_TYPE_ID  ,rs1.value_parameter, rs1.paginationTotalRows ";
-
-		Query q = em.createNativeQuery(query, Workset.class);
-		q.setParameter("idDataProcessing", idDataProcessing);
-		q.setParameter("typeIO", typeIO);
-		q.setParameter("row_inf", row_inf);
-		q.setParameter("row_sup", row_sup);
-		q.setParameter("groupRole", groupRole);
-		if (paramsFilter != null) {
-			for (String key : paramsFilter.keySet()) {
-				String value = paramsFilter.get(key);
-				q.setParameter("n_" + key, key);
-				q.setParameter("v_" + key, value);
-			}
-		}
-
-		@SuppressWarnings("unchecked")
-		List<Workset> resultList = (List<Workset>) q.getResultList();
-		return resultList;
-	}
 
 	
 	public List<Object[]> findDatasetIdColAndName(Long dFile) {

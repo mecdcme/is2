@@ -184,8 +184,6 @@ fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 
  result <-list( workset_out=r_out, roles_out= roles,rolesgroup_out= rolesgroup, var_est = var_est, log = stdout)
  
-
-
  sink()
  close(con)
  return(result)
