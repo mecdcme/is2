@@ -74,7 +74,7 @@ public class UserService {
     }
 
     public User update(UserCreateForm uf) throws Exception {
-        User user =  userDao.findById(uf.getUserid()).orElse(null);
+        User user =  userDao.findById(uf.getId()).orElse(null);
         if (user == null) {
             throw new Exception("User not found");
         }

@@ -197,7 +197,7 @@ public class WorkflowController {
 
 	@GetMapping(value = "/cleanallworkset/{dataProcessingId}/{flagIO}")
 	public String cleanAllWorkset(HttpSession session, Model model, RedirectAttributes ra,
-			@PathVariable("dataProcessingId") Long dataProcessingId,@PathVariable("flagIO")Integer flagIO) {
+			@PathVariable("dataProcessingId") Long dataProcessingId,@PathVariable("flagIO")Short flagIO) {
 		notificationService.removeAllMessages();
 
 		try {
@@ -270,27 +270,27 @@ public class WorkflowController {
 		// Carica i Ruoli di input e output
 		List<AppRole> listaRuoliInOut = workflowService.findAppRolesByProcess(businessProcessParent, 1,new DataTypeCls (IS2Const.DATA_TYPE_VARIABLE));
 
-		List<StepInstanceSignature> paramsNotAssignedList = new ArrayList<>();
+		List<AppRole> paramsNotAssignedList = new ArrayList<>();
 		List<StepRuntime> sVParamsAssignedList = workflowService.getStepRuntimeParameters(dataProcessingId);
 		Map<String, StepRuntime> stepParamMap=new HashMap<>();
 	 	ArrayList<String> paramAssigned = new ArrayList<>();
 		sVParamsAssignedList.forEach(stepRuntime -> {
-			paramAssigned.add(stepRuntime.getWorkset().getName());
-			stepParamMap.put(stepRuntime.getWorkset().getName(), stepRuntime);
+			paramAssigned.add(stepRuntime.getAppRole().getCode());
+			stepParamMap.put(stepRuntime.getAppRole().getCode(), stepRuntime);
 		});
 
 		Map<Long, List<StepInstanceSignature>> paramsAllBPPMap = workflowService
 				.findParametriAndSubProcessesByProcess(businessProcessParent);
-		List<StepInstanceSignature> paramsAllBPPList = new ArrayList<>();
+		List<AppRole> paramsAllBPPList = new ArrayList<>();
 
 		for (Map.Entry<Long, List<StepInstanceSignature>> entry : paramsAllBPPMap.entrySet()) {
 			
 			List<StepInstanceSignature> listparams = entry.getValue();
 			
-			paramsAllBPPList.addAll(listparams);
 			for (StepInstanceSignature stepInstanceSignature : listparams) {
-				if (!paramAssigned.contains(stepInstanceSignature.getAppRole().getParameter().getName())) {
-					paramsNotAssignedList.add(stepInstanceSignature);
+			if(!paramsAllBPPList.contains(stepInstanceSignature.getAppRole()))	paramsAllBPPList.add(stepInstanceSignature.getAppRole());	
+				if (!paramAssigned.contains(stepInstanceSignature.getAppRole().getCode())) {
+					paramsNotAssignedList.add(stepInstanceSignature.getAppRole());
 				
 				}
 
@@ -302,7 +302,7 @@ public class WorkflowController {
      		List<StepRuntime> stepRuntimesRuleset = workflowService.getStepRuntimesRuleset(dataProcessingId);
      		Map<String, StepRuntime> stepRuntimesRulesetMap=new HashMap<>();
      		stepRuntimesRuleset.forEach(sxstepRuntime -> {
-    		 	stepRuntimesRulesetMap.put(sxstepRuntime.getAppRole().getName(), sxstepRuntime);
+    		 	stepRuntimesRulesetMap.put(sxstepRuntime.getAppRole().getCode(), sxstepRuntime);
     		});
     	   	List<Ruleset> rulesetList=ruleService.findRulesetBySessioneLavoro(dataProcessing.getWorkSession());
     		// Load Ruleset Role
@@ -325,7 +325,7 @@ public class WorkflowController {
 
 		model.addAttribute("listaRuoliInput", listaRuoliInput);
 		model.addAttribute("listaRuoliInOut", listaRuoliInOut);
-		model.addAttribute("parameterList", paramsNotAssignedList);
+		//model.addAttribute("parameterList", paramsNotAssignedList);
 		model.addAttribute("parameterListAll", paramsAllBPPList);
 		model.addAttribute("datasetfiles", datasetfiles);
 		model.addAttribute("dataProcessing", dataProcessing);

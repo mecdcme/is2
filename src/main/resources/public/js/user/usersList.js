@@ -44,7 +44,7 @@ $(document).ready(function () {
             }
         },
         columns: [
-            {data: 'userid'},
+            {data: 'id'},
             {data: 'name'},
             {data: 'surname'},
             {data: 'email'},
@@ -52,16 +52,16 @@ $(document).ready(function () {
             {
                 render: function (data, type, row) {
                     var txt = '<a href="javascript:void(0)" title="Edit" onclick="javascript:edit_user('
-                            + row.userid
+                            + row.id
                             + ');"><i class="fa fa-edit"></i></a>'
                             + '&nbsp;&nbsp;<a href="javascript:void(0)" title="Change Password" onclick="javascript:open_changepassword('
-                            + row.userid
+                            + row.id
                             + ',\''
                             + row.email
                             + '\');"><i class="fa fa-lock"></i></a>';
-                    if (row.userid != $('#myId').val())
+                    if (row.id != $('#myId').val())
                         txt += '&nbsp;&nbsp; <a href="javascript:void(0)" title="Delete" onclick="javascript:open_delete('
-                                + row.userid
+                                + row.id
                                 + ',\''
                                 + row.email
                                 + '\');"><i class="fa fa-trash-o"></i></a>';
@@ -106,7 +106,7 @@ function add_user() {
     $('[name="email"]').prop("readonly", false);
     $(".password_group input").removeClass('is-invalid');
     $('.help-block').empty(); // clear error string
-    $('[name="userid"]').val('');
+    $('[name="id"]').val('');
     $('#modal_user').modal('show'); // show bootstrap modal
     $('.password_group').show(); // show password block
     $('#form_password').val(''); // show password block
@@ -133,7 +133,7 @@ function edit_user(id) {
         type: "GET",
         dataType: "JSON",
         success: function (data) {
-            $('[name="userid"]').val(data.userid);
+            $('[name="id"]').val(data.id);
             $('[name="name"]').val(data.name);
             $('[name="surname"]').val(data.surname);
             $('[name="email"]').val(data.email);

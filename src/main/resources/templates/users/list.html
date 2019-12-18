@@ -80,7 +80,7 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <input type="hidden" th:value="${#authentication.principal.userid}" id="myId" />
+                                        <input type="hidden" th:value="${#authentication.principal.id}" id="myId" />
                                         <table id="userslist" class="table table-sm" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
@@ -116,7 +116,7 @@
                     </div>                
                     <div class="modal-body form">
                         <form action="#" id="form" class="form-horizontal">
-                            <input type="hidden" value="" name="userid" />
+                            <input type="hidden" value="" name="id" />
                             <div class="form-body">
                                 <div id="msgs"></div>
                                 <div class="form-group">

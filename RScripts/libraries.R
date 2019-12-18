@@ -13,6 +13,7 @@ checkAndInstall("univOutl")
 checkAndInstall("simputation")
 checkAndInstall("VIM")
 checkAndInstall("rspa")
+checkAndInstall("varhandle")
 checkAndInstall("SeleMix")
 checkAndInstall("rjson")
 
