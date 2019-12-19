@@ -338,8 +338,7 @@ public class WorkflowService {
 			stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
 			stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_INPUT));
 			String value = form.getValue()[i];
-			// String[] values = value.split(" ");
-			workset.setContents(Arrays.asList("1"));
+		
 			workset.setParamValue(value);
 			workset.setContentSize(1);
 			workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));

@@ -400,12 +400,10 @@ public class WorkflowController {
 		DataProcessing dataProcessing = workflowService.findDataProcessing(dataProcessingId);
 		TypeIO typeIO = new TypeIO(tipoIO);
 
-		List<AppRole> outputObjects = workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId, typeIO,
-				new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
+		List<AppRole> outputObjects = workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId, typeIO,null);
 
 		AppRole currentGroup = new AppRole(outRole);
-		stepRList = workflowService.getStepRuntimesDataTypeNoValues(dataProcessingId,
-				new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE), typeIO, currentGroup);
+		stepRList = workflowService.getStepRuntimesDataTypeNoValues(dataProcessingId,null, typeIO, currentGroup);
 
 		listaBp = dataProcessing.getBusinessProcess().getBusinessSubProcesses();
 		model.addAttribute("outputObjects", outputObjects);

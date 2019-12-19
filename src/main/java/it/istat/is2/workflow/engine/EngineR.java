@@ -608,7 +608,6 @@ public class EngineR implements EngineService {
 				ArrayList<StepRuntime> l = new ArrayList<>();
 				l.add(stepRuntime);
 				workset.setStepRuntimes(l);
-				workset.setContents(Arrays.asList("1"));
 				workset.setParamValue(value);
 				workset.setContentSize(1);
 				workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
