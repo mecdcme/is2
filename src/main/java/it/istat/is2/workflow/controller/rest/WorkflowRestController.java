@@ -73,9 +73,9 @@ public class WorkflowRestController {
     @Autowired
     StepRuntimeService stepVariableService;
 
-    @RequestMapping(value = "/worksetvalori/{idelaborazione}/{tipoCampo}/{groupRole}/{paramsFilter:.+}", method = RequestMethod.GET)
+    @RequestMapping(value = "/worksetvalori/{idelaborazione}/{typeIO}/{groupRole}/{paramsFilter:.+}", method = RequestMethod.GET)
     public String loadDatasetValoriWorkset(HttpServletRequest request, Model model,
-            @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("tipoCampo") Integer tipoCampo,@PathVariable("groupRole") Integer groupRole,
+            @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("typeIO") Integer typeIO,@PathVariable("groupRole") Integer groupRole,
             @PathVariable("paramsFilter") String paramsFilter, @RequestParam("length") Integer length,
             @RequestParam("start") Integer start, @RequestParam("draw") Integer draw) throws IOException, JSONException {
 
@@ -95,7 +95,7 @@ public class WorkflowRestController {
                 parameters.put(nomeValore.get(0), nomeValore.get(1));
             }
         }
-        String dtb = workflowService.loadWorkSetValoriByDataProcessing(idelaborazione, tipoCampo,groupRole, length, start, draw, parameters);
+        String dtb = workflowService.loadWorkSetValoriByDataProcessing(idelaborazione, typeIO,groupRole, length, start, draw, parameters);
 
         return dtb;
     }

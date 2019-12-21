@@ -24,7 +24,6 @@
 package it.istat.is2.workflow.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,7 @@ public class AppRoleService {
         return ruoloDao.findAll();
     }
 
-    public Optional<AppRole> findRuolo(Integer idruolo) {
-        return ruoloDao.findById(idruolo);
+    public AppRole findRuolo(Integer idruolo) {
+        return ruoloDao.findById(idruolo).get();
     }
 }

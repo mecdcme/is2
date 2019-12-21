@@ -133,7 +133,7 @@ public class SqlGenericDao {
 	
 	public List<Object[]> findWorsetIdColAndName(Long idDataProcessing,Integer typeIO, Integer groupRole) {
 
-	    Query qf = em.createNativeQuery("SELECT ss.ID,ss.NAME from   IS2_WORKSET ss,  IS2_STEP_RUNTIME sv  where  sv.data_processing_id=:idDataProcessing and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id and ss.CLS_DATA_TYPE_ID=1  order by 1 asc ");
+	    Query qf = em.createNativeQuery("SELECT ss.ID,ss.NAME from   IS2_WORKSET ss,  IS2_STEP_RUNTIME sv  where  sv.data_processing_id=:idDataProcessing and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id  order by 1 asc ");
 	    qf.setParameter("idDataProcessing", idDataProcessing);
 	    qf.setParameter("typeIO", typeIO);
 	    qf.setParameter("groupRole", groupRole);

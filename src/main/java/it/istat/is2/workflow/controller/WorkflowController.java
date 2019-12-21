@@ -74,6 +74,7 @@ import it.istat.is2.workflow.domain.ViewDataType;
 import it.istat.is2.workflow.domain.StepRuntime;
 import it.istat.is2.workflow.domain.TypeIO;
 import it.istat.is2.workflow.domain.Workset;
+import it.istat.is2.workflow.service.AppRoleService;
 import it.istat.is2.workflow.service.StepRuntimeService;
 import it.istat.is2.workflow.service.WorkflowService;
 import it.istat.is2.worksession.domain.WorkSession;
@@ -83,6 +84,8 @@ import it.istat.is2.worksession.service.WorkSessionService;
 @Controller
 public class WorkflowController {
 
+	@Autowired
+	private AppRoleService  appRoleService;
 	@Autowired
 	private WorkflowService workflowService;
 	@Autowired
@@ -358,23 +361,22 @@ public class WorkflowController {
 	
 	
 	
-	@GetMapping(value = "/dataview/{idelab}/{tipoCampo}")
+	@GetMapping(value = "/dataview/{idelab}/{type}")
 	public String viewDataProc(HttpSession session, Model model, @PathVariable("idelab") Long dataProcessingId,
-			@PathVariable("tipoCampo") Short tipoIo) {
+			@PathVariable("type") Short type) {
 		notificationService.removeAllMessages();
 		List<StepRuntime> stepRList = new ArrayList<>();
 		List<BusinessProcess> listaBp = new ArrayList<>();
 		AppRole currentGroup = new AppRole();
 		DataProcessing dataProcessing = workflowService.findDataProcessing(dataProcessingId);
 		//TypeIO typeIO = workflowService.getTypeIOById(tipoIo);
-		TypeIO typeIO  =new TypeIO(tipoIo);
+		TypeIO typeIO  =new TypeIO(type);
 
 		List<AppRole> outputObjects = workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId,typeIO,
-				new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE) );
+				null);
 		if (!outputObjects.isEmpty()) {
 			currentGroup = outputObjects.get(0);
-			stepRList = workflowService.getStepRuntimesDataTypeNoValues(dataProcessingId,
-					new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE), typeIO,currentGroup);
+			stepRList = workflowService.getStepRuntimesDataTypeNoValues(dataProcessingId,null, typeIO,currentGroup);
 		}
 
 		listaBp = dataProcessing.getBusinessProcess().getBusinessSubProcesses();
@@ -390,9 +392,9 @@ public class WorkflowController {
 
 	}
 
-	@GetMapping(value = "/dataview/{idelab}/{tipoCampo}/{outRole}")
+	@GetMapping(value = "/dataview/{idelab}/{tipoIO}/{outRole}")
 	public String viewDataOut(HttpSession session, Model model, @PathVariable("idelab") Long dataProcessingId,
-			@PathVariable("tipoCampo") Short tipoIO, @PathVariable("outRole") Integer outRole) {
+			@PathVariable("tipoIO") Short tipoIO, @PathVariable("outRole") Integer outRole) {
 		notificationService.removeAllMessages();
 
 		List<StepRuntime> stepRList = new ArrayList<>();
@@ -402,7 +404,7 @@ public class WorkflowController {
 
 		List<AppRole> outputObjects = workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId, typeIO,null);
 
-		AppRole currentGroup = new AppRole(outRole);
+		AppRole currentGroup =appRoleService.findRuolo(outRole);
 		stepRList = workflowService.getStepRuntimesDataTypeNoValues(dataProcessingId,null, typeIO, currentGroup);
 
 		listaBp = dataProcessing.getBusinessProcess().getBusinessSubProcesses();

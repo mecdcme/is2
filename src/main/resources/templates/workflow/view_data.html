@@ -66,7 +66,7 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <span>Settings</span>
+                        <span>Output</span>
                     </li>
                     <!-- Breadcrumb Menu-->
                     <li class="breadcrumb-menu d-md-down-none">
@@ -92,7 +92,7 @@
                                             </a>
                                         </span>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body" th:if="${currentGroup.dataType.id == 1 }" >
                                         <table id="worksetTab" th:if="${not #lists.isEmpty(stepRList)}"
                                                class="table table-sm table-striped" cellspacing="0" width="auto" style="overflow: auto;">
                                             <thead>
@@ -106,6 +106,30 @@
                                             Nessuna elaborazione eseguita
                                         </span>
                                     </div>
+                                   <div class="card-body" id="card-parametri" th:if="${currentGroup.dataType.id == 2 }">
+                                        <table id="parametersTable" class="table table-sm" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:2%;"><span>#</span></th>
+                                                    <th  style="width:5%;"><span>Name</span></th>
+                                                    <th><span>Value</span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="stepR,stats: ${stepRList}" th:unless="${(stepRList == null) or (stepRList.size() == 0) }">
+                                                    <td><span th:text="${stats.index+1}"></span></td>
+                                                    <td th:text="${stepR.workset.name}"></td>
+                                                    <td><span th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepR.workset.paramValue)}"></span></td>
+                                                      
+                                                   </tr>
+                                            </tbody>
+                                        </table>
+                                        
+                                    </div>
+                                     
+                                    
+                                    
+                                    
                                 </div>
                             </div>
                         </div>
