@@ -30,377 +30,379 @@
         <script th:src="@{/js/ruleset/uploadruleset.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
-                setMenuActive([[${session.sessionBean.businessFunction.id}]]);
+            setMenuActive([[${session.sessionBean.businessFunction.id}]]);
             });
         </script>
         <link th:href="@{/css/vendors/fileinput/fileinput.min.css}" rel="stylesheet" />
     </head>
-    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-        <header th:replace="layout :: site-header"></header>
+    <body class="c-app">
+        <div th:replace="layout :: site-aside"></div>
+        <div th:replace="layout :: site-modals"></div>
         <!-- Body -->
-        <div class="app-body">
-            <aside th:replace="layout :: site-modals"></aside>
-            <aside th:replace="layout :: site-aside"></aside>
-            <!-- Main container -->
-            <main class="main">
-                <!-- Breadcrumb-->
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a th:title="${session.sessionBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
-                            <span th:text="${session.sessionBean.businessFunction.name}"></span>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a th:title="${session.sessionBean.name}" th:if="${session.sessionBean}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}"> 
-                            <span th:text="${session.sessionBean.name}"></span>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <span th:text="#{ruleset.list.label}"></span>
-                    </li>
-                    <!-- Breadcrumb Menu-->
-                    <li class="breadcrumb-menu">
-                        <div class="btn-group" role="group" aria-label="Button group">
-                            <a th:title="#{close.data.link.title}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}">
-                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+        <div class="c-wrapper">
+            <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+                <div th:include="layout :: site-header" th:remove="tag"></div>
+                <div class="c-subheader justify-content-between px-3">
+                    <!-- Breadcrumb-->
+                    <ol class="breadcrumb border-0 m-0">
+                        <li class="breadcrumb-item">
+                            <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:title="${session.sessionBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
+                                <span th:text="${session.sessionBean.businessFunction.name}"></span>
                             </a>
-                        </div>
-                    </li>
-                </ol>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:title="${session.sessionBean.name}" th:if="${session.sessionBean}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}"> 
+                                <span th:text="${session.sessionBean.name}"></span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span th:text="#{ruleset.list.label}"></span>
+                        </li>
+                    </ol>
+                    <!-- Right navigation menu -->
+                    <div class="c-header-nav d-md-down-none mfe-2">
+                        <a class="c-header-nav-link" th:title="#{session.button.close}"  th:href="@{'/sessione/apri/'+${session.sessionBean.id}}">
+                            <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                        </a>
+                    </div>
+                </div>
+            </header>
 
-                <div class="container-fluid">
-                    <div class="animated fadeIn">
-                        <input id="idsessioneBean" type="hidden"value="${session.sessionBean.id}" />
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <span th:text="#{ruleset.list.label}">Lista ruleset</span>									
-                                        <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNewRulesetDialog();" 
-                                               th:title="#{new.ruleset.link.title}">
-                                                <i class="fa fa-plus-square-o"></i>
-                                                <span th:text="#{ruleset.new.ruleset}"></span>
-                                            </a>
-                                            <a class="card-header-action" href="javascript:void(0)" onclick="javascript:browseFiles();" 
-                                               th:title="#{upload.rule.file.link.title}">
-                                                <i class="fa fa-upload"></i>
-                                                <span th:text="#{ruleset.new.file.ruleset}"></span>
-                                            </a>
+            <div class="c-body">
+                <main class="c-main">
+                    <div class="container-fluid">
+                        <div class="animated fadeIn">
+                            <input id="idsessioneBean" type="hidden"value="${session.sessionBean.id}" />
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <span th:text="#{ruleset.list.label}">Lista ruleset</span>									
+                                            <div class="card-header-actions">
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:browseFiles();" 
+                                                   th:title="#{upload.rule.file.link.title}">
+                                                    <i class="fa fa-upload"></i>
+                                                    <span th:text="#{ruleset.new.file.ruleset}"></span>
+                                                </a>
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNewRulesetDialog();" 
+                                                   th:title="#{new.ruleset.link.title}">
+                                                    <i class="fa fa-plus-square-o"></i>
+                                                    <span th:text="#{ruleset.new.ruleset}"></span>
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <form id="inputFileRulesetForm" th:action="@{'/rule/loadRulesFile'}" method="post" enctype="multipart/form-data">
-                                            <input type="hidden" value="" name="name" id="nomeF" />
-                                            <input type="hidden" value="" name="descrizione" id="desc" />
-                                            <input type="hidden" th:value="${session.sessionBean.id}" th:name="idsessione" />
-                                            <input type="hidden" value="" name="delimiter" id="delimiter" />
-                                            <input type="hidden" value="" name="labelFile" id="labelFile" />
-                                            <input type="hidden" value="" name="classificazione" id="classificazione" />
-                                            <input type="hidden" value="" name="skipFirstLine" id="skipFisrtLine" />
-                                            <input type="hidden" value="" name="labelCodeRule" id="labelCodeRule" />
-                                            <div id="upload" class="row">
-                                                <div class="col-lg-8">
-                                                    <div class="form-group">
-                                                        <label class="control-label" th:text="#{selection.file.legend}">
-                                                            Seleziona un file da caricare (txt o csv) 
-                                                        </label>
-                                                        <!-- Impostare data-show-preview a true per avere la preview del file -->
-                                                        <input id="file" accept=".csv,.txt" class="file"
-                                                               type="file" name="fileName" data-show-preview="false"
-                                                               data-show-caption="true" data-show-upload="false"
-                                                               data-toggle="tooltip" data-placement="top"
-                                                               data-show-remove="false" />
+                                        <div class="card-body">
+                                            <form id="inputFileRulesetForm" th:action="@{'/rule/loadRulesFile'}" method="post" enctype="multipart/form-data">
+                                                <input type="hidden" value="" name="name" id="nomeF" />
+                                                <input type="hidden" value="" name="descrizione" id="desc" />
+                                                <input type="hidden" th:value="${session.sessionBean.id}" th:name="idsessione" />
+                                                <input type="hidden" value="" name="delimiter" id="delimiter" />
+                                                <input type="hidden" value="" name="labelFile" id="labelFile" />
+                                                <input type="hidden" value="" name="classificazione" id="classificazione" />
+                                                <input type="hidden" value="" name="skipFirstLine" id="skipFisrtLine" />
+                                                <input type="hidden" value="" name="labelCodeRule" id="labelCodeRule" />
+                                                <div id="upload" class="row">
+                                                    <div class="col-lg-8">
+                                                        <div class="form-group">
+                                                            <label class="control-label" th:text="#{selection.file.legend}">
+                                                                Seleziona un file da caricare (txt o csv) 
+                                                            </label>
+                                                            <!-- Impostare data-show-preview a true per avere la preview del file -->
+                                                            <input id="file" accept=".csv,.txt" class="file"
+                                                                   type="file" name="fileName" data-show-preview="false"
+                                                                   data-show-caption="true" data-show-upload="false"
+                                                                   data-toggle="tooltip" data-placement="top"
+                                                                   data-show-remove="false" />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </form>
-                                        <form id="inputNewRulesetForm" action="" method="post" enctype="multipart/form-data">
-                                            <input type="hidden" th:value="${session.sessionBean.id}" th:name="idsessione" />
-                                            <input type="hidden" value="" name="rulesetId" id="rulesetId" />
-                                            <input type="hidden" value="" name="rulesetName" id="rulesetName" />
-                                            <input type="hidden" value="" name="dataset" id="dataset" />
-                                            <input type="hidden" value="" name="rulesetDesc" id="rulesetDesc" />
-                                            <input type="hidden" value="" name="rulesetType" id="rulesetType" />
-                                        </form>
+                                            </form>
+                                            <form id="inputNewRulesetForm" action="" method="post" enctype="multipart/form-data">
+                                                <input type="hidden" th:value="${session.sessionBean.id}" th:name="idsessione" />
+                                                <input type="hidden" value="" name="rulesetId" id="rulesetId" />
+                                                <input type="hidden" value="" name="rulesetName" id="rulesetName" />
+                                                <input type="hidden" value="" name="dataset" id="dataset" />
+                                                <input type="hidden" value="" name="rulesetDesc" id="rulesetDesc" />
+                                                <input type="hidden" value="" name="rulesetType" id="rulesetType" />
+                                            </form>
 
-                                        <table id="rulesetList" class="table table-sm" th:if="${listaRuleSet}" cellspacing="0">
-                                            <thead>
-                                                <tr th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
-                                                    <th><span th:text="#{generic.label.name}">Nome</span></th>
-                                                    <th><span th:text="#{generic.label.description}">Descrizione</span></th>
-                                                    <th><span th:text="#{generic.label.dataset}">Dataset</span></th>
-                                                    <th><span th:text="#{listaDataset.numeroregole}">N. regole</span></th>
-                                                    <th colspan="3"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr th:each="ruleset : ${listaRuleSet}"
-                                                    th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
-                                                    <td th:text="${ruleset.fileLabel}"></td>
-                                                    <td th:text="${ruleset.descr}"></td>
-                                                    <td>
-                                                        <span th:if="${ruleset.datasetFile}" th:text="${ruleset.datasetFile.fileName}"></span>
-                                                        <span th:unless="${ruleset.datasetFile}">-</span>
-                                                    </td>
-                                                    <td>
-                                                        <span th:if="${ruleset.rulesTotal}" th:text="${ruleset.rulesTotal}"></span>
-                                                        <span th:unless="${ruleset.rulesTotal}">-</span>
-                                                    </td>
-                                                    <td style="width: 1%">
-                                                        <a th:href="@{'/rule/viewRules/'+${ruleset.id}}" th:title="#{ruleset.showdata.title.button}">
-                                                            <i class="fa fa-search"></i>
-                                                        </a>
-                                                    </td>       
-                                                    <td style="width: 1%">
-                                                        <a href="javascript:void(0)" th:title="#{ruleset.update.title.button}" role="button" th:if="${ruleset.datasetFile}" 
-                                                           th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.fileLabel} + '\',\'' + ${ruleset.descr} + '\', \'' + ${ruleset.datasetFile.id} +'\')'">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                        <a href="javascript:void(0)" th:title="#{ruleset.update.title.button}" role="button" th:unless="${ruleset.datasetFile}" 
-                                                           th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.fileLabel} + '\',\'' + ${ruleset.descr} + '\', \'' + 'null' +'\')'">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                    </td>
-                                                  	<td style="width: 1%">
-                                                        <a href="javascript:void(0)" th:title="#{ruleset.delete.title.button}" role="button"
-                                                           th:attr="onclick='javascript:eliminaRuleset(' + ${ruleset.id} + ', \'' + ${ruleset.fileLabel} + '\',' + ${session.sessionBean.id} +')'">
-                                                            <i class="fa fa-trash"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <span th:if="${(listaRuleSet == null) or (listaRuleSet.size() == 0)}" th:text="#{no.file.available.message}">
-                                            No file available for this session.
-                                        </span>
+                                            <table id="rulesetList" class="table table-sm" th:if="${listaRuleSet}" cellspacing="0">
+                                                <thead>
+                                                    <tr th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
+                                                        <th><span th:text="#{generic.label.name}">Nome</span></th>
+                                                        <th><span th:text="#{generic.label.description}">Descrizione</span></th>
+                                                        <th><span th:text="#{generic.label.dataset}">Dataset</span></th>
+                                                        <th><span th:text="#{listaDataset.numeroregole}">N. regole</span></th>
+                                                        <th colspan="3"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr th:each="ruleset : ${listaRuleSet}"
+                                                        th:unless="${(listaRuleSet == null) or (listaRuleSet.size() == 0) }">
+                                                        <td th:text="${ruleset.fileLabel}"></td>
+                                                        <td th:text="${ruleset.descr}"></td>
+                                                        <td>
+                                                            <span th:if="${ruleset.datasetFile}" th:text="${ruleset.datasetFile.fileName}"></span>
+                                                            <span th:unless="${ruleset.datasetFile}">-</span>
+                                                        </td>
+                                                        <td>
+                                                            <span th:if="${ruleset.rulesTotal}" th:text="${ruleset.rulesTotal}"></span>
+                                                            <span th:unless="${ruleset.rulesTotal}">-</span>
+                                                        </td>
+                                                        <td style="width: 1%">
+                                                            <a th:href="@{'/rule/viewRules/'+${ruleset.id}}" th:title="#{ruleset.showdata.title.button}">
+                                                                <i class="fa fa-search"></i>
+                                                            </a>
+                                                        </td>       
+                                                        <td style="width: 1%">
+                                                            <a href="javascript:void(0)" th:title="#{ruleset.update.title.button}" role="button" th:if="${ruleset.datasetFile}" 
+                                                               th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.fileLabel} + '\',\'' + ${ruleset.descr} + '\', \'' + ${ruleset.datasetFile.id} +'\')'">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                            <a href="javascript:void(0)" th:title="#{ruleset.update.title.button}" role="button" th:unless="${ruleset.datasetFile}" 
+                                                               th:attr="onclick='javascript:apriModificaRulesetDialog(' + ${ruleset.id} + ', \'' + ${ruleset.fileLabel} + '\',\'' + ${ruleset.descr} + '\', \'' + 'null' +'\')'">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                        </td>
+                                                        <td style="width: 1%">
+                                                            <a href="javascript:void(0)" th:title="#{ruleset.delete.title.button}" role="button"
+                                                               th:attr="onclick='javascript:eliminaRuleset(' + ${ruleset.id} + ', \'' + ${ruleset.fileLabel} + '\',' + ${session.sessionBean.id} +')'">
+                                                                <i class="fa fa-trash"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <span th:if="${(listaRuleSet == null) or (listaRuleSet.size() == 0)}" th:text="#{no.file.available.message}">
+                                                No file available for this session.
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </main>
-        </div>
-        <!-- End body -->
-        <footer th:replace="layout :: site-footer"></footer>
+                </main>
+            </div>
+            <!-- End body -->
+            <footer th:replace="layout :: site-footer"></footer>
 
-        <!-- Error upload file modal -->
-        <div class="modal fade" id="errorUplodFile" tabindex="-1" role="dialog" 
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content ">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="fa fa-times-circle"></i> 
-                            <span th:text="#{upload.error.modal.title}">Errore upload</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <span th:text="#{upload.error.modal.message}">Nessun file selezionato.</span>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">
-                            <span th:text="#{Index.button.ok}">Ok</span>
-                        </button>
+            <!-- Error upload file modal -->
+            <div class="modal fade" id="errorUplodFile" tabindex="-1" role="dialog" 
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content ">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-times-circle"></i> 
+                                <span th:text="#{upload.error.modal.title}">Errore upload</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{upload.error.modal.message}">Nessun file selezionato.</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                <span th:text="#{Index.button.ok}">Ok</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Delete ruleset modal -->
-        <div class="modal fade" id="modalCancellaRuleset" tabindex="-1" role="dialog" 
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">
-                            <i class="fa fa-trash"></i>
-                            <span>Conferma eliminazione</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <span id="msg_elim_ruleset"></span>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" id="idRuleset" th:name="idRuleset" />
-                        <input type="hidden" id="idSessione_del" th:name="idSessione" />						
-                        <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
-                        </button>
-                        <button type="button" id="btn_delete_ruleset" class="btn btn-primary" th:title="#{generic.delete.button.label}">
-                            <span th:text="#{generic.delete.button.label}">Elimina</span>
-                        </button>
+            <!-- Delete ruleset modal -->
+            <div class="modal fade" id="modalCancellaRuleset" tabindex="-1" role="dialog" 
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                <i class="fa fa-trash"></i>
+                                <span>Conferma eliminazione</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <span id="msg_elim_ruleset"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="idRuleset" th:name="idRuleset" />
+                            <input type="hidden" id="idSessione_del" th:name="idSessione" />						
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
+                            </button>
+                            <button type="button" id="btn_delete_ruleset" class="btn btn-primary" th:title="#{generic.delete.button.label}">
+                                <span th:text="#{generic.delete.button.label}">Elimina</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- New ruleset (upload file) modal -->
-        <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" 
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="fa fa-binoculars"></i>
-                            <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
+            <!-- New ruleset (upload file) modal -->
+            <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" 
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-binoculars"></i>
+                                <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <div class="form-group">
-                            <label th:text="#{file.skip.first.line}">Salta prima riga:</label>
-                            <input type="radio" name="skip_line" value="1" th:text="' '+ #{radio.button.yes.label}"/>
-                            <input type="radio" name="skip_line" value="0" checked="checked" th:text="' '+ #{radio.button.no.label}"/>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-3">
-                                <label th:text="#{ruleset.file.label}" >Etichetta:</label>
-                                <input id="label_file" class="form-control" th:value="${etichetta}" type="text"/>  
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
                             </div>
-                            <div class="col-5">
-                                <label th:text="#{rules.classification.type}">Classificazione:</label>
-                                <select id="tipo_regola" class="form-control">
-                                    <option th:each="classif : ${listaClassificazioni}" 
-                                            th:value="${classif.id}" th:text="${classif.name}" th:selected="${classif.id==7}">
+                            <div class="form-group">
+                                <label th:text="#{file.skip.first.line}">Salta prima riga:</label>
+                                <input type="radio" name="skip_line" value="1" th:text="' '+ #{radio.button.yes.label}"/>
+                                <input type="radio" name="skip_line" value="0" checked="checked" th:text="' '+ #{radio.button.no.label}"/>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-3">
+                                    <label th:text="#{ruleset.file.label}" >Etichetta:</label>
+                                    <input id="label_file" class="form-control" th:value="${etichetta}" type="text"/>  
+                                </div>
+                                <div class="col-5">
+                                    <label th:text="#{rules.classification.type}">Classificazione:</label>
+                                    <select id="tipo_regola" class="form-control">
+                                        <option th:each="classif : ${listaClassificazioni}" 
+                                                th:value="${classif.id}" th:text="${classif.name}" th:selected="${classif.id==7}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <label th:text="#{delimiter.file.legend}">Separatore:</label>
+                                    <select id="delimiter_sel" class="form-control">
+                                        <option value=','>,</option>
+                                        <option value=';'>;</option>
+                                        <option value='0'>tab</option>
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <label th:text="#{rule.code.label}" >Label Code Rule:</label>
+                                    <input id="label-code-rule" class="form-control" value="R" type="text"/>  
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label th:text="#{generic.label.description.colon}">Descrizione:</label>
+                                <input id="desc_file" class="form-control" type="text" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">						
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
+                            </button>
+                            <button type="button" id="btn-invia-file" class="btn btn-primary towait" 
+                                    onclick="inviaFormRulesetFile();" th:title="#{generic.title.submit.button}">
+                                <span th:text="#{Userlist.save}">Salva</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Ruleset modal -->
+            <div class="modal fade" id="newrulesetdialog" tabindex="-1" role="dialog" 
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-plus-square"></i>
+                                <span th:text="#{rules.new.ruleset.dialog.title}">Nuovo ruleset di regole</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="control-label" th:text="#{rules.new.ruleset.name}">Nome ruleset:</label>
+                                <input id="ruleset_name" class="form-control" th:value="${etichetta}" type="text" />
+                            </div>
+                            <div class="form-group">
+                                <label th:text="#{generic.label.description.colon}">Descrizione:</label>
+                                <input id="ruleset_desc" class="form-control" type="text" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" th:text="#{ruleset.dataset.label}">Dataset:</label>
+                                <select id="dataset_file" class="form-control">
+                                    <option th:each="dataset : ${listaDatasetFile}"
+                                            th:value="${dataset.id}" th:text="${dataset.fileName}">
                                     </option>
                                 </select>
                             </div>
-                            <div class="col-2">
-                                <label th:text="#{delimiter.file.legend}">Separatore:</label>
-                                <select id="delimiter_sel" class="form-control">
-                                    <option value=','>,</option>
-                                    <option value=';'>;</option>
-                                    <option value='0'>tab</option>
+                        </div>
+                        <div class="modal-footer">						
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
+                            </button>
+                            <button type="button" id="btn-invia-new-ruleset" class="btn btn-primary towait" 
+                                    onclick="inviaFormNewRuleset();" th:title="#{generic.title.submit.button}">
+                                <span th:text="#{Userlist.save}">Salva</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Ruleset modal -->
+            <div class="modal fade" id="updaterulesetdialog" tabindex="-1" role="dialog" 
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-edit"></i> 
+                                <span th:text="#{rules.update.ruleset.dialog.title}">Modifica ruleset</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="control-label" th:text="#{rules.new.ruleset.name}">Nome ruleset:</label>
+                                <input id="ruleset_name_upd" class="form-control" th:value="${etichetta}" type="text" />
+                            </div>
+                            <div class="form-group">
+                                <label th:text="#{generic.label.description.colon}">Descrizione:</label>
+                                <input id="ruleset_desc_upd" class="form-control" type="text" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" th:text="#{ruleset.dataset.label}">Dataset:</label>
+                                <select id="dataset_file_upd" class="form-control">
+                                    <option th:each="dataset : ${listaDatasetFile}"
+                                            th:value="${dataset.id}" th:text="${dataset.fileName}">
+                                    </option>
                                 </select>
                             </div>
-                             <div class="col-2">
-                                <label th:text="#{rule.code.label}" >Label Code Rule:</label>
-                                <input id="label-code-rule" class="form-control" value="R" type="text"/>  
-                            </div>
                         </div>
-                        <div class="form-group">
-                            <label th:text="#{generic.label.description.colon}">Descrizione:</label>
-                            <input id="desc_file" class="form-control" type="text" />
+                        <div class="modal-footer">						
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
+                            </button>
+                            <button type="button" id="btn-invia-new-ruleset" class="btn btn-primary towait" 
+                                    onclick="modificaRuleset();" th:title="#{generic.title.submit.button}">
+                                <span th:text="#{Userlist.save}">Salva</span>
+                            </button>
                         </div>
-                    </div>
-                    <div class="modal-footer">						
-                        <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
-                        </button>
-                        <button type="button" id="btn-invia-file" class="btn btn-primary towait" 
-                                onclick="inviaFormRulesetFile();" th:title="#{generic.title.submit.button}">
-                            <span th:text="#{Userlist.save}">Salva</span>
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- New Ruleset modal -->
-        <div class="modal fade" id="newrulesetdialog" tabindex="-1" role="dialog" 
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="fa fa-plus-square"></i>
-                            <span th:text="#{rules.new.ruleset.dialog.title}">Nuovo ruleset di regole</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="control-label" th:text="#{rules.new.ruleset.name}">Nome ruleset:</label>
-                            <input id="ruleset_name" class="form-control" th:value="${etichetta}" type="text" />
-                        </div>
-                        <div class="form-group">
-                            <label th:text="#{generic.label.description.colon}">Descrizione:</label>
-                            <input id="ruleset_desc" class="form-control" type="text" />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" th:text="#{ruleset.dataset.label}">Dataset:</label>
-                            <select id="dataset_file" class="form-control">
-                                <option th:each="dataset : ${listaDatasetFile}"
-                                        th:value="${dataset.id}" th:text="${dataset.fileName}">
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">						
-                        <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
-                        </button>
-                        <button type="button" id="btn-invia-new-ruleset" class="btn btn-primary towait" 
-                                onclick="inviaFormNewRuleset();" th:title="#{generic.title.submit.button}">
-                            <span th:text="#{Userlist.save}">Salva</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Edit Ruleset modal -->
-        <div class="modal fade" id="updaterulesetdialog" tabindex="-1" role="dialog" 
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="fa fa-edit"></i> 
-                            <span th:text="#{rules.update.ruleset.dialog.title}">Modifica ruleset</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="control-label" th:text="#{rules.new.ruleset.name}">Nome ruleset:</label>
-                            <input id="ruleset_name_upd" class="form-control" th:value="${etichetta}" type="text" />
-                        </div>
-                        <div class="form-group">
-                            <label th:text="#{generic.label.description.colon}">Descrizione:</label>
-                            <input id="ruleset_desc_upd" class="form-control" type="text" />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" th:text="#{ruleset.dataset.label}">Dataset:</label>
-                            <select id="dataset_file_upd" class="form-control">
-                                <option th:each="dataset : ${listaDatasetFile}"
-                                        th:value="${dataset.id}" th:text="${dataset.fileName}">
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">						
-                        <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
-                        </button>
-                        <button type="button" id="btn-invia-new-ruleset" class="btn btn-primary towait" 
-                                onclick="modificaRuleset();" th:title="#{generic.title.submit.button}">
-                            <span th:text="#{Userlist.save}">Salva</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </body>
 </html>

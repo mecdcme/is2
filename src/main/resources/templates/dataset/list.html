@@ -30,293 +30,295 @@
         <script th:src="@{/js/dataset/uploadfile.js}"></script>
         <link th:href="@{/css/vendors/fileinput/fileinput.min.css}" rel="stylesheet" />
     </head>
-    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-        <header th:replace="layout :: site-header"></header>
+    <body class="c-app">
+        <div th:replace="layout :: site-aside"></div>
+        <div th:replace="layout :: site-modals"></div>
         <!-- Body -->
-        <div class="app-body">
-            <aside th:replace="layout :: site-modals"></aside>
-            <aside th:replace="layout :: site-aside"></aside>
-            <!-- Main container -->
-            <main class="main">
-                <!-- Breadcrumb-->
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a th:title="${session.sessionBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
-                            <span th:text="${session.sessionBean.businessFunction.name}"></span>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a th:title="#{session.link.title}" th:if="${session.sessionBean}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}"> 
-                            <span th:text="${session.sessionBean.name}"></span>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
-                    </li>
-                    <!-- Breadcrumb Menu-->
-                    <li class="breadcrumb-menu">
-                        <div class="btn-group" role="group" aria-label="Button group">
-                            <a th:title="#{close.data.link.title}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}">
-                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+        <div class="c-wrapper">
+            <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+                <div th:include="layout :: site-header" th:remove="tag"></div>
+                <div class="c-subheader justify-content-between px-3">
+                    <!-- Breadcrumb-->
+                    <ol class="breadcrumb border-0 m-0">
+                        <li class="breadcrumb-item">
+                            <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:title="${session.sessionBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
+                                <span th:text="${session.sessionBean.businessFunction.name}"></span>
                             </a>
-                        </div>
-                    </li>
-                </ol>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:title="#{session.link.title}" th:if="${session.sessionBean}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}"> 
+                                <span th:text="${session.sessionBean.name}"></span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
+                        </li>
+                    </ol>
+                    <!-- Right navigation menu -->
+                    <div class="c-header-nav d-md-down-none mfe-2">
+                        <a class="c-header-nav-link" th:title="#{session.button.close}"  th:href="@{'/sessione/apri/'+${session.sessionBean.id}}">
+                            <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                        </a>
+                    </div>
+                </div>
+            </header>
 
-                <div class="container-fluid">
-                    <div class="animated fadeIn">
-                        <input id="idsessionBean" type="hidden" value="${session.sessionBean.id}" />
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <i class="fa fa-bars"></i>
-                                        <span th:text="#{lista.dataset.legend}">Lista dataset</span>
-                                        <div class="card-header-actions">
-                                            <a class="card-header-action" href="javascript:void(0)" 
-                                               onclick="javascript:browseFiles()" th:title="#{upload.file.link.title}"> 
-                                                <i class="fa fa-upload"></i>
-                                                <span th:text="#{ruleset.new.file.ruleset}"></span>
-                                            </a>
-                                             <a class="card-header-action" href="javascript:void(0)" 
-                                               onclick="javascript:openDlgLoadTable();" th:title="#{upload.db.table.link.title}"> 
-                                                <i class="fa fa-database"></i>
-                                                <span th:text="#{dataset.load.table}"></span>
-                                            </a>
+            <div class="c-body">
+                <main class="c-main">
+                    <div class="container-fluid">
+                        <div class="animated fadeIn">
+                            <input id="idsessionBean" type="hidden" value="${session.sessionBean.id}" />
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <i class="fa fa-bars"></i>
+                                            <span th:text="#{lista.dataset.legend}">Lista dataset</span>
+                                            <div class="card-header-actions">
+                                                <a class="card-header-action" href="javascript:void(0)" 
+                                                   onclick="javascript:browseFiles()" th:title="#{upload.file.link.title}"> 
+                                                    <i class="fa fa-upload"></i>
+                                                    <span th:text="#{ruleset.new.file.ruleset}"></span>
+                                                </a>
+                                                <a class="card-header-action" href="javascript:void(0)" 
+                                                   onclick="javascript:openDlgLoadTable();" th:title="#{upload.db.table.link.title}"> 
+                                                    <i class="fa fa-database"></i>
+                                                    <span th:text="#{dataset.load.table}"></span>
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <form id="inputFileForm" th:action="@{'/loadInputData'}" method="post" enctype="multipart/form-data">
-                                            <input type="hidden" value="" name="descrizione" id="desc" /> 
-                                            <input type="hidden" th:value="${session.sessionBean.id}" th:name="idsessione" />
-                                            <input type="hidden" value="" name="delimiter" id="delimiter" />
-                                            <input type="hidden" value="" name="labelFile" id="label_f" />
-                                            <input type="hidden" value="" name="fileType" id="tipo_dat" />
-                                            <div id="upload" class="row">
-                                                <div class="col-lg-8">
-                                                    <div id="upload_file" class="form-group">
-                                                        <label class="control-label" th:text="#{selection.file.legend}">Seleziona un file da caricare (txt o csv) </label>
-                                                        <!-- Impostare data-show-preview a true per avere la preview del file -->
-                                                        <input id="file" accept=".csv,.txt" class="file" type="file" name="fileName"
-                                                               data-show-preview="false" data-show-caption="true"
-                                                               data-show-upload="false" data-toggle="tooltip"
-                                                               data-placement="top" data-show-remove="false" />
+                                        <div class="card-body">
+                                            <form id="inputFileForm" th:action="@{'/loadInputData'}" method="post" enctype="multipart/form-data">
+                                                <input type="hidden" value="" name="descrizione" id="desc" /> 
+                                                <input type="hidden" th:value="${session.sessionBean.id}" th:name="idsessione" />
+                                                <input type="hidden" value="" name="delimiter" id="delimiter" />
+                                                <input type="hidden" value="" name="labelFile" id="label_f" />
+                                                <input type="hidden" value="" name="fileType" id="tipo_dat" />
+                                                <div id="upload" class="row">
+                                                    <div class="col-lg-8">
+                                                        <div id="upload_file" class="form-group">
+                                                            <label class="control-label" th:text="#{selection.file.legend}">Seleziona un file da caricare (txt o csv) </label>
+                                                            <!-- Impostare data-show-preview a true per avere la preview del file -->
+                                                            <input id="file" accept=".csv,.txt" class="file" type="file" name="fileName"
+                                                                   data-show-preview="false" data-show-caption="true"
+                                                                   data-show-upload="false" data-toggle="tooltip"
+                                                                   data-placement="top" data-show-remove="false" />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </form> 
+                                            </form> 
 
-                                        <table id="datasetList" class="table table-sm" th:if="${datasetList}" cellspacing="0" style="width:100%">
-                                            <thead>
-                                                <tr th:unless="${(datasetList == null) or (datasetList.size() == 0) }">                                                
-                                                    <th><span th:text="#{datasetList.name}">Nome</span></th>
-                                                    <th><span th:text="#{datasetList.label}">Label</span></th>
-                                                    <th><span th:text="#{datasetList.fileformat}">Formato</span></th>
-                                                    <th><span th:text="#{datasetList.totalRows}">N. Righe</span></th>
-                                                    <th colspan="2"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr th:each="dataset : ${datasetList}"
-                                                    th:unless="${(datasetList == null) or (datasetList.size() == 0) }">
-                                                    <td th:text="${dataset.fileName}"></td>
-                                                    <td th:text="${dataset.fileLabel}"></td>
-                                                    <td th:text="${dataset.fileFormat}"></td>
-                                                    <td th:text="${dataset.totalRows}"></td>
-                                                    <td th:unless="${dataset.dataType != null}" th:text="null"></td>
-                                                    <td style="width: 1%">
-                                                        <a class='towait' th:title="#{show.dataset.link.title}" th:href="@{'/viewDataset/'+${dataset.id}}"> 
-                                                            <i class="fa fa-search"></i>
-                                                        </a>
-                                                   </td>
-                                                    <!--td style="width: 1%">
-                                                        <a th:href="@{'/graph/home/'+${dataset.id}}" title="Analytics">												
-                                                            <i class="fa fa-image"></i>
-                                                        </a>
-                                                    </td-->
-                                                    <td style="width: 1%">
-                                                        <a href="javascript:void(0)" th:title="#{dataset.lista.elimina}" role="button"
-                                                           th:attr="onclick='javascript:eliminaDataset(' + ${dataset.id} + ', \'' + ${dataset.fileName} + '\')'">												
-                                                            <i class="fa fa-trash"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <span th:if="${(datasetList == null) or (datasetList.size() == 0)}" th:text="#{datasetList.nodataset.message}">
-                                            No dataset available for this session.
-                                        </span>
+                                            <table id="datasetList" class="table table-sm" th:if="${datasetList}" cellspacing="0" style="width:100%">
+                                                <thead>
+                                                    <tr th:unless="${(datasetList == null) or (datasetList.size() == 0) }">                                                
+                                                        <th><span th:text="#{datasetList.name}">Nome</span></th>
+                                                        <th><span th:text="#{datasetList.label}">Label</span></th>
+                                                        <th><span th:text="#{datasetList.fileformat}">Formato</span></th>
+                                                        <th><span th:text="#{datasetList.totalRows}">N. Righe</span></th>
+                                                        <th colspan="2"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr th:each="dataset : ${datasetList}"
+                                                        th:unless="${(datasetList == null) or (datasetList.size() == 0) }">
+                                                        <td th:text="${dataset.fileName}"></td>
+                                                        <td th:text="${dataset.fileLabel}"></td>
+                                                        <td th:text="${dataset.fileFormat}"></td>
+                                                        <td th:text="${dataset.totalRows}"></td>
+                                                        <td th:unless="${dataset.dataType != null}" th:text="null"></td>
+                                                        <td style="width: 1%">
+                                                            <a class='towait' th:title="#{show.dataset.link.title}" th:href="@{'/viewDataset/'+${dataset.id}}"> 
+                                                                <i class="fa fa-search"></i>
+                                                            </a>
+                                                        </td>
+                                                        <!--td style="width: 1%">
+                                                            <a th:href="@{'/graph/home/'+${dataset.id}}" title="Analytics">												
+                                                                <i class="fa fa-image"></i>
+                                                            </a>
+                                                        </td-->
+                                                        <td style="width: 1%">
+                                                            <a href="javascript:void(0)" th:title="#{dataset.lista.elimina}" role="button"
+                                                               th:attr="onclick='javascript:eliminaDataset(' + ${dataset.id} + ', \'' + ${dataset.fileName} + '\')'">												
+                                                                <i class="fa fa-trash"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <span th:if="${(datasetList == null) or (datasetList.size() == 0)}" th:text="#{datasetList.nodataset.message}">
+                                                No dataset available for this session.
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </main>
-        </div>
-        <!-- End body -->
-        <footer th:replace="layout :: site-footer"></footer>
+                </main>
+            </div>
+            <!-- End body -->
+            <footer th:replace="layout :: site-footer"></footer>
 
-        <!-- Error file upload modal -->
-        <div class="modal fade" id="errorUplodFile" role="dialog">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content ">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="fa fa-times-circle"></i>
-                            <span th:text="#{upload.error.modal.title}">Errore upload</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+            <!-- Error file upload modal -->
+            <div class="modal fade" id="errorUplodFile" role="dialog">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content ">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-times-circle"></i>
+                                <span th:text="#{upload.error.modal.title}">Errore upload</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{upload.error.modal.message}">Nessun file selezionato.</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                <span th:text="#{Index.button.ok}">Ok</span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <span th:text="#{upload.error.modal.message}">Nessun file selezionato.</span>
+                </div>
+            </div>
+
+            <!-- Delete dataset modal -->
+            <div class="modal fade" id="modalCancellaDataset" tabindex="-1"
+                 role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body"><span id="msg_elim_dataset"></span></div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="idDataset" th:name="idDataset" />                        
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Chiudi</button>
+                            <button type="button" id="btn_delete_dataset" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">
-                            <span th:text="#{Index.button.ok}">Ok</span>
-                        </button>
+                </div>
+            </div>
+
+            <!-- Dataset preview modal -->
+            <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" 
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-binoculars"></i>&nbsp;
+                                <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label th:text="#{file.logical.name}" ><span>Etichetta:</span></label>
+                                    <input id="label_file" class="form-control" th:value="${etichetta}" type="text"/>
+                                </div>
+                                <div class="col-3">
+                                    <label th:text="#{file.data.type}"><span>Tipo dato:</span></label>
+                                    <select id="tipo_dato" class="form-control">
+                                        <option th:each="tipod : ${fileTypeList}"
+                                                th:value="${tipod.id}"
+                                                th:text="${tipod.name}">
+                                        </option>
+                                    </select>     
+                                </div>
+                                <div class="col-2">
+                                    <label th:text="#{delimiter.file.legend}">Separatore:</label>
+                                    <select id="delimiter_sel" class="form-control">
+                                        <option value=','>,</option>
+                                        <option value=';'>;</option>
+                                        <option value='0'>tab</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:title="#{generic.title.close.button}" th:text="#{Layout.Close}">Annulla</span>
+                            </button>
+                            <button type="button" id="btn-invia-file" class="btn btn-primary towait disabled"
+                                    onclick="inviaFormFile();" th:title="#{submit.button.title}"
+                                    th:text="#{submit.button}" data-dismiss="modal">Invia
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dataset preview modal -->
+            <div class="modal fade" id="load-table-db" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-binoculars"></i>&nbsp; <span
+                                    th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="dataset-fields-table" th:action="@{'/dataset/loadtable'}"
+                                  method="post">
+                                <input type="hidden" value="" name="dbschema" id="db-schema" />
+                                <input type="hidden" th:value="${session.sessionBean.id}" th:name="idsessione" />
+                                <input type="hidden" value="" name="tablename" id="table-name" />
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label><span>Database:</span></label> <select id="sel-db"
+                                                                                      class="form-control">
+                                            <option value="IS2" id="db_IS2">IS2</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <label th:text="#{dataset.tables}"></label> <select
+                                            id="sel-tables" class="form-control"></select>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-6">
+                                        <label th:text="#{dataset.fields}"></label>
+                                        <ul class="list-group list-group-flush" id="check-list-fields"></ul>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:title="#{generic.title.close.button}" th:text="#{Layout.Close}">Annulla</span>
+                            </button>
+                            <button type="button" id="btn-invia-table"
+                                    class="btn btn-primary towait "
+                                    onclick="inviaFormTable();" th:title="#{submit.button.title}"
+                                    th:text="#{submit.button}" data-dismiss="modal">Invia</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Delete dataset modal -->
-        <div class="modal fade" id="modalCancellaDataset" tabindex="-1"
-             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">
-                            <i class="fa fa-trash"></i>&nbsp;<span>Conferma eliminazione</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body"><span id="msg_elim_dataset"></span></div>
-                    <div class="modal-footer">
-                        <input type="hidden" id="idDataset" th:name="idDataset" />                        
-                        <button type="button" class="btn btn-light" data-dismiss="modal">Chiudi</button>
-                        <button type="button" id="btn_delete_dataset" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dataset preview modal -->
-        <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" 
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="fa fa-binoculars"></i>&nbsp;
-                            <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-4">
-                                <label th:text="#{file.logical.name}" ><span>Etichetta:</span></label>
-                                <input id="label_file" class="form-control" th:value="${etichetta}" type="text"/>
-                            </div>
-                            <div class="col-3">
-                                <label th:text="#{file.data.type}"><span>Tipo dato:</span></label>
-                                <select id="tipo_dato" class="form-control">
-                                    <option th:each="tipod : ${fileTypeList}"
-                                            th:value="${tipod.id}"
-                                            th:text="${tipod.name}">
-                                    </option>
-                                </select>     
-                            </div>
-                            <div class="col-2">
-                                <label th:text="#{delimiter.file.legend}">Separatore:</label>
-                                <select id="delimiter_sel" class="form-control">
-                                    <option value=','>,</option>
-                                    <option value=';'>;</option>
-                                    <option value='0'>tab</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:title="#{generic.title.close.button}" th:text="#{Layout.Close}">Annulla</span>
-                        </button>
-                        <button type="button" id="btn-invia-file" class="btn btn-primary towait disabled"
-                                onclick="inviaFormFile();" th:title="#{submit.button.title}"
-                                th:text="#{submit.button}" data-dismiss="modal">Invia
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Dataset preview modal -->
-    <div class="modal fade" id="load-table-db" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="fa fa-binoculars"></i>&nbsp; <span
-                            th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal"
-                        aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="dataset-fields-table" th:action="@{'/dataset/loadtable'}"
-                        method="post">
-                        <input type="hidden" value="" name="dbschema" id="db-schema" />
-                        <input type="hidden" th:value="${session.sessionBean.id}" th:name="idsessione" />
-                        <input type="hidden" value="" name="tablename" id="table-name" />
-                        <div class="form-group row">
-                            <div class="col-4">
-                                <label><span>Database:</span></label> <select id="sel-db"
-                                    class="form-control">
-                                    <option value="IS2" id="db_IS2">IS2</option>
-                                </select>
-                            </div>
-                            <div class="col-3">
-                                <label th:text="#{dataset.tables}"></label> <select
-                                    id="sel-tables" class="form-control"></select>
-                            </div>
-
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-6">
-                                <label th:text="#{dataset.fields}"></label>
-                                <ul class="list-group list-group-flush" id="check-list-fields"></ul>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">
-                        <span th:title="#{generic.title.close.button}" th:text="#{Layout.Close}">Annulla</span>
-                    </button>
-                    <button type="button" id="btn-invia-table"
-                        class="btn btn-primary towait "
-                        onclick="inviaFormTable();" th:title="#{submit.button.title}"
-                        th:text="#{submit.button}" data-dismiss="modal">Invia</button>
-                </div>
-            </div>
-        </div>
-    </div>
-        
     </body>
 </html>

@@ -27,43 +27,50 @@
         <head th:include="layout :: site-head" th:remove="tag" />
         <script th:inline="javascript">
             $(document).ready(function () {
-                setMenuActive(0); //Set home active
+            setMenuActive(0); //Set home active
             });
         </script>
     </head>
-    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-        <header th:replace="layout :: site-header"></header>
-        <!-- Body -->
-        <div class="app-body">
-            <aside th:replace="layout :: site-modals"></aside>
-            <aside th:replace="layout :: site-aside"></aside>
-            <main class="main">
-                <!-- Breadcrumb-->
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/}" th:title="#{home.link.title}">Home</a></li>
-                    <!-- Breadcrumb Menu-->
-                    <li class="breadcrumb-menu"></li>
-                </ol>
-                <div class="container-fluid">
-                    <div class="row" th:if="${session.businessFunctionList}">
-                        <div class="col-sm-6 col-md-4" th:each="businessFunction, iter : ${session.businessFunctionList}">
-                            <div class="card text-white" th:classappend="${iter.odd} ? bg-primary : bg-danger">
-                                <div class="card-header">
-                                    <i class="icon-star"></i>
-                                    <span th:text="${businessFunction.name}"></span>
-                                </div>
-                                <div class="card-body">
-                                    <p th:text="${businessFunction.description}"></p>
-                                    <a th:title="${businessFunction.name}" th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}" style="color:white">
-                                        Go to <span th:text="${businessFunction.name}"></span> <i class="fa fa-arrow-right"></i>
-                                    </a>
+    <body class="c-app">
+        <div th:replace="layout :: site-aside"></div>
+        <div th:replace="layout :: site-modals"></div>
+
+        <div class="c-wrapper">
+            <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+                <div th:include="layout :: site-header" th:remove="tag"></div>
+                <div class="c-subheader px-3">
+                    <!-- Breadcrumb-->
+                    <ol class="breadcrumb border-0 m-0">
+                        <li class="breadcrumb-item"><a th:href="@{/}" th:title="#{home.link.title}">Home</a></li>
+                        <!-- Breadcrumb Menu-->
+                    </ol>
+                </div>
+            </header>
+
+            <div class="c-body">
+                <main class="c-main">
+                    <div class="container-fluid">
+                        <div class="fade-in">
+                            <div class="row" th:if="${session.businessFunctionList}">
+                                <div class="col-sm-6 col-md-4" th:each="businessFunction, iter : ${session.businessFunctionList}">
+                                    <div class="card text-white" th:classappend="${iter.odd} ? bg-gradient-info : bg-gradient-warning">
+                                        <div class="card-body">
+                                            <div class="card-body-title">
+                                                <i class="card-body-title-icon cil-star"></i><span th:text="${businessFunction.name}"></span>
+                                            </div>
+                                            <p th:text="${businessFunction.description}"></p>
+                                            <a th:title="${businessFunction.name}" th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}" style="color:white">
+                                                Go to <span th:text="${businessFunction.name}"></span> <i class="fa fa-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </main>
+                </main>
+            </div>
+            <footer th:replace="layout :: site-footer"></footer>     
         </div>
-        <footer th:replace="layout :: site-footer"></footer>     
     </body>
 </html>

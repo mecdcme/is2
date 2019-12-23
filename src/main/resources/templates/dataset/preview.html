@@ -30,7 +30,7 @@
             var _variabili = [[${colonne.size()}]];
             var _righe = [[${numRighe}]];
             $(document).ready(function () {
-                setMenuActive([[${session.sessionBean.businessFunction.id}]]);
+            setMenuActive([[${session.sessionBean.businessFunction.id}]]);
             });
             var _no_search_filters = [[#{dataset.no.search.filters}]];
         </script>
@@ -38,433 +38,394 @@
         <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
         <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet" />
     </head>
-    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+    <body class="c-app">
+        <div th:replace="layout :: site-aside"></div>
+        <div th:replace="layout :: site-modals"></div>
         <!-- Body -->
-        <header th:replace="layout :: site-header"></header>
-        <!-- Body -->
-        <div class="app-body">
-            <aside th:replace="layout :: site-modals"></aside>
-            <aside th:replace="layout :: site-aside"></aside>
-            <!-- Main container -->
-            <main class="main">
-                <!-- Breadcrumb-->
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a th:title="${session.sessionBean.name}" th:if="${session.sessionBean}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}"> 
-                            <span th:text="${session.sessionBean.name}"></span>
+        <div class="c-wrapper">
+            <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+                <div th:include="layout :: site-header" th:remove="tag"></div>
+                <div class="c-subheader justify-content-between px-3">
+                    <!-- Breadcrumb-->
+                    <ol class="breadcrumb border-0 m-0">
+                        <li class="breadcrumb-item">
+                            <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:title="${session.sessionBean.name}" th:if="${session.sessionBean}" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}"> 
+                                <span th:text="${session.sessionBean.name}"></span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a class="" th:title="#{sessionewf.listadataset}" th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}">
+                                <span th:if="${session.sessionBean}">
+                                    <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span th:text="${dfile.fileName}"></span>
+                        </li>
+                    </ol>
+                    <!-- Right navigation menu -->
+                    <div class="c-header-nav d-md-down-none mfe-2">
+                        <!--a href="#" class="c-header-nav-link" title="Preprocessing">
+                            <i class="fa fa-cog"></i>&nbsp;<span th:text="#{dataset.nuovaVariabile}"></span>
+                        </a-->
+                        <!--ul class="dropdown-menu" >
+                            <li><a class="dropdown-item" th:onclick="'javascript:openStandardizationModal()'" href="#"><span th:text="#{dataset.fieldStandardization}"></span></a></li>
+                            <li><a class="dropdown-item" th:onclick="'javascript:openMergeModal()'" href="#"><span th:text="#{dataset.fieldMerge}"></span></a></li>
+                            <li><a class="dropdown-item" th:onclick="'javascript:openParseModal()'" href="#"><span th:text="#{dataset.fieldParse}"></span></a></li>
+                            <li><a class="dropdown-item" th:onclick="'javascript:openRepairModal()'" href="#"><span th:text="#{dataset.fieldRepair}"></span></a></li>
+                            <li><a class="dropdown-item" th:onclick="'javascript:openDeleteModal()'" href="#"><span th:text="#{dataset.fieldDelete}"></span></a></li> 
+                        </ul-->
+                        <!--a class="c-header-nav-link" id="btn_graph" th:title="#{dataset.link.analytics.title}" th:href="@{'/graph/home/'+${idfile}}">
+                            <i class="fa fa-image"></i>&nbsp;<span th:text="#{sessionewf.graph}"></span>
+                        </a-->
+                        <!--a class="c-header-nav-link" id="btn_metadati" th:title="#{dataset.link.classification.title}" th:href="@{'/metadatiDataset/'+${idfile}}">
+                            <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>
+                        </a-->
+                        <a class="c-header-nav-link" th:title="#{close.data.link.title}" th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}">
+                            <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                         </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a class="" th:title="#{sessionewf.listadataset}" th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}">
-                            <span th:if="${session.sessionBean}">
-                                <span th:text="#{sessionewf.listadataset}"> Lista dataset</span>
-                            </span>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <span th:text="${dfile.fileName}"></span>
-                    </li>
-                    <!-- Breadcrumb Menu-->
-                    <li class="breadcrumb-menu">
-                        <div class="btn-group" role="group" aria-label="Button group">
-                            <a href="#" class="btn d-md-down-none" title="Preprocessing">
-                                <i class="fa fa-cog"></i>&nbsp;<span th:text="#{dataset.nuovaVariabile}"></span>
-                            </a>
-                            <!--ul class="dropdown-menu" >
-                                <li><a class="dropdown-item" th:onclick="'javascript:openStandardizationModal()'" href="#"><span th:text="#{dataset.fieldStandardization}"></span></a></li>
-                                <li><a class="dropdown-item" th:onclick="'javascript:openMergeModal()'" href="#"><span th:text="#{dataset.fieldMerge}"></span></a></li>
-                                <li><a class="dropdown-item" th:onclick="'javascript:openParseModal()'" href="#"><span th:text="#{dataset.fieldParse}"></span></a></li>
-                                <li><a class="dropdown-item" th:onclick="'javascript:openRepairModal()'" href="#"><span th:text="#{dataset.fieldRepair}"></span></a></li>
-                                <li><a class="dropdown-item" th:onclick="'javascript:openDeleteModal()'" href="#"><span th:text="#{dataset.fieldDelete}"></span></a></li> 
-                            </ul-->
-                            <a class="btn d-md-down-none" id="btn_graph" th:title="#{dataset.link.analytics.title}" th:href="@{'/graph/home/'+${idfile}}">
-                                <i class="fa fa-image"></i>&nbsp;<span th:text="#{sessionewf.graph}"></span>
-                            </a>
-                            <a class="btn d-md-down-none" id="btn_metadati" th:title="#{dataset.link.classification.title}" th:href="@{'/metadatiDataset/'+${idfile}}">
-                                <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>
-                            </a>
-                            <a class="btn" th:title="#{close.data.link.title}" th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}">
-                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
-                            </a>
-                        </div>
-                    </li>
-                </ol>
+                    </div>
+                </div>
+            </header>
 
-                <div class="container-fluid">
-                    <div class="animated fadeIn">
-                        <div class="row" >
-                            <div class="col-lg-12">
-                           <!--      <div class="card">
-                                    <div class="card-header">
-                                        <span th:text=#{dataset.search.filters}>Filtri di ricerca</span>
-                                    </div>
-                                    <div class="card-body">
-                                        <span id="no_filters_msg"></span>
-                                        <div class="form-inline">
-                                            <div class="form-group" th:each="col : ${colonne}" th:if="${col.filtro}" style="margin-right: 10px">
-                                                <th:block>
-                                                    <label> 
-                                                        <span th:text="${col.name + ' :'}"></span> 
-                                                        <input type="text" class="form-control param-filter" th:id="${col.name}" style="font-weight: normal;" />
-                                                    </label>
-                                                </th:block>
-                                            </div>
-                                            <div class="form-group" style=" margin-right: 10px">
-                                                <button id="bottoneRicerca" type="button" onclick="ricercaByParams()" class="btn btn-primary">Cerca</button>
-                                            </div>
+            <div class="c-body">
+                <main class="c-main">
+                    <div class="container-fluid">
+                        <div class="animated fadeIn">
+                            <div class="row" >
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <span th:each="file, iterStat : ${files}">
+                                                <a th:href="@{'/viewDataset/'+${file.id}}" th:title="${file.fileName}" 
+                                                   th:class="nav-padding" th:classappend="!${iterStat.last}? 'bar-right' : ''" > 
+                                                    <span th:if="${file.id} == ${idfile}" class="font-weight-bold" th:text="${file.fileName}"></span>
+                                                    <span th:unless="${file.id} == ${idfile}" th:text="${file.fileName}"></span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                        <div class="card-body">
+                                            <table id="dataview" class="table table-striped table-sm" cellspacing="0" width="100%" >
+                                                <thead>
+                                                    <tr>
+                                                        <th th:each="varname: ${colonne}" th:text="${varname.name}"></th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
-                                -->
-                                <div class="card">
-                                    <div class="card-header">
-                                        <span th:each="file, iterStat : ${files}">
-                                            <a th:href="@{'/viewDataset/'+${file.id}}" th:title="${file.fileName}" 
-                                               th:class="nav-padding" th:classappend="!${iterStat.last}? 'bar-right' : ''" > 
-                                                <span th:if="${file.id} == ${idfile}" class="font-weight-bold" th:text="${file.fileName}"></span>
-                                                <span th:unless="${file.id} == ${idfile}" th:text="${file.fileName}"></span>
-                                            </a>
-                                        </span>
-                                    </div>
-                                    <div class="card-body">
-                                        <table id="dataview" class="table table-striped table-sm" cellspacing="0" width="100%" >
-                                            <thead>
-                                                <tr>
-                                                    <th th:each="varname: ${colonne}" th:text="${varname.name}"></th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </main>
-        </div>
-        <!-- End body -->
-        <footer th:replace="layout :: site-footer"></footer>
-
-        <div class="modal fade" id="modalCancellaDataset" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="exampleModalLabel">
-                            <i class="fa fa-trash"></i>Conferma eliminazione
-                        </h4>
-                    </div>
-                    <div class="modal-body"><span th:text="#{dataset.confirm.text}"></span></div>
-                    <div class="modal-footer">
-                        <input type="hidden" name="" id="id_dataset_del" value="" />
-                        <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
-                        <button type="button" id="btn_delete_dataset" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
-                    </div>
-                </div>
+                </main>
             </div>
-        </div>
-        <div class="modal fade" id="modalStandardization" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="exampleModalLabel">
-                            <i class="fas fa-layer-group"></i><span th:text="#{dataset.fieldStandardization}"></span>
-                        </h4>
-                        <div class="custom-control custom-checkbox">
-                            <hr class="style1"></hr>
-                            <span class="form-check-label" for="removeSpace">Variabile:</span>
-                            <select id="selectedVar" class="dropdown" title= "Elenco Variabili">
+            <!-- End body -->
+            <footer th:replace="layout :: site-footer"></footer>
 
-                                <option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
-                                        th:value="${cols.id}"
-                                        th:text="${cols.id} != null? ${cols.name}: ''">
-                                </option>
-                            </select>
+            <div class="modal fade" id="modalCancellaDataset" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="exampleModalLabel">
+                                <i class="fa fa-trash"></i>Conferma eliminazione
+                            </h4>
                         </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="removeSpace"></input>
-                            <span class="form-check-label" for="removeSpace">Rimuovi spazi</span>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="removeSpecial"></input>
-                            <span class="form-check-label" for="removeSpecial">Rimuovi caratteri speciali (.,:;\/'")</span>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="removeChar"></input>
-                            <span class="form-check-label" for="removeSpecial">Rimuovi carattere o stringa:</span>
-                            <input type="text" class="custom-control-input" id="charValue"></input>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="upperCase"></input>
-                            <span class="form-check-label" for="removeSpecial">UPPER/lower case</span>
-                        </div>
-                        <div id="upperRadio" class="form-check form-check-inline">
-                            <input name="gruppo3" type="radio" id="up" checked="true"></input>
-                            <span for="up">Maiuscolo</span>
-                            <input name="gruppo3" type="radio" id="low"></input>
-                            <span for="low">Minuscolo</span>
-                        </div> 
-                        <div class="custom-control custom-checkbox">
-                            <hr class="style1"></hr>
-                            <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
-                            <input type="text" class="custom-control-input" id="newField"></input>
-                        </div>
+                        <div class="modal-body"><span th:text="#{dataset.confirm.text}"></span></div>
                         <div class="modal-footer">
                             <input type="hidden" name="" id="id_dataset_del" value="" />
                             <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
-                            <button type="button" id="btn_Standardization_field" class="btn btn-primary">Salva</button>
+                            <button type="button" id="btn_delete_dataset" class="btn btn-primary towait" data-dismiss="modal">Elimina</button>
                         </div>
                     </div>
-                    <!-- Default checked -->
                 </div>
             </div>
-        </div>
-        <div class="modal fade" id="modalMerge" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="exampleModalLabel">
-                            <i class="fas fa-layer-group"></i><span th:text="#{dataset.fieldMerge}"></span>
-                        </h4>
-                        <div class="custom-control custom-checkbox">
-                            <hr class="style1"></hr>
-                            <span class="form-check-label" for="removeSpace">Variabile:</span>
-                            <select id="selectedVariable" class="dropdown" title= "Elenco Variabili">
-
-                                <option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
-                                        th:value="${cols.id}"
-                                        th:text="${cols.id} != null? ${cols.name}: ''">
-                                </option>
-
-                            </select>
-                            <button type="button"  id="addVariable" class="btn btn-secondary">Add</button>
-                        </div>
-
-                        <div class="custom-control custom-checkbox">
-                            <span class="form-check-label" for="removeSpace">Separatore:</span>
-                            <input type="text" class="custom-control-input" id="sepValue"></input>
-                            <button type="button" id="addSeparator" class="btn btn-secondary">Add</button>
-                        </div>
-
-                        <div class="custom-control custom-checkbox">
-                            <hr class="style1"></hr>
-                            <span class="form-check-label" for="removeSpecial">Lista dei campi da concatenare:</span>
-                            <textarea class="form-control rounded-0" id="textArea" rows="3" readonly="true"></textarea>
-                            <button type="button" style="float:right" id="clearTextArea" class="btn btn-secondary">Clear</button>
-
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <hr class="style1"></hr>
-                            <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
-                            <input type="text" class="custom-control-input" id="newfieldMerge"></input>
-
-                        </div>
-                        <div class="modal-footer">
-                            <input type="hidden" name="" id="id_dataset_del" value="" />
-                            <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
-                            <button type="button" id="btn_Merge_field" class="btn btn-primary" data-dismiss="modal" disabled="true">Salva</button>
-                        </div>
-                    </div>
-                    <!-- Default checked -->
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="modalParse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="exampleModalLabel">
-                            <i class="fas fa-layer-group"></i><span th:text="#{dataset.fieldParse}"></span>
-                        </h4>
-                        <div class="custom-control custom-checkbox">
-                            <hr></hr>
-                            <span class="form-check-label" for="removeSpace">Variabile:</span>
-                            <select id="selectedVariableToParse"  class="dropdown" title= "Elenco Variabili">
-                                <option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
-                                        th:value="${cols.id}"
-                                        th:text="${cols.id} != null? ${cols.name}: ''">
-                                </option>
-                            </select>
-                        </div>
-                        <div>
-                            <hr></hr>
-                            <div class="form-check col-md-offset-0" >
-                                <input name="tipoSeparatore" type="radio" id="sepRadio" checked="true"></input>
-                                <span id="sepRadio">Separatore:</span>
-                                <input type="text" class="custom-control-input" id="sepField"></input>
+            <div class="modal fade" id="modalStandardization" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="exampleModalLabel">
+                                <i class="fas fa-layer-group"></i><span th:text="#{dataset.fieldStandardization}"></span>
+                            </h4>
+                            <div class="custom-control custom-checkbox">
+                                <hr class="style1"></hr>
+                                <span class="form-check-label" for="removeSpace">Variabile:</span>
+                                <select id="selectedVar" class="dropdown" title= "Elenco Variabili">
+                                    <option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
+                                            th:value="${cols.id}"
+                                            th:text="${cols.id} != null? ${cols.name}: ''">
+                                    </option>
+                                </select>
                             </div>
-
-                            <div class="form-check col-md-offset-0">
-                                <input name="tipoSeparatore" type="radio" id="lenRadio"></input>
-                                <span id="lenRadio">Lunghezza:</span>
-                                <input type="text" class="custom-control-input" id="lenField"></input>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="removeSpace"></input>
+                                <span class="form-check-label" for="removeSpace">Rimuovi spazi</span>
                             </div>
-                        </div>
-                        <div>
-                            <hr></hr>
-                            <div class="form-check form-check-inline">
-                                <input name="posizionePartenza" type="radio" id="startRadio" checked="true"></input>
-                                <span id="startRadio">Inizio</span>
-
-                                <input name="posizionePartenza" type="radio" id="endRadio"></input>
-                                <span id="endRadio">Fine</span>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="removeSpecial"></input>
+                                <span class="form-check-label" for="removeSpecial">Rimuovi caratteri speciali (.,:;\/'")</span>
                             </div>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <hr></hr>
-                            <label class="form-check-label" for="removeSpecial">Nome della Prima Variabile:</label>
-                            <input type="text" class="custom-control-input" id="newParseField1"></input>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <label class="form-check-label" for="removeSpecial">Nome della Seconda Variabile:</label>
-                            <input type="text" class="custom-control-input" id="newParseField2"></input>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="hidden" name="" id="id_dataset_del" value="" />
-                            <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
-                            <button type="button" id="btn_Parse_field" class="btn btn-primary towait" data-dismiss="modal" disabled="true">Salva</button>
-                        </div>
-                    </div>
-                    <!-- Default checked -->
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="modalRepair" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="exampleModalLabel">
-                            <i class="fas fa-layer-group"></i><span th:text="#{dataset.fieldRepair}"></span>
-                        </h4>
-                        <div class="custom-control custom-checkbox">
-                            <hr></hr>
-                            <span class="form-check-label" for="removeSpace">Variabile:</span>
-                            <select  id="selectedVariableToFix" class="dropdown" title= "Elenco Variabili">
-                                <option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
-                                        th:value="${cols.id}"
-                                        th:text="${cols.id} != null? ${cols.name}: ''">
-                                </option>
-                            </select>
-                        </div>
-                        <form   th:action="@{'/repairField'}" method="post"   enctype="multipart/form-data" id="repairFieldForm">  
-                            <div class="form-group">
-                                <hr></hr>
-                                <span>File csv:</span>
-                                <input type="file" class="form-control-file" id="csvFileId" name ="fileCSV"></input>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="removeChar"></input>
+                                <span class="form-check-label" for="removeSpecial">Rimuovi carattere o stringa:</span>
+                                <input type="text" class="custom-control-input" id="charValue"></input>
                             </div>
-                            <span class="form-check-label" for="removeSpace" hidden="true">Separatore:</span>
-                            <input type="text" class="custom-control-input" id="delimiter" name="separatore" hidden="true"></input>
-                            <div class="form-group">  
-                                <div class="custom-control custom-checkbox">
-                                    <hr></hr>
-                                </div>	
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="upperCase"></input>
+                                <span class="form-check-label" for="removeSpecial">UPPER/lower case</span>
+                            </div>
+                            <div id="upperRadio" class="form-check form-check-inline">
+                                <input name="gruppo3" type="radio" id="up" checked="true"></input>
+                                <span for="up">Maiuscolo</span>
+                                <input name="gruppo3" type="radio" id="low"></input>
+                                <span for="low">Minuscolo</span>
+                            </div> 
+                            <div class="custom-control custom-checkbox">
+                                <hr class="style1"></hr>
                                 <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
-                                <input type="text" class="custom-control-input" id="newRepairedField" name="repairedField"></input>
-
+                                <input type="text" class="custom-control-input" id="newField"></input>
                             </div>
                             <div class="modal-footer">
-                                <input type="hidden" name="idDataset" id="id_Dataset" value="" />
-                                <input type="hidden" name="idColonna" id="id_Colonna" value="" />
-                                <input type="hidden" name="numRighe" id="num_Righe" value="" />
-                                <input type="hidden" name="numColonne" id="num_Colonne" value="" />
-                                <input type="hidden" name="fieldName" id="field_Name" value="" />
-
-
+                                <input type="hidden" name="" id="id_dataset_del" value="" />
                                 <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
-                                <!--                                 <button type="submit" id="btn_Repair_field" class="btn btn-primary towait" data-dismiss="modal" disabled="true">Salva</button> -->
+                                <button type="button" id="btn_Standardization_field" class="btn btn-primary">Salva</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                    <!-- Default checked -->
                 </div>
             </div>
-        </div>
-        <div class="modal fade" id="previewModalFixField" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">
-                            <i class="fa fa-binoculars"></i>&nbsp;
-                            <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
-                        </h4>
+            <div class="modal fade" id="modalMerge" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="exampleModalLabel">
+                                <i class="fas fa-layer-group"></i><span th:text="#{dataset.fieldMerge}"></span>
+                            </h4>
+                            <div class="custom-control custom-checkbox">
+                                <hr class="style1"></hr>
+                                <span class="form-check-label" for="removeSpace">Variabile:</span>
+                                <select id="selectedVariable" class="dropdown" title= "Elenco Variabili">
+                                    <option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
+                                            th:value="${cols.id}"
+                                            th:text="${cols.id} != null? ${cols.name}: ''">
+                                    </option>
+                                </select>
+                                <button type="button"  id="addVariable" class="btn btn-secondary">Add</button>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <span class="form-check-label" for="removeSpace">Separatore:</span>
+                                <input type="text" class="custom-control-input" id="sepValue"></input>
+                                <button type="button" id="addSeparator" class="btn btn-secondary">Add</button>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <hr class="style1"></hr>
+                                <span class="form-check-label" for="removeSpecial">Lista dei campi da concatenare:</span>
+                                <textarea class="form-control rounded-0" id="textArea" rows="3" readonly="true"></textarea>
+                                <button type="button" style="float:right" id="clearTextArea" class="btn btn-secondary">Clear</button>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <hr class="style1"></hr>
+                                <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
+                                <input type="text" class="custom-control-input" id="newfieldMerge"></input>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" name="" id="id_dataset_del" value="" />
+                                <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
+                                <button type="button" id="btn_Merge_field" class="btn btn-primary" data-dismiss="modal" disabled="true">Salva</button>
+                            </div>
+                        </div>
                     </div>
+                </div>
+            </div>
+            <div class="modal fade" id="modalParse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="exampleModalLabel">
+                                <i class="fas fa-layer-group"></i><span th:text="#{dataset.fieldParse}"></span>
+                            </h4>
+                            <div class="custom-control custom-checkbox">
+                                <hr></hr>
+                                <span class="form-check-label" for="removeSpace">Variabile:</span>
+                                <select id="selectedVariableToParse"  class="dropdown" title= "Elenco Variabili">
+                                    <option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
+                                            th:value="${cols.id}"
+                                            th:text="${cols.id} != null? ${cols.name}: ''">
+                                    </option>
+                                </select>
+                            </div>
+                            <div>
+                                <hr></hr>
+                                <div class="form-check col-md-offset-0" >
+                                    <input name="tipoSeparatore" type="radio" id="sepRadio" checked="true"></input>
+                                    <span id="sepRadio">Separatore:</span>
+                                    <input type="text" class="custom-control-input" id="sepField"></input>
+                                </div>
 
-                    <div class="modal-body">
-                        <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
-                    </div>
-                    <div class="modal-body">
-                        <span th:text="#{delimiter.file.legend}">Separatore:</span> &nbsp;&nbsp;&nbsp; 
-                        <select id="delimiter_sel">
-                            <option value=','>,</option>
-                            <option value=';'>;</option>
-                            <option value='0'>tab</option>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                            <span th:text="#{Layout.Close}">Annulla</span>
-                        </button>
-                        <button type="button" class="btn btn-primary towait"
-                                onclick="inviaFormFileFixField();" th:title="#{submit.button.title}"
-                                th:text="#{submit.button}" data-dismiss="modal">Invia</button>
+                                <div class="form-check col-md-offset-0">
+                                    <input name="tipoSeparatore" type="radio" id="lenRadio"></input>
+                                    <span id="lenRadio">Lunghezza:</span>
+                                    <input type="text" class="custom-control-input" id="lenField"></input>
+                                </div>
+                            </div>
+                            <div>
+                                <hr></hr>
+                                <div class="form-check form-check-inline">
+                                    <input name="posizionePartenza" type="radio" id="startRadio" checked="true"></input>
+                                    <span id="startRadio">Inizio</span>
+
+                                    <input name="posizionePartenza" type="radio" id="endRadio"></input>
+                                    <span id="endRadio">Fine</span>
+                                </div>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <hr></hr>
+                                <label class="form-check-label" for="removeSpecial">Nome della Prima Variabile:</label>
+                                <input type="text" class="custom-control-input" id="newParseField1"></input>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <label class="form-check-label" for="removeSpecial">Nome della Seconda Variabile:</label>
+                                <input type="text" class="custom-control-input" id="newParseField2"></input>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" name="" id="id_dataset_del" value="" />
+                                <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
+                                <button type="button" id="btn_Parse_field" class="btn btn-primary towait" data-dismiss="modal" disabled="true">Salva</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="exampleModalLabel">
-                            <i class="fas fa-layer-group"></i><span th:text="#{dataset.fieldDelete}"></span>
-                        </h4>
-                        <div class="custom-control custom-checkbox">
-                            <hr></hr>
-                            <span class="form-check-label" for="removeSpace">Variabile:</span>
-                            <select  id="selectedVariableToDelete" class="dropdown" title= "Elenco Variabili">
-                                <option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
-                                        th:value="${cols.id}"
-                                        th:text="${cols.id} != null? ${cols.name}: ''">
-                                </option>
+            <div class="modal fade" id="modalRepair" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="exampleModalLabel">
+                                <i class="fas fa-layer-group"></i><span th:text="#{dataset.fieldRepair}"></span>
+                            </h4>
+                            <div class="custom-control custom-checkbox">
+                                <hr></hr>
+                                <span class="form-check-label" for="removeSpace">Variabile:</span>
+                                <select  id="selectedVariableToFix" class="dropdown" title= "Elenco Variabili">
+                                    <option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
+                                            th:value="${cols.id}"
+                                            th:text="${cols.id} != null? ${cols.name}: ''">
+                                    </option>
+                                </select>
+                            </div>
+                            <form   th:action="@{'/repairField'}" method="post"   enctype="multipart/form-data" id="repairFieldForm">  
+                                <div class="form-group">
+                                    <hr></hr>
+                                    <span>File csv:</span>
+                                    <input type="file" class="form-control-file" id="csvFileId" name ="fileCSV"></input>
+                                </div>
+                                <span class="form-check-label" for="removeSpace" hidden="true">Separatore:</span>
+                                <input type="text" class="custom-control-input" id="delimiter" name="separatore" hidden="true"></input>
+                                <div class="form-group">  
+                                    <div class="custom-control custom-checkbox">
+                                        <hr></hr>
+                                    </div>	
+                                    <label class="form-check-label" for="removeSpecial">Nome della Nuova Variabile:</label>
+                                    <input type="text" class="custom-control-input" id="newRepairedField" name="repairedField"></input>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="hidden" name="idDataset" id="id_Dataset" value="" />
+                                    <input type="hidden" name="idColonna" id="id_Colonna" value="" />
+                                    <input type="hidden" name="numRighe" id="num_Righe" value="" />
+                                    <input type="hidden" name="numColonne" id="num_Colonne" value="" />
+                                    <input type="hidden" name="fieldName" id="field_Name" value="" />
+                                    <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Default checked -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="previewModalFixField" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">
+                                <i class="fa fa-binoculars"></i>&nbsp;
+                                <span th:text="#{dataset.loadfile.preview.titolo}">Anteprima</span>
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <textarea class="form-control rounded-0" id="PreviewTextarea" rows="10"></textarea>
+                        </div>
+                        <div class="modal-body">
+                            <span th:text="#{delimiter.file.legend}">Separatore:</span> &nbsp;&nbsp;&nbsp; 
+                            <select id="delimiter_sel">
+                                <option value=','>,</option>
+                                <option value=';'>;</option>
+                                <option value='0'>tab</option>
                             </select>
                         </div>
-
-
                         <div class="modal-footer">
-
-
-                            <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
-                            <button type="submit" id="btn_Delete_field" class="btn btn-primary towait" data-dismiss="modal">Esegui</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                <span th:text="#{Layout.Close}">Annulla</span>
+                            </button>
+                            <button type="button" class="btn btn-primary towait"
+                                    onclick="inviaFormFileFixField();" th:title="#{submit.button.title}"
+                                    th:text="#{submit.button}" data-dismiss="modal">Invia</button>
                         </div>
-
                     </div>
-                    <!-- Default checked -->
                 </div>
             </div>
-        </div>  
+            <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="exampleModalLabel">
+                                <i class="fas fa-layer-group"></i><span th:text="#{dataset.fieldDelete}"></span>
+                            </h4>
+                            <div class="custom-control custom-checkbox">
+                                <hr></hr>
+                                <span class="form-check-label" for="removeSpace">Variabile:</span>
+                                <select  id="selectedVariableToDelete" class="dropdown" title= "Elenco Variabili">
+                                    <option th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }"
+                                            th:value="${cols.id}"
+                                            th:text="${cols.id} != null? ${cols.name}: ''">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary " data-dismiss="modal">Chiudi</button>
+                                <button type="submit" id="btn_Delete_field" class="btn btn-primary towait" data-dismiss="modal">Esegui</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
