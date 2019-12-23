@@ -32,7 +32,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -58,8 +57,7 @@ import it.istat.is2.workflow.domain.Workset;
  */
 @Service
 public class EngineJava implements EngineService {
-
-  
+ 
     @Autowired
     AppRoleDao ruoloDao;
     @Autowired
@@ -67,7 +65,6 @@ public class EngineJava implements EngineService {
     @Autowired
     private  ApplicationContext context;
  
-
     private DataProcessing dataProcessing;
     private StepInstance stepInstance;
     private Map<String, ArrayList<StepRuntime>> dataMap;
@@ -179,9 +176,7 @@ public class EngineJava implements EngineService {
 
     @Override
     public void processOutput() throws Exception {
-
         saveOutputDB();
-
     }
 
     private void saveOutputDB() {
@@ -239,9 +234,7 @@ public class EngineJava implements EngineService {
 
     @Override
     public void destroy() {
-        // TODO Auto-generated method stub
+        //Nothing to do
     }
-
- 
 
 }

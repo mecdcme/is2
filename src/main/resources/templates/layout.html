@@ -57,7 +57,7 @@
         <!-- START SIDEBAR -->
         <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar" th:fragment="site-aside">
             <div class="c-sidebar-brand brand-full">
-                <i class="icon-magic-wand"></i> <span>IS<sup>2</sup> Worbench</span>
+                <i class="icon-chemistry"></i> <span>IS<sup>2</sup> Worbench</span>
                 <!--img class="c-sidebar-brand-full" th:src="@{/img/istat-logo.svg}" width="89" height="25" alt="Istat Logo"/-->
                 <img class="c-sidebar-brand-minimized" th:src="@{/img/istat-logo.svg}" width="89" height="25" alt="Istat Logo"/>
             </div>
@@ -84,31 +84,31 @@
                             th:if="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}">
                             <li class="c-sidebar-nav-item">
                                 <a class="c-sidebar-nav-link c-sidebar-nav-deep-link" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}">
-                                    <i class="c-sidebar-nav-deep-icon icon-arrow-right"></i>
+                                    <i class="c-sidebar-nav-deep-icon cil-folder-open"></i>
                                     <span class="truncate" th:title=${session.sessionBean.name} th:text="${session.sessionBean.name}"></span>
                                 </a>
                             </li>
                             <li class="c-sidebar-nav-item">
-                                <a class="c-sidebar-nav-link c-sidebar-nav-deep-link" th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}" th:id="'ds'+${businessFunction.id}">
+                                <a class="c-sidebar-nav-link c-sidebar-nav-deeper-link" th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}" th:id="'ds'+${businessFunction.id}">
                                     <i class="c-sidebar-nav-deep-icon icon-doc"></i>
                                     <span th:title=#{dataset.link.title}>Dataset</span>
                                     <span class="badge badge-info"><span th:text="${session.sessionBean.file.size()}"></span></span>
                                 </a>
                             </li>
                             <li class="c-sidebar-nav-item" th:if="${session.sessionBean.ruleset != null}">
-                                <a class="c-sidebar-nav-link c-sidebar-nav-deep-link" th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}" th:id="'rs'+${businessFunction.id}">
+                                <a class="c-sidebar-nav-link c-sidebar-nav-deeper-link" th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}" th:id="'rs'+${businessFunction.id}">
                                     <i class="c-sidebar-nav-deep-icon  icon-wrench"></i>
                                     <span th:title=#{ruleset.link.title}>Ruleset</span>
                                     <span class="badge badge-info"><span th:text="${session.sessionBean.ruleset.size()}"></span></span>
                                 </a>
                             </li>
                             <li class="c-sidebar-nav-item">
-                                <a class="c-sidebar-nav-link c-sidebar-nav-deep-link" th:if="${session.sessionBean.dataProcessingId > 0}" 
+                                <a class="c-sidebar-nav-link c-sidebar-nav-deeper-link" th:if="${session.sessionBean.dataProcessingId > 0}" 
                                    th:href="@{'/ws/home/'+${session.sessionBean.dataProcessingId}}" th:id="'pr'+${businessFunction.id}">
                                     <i class="c-sidebar-nav-deep-icon icon-calculator"></i>
                                     <span class="truncate" th:title="${session.sessionBean.dataProcessingName}" th:text="${session.sessionBean.dataProcessingName}">Process</span>
                                 </a>
-                                <a class="c-sidebar-nav-link c-sidebar-nav-deep-link" th:unless="${session.sessionBean.dataProcessingId > 0}" th:href="@{#}">
+                                <a class="c-sidebar-nav-link c-sidebar-nav-deeper-link" th:unless="${session.sessionBean.dataProcessingId > 0}" th:href="@{#}">
                                     <i class="c-sidebar-nav-deep-icon icon-calculator"></i>
                                     <span class="truncate" th:title=#{Layout.Process}>Process</span>
                                 </a>
@@ -152,7 +152,7 @@
                                 <span th:title="#{Layout.team.link}">Team</span>
                             </a>
                         </li>
-                        <li class="c-header-nav-item px-3" sec:authorize="hasRole('ADMIN')" >
+                        <li class="c-header-nav-item dropdown" sec:authorize="hasRole('ADMIN')" >
                             <a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                 <span th:title="#{Layout.settings.link}">Settings</span>
                             </a>
@@ -161,13 +161,13 @@
                                     <strong>IS<sup>2</sup> Workbench</strong>
                                 </div>
                                 <a class="dropdown-item" th:title="#{Layout.server.conf}" th:href="@{/settings}">
-                                    <i class="fa fa-server"></i> Process design
+                                    <i class="c-icon mfe-2 icon-organization"></i> Process design
                                 </a>
                                 <a class="dropdown-item" th:title="#{Layout.server.conf}" th:href="@{/admin}">
-                                    <i class="fa fa-server"></i> Server configuration
+                                    <i class="c-icon mfe-2 icon-wrench"></i> Server configuration
                                 </a>
                                 <a class="dropdown-item" th:title="#{Layout.user.settings}" th:href="@{/users/userlist}">
-                                    <i class="fa fa-users"></i><span th:text="#{Layout.users}"></span>
+                                    <i class="c-icon mfe-2 icon-people"></i><span th:text="#{Layout.users}"></span>
                                 </a>
                             </div>
                         </li>

@@ -18,9 +18,6 @@
  * @author Mauro Bruno <mbruno @ istat.it>
  * @version 0.1.1
  */
-/**
- *
- */
 package it.istat.is2.workflow.engine;
 
 import it.istat.is2.app.util.IS2Const;
@@ -38,8 +35,7 @@ public class EngineFactory {
 
     @Autowired
     private EngineSQL engineSQL;
-
-    // use getEngine method to get object of type engine
+ 
     public EngineService getEngine(String engineType) {
         if (engineType == null) {
             return null;

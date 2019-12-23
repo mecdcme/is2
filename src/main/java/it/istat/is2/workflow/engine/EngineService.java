@@ -31,26 +31,25 @@ import it.istat.is2.workflow.domain.StepInstance;
 @Service
 public interface EngineService {
 
-	//GENERIC INPUT
-	public static final String WORKSET_IN = "workset_in";
-	public static final String PARAMETERS_IN = "params_in";
-	public static final String ROLES_IN = "roles_in";
-	
-	//GENERIC OUTPUT
-	public static final String WORKSET_OUT = "workset_out"; //Output container
+    //GENERIC INPUT
+    public static final String WORKSET_IN = "workset_in";
+    public static final String PARAMETERS_IN = "params_in";
+    public static final String ROLES_IN = "roles_in";
+
+    //GENERIC OUTPUT
+    public static final String WORKSET_OUT = "workset_out"; //Output container
     public static final String PARAMETERS_OUT = "params_out";
     public static final String REPORT_OUT = "report_out";
     public static final String ROLES_OUT = "roles_out";
     public static final String ROLES_GROUP_OUT = "rolesgroup_out";
     public static final String RESULTSET = "resultset";
-    
+
     //RULESET
     public static final String RULESET = "ruleset";
-    
+
     //DEFAULT VALUES
     public static final String ROLE_DEFAULT = "N";
     public static final String DEFAULT_NA = "NA"; //
-    
 
     public void init(DataProcessing dataProcessing, StepInstance stepInstance) throws Exception;
 
