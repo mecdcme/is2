@@ -35,49 +35,47 @@
         </script>
         <link rel="stylesheet" th:href="@{/css/vendors/table/datatables.css}" />
     </head>
-    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-        <header th:replace="layout :: site-header"></header>
+        <body class="c-app">
+        <div th:replace="layout :: site-aside"></div>
+        <div th:replace="layout :: site-modals"></div>
         <!-- Body -->
-        <div class="app-body">
-            <aside th:replace="layout :: site-modals"></aside>
-            <aside th:replace="layout :: site-aside"></aside>
-            <!-- Main container -->
-            <main class="main">
-                <!-- Breadcrumb-->
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a th:href="@{/}">Home</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
-                            <span th:text="${session.sessionBean.businessFunction.name}"></span>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a th:href="@{'/sessione/apri/' + ${session.sessionBean.id}}">
-                            <span th:text="${session.sessionBean.name}"></span>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:if="${session.sessionBean}" 
-                           th:href="@{'/ws/home/'+${session.sessionBean.dataProcessingId}}"> 
-                            <span th:if="${session.sessionBean.dataProcessingName}" 
-                                  th:text="${session.sessionBean.dataProcessingName}"></span>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <span>Output</span>
-                    </li>
-                    <!-- Breadcrumb Menu-->
-                    <li class="breadcrumb-menu d-md-down-none">
-                        <div class="btn-group" role="group" aria-label="Button group">
-                            <a class="breadcrumb-last-item" title="Chiudi processo" 
-                                th:href="@{'/ws/home/'+${session.sessionBean.dataProcessingId}}"> 
-                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+        <div class="c-wrapper">
+            <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+                <div th:include="layout :: site-header" th:remove="tag"></div>
+                <div class="c-subheader justify-content-between px-3">
+                    <!-- Breadcrumb-->
+                    <ol class="breadcrumb border-0 m-0">
+                        <li class="breadcrumb-item"><a th:title="#{home.link.title}" th:href="@{/}">Home</a></li>
+                        <li class="breadcrumb-item">
+                            <a th:title="${session.sessionBean.businessFunction.name}" th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
+                                <span th:text="${session.sessionBean.businessFunction.name}"></span>
                             </a>
-                        </div>
-                    </li>
-                </ol>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:title="${session.sessionBean.name}" th:href="@{'/sessione/apri/' + ${session.sessionBean.id}}">
+                                <span th:text="${session.sessionBean.name}"></span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:title="${session.sessionBean.dataProcessingName}" th:if="${session.sessionBean}" th:href="@{'/ws/home/'+${session.sessionBean.dataProcessingId}}">
+                                <span th:if="${session.sessionBean.dataProcessingName}" th:text="${session.sessionBean.dataProcessingName}"></span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span>Output</span>
+                        </li>
+                    </ol>
+                    <!-- Right navigation menu -->
+                    <div class="c-header-nav d-md-down-none mfe-2">
+                        <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{'/ws/home/'+${session.sessionBean.dataProcessingId}}">
+                            <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                        </a>
+                    </div>
+                </div>
+            </header> 
+
+            <div class="c-body">
+                <main class="c-main">
                 <div class="container-fluid">
                     <div class="animated fadeIn">
                         <div class="row">
@@ -136,6 +134,7 @@
                         <!-- row -->
                     </div>
                 </div>
+
             </main>
         </div>
         <!-- END MAIN CONTAINER -->
