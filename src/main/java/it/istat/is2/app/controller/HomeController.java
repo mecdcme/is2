@@ -41,7 +41,8 @@ import it.istat.is2.workflow.service.BusinessFunctionService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.ui.Model;
- 
+import org.springframework.web.bind.annotation.RequestMethod;
+
 @Controller
 public class HomeController {
 
@@ -50,10 +51,9 @@ public class HomeController {
     @Autowired
     private AdministrationService administrationService;
     @Autowired
-	private MessageSource messages;
+    private MessageSource messages;
     @Autowired
     private NotificationService notificationService;
-    
 
     @RequestMapping("/")
     public String home(HttpSession session, Model model) {
@@ -65,7 +65,7 @@ public class HomeController {
         for (BusinessFunction bf : businessFunctionList) {
             if (bf.getViewDataType().contains(new ViewDataType(IS2Const.VIEW_DATATYPE_RULESET))) {
                 businessFunctionBeanList.add(new BusinessFunctionBean(bf.getId(), bf.getName(), bf.getDescr(), true));
-            } else{
+            } else {
                 businessFunctionBeanList.add(new BusinessFunctionBean(bf.getId(), bf.getName(), bf.getDescr(), false));
             }
         }
@@ -78,29 +78,28 @@ public class HomeController {
     @RequestMapping("/team")
     public String team(HttpSession session, Model model) {
         notificationService.removeAllMessages();
-
         return "team";
     }
+
     @RequestMapping("/admin")
     public String admin(HttpSession session, Model model) {
         notificationService.removeAllMessages();
-
         return "admin/home";
     }
-    
-    @RequestMapping("/startr")
+
+    @RequestMapping(value = "/startr", method = RequestMethod.POST)
     public String startR(HttpSession session, Model model) {
         notificationService.removeAllMessages();
-        
-    	try {
-    		  administrationService.startR();
-			notificationService.addInfoMessage(
-	                messages.getMessage("generic.success", null, LocaleContextHolder.getLocale()));	
-		}catch(Exception e) {
-			notificationService.addErrorMessage(
+
+        try {
+            administrationService.startR();
+            notificationService.addInfoMessage(
+                    messages.getMessage("generic.success", null, LocaleContextHolder.getLocale()));
+        } catch (Exception e) {
+            notificationService.addErrorMessage(
                     messages.getMessage("generic.error", null, LocaleContextHolder.getLocale()), e.getMessage());
-		}
-         
+        }
+
         return "admin/home";
     }
 }

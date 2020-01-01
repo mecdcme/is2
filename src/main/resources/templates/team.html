@@ -42,9 +42,14 @@
                     <!-- Breadcrumb-->
                     <ol class="breadcrumb border-0 m-0">
                         <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-                        <!-- Breadcrumb Menu-->
-                        <li class="breadcrumb-menu"></li>
+                        <li class="breadcrumb-item">Team</li>
                     </ol>
+                    <!-- Right navigation menu -->
+                    <div class="c-header-nav d-md-down-none mfe-2">
+                        <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{'/'}">
+                            <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                        </a>
+                    </div>
                 </div>
             </header>
 
@@ -55,11 +60,11 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <i class="icon-star"></i>
+                                        <i class="icon-rocket"></i>
                                         <span>Project team</span>
                                     </div>
                                     <div class="card-body text-center">
-                                        <img class="img-fluid" th:src="@{/img/team.png}" alt="Our team">
+                                        <img class="img-fluid" th:src="@{/img/team.png}" alt="Our team"></img>
                                     </div>
                                 </div>
                             </div>
