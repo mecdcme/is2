@@ -89,105 +89,107 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <table id="processiList" class="table table-sm">
-                                                <thead>
-                                                    <tr>
-                                                        <th><span th:text="#{Layout.Process}">Processo</span></th>
-                                                        <th><span th:text="#{Layout.Step}">Step</span></th>
-                                                        <th class="text-center"><span>Settings</span></th>
-                                                        <th class="text-center"><span>Status</span></th>
-                                                        <th class="text-center">Actions</th>
-                                                        <th class="text-center">Output</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <th:block th:each="bProcess: ${dataProcessing.businessProcess.businessSubProcesses}"
-                                                              th:unless="${(dataProcessing.businessProcess.businessSubProcesses == null) or (dataProcessing.businessProcess.businessSubProcesses.size() == 0) }">
-                                                        <tr th:each="bStep,stats: ${bProcess.businessSteps}" th:unless="${(bProcess.businessSteps == null) or (bProcess.businessSteps.size() == 0) }">
-                                                            <td th:if="${stats.index == 0}" th:rowspan="${bProcess.businessSteps.size()}">
-                                                                <span th:text="${bProcess.descr + '('+bProcess.name+')'}"></span>
-                                                            </td>
-                                                            <td><span th:text="${bStep.descr + '('+bStep.name+')'}"></span></td>
-                                                            <td class="text-center" th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}" >
-                                                                <span th:if="${(#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id)))}" class="text-success">
-                                                                    <i class="fa fa-check" aria-hidden="true"></i>
-                                                                </span>
-                                                                <ul class="nav navbar-nav d-inline-flex mr-auto" 
-                                                                    th:unless="${#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id))}">
-                                                                    <li class="nav-item">
-                                                                        <ul class="list-inline">
-                                                                            <li class="nav-item dropdown list-inline-item" th:if="${not #lists.isEmpty(variablesMissing.get(bProcess.id))}">
-                                                                                <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">
-                                                                                    <span>Vars</span>
-                                                                                    <span class="badge badge-pill badge-danger" th:text=" ${variablesMissing.get(bProcess.id).size()}"></span>
-                                                                                </a>
-                                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                                    <div class="dropdown-header text-center">
-                                                                                        <strong>Variables missing</strong>
-                                                                                    </div>
-                                                                                    <small>
-                                                                                        <span class="dropdown-item" th:each="item : ${variablesMissing.get(bProcess.id)}" >
-                                                                                            <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${dataProcessing.id}}" th:text="${item}"> </a>
-                                                                                        </span>
-                                                                                    </small>
-                                                                                </div>
-                                                                            </li>
-                                                                            <li class="nav-item dropdown list-inline-item" th:if="${not  #lists.isEmpty(paramsMissing.get(bProcess.id))}">
-                                                                                <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                                                                    <span>Params</span>
-                                                                                    <span class="badge badge-pill badge-danger" th:text="${paramsMissing.get(bProcess.id).size()}"></span>
-                                                                                </a>
-                                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                                    <div class="dropdown-header text-center">
-                                                                                        <strong>Parameters missing</strong>
-                                                                                    </div>
-                                                                                    <small>
-                                                                                        <span class="dropdown-item" th:each="item : ${paramsMissing.get(bProcess.id)}" >
-                                                                                            <a title="Settings Workset" th:href="@{'/ws/editworkingset/'+${dataProcessing.id}}" th:text="${item}"> </a>
-                                                                                        </span>
-                                                                                    </small>
-                                                                                </div>
-                                                                            </li>
-                                                                            <li class="nav-item dropdown list-inline-item" th:if="${not  #lists.isEmpty(rulesetMissing.get(bProcess.id))}">
-                                                                                <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                                                                    <span>Ruleset</span>
-                                                                                    <span class="badge badge-pill badge-danger" th:text="${rulesetMissing.get(bProcess.id).size()}"></span>
-                                                                                </a>
-                                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                                    <div class="dropdown-header text-center">
-                                                                                        <strong>Ruleset missing</strong>
-                                                                                    </div>
-                                                                                    <small>
-                                                                                        <span class="dropdown-item" th:each="item : ${rulesetMissing.get(bProcess.id)}" >
-                                                                                            <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${dataProcessing.id}}" th:text="${item}"> </a>
-                                                                                        </span>
-                                                                                    </small>
-                                                                                </div>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </li>
-                                                                </ul>
-                                                            </td>
-                                                            <td class="text-center" th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}">
-                                                                <span th:id="${bProcess.id}">NEW</span>
-                                                            </td>
-                                                            <td class="text-center" th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}">
-                                                                <a th:name="link" title="Run" th:id="'esegui_'+${bProcess.id}" style="vertical-align: middle"
-                                                                   th:classappend="${#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id))} ? active : not-active"
-                                                                   th:onclick="'javascript:esegui(\'' +${dataProcessing.id} +'\',\''+${bProcess.id}+'\')'" href="javascript:void(0)" >
-                                                                    <i class="fa fa-play" aria-hidden="true"></i> 
-                                                                </a>
-                                                            </td>
-                                                            <td th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}"  class="text-center">
-                                                                <a th:name="link" class="towait not-active" title="View Output" th:id="'output_'+${bProcess.id}"
-                                                                   th:href="@{'/ws/dataview/'+${dataProcessing.id}+'/'+${T(it.istat.is2.app.util.IS2Const).TYPE_IO_OUTPUT}}" style="vertical-align: middle">
-                                                                    <i class="fa fa-table" aria-hidden="true"></i>  
-                                                                </a>
-                                                            </td>
+                                            <div class="table-responsive">
+                                                <table id="processiList" class="table table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th><span th:text="#{Layout.Process}">Processo</span></th>
+                                                            <th><span th:text="#{Layout.Step}">Step</span></th>
+                                                            <th class="text-center"><span>Settings</span></th>
+                                                            <th class="text-center"><span>Status</span></th>
+                                                            <th class="text-center">Actions</th>
+                                                            <th class="text-center">Output</th>
                                                         </tr>
-                                                    </th:block>
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                        <th:block th:each="bProcess: ${dataProcessing.businessProcess.businessSubProcesses}"
+                                                                  th:unless="${(dataProcessing.businessProcess.businessSubProcesses == null) or (dataProcessing.businessProcess.businessSubProcesses.size() == 0) }">
+                                                            <tr th:each="bStep,stats: ${bProcess.businessSteps}" th:unless="${(bProcess.businessSteps == null) or (bProcess.businessSteps.size() == 0) }">
+                                                                <td th:if="${stats.index == 0}" th:rowspan="${bProcess.businessSteps.size()}">
+                                                                    <span th:text="${bProcess.descr + '('+bProcess.name+')'}"></span>
+                                                                </td>
+                                                                <td><span th:text="${bStep.descr + '('+bStep.name+')'}"></span></td>
+                                                                <td class="text-center" th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}" >
+                                                                    <span th:if="${(#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id)))}" class="text-success">
+                                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                                    </span>
+                                                                    <ul class="nav navbar-nav d-inline-flex mr-auto" 
+                                                                        th:unless="${#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id))}">
+                                                                        <li class="nav-item">
+                                                                            <ul class="list-inline">
+                                                                                <li class="nav-item dropdown list-inline-item" th:if="${not #lists.isEmpty(variablesMissing.get(bProcess.id))}">
+                                                                                    <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">
+                                                                                        <span>Vars</span>
+                                                                                        <span class="badge badge-pill badge-danger" th:text=" ${variablesMissing.get(bProcess.id).size()}"></span>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                                        <div class="dropdown-header text-center">
+                                                                                            <strong>Variables missing</strong>
+                                                                                        </div>
+                                                                                        <small>
+                                                                                            <span class="dropdown-item" th:each="item : ${variablesMissing.get(bProcess.id)}" >
+                                                                                                <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${dataProcessing.id}}" th:text="${item}"> </a>
+                                                                                            </span>
+                                                                                        </small>
+                                                                                    </div>
+                                                                                </li>
+                                                                                <li class="nav-item dropdown list-inline-item" th:if="${not  #lists.isEmpty(paramsMissing.get(bProcess.id))}">
+                                                                                    <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                                        <span>Params</span>
+                                                                                        <span class="badge badge-pill badge-danger" th:text="${paramsMissing.get(bProcess.id).size()}"></span>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                                        <div class="dropdown-header text-center">
+                                                                                            <strong>Parameters missing</strong>
+                                                                                        </div>
+                                                                                        <small>
+                                                                                            <span class="dropdown-item" th:each="item : ${paramsMissing.get(bProcess.id)}" >
+                                                                                                <a title="Settings Workset" th:href="@{'/ws/editworkingset/'+${dataProcessing.id}}" th:text="${item}"> </a>
+                                                                                            </span>
+                                                                                        </small>
+                                                                                    </div>
+                                                                                </li>
+                                                                                <li class="nav-item dropdown list-inline-item" th:if="${not  #lists.isEmpty(rulesetMissing.get(bProcess.id))}">
+                                                                                    <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                                        <span>Ruleset</span>
+                                                                                        <span class="badge badge-pill badge-danger" th:text="${rulesetMissing.get(bProcess.id).size()}"></span>
+                                                                                    </a>
+                                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                                        <div class="dropdown-header text-center">
+                                                                                            <strong>Ruleset missing</strong>
+                                                                                        </div>
+                                                                                        <small>
+                                                                                            <span class="dropdown-item" th:each="item : ${rulesetMissing.get(bProcess.id)}" >
+                                                                                                <a title="Settings Wokset" th:href="@{'/ws/editworkingset/'+${dataProcessing.id}}" th:text="${item}"> </a>
+                                                                                            </span>
+                                                                                        </small>
+                                                                                    </div>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </li>
+                                                                    </ul>
+                                                                </td>
+                                                                <td class="text-center" th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}">
+                                                                    <span th:id="${bProcess.id}">NEW</span>
+                                                                </td>
+                                                                <td class="text-center" th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}">
+                                                                    <a th:name="link" title="Run" th:id="'esegui_'+${bProcess.id}" style="vertical-align: middle"
+                                                                       th:classappend="${#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id))} ? active : not-active"
+                                                                       th:onclick="'javascript:esegui(\'' +${dataProcessing.id} +'\',\''+${bProcess.id}+'\')'" href="javascript:void(0)" >
+                                                                        <i class="fa fa-play" aria-hidden="true"></i> 
+                                                                    </a>
+                                                                </td>
+                                                                <td th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}"  class="text-center">
+                                                                    <a th:name="link" class="towait not-active" title="View Output" th:id="'output_'+${bProcess.id}"
+                                                                       th:href="@{'/ws/dataview/'+${dataProcessing.id}+'/'+${T(it.istat.is2.app.util.IS2Const).TYPE_IO_OUTPUT}}" style="vertical-align: middle">
+                                                                        <i class="fa fa-table" aria-hidden="true"></i>  
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        </th:block>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                             <input type="hidden" id="check_vrs" th:value="${stepRList.size()}" />
                                         </div>
                                     </div>
@@ -200,9 +202,7 @@
                                         <div class="card-header">
                                             <span th:text="#{Layout.log.console}">Log console</span>
                                             <div class="card-header-actions">
-                                                <a
-                                                    title="Clean Log"
-                                                    href="javascript:void(0)"
+                                                <a title="Clean Log" href="javascript:void(0)"
                                                     th:onclick="'javascript:clearLog(' + ${session.sessionBean.id} + ')'">
                                                     <i class="fa fa-trash-o"></i>&nbsp;<span>Clean</span>
                                                 </a>  
@@ -210,8 +210,8 @@
                                         </div>
                                         <div class="card-body logbox">
                                             <ul th:if="${not #lists.isEmpty(logs)}">
-                                                <li th:each="log : ${logs}"><span
-                                                        th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;
+                                                <li th:each="log : ${logs}">
+                                                    <span th:text="${#dates.format(log.msgTime, 'dd/MM/yyyy HH:mm')}"></span>&nbsp;&ndash;&nbsp;
                                                     <span th:text="${log.msg}"></span>
                                                 </li>
                                             </ul>

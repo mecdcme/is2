@@ -50,7 +50,7 @@
                         </li>
                     </ol>
                     <!-- Right navigation menu -->
-                    <div class="c-header-nav d-md-down-none mfe-2">
+                    <div class="c-header-nav mfe-2">
                         <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{'/'}">
                             <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                         </a>
@@ -75,38 +75,40 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <table class="table table-sm" th:if="${listasessioni}" cellspacing="0" style="width:100%">
-                                                <thead>
-                                                    <tr th:unless="${(listasessioni == null) or (listasessioni.size() == 0) }">
-                                                        <th><span th:text="#{listasessioni.name}"></span></th>
-                                                        <th><span th:text="#{listasessioni.descr}"></span></th>
-                                                        <th><span th:text="#{listasessioni.name.file}"></span></th>
-                                                        <th><span th:text="#{listasessioni.name.regole}"></span></th>
-                                                        <th><span th:text="#{listasessioni.name.elaborazione}"></span></th>
-                                                        <th><span th:text="#{listasessioni.data.creazione}"></span></th>
-                                                        <th colspan="2"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr th:each="sessione : ${listasessioni}" th:unless="${(listasessioni == null) or (listasessioni.size() == 0) }">
-                                                        <td th:id="${'sesnome_'+ sessione.id}" th:text="${sessione.name}"></td>
-                                                        <td th:id="${'sesdesc_'+ sessione.id}" th:text="${sessione.descr}"></td>
-                                                        <td th:if="${(sessione.datasetFiles!=null) and (sessione.datasetFiles.size()>0)}" th:text="${sessione.datasetFiles.size()}"></td>
-                                                        <td th:unless="${(sessione.datasetFiles!=null) and (sessione.datasetFiles.size()>0)}">-</td>
-                                                        <td th:if="${(sessione.ruleSets!=null) and (sessione.ruleSets.size()>0)}" th:text="${sessione.ruleSets.size()}"></td>
-                                                        <td th:unless="${(sessione.ruleSets!=null) and (sessione.ruleSets.size()>0)}">-</td>
-                                                        <td th:if="${(sessione.dataProcessings!=null) and (sessione.dataProcessings.size()>0)}" th:text="${sessione.dataProcessings.size()}"></td>
-                                                        <td th:unless="${(sessione.dataProcessings!=null) and (sessione.dataProcessings.size()>0)}">-</td>
-                                                        <td th:id="${'sesdata_'+ sessione.lastUpdate}" th:text="${#dates.format(sessione.lastUpdate, 'dd/MM/yyyy HH:mm')}"></td>
-                                                        <td style="width: 1%">
-                                                            <a class="towait" th:title="#{title.button.show.process}" th:href="@{'/sessione/apri/'+${sessione.id}}"> <i class="fa fa-folder-open"></i></a>
-                                                        </td>
-                                                        <td style="width: 1%">
-                                                            <a th:title="#{title.button.delete.process}" role="button" href="javascript:void(0);" th:onclick="'javascript:eliminaSessioneLavoro(\'' + ${sessione.id} + '\')'"><i class="fa fa-trash"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm" th:if="${listasessioni}" cellspacing="0" style="width:100%">
+                                                    <thead>
+                                                        <tr th:unless="${(listasessioni == null) or (listasessioni.size() == 0) }">
+                                                            <th><span th:text="#{listasessioni.name}"></span></th>
+                                                            <th><span th:text="#{listasessioni.descr}"></span></th>
+                                                            <th><span th:text="#{listasessioni.name.file}"></span></th>
+                                                            <th><span th:text="#{listasessioni.name.regole}"></span></th>
+                                                            <th><span th:text="#{listasessioni.name.elaborazione}"></span></th>
+                                                            <th><span th:text="#{listasessioni.data.creazione}"></span></th>
+                                                            <th colspan="2"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr th:each="sessione : ${listasessioni}" th:unless="${(listasessioni == null) or (listasessioni.size() == 0) }">
+                                                            <td th:id="${'sesnome_'+ sessione.id}" th:text="${sessione.name}"></td>
+                                                            <td th:id="${'sesdesc_'+ sessione.id}" th:text="${sessione.descr}"></td>
+                                                            <td th:if="${(sessione.datasetFiles!=null) and (sessione.datasetFiles.size()>0)}" th:text="${sessione.datasetFiles.size()}"></td>
+                                                            <td th:unless="${(sessione.datasetFiles!=null) and (sessione.datasetFiles.size()>0)}">-</td>
+                                                            <td th:if="${(sessione.ruleSets!=null) and (sessione.ruleSets.size()>0)}" th:text="${sessione.ruleSets.size()}"></td>
+                                                            <td th:unless="${(sessione.ruleSets!=null) and (sessione.ruleSets.size()>0)}">-</td>
+                                                            <td th:if="${(sessione.dataProcessings!=null) and (sessione.dataProcessings.size()>0)}" th:text="${sessione.dataProcessings.size()}"></td>
+                                                            <td th:unless="${(sessione.dataProcessings!=null) and (sessione.dataProcessings.size()>0)}">-</td>
+                                                            <td th:id="${'sesdata_'+ sessione.lastUpdate}" th:text="${#dates.format(sessione.lastUpdate, 'dd/MM/yyyy HH:mm')}"></td>
+                                                            <td style="width: 1%">
+                                                                <a class="towait" th:title="#{title.button.show.process}" th:href="@{'/sessione/apri/'+${sessione.id}}"> <i class="fa fa-folder-open"></i></a>
+                                                            </td>
+                                                            <td style="width: 1%">
+                                                                <a th:title="#{title.button.delete.process}" role="button" href="javascript:void(0);" th:onclick="'javascript:eliminaSessioneLavoro(\'' + ${sessione.id} + '\')'"><i class="fa fa-trash"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

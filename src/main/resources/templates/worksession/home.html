@@ -54,7 +54,7 @@
                         </li>
                     </ol>
                     <!-- Right navigation menu -->
-                    <div class="c-header-nav d-md-down-none mfe-2">
+                    <div class="c-header-nav mfe-2">
                         <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{'/sessione/chiudisessione/' + ${session.sessionBean.businessFunction.id}}">
                             <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                         </a>
@@ -66,7 +66,7 @@
                     <div class="container-fluid">
                         <div class="animated fadeIn">
                             <div class="row">
-                                <div class="col-4 col-lg-3" th:if="${(session.sessionBean.file != null)}">
+                                <div class="col-sm-4 col-lg-3" th:if="${(session.sessionBean.file != null)}">
                                     <div class="card overflow-hidden">
                                         <div class="card-body p-0 d-flex align-items-center">
                                             <a th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}">
@@ -94,7 +94,7 @@
                                                 </div>
                                             </a>
                                             <div>
-                                                 <a th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}">
+                                                <a th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}">
                                                     <div class="text-value-sm text-info">
                                                         <span th:text="${session.sessionBean.ruleset.size()}" ></span>
                                                     </div>
@@ -122,39 +122,41 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <table class="table table-sm" th:if="${listaElaborazioni}" cellspacing="0"  style="width:100%">
-                                                <thead>
-                                                    <tr th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
-                                                        <th><span th:text="#{listasessioni.codice}">codice</span></th>
-                                                        <th><span th:text="#{listasessioni.name}">nome</span></th>
-                                                        <th><span th:text="#{listasessioni.descr}">Descrizione</span></th>
-                                                        <th><span th:text="#{listasessioni.processo}">Processo</span></th>
-                                                        <th><span th:text="#{listasessioni.data.creazione}">data creazione</span></th>
-                                                        <th colspan="2"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr th:each="elaborazione : ${listaElaborazioni}"
-                                                        th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
-                                                        <td th:id="${'elabid_'+ elaborazione.id}" th:text="${elaborazione.id}"></td>
-                                                        <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.name}"></td>
-                                                        <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.descr}"></td>
-                                                        <td th:id="${'elabdata_'+ elaborazione.lastUpdate}" th:text="${elaborazione.businessProcess.name}"></td>
-                                                        <td th:id="${'elabdata_'+ elaborazione.lastUpdate}" th:text="${#dates.format(elaborazione.lastUpdate, 'dd/MM/yyyy HH:mm')}"></td>
-                                                        <td style="width: 1%">
-                                                            <a class='towait' th:title="#{sessionewf.show.process.title.button}" th:href="@{'/ws/home/'+${elaborazione.id}}"> 
-                                                                <i class="fa fa-folder-open"></i>
-                                                            </a>
-                                                        </td>
-                                                        <td style="width: 1%">
-                                                            <a th:title="#{sessionewf.del.process.title.button}" href="javascript:void(0);" role="button"                                                        
-                                                               th:attr="onclick='javascript:eliminaElaborazione(' + ${elaborazione.id} + ', \'' + ${session.sessionBean.id} + '\',\'' + ${elaborazione.name} + '\')'">											
-                                                                <i class="fa fa-trash"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm" th:if="${listaElaborazioni}" cellspacing="0"  style="width:100%">
+                                                    <thead>
+                                                        <tr th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
+                                                            <th><span th:text="#{listasessioni.codice}">codice</span></th>
+                                                            <th><span th:text="#{listasessioni.name}">nome</span></th>
+                                                            <th><span th:text="#{listasessioni.descr}">Descrizione</span></th>
+                                                            <th><span th:text="#{listasessioni.processo}">Processo</span></th>
+                                                            <th><span th:text="#{listasessioni.data.creazione}">data creazione</span></th>
+                                                            <th colspan="2"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr th:each="elaborazione : ${listaElaborazioni}"
+                                                            th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
+                                                            <td th:id="${'elabid_'+ elaborazione.id}" th:text="${elaborazione.id}"></td>
+                                                            <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.name}"></td>
+                                                            <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.descr}"></td>
+                                                            <td th:id="${'elabdata_'+ elaborazione.lastUpdate}" th:text="${elaborazione.businessProcess.name}"></td>
+                                                            <td th:id="${'elabdata_'+ elaborazione.lastUpdate}" th:text="${#dates.format(elaborazione.lastUpdate, 'dd/MM/yyyy HH:mm')}"></td>
+                                                            <td style="width: 1%">
+                                                                <a class='towait' th:title="#{sessionewf.show.process.title.button}" th:href="@{'/ws/home/'+${elaborazione.id}}"> 
+                                                                    <i class="fa fa-folder-open"></i>
+                                                                </a>
+                                                            </td>
+                                                            <td style="width: 1%">
+                                                                <a th:title="#{sessionewf.del.process.title.button}" href="javascript:void(0);" role="button"                                                        
+                                                                   th:attr="onclick='javascript:eliminaElaborazione(' + ${elaborazione.id} + ', \'' + ${session.sessionBean.id} + '\',\'' + ${elaborazione.name} + '\')'">											
+                                                                    <i class="fa fa-trash"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
