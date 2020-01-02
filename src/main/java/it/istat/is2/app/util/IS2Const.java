@@ -29,17 +29,17 @@ public interface IS2Const {
     public static final String SESSION_WORKSESSION = "session_ws";
     public static final String SESSION_DATAPROCESSING = "dataProcessing";
     public static final String SESSION_BUSINESS_FUNCTIONS = "businessFunctionList";
+    public static final String SESSION_BUSINESS_SERVICES = "businessServiceList";
+    
     public static final String WORKINGSET = "workingset";
- 
- 
+
     public static final String LIST_BUSINESS_PROCESS = "listBP";
     public static final String SESSION_DATASET = "sessionWSdataset";
-
 
     public static final String ENGINE_R = "R";
     public static final String ENGINE_JAVA = "JAVA";
     public static final String ENGINE_SQL = "SQL";
-    
+
     public static final String ENGINE_R_LIGHT = "R-LIGHT";
     public static final String WORKSET_FREQUENCY = "FREQUENCY";
     public static final String WF_OUTPUT_ROLES = "roles.output";
@@ -47,25 +47,24 @@ public interface IS2Const {
 
     public static final String OUTPUT_DEFAULT = "OUT";
     public static final String OUTPUT_R = "R";
-	public static final String WF_OUTPUT_ROLES_GROUP = "rolesgroup.output";
+    public static final String WF_OUTPUT_ROLES_GROUP = "rolesgroup.output";
 
-	public static final String TEXT_RULE = "RULE";
-	
+    public static final String TEXT_RULE = "RULE";
+
     public static final int DATA_TYPE_VARIABLE = 1;
-	public static final int DATA_TYPE_PARAMETER = 2;
-	public static final int DATA_TYPE_DATASET = 3;
-	public static final int DATA_TYPE_RULESET = 4;
-	public static final int DATA_TYPE_RULE = 5;
-	public static final int DATA_TYPE_MODEL = 6;
-	
-	public static final short TYPE_IO_INPUT = 1;
-	public static final short TYPE_IO_OUTPUT = 2;
-	public static final short TYPE_IO_INPUT_OUTPUT = 3;
-	
-	public static final String VIEW_DATATYPE_DATASET = "DATASET";
-	public static final String VIEW_DATATYPE_RULESET = "RULESET";
-	
-	public static final String ROLE_NAME_RULESET = "RULESET";
-	
+    public static final int DATA_TYPE_PARAMETER = 2;
+    public static final int DATA_TYPE_DATASET = 3;
+    public static final int DATA_TYPE_RULESET = 4;
+    public static final int DATA_TYPE_RULE = 5;
+    public static final int DATA_TYPE_MODEL = 6;
+
+    public static final short TYPE_IO_INPUT = 1;
+    public static final short TYPE_IO_OUTPUT = 2;
+    public static final short TYPE_IO_INPUT_OUTPUT = 3;
+
+    public static final String VIEW_DATATYPE_DATASET = "DATASET";
+    public static final String VIEW_DATATYPE_RULESET = "RULESET";
+
+    public static final String ROLE_NAME_RULESET = "RULESET";
 
 }

@@ -21,19 +21,27 @@
  * @author Stefano Macone <macone @ istat.it>
  * @version 1.0
  */
-package it.istat.is2.workflow.dao;
+package it.istat.is2.workflow.service;
+
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import it.istat.is2.workflow.domain.BusinessFunction;
-@Repository
-public interface BusinessFunctionDao extends CrudRepository<BusinessFunction,Long> {
+import it.istat.is2.workflow.dao.BusinessServiceDao;
+import it.istat.is2.workflow.domain.BusinessService;
 
-        @Override
-	List<BusinessFunction> findAll();
-        @Override
-	Optional<BusinessFunction> findById(Long idfunction);
+@Service
+public class BusinessServiceService {
+
+    @Autowired
+    BusinessServiceDao businessServiceDao;
+
+    public List<BusinessService> findBusinessServices() {
+        return businessServiceDao.findAll();
+    }
+
+    public BusinessService findBusinessServiceById(long idService) {
+        return businessServiceDao.findById(idService).orElse(null);
+    }
 }

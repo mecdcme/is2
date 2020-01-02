@@ -37,7 +37,9 @@ import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.workflow.domain.ViewDataType;
 import it.istat.is2.workflow.domain.BusinessFunction;
+import it.istat.is2.workflow.domain.BusinessService;
 import it.istat.is2.workflow.service.BusinessFunctionService;
+import it.istat.is2.workflow.service.BusinessServiceService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.ui.Model;
@@ -48,6 +50,8 @@ public class HomeController {
 
     @Autowired
     private BusinessFunctionService businessFunctionService;
+     @Autowired
+    private BusinessServiceService businessServiceService;
     @Autowired
     private AdministrationService administrationService;
     @Autowired
@@ -59,6 +63,8 @@ public class HomeController {
     public String home(HttpSession session, Model model) {
         notificationService.removeAllMessages();
 
+        List<BusinessService> businessServiceList = businessServiceService.findBusinessServices();
+        
         List<BusinessFunction> businessFunctionList = businessFunctionService.findBFunctions();
 
         List<BusinessFunctionBean> businessFunctionBeanList = new ArrayList();
@@ -71,6 +77,7 @@ public class HomeController {
         }
 
         session.setAttribute(IS2Const.SESSION_BUSINESS_FUNCTIONS, businessFunctionBeanList);
+        session.setAttribute(IS2Const.SESSION_BUSINESS_SERVICES, businessServiceList);
 
         return "index";
     }

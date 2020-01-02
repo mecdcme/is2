@@ -22,18 +22,20 @@
  * @version 1.0
  */
 package it.istat.is2.workflow.dao;
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import it.istat.is2.workflow.domain.BusinessFunction;
-@Repository
-public interface BusinessFunctionDao extends CrudRepository<BusinessFunction,Long> {
+import it.istat.is2.workflow.domain.BusinessService;
+import java.util.List;
+import java.util.Optional;
 
-        @Override
-	List<BusinessFunction> findAll();
-        @Override
-	Optional<BusinessFunction> findById(Long idfunction);
+@Repository
+public interface BusinessServiceDao extends CrudRepository<BusinessService, Long> {
+
+    @Override
+    List<BusinessService> findAll();
+
+    Optional<BusinessService> findById(Long idService);
+
 }
