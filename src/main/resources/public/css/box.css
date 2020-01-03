@@ -55,10 +55,10 @@ a, a:hover{
 }
 
 .truncate {
-  width: 250px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .c-sidebar .c-sidebar-nav-dropdown-toggle:hover, .c-sidebar .c-sidebar-nav-link:hover {
@@ -197,12 +197,6 @@ a, a:hover{
 
 .loading-span{
     padding-left: 12px;
-}
-
-/* Login */
-.essnet{
-    padding-top: 35px;
-    margin-bottom: 0px;
 }
 
 /* Alpaca imports */
@@ -421,5 +415,5 @@ label.error {
 
 input[type="checkbox"],
 input[type="checkbox"]+label{
-  cursor:pointer;
-  }
+    cursor:pointer;
+}

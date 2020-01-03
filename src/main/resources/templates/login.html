@@ -39,9 +39,22 @@
         <link th:href="@{/css/coreui/coreui.css}" rel="stylesheet" />
         <link th:href="@{/css/box.css}" rel="stylesheet" />
         <!-- Icons -->
-        <link th:href="@{/icons/font-awesome.min.css}" rel="stylesheet" />
-        <link th:href="@{/icons/coreui-icons.css}" rel="stylesheet" />
         <link th:href="@{/icons/simple-line-icons.css}" rel="stylesheet" />
+        <style>
+            .container{
+                margin-top: -80px;
+            }
+            .essnet{
+                padding-top: 35px;
+                margin-bottom: 0px;
+            }
+
+            @media (max-height: 700px){
+                .container {
+                    margin-top: 0px;
+                }
+            }
+        </style>
     </head>
     <body class="c-app flex-row align-items-center">
         <!-- START LOGIN FORM-->
