@@ -82,7 +82,7 @@ a, a:hover{
     text-align: center;
     transition: .25s;
     padding-top: 2px;
-    padding-left: 10px;
+    padding-left: 15px;
 }
 
 .c-header.c-header-with-subheader {
@@ -128,7 +128,6 @@ a, a:hover{
 .card-header-actions a{
     padding: 0 0.3rem;
 }
-
 
 .app-header{
     padding-right: 10px;
@@ -176,7 +175,6 @@ a, a:hover{
     box-shadow: 0 0 0 0.2rem rgba(32,168,216,.25);
 }
 
-
 .form-control.is-invalid{
     background-image: none;
 }
@@ -184,6 +182,10 @@ a, a:hover{
 .dropdown-item.active, .dropdown-item:active{
     background-color: #f0f3f5;
     color: #23282c;
+}
+
+.modal-header h5{
+    font-size: 1.0rem;
 }
 
 /* Loading dialog*/
@@ -288,6 +290,12 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
     color: #fff;
     background-color: #3399ff;
     border-color: #3399ff;
+}
+
+.btn-outline-info {
+    color: #39f;
+    border-color: #39f;
+    background-color: white;
 }
 
 /* Menu */

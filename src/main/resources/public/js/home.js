@@ -27,7 +27,7 @@ Chart.defaults.global.pointHitDetectionRadius = 1;
 Chart.defaults.global.tooltips.enabled = false;
 Chart.defaults.global.defaultFontColor = '#646470';
 
-$(function () {
+$(document).ready(function () {
 
     var ctxService = document.getElementById('chart-service-catalogue').getContext('2d');
     var chartService = new Chart(ctxService, {

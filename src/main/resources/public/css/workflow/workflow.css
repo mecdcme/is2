@@ -67,28 +67,42 @@
 
 #tabs {
     margin-top: 0px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 #tab-msg {
-    margin: 0px; padding-left : 12px;
-    color: #f86c6b;
-    padding-left: 12px;
+    margin: 0px;
+    color: #e55353;
+    padding-left: 17px;
+    font-weight: normal;
 }
 
-legend {
-    font-size: 1.2rem;
+#selectable, #div_lista_ruoli{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 91%;
 }
 
 #selectable .ui-selected, #selectable .ui-selecting {
-    background-color: #20a8d8 !important;
+    background-color: #39f !important;
+    border-color: #39f !important;
     color: white;
 }
 
-#selectable li {
-    height: 35px;
+#selectable li, #div_lista_ruoli li {
+    font-size: 0.875rem;
+    height: 40px;
     cursor: pointer;
-    padding: 0.4rem 1.0rem 0.1rem 1.0rem;
+    padding: 0.6rem 1.0rem 0.1rem 1.0rem;
+}
+
+#div_lista_ruoli .list-group-item{
+    border-bottom: none;
+}
+
+#div_lista_ruoli .list-group-item:last-child{
+    border-bottom: 1px solid rgba(0,0,21,.125);
 }
 
 #selectable .even {
@@ -106,6 +120,8 @@ legend {
 
 .list-group-item.active {
     color: white !important;
+    background-color: #39f;
+    border-color: #39f;
 }
 
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited,
@@ -114,9 +130,17 @@ a.ui-button, a:link.ui-button, a:visited.ui-button, .ui-button {
     cursor: pointer;
 }
 
+.ui-tabs{
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
 .ui-tabs .ui-tabs-nav li {
     border-radius: 3px;
     margin: 0px 0px 5px 10px;
+    background-color: #39f;
+    border-color: #39f;
     border: none;
 }
 
@@ -136,4 +160,19 @@ a.ui-button, a:link.ui-button, a:visited.ui-button, .ui-button {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 500px;
+}
+
+.bind-variables-head{
+    font-weight: bold;
+    padding-left: 5px;
+}
+
+.bind-variables{
+    margin-top: 10px;
+    height: 400px; 
+    overflow-y: auto;
+}
+
+.bind-variables-footer{
+    margin-top: 20px;
 }

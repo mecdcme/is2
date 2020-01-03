@@ -51,7 +51,7 @@ $(document).ready(function () {
         paging: false,
         ordering: false,
         buttons: [{
-                className: 'btn-extenal-function btn-light',
+                className: 'btn btn-sm btn-block btn-outline-info',
                 text: '<i class="fa fa-plus"></i><span> '+_variable_btn+'</span>',
                 action: function (e, dt, node, config) {
                     openDlgAddVariabileWorkset();
@@ -647,29 +647,6 @@ function mostraDialogEliminaAssociazione(idelab, idstepVar, nomestepvar) {
     $("#modalCancellaAssociazione").modal("show");
 }
 
-function test() {
-    alert($("#nome-var").val().length);
-    ($("#filtro1").prop("checked") != false || $("#filtro0").prop("checked") != false)
-            && $("#nome-var").val().length > 0
-}
-
-function mostraDialogModificaAssociazioneOld(idelab, idstepVar, nomestepvar, idruolo) {
-    $("#mod_idruolo").val(idruolo);
-    $("#mod_idvariabile").val(idstepVar);
-    $("#mod_nomevariabile").val(nomestepvar);
-    $(".rolelist").removeClass('active');
-    $(".varlist").removeClass('active');
-    $("#mod_var_" + idstepVar).addClass('active');
-    $("#mod_role_" + idruolo).addClass('active');
-    $("#varModSelectedId").val('');
-    $("#varModSelectedName").text('Nessuna variabile selezionata');
-    $("#roleModSelectedId").val('');
-    $("#roleModSelectedName").text('Nessun ruolo selezionato');
-    $("#btn_dlg_assoc_mod").addClass('disabled');
-    $("#btn_dlg_assoc_mod").attr("disabled", "disabled");
-    $("#modifica-viarabile-workset-modal").modal('show');
-}
-
 function controllaCampoParam() {
     if ($("#value-text").val() && $("#value-text").val().length > 0 && $("#value-text").val() != '') {
         $("#btn_dlg_assoc_param").removeClass('disabled');
@@ -684,7 +661,6 @@ function mostraDialogModificaAssociazione(idelab, idstepVar, nomestepvar, idruol
 
     $("#nome-var").val(nomestepvar);
     $("#idruolomod").val(idruolo).change();
-
     $("filtro:checked").val(idruolo);
     $("#mod_idvariabile").val(idstepVar);
     $("#mod_valore_old").val(nomestepvar);
