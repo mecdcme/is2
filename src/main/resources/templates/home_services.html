@@ -25,11 +25,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
-        <script th:src="@{/js/vendors/chart/Chart.min.js}" type="text/javascript"></script>
-        <script th:src="@{/js/home.js}" type="text/javascript"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
-                setMenuActive(0); //Set home active
+            setMenuActive(0); //Set home active
             });
         </script>
     </head>
@@ -40,12 +38,20 @@
         <div class="c-wrapper">
             <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
                 <div th:include="layout :: site-header" th:remove="tag"></div>
-                <div class="c-subheader px-3">
+                <div class="c-subheader justify-content-between px-3">
                     <!-- Breadcrumb-->
                     <ol class="breadcrumb border-0 m-0">
                         <li class="breadcrumb-item"><a th:href="@{/}" th:title="#{home.link.title}">Home</a></li>
-                        <!-- Breadcrumb Menu-->
+                        <li class="breadcrumb-item">
+                            <span>Service catalogue</span>
+                        </li>
                     </ol>
+                    <!-- Right navigation menu -->
+                    <div class="c-header-nav mfe-2">
+                        <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{'/'}">
+                            <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                        </a>
+                    </div>
                 </div>
             </header>
 
@@ -53,39 +59,21 @@
                 <main class="c-main">
                     <div class="container-fluid">
                         <div class="fade-in">
-                            <div class="row">
-                                <div class="col-sm-6 col-lg-4">
-                                    <div class="card text-white bg-info">
-                                        <div class="card-body d-flex">
-                                            <div>
-                                                <div class="text-value-lg">
-                                                    <a style="color:white"th:href="@{/services}">Service catalogue</a>
-                                                </div>
+                            <div class="row" th:if="${session.businessServiceList}">
+                                <div class="col-sm-6 col-md-4" th:each="businessService, iter : ${session.businessServiceList}">
+                                    <div class="card text-white" th:classappend="${iter.odd} ? bg-gradient-warning : bg-gradient-info">
+                                        <div class="card-body">
+                                            <div class="card-body-title">
+                                                <i class="card-body-title-icon icon-calculator"></i><span th:text="${businessService.name}"></span>
                                             </div>
-                                        </div>
-                                        <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-                                            <canvas class="chart" id="chart-service-catalogue" height="70"></canvas>
+                                            <p th:text="${businessService.descr}"></p>
+                                            <a th:title="${businessService.name}" th:href="@{'/sessione/mostraSessioni/'+${businessService.id}}" style="color:white">
+                                                Go to <span th:text="${businessService.name}"></span> <i class="fa fa-arrow-right"></i>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- /.col-->
-                                <div class="col-sm-6 col-lg-4">
-                                    <div class="card text-white bg-warning">
-                                        <div class="card-body d-flex">
-                                            <div>
-                                                <div class="text-value-lg">
-                                                    <a style="color:white"th:href="@{/functions}">Business functions</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="c-chart-wrapper mt-3" style="height:70px;">
-                                            <canvas class="chart" id="chart-business-functions" height="70"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /.col-->
                             </div>
-                            <!-- /.row-->
                         </div>
                     </div>
                 </main>

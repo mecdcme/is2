@@ -50,7 +50,7 @@ public class HomeController {
 
     @Autowired
     private BusinessFunctionService businessFunctionService;
-     @Autowired
+    @Autowired
     private BusinessServiceService businessServiceService;
     @Autowired
     private AdministrationService administrationService;
@@ -64,7 +64,6 @@ public class HomeController {
         notificationService.removeAllMessages();
 
         List<BusinessService> businessServiceList = businessServiceService.findBusinessServices();
-        
         List<BusinessFunction> businessFunctionList = businessFunctionService.findBFunctions();
 
         List<BusinessFunctionBean> businessFunctionBeanList = new ArrayList();
@@ -80,6 +79,18 @@ public class HomeController {
         session.setAttribute(IS2Const.SESSION_BUSINESS_SERVICES, businessServiceList);
 
         return "index";
+    }
+
+    @RequestMapping("/services")
+    public String services(HttpSession session, Model model) {
+        notificationService.removeAllMessages();
+        return "home_services";
+    }
+    
+    @RequestMapping("/functions")
+    public String functions(HttpSession session, Model model) {
+        notificationService.removeAllMessages();
+        return "home_functions";
     }
 
     @RequestMapping("/team")

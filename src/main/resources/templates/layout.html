@@ -46,6 +46,7 @@
         <!-- CSS -->
         <link th:href="@{/css/coreui/coreui.css}" rel="stylesheet" />
         <link th:href="@{/css/vendors/toastr/toastr.css}" rel="stylesheet" />
+        <link th:href="@{/css/vendors/spinkit/spinkit.css}" rel="stylesheet" />
         <link th:href="@{/css/box.css}" rel="stylesheet" />
         <!-- Icons -->
         <link th:href="@{/icons/font-awesome.min.css}" rel="stylesheet" />
@@ -73,7 +74,7 @@
                             <i class="c-sidebar-nav-icon icon-calculator"></i> <span th:title=${businessService.name} th:text="${businessService.name}"></span>
                         </a>
                     </li>
-                    
+
                     <li class="c-sidebar-nav-title">Business functions</li>
                     <li th:each="businessFunction, iter : ${session.businessFunctionList}" th:id="'bf'+${businessFunction.id}"
                         th:classappend="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}? 'c-sidebar-nav-item c-sidebar-nav-dropdown': 'c-sidebar-nav-item'">
@@ -209,11 +210,17 @@
             <div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
+                        <div class="modal-header">
+                            <span>Loading...</span>
+                        </div>
                         <div class="modal-body">
-                            <div class="spinner-border text-info" role="status" style="width: 2rem; height: 2rem;">
-                                <span class="sr-only">Loading...</span>
+                            <div class="sk-wave">
+                                <div class="sk-wave-rect"></div>
+                                <div class="sk-wave-rect"></div>
+                                <div class="sk-wave-rect"></div>
+                                <div class="sk-wave-rect"></div>
+                                <div class="sk-wave-rect"></div>
                             </div>
-                            <span class="loading-span">Loading...</span>
                         </div>
                     </div>
                 </div>

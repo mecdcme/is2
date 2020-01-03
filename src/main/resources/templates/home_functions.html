@@ -1,0 +1,86 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+        <script th:inline="javascript">
+            $(document).ready(function () {
+            setMenuActive(0); //Set home active
+            });
+        </script>
+    </head>
+    <body class="c-app">
+        <div th:replace="layout :: site-aside"></div>
+        <div th:replace="layout :: site-modals"></div>
+
+        <div class="c-wrapper">
+            <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+                <div th:include="layout :: site-header" th:remove="tag"></div>
+                <div class="c-subheader justify-content-between px-3">
+                    <!-- Breadcrumb-->
+                    <ol class="breadcrumb border-0 m-0">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/}" th:title="#{home.link.title}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span>Business functions</span>
+                        </li>
+                    </ol>
+                    <!-- Right navigation menu -->
+                    <div class="c-header-nav mfe-2">
+                        <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{'/'}">
+                            <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="c-body">
+                <main class="c-main">
+                    <div class="container-fluid">
+                        <div class="fade-in">
+                            <div class="row" th:if="${session.businessFunctionList}">
+                                <div class="col-sm-6 col-md-4" th:each="businessFunction, iter : ${session.businessFunctionList}">
+                                    <div class="card text-white" th:classappend="${iter.odd} ? bg-gradient-info : bg-gradient-warning">
+                                        <div class="card-body">
+                                            <div class="card-body-title">
+                                                <i class="card-body-title-icon cil-star"></i><span th:text="${businessFunction.name}"></span>
+                                            </div>
+                                            <p th:text="${businessFunction.description}"></p>
+                                            <a th:title="${businessFunction.name}" th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}" style="color:white">
+                                                Go to <span th:text="${businessFunction.name}"></span> <i class="fa fa-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+            <footer th:replace="layout :: site-footer"></footer>     
+        </div>
+    </body>
+</html>
