@@ -124,15 +124,18 @@
                                                     <td><span th:text="${stats.index+1}"></span></td>
                                                     <td th:text="${stepR.workset.name}"></td>
                                                     <td>
-												 	<a href="javascript:void(0);" title="Modifica parametro"
+												 	
+													<div class="form-group">
+														<div id="view-param">
+														<a  id="btn-view-param" href="javascript:void(0);" title="Modifica parametro"
                                                                    th:attr="data-param-template=${stepR.appRole.parameter.jsonTemplate},data-name-workset=${stepR.workset.name},data-value-param=${stepR.workset.paramValue},onclick='javascript:viewParamsAlpacaTemplate(this);'">
                                                                     <i class="fa fa-pencil"></i>
                                                                 </a>
-													<div class="form-group">
-														<span id="param-text-view"></span>
-													</div>
-													<div class="form-group">
-														<div id="view-param"></div>
+											 <script th:inline="javascript">
+											 	$("#btn-view-param").click();
+                                              </script>
+														
+														</div>
 													</div>
 												</td>
 

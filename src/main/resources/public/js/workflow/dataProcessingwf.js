@@ -141,13 +141,13 @@ function scaricaWorkSet(e, param, idelab) {
 function viewParamsAlpacaTemplate(identifier) {
      var nameParameter = $(identifier).data('name-workset');
     $('#param-text-edit').text(nameParameter);
-    var jsontemplate = $(identifier).data('param-template');
+    var jsontemplate = $(identifier).data('param-template');          
    
     var schema = "";
-    var options ="";
+    var options ="{\"type\" : \"object\"}";
     if(jsontemplate != undefined){
-//     schema = jsontemplate["schema"];
-  //   options = jsontemplate["options"];
+     schema = jsontemplate["schema"];
+     options = JSON.stringify(jsontemplate["options"]);
     }
  
     if (!options)
@@ -156,10 +156,11 @@ function viewParamsAlpacaTemplate(identifier) {
     if (!data)
         data = "";
     
-    var dataContent = "{\"data\":" + JSON.stringify(data) + ",\"schema\":" + JSON.stringify(schema) + ",\"options\":" + JSON.stringify(options) + "}";
+    var dataContent = "{\"data\":" + JSON.stringify(data) + ",\"schema\":" + JSON.stringify(schema) + ",\"options\":" + options + ",\"view\":\"web-display\"}";
    
     var jsonObj = JSON.parse(dataContent);
     console.log(dataContent);
+    $('#view-param').empty();
     $('#view-param').alpaca(jsonObj);
 }
 
