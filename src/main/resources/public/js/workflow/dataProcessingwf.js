@@ -137,3 +137,29 @@ function scaricaWorkSet(e, param, idelab) {
     e.preventDefault();
     window.location = _ctx + '/rest/ws/download/workset/' + param + '/' + idelab+'/'+_roleGroup;
 }
+
+function viewParamsAlpacaTemplate(identifier) {
+     var nameParameter = $(identifier).data('name-workset');
+    $('#param-text-edit').text(nameParameter);
+    var jsontemplate = $(identifier).data('param-template');
+   
+    var schema = "";
+    var options ="";
+    if(jsontemplate != undefined){
+//     schema = jsontemplate["schema"];
+  //   options = jsontemplate["options"];
+    }
+ 
+    if (!options)
+        options = "";
+    var data = $(identifier).data('value-param');
+    if (!data)
+        data = "";
+    
+    var dataContent = "{\"data\":" + JSON.stringify(data) + ",\"schema\":" + JSON.stringify(schema) + ",\"options\":" + JSON.stringify(options) + "}";
+   
+    var jsonObj = JSON.parse(dataContent);
+    console.log(dataContent);
+    $('#view-param').alpaca(jsonObj);
+}
+

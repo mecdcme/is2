@@ -27,6 +27,9 @@
         <head th:include="layout :: site-head" th:remove="tag" />
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
         <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
+         <script th:src="@{/js/vendors/alpaca/handlebars.min.js}"  type="text/javascript"></script>
+        <script th:src="@{/js/vendors/alpaca/alpaca.min.js}"  type="text/javascript"></script>
+      
         <script th:src="@{/js/workflow/dataProcessingwf.js}"></script>
         <script th:inline="javascript">
             var _idElaborazione = [[${session.sessionBean.dataProcessingId}]];
@@ -34,6 +37,8 @@
             var _roleGroup = [[${currentGroup.id}]];
         </script>
         <link rel="stylesheet" th:href="@{/css/vendors/table/datatables.css}" />
+        <link th:href="@{/css/vendors/alpaca/alpaca.min.css}" rel="stylesheet" />
+      
     </head>
         <body class="c-app">
         <div th:replace="layout :: site-aside"></div>
@@ -111,23 +116,30 @@
                                                     <th style="width:2%;"><span>#</span></th>
                                                     <th  style="width:5%;"><span>Name</span></th>
                                                     <th><span>Value</span></th>
+                                                   
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr th:each="stepR,stats: ${stepRList}" th:unless="${(stepRList == null) or (stepRList.size() == 0) }">
                                                     <td><span th:text="${stats.index+1}"></span></td>
                                                     <td th:text="${stepR.workset.name}"></td>
-                                                    <td><span th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepR.workset.paramValue)}"></span></td>
-                                                      
-                                                   </tr>
+                                                    <td>
+												 	<a href="javascript:void(0);" title="Modifica parametro"
+                                                                   th:attr="data-param-template=${stepR.appRole.parameter.jsonTemplate},data-name-workset=${stepR.workset.name},data-value-param=${stepR.workset.paramValue},onclick='javascript:viewParamsAlpacaTemplate(this);'">
+                                                                    <i class="fa fa-pencil"></i>
+                                                                </a>
+													<div class="form-group">
+														<span id="param-text-view"></span>
+													</div>
+													<div class="form-group">
+														<div id="view-param"></div>
+													</div>
+												</td>
+
+											</tr>
                                             </tbody>
                                         </table>
-                                        
                                     </div>
-                                     
-                                    
-                                    
-                                    
                                 </div>
                             </div>
                         </div>

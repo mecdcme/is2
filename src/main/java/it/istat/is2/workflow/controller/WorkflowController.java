@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -85,7 +86,7 @@ import it.istat.is2.worksession.service.WorkSessionService;
 public class WorkflowController {
 
 	@Autowired
-	private AppRoleService  appRoleService;
+	private AppRoleService appRoleService;
 	@Autowired
 	private WorkflowService workflowService;
 	@Autowired
@@ -148,28 +149,30 @@ public class WorkflowController {
 				.findMissingAppRoleySubProcessAndTipoVar(dataProcessing, new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
 		HashMap<Long, List<String>> variablesMissing = workflowService
 				.findMissingAppRoleySubProcessAndTipoVar(dataProcessing, new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
-		
+
 		HashMap<Long, List<String>> rulesetMissing = workflowService
 				.findMissingAppRoleySubProcessAndTipoVar(dataProcessing, new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
 
-		//all in paramterers
+		// all in paramterers
 		for (Map.Entry<Long, List<String>> entry : variablesMissing.entrySet()) {
 			Long key = entry.getKey();
 			List<String> value = entry.getValue();
-			List<String> list=paramsMissing.get(key);
-			if(list==null) list=new ArrayList<>();
+			List<String> list = paramsMissing.get(key);
+			if (list == null)
+				list = new ArrayList<>();
 			list.addAll(value);
 			paramsMissing.put(key, list);
-	   }
+		}
 		for (Map.Entry<Long, List<String>> entry : rulesetMissing.entrySet()) {
 			Long key = entry.getKey();
 			List<String> value = entry.getValue();
-			List<String> list=paramsMissing.get(key);
-			if(list==null) list=new ArrayList<>();
+			List<String> list = paramsMissing.get(key);
+			if (list == null)
+				list = new ArrayList<>();
 			list.addAll(value);
 			paramsMissing.put(key, list);
-	   }
-		
+		}
+
 		model.addAttribute("paramsMissing", paramsMissing);
 		model.addAttribute("variablesMissing", new HashMap<>());
 		model.addAttribute("rulesetMissing", new HashMap<>());
@@ -192,7 +195,6 @@ public class WorkflowController {
 			stepRuntimeservice.removeStepRuntimeById(idvar);
 		}
 
-		
 		notificationService.addInfoMessage("La variabile è stata rimossa");
 
 		return "redirect:/ws/editworkingset/" + dataProcessingId;
@@ -200,14 +202,16 @@ public class WorkflowController {
 
 	@GetMapping(value = "/cleanallworkset/{dataProcessingId}/{flagIO}")
 	public String cleanAllWorkset(HttpSession session, Model model, RedirectAttributes ra,
-			@PathVariable("dataProcessingId") Long dataProcessingId,@PathVariable("flagIO")Short flagIO) {
+			@PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("flagIO") Short flagIO) {
 		notificationService.removeAllMessages();
 
 		try {
-			workflowService.cleanAllWorkset(dataProcessingId,flagIO);
-			notificationService.addInfoMessage(messages.getMessage("workset.clean.ok", null, LocaleContextHolder.getLocale()));
+			workflowService.cleanAllWorkset(dataProcessingId, flagIO);
+			notificationService
+					.addInfoMessage(messages.getMessage("workset.clean.ok", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
-			notificationService.addErrorMessage(messages.getMessage("workset.clean.error", null, LocaleContextHolder.getLocale()));
+			notificationService
+					.addErrorMessage(messages.getMessage("workset.clean.error", null, LocaleContextHolder.getLocale()));
 		}
 		return "redirect:/ws/home/" + dataProcessingId;
 	}
@@ -243,9 +247,8 @@ public class WorkflowController {
 
 		SessionBean elaSession = new SessionBean(dataProcessing.getId(), dataProcessing.getName());
 		session.setAttribute(IS2Const.SESSION_DATAPROCESSING, elaSession);
-		
+
 		List<String> matchedVariables = new ArrayList<>();
-		
 
 		List<DatasetFile> datasetfiles = datasetService
 				.findDatasetFilesByIdWorkSession(dataProcessing.getWorkSession().getId());
@@ -257,26 +260,29 @@ public class WorkflowController {
 
 		});
 
-		List<StepRuntime> stepRList = workflowService.getStepRuntimesNoValues(dataProcessingId, new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
-		if(stepRList != null && stepRList.size() > 0) {
-			for(StepRuntime stepRuntime : stepRList) {
+		List<StepRuntime> stepRList = workflowService.getStepRuntimesNoValues(dataProcessingId,
+				new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
+		if (stepRList != null && stepRList.size() > 0) {
+			for (StepRuntime stepRuntime : stepRList) {
 				matchedVariables.add(stepRuntime.getWorkset().getName());
 			}
 		}
-		
+
 		BusinessProcess businessProcessParent = dataProcessing.getBusinessProcess();
 
 		BusinessFunction businessFunction = dataProcessing.getWorkSession().getBusinessFunction();
 
 		// Carica i Ruoli di input
-		List<AppRole> listaRuoliInput = workflowService.findAppRolesByProcess(businessProcessParent, 0, new DataTypeCls (IS2Const.DATA_TYPE_VARIABLE));
+		List<AppRole> listaRuoliInput = workflowService.findAppRolesByProcess(businessProcessParent, 0,
+				new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
 		// Carica i Ruoli di input e output
-		List<AppRole> listaRuoliInOut = workflowService.findAppRolesByProcess(businessProcessParent, 1,new DataTypeCls (IS2Const.DATA_TYPE_VARIABLE));
+		List<AppRole> listaRuoliInOut = workflowService.findAppRolesByProcess(businessProcessParent, 1,
+				new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
 
 		List<AppRole> paramsNotAssignedList = new ArrayList<>();
 		List<StepRuntime> sVParamsAssignedList = workflowService.getStepRuntimeParameters(dataProcessingId);
-		Map<String, StepRuntime> stepParamMap=new HashMap<>();
-	 	ArrayList<String> paramAssigned = new ArrayList<>();
+		Map<String, StepRuntime> stepParamMap = new HashMap<>();
+		ArrayList<String> paramAssigned = new ArrayList<>();
 		sVParamsAssignedList.forEach(stepRuntime -> {
 			paramAssigned.add(stepRuntime.getAppRole().getCode());
 			stepParamMap.put(stepRuntime.getAppRole().getCode(), stepRuntime);
@@ -287,39 +293,36 @@ public class WorkflowController {
 		List<AppRole> paramsAllBPPList = new ArrayList<>();
 
 		for (Map.Entry<Long, List<StepInstanceSignature>> entry : paramsAllBPPMap.entrySet()) {
-			
+
 			List<StepInstanceSignature> listparams = entry.getValue();
-			
+
 			for (StepInstanceSignature stepInstanceSignature : listparams) {
-			if(!paramsAllBPPList.contains(stepInstanceSignature.getAppRole()))	paramsAllBPPList.add(stepInstanceSignature.getAppRole());	
+				if (!paramsAllBPPList.contains(stepInstanceSignature.getAppRole()))
+					paramsAllBPPList.add(stepInstanceSignature.getAppRole());
 				if (!paramAssigned.contains(stepInstanceSignature.getAppRole().getCode())) {
 					paramsNotAssignedList.add(stepInstanceSignature.getAppRole());
-				
+
 				}
 
 			}
 		}
-     	List<BusinessProcess> listaBp = dataProcessing.getBusinessProcess().getBusinessSubProcesses();
+		List<BusinessProcess> listaBp = dataProcessing.getBusinessProcess().getBusinessSubProcesses();
 
-     	if( businessFunction.getViewDataType().contains(new ViewDataType(IS2Const.VIEW_DATATYPE_RULESET))) {
-     		List<StepRuntime> stepRuntimesRuleset = workflowService.getStepRuntimesRuleset(dataProcessingId);
-     		Map<String, StepRuntime> stepRuntimesRulesetMap=new HashMap<>();
-     		stepRuntimesRuleset.forEach(sxstepRuntime -> {
-    		 	stepRuntimesRulesetMap.put(sxstepRuntime.getAppRole().getCode(), sxstepRuntime);
-    		});
-    	   	List<Ruleset> rulesetList=ruleService.findRulesetBySessioneLavoro(dataProcessing.getWorkSession());
-    		// Load Ruleset Role
-    		List<AppRole> rulesetRoleList = workflowService.findAppRolesByProcess(businessProcessParent, 0, new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
+		if (businessFunction.getViewDataType().contains(new ViewDataType(IS2Const.VIEW_DATATYPE_RULESET))) {
+			List<StepRuntime> stepRuntimesRuleset = workflowService.getStepRuntimesRuleset(dataProcessingId);
+			Map<String, StepRuntime> stepRuntimesRulesetMap = new HashMap<>();
+			stepRuntimesRuleset.forEach(sxstepRuntime -> {
+				stepRuntimesRulesetMap.put(sxstepRuntime.getAppRole().getCode(), sxstepRuntime);
+			});
+			List<Ruleset> rulesetList = ruleService.findRulesetBySessioneLavoro(dataProcessing.getWorkSession());
+			// Load Ruleset Role
+			List<AppRole> rulesetRoleList = workflowService.findAppRolesByProcess(businessProcessParent, 0,
+					new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
 
-    	   	model.addAttribute("stepRuntimesRulesetMap", stepRuntimesRulesetMap);
-    	   	model.addAttribute("rulesetList", rulesetList);
-    	  	model.addAttribute("rulesetRoleList", rulesetRoleList);
-     	}
-     	
-     	
-     	
-     	
-		
+			model.addAttribute("stepRuntimesRulesetMap", stepRuntimesRulesetMap);
+			model.addAttribute("rulesetList", rulesetList);
+			model.addAttribute("rulesetRoleList", rulesetRoleList);
+		}
 		model.addAttribute(IS2Const.LIST_BUSINESS_PROCESS, listaBp);
 		model.addAttribute("stepRList", stepRList);
 
@@ -328,7 +331,7 @@ public class WorkflowController {
 
 		model.addAttribute("listaRuoliInput", listaRuoliInput);
 		model.addAttribute("listaRuoliInOut", listaRuoliInOut);
-		//model.addAttribute("parameterList", paramsNotAssignedList);
+		// model.addAttribute("parameterList", paramsNotAssignedList);
 		model.addAttribute("parameterListAll", paramsAllBPPList);
 		model.addAttribute("datasetfiles", datasetfiles);
 		model.addAttribute("dataProcessing", dataProcessing);
@@ -341,71 +344,71 @@ public class WorkflowController {
 	}
 
 	@PostMapping(value = "/associaVariabiliRuolo")
-    public String associaVariabiliRuolo(HttpServletResponse response, Model model, @RequestBody AssociazioneVarRoleBean[] associazioneVarRoleBean) throws IOException {
-   		DataProcessing elaborazione = workflowService.findDataProcessing(associazioneVarRoleBean[0].getIdElaborazione());
-   		
-   		try {
-   			workflowService.creaAssociazionVarRole(elaborazione,associazioneVarRoleBean);
-			notificationService.addInfoMessage(
-	                messages.getMessage("generic.save.success", null, LocaleContextHolder.getLocale()));	
-		}catch(Exception e) {
+	public String associaVariabiliRuolo(HttpServletResponse response, Model model,
+			@RequestBody AssociazioneVarRoleBean[] associazioneVarRoleBean) throws IOException {
+		DataProcessing elaborazione = workflowService
+				.findDataProcessing(associazioneVarRoleBean[0].getIdElaborazione());
+
+		try {
+			workflowService.creaAssociazionVarRole(elaborazione, associazioneVarRoleBean);
+			notificationService
+					.addInfoMessage(messages.getMessage("generic.save.success", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
 			notificationService.addErrorMessage(
-                    messages.getMessage("process.removing.error", null, LocaleContextHolder.getLocale()), e.getMessage());
+					messages.getMessage("process.removing.error", null, LocaleContextHolder.getLocale()),
+					e.getMessage());
 		}
-   		return "redirect:/ws/editworkingset/" + elaborazione.getId();
-   	}
-
-	
-	
-	
-	
-	
-	
-	@GetMapping(value = "/dataview/{idelab}/{type}")
-	public String viewDataProc(HttpSession session, Model model, @PathVariable("idelab") Long dataProcessingId,
-			@PathVariable("type") Short type) {
-		notificationService.removeAllMessages();
-		List<StepRuntime> stepRList = new ArrayList<>();
-		List<BusinessProcess> listaBp = new ArrayList<>();
-		AppRole currentGroup = new AppRole();
-		DataProcessing dataProcessing = workflowService.findDataProcessing(dataProcessingId);
-		//TypeIO typeIO = workflowService.getTypeIOById(tipoIo);
-		TypeIO typeIO  =new TypeIO(type);
-
-		List<AppRole> outputObjects = workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId,typeIO,
-				null);
-		if (!outputObjects.isEmpty()) {
-			currentGroup = outputObjects.get(0);
-			stepRList = workflowService.getStepRuntimesDataTypeNoValues(dataProcessingId,null, typeIO,currentGroup);
-		}
-
-		listaBp = dataProcessing.getBusinessProcess().getBusinessSubProcesses();
-		model.addAttribute("outputObjects", outputObjects);
-		model.addAttribute("currentGroup", currentGroup);
-		model.addAttribute("stepRList", stepRList);
-		model.addAttribute("dataProcessing", dataProcessing);
-		model.addAttribute("tipoCampo", typeIO);
-		model.addAttribute("bProcess", listaBp);
-		model.addAttribute(IS2Const.LIST_BUSINESS_PROCESS, listaBp);
-
-		return "workflow/view_data";
-
+		return "redirect:/ws/editworkingset/" + elaborazione.getId();
 	}
 
-	@GetMapping(value = "/dataview/{idelab}/{tipoIO}/{outRole}")
+	/*
+	 * @GetMapping(value = "/dataview/{idelab}/{tipoIO}") public String
+	 * viewDataProc(HttpSession session, Model model, @PathVariable("idelab") Long
+	 * dataProcessingId,
+	 * 
+	 * @PathVariable("tipoIO") Short type) {
+	 * notificationService.removeAllMessages(); List<StepRuntime> stepRList = new
+	 * ArrayList<>(); List<BusinessProcess> listaBp = new ArrayList<>(); AppRole
+	 * currentGroup = new AppRole(); DataProcessing dataProcessing =
+	 * workflowService.findDataProcessing(dataProcessingId); //TypeIO typeIO =
+	 * workflowService.getTypeIOById(tipoIo); TypeIO typeIO =new TypeIO(type);
+	 * 
+	 * List<AppRole> outputObjects =
+	 * workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId,typeIO,
+	 * null); if (!outputObjects.isEmpty()) { currentGroup = outputObjects.get(0);
+	 * stepRList =
+	 * workflowService.getStepRuntimesDataTypeNoValues(dataProcessingId,null,
+	 * typeIO,currentGroup); }
+	 * 
+	 * listaBp = dataProcessing.getBusinessProcess().getBusinessSubProcesses();
+	 * model.addAttribute("outputObjects", outputObjects);
+	 * model.addAttribute("currentGroup", currentGroup);
+	 * model.addAttribute("stepRList", stepRList);
+	 * model.addAttribute("dataProcessing", dataProcessing);
+	 * model.addAttribute("tipoCampo", typeIO); model.addAttribute("bProcess",
+	 * listaBp); model.addAttribute(IS2Const.LIST_BUSINESS_PROCESS, listaBp);
+	 * 
+	 * return "workflow/view_data";
+	 * 
+	 * }
+	 */
+	@GetMapping(value = { "/dataview/{idelab}/{tipoIO}/{outRole}", "/dataview/{idelab}/{tipoIO}" })
 	public String viewDataOut(HttpSession session, Model model, @PathVariable("idelab") Long dataProcessingId,
-			@PathVariable("tipoIO") Short tipoIO, @PathVariable("outRole") Integer outRole) {
+			@PathVariable("tipoIO") Short tipoIO, @PathVariable("outRole") Optional<Integer> outRole) {
 		notificationService.removeAllMessages();
 
 		List<StepRuntime> stepRList = new ArrayList<>();
 		List<BusinessProcess> listaBp = new ArrayList<>();
 		DataProcessing dataProcessing = workflowService.findDataProcessing(dataProcessingId);
 		TypeIO typeIO = new TypeIO(tipoIO);
+		AppRole currentGroup;
 
-		List<AppRole> outputObjects = workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId, typeIO,null);
-
-		AppRole currentGroup =appRoleService.findRuolo(outRole);
-		stepRList = workflowService.getStepRuntimesDataTypeNoValues(dataProcessingId,null, typeIO, currentGroup);
+		List<AppRole> outputObjects = workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId, typeIO, null);
+		if (outRole.isPresent())
+			currentGroup = appRoleService.findRuolo(outRole.get());
+		else
+			currentGroup = outputObjects.get(0);
+		stepRList = workflowService.getStepRuntimesDataTypeNoValues(dataProcessingId, null, typeIO, currentGroup);
 
 		listaBp = dataProcessing.getBusinessProcess().getBusinessSubProcesses();
 		model.addAttribute("outputObjects", outputObjects);
@@ -440,16 +443,17 @@ public class WorkflowController {
 	public String eliminaWS(HttpSession session, Model model, @AuthenticationPrincipal User user,
 			@PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("idsessione") Long idsessione) {
 		notificationService.removeAllMessages();
-		
+
 		try {
 			workflowService.eliminaDataProcessing(dataProcessingId);
 			notificationService.addInfoMessage(
-	                messages.getMessage("process.removed.message", null, LocaleContextHolder.getLocale()));	
-		}catch(Exception e) {
+					messages.getMessage("process.removed.message", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
 			notificationService.addErrorMessage(
-                    messages.getMessage("process.removing.error", null, LocaleContextHolder.getLocale()), e.getMessage());
+					messages.getMessage("process.removing.error", null, LocaleContextHolder.getLocale()),
+					e.getMessage());
 		}
-		
+
 		List<WorkSession> listasessioni = workSessionService.getSessioneList(user);
 		model.addAttribute("listasessioni", listasessioni);
 
@@ -459,36 +463,39 @@ public class WorkflowController {
 	}
 
 	/*
-	@GetMapping(value = "/dobproc/{dataProcessingId}/{idBProc}")
-	public String dobproc(HttpSession session, Model model, @PathVariable("dataProcessingId") Long dataProcessingId,
-			@PathVariable("idBProc") Long idBProc) throws REngineException {
-		notificationService.removeAllMessages();
-
-		Elaborazione dataProcessing = workflowService.findElaborazione(dataProcessingId);
-		try {
-			dataProcessing = workflowService.doBusinessProc(dataProcessing, idBProc);
-			notificationService.addInfoMessage(messages.getMessage("run.ok", null, LocaleContextHolder.getLocale()));
-		} catch (Exception e) {
-			notificationService.addErrorMessage("Error: " + e.getMessage());
-		}
-
-		List<stepRuntime> stepRList = workflowService.getstepRuntimesTipoCampoNoValori(dataProcessingId,
-				new DataTypeCls(IS2Const.WORKSET_TIPO_VARIABILE), new TipoCampo(IS2Const.TIPO_CAMPO_ELABORATO), null);
-		List<BusinessProcess> listaBp = dataProcessing.getBusinessProcess().getBusinessSubProcesses();
-
-		BusinessProcess bProcess = Utility.getBusinessProcess(listaBp, idBProc);
-		model.addAttribute("stepRList", stepRList);
-		model.addAttribute("dataProcessing", dataProcessing);
-		model.addAttribute("bProcess", bProcess);
-		model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
-
-		SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-		List<Log> logs = logService.findByIdSessione(sessionBean.getId());
-		model.addAttribute("logs", logs);
-
-		return "workflow/home";
-	}
-*/
+	 * @GetMapping(value = "/dobproc/{dataProcessingId}/{idBProc}") public String
+	 * dobproc(HttpSession session, Model model, @PathVariable("dataProcessingId")
+	 * Long dataProcessingId,
+	 * 
+	 * @PathVariable("idBProc") Long idBProc) throws REngineException {
+	 * notificationService.removeAllMessages();
+	 * 
+	 * Elaborazione dataProcessing =
+	 * workflowService.findElaborazione(dataProcessingId); try { dataProcessing =
+	 * workflowService.doBusinessProc(dataProcessing, idBProc);
+	 * notificationService.addInfoMessage(messages.getMessage("run.ok", null,
+	 * LocaleContextHolder.getLocale())); } catch (Exception e) {
+	 * notificationService.addErrorMessage("Error: " + e.getMessage()); }
+	 * 
+	 * List<stepRuntime> stepRList =
+	 * workflowService.getstepRuntimesTipoCampoNoValori(dataProcessingId, new
+	 * DataTypeCls(IS2Const.WORKSET_TIPO_VARIABILE), new
+	 * TipoCampo(IS2Const.TIPO_CAMPO_ELABORATO), null); List<BusinessProcess>
+	 * listaBp = dataProcessing.getBusinessProcess().getBusinessSubProcesses();
+	 * 
+	 * BusinessProcess bProcess = Utility.getBusinessProcess(listaBp, idBProc);
+	 * model.addAttribute("stepRList", stepRList);
+	 * model.addAttribute("dataProcessing", dataProcessing);
+	 * model.addAttribute("bProcess", bProcess);
+	 * model.addAttribute(IS2Const.LISTA_BUSINESS_PROCESS, listaBp);
+	 * 
+	 * SessionBean sessionBean = (SessionBean)
+	 * session.getAttribute(IS2Const.SESSION_BEAN); List<Log> logs =
+	 * logService.findByIdSessione(sessionBean.getId()); model.addAttribute("logs",
+	 * logs);
+	 * 
+	 * return "workflow/home"; }
+	 */
 	@RequestMapping(value = "/associavariabile", method = RequestMethod.POST)
 	public String associavariabileWS(HttpSession session, Model model,
 			@ModelAttribute("associazioneVarFormBean") MappingVarsFormBean form) {
@@ -567,20 +574,20 @@ public class WorkflowController {
 		ra.addFlashAttribute("showTabParam", "parametri");
 		return "redirect:/ws/editworkingset/" + dataProcessing.getId();
 	}
-	
+
 	@RequestMapping(value = "/setruleset", method = RequestMethod.POST)
 	public String setRuleset(HttpSession session, Model model, RedirectAttributes ra,
-			@RequestParam("dataProcessingId") Long dataProcessingId, 		
-			@RequestParam("idRuleset") Integer idRuleset) {
-		
+			@RequestParam("dataProcessingId") Long dataProcessingId, @RequestParam("idRuleset") Integer idRuleset) {
+
 		DataProcessing dataProcessing = workflowService.findDataProcessing(dataProcessingId);
 		try {
-			workflowService.setRuleset(dataProcessing,idRuleset);
-			notificationService.addInfoMessage(messages.getMessage("process.setresulset.ok", null, LocaleContextHolder.getLocale()));
+			workflowService.setRuleset(dataProcessing, idRuleset);
+			notificationService.addInfoMessage(
+					messages.getMessage("process.setresulset.ok", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
 			notificationService.addErrorMessage("Error: " + e.getMessage());
 		}
-	 
+
 		model.addAttribute("dataProcessing", dataProcessing);
 		ra.addFlashAttribute("showTab", "resultset");
 		return "redirect:/ws/editworkingset/" + dataProcessing.getId();
