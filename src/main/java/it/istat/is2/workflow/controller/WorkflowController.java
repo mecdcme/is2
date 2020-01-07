@@ -361,37 +361,7 @@ public class WorkflowController {
 		return "redirect:/ws/editworkingset/" + elaborazione.getId();
 	}
 
-	/*
-	 * @GetMapping(value = "/dataview/{idelab}/{tipoIO}") public String
-	 * viewDataProc(HttpSession session, Model model, @PathVariable("idelab") Long
-	 * dataProcessingId,
-	 * 
-	 * @PathVariable("tipoIO") Short type) {
-	 * notificationService.removeAllMessages(); List<StepRuntime> stepRList = new
-	 * ArrayList<>(); List<BusinessProcess> listaBp = new ArrayList<>(); AppRole
-	 * currentGroup = new AppRole(); DataProcessing dataProcessing =
-	 * workflowService.findDataProcessing(dataProcessingId); //TypeIO typeIO =
-	 * workflowService.getTypeIOById(tipoIo); TypeIO typeIO =new TypeIO(type);
-	 * 
-	 * List<AppRole> outputObjects =
-	 * workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId,typeIO,
-	 * null); if (!outputObjects.isEmpty()) { currentGroup = outputObjects.get(0);
-	 * stepRList =
-	 * workflowService.getStepRuntimesDataTypeNoValues(dataProcessingId,null,
-	 * typeIO,currentGroup); }
-	 * 
-	 * listaBp = dataProcessing.getBusinessProcess().getBusinessSubProcesses();
-	 * model.addAttribute("outputObjects", outputObjects);
-	 * model.addAttribute("currentGroup", currentGroup);
-	 * model.addAttribute("stepRList", stepRList);
-	 * model.addAttribute("dataProcessing", dataProcessing);
-	 * model.addAttribute("tipoCampo", typeIO); model.addAttribute("bProcess",
-	 * listaBp); model.addAttribute(IS2Const.LIST_BUSINESS_PROCESS, listaBp);
-	 * 
-	 * return "workflow/view_data";
-	 * 
-	 * }
-	 */
+	
 	@GetMapping(value = { "/dataview/{idelab}/{tipoIO}/{outRole}", "/dataview/{idelab}/{tipoIO}" })
 	public String viewDataOut(HttpSession session, Model model, @PathVariable("idelab") Long dataProcessingId,
 			@PathVariable("tipoIO") Short tipoIO, @PathVariable("outRole") Optional<Integer> outRole) {

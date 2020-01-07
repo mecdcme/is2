@@ -342,10 +342,11 @@
                                                             <th:block th:each="datasetfile ,iter: ${datasetfiles}">
                                                                 <li th:each="element, y: ${datasetfile.columns}" 
                                                                     th:id="${'var_'+element.id}"
-                                                                    th:text="${datasetfile.FileLabel+ ' - '+ element.name}"
+                                                                    
                                                                     th:value="${element.id} + '~' + ${element.name} + '~' + ${datasetfile.FileLabel+ ' - '+ element.name} " 
                                                                     class="list-group-item varlist" th:classappend="${iter.odd}? 'odd' : 'even'"
                                                                     title="Associa variabile">
+                                                                    <span class="prefix" th:text="${datasetfile.FileLabel+ ' - '}"></span><span th:text="${element.name}"></span>
                                                                 </li>
                                                             </th:block>
                                                         </ol>
@@ -508,7 +509,7 @@
                 <div class="modal-dialog modal-xl" role="document">
                     <form th:action="@{/ws/modificaparametro}" id="formModAssociaParam"
                           method="post">
-                        <input id="id_dataProcessing" type="hidden" name="dataProcessingId"
+                        <input id="id-dataProcessing-edit" type="hidden" name="dataProcessingId"
                                th:value="${dataProcessing.id}" /> <input id="valoreParamMod"
                                type="hidden" name="valoreParam" value="" /> <input
                                id="idStepRunMod" type="hidden" name="idStepRunMod" value="" /> <input
@@ -610,7 +611,7 @@
                         </div>
                         <div class="modal-body">
                             Eliminare l'associazione per la variabile
-                            <span id="nomestepRar"></span>
+                            <span id="namestepR"></span>
                             ?
                         </div>
                         <div class="modal-footer">

@@ -73,9 +73,9 @@ public class ContingencyService {
 			String matchingVariableB = metricMatchingVariable.getString("MatchingVariableB");
 			String method = metricMatchingVariable.getString("Method");
 			double thresould = metricMatchingVariable.getDouble("Threshold");
-			int window = metricMatchingVariable.getInt("Window");
+			
 			MetricMatchingVariable mm = new MetricMatchingVariable(matchingVariable, matchingVariableA,
-					matchingVariableB, method, thresould, window);
+					matchingVariableB, method, thresould);
 			metricMatchingVariableVector.add(mm);
 
 		}
@@ -109,10 +109,7 @@ public class ContingencyService {
 
 	}
 
-	/**
-	 * @param valuesI
-	 * @return
-	 */
+
 	public ArrayList<String> getNameMatchingVariables() {
 		// TODO Auto-generated method stub
 		ArrayList<String> ret = new ArrayList<>();
@@ -122,10 +119,7 @@ public class ContingencyService {
 		return ret;
 	}
 
-	/**
-	 * @param valuesI
-	 * @return
-	 */
+
 	public String getPattern(Map<String, String> valuesI) {
 		// TODO Auto-generated method stub
 		String pattern = "";
@@ -161,11 +155,7 @@ public class ContingencyService {
 		}
 		return pattern;
 	}
-
-	/**
-	 * @param valuesI
-	 * @return
-	 */
+	
 	public Map<String, Integer> getEmptyContengencyTable() {
 		// TODO Auto-generated method stub
 		Map<String, Integer> contengencyTable = new LinkedHashMap<String, Integer>();

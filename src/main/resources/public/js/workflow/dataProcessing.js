@@ -25,7 +25,7 @@ var _ctx = $("meta[name='ctx']").attr("content");
 var toggle = true;
 var associazioneVarRoleBean = [];
 var tmpVarSel = {};
-var tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
+var tabTemplate = "<li><a href='#{href}'><span class='prefix'>#{prefix}</span>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
 
 $(document).ready(function () {
 
@@ -641,7 +641,7 @@ function modificaParam() {
 }
 
 function mostraDialogEliminaAssociazione(idelab, idstepVar, nomestepvar) {
-    $("#nomeStepVar").text(nomestepvar);
+    $("#namestepR").text(nomestepvar);
     $("#idelab").val(idelab);
     $("#idstepVar").val(idstepVar);
     $("#modalCancellaAssociazione").modal("show");
@@ -716,20 +716,26 @@ $(function () {
     $('#check-vars-select-all').click(function() {
         var checked = $(this).prop('checked');
         
-        selectSelectableElement($("#selectable"), $("#selectable li:lt(3)"));
+        selectSelectableElement($("#selectable"), $("#selectable li"),checked);
+      });
+    
+    $('#check-prefix-dataset').click(function() {
+        var checked = $(this).prop('checked');
+        $(".prefix").toggle(checked);  
       });
 });
 
-function selectSelectableElement (selectableContainer, elementsToSelect)
+function selectSelectableElement (selectableContainer, elementsToSelect,checked)
 {
-    // add unselecting class to all elements in the styleboard canvas except the ones to select
-    $(".ui-selected", selectableContainer).not(elementsToSelect).removeClass("ui-selected").addClass("ui-unselecting");
-    
-    // add ui-selecting class to the elements to select
-    $(elementsToSelect).not(".ui-selected").addClass("ui-selecting");
-
-    // trigger the mouse stop event (this will select all .ui-selecting elements, and deselect all .ui-unselecting elements)
-    selectableContainer.data("selectable").stop(null);
+   if(checked){
+	   // add ui-selecting class to the elements to select
+	    $(elementsToSelect).removeClass("ui-unselecting").addClass("ui-selecting").addClass("ui-selected");
+  }
+   else{
+	 	   $(elementsToSelect).removeClass("ui-selected").removeClass("ui-selecting").addClass("ui-unselecting");
+  }
+   // trigger the mouse stop event (this will select all .ui-selecting elements, and deselect all .ui-unselecting elements)
+   selectableContainer.data("ui-selectable")._mouseStop(null);
 }
 
 
