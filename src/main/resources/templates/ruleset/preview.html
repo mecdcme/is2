@@ -29,7 +29,7 @@
         <script th:src="@{/js/ruleset/rulesetpreview.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
-            setMenuActive([[${session.sessionBean.businessFunction.id}]]);
+            setMenuActive([[${session.sessionBean.businessFunction.id}]], "rs");
             });
             var _new_role = [[#{rules.new.rule}]]
                     var _delete_msg = [[#{rule.delete.message}]]

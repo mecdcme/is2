@@ -80,13 +80,11 @@ $(function () {
 });
 
 //Set menu active
-function setMenuActive(id) {
-//    if (id === 0) { //home
-//        $("#home a").addClass("active");
-//    } else{
-//        $("#bf" + id + " a").addClass("active");
-//    }
-    
+function setMenuActive(id, target) {
+    if (id !== 0) { //home
+        $("#" + target + id).addClass("c-active");
+        $("#bf" + id).addClass("c-show");
+    }     
 }
 
 function format(n) {

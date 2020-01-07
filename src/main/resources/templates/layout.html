@@ -90,7 +90,6 @@
                             th:if="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}">
                             <li class="c-sidebar-nav-item">
                                 <a class="c-sidebar-nav-link c-sidebar-nav-deep-link" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}">
-                                    <i class="c-sidebar-nav-deep-icon cil-folder-open"></i>
                                     <span class="truncate" th:title=${session.sessionBean.name} th:text="${session.sessionBean.name}"></span>
                                 </a>
                             </li>
