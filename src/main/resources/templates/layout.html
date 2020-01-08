@@ -70,7 +70,7 @@
                     </li>
                     <li class="c-sidebar-nav-title">Service catalogue</li>
                     <li th:each="businessService, iter : ${session.businessServiceList}" th:id="'bs'+${businessService.id}">
-                        <a class ="c-sidebar-nav-link" th:href="@{'/sessione/displayService/'+${businessService.id}}">
+                        <a class ="c-sidebar-nav-link" th:href="@{'/service/'+${businessService.id}}">
                             <i class="c-sidebar-nav-icon icon-calculator"></i> <span th:title=${businessService.name} th:text="${businessService.name}"></span>
                         </a>
                     </li>

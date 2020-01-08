@@ -67,7 +67,7 @@
                                                 <i class="card-body-title-icon icon-calculator"></i><span th:text="${businessService.name}"></span>
                                             </div>
                                             <p th:text="${businessService.descr}"></p>
-                                            <a th:title="${businessService.name}" th:href="@{'/sessione/mostraSessioni/'+${businessService.id}}" style="color:white">
+                                            <a th:title="${businessService.name}" th:href="@{'/service/'+${businessService.id}}" style="color:white">
                                                 Go to <span th:text="${businessService.name}"></span> <i class="fa fa-arrow-right"></i>
                                             </a>
                                         </div>

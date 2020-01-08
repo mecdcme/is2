@@ -38,11 +38,14 @@ import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.workflow.domain.ViewDataType;
 import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.domain.BusinessService;
+import it.istat.is2.workflow.domain.StepInstance;
 import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.workflow.service.BusinessServiceService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
@@ -84,13 +87,24 @@ public class HomeController {
     @RequestMapping("/services")
     public String services(HttpSession session, Model model) {
         notificationService.removeAllMessages();
-        return "home_services";
+        return "service/list";
+    }
+    
+    @GetMapping(value = "/service/{idService}")
+    public String getService(HttpSession session, Model model, @PathVariable("idService") Integer idBusinessService) {
+        notificationService.removeAllMessages();
+        BusinessService businessService = businessServiceService.findBusinessServiceById(idBusinessService);
+        List<StepInstance> stepInstances = businessServiceService.findStepInstances(idBusinessService);
+        
+        model.addAttribute("businessService", businessService);
+        model.addAttribute("stepInstances", stepInstances);
+        return "service/home";
     }
     
     @RequestMapping("/functions")
     public String functions(HttpSession session, Model model) {
         notificationService.removeAllMessages();
-        return "home_functions";
+        return "function/list";
     }
 
     @RequestMapping("/team")
