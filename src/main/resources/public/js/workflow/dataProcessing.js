@@ -25,7 +25,8 @@ var _ctx = $("meta[name='ctx']").attr("content");
 var toggle = true;
 var associazioneVarRoleBean = [];
 var tmpVarSel = {};
-var tabTemplate = "<li><a href='#{href}'><span class='prefix'>#{prefix}</span>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
+var checkedPrefix = true;
+var tabTemplate = "<li><a href='#{href}'><span class='prefix' style='#{prefixStyle}'>#{prefixTab}</span>#{label} @ <span title='#{roleName}'>#{roleCode}</span></a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
 
 $(document).ready(function () {
 
@@ -188,6 +189,7 @@ function associaVar() {
     console.log("roleSelectedName", roleSelectedName);
     var roleSelectedId = $("#roleSelectedId").val();
     console.log("roleSelectedId", roleSelectedId);
+    var roleSelectedCode = $("#roleSelectedCode").val();
     var idElab = $("#dataProcessingId").val();
     var prefixDataset = $("#check-prefix-dataset").is(':checked');
     
@@ -202,8 +204,10 @@ function associaVar() {
         var idTab = obj['idVar'];
         console.log("idTab", idTab);
         var labelTab = obj['labelTab'];
-        console.log("labelTab", labelTab);
-        var li = $(tabTemplate.replace(/#\{href\}/g, "#" + idTab).replace(/#\{label\}/g, labelTab));
+        var prefixTab = obj['prefixTab'];
+        console.log("labelTab", labelTab); 
+        var prefixStyle =checkedPrefix?'':'display: none;';
+        var li = $(tabTemplate.replace(/#\{href\}/g, "#" + idTab).replace(/#\{label\}/g, labelTab).replace(/#\{prefixTab\}/g, prefixTab).replace(/#\{prefixStyle\}/g, prefixStyle).replace(/#\{roleCode\}/g, roleSelectedName).replace(/#\{roleName\}/g, roleSelectedName));
         console.log(li);
         tabs.find(".ui-tabs-nav").append(li);
         tabs.tabs("refresh");
@@ -404,11 +408,12 @@ function setSelectedVarMod(ordine, nome, id) {
     }
 }
 
-function setSelectedRole(nomeR, idR) {
+function setSelectedRole(nomeR, idR,code) {
     $(".rolelist").removeClass('active');
     $("#role_" + idR).addClass('active');
     $("#roleSelectedId").val(idR);
     $("#roleSelectedName").val(nomeR);
+    $("#roleSelectedCode").val(code);
     if ($('.ui-selected').length > 0) {
         $("#btn_dlg_assoc").removeClass('disabled');
         $("#btn_dlg_assoc").attr("disabled", false);
@@ -703,7 +708,7 @@ $(function () {
             $(".ui-selected", this).each(function () {
                 var currSel = $(this).attr("value");
                 tmpArr = currSel.split('~');
-                variablesArr.push({'idVar': tmpArr[0], 'name': tmpArr[1], 'labelTab': tmpArr[2]});
+                variablesArr.push({'idVar': tmpArr[0], 'name': tmpArr[1], 'labelTab': tmpArr[2], 'prefixTab': tmpArr[3]});
             });
             if ($("#roleSelectedId").val() != null && $("#roleSelectedId").val() !== '') {
                 $("#btn_dlg_assoc").removeClass('disabled');
@@ -720,8 +725,8 @@ $(function () {
       });
     
     $('#check-prefix-dataset').click(function() {
-        var checked = $(this).prop('checked');
-        $(".prefix").toggle(checked);  
+        checkedPrefix = $(this).prop('checked');
+        $(".prefix").toggle(checkedPrefix);  
       });
 });
 

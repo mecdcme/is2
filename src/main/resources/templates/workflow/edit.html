@@ -343,7 +343,7 @@
                                                                 <li th:each="element, y: ${datasetfile.columns}" 
                                                                     th:id="${'var_'+element.id}"
                                                                     
-                                                                    th:value="${element.id} + '~' + ${element.name} + '~' + ${datasetfile.FileLabel+ ' - '+ element.name} " 
+                                                                    th:value="${element.id} + '~' + ${element.name} + '~' + ${element.name}+ '~' + ${datasetfile.FileLabel+ ' - '}" 
                                                                     class="list-group-item varlist" th:classappend="${iter.odd}? 'odd' : 'even'"
                                                                     title="Associa variabile">
                                                                     <span class="prefix" th:text="${datasetfile.FileLabel+ ' - '}"></span><span th:text="${element.name}"></span>
@@ -356,13 +356,14 @@
                                                     <span class="bind-variables-head" th:text="#{process.dataset.roles.label}"> Ruoli </span>
                                                     <input type="hidden" id="roleSelectedId" />
                                                     <input type="hidden" id="roleSelectedName" />
+                                                     <input type="hidden" id="roleSelectedCode" />
                                                     <div class="bind-variables">
                                                         <ol id="div_lista_ruoli">
                                                             <li th:each="ruolo, y: ${listaRuoliInput}"
                                                                class="list-group-item rolelist"
                                                                th:id="${'role_'+ruolo.id}"
-                                                               th:attr="onclick='javascript:setSelectedRole(\'' + ${ruolo.name} + '\',' + ${ruolo.id} + ')'"
-                                                               title="Scelta ruolo"> <span th:text="${ruolo.name}"></span>
+                                                               th:attr="onclick='javascript:setSelectedRole(\'' + ${ruolo.name} + '\',' + ${ruolo.id} + ',\'' + ${ruolo.code} + '\')'"
+                                                               title="Scelta ruolo"> <span th:text="${ruolo.code+' - '+ruolo.name}"></span>
                                                             </li>                                
                                                         </ol>
                                                         <!--div class="list-group" id="div_lista_ruoli">
@@ -387,7 +388,7 @@
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-check form-check-inline bind-variables-footer">
-                                                <input class="form-check-input" type="checkbox"  id="check-prefix-dataset"  th:checked="${datasetfiles.size()>1}" value="prefix"/>
+                                                <input class="form-check-input" type="checkbox"  id="check-prefix-dataset"  checked="checked" value="prefix"/>
                                                 <label class="form-check-label" for="check-prefix-dataset" th:text="#{process.prefix.dataset}">Aggiungi prefisso dataset</label>
                                             </div>
                                         </div>

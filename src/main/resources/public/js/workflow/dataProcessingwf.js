@@ -79,6 +79,8 @@ $(document).ready(function () {
         $("#btn_filtri_cerca").hide();
         $("#no_filters_msg").text("Non ci sono filtri di ricerca impostati.");
     }
+ 
+    
 });
         
 function getParams() {
@@ -138,29 +140,37 @@ function scaricaWorkSet(e, param, idelab) {
     window.location = _ctx + '/rest/ws/download/workset/' + param + '/' + idelab+'/'+_roleGroup;
 }
 
+
+
 function viewParamsAlpacaTemplate(identifier) {
-     var nameParameter = $(identifier).data('name-workset');
-    $('#param-text-edit').text(nameParameter);
-    var jsontemplate = $(identifier).data('param-template');          
-   
-    var schema = "";
-    var options ="{\"type\" : \"object\"}";
-    if(jsontemplate != undefined){
-     schema = jsontemplate["schema"];
-     options = JSON.stringify(jsontemplate["options"]);
-    }
- 
-    if (!options)
-        options = "";
-    var data = $(identifier).data('value-param');
-    if (!data)
-        data = "";
-    
-    var dataContent = "{\"data\":" + JSON.stringify(data) + ",\"schema\":" + JSON.stringify(schema) + ",\"options\":" + options + ",\"view\":\"web-display\"}";
-   
-    var jsonObj = JSON.parse(dataContent);
-    console.log(dataContent);
-    $('#view-param').empty();
-    $('#view-param').alpaca(jsonObj);
+	var nameParameter = $(identifier).data('name-workset');
+	$('#param-text-edit').text(nameParameter);
+	var jsontemplate = $(identifier).data('param-template');
+	var data = $(identifier).data('value-param');
+	if (!data)
+		data = "";
+	var schema = "";
+	var options = "{\"type\" : \"object\"}";
+	if (jsontemplate != undefined) {
+		schema = jsontemplate["schema"];
+		options = JSON.stringify(jsontemplate["options"]);
+	} else {
+		schema = "{\"properties\":{ ";
+		Object.keys(data).forEach(function(key) {
+			schema += "\"" + key + "\": {\"title\":\"" + key + "\"},";
+		});
+		schema = schema.substring(0, schema.length - 1);
+		schema += "}}"
+		schema =JSON.parse(schema);
+	}
+	console.log(schema);
+	var dataContent = "{\"data\":" + JSON.stringify(data) + ",\"schema\":"
+			+ JSON.stringify(schema) + ",\"options\":" + options
+			+ ",\"view\":\"web-display-horizontal\"}";
+
+	var jsonObj = JSON.parse(dataContent);
+
+	$('#view-param').empty();
+	$('#view-param').alpaca(jsonObj);
 }
 
