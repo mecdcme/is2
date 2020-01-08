@@ -22,18 +22,20 @@
  * @version 1.0
  */
 package it.istat.is2.workflow.dao;
+
+import it.istat.is2.workflow.domain.BusinessProcess;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import it.istat.is2.workflow.domain.ProcessStep;
 
 @Repository
-public interface ProcessStepDao extends CrudRepository<ProcessStep,Long> {
+public interface ProcessStepDao extends CrudRepository<ProcessStep, Long> {
 
-	List<ProcessStep> findAll();
-	@SuppressWarnings("rawtypes")
-	List<ProcessStep> findByBusinessProcesses(@Param("idprocess")List businessProcess);
+    @Override
+    List<ProcessStep> findAll();
+
+    List<ProcessStep> findByBusinessProcessesIn(List<BusinessProcess> businessProcess);
 
 }

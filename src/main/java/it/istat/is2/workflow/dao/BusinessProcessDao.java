@@ -22,23 +22,27 @@
  * @version 1.0
  */
 package it.istat.is2.workflow.dao;
+
+import it.istat.is2.workflow.domain.BusinessFunction;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import it.istat.is2.workflow.domain.BusinessProcess;
 
 @Repository
-public interface BusinessProcessDao extends CrudRepository<BusinessProcess,Long> {
+public interface BusinessProcessDao extends CrudRepository<BusinessProcess, Long> {
 
-	@Query("SELECT bp FROM BusinessProcess bp WHERE bp.businessProcessParent IS NULL ORDER BY bp.order ASC ")
-	List<BusinessProcess> findAllProcesses();
-	@Query("SELECT bp FROM BusinessProcess bp WHERE bp.businessProcessParent IS NOT NULL ORDER BY bp.order ASC")
-	List<BusinessProcess> findAllSubProcesses();
-	List<BusinessProcess> findAll();
-	@SuppressWarnings("rawtypes")
-	List<BusinessProcess> findByBusinessFunctions( @Param("idfunction")List businessFunctions);
+    @Override
+    List<BusinessProcess> findAll();
+
+    @Query("SELECT bp FROM BusinessProcess bp WHERE bp.businessProcessParent IS NULL ORDER BY bp.order ASC ")
+    List<BusinessProcess> findAllProcesses();
+
+    @Query("SELECT bp FROM BusinessProcess bp WHERE bp.businessProcessParent IS NOT NULL ORDER BY bp.order ASC")
+    List<BusinessProcess> findAllSubProcesses();
+
+    List<BusinessProcess> findByBusinessFunctionsIn(List<BusinessFunction> businessFunctions);
 }

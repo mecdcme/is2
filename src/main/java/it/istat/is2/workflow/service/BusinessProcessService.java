@@ -42,7 +42,7 @@ public class BusinessProcessService {
     public List<BusinessProcess> findBProcessByIdFunction(Long idfunction) {
         List<BusinessFunction> businessFunctions = new ArrayList<>();
         businessFunctions.add(new BusinessFunction(idfunction));
-        return businessProcessDao.findByBusinessFunctions(businessFunctions);
+        return businessProcessDao.findByBusinessFunctionsIn(businessFunctions);
     }
     
     public BusinessProcess findBProcessById(long idprocess) {
@@ -56,7 +56,6 @@ public class BusinessProcessService {
         return businessProcessDao.findAllSubProcesses();
     }
 	public List<BusinessProcess> findAll() {
-		// TODO Auto-generated method stub
 		return businessProcessDao.findAll();
 	}
 }
