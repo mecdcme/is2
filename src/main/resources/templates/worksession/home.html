@@ -117,7 +117,7 @@
                                                 <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaElaborazione();" 
                                                    th:title="#{label.button.nuova.elaborazione}"> 
                                                     <i class="fa fa-plus-square-o"></i>
-                                                    <span th:text="#{label.button.nuovo.processo}">Nuovo processo</span>
+                                                    <span th:text="#{label.button.nuova.elaborazione}">Nuovo processo</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -126,7 +126,6 @@
                                                 <table class="table table-sm" th:if="${listaElaborazioni}" cellspacing="0"  style="width:100%">
                                                     <thead>
                                                         <tr th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
-                                                            <th><span th:text="#{listasessioni.codice}">codice</span></th>
                                                             <th><span th:text="#{listasessioni.name}">nome</span></th>
                                                             <th><span th:text="#{listasessioni.descr}">Descrizione</span></th>
                                                             <th><span th:text="#{listasessioni.processo}">Processo</span></th>
@@ -137,7 +136,6 @@
                                                     <tbody>
                                                         <tr th:each="elaborazione : ${listaElaborazioni}"
                                                             th:unless="${(listaElaborazioni == null) or (listaElaborazioni.size() == 0) }">
-                                                            <td th:id="${'elabid_'+ elaborazione.id}" th:text="${elaborazione.id}"></td>
                                                             <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.name}"></td>
                                                             <td th:id="${'elabdesc_'+ elaborazione.id}" th:text="${elaborazione.descr}"></td>
                                                             <td th:id="${'elabdata_'+ elaborazione.lastUpdate}" th:text="${elaborazione.businessProcess.name}"></td>

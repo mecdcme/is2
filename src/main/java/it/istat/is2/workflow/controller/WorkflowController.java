@@ -230,10 +230,10 @@ public class WorkflowController {
             Workset workset = (Workset) listaVars.get(0).getWorkset();
             workflowService.deleteWorkset(workset);
         } else {
-            // do nothing
+        	stepRuntimeservice.removeStepRuntimeById(idparametro);
         }
 
-        stepRuntimeservice.removeStepRuntimeById(idparametro);
+        
         notificationService.addInfoMessage("Il parametro è stato eliminato");
         ra.addFlashAttribute("showTabParam", true);
         return "redirect:/ws/editworkingset/" + dataProcessingId;
@@ -510,7 +510,7 @@ public class WorkflowController {
         notificationService.addInfoMessage("Parametro modificato");
 
         model.addAttribute("dataProcessing", dataProcessing);
-        ra.addFlashAttribute("showTabParam", "parametri");
+        ra.addFlashAttribute("showTabParam", true);
         return "redirect:/ws/editworkingset/" + dataProcessing.getId();
     }
 

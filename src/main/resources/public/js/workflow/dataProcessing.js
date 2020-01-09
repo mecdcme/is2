@@ -50,7 +50,11 @@ $(document).ready(function () {
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         paging: false,
-        ordering: false,
+        rowReorder: true,
+        columnDefs: [
+        	  { orderable: true, targets: [0,1,2] },
+              { orderable: false, targets: '_all' }
+        ],
         buttons: [{
                 className: 'btn btn-sm btn-block btn-outline-info',
                 text: '<i class="fa fa-plus"></i><span> '+_variable_btn+'</span>',

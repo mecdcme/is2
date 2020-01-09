@@ -159,7 +159,7 @@ a.ui-button, a:link.ui-button, a:visited.ui-button, .ui-button {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 500px;
+    max-width: 80%;
 }
 
 .bind-variables-head{
@@ -176,3 +176,5 @@ a.ui-button, a:link.ui-button, a:visited.ui-button, .ui-button {
 .bind-variables-footer{
     margin-top: 20px;
 }
+
+

@@ -140,6 +140,15 @@ function scaricaWorkSet(e, param, idelab) {
     window.location = _ctx + '/rest/ws/download/workset/' + param + '/' + idelab+'/'+_roleGroup;
 }
 
+function getDynamicSchema(data) {
+	var text = "{\"properties\":{ ";
+	Object.keys(data).forEach(function(key) {
+		text += "\"" + key + "\": {\"title\":\"" + key + "\"},";
+	});
+	text = text.substring(0, text.length - 1);
+	text += "}}";
+    return  JSON.parse(text);
+}
 
 
 function viewParamsAlpacaTemplate(identifier) {
@@ -155,13 +164,7 @@ function viewParamsAlpacaTemplate(identifier) {
 		schema = jsontemplate["schema"];
 		options = JSON.stringify(jsontemplate["options"]);
 	} else {
-		schema = "{\"properties\":{ ";
-		Object.keys(data).forEach(function(key) {
-			schema += "\"" + key + "\": {\"title\":\"" + key + "\"},";
-		});
-		schema = schema.substring(0, schema.length - 1);
-		schema += "}}"
-		schema =JSON.parse(schema);
+		schema=getDynamicSchema(data);
 	}
 	console.log(schema);
 	var dataContent = "{\"data\":" + JSON.stringify(data) + ",\"schema\":"
