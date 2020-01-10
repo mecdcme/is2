@@ -8,16 +8,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersInvalidException;
-import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.NoSuchJobException;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
@@ -43,13 +40,12 @@ public class WorkFlowBatchController {
     JobLauncher jobLauncher;
     @Autowired
     private NotificationService notificationService;
-
+    @Autowired
+    private MessageSource messages;
     @Autowired
     Job doBusinessProc;
-
     @Autowired
     LogService logService;
-
     @Autowired
     WorkFlowBatchService workFlowBatchService;
 
@@ -60,7 +56,7 @@ public class WorkFlowBatchController {
     JobRepository jobRepository;
 
     @RequestMapping(value = "/batch/{idElaborazione}/{idBProc}", method = RequestMethod.GET)
-    public List<NotificationMessage> doBatch(HttpSession session, Model model, @AuthenticationPrincipal User user,
+    public ResponseEntity<?> doBatch(HttpSession session, Model model, @AuthenticationPrincipal User user,
             @PathVariable("idElaborazione") Long idElaborazione, @PathVariable("idBProc") Long idBProc)
             throws NoSuchJobException {
     	notificationService.removeAllMessages();
@@ -68,11 +64,12 @@ public class WorkFlowBatchController {
                 .addLong("idBProc", idBProc).addLong("time", System.currentTimeMillis()).toJobParameters();
         try {
             jobLauncher.run(doBusinessProc, jobParameters);
+            notificationService.addInfoMessage(messages.getMessage("generic.process.start", null, LocaleContextHolder.getLocale()));
         } catch (Exception e) {
             logService.save(e.getMessage());
         }
         
-        return notificationService.getNotificationMessages();
+        return  ResponseEntity.ok(notificationService.getNotificationMessages());
     }
 
     @GetMapping("/batch/logs")

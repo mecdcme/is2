@@ -39,7 +39,7 @@
             for (i = 0; i < _paramList.length; i++) {
                 _paramTemplateMap[_paramList[i].parameter.name] = _paramList[i].parameter.jsonTemplate;
             }
-        //    var matchedVariables = [[${matchedVariables}]];
+            var matchedVariables = [[${matchedVariables}]];
             var _variable_btn = [[#{btn.title.variable}]];
             $(document).ready(function () {
                 setMenuActive([[${session.sessionBean.businessFunction.id}]], "pr");
@@ -347,8 +347,8 @@
                                                                     class="list-group-item varlist" th:classappend="${iter.odd}? 'odd' : 'even'"
                                                                     title="Associa variabile">
                                                                     <span class="prefix" th:text="${datasetfile.FileLabel+ ' - '}"></span><span th:text="${element.name}"></span>
-                                                                    <span th:if="${matchedVariables.get(element.id)}"  th:title="${'Roles: '+matchedVariables.get(element.id)}">&nbsp;&nbsp;
-                                                                        <span class="badge badge-light badge-pill" style="position: static;"th:text="${matchedVariables.get(element.id).size()}">9</span>
+                                                                    <span th:if="${matchedVariablesMap.get(element.id)}"  th:title="${'Roles: '+matchedVariablesMap.get(element.id)}">&nbsp;&nbsp;
+                                                                        <span class="badge badge-light badge-pill" style="position: static;"th:text="${matchedVariablesMap.get(element.id).size()}">1</span>
                                                                      </span>
                                                                 </li>
                                                             </th:block>

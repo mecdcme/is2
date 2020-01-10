@@ -24,7 +24,6 @@
 package it.istat.is2.workflow.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -42,8 +41,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.app.bean.MappingVarsFormBean;
 import it.istat.is2.app.bean.AssociazioneVarRoleBean;
+import it.istat.is2.app.bean.MappingVarsFormBean;
 import it.istat.is2.app.bean.Ruolo;
 import it.istat.is2.app.bean.Variable;
 import it.istat.is2.app.dao.SqlGenericDao;
@@ -179,7 +178,7 @@ public class WorkflowService {
 			Integer groupRole) {
 		Map<String, List<String>> ret = new LinkedHashMap<>();
 		DataProcessing el = findDataProcessing(idDataProcessing);
-		AppRole groupAppRole = new AppRole(groupRole);
+		AppRole groupAppRole =appRoleDao.findById(groupRole).get();
 		for (Iterator<?> iterator = el.getStepRuntimes().iterator(); iterator.hasNext();) {
 			StepRuntime stepRuntime = (StepRuntime) iterator.next();
 			if (groupAppRole.equals(stepRuntime.getRoleGroup())) {
@@ -632,6 +631,12 @@ public class WorkflowService {
 		workset.setStepRuntimes(listaStepV);
 		stepRuntime.setWorkset(workset);
 		stepRuntimeDao.save(stepRuntime);
+	}
+
+	public String getAppRoleNameById(Integer groupRole) {
+		// TODO Auto-generated method stub
+		AppRole role= appRoleDao.findById(groupRole).get();
+		return role.getName();
 	}
 
 }
