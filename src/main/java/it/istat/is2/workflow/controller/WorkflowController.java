@@ -250,7 +250,7 @@ public class WorkflowController {
         SessionBean elaSession = new SessionBean(dataProcessing.getId(), dataProcessing.getName());
         session.setAttribute(IS2Const.SESSION_DATAPROCESSING, elaSession);
 
-        List<String> matchedVariables = new ArrayList<>();
+        Map<Long, List<String>> matchedVariables = new  HashMap<>();
 
         List<DatasetFile> datasetfiles = datasetService
                 .findDatasetFilesByIdWorkSession(dataProcessing.getWorkSession().getId());
@@ -266,7 +266,14 @@ public class WorkflowController {
                 new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
         if (stepRList != null && stepRList.size() > 0) {
             for (StepRuntime stepRuntime : stepRList) {
-                matchedVariables.add(stepRuntime.getWorkset().getName());
+            	Long idDatasetCol=stepRuntime.getWorkset().getDatasetColumnId();
+            	if(idDatasetCol!=null) {
+            	String nameRole=stepRuntime.getAppRole().getName();
+            	List<String> roles=matchedVariables.get(idDatasetCol);
+            	if(roles==null) roles=new ArrayList<String>();
+            	roles.add(nameRole);
+                matchedVariables.put(idDatasetCol,roles);
+            	}
             }
         }
 

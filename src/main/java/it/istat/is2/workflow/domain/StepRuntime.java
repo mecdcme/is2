@@ -81,7 +81,7 @@ public class StepRuntime implements Serializable {
     }
 
     public StepRuntime(Integer id, AppRole appRole, DataProcessing dataProcessing,  TypeIO typeIO, Short order,
-            Long idw, String nomeW, Integer valoriSizeW,String paramValue) {
+            Long idw,   Long idDsCol, String nomeW, Integer valoriSizeW,String paramValue) {
         super();
         this.id = id;
         this.appRole = appRole;
@@ -97,6 +97,7 @@ public class StepRuntime implements Serializable {
         ws.setContentSize(valoriSizeW);
         ws.setContents(new ArrayList<>());
         ws.setParamValue(paramValue);
+        ws.setDatasetColumnId(idDsCol);
         this.workset =ws;
         
     }

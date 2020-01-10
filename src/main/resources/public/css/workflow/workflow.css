@@ -177,4 +177,11 @@ a.ui-button, a:link.ui-button, a:visited.ui-button, .ui-button {
     margin-top: 20px;
 }
 
+.td-multi-step{
+	border-left: 1px solid #d8dbe0;
+	border-right: 1px solid #d8dbe0;	
+}
 
+#processiList > tbody > tr:last-child{
+	border-bottom: 1px solid #d8dbe0;
+}

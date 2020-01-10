@@ -27,6 +27,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import it.istat.is2.app.domain.converter.ListToStringConverter;
+import it.istat.is2.dataset.domain.DatasetColumn;
 import lombok.Data;
 
 import java.util.List;
@@ -63,6 +64,9 @@ public class Workset implements Serializable {
 
     @OneToMany(mappedBy = "workset",cascade = CascadeType.REMOVE)
     private List<StepRuntime> stepRuntimes;
+    
+    @Column(name = "DATASET_COLUMN")
+    private Long datasetColumnId;
 
     public String getValoriStr() {
         String ret = "";

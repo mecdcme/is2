@@ -90,6 +90,7 @@ INSERT INTO `is2_business_function` (`ID`, `NAME`, `DESCR`, `LABEL`, `ACTIVE`)
 		(2,'Data Editing','Data editing is the process of reviewing the data for consistency, detection of errors and outliers and correction of errors, in order to improve the quality, accuracy and adequacy of the data and make it suitable for the purpose for which it was collected.','EDIT',1),
 		(3,'Data Validation','Data validation is the process of ensuring data have undergone data cleansing to ensure they have data quality, that is, that they are both correct and useful. It uses routines, often called \"validation rules\", that check for correctness, meaningfulness, and security of data that are input to the system.','VALIDATE',1);
 
+
 -- -----------------------------------------------------
 -- BUSINESS_PROCESS
 -- -----------------------------------------------------
@@ -102,6 +103,11 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `O
         (70,'Contingency Table','Calculate contingency table','CrossTable',1,1),
         (71,'Fellegi Sunter','Fellegi Sunter algorithm','FellegiSunter',1,2),
         (72,'Matching Table','Matching records','MatchingTable',1,3);
+
+-- add multi-step process
+INSERT INTO `is2`.`is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER`) VALUES ('5', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS', '3');
+INSERT INTO `is2`.`is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER`, `PARENT`) VALUES ('6', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS1', '4', '5');
+
 
 -- -----------------------------------------------------
 -- CATALOGUE OF BUSINESS SERVICES
@@ -132,6 +138,9 @@ INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`)
 -- -----------------------------------------------------
 INSERT INTO `is2_link_function_process` (`BUSINESS_FUNCTION_ID`, `BUSINESS_PROCESS_ID`)
 	VALUES (1,1),(1,2),(3,3);
+    
+-- add multi-step process
+INSERT INTO `is2`.`is2_link_function_process` (`BUSINESS_FUNCTION_ID`, `BUSINESS_PROCESS_ID`) VALUES ('1', '5');
 
 -- -----------------------------------------------------
 -- MANY TO MANY RELATION -> BUSINESS_PROCESS - PROCESS_STEP

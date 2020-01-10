@@ -51,11 +51,11 @@ public interface StepRuntimeDao extends CrudRepository<StepRuntime, Integer> {
 	@Query("SELECT sw.name, st from StepRuntime st, Workset sw where st.workset.id =sw.id and st.dataProcessing=:elab ORDER BY st.orderCode ASC")
 	Map<String, StepRuntime> findByDataProcessingMap(@Param("elab") Long dataProcessing);
 
-	@Query("SELECT new it.istat.is2.workflow.domain.StepRuntime(st.id, st.appRole, st.dataProcessing,st.typeIO,st.orderCode,  st.workset.id, st.workset.name,st.workset.contentSize,st.workset.paramValue) from StepRuntime st where st.dataProcessing=:elab and (:dataType IS NULL OR st.workset.dataType=:dataType) ORDER BY st.orderCode ASC")
+	@Query("SELECT new it.istat.is2.workflow.domain.StepRuntime(st.id, st.appRole, st.dataProcessing,st.typeIO,st.orderCode, st.workset.id, st.workset.datasetColumnId, st.workset.name,st.workset.contentSize,st.workset.paramValue) from StepRuntime st where st.dataProcessing=:elab and (:dataType IS NULL OR st.workset.dataType=:dataType) ORDER BY st.orderCode ASC")
 	List<StepRuntime> findByDataProcessingNoValues(@Param("elab") DataProcessing dataProcessing,
 			@Param("dataType") DataTypeCls dataTypeCls);
 	
-	@Query("SELECT new it.istat.is2.workflow.domain.StepRuntime(st.id, st.appRole, st.dataProcessing,st.typeIO,st.orderCode,   st.workset.id, st.workset.name,st.workset.contentSize,st.workset.paramValue) from StepRuntime st where st.dataProcessing=:elab and (:dataType IS NULL OR st.workset.dataType=:dataType) and st.typeIO=:typeIO and (:roleGroup IS NULL OR st.roleGroup=:roleGroup) ORDER BY st.orderCode ASC")
+	@Query("SELECT new it.istat.is2.workflow.domain.StepRuntime(st.id, st.appRole, st.dataProcessing,st.typeIO,st.orderCode, st.workset.id, st.workset.datasetColumnId, st.workset.name,st.workset.contentSize,st.workset.paramValue) from StepRuntime st where st.dataProcessing=:elab and (:dataType IS NULL OR st.workset.dataType=:dataType) and st.typeIO=:typeIO and (:roleGroup IS NULL OR st.roleGroup=:roleGroup) ORDER BY st.orderCode ASC")
 	List<StepRuntime> findByDataProcessingStatusNoValues(@Param("elab") DataProcessing dataProcessing,
 			@Param("dataType") DataTypeCls dataType, @Param("typeIO") TypeIO typeIO,@Param("roleGroup") AppRole appRole);
 	
