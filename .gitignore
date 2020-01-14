@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 /target/
 /bin/
 /logs/
-=======
-/target/
->>>>>>> branch 'master' of https://github.com/mecdcme/is2
+
+# Credentials
+/terraform/i3s-dev-*.json
