@@ -59,10 +59,12 @@ public class ListToStringConverter implements AttributeConverter<List<String>, S
 	public List<String> convertToEntityAttribute(String data) {
 		List<String> listValue = new ArrayList<String>();
 		try {
-
-			JSONArray jsonArray = new JSONArray(data);
-			for (int i = 0; i < jsonArray.length(); i++) {
-		  	listValue.add(jsonArray.get(i).toString());
+			if (data!=null)
+			{
+				JSONArray jsonArray = new JSONArray(data);
+				for (int i = 0; i < jsonArray.length(); i++) {
+			  	listValue.add(jsonArray.get(i).toString());
+				}
 			}
 		} catch (JSONException e) {
 
