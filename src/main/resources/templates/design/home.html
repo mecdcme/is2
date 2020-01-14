@@ -1,0 +1,222 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head th:include="layout :: site-head" th:remove="tag" />
+        <script th:inline="javascript">
+            $(document).ready(function () {
+            setMenuActive("elaborazione")
+            });
+        </script>
+        <link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
+    </head>
+    <body class="c-app">
+        <div th:replace="layout :: site-aside"></div>
+        <div th:replace="layout :: site-modals"></div>
+        <!-- Body -->
+        <div class="c-wrapper">
+            <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+                <div th:include="layout :: site-header" th:remove="tag"></div>
+                <div class="c-subheader justify-content-between px-3">
+                    <!-- Breadcrumb-->
+                    <ol class="breadcrumb border-0 m-0">
+                        <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                        <li class="breadcrumb-item">
+                            <span>Process design</span>
+                        </li>
+                    </ol>
+                    <!-- Right navigation menu -->
+                    <div class="c-header-nav d-md-down-none mfe-2">
+                        <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{'/'}">
+                            <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="c-body">
+                <main class="c-main">
+                    <div class="container-fluid">
+                        <div class="row justify-start">
+                            <div class="col-lg-4">
+                                <ul id="myUL">
+                                    <li><span class="caret">Albero delle Funzioni</span>
+                                        <ul class="nested" th:each="alb: ${albero}">
+                                            <li>
+                                                <span class="caret" th:text="${alb.getData()}"></span>
+                                                <ul class="nested" th:each="foglio: ${alb.getChildren()}">
+                                                    <li th:text="${foglio.getData()}"></li>
+                                                    <ul class="nested" th:each="foglio2: ${foglio.getChildren()}">
+                                                        <li th:text="${foglio2.getData()}"></li>
+                                                        <ul class="nested" th:each="foglio3: ${foglio2.getChildren()}">
+                                                            <li th:text="${foglio3.getData()}"></li>
+                                                            <ul class="nested" th:each="foglio4: ${foglio3.getChildren()}">
+                                                                <li th:text="${foglio4.getData()}"></li>
+                                                            </ul>
+                                                        </ul>
+                                                    </ul>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="row">
+                                    <div>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <span th:text="#{Layout.Functions}"></span>
+                                            </div>
+                                            <div class="card-body">
+                                                <table id="functionsTabList"
+                                                       class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th><span>ID</span></th>
+                                                            <th><span>NOME</span></th>
+                                                            <th><span>DESCRIZIONE</span></th>
+                                                            <th><span>ETICHETTA</span></th>
+                                                            <th style="width: 1%"></th>
+                                                            <th style="width: 1%"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr th:each="stepP: ${listaFunzioni}">
+                                                            <td th:text="${stepP.id}"></td>
+                                                            <td th:text="${stepP.name}"></td>
+                                                            <td th:text="${stepP.descr}"></td>
+                                                            <td th:text="${stepP.label}"></td>
+                                                            <td><i class="fa fa-pencil"></i></td>
+                                                            <td><i class="fa fa-trash-o"></i></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <span th:text="#{Layout.Processes}"></span>
+                                            </div>
+                                            <div class="card-body">
+                                                <table id="processesTabList" class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th><span>ID</span></th>
+                                                            <th><span>NOME</span></th>
+                                                            <th><span>DESCRIZIONE</span></th>
+                                                            <th><span>ETICHETTA</span></th>
+                                                            <th style="width: 1%"></th>
+                                                            <th style="width: 1%"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr th:each="stepP: ${listaAllBp}">
+                                                            <td th:text="${stepP.id}"></td>
+                                                            <td th:text="${stepP.name}"></td>
+                                                            <td th:text="${stepP.descr}"></td>
+                                                            <td th:text="${stepP.label}"></td>
+                                                            <td><i class="fa fa-pencil"></i></td>
+                                                            <td><i class="fa fa-trash-o"></i></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <span th:text="#{Layout.Subprocesses}"></span>
+                                                </div>
+                                                <div class="card-body">
+                                                    <table id="processesTabList"
+                                                           class="table table-striped table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th><span>ID</span></th>
+                                                                <th><span>NOME</span></th>
+                                                                <th><span>DESCRIZIONE</span></th>
+                                                                <th><span>ETICHETTA</span></th>
+                                                                <th style="width: 1%"></th>
+                                                                <th style="width: 1%"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr th:each="stepP: ${listaAllSubBp}">
+                                                                <td th:text="${stepP.id}"></td>
+                                                                <td th:text="${stepP.name}"></td>
+                                                                <td th:text="${stepP.descr}"></td>
+                                                                <td th:text="${stepP.label}"></td>
+                                                                <td><i class="fa fa-pencil"></i></td>
+                                                                <td><i class="fa fa-trash-o"></i></td>                                                            
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <span th:text="#{Layout.Steps}"></span>
+                                                </div>
+                                                <div class="card-body">
+                                                    <table id="subProcessesTabList" class="table table-striped table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th><span>ID</span></th>
+                                                                <th><span>NOME</span></th>
+                                                                <th><span>DESCRIZIONE</span></th>
+                                                                <th style="width: 1%"></th>
+                                                                <th style="width: 1%"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr th:each="stepP: ${listaBusinessStep}">
+                                                                <td th:text="${stepP.id}"></td>
+                                                                <td th:text="${stepP.name}"></td>
+                                                                <td th:text="${stepP.descr}"></td>
+                                                                <td><i class="fa fa-pencil"></i></td>
+                                                                <td><i class="fa fa-trash-o"></i></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+            <footer th:replace="layout :: site-footer"></footer>     
+        </div>
+    </body>
+</html>

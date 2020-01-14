@@ -254,6 +254,7 @@ CREATE TABLE `is2_link_function_view_data_type` (
 CREATE TABLE `is2_workset` (
   `ID` 				     INT NOT NULL AUTO_INCREMENT,
   `NAME` 			     VARCHAR(100) NULL,
+  `DATASET_COLUMN`	    INT NULL,
   `ORDER_CODE` 			 INT NULL,
   `CONTENT` 			 JSON NULL,
   `CONTENT_SIZE` 		 INT NULL,

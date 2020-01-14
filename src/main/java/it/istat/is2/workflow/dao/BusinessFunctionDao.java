@@ -32,6 +32,8 @@ import it.istat.is2.workflow.domain.BusinessFunction;
 @Repository
 public interface BusinessFunctionDao extends CrudRepository<BusinessFunction,Long> {
 
+        @Override
 	List<BusinessFunction> findAll();
+        @Override
 	Optional<BusinessFunction> findById(Long idfunction);
 }

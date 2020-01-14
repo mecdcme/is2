@@ -44,7 +44,7 @@ public class BusinessStepService {
     public List<ProcessStep> findBStepByIdProcess(Long idprocess) {
         List<BusinessProcess> businessProcesses = new ArrayList<>();
         businessProcesses.add(new BusinessProcess(idprocess));
-        return processStepDao.findByBusinessProcesses(businessProcesses);
+        return processStepDao.findByBusinessProcessesIn(businessProcesses);
     }
 
     public Optional<ProcessStep> findBusinessStep(Long idbstep) {

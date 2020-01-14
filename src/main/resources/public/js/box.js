@@ -36,7 +36,7 @@ toastr.options = {
   "onclick": null,
   "showDuration": "200",
   "hideDuration": "1000",
-  "timeOut": "3000",
+  "timeOut": "2000",
   "extendedTimeOut": "1000",
   "showEasing": "swing",
   "hideEasing": "linear",
@@ -80,13 +80,11 @@ $(function () {
 });
 
 //Set menu active
-function setMenuActive(id) {
-//    if (id === 0) { //home
-//        $("#home a").addClass("active");
-//    } else{
-//        $("#bf" + id + " a").addClass("active");
-//    }
-    
+function setMenuActive(id, target) {
+    if (id !== 0) { //home
+        $("#" + target + id).addClass("c-active");
+        $("#bf" + id).addClass("c-show");
+    }     
 }
 
 function format(n) {

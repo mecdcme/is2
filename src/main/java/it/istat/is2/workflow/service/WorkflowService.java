@@ -24,7 +24,6 @@
 package it.istat.is2.workflow.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -42,8 +41,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.app.bean.MappingVarsFormBean;
 import it.istat.is2.app.bean.AssociazioneVarRoleBean;
+import it.istat.is2.app.bean.MappingVarsFormBean;
 import it.istat.is2.app.bean.Ruolo;
 import it.istat.is2.app.bean.Variable;
 import it.istat.is2.app.dao.SqlGenericDao;
@@ -78,7 +77,7 @@ import it.istat.is2.worksession.domain.WorkSession;
 @Service
 public class WorkflowService {
 
-	private final String PATTERN_NAME="\\.|\\s"; 
+	private final String PATTERN_NAME = "\\.|\\s";
 	@Autowired
 	private WorkSessionDao workSessionDao;
 	@Autowired
@@ -143,25 +142,26 @@ public class WorkflowService {
 
 		return obj.toString();
 	}
-	
+
 	public String loadWorkSetValoriByDataProcessing(Long idDataProcessing, Integer typeIO, Integer groupRole,
 			Integer length, Integer start, Integer draw, HashMap<String, String> paramsFilter) throws JSONException {
 
-		int offset=2;
-		List<Object[]> resulFieldstList = sqlGenericDao.findWorsetIdColAndName(idDataProcessing,typeIO, groupRole);
-		List<Object[]> dataList = sqlGenericDao.findWorKSetDataViewParamsbyQuery(resulFieldstList, idDataProcessing, typeIO, groupRole, start, length, paramsFilter, null, null);
+		int offset = 2;
+		List<Object[]> resulFieldstList = sqlGenericDao.findWorsetIdColAndName(idDataProcessing, typeIO, groupRole);
+		List<Object[]> dataList = sqlGenericDao.findWorKSetDataViewParamsbyQuery(resulFieldstList, idDataProcessing,
+				typeIO, groupRole, start, length, paramsFilter, null, null);
 		// start, start + length, query_filter);
 		Integer numRighe = 0;
-		 
+
 		JSONObject obj = new JSONObject();
 		JSONArray data = new JSONArray();
-	 	if (dataList.size() > 0) {
-			String rows=dataList.get(0)[resulFieldstList.size()+offset].toString();
+		if (dataList.size() > 0) {
+			String rows = dataList.get(0)[resulFieldstList.size() + offset].toString();
 			numRighe = Integer.valueOf(rows);
 			for (Object[] row : dataList) {
 				JSONObject obji = new JSONObject();
 				for (int j = 0; j < resulFieldstList.size(); j++) {
-					obji.put((String) resulFieldstList.get(j)[1], row[j+offset]);
+					obji.put((String) resulFieldstList.get(j)[1], row[j + offset]);
 				}
 				data.put(obji);
 			}
@@ -170,22 +170,15 @@ public class WorkflowService {
 		obj.put("draw", draw);
 		obj.put("recordsTotal", numRighe);
 		obj.put("recordsFiltered", numRighe);
-		
-		
-		
-		
-		
-		
-		
+
 		return obj.toString();
 	}
 
- 
 	public Map<String, List<String>> loadWorkSetValoriByDataProcessingRoleGroupMap(Long idDataProcessing,
 			Integer groupRole) {
 		Map<String, List<String>> ret = new LinkedHashMap<>();
 		DataProcessing el = findDataProcessing(idDataProcessing);
-		AppRole groupAppRole = new AppRole(groupRole);
+		AppRole groupAppRole =appRoleDao.findById(groupRole).get();
 		for (Iterator<?> iterator = el.getStepRuntimes().iterator(); iterator.hasNext();) {
 			StepRuntime stepRuntime = (StepRuntime) iterator.next();
 			if (groupAppRole.equals(stepRuntime.getRoleGroup())) {
@@ -196,7 +189,6 @@ public class WorkflowService {
 		return ret;
 	}
 
-	 
 	public List<StepRuntime> getStepRuntimes(Long idDataProcessing) {
 		return stepRuntimeDao.findByDataProcessing(new DataProcessing(idDataProcessing));
 	}
@@ -225,10 +217,11 @@ public class WorkflowService {
 			if (workset == null) {
 				workset = new Workset();
 				DatasetColumn dscolumn = datasetColumnDao.findById((Long.parseLong(form.getVariable()[i]))).get();
-				workset.setName(
-						dscolumn.getDatasetFile().getFileLabel() + "_" + dscolumn.getName().replaceAll(PATTERN_NAME, "_"));
+				workset.setName(dscolumn.getDatasetFile().getFileLabel() + "_"
+						+ dscolumn.getName().replaceAll(PATTERN_NAME, "_"));
 				workset.setContents(dscolumn.getContents());
 				workset.setContentSize(workset.getContents().size());
+				workset.setDatasetColumnId(dscolumn.getId());
 			}
 
 			stepRuntime.setAppRole(sxruolo);
@@ -272,6 +265,7 @@ public class WorkflowService {
 			workset.setName(dscolumn.getName().replaceAll(PATTERN_NAME, "_"));
 			workset.setContents(dscolumn.getContents());
 			workset.setContentSize(workset.getContents().size());
+			workset.setDatasetColumnId(dscolumn.getId());
 		}
 
 		workset.setName(nomeVar);
@@ -338,7 +332,7 @@ public class WorkflowService {
 			stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
 			stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_INPUT));
 			String value = form.getValue()[i];
-		
+
 			workset.setParamValue(value);
 			workset.setContentSize(1);
 			workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
@@ -486,30 +480,29 @@ public class WorkflowService {
 			stepRuntimesRoles.add(stepRuntime.getAppRole());
 		}
 
-		for (Iterator iteratorb = dataProcessing.getBusinessProcess().getBusinessSubProcesses().iterator(); iteratorb
-				.hasNext();) {
+		for (Iterator iteratorb = dataProcessing.getBusinessProcess().getBusinessSubProcesses().iterator(); iteratorb.hasNext();) {
 			BusinessProcess suBusinessProcess = (BusinessProcess) iteratorb.next();
 
 			Set<String> roleNameSet = new HashSet<String>();
 			List<StepInstance> instanceBF = findAllStepInstanceBySubBProcess(suBusinessProcess);
-
+			boolean firstStepInInstance = true;
 			for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
 				StepInstance stepInstance = (StepInstance) iterator.next();
 
 				for (Iterator<StepInstanceSignature> iteratorAppRoles = stepInstance.getStepInstanceSignatures()
 						.iterator(); iteratorAppRoles.hasNext();) {
-					{
-						StepInstanceSignature stepInstanceSignature = iteratorAppRoles.next();
-						if (stepInstanceSignature.getTypeIO().equals(new TypeIO(IS2Const.TYPE_IO_INPUT))
-								&& stepInstanceSignature.getIsRequerid()) {
-							AppRole ar = stepInstanceSignature.getAppRole();
-							if (ar.getDataType().equals(dataType) && !stepRuntimesRoles.contains(ar)) {
-								roleNameSet.add(ar.getName());
-							}
+
+					StepInstanceSignature stepInstanceSignature = iteratorAppRoles.next();
+					if (stepInstanceSignature.getTypeIO().equals(new TypeIO(IS2Const.TYPE_IO_INPUT))
+							&& stepInstanceSignature.getIsRequerid() && firstStepInInstance) {
+						AppRole ar = stepInstanceSignature.getAppRole();
+						if (ar.getDataType().equals(dataType) && !stepRuntimesRoles.contains(ar)) {
+							roleNameSet.add(ar.getName());
 						}
 					}
 				}
-
+				
+				firstStepInInstance = false;
 			}
 			ret.put(suBusinessProcess.getId(), new ArrayList<>(roleNameSet));
 		}
@@ -558,6 +551,7 @@ public class WorkflowService {
 					workset.setName(nameWorkset);
 					workset.setContents(dscolumn.getContents());
 					workset.setContentSize(workset.getContents().size());
+					workset.setDatasetColumnId(dscolumn.getId());
 				}
 				stepRuntime.setAppRole(appRole);
 				stepRuntime.setOrderCode(appRole.getOrder());
@@ -575,10 +569,9 @@ public class WorkflowService {
 	@Transactional
 	public void cleanAllWorkset(Long idDataProcessing, Short flagIO) {
 
-	
 		List<StepRuntime> list = getStepRuntimes(idDataProcessing);
 		for (StepRuntime step : list) {
-			if (flagIO.equals( new Short("0")) || step.getTypeIO().equals(new TypeIO(flagIO))) {
+			if (flagIO.equals( Short.valueOf("0")) || step.getTypeIO().equals(new TypeIO(flagIO))) {
 				stepRuntimeDao.deleteById(step.getId());
 			}
 		}
@@ -586,9 +579,9 @@ public class WorkflowService {
 		List<Long> jobInstanceIds = workFlowBatchDao.findJobInstanceIdByElabId(idDataProcessing);
 		if (jobInstanceIds != null && jobInstanceIds.size() > 0) {
 			for (int i = 0; i < jobInstanceIds.size(); i++) {
-			 
-			//	workFlowBatchDao.deleteBatchJobExecutionContextById(jobInstanceIds.get(i));
-			//	workFlowBatchDao.deleteBatchJobExecutionById(jobInstanceIds.get(i));
+
+				// workFlowBatchDao.deleteBatchJobExecutionContextById(jobInstanceIds.get(i));
+				// workFlowBatchDao.deleteBatchJobExecutionById(jobInstanceIds.get(i));
 				workFlowBatchDao.deleteJobInstanceById(jobInstanceIds.get(i));
 			}
 		}
@@ -638,6 +631,12 @@ public class WorkflowService {
 		workset.setStepRuntimes(listaStepV);
 		stepRuntime.setWorkset(workset);
 		stepRuntimeDao.save(stepRuntime);
+	}
+
+	public String getAppRoleNameById(Integer groupRole) {
+		// TODO Auto-generated method stub
+		AppRole role= appRoleDao.findById(groupRole).get();
+		return role.getName();
 	}
 
 }

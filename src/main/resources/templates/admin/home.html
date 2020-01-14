@@ -25,34 +25,60 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
-        
-       
+        <script th:inline="javascript">
+            $(document).ready(function () {
+            setMenuActive(0); //Set home active
+            });
+        </script>
     </head>
-    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-        <header th:replace="layout :: site-header"></header>
+    <body class="c-app">
+        <div th:replace="layout :: site-aside"></div>
+        <div th:replace="layout :: site-modals"></div>
         <!-- Body -->
-        <div class="app-body">
-            <aside th:replace="layout :: site-modals"></aside>
-            <aside th:replace="layout :: site-aside"></aside>
-            <!-- Main container -->
-            <main class="main">
-                <!-- Breadcrumb-->
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a th:href="@{/}">Home</a>
-                    </li>
-                    
-                </ol>
-                <div class="container-fluid">
-                    <div class="animated fadeIn">
-                           <a th:href="@{/startr}">Start R</a>
+        <div class="c-wrapper">
+            <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+                <div th:include="layout :: site-header" th:remove="tag"></div>
+                <div class="c-subheader justify-content-between px-3">
+                    <!-- Breadcrumb-->
+                    <ol class="breadcrumb border-0 m-0">
+                        <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                        <li class="breadcrumb-item">
+                            <span>Server configuration</span>
+                        </li>
+                    </ol>
+                    <!-- Right navigation menu -->
+                    <div class="c-header-nav d-md-down-none mfe-2">
+                        <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{'/'}">
+                            <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                        </a>
                     </div>
                 </div>
-            </main>
-        </div>
-        <!-- End body -->
-        <footer th:replace="layout :: site-footer" />
+            </header>
 
- 
+            <div class="c-body">
+                <main class="c-main">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="icon-rocket"></i>
+                                        <span>R Server</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <form action="#" th:action="@{/startr}" method="post">
+                                            <button class="btn btn-success" type="submit">
+                                                <i class="icon-arrow-right"></i> &nbsp; Start R
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+            <footer th:replace="layout :: site-footer"></footer>     
+        </div>
     </body>
 </html>

@@ -25,7 +25,8 @@ var _ctx = $("meta[name='ctx']").attr("content");
 var toggle = true;
 var associazioneVarRoleBean = [];
 var tmpVarSel = {};
-var tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
+var checkedPrefix = true;
+var tabTemplate = "<li><a href='#{href}'><span class='prefix' style='#{prefixStyle}'>#{prefixTab}</span>#{label} @ <span title='#{roleName}'>#{roleCode}</span></a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
 
 $(document).ready(function () {
 
@@ -49,9 +50,13 @@ $(document).ready(function () {
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         paging: false,
-        ordering: false,
+        rowReorder: true,
+        columnDefs: [
+        	  { orderable: true, targets: [0,1,2] },
+              { orderable: false, targets: '_all' }
+        ],
         buttons: [{
-                className: 'btn-extenal-function btn-light',
+                className: 'btn btn-sm btn-block btn-outline-info',
                 text: '<i class="fa fa-plus"></i><span> '+_variable_btn+'</span>',
                 action: function (e, dt, node, config) {
                     openDlgAddVariabileWorkset();
@@ -188,6 +193,7 @@ function associaVar() {
     console.log("roleSelectedName", roleSelectedName);
     var roleSelectedId = $("#roleSelectedId").val();
     console.log("roleSelectedId", roleSelectedId);
+    var roleSelectedCode = $("#roleSelectedCode").val();
     var idElab = $("#dataProcessingId").val();
     var prefixDataset = $("#check-prefix-dataset").is(':checked');
     
@@ -202,8 +208,10 @@ function associaVar() {
         var idTab = obj['idVar'];
         console.log("idTab", idTab);
         var labelTab = obj['labelTab'];
-        console.log("labelTab", labelTab);
-        var li = $(tabTemplate.replace(/#\{href\}/g, "#" + idTab).replace(/#\{label\}/g, labelTab));
+        var prefixTab = obj['prefixTab'];
+        console.log("labelTab", labelTab); 
+        var prefixStyle =checkedPrefix?'':'display: none;';
+        var li = $(tabTemplate.replace(/#\{href\}/g, "#" + idTab).replace(/#\{label\}/g, labelTab).replace(/#\{prefixTab\}/g, prefixTab).replace(/#\{prefixStyle\}/g, prefixStyle).replace(/#\{roleCode\}/g, roleSelectedName).replace(/#\{roleName\}/g, roleSelectedName));
         console.log(li);
         tabs.find(".ui-tabs-nav").append(li);
         tabs.tabs("refresh");
@@ -404,11 +412,12 @@ function setSelectedVarMod(ordine, nome, id) {
     }
 }
 
-function setSelectedRole(nomeR, idR) {
+function setSelectedRole(nomeR, idR,code) {
     $(".rolelist").removeClass('active');
     $("#role_" + idR).addClass('active');
     $("#roleSelectedId").val(idR);
     $("#roleSelectedName").val(nomeR);
+    $("#roleSelectedCode").val(code);
     if ($('.ui-selected').length > 0) {
         $("#btn_dlg_assoc").removeClass('disabled');
         $("#btn_dlg_assoc").attr("disabled", false);
@@ -641,33 +650,10 @@ function modificaParam() {
 }
 
 function mostraDialogEliminaAssociazione(idelab, idstepVar, nomestepvar) {
-    $("#nomeStepVar").text(nomestepvar);
+    $("#namestepR").text(nomestepvar);
     $("#idelab").val(idelab);
     $("#idstepVar").val(idstepVar);
     $("#modalCancellaAssociazione").modal("show");
-}
-
-function test() {
-    alert($("#nome-var").val().length);
-    ($("#filtro1").prop("checked") != false || $("#filtro0").prop("checked") != false)
-            && $("#nome-var").val().length > 0
-}
-
-function mostraDialogModificaAssociazioneOld(idelab, idstepVar, nomestepvar, idruolo) {
-    $("#mod_idruolo").val(idruolo);
-    $("#mod_idvariabile").val(idstepVar);
-    $("#mod_nomevariabile").val(nomestepvar);
-    $(".rolelist").removeClass('active');
-    $(".varlist").removeClass('active');
-    $("#mod_var_" + idstepVar).addClass('active');
-    $("#mod_role_" + idruolo).addClass('active');
-    $("#varModSelectedId").val('');
-    $("#varModSelectedName").text('Nessuna variabile selezionata');
-    $("#roleModSelectedId").val('');
-    $("#roleModSelectedName").text('Nessun ruolo selezionato');
-    $("#btn_dlg_assoc_mod").addClass('disabled');
-    $("#btn_dlg_assoc_mod").attr("disabled", "disabled");
-    $("#modifica-viarabile-workset-modal").modal('show');
 }
 
 function controllaCampoParam() {
@@ -684,7 +670,6 @@ function mostraDialogModificaAssociazione(idelab, idstepVar, nomestepvar, idruol
 
     $("#nome-var").val(nomestepvar);
     $("#idruolomod").val(idruolo).change();
-
     $("filtro:checked").val(idruolo);
     $("#mod_idvariabile").val(idstepVar);
     $("#mod_valore_old").val(nomestepvar);
@@ -727,7 +712,7 @@ $(function () {
             $(".ui-selected", this).each(function () {
                 var currSel = $(this).attr("value");
                 tmpArr = currSel.split('~');
-                variablesArr.push({'idVar': tmpArr[0], 'name': tmpArr[1], 'labelTab': tmpArr[2]});
+                variablesArr.push({'idVar': tmpArr[0], 'name': tmpArr[1], 'labelTab': tmpArr[2], 'prefixTab': tmpArr[3]});
             });
             if ($("#roleSelectedId").val() != null && $("#roleSelectedId").val() !== '') {
                 $("#btn_dlg_assoc").removeClass('disabled');
@@ -740,20 +725,26 @@ $(function () {
     $('#check-vars-select-all').click(function() {
         var checked = $(this).prop('checked');
         
-        selectSelectableElement($("#selectable"), $("#selectable li:lt(3)"));
+        selectSelectableElement($("#selectable"), $("#selectable li"),checked);
+      });
+    
+    $('#check-prefix-dataset').click(function() {
+        checkedPrefix = $(this).prop('checked');
+        $(".prefix").toggle(checkedPrefix);  
       });
 });
 
-function selectSelectableElement (selectableContainer, elementsToSelect)
+function selectSelectableElement (selectableContainer, elementsToSelect,checked)
 {
-    // add unselecting class to all elements in the styleboard canvas except the ones to select
-    $(".ui-selected", selectableContainer).not(elementsToSelect).removeClass("ui-selected").addClass("ui-unselecting");
-    
-    // add ui-selecting class to the elements to select
-    $(elementsToSelect).not(".ui-selected").addClass("ui-selecting");
-
-    // trigger the mouse stop event (this will select all .ui-selecting elements, and deselect all .ui-unselecting elements)
-    selectableContainer.data("selectable").stop(null);
+   if(checked){
+	   // add ui-selecting class to the elements to select
+	    $(elementsToSelect).removeClass("ui-unselecting").addClass("ui-selecting").addClass("ui-selected");
+  }
+   else{
+	 	   $(elementsToSelect).removeClass("ui-selected").removeClass("ui-selecting").addClass("ui-unselecting");
+  }
+   // trigger the mouse stop event (this will select all .ui-selecting elements, and deselect all .ui-unselecting elements)
+   selectableContainer.data("ui-selectable")._mouseStop(null);
 }
 
 

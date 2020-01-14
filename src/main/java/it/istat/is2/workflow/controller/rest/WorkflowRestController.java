@@ -29,31 +29,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.istat.is2.app.bean.AssociazioneVarRoleBean;
-import it.istat.is2.app.bean.Ruolo;
-import it.istat.is2.app.bean.Variable;
-import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.workflow.domain.BusinessProcess;
 import it.istat.is2.workflow.domain.ProcessStep;
-import it.istat.is2.workflow.domain.DataProcessing;
 import it.istat.is2.workflow.domain.StepRuntime;
 import it.istat.is2.workflow.service.BusinessProcessService;
 import it.istat.is2.workflow.service.BusinessStepService;
@@ -73,9 +64,9 @@ public class WorkflowRestController {
     @Autowired
     StepRuntimeService stepVariableService;
 
-    @RequestMapping(value = "/worksetvalori/{idelaborazione}/{tipoCampo}/{groupRole}/{paramsFilter:.+}", method = RequestMethod.GET)
+    @RequestMapping(value = "/worksetvalori/{idelaborazione}/{typeIO}/{groupRole}/{paramsFilter:.+}", method = RequestMethod.GET)
     public String loadDatasetValoriWorkset(HttpServletRequest request, Model model,
-            @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("tipoCampo") Integer tipoCampo,@PathVariable("groupRole") Integer groupRole,
+            @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("typeIO") Integer typeIO,@PathVariable("groupRole") Integer groupRole,
             @PathVariable("paramsFilter") String paramsFilter, @RequestParam("length") Integer length,
             @RequestParam("start") Integer start, @RequestParam("draw") Integer draw) throws IOException, JSONException {
 
@@ -95,7 +86,7 @@ public class WorkflowRestController {
                 parameters.put(nomeValore.get(0), nomeValore.get(1));
             }
         }
-        String dtb = workflowService.loadWorkSetValoriByDataProcessing(idelaborazione, tipoCampo,groupRole, length, start, draw, parameters);
+        String dtb = workflowService.loadWorkSetValoriByDataProcessing(idelaborazione, typeIO,groupRole, length, start, draw, parameters);
 
         return dtb;
     }
@@ -131,27 +122,29 @@ public class WorkflowRestController {
     public void downloadWorkset(HttpServletRequest request, HttpServletResponse response,
             @PathVariable("tipoFile") String tipoFile, @PathVariable("idelab") Long idelab,@PathVariable("groupRole") Integer groupRole) throws Exception {
 
+
         String fileName = "";
         String contentType = "";
+        String outputName =  workflowService.getAppRoleNameById(groupRole);
         switch (tipoFile) {
-            case "csv":
-                fileName = "workset.csv";
-                contentType = "text/csv";
-                break;
-            case "pdf":
-                fileName = "workset.pdf";
-                contentType = "application/pdf";
-                break;
-            case "excel":
-                fileName = "workset.xlsx";
-                contentType = "application/vnd.ms-excel";
-                break;
-        }
-
+        case "csv":
+            fileName = outputName+".csv";
+            contentType = "text/csv";
+            break;
+        case "pdf":
+            fileName = outputName+".pdf";
+            contentType = "application/pdf";
+            break;
+        case "excel":
+            fileName = outputName+".xlsx";
+            contentType = "application/vnd.ms-excel";
+            break;
+    }
+        Map<String, List<String>> dataMap = workflowService.loadWorkSetValoriByDataProcessingRoleGroupMap(idelab,groupRole);
+        
         response.setHeader("charset", "utf-8");
         response.setHeader("Content-Type", contentType);
         response.setHeader("Content-disposition", "attachment; filename=" + fileName);
-        Map<String, List<String>> dataMap = workflowService.loadWorkSetValoriByDataProcessingRoleGroupMap(idelab,groupRole);
         Utility.writeObjectToCSV(response.getWriter(), dataMap);
     }
 

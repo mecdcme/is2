@@ -91,7 +91,7 @@ function pollJobs() {
 					$('#' + this.idProcesso).addClass("success");
 					console.log(this.idProcesso + '-  ' + old_status + ' '
 							+ this.status)
-					if (old_status.startsWith("START1")
+					if (old_status.startsWith("START")
 							&& old_status != this.status)
 						window.location.reload();
 				} else {

@@ -29,359 +29,362 @@
         <script th:src="@{/js/ruleset/rulesetpreview.js}"></script>
         <script th:inline="javascript">
             $(document).ready(function () {
-                setMenuActive([[${session.sessionBean.businessFunction.id}]]);
+            setMenuActive([[${session.sessionBean.businessFunction.id}]], "rs");
             });
             var _new_role = [[#{rules.new.rule}]]
-            var _delete_msg = [[#{rule.delete.message}]]
+                    var _delete_msg = [[#{rule.delete.message}]]
         </script>
-        <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet"/>
-   
-        
+        <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet"/>     
     </head>
-    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-        <header th:replace="layout :: site-header"></header>
+    <body class="c-app">
+        <div th:replace="layout :: site-aside"></div>
+        <div th:replace="layout :: site-modals"></div>
         <!-- Body -->
-        <div class="app-body">
-            <aside th:replace="layout :: site-modals"></aside>
-            <aside th:replace="layout :: site-aside"></aside>
-            <!-- Main container -->
-            <main class="main">
-                <!-- Breadcrumb-->
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a th:href="@{/}">Home</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a title="Sessione lavoro" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}"> 
-                            <span th:text="${session.sessionBean.name}"></span>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a title="Chiudi ruleset" th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}">
-                            <span th:text="#{ruleset.list.label}"></span>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <span th:text="${ruleset.fileName}"></span>
-                    </li>
-                    <!-- Breadcrumb Menu-->
-                    <li class="breadcrumb-menu">
+        <div class="c-wrapper">
+            <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+                <div th:include="layout :: site-header" th:remove="tag"></div>
+                <div class="c-subheader justify-content-between px-3">
+                    <!-- Breadcrumb-->
+                    <ol class="breadcrumb border-0 m-0">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a title="Sessione lavoro" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}"> 
+                                <span th:text="${session.sessionBean.name}"></span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a title="Chiudi ruleset" th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}">
+                                <span th:text="#{ruleset.list.label}"></span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span th:text="${ruleset.fileName}"></span>
+                        </li>
+
+                    </ol>
+                    <!-- Right navigation menu -->
+                    <div class="c-header-nav d-md-down-none mfe-2">
                         <div class="btn-group" role="group" aria-label="Button group">
                             <a title="Show log" href="javascript:void(0)" onclick="javascript:showLog();">
-                              <i class="fa fa-clone"></i>&nbsp;<span>Log</span>
+                                <i class="fa fa-clone"></i>&nbsp;<span>Log</span>
                             </a>
-                            &nbsp;        
                             <a th:title="#{ruleset.button.close}" th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}">
                                 <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                             </a>
                         </div>
-                    </li>
-                </ol>
-
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <span th:text="${ruleset.fileLabel}"></span>
-                                    <div class="card-header-actions">
-                                      <a class="card-header-action towait" href="javascript:void(0)" title="Validate" th:onclick="'javascript:runValidateR(\'validate\',' + ${ruleset.id} + ',0)'">
-                                            <i class="fa fa-caret-square-o-right"></i>&nbsp;
-                                            <span th:text="#{ruleset.package.validate}"></span>
-                                        </a> 
-                                        <a class="card-header-action towait" href="javascript:void(0)" title="Infeasible" th:onclick="'javascript:runValidateR(\'infeasible\',' + ${ruleset.id} + ',1)'">
-                                            <i class="fa fa-caret-square-o-right"></i>&nbsp;
-                                            <span th:text="#{ruleset.package.validate.contrad}"></span>
-                                        </a> 
-                                        <!--a class="card-header-action" href="javascript:void(0)" title="Nuova regola" th:onclick="'javascript:runValidate(' + ${ruleset.id} + ')'">
-                                            <i class="fa fa-caret-square-o-right"></i>&nbsp;
-                                            <span th:text="#{ruleset.package.validate.redundant}"></span>
-                                        </a-->
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <table id="dataview" class="table table-striped " cellspacing="0" width="auto" style="overflow: auto;">
-                                        <thead>
-                                            <tr>
-                                                <th width="1%" class="text-center validate"  >Validate</th>
-                                                <th width="1%" class="text-center infeasible">Contrad</th>
-                                                <th width="5%" th:text="#{ruleset.code.label}">Codice</th>
-                                                <th th:text="#{ruleset.rule.label}">Regola</th>
-                                                <!--th>Variabile</th-->
-                                                <th class="text-center no-sort" th:text="#{rule.type.label}">Classificazione</th>
-                                                <th width="1%" class="no-sort"></th>
-                                                <th width="1%" class="no-sort"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="rule, counter : ${rules}">
-                                              <td class="text-center validate"  ><span th:id="${'validate_'+rule.code}"></span></td>
-                                                <td class="text-center infeasible" ><span th:id="${'infeasible_'+rule.code}"></span></td>
-                                                <td><span th:text="${rule.code}"></span></td>
-                                                <td><span th:text="${#strings.abbreviate(rule.rule,150)}" th:title="${rule.rule}"></span></td>
-                                                <!--td>
-                                                    <span th:if="${session.dfile != null}" th:title="${rule.variabile}"
-                                                          th:text="${#strings.abbreviate(rule.sxRuleset.datasetFile.getNomeColFormId(rule.variabile),50)}"></span>
-                                                </td-->
-                                                <td class="text-center" th:if="${rule.ruleType != null}">
-                                                    <span th:text="${#strings.abbreviate(rule.ruleType.name,50)}" th:title="${rule.ruleType.name}"></span>
-                                                </td>
-                                                <td th:unless="${rule.ruleType != null}"><span></span></td>
-                                                 <td style="width: 1%">
-                                                    <a href="javascript:void(0)" th:title="#{ruleset.rule.edit}" role="button"
-                                                       th:attr="data-rule-id=${rule.id}, data-rule-code=${rule.code},data-rule-rule=${rule.rule},data-rule-descr=${rule.descr},data-rule-class-id= ${rule.ruleType.id}, onclick='javascript:editRule(this);'">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                </td>
-                                                <td style="width: 1%">
-                                                    <a href="javascript:void(0)" th:title="#{ruleset.delete.role.button}" role="button" th:attr="onclick='javascript:deleteRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">
-                                                        <i class="fa fa-trash-o"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <!--div class="card" th:if="${session.dfile != null}" id="dataset_div">
-                                <div class="card-header">
-                                    <span th:text="${session.dfile.fileName}">Nome dataset</span>
-                                    <div class="btn-group pull-right" role="group">
-                                        <a class="" title="Chiudi riquadro" href="javascript:void(0)" th:attr="onclick='javascript:chiudiDivVariabili()'">
-                                            <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div class="card-body">
-                                    <table id="metadataTab" class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th><span>Nome Variabile</span></th>
-                                                <th style="width: 5%"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="cols: ${session.dfile.colonne}" th:unless="${(session.dfile.colonne == null) or (session.dfile.colonne.size() == 0) }">
-                                                <td><span th:text="${cols.name}"></span></td>
-                                                <td align="center">
-                                                    <a href="javascript:void(0)" th:unless="${cols.tipoVariabile}" title="Aggiungi regola"
-                                                       th:attr="onclick='javascript:addRule('+${cols.id}+',\''+${cols.name}+ '\')'">
-                                                        <i class="fa fa-plus-square-o"></i>
-                                                    </a>
-                                                    <input type="hidden" name="colsid" th:value="${cols.id}" />
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div-->
-                        </div>
                     </div>
                 </div>
-            </main>
-        </div>
-        <!-- End body -->
-        <footer th:replace="layout :: site-footer"></footer>
+            </header>
 
-        <!-- New Rule Dialog -->
-        <div class="modal fade" id="newruledialog" tabindex="-1" role="dialog" 
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="fa fa-plus-square"></i>&nbsp;
-                            <span th:text="#{rules.new.rule.dialog.title}">Nuova regola</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                     <form id="inputNewRuleForm" th:action="@{'/rule/newRule'}" method="post" >
-                           <input type="hidden" th:value="${session.sessionBean.id}" name="idsessione" />
-                           <input type="hidden" th:value="${ruleset.id}" name="idruleset" />
-                    <div class="form-group">
-                            <label class="control-label" th:text="#{generic.code}+'*'"> Codice:</label>
-                            <input  class="form-control"  id="rule_code" name="ruleCode" th:value="${'R'+(rules.size()+1)}" type="text" />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" th:text="#{ruleset.rule}+'*'">Regola:</label>
-                            <input  class="form-control"  id="rule_text" name="ruleText" value="" type="text" />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" th:text="#{rules.new.ruleset.desc}">Descrizione:</label>
-                            <input  class="form-control"  id="rule_desc"  name="ruleDesc" value="" type="text" />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" th:text="#{ruleset.classification.label}">Classificazione:</label>
-                            <select id="classification_l" name="classification" class="form-control">
-                                <option th:each="classificazione : ${listaClassificazioni}"
-                                        th:value="${classificazione.id}"
-                                        th:text="${classificazione.name}"></option>
-                            </select>
-                        </div>
-                    </form>      
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
-                        </button>
-                        <button type="button" id="btn-invia-new-rule" class="btn btn-primary" 
-                                onclick="inviaFormNewRule();" th:title="#{generic.title.submit.button}">
-                            <span th:text="#{Userlist.save}">Salva</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Edit Rule Dialog -->
-        <div class="modal fade" id="modalEditRule" tabindex="-1" role="dialog" 
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="fa fa-pencil-square-o"></i>
-                            <span th:text="#{ruleset.rule.edit}">Edit regola</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editForm" th:action="@{'/rule/editRule'}" method="post" class="form-horizontal">
-                            <input type="hidden" value="" name="ruleId" id="editRuleId" />
-                            <input type="hidden" th:value="${ruleset.id}" name="ruleSetId" />
-                            <div class="form-body">
-                                <div id="msgs"></div>
-                                <div class="modal-body">
-                                <div class="form-group">
-                                        <label class="control-label" th:text="#{generic.code}">Codice:</label>
-                                        <input name="codeRule"  class="form-control" title="Code Rule" type="text" id="editCodeRule"  readonly="readonly"/>
-                                        <span class="help-block"></span>
+            <div class="c-body">
+                <main class="c-main">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <span th:text="${ruleset.fileLabel}"></span>
+                                        <div class="card-header-actions">
+                                            <a class="card-header-action towait" href="javascript:void(0)" title="Validate" th:onclick="'javascript:runValidateR(\'validate\',' + ${ruleset.id} + ',0)'">
+                                                <i class="fa fa-caret-square-o-right"></i>&nbsp;
+                                                <span th:text="#{ruleset.package.validate}"></span>
+                                            </a> 
+                                            <a class="card-header-action towait" href="javascript:void(0)" title="Infeasible" th:onclick="'javascript:runValidateR(\'infeasible\',' + ${ruleset.id} + ',1)'">
+                                                <i class="fa fa-caret-square-o-right"></i>&nbsp;
+                                                <span th:text="#{ruleset.package.validate.contrad}"></span>
+                                            </a> 
+                                            <!--a class="card-header-action" href="javascript:void(0)" title="Nuova regola" th:onclick="'javascript:runValidate(' + ${ruleset.id} + ')'">
+                                                <i class="fa fa-caret-square-o-right"></i>&nbsp;
+                                                <span th:text="#{ruleset.package.validate.redundant}"></span>
+                                            </a-->
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label" th:text="#{ruleset.rule}+'*'">Regola:</label>
-                                        <input name="rule"  class="form-control" title="Rule" type="text" id="rule" />
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label" th:text="#{rules.new.ruleset.desc}">Descrizione:</label>
-                                        <input name="descrizione"  class="form-control" title="Descrizione" type="text" id="descrizione_edit" />
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label" th:text="#{ruleset.classification.label}">Classificazione:</label>
-                                        <select name="classificazione" id="classification_edit" class="form-control">
-                                            <option th:each="classificazione : ${listaClassificazioni}"
-                                                    th:value="${classificazione.id}"
-                                                    th:text="${classificazione.name}"></option>
-                                        </select>
+                                    <div class="card-body">
+                                        <table id="dataview" class="table table-striped " cellspacing="0" width="auto" style="overflow: auto;">
+                                            <thead>
+                                                <tr>
+                                                    <th width="1%" class="text-center validate"  >Validate</th>
+                                                    <th width="1%" class="text-center infeasible">Contrad</th>
+                                                    <th width="5%" th:text="#{ruleset.code.label}">Codice</th>
+                                                    <th th:text="#{ruleset.rule.label}">Regola</th>
+                                                    <!--th>Variabile</th-->
+                                                    <th class="text-center no-sort" th:text="#{rule.type.label}">Classificazione</th>
+                                                    <th width="1%" class="no-sort"></th>
+                                                    <th width="1%" class="no-sort"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="rule, counter : ${rules}">
+                                                    <td class="text-center validate"  ><span th:id="${'validate_'+rule.code}"></span></td>
+                                                    <td class="text-center infeasible" ><span th:id="${'infeasible_'+rule.code}"></span></td>
+                                                    <td><span th:text="${rule.code}"></span></td>
+                                                    <td><span th:text="${#strings.abbreviate(rule.rule,150)}" th:title="${rule.rule}"></span></td>
+                                                    <!--td>
+                                                        <span th:if="${session.dfile != null}" th:title="${rule.variabile}"
+                                                              th:text="${#strings.abbreviate(rule.sxRuleset.datasetFile.getNomeColFormId(rule.variabile),50)}"></span>
+                                                    </td-->
+                                                    <td class="text-center" th:if="${rule.ruleType != null}">
+                                                        <span th:text="${#strings.abbreviate(rule.ruleType.name,50)}" th:title="${rule.ruleType.name}"></span>
+                                                    </td>
+                                                    <td th:unless="${rule.ruleType != null}"><span></span></td>
+                                                    <td style="width: 1%">
+                                                        <a href="javascript:void(0)" th:title="#{ruleset.rule.edit}" role="button"
+                                                           th:attr="data-rule-id=${rule.id}, data-rule-code=${rule.code},data-rule-rule=${rule.rule},data-rule-descr=${rule.descr},data-rule-class-id= ${rule.ruleType.id}, onclick='javascript:editRule(this);'">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td style="width: 1%">
+                                                        <a href="javascript:void(0)" th:title="#{ruleset.delete.role.button}" role="button" th:attr="onclick='javascript:deleteRule(' + ${rule.id} + ', \'' + ${rule.rule} + '\')'">
+                                                            <i class="fa fa-trash-o"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
-                        </button>
-                        <button type="button" onclick="inviaFormEditRule();"  class="btn btn-primary" th:title="#{generic.title.submit.button}">
-                            <span th:text="#{Userlist.save}">Save</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Add Domain Rule Dialog -->
-        <div class="modal fade" id="addrulevariable" tabindex="-1"
-             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="fa fa-plus-square"></i>&nbsp;
-                            <span th:text="#{rules.new.rule.domain.title}">Nuova regola di dominio</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="#" id="addrulevariableForm" class="form-horizontal">
-                            <input type="hidden" value="" name="ruleId" id="editRuleId" />
-                            <input type="hidden" value="10" name="ruleSetId" id="editRuleId" />
-                            <div class="form-body">
-                                <div id="msgs"></div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <label class="control-label" th:text="#{ruleset.variable.label}">Variabile:</label>
-                                        <input name="variable" placeholder="Variable" class="form-control" title="Variable" type="text" id="nome_var" />
+                                <!--div class="card" th:if="${session.dfile != null}" id="dataset_div">
+                                    <div class="card-header">
+                                        <span th:text="${session.dfile.fileName}">Nome dataset</span>
+                                        <div class="btn-group pull-right" role="group">
+                                            <a class="" title="Chiudi riquadro" href="javascript:void(0)" th:attr="onclick='javascript:chiudiDivVariabili()'">
+                                                <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label" th:text="#{ruleset.rule}">Regola:</label>
-                                        <input name="rule" placeholder="Rule" class="form-control" title="Rule" type="text" id="rule_text_v" />
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label" th:text="#{rules.new.ruleset.desc}">Descrizione:</label>
-                                        <input name="descrizione" th:placeholder="#{generic.label.description}" 
-                                               class="form-control" title="Descrizione" type="text" id="rule_desc_v" />
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label" th:text="#{ruleset.classification.label}">Classificazione:</label>
-                                        <select id="classification_v" class="form-control">
-                                            <option th:each="classificazione : ${listaClassificazioni}"
-                                                    th:value="${classificazione.id}"
-                                                    th:text="${classificazione.name}"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
-                        </button>
-                        <button type="button" id="btn-invia-new-rule" class="btn btn-primary towait" onclick="inviaFormNewVarRule();"
-                                th:title="#{generic.title.submit.button}">
-                            <span th:text="#{Userlist.save}">Salva</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
         
-        <!-- Delete Rule Dialog -->
-        <div class="modal fade" id="modalDeleteRule" tabindex="-1"
-             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <input type="hidden" id="ruleId" />
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">
-                            <i class="fa fa-trash"></i>&nbsp;
-                            <span th:text="#{confirm.elimination.title}">Conferma eliminazione</span>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                                    <div class="card-body">
+                                        <table id="metadataTab" class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th><span>Nome Variabile</span></th>
+                                                    <th style="width: 5%"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="cols: ${session.dfile.colonne}" th:unless="${(session.dfile.colonne == null) or (session.dfile.colonne.size() == 0) }">
+                                                    <td><span th:text="${cols.name}"></span></td>
+                                                    <td align="center">
+                                                        <a href="javascript:void(0)" th:unless="${cols.tipoVariabile}" title="Aggiungi regola"
+                                                           th:attr="onclick='javascript:addRule('+${cols.id}+',\''+${cols.name}+ '\')'">
+                                                            <i class="fa fa-plus-square-o"></i>
+                                                        </a>
+                                                        <input type="hidden" name="colsid" th:value="${cols.id}" />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div-->
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body"><span></span>
+                </main>
+            </div>
+            <!-- End body -->
+            <footer th:replace="layout :: site-footer"></footer>
+
+            <!-- New Rule Dialog -->
+            <div class="modal fade" id="newruledialog" tabindex="-1" role="dialog" 
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-plus-square"></i>&nbsp;
+                                <span th:text="#{rules.new.rule.dialog.title}">Nuova regola</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="inputNewRuleForm" th:action="@{'/rule/newRule'}" method="post" >
+                                <input type="hidden" th:value="${session.sessionBean.id}" name="idsessione" />
+                                <input type="hidden" th:value="${ruleset.id}" name="idruleset" />
+                                <div class="form-group">
+                                    <label class="control-label" th:text="#{generic.code}+'*'"> Codice:</label>
+                                    <input  class="form-control"  id="rule_code" name="ruleCode" th:value="${'R'+(rules.size()+1)}" type="text" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" th:text="#{ruleset.rule}+'*'">Regola:</label>
+                                    <input  class="form-control"  id="rule_text" name="ruleText" value="" type="text" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" th:text="#{rules.new.ruleset.desc}">Descrizione:</label>
+                                    <input  class="form-control"  id="rule_desc"  name="ruleDesc" value="" type="text" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" th:text="#{ruleset.classification.label}">Classificazione:</label>
+                                    <select id="classification_l" name="classification" class="form-control">
+                                        <option th:each="classificazione : ${listaClassificazioni}"
+                                                th:value="${classificazione.id}"
+                                                th:text="${classificazione.name}"></option>
+                                    </select>
+                                </div>
+                            </form>      
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
+                            </button>
+                            <button type="button" id="btn-invia-new-rule" class="btn btn-primary" 
+                                    onclick="inviaFormNewRule();" th:title="#{generic.title.submit.button}">
+                                <span th:text="#{Userlist.save}">Salva</span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
-                        </button>
-                        <button type="button" id="btnDelete" class="btn btn-primary towait" th:title="#{generic.delete.button.label}">
-                            <span th:text="#{generic.delete.button.label}">Elimina</span>
-                        </button>
+                </div>
+            </div>
+
+            <!-- Edit Rule Dialog -->
+            <div class="modal fade" id="modalEditRule" tabindex="-1" role="dialog" 
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-pencil-square-o"></i>
+                                <span th:text="#{ruleset.rule.edit}">Edit regola</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editForm" th:action="@{'/rule/editRule'}" method="post" class="form-horizontal">
+                                <input type="hidden" value="" name="ruleId" id="editRuleId" />
+                                <input type="hidden" th:value="${ruleset.id}" name="ruleSetId" />
+                                <div class="form-body">
+                                    <div id="msgs"></div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label class="control-label" th:text="#{generic.code}">Codice:</label>
+                                            <input name="codeRule"  class="form-control" title="Code Rule" type="text" id="editCodeRule"  readonly="readonly"/>
+                                            <span class="help-block"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" th:text="#{ruleset.rule}+'*'">Regola:</label>
+                                            <input name="rule"  class="form-control" title="Rule" type="text" id="rule" />
+                                            <span class="help-block"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" th:text="#{rules.new.ruleset.desc}">Descrizione:</label>
+                                            <input name="descrizione"  class="form-control" title="Descrizione" type="text" id="descrizione_edit" />
+                                            <span class="help-block"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" th:text="#{ruleset.classification.label}">Classificazione:</label>
+                                            <select name="classificazione" id="classification_edit" class="form-control">
+                                                <option th:each="classificazione : ${listaClassificazioni}"
+                                                        th:value="${classificazione.id}"
+                                                        th:text="${classificazione.name}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
+                            </button>
+                            <button type="button" onclick="inviaFormEditRule();"  class="btn btn-primary" th:title="#{generic.title.submit.button}">
+                                <span th:text="#{Userlist.save}">Save</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Domain Rule Dialog -->
+            <div class="modal fade" id="addrulevariable" tabindex="-1"
+                 role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="fa fa-plus-square"></i>&nbsp;
+                                <span th:text="#{rules.new.rule.domain.title}">Nuova regola di dominio</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="#" id="addrulevariableForm" class="form-horizontal">
+                                <input type="hidden" value="" name="ruleId" id="editRuleId" />
+                                <input type="hidden" value="10" name="ruleSetId" id="editRuleId" />
+                                <div class="form-body">
+                                    <div id="msgs"></div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label class="control-label" th:text="#{ruleset.variable.label}">Variabile:</label>
+                                            <input name="variable" placeholder="Variable" class="form-control" title="Variable" type="text" id="nome_var" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" th:text="#{ruleset.rule}">Regola:</label>
+                                            <input name="rule" placeholder="Rule" class="form-control" title="Rule" type="text" id="rule_text_v" />
+                                            <span class="help-block"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" th:text="#{rules.new.ruleset.desc}">Descrizione:</label>
+                                            <input name="descrizione" th:placeholder="#{generic.label.description}" 
+                                                   class="form-control" title="Descrizione" type="text" id="rule_desc_v" />
+                                            <span class="help-block"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" th:text="#{ruleset.classification.label}">Classificazione:</label>
+                                            <select id="classification_v" class="form-control">
+                                                <option th:each="classificazione : ${listaClassificazioni}"
+                                                        th:value="${classificazione.id}"
+                                                        th:text="${classificazione.name}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
+                            </button>
+                            <button type="button" id="btn-invia-new-rule" class="btn btn-primary towait" onclick="inviaFormNewVarRule();"
+                                    th:title="#{generic.title.submit.button}">
+                                <span th:text="#{Userlist.save}">Salva</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Rule Dialog -->
+            <div class="modal fade" id="modalDeleteRule" tabindex="-1"
+                 role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <input type="hidden" id="ruleId" />
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                <i class="fa fa-trash"></i>&nbsp;
+                                <span th:text="#{confirm.elimination.title}">Conferma eliminazione</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body"><span></span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">
+                                <span th:text="#{Userlist.close}" th:title="#{generic.title.close.button}">Close</span>
+                            </button>
+                            <button type="button" id="btnDelete" class="btn btn-primary towait" th:title="#{generic.delete.button.label}">
+                                <span th:text="#{generic.delete.button.label}">Elimina</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

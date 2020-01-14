@@ -16,13 +16,13 @@ public class MetricMatchingVariable {
          this.windowSize=0;
 	}
 	
-	public MetricMatchingVariable(String matchingVariable,String matchingVariableNameVariableA,String matchingVariableNameVariableB, String comparisonFunction, double metricThreshold, int windowSize){
+	public MetricMatchingVariable(String matchingVariable,String matchingVariableNameVariableA,String matchingVariableNameVariableB, String comparisonFunction, double metricThreshold){
 		this.matchingVariable = matchingVariable;
 		this.matchingVariableNameVariableA = matchingVariableNameVariableA;
 		this.matchingVariableNameVariableB = matchingVariableNameVariableB;
 		this.comparisonFunction = comparisonFunction;
 		this.metricThreshold = metricThreshold;
-        this.windowSize = windowSize;
+        this.windowSize = 0;
 	}
 
 	 

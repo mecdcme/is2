@@ -79,6 +79,8 @@ $(document).ready(function () {
         $("#btn_filtri_cerca").hide();
         $("#no_filters_msg").text("Non ci sono filtri di ricerca impostati.");
     }
+ 
+    
 });
         
 function getParams() {
@@ -137,3 +139,41 @@ function scaricaWorkSet(e, param, idelab) {
     e.preventDefault();
     window.location = _ctx + '/rest/ws/download/workset/' + param + '/' + idelab+'/'+_roleGroup;
 }
+
+function getDynamicSchema(data) {
+	var text = "{\"properties\":{ ";
+	Object.keys(data).forEach(function(key) {
+		text += "\"" + key + "\": {\"title\":\"" + key + "\"},";
+	});
+	text = text.substring(0, text.length - 1);
+	text += "}}";
+    return  JSON.parse(text);
+}
+
+
+function viewParamsAlpacaTemplate(identifier) {
+	var nameParameter = $(identifier).data('name-workset');
+	$('#param-text-edit').text(nameParameter);
+	var jsontemplate = $(identifier).data('param-template');
+	var data = $(identifier).data('value-param');
+	if (!data)
+		data = "";
+	var schema = "";
+	var options = "{\"type\" : \"object\"}";
+	if (jsontemplate != undefined) {
+		schema = jsontemplate["schema"];
+		options = JSON.stringify(jsontemplate["options"]);
+	} else {
+		schema=getDynamicSchema(data);
+	}
+	console.log(schema);
+	var dataContent = "{\"data\":" + JSON.stringify(data) + ",\"schema\":"
+			+ JSON.stringify(schema) + ",\"options\":" + options
+			+ ",\"view\":\"web-display-horizontal\"}";
+
+	var jsonObj = JSON.parse(dataContent);
+
+	$('#view-param').empty();
+	$('#view-param').alpaca(jsonObj);
+}
+

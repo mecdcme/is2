@@ -90,6 +90,7 @@ INSERT INTO `is2_business_function` (`ID`, `NAME`, `DESCR`, `LABEL`, `ACTIVE`)
 		(2,'Data Editing','Data editing is the process of reviewing the data for consistency, detection of errors and outliers and correction of errors, in order to improve the quality, accuracy and adequacy of the data and make it suitable for the purpose for which it was collected.','EDIT',1),
 		(3,'Data Validation','Data validation is the process of ensuring data have undergone data cleansing to ensure they have data quality, that is, that they are both correct and useful. It uses routines, often called \"validation rules\", that check for correctness, meaningfulness, and security of data that are input to the system.','VALIDATE',1);
 
+
 -- -----------------------------------------------------
 -- BUSINESS_PROCESS
 -- -----------------------------------------------------
@@ -102,6 +103,11 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `O
         (70,'Contingency Table','Calculate contingency table','CrossTable',1,1),
         (71,'Fellegi Sunter','Fellegi Sunter algorithm','FellegiSunter',1,2),
         (72,'Matching Table','Matching records','MatchingTable',1,3);
+
+-- add multi-step process
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER`) VALUES ('5', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS', '3');
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER`, `PARENT`) VALUES ('6', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS1', '4', '5');
+
 
 -- -----------------------------------------------------
 -- CATALOGUE OF BUSINESS SERVICES
@@ -132,6 +138,9 @@ INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`)
 -- -----------------------------------------------------
 INSERT INTO `is2_link_function_process` (`BUSINESS_FUNCTION_ID`, `BUSINESS_PROCESS_ID`)
 	VALUES (1,1),(1,2),(3,3);
+    
+-- add multi-step process
+INSERT INTO `is2_link_function_process` (`BUSINESS_FUNCTION_ID`, `BUSINESS_PROCESS_ID`) VALUES ('1', '5');
 
 -- -----------------------------------------------------
 -- MANY TO MANY RELATION -> BUSINESS_PROCESS - PROCESS_STEP
@@ -181,7 +190,7 @@ INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_
 -- -----------------------------------------------------
 INSERT INTO `is2_parameter` (`ID`, `NAME`, `DESCR`, `DEFAULT_VAL`, `JSON_TEMPLATE`) 
 	VALUES
-		('1', 'MATCHING VARIABLES', 'MATCHING VARIABLES', NULL, '{"data":[],"schema":{"items":{"properties":{"MatchingVariable":{"maxLength":50,"required":true,"title":"MatchingVariable","type":"string"},"MatchingVariableA":{"maxLength":50,"required":true,"title":"MatchingVariableA","type":"string"},"MatchingVariableB":{"maxLength":50,"required":true,"title":"MatchingVariableB","type":"string"},"Method":{"enum":["Equality","Jaro","Dice","JaroWinkler","Levenshtein","3Grams","Soundex","NumericComparison","NumericEuclideanDistance","WindowEquality","Inclusion3Grams"],"required":true,"title":"Method"},"Threshold":{"title":"Threshold","type":"number"},"Window":{"title":"Window","type":"integer"}},"type":"object"},"type":"array"},"options":{"type":"table","showActionsColumn":false,"hideAddItemsBtn":true,"items":{"fields":{"Method":{"type":"select","noneLabel":"","removeDefaultNone":false},"MatchingVariableA":{"type":"select","noneLabel":"","dataSource":"matchedVariables"},"MatchingVariableB":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}}},"form":{"buttons":{"addRow":"addRow","removeRow":"removeRow"}},"view":{"templates":{"container-array-toolbar":"#addItemsBtn"}}}}'),
+		('1', 'MATCHING VARIABLES', 'MATCHING VARIABLES', NULL, '{"data":[],"schema":{"items":{"properties":{"MatchingVariable":{"maxLength":50,"required":true,"title":"MatchingVariable","type":"string"},"MatchingVariableA":{"maxLength":50,"required":true,"title":"MatchingVariableA","type":"string"},"MatchingVariableB":{"maxLength":50,"required":true,"title":"MatchingVariableB","type":"string"},"Method":{"enum":["Equality","Jaro","Dice","JaroWinkler","Levenshtein","3Grams","Soundex","NumericComparison","NumericEuclideanDistance","WindowEquality","Inclusion3Grams"],"required":true,"title":"Method"},"Threshold":{"title":"Threshold","type":"number"}},"type":"object"},"type":"array"},"options":{"type":"table","showActionsColumn":false,"hideAddItemsBtn":true,"items":{"fields":{"Method":{"type":"select","noneLabel":"","removeDefaultNone":false},"MatchingVariableA":{"type":"select","noneLabel":"","dataSource":"matchedVariables"},"MatchingVariableB":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}}},"form":{"buttons":{"addRow":"addRow","removeRow":"removeRow"}},"view":{"templates":{"container-array-toolbar":"#addItemsBtn"}}}}'),
         ('2', 'THRESHOLD MATCHING', 'THRESHOLD MATCHING', 1, '{"data":[],"schema":{"name":"THRESHOLD MATCHING","type":"number", "minimum": 0.01,"maximum": 1}}'),
         ('3', 'THRESHOLD UNMATCHING', 'THRESHOLD UNMATCHING', 1, '{"data":[],"schema":{"name":"THRESHOLD UNMATCHING","type":"number", "minimum": 0.01,"maximum": 1}}');
 
@@ -194,16 +203,16 @@ INSERT INTO `is2_app_role` (`ID`, `NAME`, `CODE`, `DESCR`, `ORDER`, `CLS_DATA_TY
 		(2,'MATCHING A','X1','MATCHING VARIABLE IN DATASET A',2,1,NULL),
 		(3,'MATCHING B','X2','MATCHING VARIABLE IN DATASET B',3,1,NULL),
         (4,'CONTENGENCY TABLE','CT','CONTENGENCY TABLE',4,1,NULL),
-        (5,'FELLEGI-SUNTER','FS','FELLEGI-SUNTER',14,1,NULL),
+        (5,'FELLEGI-SUNTER','FS','FELLEGI-SUNTER',2,1,NULL),
 		(6,'BLOCKING','B','SLICING DEL DATASET',7,1,NULL),
-		(7,'MATCHING TABLE','MT','MATCHING TABLE',8,1,NULL),
+		(7,'MATCHING TABLE','MT','MATCHING TABLE',10,1,NULL),
 		(8,'THRESHOLD MATCHING','TH','THRESHOLD MATCHING',9,2,2),
 		(9,'THRESHOLD UNMATCHING','TU','THRESHOLD UNMATCHING',10,2,3),
-		(10,'POSSIBLE MATCHING TABLE','PM','POSSIBLE MATCHING TABLE',11,1,NULL),
+		(10,'POSSIBLE MATCHING TABLE','PM','POSSIBLE MATCHING TABLE',9,1,NULL),
         (11,'RANKING','M','INFLUENCE RANKING',5,1,NULL),
 		(12,'STRATA','S','PARTIZIONAMENTO DEL DATASET',6,1,NULL),
-		(13,'RESIDUAL A','RA','RESIDUAL DATASET  A',12,1,NULL),
-		(14,'RESIDUAL B','RB','RESIDUAL DATASET  B',13,1,NULL),
+		(13,'RESIDUAL A','RA','RESIDUAL DATASET  A',6,1,NULL),
+		(14,'RESIDUAL B','RB','RESIDUAL DATASET  B',5,1,NULL),
 		(15,'DATA','MD','DATA',1,1,NULL),
 		(16,'RULESET','RS','RULESET',2,4,NULL);
 

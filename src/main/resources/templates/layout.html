@@ -36,7 +36,7 @@
         <title>IS2 Workbench</title>
         <!-- Javascript -->
         <script th:src="@{/js/vendors/jquery/jquery-3.1.1.min.js}" type="text/javascript"></script>
-         <script th:src="@{/js/vendors/jquery/jquery.validate.min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/vendors/jquery/jquery.validate.min.js}" type="text/javascript"></script>
         <script th:src="@{/js/vendors/popper/popper.min.js}" type="text/javascript"></script>
         <script th:src="@{/js/bootstrap.js}" type="text/javascript"></script>
         <script th:src="@{/js/vendors/coreui/perfect-scrollbar.min.js}" type="text/javascript"></script>
@@ -46,81 +46,162 @@
         <!-- CSS -->
         <link th:href="@{/css/coreui/coreui.css}" rel="stylesheet" />
         <link th:href="@{/css/vendors/toastr/toastr.css}" rel="stylesheet" />
+        <link th:href="@{/css/vendors/spinkit/spinkit.css}" rel="stylesheet" />
         <link th:href="@{/css/box.css}" rel="stylesheet" />
         <!-- Icons -->
         <link th:href="@{/icons/font-awesome.min.css}" rel="stylesheet" />
         <link th:href="@{/icons/coreui-icons.css}" rel="stylesheet" />
         <link th:href="@{/icons/simple-line-icons.css}" rel="stylesheet" />
     </head>
-    <body>
-        <!-- START HEADER -->
-        <header th:fragment="site-header" class="app-header navbar">
-            <!-- MESSAGES CONTAINER-->
-            <div th:if="${session['siteNotificationMessages']}" style="display: none">
-                <ul id="messages" th:with="notifyMessages=${session['siteNotificationMessages']}">
-                    <li th:each="msg : ${notifyMessages}">
-                        <span th:text="${msg.type}"></span>
-                        <span th:text="${msg.text}"></span>
-                    </li>
-                </ul>
-            <span th:text="${#session.removeAttribute('siteNotificationMessages')}"></span>
-            </div>
+    <body class="c-app">
 
-            <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="#">
-                <img class="navbar-brand-full" th:src="@{/img/istat-logo.svg}" width="89" height="25" alt="CoreUI Logo">
-            </a>
-            <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-              <ul class="nav navbar-nav d-md-down-none">
-                <li class="nav-item px-3" sec:authorize="hasRole('ADMIN')" >
-                    <a class="nav-link" th:href="@{/team}" role="button" aria-haspopup="true" aria-expanded="false">
-                        <span th:title="#{Layout.team.link}">Team</span>
-                    </a>
-                </li>
-                <li class="nav-item px-3" sec:authorize="hasRole('ADMIN')" >
-                    <a class="nav-link"  data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <span th:title="#{Layout.settings.link}">Settings</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-xl-left">
-                        <div class="dropdown-header text-center">
-                            <strong>IS<sup>2</sup> Workbench</strong>
-                        </div>
-                        <!-- a class="dropdown-item" th:title="#{Layout.server.conf}" th:href="@{/settings}">
-                            <i class="fa fa-server"></i> Process design</a>
-                        <a class="dropdown-item" th:title="#{Layout.server.conf}" th:href="@{/admin}">
-                            <i class="fa fa-server"></i> Server configuration</a-->
-                        <a class="dropdown-item" th:title="#{Layout.user.settings}" th:href="@{/users/userlist}">
-                            <i class="fa fa-users"></i><span th:text="#{Layout.users}"></span></a>
+        <!-- START SIDEBAR -->
+        <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar" th:fragment="site-aside">
+            <div class="c-sidebar-brand brand-full">
+                <i class="icon-chemistry"></i> <span>IS<sup>2</sup> Worbench</span>
+            </div>
+            <div class="c-sidebar-nav" >
+                <ul class="c-sidebar-nav">
+                    <li class="c-sidebar-nav-item" id="home">
+                        <a class="c-sidebar-nav-link" th:href="@{/}" th:title="#{home.link.title}">
+                            <i class="c-sidebar-nav-icon cil-home"></i> Home
+                            <span class="badge badge-danger">Version 0.9</span>
+                        </a>
+                    </li>
+                    <li class="c-sidebar-nav-title">Service catalogue</li>
+                    <li th:each="businessService, iter : ${session.businessServiceList}" th:id="'bs'+${businessService.id}">
+                        <a class ="c-sidebar-nav-link" th:href="@{'/service/'+${businessService.id}}">
+                            <i class="c-sidebar-nav-icon icon-calculator"></i> <span th:title=${businessService.name} th:text="${businessService.name}"></span>
+                        </a>
+                    </li>
+
+                    <li class="c-sidebar-nav-title">Business functions</li>
+                    <li th:each="businessFunction, iter : ${session.businessFunctionList}" th:id="'bf'+${businessFunction.id}"
+                        th:classappend="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}? 'c-sidebar-nav-item c-sidebar-nav-dropdown': 'c-sidebar-nav-item'">
+                        <a class ="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" th:href="@{#}"
+                           th:if="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}">
+                            <i class="c-sidebar-nav-icon cil-star"></i> <span th:title=${businessFunction.name} th:text="${businessFunction.name}"></span>
+                        </a>
+                        <a th:unless="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}"
+                           class ="c-sidebar-nav-link" th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}">
+                            <i class="c-sidebar-nav-icon cil-star"></i> <span th:title=${businessFunction.name} th:text="${businessFunction.name}"></span>
+                        </a>
+                        <ul class="c-sidebar-nav-dropdown-items" 
+                            th:if="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}">
+                            <li class="c-sidebar-nav-item">
+                                <a class="c-sidebar-nav-link c-sidebar-nav-deep-link" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}">
+                                    <span class="truncate" th:title=${session.sessionBean.name} th:text="${session.sessionBean.name}"></span>
+                                </a>
+                            </li>
+                            <li class="c-sidebar-nav-item">
+                                <a class="c-sidebar-nav-link c-sidebar-nav-deeper-link" th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}" th:id="'ds'+${businessFunction.id}">
+                                    <i class="c-sidebar-nav-deep-icon icon-doc"></i>
+                                    <span th:title=#{dataset.link.title}>Dataset</span>
+                                    <span class="badge badge-info"><span th:text="${session.sessionBean.file.size()}"></span></span>
+                                </a>
+                            </li>
+                            <li class="c-sidebar-nav-item" th:if="${session.sessionBean.ruleset != null}">
+                                <a class="c-sidebar-nav-link c-sidebar-nav-deeper-link" th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}" th:id="'rs'+${businessFunction.id}">
+                                    <i class="c-sidebar-nav-deep-icon  icon-wrench"></i>
+                                    <span th:title=#{ruleset.link.title}>Ruleset</span>
+                                    <span class="badge badge-info"><span th:text="${session.sessionBean.ruleset.size()}"></span></span>
+                                </a>
+                            </li>
+                            <li class="c-sidebar-nav-item">
+                                <a class="c-sidebar-nav-link c-sidebar-nav-deeper-link" th:if="${session.sessionBean.dataProcessingId > 0}" 
+                                   th:href="@{'/ws/home/'+${session.sessionBean.dataProcessingId}}" th:id="'pr'+${businessFunction.id}">
+                                    <i class="c-sidebar-nav-deep-icon icon-calculator"></i>
+                                    <span class="truncate" th:title="${session.sessionBean.dataProcessingName}" th:text="${session.sessionBean.dataProcessingName}">Process</span>
+                                </a>
+                                <a class="c-sidebar-nav-link c-sidebar-nav-deeper-link" th:unless="${session.sessionBean.dataProcessingId > 0}" th:href="@{#}">
+                                    <i class="c-sidebar-nav-deep-icon icon-calculator"></i>
+                                    <span class="truncate" th:title=#{Layout.Process}>Process</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>   
+                </ul>
+            </div>
+        </div>
+        <!-- END SIDEBAR-->
+
+        <!-- START HEADER -->
+        <div class="c-wrapper">
+            <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+                <div th:fragment="site-header">
+
+                    <!-- MESSAGES CONTAINER-->
+                    <div th:if="${session['siteNotificationMessages']}" style="display: none">
+                        <ul id="messages" th:with="notifyMessages=${session['siteNotificationMessages']}">
+                            <li th:each="msg : ${notifyMessages}">
+                                <span th:text="${msg.type}"></span>
+                                <span th:text="${msg.text}"></span>
+                            </li>
+                        </ul>
+                        <span th:text="${#session.removeAttribute('siteNotificationMessages')}"></span>
                     </div>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav ml-auto">
-                <li class="nav-item" style="min-width: 35px; border-right: 1px solid #e4e7ea">
-                    <a class="nav-link" href="?language=it_IT" th:title="#{Layout.switch.ita.lang}">ITA</a>
-                </li>
-                <li class="nav-item" style="min-width: 40px;">
-                    <a class="nav-link" href="?language=en_US" th:title="#{Layout.switch.eng.lang}">ENG</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <img class="img-avatar" th:src="@{/img/francesco.png}">
+
+                    <button class="c-header-toggler c-class-toggler d-lg-none mr-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show">
+                        <span class="c-header-toggler-icon"></span>
+                    </button>
+                    <a class="c-header-brand d-sm-none" href="#">
+                        <i class="icon-chemistry"></i> <span>IS<sup>2</sup> Worbench</span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <div class="dropdown-header text-center">
-                            <strong>Account</strong>
-                        </div>
-                        <a class="dropdown-item" th:href="@{/users/edituser}" th:title="#{Layout.link.user.profile}">
-                            <i class="icons cui-user"></i> Profile</a>
-                        <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/users/logout}" th:title="#{Layout.link.user.logout}">
-                            <i class="icons cui-account-logout"></i> Logout</a>
-                    </div>
-                </li>
-            </ul>
-        </header>
+                    <button class="c-header-toggler c-class-toggler ml-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
+                        <span class="c-header-toggler-icon"></span>
+                    </button>
+
+                    <ul class="c-header-nav d-md-down-none">
+                        <li class="c-header-nav-item px-3" sec:authorize="hasRole('ADMIN')" >
+                            <a class="c-header-nav-link" th:href="@{/team}" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span th:title="#{Layout.team.link}">Team</span>
+                            </a>
+                        </li>
+                        <li class="c-header-nav-item dropdown" sec:authorize="hasRole('ADMIN')" >
+                            <a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span th:title="#{Layout.settings.link}">Settings</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-xl-left pt-0">
+                                <div class="dropdown-header bg-light py-2">
+                                    <strong>IS<sup>2</sup> Workbench</strong>
+                                </div>
+                                <a class="dropdown-item" th:title="#{Layout.server.conf}" th:href="@{/settings}">
+                                    <i class="c-icon mfe-2 icon-organization"></i> Process design
+                                </a>
+                                <a class="dropdown-item" th:title="#{Layout.server.conf}" th:href="@{/admin}">
+                                    <i class="c-icon mfe-2 icon-wrench"></i> Server configuration
+                                </a>
+                                <a class="dropdown-item" th:title="#{Layout.user.settings}" th:href="@{/users/userlist}">
+                                    <i class="c-icon mfe-2 icon-people"></i><span th:text="#{Layout.users}"></span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="c-header-nav ml-auto mr-4">
+                        <li class="c-header-nav-item d-md-down-none mx-2" style="min-width: 35px; border-right: 1px solid #e4e7ea">
+                            <a class="c-header-nav-link" href="?language=it_IT" th:title="#{Layout.switch.ita.lang}">ITA</a>
+                        </li>
+                        <li class="c-header-nav-item d-md-down-none mx-2" style="min-width: 40px;">
+                            <a class="c-header-nav-link" href="?language=en_US" th:title="#{Layout.switch.eng.lang}">ENG</a>
+                        </li>
+                        <li class="c-header-nav-item dropdown">
+                            <a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                <div class="c-avatar"><img class="c-avatar-img" th:src="@{/img/francesco.png}"></div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right pt-0">
+                                <div class="dropdown-header bg-light py-2 text-center">
+                                    <strong>Account</strong>
+                                </div>
+                                <a class="dropdown-item" th:href="@{/users/edituser}" th:title="#{Layout.link.user.profile}">
+                                    <i class="c-icon mfe-2 cil-user"></i> Profile</a>
+                                <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/users/logout}" th:title="#{Layout.link.user.logout}">
+                                    <i class="c-icon mfe-2 cil-account-logout"></i> Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+        </div>
         <!-- END HEADER -->
 
         <!-- LOADING DATA -->
@@ -128,11 +209,17 @@
             <div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
+                        <div class="modal-header">
+                            <span>Loading...</span>
+                        </div>
                         <div class="modal-body">
-                            <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem;">
-                                <span class="sr-only">Loading...</span>
+                            <div class="sk-wave">
+                                <div class="sk-wave-rect"></div>
+                                <div class="sk-wave-rect"></div>
+                                <div class="sk-wave-rect"></div>
+                                <div class="sk-wave-rect"></div>
+                                <div class="sk-wave-rect"></div>
                             </div>
-                            <span class="loading-span">Loading...</span>
                         </div>
                     </div>
                 </div>
@@ -172,7 +259,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="modal fade" id="modalRLog" role="dialog" th:if="${session.sessionBean}">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
@@ -206,72 +293,9 @@
                     </div>
                 </div>
             </div>
-            
-            
         </div>
 
-        <div class="app-body">
-            <!-- START SIDEBAR -->
-            <div class="sidebar" th:fragment="site-aside">
-                <nav class="sidebar-nav">
-                    <ul class="nav">
-                        <li class="nav-item" id="home">
-                            <a class="nav-link" th:href="@{/}" th:title="#{home.link.title}">
-                                <i class="nav-icon icon-home"></i> Home
-                                <span class="badge badge-primary">Version 0.9</span>
-                            </a>
-                        </li>
-                        <li class="nav-title">Business functions</li>
-                        <li th:each="businessFunction, iter : ${session.businessFunctionList}" th:id="'bf'+${businessFunction.id}"
-                            th:classappend="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}? 'nav-item nav-dropdown': 'nav-item'">
-                            <a class ="nav-link nav-dropdown-toggle" th:href="@{#}"
-                               th:if="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}">
-                                <i class="nav-icon icon-star"></i> <span th:title=${businessFunction.name} th:text="${businessFunction.name}"></span>
-                            </a>
-                            <a th:unless="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}"
-                               class ="nav-link " th:href="@{'/sessione/mostraSessioni/'+${businessFunction.id}}">
-                                <i class="nav-icon icon-star"></i> <span th:title=${businessFunction.name} th:text="${businessFunction.name}"></span>
-                            </a>
-                            <ul class="nav-dropdown-items" 
-                                th:if="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}">
-                                <li class="nav-item">
-                                    <a class="nav-link" th:href="@{'/sessione/apri/'+${session.sessionBean.id}}">
-                                        <i class="nav-icon icon-arrow-right"></i>
-                                        <span th:title=${session.sessionBean.name} th:text="${session.sessionBean.name}"></span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}">
-                                        <i class="nav-icon icon-doc"></i>
-                                        <span th:title=#{dataset.link.title}>Dataset</span>
-                                        <span class="badge badge-primary"><span th:text="${session.sessionBean.file.size()}"></span></span>
-                                    </a>
-                                </li>
-                                <li class="nav-item" th:if="${session.sessionBean.ruleset != null}">
-                                    <a class="nav-link" th:href="@{'/rule/viewRuleset/'+${session.sessionBean.id}}">
-                                        <i class="nav-icon icon-wrench"></i>
-                                        <span th:title=#{ruleset.link.title}>Ruleset</span>
-                                        <span class="badge badge-primary"><span th:text="${session.sessionBean.ruleset.size()}"></span></span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" th:if="${session.sessionBean.dataProcessingId > 0}" th:href="@{'/ws/home/'+${session.sessionBean.dataProcessingId}}">
-                                        <i class="nav-icon icon-calculator"></i>
-                                        <span th:title="${session.sessionBean.dataProcessingName}" th:text="${session.sessionBean.dataProcessingName}">Process</span>
-                                    </a>
-                                    <a class="nav-link" th:unless="${session.sessionBean.dataProcessingId > 0}" th:href="@{#}">
-                                        <i class="nav-icon icon-calculator"></i>
-                                        <span th:title=#{Layout.Process}>Process</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>   
-                    </ul>
-                </nav>
-            </div>
-            <!-- END SIDEBAR-->
-        </div>
-        <footer class="app-footer" th:fragment="site-footer" >
+        <footer class="c-footer" th:fragment="site-footer" >
             <div>
                 <span>Developed by </span><a href="http://www.istat.it">Istat</a>
             </div>
