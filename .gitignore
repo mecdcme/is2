@@ -1,1 +1,4 @@
 /target/
+
+# Credentials
+/terraform/i3s-dev-*.json
