@@ -1,4 +1,6 @@
 /target/
+/bin/
+/logs/
 
 # Credentials
 /terraform/i3s-dev-*.json

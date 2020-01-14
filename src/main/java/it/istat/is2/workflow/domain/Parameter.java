@@ -51,7 +51,7 @@ public class Parameter implements Serializable {
     private String descr;
     @Column(name = "DEFAULT_VAL")
     private String defaultVal;
-    @Lob
+//    @Lob
     @Column(name = "JSON_TEMPLATE")
     private String jsonTemplate;
     

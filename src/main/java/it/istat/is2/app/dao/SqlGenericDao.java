@@ -70,9 +70,9 @@ public class SqlGenericDao {
 			+ "		   ss.CLS_DATA_TYPE_ID as CLS_DATA_TYPE_ID,"
 			+ "        ss.value_parameter as value_parameter,"
 			+ "		   ss.content_size, "
-			+ "        t.idx, t.v "
+			+ "        t.idx, cast(t.v as text) "
 			+ " FROM   "
-			+ "      IS2_WORKSET ss,  IS2_STEP_RUNTIME sv, json_table(ss.content , '$[*]' columns( idx FOR ORDINALITY,  v TEXT  path '$[0]')     ) t	 " 
+			+ "      IS2_WORKSET ss,  IS2_STEP_RUNTIME sv, jsonb_array_elements(cast(ss.content as jsonb)) WITH ORDINALITY AS t(v,idx)	 " 
 			+ " WHERE  "
 			+ "        sv.data_processing_id=:idDataProcessing and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id and ss.CLS_DATA_TYPE_ID=1 "
 			+ " ) ,"
@@ -151,9 +151,9 @@ public class SqlGenericDao {
 			+ "        ss.id AS iddscol, "
 			+ "        ss.name AS name, "
 			+ "        ss.order_code, "
-			+ "        t.idx, t.v "
+			+ "        t.idx, cast(t.v as text)"
 			+ " FROM   "
-			+ "        IS2_DATASET_COLUMN ss, json_table( CONVERT(  ss.content USING utf8), '$[*]' columns ( idx FOR ORDINALITY, v text path '$[0]') ) t " 
+			+ "        IS2_DATASET_COLUMN ss, jsonb_array_elements(cast(ss.content as jsonb)) WITH ORDINALITY AS t(v,idx) " 
 			+ " WHERE  "
 			+ "        ss.dataset_file_id=:dFile),"
 			+ " ss_pivot as ("
@@ -162,7 +162,7 @@ public class SqlGenericDao {
 			+ "        ss_model.iddscol, ";
 	
 		for (Object[] field : resulFieldstList) {
-			query += " MAX(IF(ss_model.iddscol = " + field[0] + ", ss_model.v, NULL )) AS `" + field[1] + "`,";
+			query += " MAX(CASE WHEN ss_model.id = "+field[0]+" THEN ss_model.v END) AS " + field[1] + ",";
 		}
 		
 		query = query.substring(0, query.length() - 1);
