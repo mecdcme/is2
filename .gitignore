@@ -4,3 +4,7 @@
 
 # Credentials
 /terraform/i3s-dev-*.json
+
+# Terraform
+/terraform/.terraform
+/terraform/terraform.tfstate*
