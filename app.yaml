@@ -1,0 +1,4 @@
+runtime: custom
+env: flex
+beta_settings:
+    cloud_sql_instances: i3s-dev:europe-west1:is2-master-instance  
