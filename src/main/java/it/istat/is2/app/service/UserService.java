@@ -114,6 +114,5 @@ public class UserService {
 
     public void delete(Long id) {
         userDao.deleteById(id);
-
     }
 }
