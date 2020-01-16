@@ -3,44 +3,37 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.istat.is2.test;
+package it.istat.is2.test.app.service;
 
-import it.istat.is2.IS2Application;
+import it.istat.is2.app.dao.UserDao;
+import it.istat.is2.app.dao.UserRolesDao;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.UserService;
-import org.junit.After;
-import org.junit.Before;
+import it.istat.is2.test.TestBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = IS2Application.class)
-public class UserServiceTests {
+public class UserServiceTests extends TestBase {
 
-    @Autowired
-    UserService userService;
+    @Mock UserDao userDao;
+    @Mock UserRolesDao userRolesDao;
 
-    public UserServiceTests() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
+    @InjectMocks UserService userService;
 
     @Test
     public void userService_FindExistingUserById_ShouldReturnUser() {
         // Arrange
+        User mockedUser = new User(1L, "mbruno@istat.it");
+        when(userDao.findById(1L)).thenReturn(Optional.of(mockedUser));
         Long id = 1L;
 
         // Act
@@ -48,11 +41,18 @@ public class UserServiceTests {
 
         // Assert
         assertNotNull(user);
+        assertEquals("mbruno@istat.it", user);
     }
 
     @Test
     public void userService_FindUsers_ShouldReturnAllUsers() {
         // Arrange
+        User user1 = new User(1L, "mbruno@istat.it");
+        User user2 = new User(2L, "v.broeke@cbs.nl");
+        List<User> mockedUsers = Arrays.asList(user1, user2);
+
+        when(userDao.findAll()).thenReturn(mockedUsers);
+        when(userRolesDao.findAll()).thenReturn(Arrays.asList());
 
         // Act
         List<User> users = userService.findAll();
