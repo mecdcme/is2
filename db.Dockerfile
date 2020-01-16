@@ -1,6 +1,3 @@
-FROM mysql:8.0
+FROM postgres:11
 
-ENV MYSQL_ROOT_PASSWORD root
-ENV MYSQL_DATABSE IS2
-
-COPY ./db/is2-create.sql /docker-entrypoint-initdb.d/
+COPY ./db/is2-postgres.sql /docker-entrypoint-initdb.d/

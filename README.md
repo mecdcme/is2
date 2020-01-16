@@ -71,13 +71,13 @@ java –jar is2.jar
 
 Dockerize the MySQL database
 ```
-docker build -t i3sessnet/is2-mysql . -f db.Dockerfile
-docker run -p 3306:3306 i3sessnet/is2-mysql
+docker build -t i3sessnet/is2-postgres . -f db.Dockerfile
+docker run -p 5432:5432 i3sessnet/is2-postgres
 ```
 
 Dockerize the web application
 ```
-docker build -t i3sessnet/is2 . -f app.Dockerfile
+docker build -t i3sessnet/is2 .
 docker run -p 8080:8080 i3sessnet/is2 
 ```
 
