@@ -14,7 +14,6 @@ variable "project" {
 }
 
 provider "google" {
-  credentials = file("~/code/credentials/i3s-dev-b538d40535d9.json") # Ugly!
   project     = var.project
   region      = var.region
   zone        = "europe-west1-a"
@@ -33,4 +32,4 @@ resource "google_sql_database_instance" "master" {
 resource "google_app_engine_application" "is2-app" {
   project     = var.project
   location_id = var.appengine-region
-} 
+}
