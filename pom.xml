@@ -150,7 +150,6 @@
         <dependency>
             <groupId>org.springframework.batch</groupId>
             <artifactId>spring-batch-test</artifactId>
-            <version>4.1.2.RELEASE</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -163,7 +162,22 @@
             <artifactId>postgres-socket-factory</artifactId>
             <version>1.0.15</version>
         </dependency>
+        <!-- Renjin -->
+        <dependency>
+            <groupId>org.renjin</groupId>
+            <artifactId>renjin-script-engine</artifactId>
+            <version>RELEASE</version>
+        </dependency>
     </dependencies>
+    
+    <!-- Renjin repository-->
+    <repositories>
+        <repository>
+            <id>bedatadriven</id>
+            <name>bedatadriven public repo</name>
+            <url>https://nexus.bedatadriven.com/content/groups/public/</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
