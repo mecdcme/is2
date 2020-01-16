@@ -9,3 +9,12 @@
 /terraform/.terraform
 /terraform/terraform.tfstate*
 /nbproject/
+
+# IntelliJ IDE
+.idea/
+
+# Visual Studio
+.vs/
+
+# Visual Studio Code
+.vscode
