@@ -14,7 +14,7 @@ variable "project" {
 }
 
 provider "google" {
-  credentials = file("~/code/credentials/i3s-dev-b538d40535d9.json")
+  credentials = file("~/code/credentials/i3s-dev-b538d40535d9.json") # Ugly!
   project     = var.project
   region      = var.region
   zone        = "europe-west1-a"
