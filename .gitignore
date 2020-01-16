@@ -8,3 +8,4 @@
 # Terraform
 /terraform/.terraform
 /terraform/terraform.tfstate*
+/nbproject/
