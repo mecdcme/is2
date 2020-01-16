@@ -13,10 +13,15 @@ variable "project" {
   default = "i3s-dev"
 }
 
+variable "zone" {
+  type    = string
+  default = "europe-west1-a"
+}
+
 provider "google" {
-  project     = var.project
-  region      = var.region
-  zone        = "europe-west1-a"
+  project = var.project
+  region  = var.region
+  zone    = var.zone
 }
 
 resource "google_sql_database_instance" "master" {
