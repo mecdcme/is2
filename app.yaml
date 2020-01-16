@@ -1,0 +1,13 @@
+runtime: custom
+env: flex
+beta_settings:
+    cloud_sql_instances: i3s-dev:europe-west1:is2-master-instance
+env_variables:
+    SERVER_ADDRESS: 0.0.0.0
+    SPRING_DATASOURCE_URL: jdbc:postgresql:///postgres?cloudSqlInstance=i3s-dev:europe-west1:is2-master-instance&socketFactory=com.google.cloud.sql.postgres.SocketFactory
+    SPRING_DATASOURCE_USERNAME: postgres
+    SPRING_DATASOURCE_PASSWORD: postgres
+    SPRING_DATASOURCE_DRIVERCLASSNAME: org.postgresql.Driver
+    SPRING_DATASOURCE_PLATFORM: postgresql
+
+  
