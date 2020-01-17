@@ -47,6 +47,7 @@ public class UserServiceTests extends TestBase {
         assertNotNull(user);
         assertEquals("email", user.getEmail());
         assertNotEquals("password", user.getPassword());
+        assertTrue(user.getPassword().length() > 0);
         assertEquals("name", user.getName());
         assertEquals("surname", user.getSurname());
 
@@ -61,78 +62,196 @@ public class UserServiceTests extends TestBase {
 
         UserCreateForm form = new UserCreateForm();
         form.setId(id);
-        form.setEmail("email");
+        form.setEmail(email);
         form.setPassword("password");
         form.setName("name");
         form.setSurname("surname");
         form.setRole((short)1);
 
-        User mockedUser = new User(id, email);
-
-        when(userDao.findById(1L)).thenReturn(Optional.of(mockedUser));
+        when(userDao.findById(id)).thenReturn(Optional.of(new User(id, "email")));
 
         // Act
         User user = userService.update(form);
 
         // Assert
         assertNotNull(user);
-        assertEquals("email", user.getEmail());
-        assertNotEquals("password", user.getPassword());
+        assertEquals(email, user.getEmail());
+        assertNull(user.getPassword()); // Update is not updating password
         assertEquals("name", user.getName());
         assertEquals("surname", user.getSurname());
 
         verify(userDao, times(1)).save(user);
     }
 
+    @Test(expected=Exception.class)
+    public void userService_UpdateWithoutUser_ShouldThrowException() throws Exception {
+        // Arrange
+        Long id = 1L;
+        UserCreateForm form = new UserCreateForm();
+        form.setId(id);
+
+        when(userDao.findById(id)).thenReturn(null);
+
+        // Act
+        User user = userService.update(form);
+
+        // Assert
+        assertNull(user);
+    }
+
     @Test
-    public void userService_FindExistingUserById_ShouldReturnUser() {
+    public void userService_UpdatePasswordByEmail_ShouldUpdatePassword() throws Exception {
+        // Arrange
+        String email = "mbruno@istat.nl";
+        String password = "password";
+        String otherPassword = "otherPassword";
+
+        User testUser = new User();
+        testUser.setEmail(email);
+        testUser.setPassword(password);
+
+        when(userDao.findByEmail(email)).thenReturn(testUser);
+
+        // Act
+        User user = userService.updatePasswordByEmail(email, otherPassword);
+        String hashedPassword = user.getPassword();
+
+        // Assert
+        assertNotNull(user);
+        assertEquals(email, user.getEmail());
+        assertNotEquals(password, hashedPassword);
+        assertNotEquals(otherPassword, hashedPassword);
+        assertTrue(hashedPassword.length() > 0);
+
+        verify(userDao, times(1)).save(user);
+    }
+
+    @Test(expected=Exception.class)
+    public void userService_UpdatePasswordByEmailWithoutUser_ShouldThrowException() throws Exception {
+        // Arrange
+        String email = "mbruno@istat.nl";
+        String password = "password";
+
+        when(userDao.findByEmail(email)).thenReturn(null);
+
+        // Act
+        User user = userService.updatePasswordByEmail(email, password);
+
+        // Assert
+        assertNull(user);
+    }
+
+    @Test
+    public void userService_UpdatePasswordById_ShouldUpdatePassword() throws Exception {
+        // Arrange
+        Long id = 1L;
+        String password = "password";
+        String otherPassword = "otherPassword";
+
+        User testUser = new User();
+        testUser.setId(id);
+        testUser.setPassword(password);
+
+        when(userDao.findById(id)).thenReturn(Optional.of(testUser));
+
+        // Act
+        User user = userService.updatePasswordById(id, otherPassword);
+        String hashedPassword = user.getPassword();
+
+        // Assert
+        assertNotNull(user);
+        assertEquals(id, user.getId());
+        assertNotEquals(password, hashedPassword);
+        assertNotEquals(otherPassword, hashedPassword);
+        assertTrue(hashedPassword.length() > 0);
+
+        verify(userDao, times(1)).save(user);
+    }
+
+    @Test(expected=Exception.class)
+    public void userService_UpdatePasswordByIdWithoutUser_ShouldThrowException() throws Exception {
+        // Arrange
+        Long id = 1L;
+        String password = "password";
+
+        when(userDao.findById(id)).thenReturn(null);
+
+        // Act
+        User user = userService.updatePasswordById(id, password);
+
+        // Assert
+        assertNull(user);
+    }
+
+    @Test
+    public void userService_FindOne_ShouldReturnUser() {
         // Arrange
         Long id = 1L;
         String email = "mbruno@istat.it";
-        User mockedUser = new User(id, email);
-        when(userDao.findById(id)).thenReturn(Optional.of(mockedUser));
+
+        when(userDao.findById(id)).thenReturn(Optional.of(new User(id, email)));
 
         // Act
         User user = userService.findOne(id);
 
         // Assert
         assertNotNull(user);
+        assertEquals(id, user.getId());
         assertEquals(email, user.getEmail());
     }
 
     @Test
-    public void userService_FindExistingUserByEmail_ShouldReturnUser() {
+    public void userService_FindByEmail_ShouldReturnUser() {
         // Arrange
-        Long userId = 1L;
+        Long id = 1L;
         String email = "mbruno@istat.it";
-        User mockedUser = new User(userId, email);
-        when(userDao.findByEmail(email)).thenReturn(mockedUser);
+
+        when(userDao.findByEmail(email)).thenReturn(new User(id, email));
 
         // Act
         User user = userService.findByEmail(email);
 
         // Assert
         assertNotNull(user);
+        assertEquals(id, user.getId());
         assertEquals(email, user.getEmail());
     }
 
     @Test
-    public void userService_FindUsers_ShouldReturnAllUsers() {
+    public void userService_FindAll_ShouldReturnAllUsers() {
         // Arrange
         User user1 = new User(1L, "mbruno@istat.it");
         User user2 = new User(2L, "v.broeke@cbs.nl");
-        List<User> mockedUsers = Arrays.asList(user1, user2);
+        List<User> testUsers = Arrays.asList(user1, user2);
 
-        when(userDao.findAll()).thenReturn(mockedUsers);
+        when(userDao.findAll()).thenReturn(testUsers);
         when(userRolesDao.findAll()).thenReturn(Arrays.asList());
 
         // Act
         List<User> users = userService.findAll();
 
         // Assert
+        assertNotNull(users);
         assertEquals(2, users.size());
     }
 
+    @Test
+    public void userService_FindRoles_ShouldReturnAllRoles() {
+        // Arrange
+        UserRole role1 = new UserRole((short) 1);
+        UserRole role2 = new UserRole((short) 2);
+        List<UserRole> testRoles = Arrays.asList(role1, role2);
+
+        when(userDao.findAll()).thenReturn(Arrays.asList());
+        when(userRolesDao.findAll()).thenReturn(testRoles);
+
+        // Act
+        List<UserRole> roles = userService.findAllRoles();
+
+        // Assert
+        assertNotNull(roles);
+        assertEquals(2, roles.size());
+    }
     @Test
     public void userService_DeleteUser_ShouldCallDeleteOnDaoOnce() {
         // Arrange
