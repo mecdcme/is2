@@ -14,42 +14,49 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.mockito.junit.MockitoJUnitRunner;
+
 
 import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class UserServiceTests extends TestBase {
 
     @Mock UserDao userDao;
     @Mock UserRolesDao userRolesDao;
 
-    @InjectMocks UserService userService;
+    @InjectMocks
+    UserService userService;
 
     @Test
     public void userService_FindExistingUserById_ShouldReturnUser() {
         // Arrange
-        User mockedUser = new User(1L, "mbruno@istat.it");
+        User mockedUser = new User(1L, "admin@is2.it");
         when(userDao.findById(1L)).thenReturn(Optional.of(mockedUser));
+        
+       
         Long id = 1L;
-
+        System.out.println(id);
         // Act
         User user = userService.findOne(id);
-
+        System.out.println(user);
+        
         // Assert
         assertNotNull(user);
-        assertEquals("mbruno@istat.it", user);
+        assertEquals("admin@is2.it", user.getEmail());
     }
 
     @Test
     public void userService_FindUsers_ShouldReturnAllUsers() {
         // Arrange
-        User user1 = new User(1L, "mbruno@istat.it");
-        User user2 = new User(2L, "v.broeke@cbs.nl");
-        List<User> mockedUsers = Arrays.asList(user1, user2);
+      //  User user1 = new User(83L, "fra@fra.it");
+        User user2 = new User(2L, "user@is2.it");
+        User user3 = new User(1L, "admin@is2.it");
+       // List<User> mockedUsers = Arrays.asList(user1, user2,user3);
+        List<User> mockedUsers = Arrays.asList(user2,user3);
 
         when(userDao.findAll()).thenReturn(mockedUsers);
         when(userRolesDao.findAll()).thenReturn(Arrays.asList());

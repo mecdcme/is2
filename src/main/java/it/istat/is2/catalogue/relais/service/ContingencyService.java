@@ -72,10 +72,10 @@ public class ContingencyService {
 			String matchingVariableA = metricMatchingVariable.getString("MatchingVariableA");
 			String matchingVariableB = metricMatchingVariable.getString("MatchingVariableB");
 			String method = metricMatchingVariable.getString("Method");
-			double thresould = metricMatchingVariable.getDouble("Threshold");
-			
+			Float thresould = metricMatchingVariable.isNull("Threshold")? null :metricMatchingVariable.getFloat("Threshold");
+			Integer windowSize = metricMatchingVariable.isNull("WindowSize")? null :metricMatchingVariable.getInt("WindowSize");
 			MetricMatchingVariable mm = new MetricMatchingVariable(matchingVariable, matchingVariableA,
-					matchingVariableB, method, thresould);
+					matchingVariableB, method, thresould,windowSize);
 			metricMatchingVariableVector.add(mm);
 
 		}
@@ -147,7 +147,7 @@ public class ContingencyService {
 			} else {
 
 				if (metrics[ii].getSimilarity(matchingVariableNameVariableA,
-						matchingVariableNameVariableB) >= metricMatchingVariable.getMetricThreshold())
+						matchingVariableNameVariableB) >= metricMatchingVariable.getMetricThreshold().floatValue())
 					pattern = pattern + "1";
 				else
 					pattern = pattern + "0";
