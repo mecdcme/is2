@@ -41,6 +41,8 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
+import it.istat.is2.app.dao.SqlGenericDao;
+
 @Configuration
 public class AppConfiguration implements WebMvcConfigurer {
 
@@ -113,4 +115,11 @@ public class AppConfiguration implements WebMvcConfigurer {
 
         return viewResolver;
     }
+    
+    @Bean
+    public SqlGenericDao sqlGenericDaoResolver() {
+    	
+         return SqlGenericDao.getDAOFactory(0);
+    }
+    
 }
