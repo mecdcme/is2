@@ -25,6 +25,7 @@ package it.istat.is2;
 
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -116,10 +117,12 @@ public class AppConfiguration implements WebMvcConfigurer {
         return viewResolver;
     }
     
+    @Value("${spring.datasource.platform}")
+    private String datasourcePlatform;
+    
     @Bean
     public SqlGenericDao sqlGenericDaoResolver() {
-    	
-         return SqlGenericDao.getDAOFactory(0);
+    	 return SqlGenericDao.getSqlGenericDAOFactory(datasourcePlatform);
     }
     
 }

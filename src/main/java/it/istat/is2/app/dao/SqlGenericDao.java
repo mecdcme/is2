@@ -37,8 +37,8 @@ import it.istat.is2.dataset.domain.DatasetFile;
 public abstract class SqlGenericDao {
 	
 	
-    public static final int MYSQL = 0;  
-    public static final int POSTGRESSQL = 1;
+    public static final String MYSQL = "mysql";  
+    public static final String POSTGRESSQL = "postgresql";
 
 	@Autowired
 	protected EntityManager em;
@@ -101,8 +101,8 @@ public abstract class SqlGenericDao {
 	public abstract List<String> findFieldsTableDB(String table_schema, String table_name);
 
 	 
-    public static SqlGenericDao getDAOFactory(int database) {
-        switch (database) {
+    public static SqlGenericDao getSqlGenericDAOFactory(String database) {
+        switch (database.toLowerCase()) {
         case MYSQL:
             return new MySqlSqlGenericDao();
         case POSTGRESSQL:
