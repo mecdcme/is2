@@ -25,6 +25,7 @@ package it.istat.is2;
 
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -40,6 +41,8 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+
+import it.istat.is2.app.dao.SqlGenericDao;
 
 @Configuration
 public class AppConfiguration implements WebMvcConfigurer {
@@ -113,4 +116,13 @@ public class AppConfiguration implements WebMvcConfigurer {
 
         return viewResolver;
     }
+    
+    @Value("${spring.datasource.platform}")
+    private String datasourcePlatform;
+    
+    @Bean
+    public SqlGenericDao sqlGenericDaoResolver() {
+    	 return SqlGenericDao.getSqlGenericDAOFactory(datasourcePlatform);
+    }
+    
 }

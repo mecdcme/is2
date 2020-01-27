@@ -18,3 +18,7 @@
 
 # Visual Studio Code
 .vscode
+/.classpath
+/.project
+/.settings/
+/.gitignore
