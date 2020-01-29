@@ -1,22 +1,22 @@
--- -----------------------------------------------------
+-- 
 -- Schema is2
--- -----------------------------------------------------
+-- 
 DROP SCHEMA IF EXISTS `is2`;
 CREATE SCHEMA `is2` DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 USE `is2`;
 
--- -----------------------------------------------------
+-- 
 -- USER ROLE
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_user_roles` (
   `ID` 	 	INT NOT NULL AUTO_INCREMENT,
   `ROLE` 	VARCHAR(50) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- USER
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_users` (
   `ID` 			INT NOT NULL AUTO_INCREMENT,
   `EMAIL` 		VARCHAR(255) NULL,
@@ -30,15 +30,13 @@ CREATE TABLE `is2_users` (
         ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
 -- 
--- CLASSIFICATION TABLES - BEGIN
---
--- -----------------------------------------------------
+-- CLASSIFICATION TABLES
+-- 
 
--- -----------------------------------------------------
+-- 
 -- DATA TYPE CLASSIFICATION
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_cls_data_type` (
   `ID` 	  INT NOT NULL AUTO_INCREMENT,
   `NAME`  VARCHAR(100) NULL,
@@ -46,18 +44,18 @@ CREATE TABLE `is2_cls_data_type` (
   PRIMARY KEY (`ID`)
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- INPUT/OUTPUT CLASSIFICATION
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_cls_type_io` (
   `ID` 	 INT NOT NULL AUTO_INCREMENT,
   `NAME` VARCHAR(100) NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- RULE TYPE CLASSIFICATION
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_cls_rule` (
   `ID`    INT NOT NULL AUTO_INCREMENT,
   `NAME`  VARCHAR(100) NULL,
@@ -66,9 +64,9 @@ CREATE TABLE `is2_cls_rule` (
   PRIMARY KEY (`ID`)
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- VARIABLE CLASSIFICATION (FROM ISTAT CORPORATE METADATA SYSTEM)
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_cls_statistical_variable` (
     `ID` INT NOT NULL AUTO_INCREMENT,
     `NAME` VARCHAR(100) NULL,
@@ -80,9 +78,9 @@ CREATE TABLE `is2_cls_statistical_variable` (
     PRIMARY KEY (`ID`)
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- VIEW_DATA_TYPE
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_view_data_type` (
   `ID`	  INT NOT NULL AUTO_INCREMENT,
   `NAME`  VARCHAR(50) NULL,
@@ -90,13 +88,7 @@ CREATE TABLE `is2_view_data_type` (
   PRIMARY KEY (`ID`)
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
 -- 
--- CLASSIFICATION TABLES - END
---
--- -----------------------------------------------------
-
--- -----------------------------------------------------
 -- 
 -- PROCESS DESIGN SECTION - BEGIN
 --
@@ -107,11 +99,11 @@ CREATE TABLE `is2_view_data_type` (
 -- BUSINESS_FUNCTION -> BUSINESS_PROCESS -> PROCESS_STEP
 -- A process step will use a service available in the BUSINESS_SERVICE catalogue
 --
--- -----------------------------------------------------
+-- 
 
--- -----------------------------------------------------
+-- 
 -- BUSINESS_FUNCTION
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_business_function` (
   `ID`	   INT NOT NULL AUTO_INCREMENT,
   `NAME`   VARCHAR(100) NULL,
@@ -121,9 +113,9 @@ CREATE TABLE `is2_business_function` (
   PRIMARY KEY (`ID`)
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- BUSINESS_PROCESS
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_business_process` (
   `ID` 	   INT NOT NULL AUTO_INCREMENT,
   `NAME`   VARCHAR(100) NULL,
@@ -137,9 +129,9 @@ CREATE TABLE `is2_business_process` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- CATALOGUE OF BUSINESS SERVICES
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_business_service` (
   `ID` 	  INT NOT NULL AUTO_INCREMENT,
   `NAME`  VARCHAR(100) NULL,
@@ -147,9 +139,9 @@ CREATE TABLE `is2_business_service` (
   PRIMARY KEY (`ID`)
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- PROCESS_STEP
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_process_step` (
   `ID` 	  				INT NOT NULL AUTO_INCREMENT,
   `NAME`  				VARCHAR(100) NULL,
@@ -161,9 +153,9 @@ CREATE TABLE `is2_process_step` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- WORK SESSION
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_work_session` (
   `ID` 						INT NOT NULL AUTO_INCREMENT,
   `NAME` 					VARCHAR(100) NULL,
@@ -180,17 +172,9 @@ CREATE TABLE `is2_work_session` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
-
--- -----------------------------------------------------
 -- 
--- SECTION PROCESS DESIGN - LINK TABLES
--- 
--- -----------------------------------------------------
-
--- -----------------------------------------------------
 -- MANY TO MANY RELATION -> BUSINESS_FUNCTION - BUSINESS_PROCESS
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_link_function_process` (
   `BUSINESS_FUNCTION_ID` INT NOT NULL,
   `BUSINESS_PROCESS_ID`  INT NOT NULL,
@@ -203,9 +187,9 @@ CREATE TABLE `is2_link_function_process` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- MANY TO MANY RELATION -> BUSINESS_PROCESS - PROCESS_STEP
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_link_process_step` (
   `BUSINESS_PROCESS_ID` INT NOT NULL,
   `PROCESS_STEP_ID` 	INT NOT NULL,
@@ -218,9 +202,9 @@ CREATE TABLE `is2_link_process_step` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- MANY TO MANY RELATION -> BUSINESS_FUNCTION - VIEW_DATA_TYPE
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_link_function_view_data_type` (
   `BUSINESS_FUNCTION_ID` INT NOT NULL,
   `VIEW_DATA_TYPE_ID`    INT NOT NULL,
@@ -233,24 +217,15 @@ CREATE TABLE `is2_link_function_view_data_type` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
 -- 
--- SECTION PROCESS DESIGN - END
 -- 
--- -----------------------------------------------------
+-- SECTION DATA REPOSITORY
+-- 
+-- 
 
--- -----------------------------------------------------
 -- 
--- SECTION DATA REPOSITORY - BEGIN
--- 
--- -----------------------------------------------------
-
--- -----------------------------------------------------
 -- WORKSET
---
--- Description: 
 -- 
--- -----------------------------------------------------
 CREATE TABLE `is2_workset` (
   `ID` 				     INT NOT NULL AUTO_INCREMENT,
   `NAME` 			     VARCHAR(100) NULL,
@@ -266,12 +241,12 @@ CREATE TABLE `is2_workset` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- DATASET FILE
 --
 -- Description: a reference the file containing data (the data itself is stored in dataset_column)
 -- 
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_dataset_file` (
   `ID` 				 INT NOT NULL AUTO_INCREMENT,
   `FILE_NAME` 		 VARCHAR(100) NULL,
@@ -291,13 +266,9 @@ CREATE TABLE `is2_dataset_file` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
--- DATASET COLUMN
---
--- Description:
 -- 
-
--- -----------------------------------------------------
+-- DATASET COLUMN
+-- 
 CREATE TABLE `is2_dataset_column` (
   `ID` 							 INT NOT NULL AUTO_INCREMENT,
   `NAME` 						 VARCHAR(100) NULL,
@@ -315,21 +286,13 @@ CREATE TABLE `is2_dataset_column` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
 -- 
--- SECTION DATA REPOSITORY - END
+-- SECTION RULES
 -- 
--- -----------------------------------------------------
 
--- -----------------------------------------------------
 -- 
--- SECTION RULES - BEGIN
--- 
--- -----------------------------------------------------
-
--- -----------------------------------------------------
 -- RULESET
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_ruleset` (
   `ID` 			    INT NOT NULL AUTO_INCREMENT,
   `FILE_NAME` 	    VARCHAR(100) NULL,
@@ -348,9 +311,9 @@ CREATE TABLE `is2_ruleset` (
 		ON DELETE NO ACTION ON UPDATE NO ACTION
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- RULE
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_rule` (
   `ID` 			 INT NOT NULL AUTO_INCREMENT,
   `NAME` 		 VARCHAR(100) DEFAULT NULL,
@@ -372,21 +335,13 @@ CREATE TABLE `is2_rule` (
 	  ON DELETE NO ACTION ON UPDATE NO ACTION
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
 -- 
--- SECTION DATA RULES - END
+-- SECTION PROCESS IMPLEMENTATION
 -- 
--- -----------------------------------------------------
 
--- -----------------------------------------------------
 -- 
--- SECTION PROCESS IMPLEMENTATION - BEGIN
--- 
--- -----------------------------------------------------
-
--- -----------------------------------------------------
 -- CATALOGUE OF APPLICATION SERVICES
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_app_service` (
   `ID` 						INT NOT NULL AUTO_INCREMENT,
   `NAME` 					VARCHAR(100) NULL,
@@ -400,12 +355,12 @@ CREATE TABLE `is2_app_service` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- STEP INSTANCE
 -- 
 -- Description: each service in the application service catalogue provides a set of functionalities
 -- each function is described in the following table
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_step_instance` (
   `ID`	 			INT NOT NULL AUTO_INCREMENT,
   `METHOD` 			VARCHAR(100) NULL,
@@ -418,9 +373,9 @@ CREATE TABLE `is2_step_instance` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- PARAMETER
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_parameter` (
   `ID` 			  INT NOT NULL AUTO_INCREMENT,
   `NAME` 		  VARCHAR(100) NULL,
@@ -430,11 +385,11 @@ CREATE TABLE `is2_parameter` (
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- -----------------------------------------------------
+-- 
 -- ROLE
 --
 -- Description: this is a central concept in our model. 
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_app_role` (
   `ID` 					INT NOT NULL AUTO_INCREMENT,
   `CODE` 				VARCHAR(50) NULL,
@@ -452,12 +407,12 @@ CREATE TABLE `is2_app_role` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- STEP INSTANCE SIGNATURE
 --
 -- Description: this table describes the signature of each function contained in the application service catalogue.
 -- In our model a signature is a set of application roles. Each role has a defined type (INPUT/OUTPUT). 
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_step_instance_signature` (
   `ID` 				 INT NOT NULL AUTO_INCREMENT,	
   `REQUIRED` 		 TINYINT NULL,
@@ -477,12 +432,12 @@ CREATE TABLE `is2_step_instance_signature` (
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- -----------------------------------------------------
+-- 
 -- DATA PROCESSING
 --
 -- Description: 
 -- 
--- ----------------------------------------------------
+--
 CREATE TABLE `is2_data_processing` (
   `ID` 					INT NOT NULL AUTO_INCREMENT,
   `NAME` 				VARCHAR(100) NULL,
@@ -499,12 +454,12 @@ CREATE TABLE `is2_data_processing` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- STEP RUNTIME
 --
 -- Description: 
 -- 
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_step_runtime` (
   `ID` 						   INT NOT NULL AUTO_INCREMENT,
   `ORDER_CODE` 					   INT NULL,
@@ -536,16 +491,9 @@ CREATE TABLE `is2_step_runtime` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
--- -----------------------------------------------------
 -- 
--- SECTION PROCESS IMPLEMENTATION - LINK
--- 
--- -----------------------------------------------------
-
--- -----------------------------------------------------
 --  MANY TO MANY RELATION -> PROCESS_STEP - PROCESS_STEP_INSTANCE
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_link_step_instance` (
   `PROCESS_STEP_ID` 		 INT NOT NULL,
   `PROCESS_STEP_INSTANCE_ID` INT NOT NULL,
@@ -558,9 +506,9 @@ CREATE TABLE `is2_link_step_instance` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 --  MANY TO MANY RELATION -> BUSINESS_SERVICE - APP_ROLE
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_link_business_service_app_role` (
   `BUSINESS_SERVICE_ID` INT NOT NULL,
   `APP_ROLE_ID` 		INT NOT NULL,
@@ -573,25 +521,15 @@ CREATE TABLE `is2_link_business_service_app_role` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
 -- 
--- SECTION PROCESS IMPLEMENTATION - END
 -- 
--- -----------------------------------------------------
-
-
-
-
-
--- -----------------------------------------------------
+-- SECTION AUXILIARY
 -- 
--- SECTION AUXILIARY - BEGIN
 -- 
--- -----------------------------------------------------
 
--- -----------------------------------------------------
+-- 
 -- LOG
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_log` (
   `ID` 				INT NOT NULL AUTO_INCREMENT,
   `MSG` 			TEXT NULL,
@@ -604,22 +542,16 @@ CREATE TABLE `is2_log` (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
 -- 
--- SECTION ADMINISTRATION - END
 -- 
--- -----------------------------------------------------
+-- SECTION WHAT'S NEXT
+-- 
+-- 
 
--- -----------------------------------------------------
 -- 
--- SECTION WHAT'S NEXT - BEGIN
--- 
--- -----------------------------------------------------
-
--- -----------------------------------------------------
 -- WORKFLOW
 -- The workflow will be implemented in a future release of the software
--- -----------------------------------------------------
+-- 
 CREATE TABLE `is2_workflow` (
   `ID` 			INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `RULE_ID` 	INT NOT NULL,
@@ -628,10 +560,10 @@ CREATE TABLE `is2_workflow` (
   `ELSE_STEP` 	INT NOT NULL REFERENCES `is2`.`is2_process_step` (`ID`)
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------
+-- 
 -- DATA BRIDGE
 -- The data bridge will be implemented in a future release of the software
--- -----------------------------------------------------
+-- 
 
 CREATE TABLE `is2_data_bridge` (
   `ID` 			INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -642,20 +574,9 @@ CREATE TABLE `is2_data_bridge` (
   `bridge_name` VARCHAR(50) NULL
 ) ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
--- -----------------------------------------------------
+--
+-- SECTION BATCH 
 -- 
--- SECTION WHAT'S NEXT - END
--- 
--- -----------------------------------------------------
-
-
-
--- -----------------------------------------------------
--- 
--- SECTION BATCH  - BEGIN
--- 
--- -----------------------------------------------------
 
 -- DROP TABLES --
 DROP TABLE IF EXISTS BATCH_STEP_EXECUTION_CONTEXT ;
@@ -779,10 +700,3 @@ CREATE TABLE BATCH_JOB_SEQ (
 ) ENGINE=InnoDB;
 
 INSERT INTO BATCH_JOB_SEQ (ID, UNIQUE_KEY) select * from (select 0 as ID, '0' as UNIQUE_KEY) as tmp where not exists(select * from BATCH_JOB_SEQ);
-
-
--- -----------------------------------------------------
--- 
--- SECTION BATCH  - END
--- 
--- -----------------------------------------------------
