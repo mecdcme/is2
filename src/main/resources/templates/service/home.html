@@ -67,12 +67,12 @@
                     <div class="container-fluid">
                         <div class="animated fadeIn">
                             <div class="row">
-                                <div class="col-sm-6 col-md-4" th:each="appService : ${appServices}">
+                                <div class="col-sm-6 col-md-6" th:each="appService : ${appServices}">
                                     <div class="card">
                                         <div class="card-header">
                                             <span th:text="${appService.name}" style="font-weight: bold"></span>
                                             <div class="card-header-actions" th:if="${appService.language == 'R'}">
-                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaSessioneWF();" th:title="#{label.button.session}"> 
+                                                <a class="card-header-action" th:href="@{/code}"> 
                                                     <i class="cil-code"></i>
                                                     <span th:text="#{service.code}">Source code</span>
                                                 </a>

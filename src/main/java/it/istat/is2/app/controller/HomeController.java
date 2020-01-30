@@ -91,6 +91,12 @@ public class HomeController {
         return "service/gsbpm";
     }
     
+    @RequestMapping("/code")
+    public String getSourceCode(HttpSession session, Model model) {
+        notificationService.removeAllMessages();
+        return "service/code";
+    }
+    
     @RequestMapping("/gsbpm/{idGsbpm}")
     public String getServiceByGsbpm(HttpSession session, Model model, @PathVariable("idGsbpm") Integer idGsbpm) {
         notificationService.removeAllMessages();
