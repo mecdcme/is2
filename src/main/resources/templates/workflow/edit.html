@@ -37,7 +37,7 @@
             var _paramTemplateMap = {};
             var _paramList = [[${parameterListAll}]]
             for (i = 0; i < _paramList.length; i++) {
-                _paramTemplateMap[_paramList[i].parameter.name] = _paramList[i].parameter.jsonTemplate;
+                _paramTemplateMap[replaceAll(_paramList[i].parameter.name," ","_")] = _paramList[i].parameter.jsonTemplate;
             }
             var matchedVariables = [[${matchedVariables}]];
             var _variable_btn = [[#{btn.title.variable}]];
@@ -187,7 +187,7 @@
                                                             <td><span th:utext="${T(it.istat.is2.app.util.Utility).printJsonToHtml(stepP.workset.paramValue)}"></span></td>
                                                             <td>
                                                                 <a href="javascript:void(0);" title="Edit param"
-                                                                   th:attr="data-id-elab=${dataProcessing.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-id-workset=${stepP.workset.id},data-name-workset=${stepP.workset.name},data-value-param=${stepP.workset.paramValue},onclick='javascript:openDlgModParametriWorkset(this);'">
+                                                                   th:attr="data-id-elab=${dataProcessing.id},data-id-step=${stepP.id},data-id-param=${stepP.id},data-id-workset=${stepP.workset.id},data-name-workset=${paramSignInstanceAppRole.parameter.name},data-value-param=${stepP.workset.paramValue},onclick='javascript:openDlgModParametriWorkset(this);'">
                                                                     <i class="fa fa-pencil"></i>
                                                                 </a>
                                                             </td>
@@ -200,7 +200,7 @@
                                                         <th:block th:unless="${stepParamMap.get(paramSignInstanceAppRole.code)}">
                                                             <td><i class="fa fa-times" style="color: #f86c6b;"></i></td>
                                                             <td>
-                                                                <a href="javascript:void(0);" title="Edit param"
+                                                                <a href="javascript:void(0);" title="Add param"
                                                                    th:attr="data-role-id=${paramSignInstanceAppRole.id},data-param-id=${paramSignInstanceAppRole.parameter.id},data-param-name=${paramSignInstanceAppRole.parameter.name},onclick='javascript:openAddParameter(this);'">
                                                                     <i class="fa fa-pencil"></i>
                                                                 </a>

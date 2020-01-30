@@ -163,7 +163,7 @@ function openAddParameter(identifier) {
     var nameParameter = $(identifier).data('param-name');
     $('#param-text-add').text(nameParameter);
     $('#param-value').val(nameParameter + '|' + idParam + '|' + idRole);
-    var jsontemplateText = _paramTemplateMap[nameParameter];
+    var jsontemplateText = _paramTemplateMap[replaceAll(nameParameter," ","_")];
     $('#add-param').empty();
     var jsonObj = JSON.parse(jsontemplateText, function (key, value) {
         if (key === "addRow") {
@@ -258,12 +258,16 @@ function associaVarToRole() {
     });
 }
 
+function replaceAll(str, cerca, sostituisci) {
+	  return str.split(cerca).join(sostituisci);
+	}
+
 function openDlgModParametriWorkset(identifier) {
     var idParam = $(identifier).data('id-param');
     var idWorkset = $(identifier).data('id-workset');
     var nameParameter = $(identifier).data('name-workset');
     $('#param-text-edit').text(nameParameter);
-    var jsontemplateText = _paramTemplateMap[nameParameter];
+    var jsontemplateText = _paramTemplateMap[replaceAll(nameParameter," ","_")];
     var jsontemplate = JSON.parse(jsontemplateText);
     var schema = jsontemplate["schema"];
     var options = jsontemplate["options"];

@@ -19,12 +19,12 @@ INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`) VALUES	(100,'SeleMix'
 -- 
 -- PROCESS_STEP
 -- 
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (10,'MLEST','This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the “true” data for all units that were used for the estimation',100);
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (15,'MLEST_STRATA','MLEST with stratification',100);
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (20,'PREDY','On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates',100);
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (25,'PREDY_STRATA','PREDY with stratification',100);
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (30,'SELEDIT','This function performs Selective Editing. On the basis of a set of observed data and the corresponding predictions for the true data, it selects the units required for interactive editing',100);
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (35,'SELEDIT_STRATA','SELEDIT with stratification',100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `LABEL`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (10,'MLEST','Run MLEST','This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the “true” data for all units that were used for the estimation',100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `LABEL`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (15,'MLEST_STRAT','Run MLEST_STRAT','MLEST with stratification',100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `LABEL`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (20,'PREDY','Run PREDY','On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates',100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `LABEL`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (25,'PREDY_STRAT','Run PREDY_STRAT','PREDY with stratification',100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `LABEL`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (30,'SELEDIT','Run SELEDIT','This function performs Selective Editing. On the basis of a set of observed data and the corresponding predictions for the true data, it selects the units required for interactive editing',100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `LABEL`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (35,'SELEDIT_STRATA','Run SELEDIT_STRATA','SELEDIT with stratification',100);
 -- INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (40,'OUTL','Scelta Outlier',100);
 -- INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (50,'MOD','Imposta Modello',100);
 

@@ -145,6 +145,7 @@ CREATE TABLE `is2_business_service` (
 CREATE TABLE `is2_process_step` (
   `ID` 	  				INT NOT NULL AUTO_INCREMENT,
   `NAME`  				VARCHAR(100) NULL,
+  `LABEL` 				VARCHAR(100) NULL,
   `DESCR` 				TEXT NULL,
   `BUSINESS_SERVICE_ID` INT NOT NULL,
   PRIMARY KEY (`ID`),

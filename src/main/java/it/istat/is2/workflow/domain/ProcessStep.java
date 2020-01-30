@@ -49,6 +49,8 @@ public class ProcessStep implements Serializable {
     private String name;
     @Column(name="DESCR")
     private String descr;
+    @Column(name="LABEL")
+    private String label;
     
     @ManyToOne
     @JoinColumn(name = "BUSINESS_SERVICE_ID")

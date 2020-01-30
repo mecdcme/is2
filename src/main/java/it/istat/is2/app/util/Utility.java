@@ -499,7 +499,7 @@ public class Utility {
 
 		LinkedHashMap<String, ArrayList<StepRuntime>> ret = new LinkedHashMap<>();
 		for (StepRuntime stepRuntime : dataList) {
-			System.out.println(stepRuntime.getId());
+			
 			ArrayList<StepRuntime> stepList = ret.get(stepRuntime.getWorkset().getName());
 			if (stepList == null)
 				stepList = new ArrayList<>();
