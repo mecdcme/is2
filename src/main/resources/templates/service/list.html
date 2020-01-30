@@ -41,14 +41,19 @@
                 <div class="c-subheader justify-content-between px-3">
                     <!-- Breadcrumb-->
                     <ol class="breadcrumb border-0 m-0">
-                        <li class="breadcrumb-item"><a th:href="@{/}" th:title="#{home.link.title}">Home</a></li>
                         <li class="breadcrumb-item">
-                            <span>Service catalogue</span>
+                            <a th:href="@{/}" th:title="#{home.link.title}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/gsbpm}">GSBPM</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span>5.1 Integrate data</span>
                         </li>
                     </ol>
                     <!-- Right navigation menu -->
                     <div class="c-header-nav mfe-2">
-                        <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{'/'}">
+                        <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{'/gsbpm'}">
                             <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                         </a>
                     </div>

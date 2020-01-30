@@ -45,9 +45,10 @@
                             <a th:href="@{/}">Home</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a th:href="@{/services}">
-                                <span>Service catalogue</span>
-                            </a>
+                            <a th:href="@{/gsbpm}">GSBPM</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/gsbpm/100}">5.1 Integrate data</a>
                         </li>
                         <li class="breadcrumb-item">
                             <span th:text="${businessService.name}"></span>
@@ -55,7 +56,7 @@
                     </ol>
                     <!-- Right navigation menu -->
                     <div class="c-header-nav mfe-2">
-                        <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{/services}">
+                        <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{/gsbpm/100}">
                             <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                         </a>
                     </div>
@@ -65,6 +66,22 @@
                 <main class="c-main">
                     <div class="container-fluid">
                         <div class="animated fadeIn">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-4" th:each="appService : ${appServices}">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <span th:text="${appService.name}" style="font-weight: bold"></span>
+                                            <div class="card-header-actions" th:if="${appService.language == 'R'}">
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaSessioneWF();" th:title="#{label.button.session}"> 
+                                                    <i class="cil-code"></i>
+                                                    <span th:text="#{service.code}">Source code</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="card-body"><span th:text="${appService.descr}"></span></div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="card">
@@ -76,10 +93,12 @@
                                                 <table class="table table-sm" th:if="${stepInstances}" cellspacing="0"  style="width:100%">
                                                     <thead>
                                                         <tr th:unless="${(stepInstances == null) or (stepInstances.size() == 0) }">
-                                                            <th><span th:text="#{listasessioni.codice}">codice</span></th>
-                                                            <th><span th:text="#{listasessioni.name}">nome</span></th>
-                                                            <th><span th:text="#{listasessioni.descr}">Descrizione</span></th>
-                                                            <th><span th:text="#{listasessioni.processo}">Processo</span></th>
+                                                            <th><span>#</span></th>
+                                                            <th><span th:text="#{service.name}">nome</span></th>
+                                                            <th style="width:50%"><span th:text="#{service.descr}">Descrizione</span></th>
+                                                            <th><span th:text="#{service.language}">Language</span></th>
+                                                            <th><span th:text="#{service.package}">Package</span></th>
+                                                            <th><span th:text="#{service.method}">Function/Method</span></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -88,6 +107,8 @@
                                                             <td th:text="${stepInstance.id}"></td>
                                                             <td th:text="${stepInstance.label}"></td>
                                                             <td th:text="${stepInstance.descr}"></td>
+                                                            <td th:text="${stepInstance.appService.language}"></td>
+                                                            <td th:text="${stepInstance.appService.source}"></td>
                                                             <td th:text="${stepInstance.method}"></td>
                                                         </tr>
                                                     </tbody>

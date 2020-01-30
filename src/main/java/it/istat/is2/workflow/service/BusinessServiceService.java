@@ -70,4 +70,13 @@ public class BusinessServiceService {
 
         return stepInstances;
     }
+
+    public List<AppService> findAppServices(Integer idBusinessService) {
+        List<AppService> appServiceList = new ArrayList<>();
+         BusinessService businessService = businessServiceDao.findById(idBusinessService).orElse(null);
+        if (businessService != null) {
+            appServiceList = appServiceDao.findByBusinessService(businessService);
+        }
+        return appServiceList;
+    }
 }

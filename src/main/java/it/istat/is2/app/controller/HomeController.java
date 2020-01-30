@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import it.istat.is2.app.service.AdministrationService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
+import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.ViewDataType;
 import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.domain.BusinessService;
@@ -84,9 +85,17 @@ public class HomeController {
         return "index";
     }
 
-    @RequestMapping("/services")
+    @RequestMapping("/gsbpm")
     public String services(HttpSession session, Model model) {
         notificationService.removeAllMessages();
+        return "service/gsbpm";
+    }
+    
+    @RequestMapping("/gsbpm/{idGsbpm}")
+    public String getServiceByGsbpm(HttpSession session, Model model, @PathVariable("idGsbpm") Integer idGsbpm) {
+        notificationService.removeAllMessages();
+        BusinessService businessService = businessServiceService.findBusinessServiceById(idGsbpm);
+        model.addAttribute("businessService", businessService);
         return "service/list";
     }
     
@@ -94,9 +103,11 @@ public class HomeController {
     public String getService(HttpSession session, Model model, @PathVariable("idService") Integer idBusinessService) {
         notificationService.removeAllMessages();
         BusinessService businessService = businessServiceService.findBusinessServiceById(idBusinessService);
+        List<AppService> appServices = businessServiceService.findAppServices(idBusinessService);
         List<StepInstance> stepInstances = businessServiceService.findStepInstances(idBusinessService);
         
         model.addAttribute("businessService", businessService);
+        model.addAttribute("appServices", appServices);
         model.addAttribute("stepInstances", stepInstances);
         return "service/home";
     }

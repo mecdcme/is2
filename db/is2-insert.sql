@@ -106,7 +106,7 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER`, `PA
 -- 
 INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`) 
 	VALUES  
-		(200,'Relais','RELAIS (REcord Linkage At IStat) is a toolkit providing a set of techniques for dealing with record linkage projects. The principal features of RELAIS are: It is designed and developed to allow the combination of different techniques for each of the record linkage phases. It has been developed as an open source project under the EUPL license (European Union Public License). It has been implemented by using two languages based on different paradigms: Java, an object-oriented language, and R, a functional language. It has been implemented using a relational database architecture, in particular it is based on a MySQL environment that is also in line with the open source philosophy of the RELAIS project.'),
+		(200,'Relais','RELAIS (REcord Linkage At IStat) is a toolkit providing a set of techniques for dealing with record linkage projects. The principal features of RELAIS are: It is designed and developed to allow the combination of different techniques for each of the record linkage phases. It has been developed as an open source project under the EUPL license (European Union Public License).'),
 		(300,'Validate','The validate R-package makes it easy to check whether data lives up to expectations you have based on domain knowledge. It works by allowing you to define data validation rules independent of the code or data set');
 
 -- 
