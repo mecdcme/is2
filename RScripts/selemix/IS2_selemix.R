@@ -261,7 +261,7 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
 				 
 			#output parameters
 			mod <- rbind(mod, toJSON(list(layer=layer,B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w )))
-			print(	mod)
+			
 			#Report output 
 			report <- list(n.outlier = sum(est$outlier), missing = sum(as.numeric(est$pattern)),  is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)
 			param_report <- list( Report = toJSON(report))
