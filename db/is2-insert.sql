@@ -72,7 +72,7 @@ INSERT INTO `is2_view_data_type` (`ID`, `NAME`)
 -- 
 -- GSBPM_PROCESS
 -- 
-INSERT INTO `is2_gsbpm_process` (`ID`, `NAME`, `PARENT`, `ORDER`, `ACTIVE`) 
+INSERT INTO `is2_gsbpm_process` (`ID`, `NAME`, `PARENT`, `ORDER_CODE`, `ACTIVE`) 
 	VALUES 
 		(1,'Specify needs',NULL,1,0),
 		(2,'Design',NULL,2,1),
@@ -164,7 +164,7 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER`, `PA
 -- 
 -- CATALOGUE OF BUSINESS SERVICES
 -- 
-INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`, `IS2_GSBPM_PROCESS_ID`) 
+INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`, `GSBPM_PROCESS_ID`) 
 	VALUES  
 		(200,'Relais','RELAIS (REcord Linkage At IStat) is a toolkit providing a set of techniques for dealing with record linkage projects. The principal features of RELAIS are: It is designed and developed to allow the combination of different techniques for each of the record linkage phases. It has been developed as an open source project under the EUPL license (European Union Public License).', 51),
 		(300,'Validate','The validate R-package makes it easy to check whether data lives up to expectations you have based on domain knowledge. It works by allowing you to define data validation rules independent of the code or data set', 53);

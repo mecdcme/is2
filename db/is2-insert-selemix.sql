@@ -14,7 +14,7 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `O
 -- 
 -- BUSINESS SERVICE
 -- 
-INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`, `IS2_GSBPM_PROCESS_ID`) VALUES	(100,'SeleMix','Selemix is an R package to treat quantitative data, which aims to identify a set of units affected by errors which potentially influence the estimates of interest (selective editing)', 53) ;
+INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`, `GSBPM_PROCESS_ID`) VALUES	(100,'SeleMix','Selemix is an R package to treat quantitative data, which aims to identify a set of units affected by errors which potentially influence the estimates of interest (selective editing)', 53) ;
 
 -- 
 -- PROCESS_STEP

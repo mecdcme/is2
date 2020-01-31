@@ -140,7 +140,6 @@ CREATE TABLE `is2_business_process` (
   `ORDER`  INT NULL,
   `PARENT` INT NULL,
   PRIMARY KEY (`ID`),
-  PRIMARY KEY (`ID`),
   CONSTRAINT `fk_is2_business_process_is2_business_process` FOREIGN KEY (`PARENT`)
 	REFERENCES `is2_business_process` (`ID`)
     ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -155,7 +154,7 @@ CREATE TABLE `is2_business_service` (
   `DESCR` TEXT NULL,
   `GSBPM_PROCESS_ID` INT NULL,
   PRIMARY KEY (`ID`),
-  CONSTRAINT `fk_is2_business_service_is2_gsbpm_process` FOREIGN KEY (`IS2_GSBPM_PROCESS_ID`)
+  CONSTRAINT `fk_is2_business_service_is2_gsbpm_process` FOREIGN KEY (`GSBPM_PROCESS_ID`)
 	REFERENCES `is2_gsbpm_process` (`ID`)
     ON DELETE NO ACTION ON UPDATE NO ACTION
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
