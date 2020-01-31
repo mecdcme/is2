@@ -48,7 +48,7 @@
                             <a th:href="@{/gsbpm}">GSBPM</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <span>5.1 Integrate data</span>
+                            <span th:text="${gsbpmProcess.name}"></span>
                         </li>
                     </ol>
                     <!-- Right navigation menu -->
@@ -64,8 +64,8 @@
                 <main class="c-main">
                     <div class="container-fluid">
                         <div class="fade-in">
-                            <div class="row" th:if="${session.businessServiceList}">
-                                <div class="col-sm-6 col-md-4" th:each="businessService, iter : ${session.businessServiceList}">
+                            <div class="row" th:if="${businessServices}">
+                                <div class="col-sm-6 col-md-4" th:each="businessService, iter : ${businessServices}">
                                     <div class="card text-white" th:classappend="${iter.odd} ? bg-gradient-warning : bg-gradient-info">
                                         <div class="card-body">
                                             <div class="card-body-title">

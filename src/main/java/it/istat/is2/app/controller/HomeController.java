@@ -39,10 +39,13 @@ import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.ViewDataType;
 import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.domain.BusinessService;
+import it.istat.is2.workflow.domain.GsbpmProcess;
 import it.istat.is2.workflow.domain.StepInstance;
 import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.workflow.service.BusinessServiceService;
+import it.istat.is2.workflow.service.GsbpmProcessService;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +59,8 @@ public class HomeController {
     private BusinessFunctionService businessFunctionService;
     @Autowired
     private BusinessServiceService businessServiceService;
+    @Autowired
+    private GsbpmProcessService gsbpmProcessService;
     @Autowired
     private AdministrationService administrationService;
     @Autowired
@@ -88,23 +93,30 @@ public class HomeController {
     @RequestMapping("/gsbpm")
     public String services(HttpSession session, Model model) {
         notificationService.removeAllMessages();
+
+        HashMap<String, GsbpmProcess> gsbpmMatrix = gsbpmProcessService.getGsbpmMatrix();
+        Integer rows = gsbpmProcessService.getGsbpmRows();
+        Integer columns = gsbpmProcessService.getGsbpmColumns();
+
+        model.addAttribute("gsbpmMatrix", gsbpmMatrix);
+        model.addAttribute("rows", rows);
+        model.addAttribute("columns", columns);
+
         return "service/gsbpm";
     }
-    
-    @RequestMapping("/code")
-    public String getSourceCode(HttpSession session, Model model) {
-        notificationService.removeAllMessages();
-        return "service/code";
-    }
-    
+
     @RequestMapping("/gsbpm/{idGsbpm}")
     public String getServiceByGsbpm(HttpSession session, Model model, @PathVariable("idGsbpm") Integer idGsbpm) {
         notificationService.removeAllMessages();
-        BusinessService businessService = businessServiceService.findBusinessServiceById(idGsbpm);
-        model.addAttribute("businessService", businessService);
+        List<BusinessService> businessServices = businessServiceService.findBusinessServiceByIdGsbpm(idGsbpm);
+        GsbpmProcess gsbpmProcess = gsbpmProcessService.findById(idGsbpm);
+        
+        model.addAttribute("businessServices", businessServices);
+        model.addAttribute("gsbpmProcess", gsbpmProcess);
+
         return "service/list";
     }
-    
+
     @GetMapping(value = "/service/{idService}")
     public String getService(HttpSession session, Model model, @PathVariable("idService") Integer idBusinessService) {
         notificationService.removeAllMessages();
@@ -116,6 +128,12 @@ public class HomeController {
         model.addAttribute("appServices", appServices);
         model.addAttribute("stepInstances", stepInstances);
         return "service/home";
+    }
+    
+    @RequestMapping("/code")
+    public String getSourceCode(HttpSession session, Model model) {
+        notificationService.removeAllMessages();
+        return "service/code";
     }
     
     @RequestMapping("/functions")

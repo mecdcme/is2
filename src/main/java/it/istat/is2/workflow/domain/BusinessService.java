@@ -21,6 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
 
@@ -30,7 +31,7 @@ import lombok.Data;
 public class BusinessService implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
@@ -46,35 +47,42 @@ public class BusinessService implements Serializable {
         @JoinColumn(name = "BUSINESS_SERVICE_ID", referencedColumnName = "ID", nullable = false)}, inverseJoinColumns = {
         @JoinColumn(name = "APP_ROLE_ID", referencedColumnName = "ID", nullable = false)})
     private List<AppRole> appRoles;
-  
+
     @OneToMany(mappedBy = "businessService")
     private List<AppService> appServices;
+    
+    @ManyToOne
+    @JoinColumn(name = "GSBPM_PROCESS_ID")
+    private GsbpmProcess gsbpmProcess;
 
-	 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		BusinessService other = (BusinessService) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        BusinessService other = (BusinessService) obj;
+        if (id == null) {
+            if (other.id != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
 
-	 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
 
 }

@@ -30,6 +30,11 @@
                 setMenuActive(0); //Set home active
             });
         </script>
+        <style>
+            .card{
+                min-height: 70px;
+            }
+        </style>
     </head>
     <body class="c-app">
         <div th:replace="layout :: site-aside"></div>
@@ -59,104 +64,30 @@
                 <main class="c-main">
                     <div class="container-fluid">
                         <div class="fade-in">
-                            <div class="row">
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card text-white bg-info text-center">
-                                        <div class="card-body">Design</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card text-white bg-info text-center">
-                                        <div class="card-body">Build</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card text-white bg-info text-center">
-                                        <div class="card-body">Collect</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card text-white bg-info text-center">
-                                        <div class="card-body">Process</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card text-white bg-info text-center">
-                                        <div class="card-body">Analyse</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card text-white bg-info text-center">
-                                        <div class="card-body">Disseminate</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card">
-                                        <div class="card-body">2.1 Design outputs</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card">
-                                        <div class="card-body">3.1 Build collection instrument</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card">
-                                        <div class="card-body">4.1 Create frame & select sample</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card text-white bg-success">
-                                        <div class="card-body">
-                                            <a style="color:white" th:href="@{'/gsbpm/100'}">
-                                                <span>5.1 Integrate data</span>
-                                            </a>
+                            <div class="row" th:each="y: ${#numbers.sequence(0, rows - 1)}">
+                                <div class="col-sm-2 col-md-2" th:each="x: ${#numbers.sequence(0, columns - 1)}">
+                                    <th:block th:if="${y==0}"><!-- first row-->
+                                        <div class="card bg-info text-white">
+                                            <div class="card-body" th:with="process=${gsbpmMatrix.get(x+'_'+y)}">
+                                                <span th:text="${process.name}"></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card">
-                                        <div class="card-body">6.1 Prepare draft outputs</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card">
-                                        <div class="card-body">7.1 Update output systems</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card">
-                                        <div class="card-body">2.2 Design variable descriptions</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card">
-                                        <div class="card-body">3.2 Build or enhance process components</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card">
-                                        <div class="card-body">4.2 Setup collection</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card">
-                                        <div class="card-body">5.2 Classify & code</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card">
-                                        <div class="card-body">6.2 Validate outputs</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <div class="card">
-                                        <div class="card-body">7.2 Produce dissemination outputs</div>
-                                    </div>
+                                    </th:block>
+                                    <th:block th:unless="${y==0}">
+                                        <div class="card" th:if="${gsbpmMatrix.get(x+'_'+y)}" th:with="process=${gsbpmMatrix.get(x+'_'+y)}" th:classappend="${process.businessServices.size()>0}? 'bg-success text-white':''">
+                                            <div class="card-body">
+                                                <th:block th:if="${process.businessServices.size()>0}">
+                                                    <a th:title="${process.name}" th:href="@{'/gsbpm/' + ${process.id}}" style='color:white'>
+                                                        <span th:text="${process.name}"></span>
+                                                    </a>
+                                                </th:block>
+                                                <th:block th:unless="${process.businessServices.size()>0}">
+                                                    <span th:text="${process.name}"></span>
+                                                </th:block>
+                                            </div>
+                                        </div>    
+                                    </th:block>
+
                                 </div>
                             </div>
                         </div>

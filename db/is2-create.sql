@@ -89,6 +89,22 @@ CREATE TABLE `is2_view_data_type` (
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 
+-- GSBPM_PROCESS
+-- 
+CREATE TABLE `is2_gsbpm_process` (
+  `ID`	  INT NOT NULL AUTO_INCREMENT,
+  `NAME`  VARCHAR(250) NULL,
+  `DESCR` TEXT NULL,
+  `ACTIVE`	  TINYINT NOT NULL,
+  `ORDER_CODE`	  INT NULL,
+  `PARENT`	  INT NULL,
+  PRIMARY KEY (`ID`),
+  CONSTRAINT `fk_is2_gsbpm_process_is2_gsbpm_process` FOREIGN KEY (`PARENT`)
+	REFERENCES `is2_gsbpm_process` (`ID`)
+    ON DELETE NO ACTION ON UPDATE NO ACTION
+)  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 
 -- 
 -- PROCESS DESIGN SECTION - BEGIN
 --
@@ -124,8 +140,9 @@ CREATE TABLE `is2_business_process` (
   `ORDER`  INT NULL,
   `PARENT` INT NULL,
   PRIMARY KEY (`ID`),
+  PRIMARY KEY (`ID`),
   CONSTRAINT `fk_is2_business_process_is2_business_process` FOREIGN KEY (`PARENT`)
-	REFERENCES `is2`.`is2_business_process` (`ID`)
+	REFERENCES `is2_business_process` (`ID`)
     ON DELETE NO ACTION ON UPDATE NO ACTION
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -136,7 +153,11 @@ CREATE TABLE `is2_business_service` (
   `ID` 	  INT NOT NULL AUTO_INCREMENT,
   `NAME`  VARCHAR(100) NULL,
   `DESCR` TEXT NULL,
-  PRIMARY KEY (`ID`)
+  `GSBPM_PROCESS_ID` INT NULL,
+  PRIMARY KEY (`ID`),
+  CONSTRAINT `fk_is2_business_service_is2_gsbpm_process` FOREIGN KEY (`IS2_GSBPM_PROCESS_ID`)
+	REFERENCES `is2_gsbpm_process` (`ID`)
+    ON DELETE NO ACTION ON UPDATE NO ACTION
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 
@@ -150,7 +171,7 @@ CREATE TABLE `is2_process_step` (
   `BUSINESS_SERVICE_ID` INT NOT NULL,
   PRIMARY KEY (`ID`),
   CONSTRAINT `fk_is2_process_step_business_service` FOREIGN KEY (`BUSINESS_SERVICE_ID`)
-	REFERENCES `is2`.`is2_business_service` (`ID`)
+	REFERENCES `is2_business_service` (`ID`)
     ON DELETE NO ACTION ON UPDATE NO ACTION
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -181,10 +202,10 @@ CREATE TABLE `is2_link_function_process` (
   `BUSINESS_PROCESS_ID`  INT NOT NULL,
   PRIMARY KEY (`BUSINESS_FUNCTION_ID`, `BUSINESS_PROCESS_ID`),
   CONSTRAINT `fk_is2_bfunc_bprocess_is2_business_function` FOREIGN KEY (`BUSINESS_FUNCTION_ID`)
-	REFERENCES `is2`.`is2_business_function` (`ID`)
+	REFERENCES `is2_business_function` (`ID`)
     ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_is2_bfunc_bprocess_is2_business_process` FOREIGN KEY (`BUSINESS_PROCESS_ID`)
-	REFERENCES `is2`.`is2_business_process` (`ID`)
+	REFERENCES `is2_business_process` (`ID`)
     ON DELETE NO ACTION ON UPDATE NO ACTION
 )  ENGINE=INNODB AUTO_INCREMENT=2 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

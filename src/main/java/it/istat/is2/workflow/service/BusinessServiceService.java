@@ -30,9 +30,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.istat.is2.workflow.dao.BusinessServiceDao;
+import it.istat.is2.workflow.dao.GsbpmProcessDao;
 import it.istat.is2.workflow.dao.StepInstanceDao;
 import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
+import it.istat.is2.workflow.domain.GsbpmProcess;
 import it.istat.is2.workflow.domain.StepInstance;
 import java.util.ArrayList;
 
@@ -41,6 +43,9 @@ public class BusinessServiceService {
 
     @Autowired
     BusinessServiceDao businessServiceDao;
+    
+    @Autowired
+    GsbpmProcessDao gsbpmProcessDao;
 
     @Autowired
     AppServiceDao appServiceDao;
@@ -54,6 +59,15 @@ public class BusinessServiceService {
 
     public BusinessService findBusinessServiceById(Integer idService) {
         return businessServiceDao.findById(idService).orElse(null);
+    }
+
+    public List<BusinessService> findBusinessServiceByIdGsbpm(Integer idGsbpm) {
+        List<BusinessService> businessServices = null;
+        GsbpmProcess gsbpmProcess = gsbpmProcessDao.findById(idGsbpm).orElse(null);
+        if(gsbpmProcess != null){
+            businessServices = businessServiceDao.findByGsbpmProcess(gsbpmProcess);
+        }
+        return businessServices;
     }
 
     public List<StepInstance> findStepInstances(Integer idBusinessService) {
@@ -73,7 +87,7 @@ public class BusinessServiceService {
 
     public List<AppService> findAppServices(Integer idBusinessService) {
         List<AppService> appServiceList = new ArrayList<>();
-         BusinessService businessService = businessServiceDao.findById(idBusinessService).orElse(null);
+        BusinessService businessService = businessServiceDao.findById(idBusinessService).orElse(null);
         if (businessService != null) {
             appServiceList = appServiceDao.findByBusinessService(businessService);
         }

@@ -23,22 +23,26 @@
  */
 package it.istat.is2.workflow.dao;
 
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import it.istat.is2.workflow.domain.BusinessService;
 import it.istat.is2.workflow.domain.GsbpmProcess;
-import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface BusinessServiceDao extends CrudRepository<BusinessService, Integer> {
+public interface GsbpmProcessDao extends CrudRepository<GsbpmProcess, Integer> {
 
-    @Override
-    List<BusinessService> findAll();
+    @Query("SELECT gp FROM GsbpmProcess gp WHERE gp.gsbpmProcessParent IS NULL and gp.active = 1 ORDER BY gp.orderCode ASC ")
+    List<GsbpmProcess> findAllProcesses();
 
-    Optional<BusinessService> findById(Long idService);
-
-    List<BusinessService> findByGsbpmProcess(GsbpmProcess gsbpmProcess);
-
+    @Query("SELECT gp FROM GsbpmProcess gp WHERE gp.gsbpmProcessParent IS NOT NULL and gp.active = 1 ORDER BY gp.gsbpmProcessParent, gp.orderCode ASC")
+    List<GsbpmProcess> findAllSubProcesses();
+    
+    @Query("SELECT max(gp.orderCode) FROM GsbpmProcess gp")
+    Integer getGsbpmRows();
+    
+    @Query("SELECT count(*) FROM GsbpmProcess gp WHERE gp.gsbpmProcessParent IS NULL and gp.active = 1")
+    Integer getGsbpmColumns();
 }

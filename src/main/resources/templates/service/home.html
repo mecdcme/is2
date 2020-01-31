@@ -48,7 +48,9 @@
                             <a th:href="@{/gsbpm}">GSBPM</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a th:href="@{/gsbpm/100}">5.1 Integrate data</a>
+                            <a th:href="@{'/gsbpm/' + ${businessService.gsbpmProcess.id}}">
+                                <span th:text="${businessService.gsbpmProcess.name}"></span>
+                            </a>
                         </li>
                         <li class="breadcrumb-item">
                             <span th:text="${businessService.name}"></span>

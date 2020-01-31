@@ -68,6 +68,66 @@ INSERT INTO `is2_view_data_type` (`ID`, `NAME`)
 		(1,'DATASET'),
 		(2,'RULESET');
 
+
+-- 
+-- GSBPM_PROCESS
+-- 
+INSERT INTO `is2_gsbpm_process` (`ID`, `NAME`, `PARENT`, `ORDER`, `ACTIVE`) 
+	VALUES 
+		(1,'Specify needs',NULL,1,0),
+		(2,'Design',NULL,2,1),
+		(3,'Build',NULL,3,1),
+		(4,'Collect',NULL,4,1),
+		(5,'Process',NULL,5,1),
+		(6,'Analyse',NULL,6,1),
+		(7,'Disseminate',NULL,7,1),
+		(8,'Evaluate',NULL,8,0),
+		(11,'1.1 Identify needs',1,1,0),
+		(12,'1.2 Consult and confirm needs',1,2,0),
+		(13,'1.3 Establish output objectives',1,3,0),
+		(14,'1.4 Identify concepts',1,4,0),
+		(15,'1.5 Check data availability',1,5,0),
+		(16,'1.6 Prepare and submit business case',1,6,0),
+		(21,'2.1 Design outputs',2,1,1),
+		(22,'2.2 Design variable descriptions',2,2,1),
+		(23,'2.3 Design collection',2,3,1),
+		(24,'2.4 Design frame & sample',2,4,1),
+		(25,'2.5 Design processing & analysis',2,5,1),
+		(26,'2.6 Design production systems & workflow',2,6,1),
+		(31,'3.1 Reuse or build collection instruments',3,1,1),
+		(32,'3.2 Reuse or build processing and analysis components',3,2,1),
+		(33,'3.3 Reuse or build dissemination components',3,3,1),
+		(34,'3.4 Configure workflows',3,4,1),
+		(35,'3.5 Test production system',3,5,1),
+		(36,'3.6 Test statistical business process',3,6,1),
+		(37,'3.7 Finalise production system',3,7,1),
+		(41,'4.1 Create frame and select sample',4,1,1),
+		(42,'4.2 Set up collection',4,2,1),
+		(43,'4.3 Run collection',4,3,1),
+		(44,'4.4 Finalize collection',4,4,1),
+		(51,'5.1 Integrate data',5,1,1),
+		(52,'5.2 Classify & code',5,2,1),
+		(53,'5.3 Review & validate',5,3,1),
+		(54,'5.4 Edit & impute',5,4,1),
+		(55,'5.5 Derive new variables & units',5,5,1),
+		(56,'5.6 Calculate weights',5,6,1),
+		(57,'5.7 Calculate aggregates',5,7,1),
+		(58,'5.8 Finalise data files',5,8,1),
+		(61,'6.1 Prepare draft outputs',6,1,1),
+		(62,'6.2 Validate outputs',6,2,1),
+		(63,'6.3 Interpret & explain outputs',6,3,1),
+		(64,'6.4 Apply disclosure control',6,4,1),
+		(65,'6.5 Finalise outputs',6,5,1),
+		(71,'7.1 Update output systems',7,1,1),
+		(72,'7.2 Produce dissemination products',7,2,1),
+		(73,'7.3 Manage release of dissemination products',7,3,1),
+		(74,'7.4 Promote dissemination products',7,4,1),
+		(75,'7.5 Manage user support',7,5,1),
+		(81,'8.1 Update output systems',8,1,0),
+		(82,'8.2 Produce dissemination products',8,2,0),
+		(83,'8.3 Manage release of dissemination products',8,3,0);
+        
+
 -- 
 -- 
 -- PROCESS DESIGN SECTION
@@ -104,20 +164,20 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER`, `PA
 -- 
 -- CATALOGUE OF BUSINESS SERVICES
 -- 
-INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`) 
+INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`, `IS2_GSBPM_PROCESS_ID`) 
 	VALUES  
-		(200,'Relais','RELAIS (REcord Linkage At IStat) is a toolkit providing a set of techniques for dealing with record linkage projects. The principal features of RELAIS are: It is designed and developed to allow the combination of different techniques for each of the record linkage phases. It has been developed as an open source project under the EUPL license (European Union Public License). It has been implemented by using two languages based on different paradigms: Java, an object-oriented language, and R, a functional language. It has been implemented using a relational database architecture, in particular it is based on a MySQL environment that is also in line with the open source philosophy of the RELAIS project.'),
-		(300,'Validate','The validate R-package makes it easy to check whether data lives up to expectations you have based on domain knowledge. It works by allowing you to define data validation rules independent of the code or data set');
+		(200,'Relais','RELAIS (REcord Linkage At IStat) is a toolkit providing a set of techniques for dealing with record linkage projects. The principal features of RELAIS are: It is designed and developed to allow the combination of different techniques for each of the record linkage phases. It has been developed as an open source project under the EUPL license (European Union Public License).', 51),
+		(300,'Validate','The validate R-package makes it easy to check whether data lives up to expectations you have based on domain knowledge. It works by allowing you to define data validation rules independent of the code or data set', 53);
 
 -- 
 -- PROCESS_STEP
 -- 
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `LABEL`, `DESCR`, `BUSINESS_SERVICE_ID`) 
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) 
 	VALUES 
-		(4,'VALIDATE','Run VALIDATE','Validate dataset with ruleset',300),
-		(70,'CONTINGENCY_TABLE', 'Run CONTINGENCY_TABLE', 'The first step of the probabilistic procedure consists of computing the comparison vector, given by the result of the function on the k matching variables, for all the pairs in the space. Indeed, starting from the vector distribution among the pairs (reported in the contingency table) the goal is the estimation of the probability distribution of the unknown random variable “link status”, which assigns each pair to the set M or to the set U. The comparison vector considered in RELAIS is a binary one, i.e. for each matching variable it reports the equality (corresponding to value 1) or the inequality (corresponding to value 0) between the units.',200),
-		(71,'FELLEGI_SUNTER','Run FELLEGI_SUNTER','The Fellegi and Sunter method is a probabilistic approach to solve record linkage problem based on decision model.  According to the method, given two (or more) sources of data, all pairs coming from the Cartesian product of the two sources has to be classified in three independent and mutually exclusive subsets: the set of matches, the set of non-matches and the set of pairs requiring manual review. In order to classify the pairs, the comparisons on common attributes are used to estimate for each pair the probabilities to belong to both the set of matches and the set of non-matches. The pair classification criteria is based on the ratio between such conditional probabilities. The decision model aims to minimize both the misclassification errors and the probability of classifying a pair as belonging to the subset of pairs requiring manual review',200),
-		(72,'MATCHING_TABLE','Run MATCHING_TABLE','Create result matching table',200);
+		(4,'VALIDATE','Validate dataset with ruleset',300),
+		(70,'CONTINGENCY_TABLE','The first step of the probabilistic procedure consists of computing the comparison vector, given by the result of the function on the k matching variables, for all the pairs in the space. Indeed, starting from the vector distribution among the pairs (reported in the contingency table) the goal is the estimation of the probability distribution of the unknown random variable “link status”, which assigns each pair to the set M or to the set U. The comparison vector considered in RELAIS is a binary one, i.e. for each matching variable it reports the equality (corresponding to value 1) or the inequality (corresponding to value 0) between the units.',200),
+		(71,'FELLEGI_SUNTER','The Fellegi and Sunter method is a probabilistic approach to solve record linkage problem based on decision model.  According to the method, given two (or more) sources of data, all pairs coming from the Cartesian product of the two sources has to be classified in three independent and mutually exclusive subsets: the set of matches, the set of non-matches and the set of pairs requiring manual review. In order to classify the pairs, the comparisons on common attributes are used to estimate for each pair the probabilities to belong to both the set of matches and the set of non-matches. The pair classification criteria is based on the ratio between such conditional probabilities. The decision model aims to minimize both the misclassification errors and the probability of classifying a pair as belonging to the subset of pairs requiring manual review',200),
+		(72,'MATCHING_TABLE','Create result matching table',200);
 
 
 -- 
