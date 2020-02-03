@@ -168,6 +168,16 @@
             <artifactId>renjin-script-engine</artifactId>
             <version>RELEASE</version>
         </dependency>
+        <dependency>
+		    <groupId>javax.xml.bind</groupId>
+		    <artifactId>jaxb-api</artifactId>
+		    <version>2.3.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.sun.xml.bind</groupId>
+		    <artifactId>jaxb-impl</artifactId>
+		    <version>2.3.1</version>
+		</dependency>
     </dependencies>
     
     <!-- Renjin repository-->
@@ -177,6 +187,10 @@
             <name>bedatadriven public repo</name>
             <url>https://nexus.bedatadriven.com/content/groups/public/</url>
         </repository>
+        <repository>
+	        <id>central</id>
+	        <url>https://repo1.maven.org/maven2/</url>
+	    </repository>
     </repositories>
 
     <build>
