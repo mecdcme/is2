@@ -1,0 +1,2566 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="is2">
+	<table_structure name="batch_job_execution">
+		<field Field="JOB_EXECUTION_ID" Type="bigint(20)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<field Field="VERSION" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="JOB_INSTANCE_ID" Type="bigint(20)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="CREATE_TIME" Type="datetime" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="START_TIME" Type="datetime" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="END_TIME" Type="datetime" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="STATUS" Type="varchar(10)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="EXIT_CODE" Type="varchar(2500)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="EXIT_MESSAGE" Type="varchar(2500)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="LAST_UPDATED" Type="datetime" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="JOB_CONFIGURATION_LOCATION" Type="varchar(2500)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="WF_SESSION_ID" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="WF_ELAB_ID" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="WF_PROC_ID" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="batch_job_execution" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="JOB_EXECUTION_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="batch_job_execution" Non_unique="1" Key_name="JOB_INST_EXEC_FK" Seq_in_index="1" Column_name="JOB_INSTANCE_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="batch_job_execution" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Create_time="2020-02-03 13:34:32" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="batch_job_execution">
+	</table_data>
+	<table_structure name="batch_job_execution_context">
+		<field Field="JOB_EXECUTION_ID" Type="bigint(20)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<field Field="SHORT_CONTEXT" Type="varchar(2500)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="SERIALIZED_CONTEXT" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="batch_job_execution_context" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="JOB_EXECUTION_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="batch_job_execution_context" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Create_time="2020-02-03 13:34:33" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="batch_job_execution_context">
+	</table_data>
+	<table_structure name="batch_job_execution_params">
+		<field Field="JOB_EXECUTION_ID" Type="bigint(20)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="TYPE_CD" Type="varchar(6)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="KEY_NAME" Type="varchar(100)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="STRING_VAL" Type="varchar(250)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DATE_VAL" Type="datetime" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="LONG_VAL" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DOUBLE_VAL" Type="double" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="IDENTIFYING" Type="char(1)" Null="NO" Key="" Extra="" Comment="" />
+		<key Table="batch_job_execution_params" Non_unique="1" Key_name="JOB_EXEC_PARAMS_FK" Seq_in_index="1" Column_name="JOB_EXECUTION_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="batch_job_execution_params" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Create_time="2020-02-03 13:34:32" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="batch_job_execution_params">
+	</table_data>
+	<table_structure name="batch_job_execution_seq">
+		<field Field="ID" Type="bigint(20)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="UNIQUE_KEY" Type="char(1)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<key Table="batch_job_execution_seq" Non_unique="0" Key_name="UNIQUE_KEY_UN" Seq_in_index="1" Column_name="UNIQUE_KEY" Collation="A" Cardinality="1" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="batch_job_execution_seq" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="1" Avg_row_length="16384" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Create_time="2020-02-03 13:34:34" Update_time="2020-02-03 13:34:35" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="batch_job_execution_seq">
+	<row>
+		<field name="ID">0</field>
+		<field name="UNIQUE_KEY">0</field>
+	</row>
+	</table_data>
+	<table_structure name="batch_job_instance">
+		<field Field="JOB_INSTANCE_ID" Type="bigint(20)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<field Field="VERSION" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="JOB_NAME" Type="varchar(100)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="JOB_KEY" Type="varchar(32)" Null="NO" Key="" Extra="" Comment="" />
+		<key Table="batch_job_instance" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="JOB_INSTANCE_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="batch_job_instance" Non_unique="0" Key_name="JOB_INST_UN" Seq_in_index="1" Column_name="JOB_NAME" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="batch_job_instance" Non_unique="0" Key_name="JOB_INST_UN" Seq_in_index="2" Column_name="JOB_KEY" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="batch_job_instance" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Create_time="2020-02-03 13:34:31" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="batch_job_instance">
+	</table_data>
+	<table_structure name="batch_job_seq">
+		<field Field="ID" Type="bigint(20)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="UNIQUE_KEY" Type="char(1)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<key Table="batch_job_seq" Non_unique="0" Key_name="UNIQUE_KEY_UN" Seq_in_index="1" Column_name="UNIQUE_KEY" Collation="A" Cardinality="1" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="batch_job_seq" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="1" Avg_row_length="16384" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Create_time="2020-02-03 13:34:35" Update_time="2020-02-03 13:34:35" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="batch_job_seq">
+	<row>
+		<field name="ID">0</field>
+		<field name="UNIQUE_KEY">0</field>
+	</row>
+	</table_data>
+	<table_structure name="batch_step_execution">
+		<field Field="STEP_EXECUTION_ID" Type="bigint(20)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<field Field="VERSION" Type="bigint(20)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="STEP_NAME" Type="varchar(100)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="JOB_EXECUTION_ID" Type="bigint(20)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="START_TIME" Type="datetime" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="END_TIME" Type="datetime" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="STATUS" Type="varchar(10)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="COMMIT_COUNT" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="READ_COUNT" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="FILTER_COUNT" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="WRITE_COUNT" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="READ_SKIP_COUNT" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="WRITE_SKIP_COUNT" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="PROCESS_SKIP_COUNT" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="ROLLBACK_COUNT" Type="bigint(20)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="EXIT_CODE" Type="varchar(2500)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="EXIT_MESSAGE" Type="varchar(2500)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="LAST_UPDATED" Type="datetime" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="batch_step_execution" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="STEP_EXECUTION_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="batch_step_execution" Non_unique="1" Key_name="JOB_EXEC_STEP_FK" Seq_in_index="1" Column_name="JOB_EXECUTION_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="batch_step_execution" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Create_time="2020-02-03 13:34:33" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="batch_step_execution">
+	</table_data>
+	<table_structure name="batch_step_execution_context">
+		<field Field="STEP_EXECUTION_ID" Type="bigint(20)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<field Field="SHORT_CONTEXT" Type="varchar(2500)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="SERIALIZED_CONTEXT" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="batch_step_execution_context" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="STEP_EXECUTION_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="batch_step_execution_context" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Create_time="2020-02-03 13:34:33" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="batch_step_execution_context">
+	</table_data>
+	<table_structure name="batch_step_execution_seq">
+		<field Field="ID" Type="bigint(20)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="UNIQUE_KEY" Type="char(1)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<key Table="batch_step_execution_seq" Non_unique="0" Key_name="UNIQUE_KEY_UN" Seq_in_index="1" Column_name="UNIQUE_KEY" Collation="A" Cardinality="1" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="batch_step_execution_seq" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="1" Avg_row_length="16384" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Create_time="2020-02-03 13:34:34" Update_time="2020-02-03 13:34:34" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="batch_step_execution_seq">
+	<row>
+		<field name="ID">0</field>
+		<field name="UNIQUE_KEY">0</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_app_role">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="CODE" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="ORDER" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="CLS_DATA_TYPE_ID" Type="int(11)" Null="YES" Key="MUL" Extra="" Comment="" />
+		<field Field="PARAMETER_ID" Type="int(11)" Null="YES" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_app_role" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="31" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_app_role" Non_unique="1" Key_name="fk_is2_app_role_is2_data_type" Seq_in_index="1" Column_name="CLS_DATA_TYPE_ID" Collation="A" Cardinality="3" Null="YES" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_app_role" Non_unique="1" Key_name="fk_is2_app_role_is2_paramter" Seq_in_index="1" Column_name="PARAMETER_ID" Collation="A" Cardinality="7" Null="YES" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_app_role" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="31" Avg_row_length="528" Data_length="16384" Max_data_length="0" Index_length="32768" Data_free="0" Auto_increment="115" Create_time="2020-02-03 13:34:25" Update_time="2020-02-03 13:43:25" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_app_role">
+	<row>
+		<field name="ID">1</field>
+		<field name="CODE">X</field>
+		<field name="NAME">MATCHING VARIABLES</field>
+		<field name="DESCR">MATCHING VARAIBLES</field>
+		<field name="ORDER">1</field>
+		<field name="CLS_DATA_TYPE_ID">2</field>
+		<field name="PARAMETER_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="CODE">X1</field>
+		<field name="NAME">MATCHING A</field>
+		<field name="DESCR">MATCHING VARIABLE IN DATASET A</field>
+		<field name="ORDER">2</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">3</field>
+		<field name="CODE">X2</field>
+		<field name="NAME">MATCHING B</field>
+		<field name="DESCR">MATCHING VARIABLE IN DATASET B</field>
+		<field name="ORDER">3</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">4</field>
+		<field name="CODE">CT</field>
+		<field name="NAME">CONTENGENCY TABLE</field>
+		<field name="DESCR">CONTENGENCY TABLE</field>
+		<field name="ORDER">4</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">5</field>
+		<field name="CODE">FS</field>
+		<field name="NAME">FELLEGI-SUNTER</field>
+		<field name="DESCR">FELLEGI-SUNTER</field>
+		<field name="ORDER">2</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">6</field>
+		<field name="CODE">B</field>
+		<field name="NAME">BLOCKING</field>
+		<field name="DESCR">SLICING DEL DATASET</field>
+		<field name="ORDER">7</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">7</field>
+		<field name="CODE">MT</field>
+		<field name="NAME">MATCHING TABLE</field>
+		<field name="DESCR">MATCHING TABLE</field>
+		<field name="ORDER">10</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">8</field>
+		<field name="CODE">TH</field>
+		<field name="NAME">THRESHOLD MATCHING</field>
+		<field name="DESCR">THRESHOLD MATCHING</field>
+		<field name="ORDER">9</field>
+		<field name="CLS_DATA_TYPE_ID">2</field>
+		<field name="PARAMETER_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">9</field>
+		<field name="CODE">TU</field>
+		<field name="NAME">THRESHOLD UNMATCHING</field>
+		<field name="DESCR">THRESHOLD UNMATCHING</field>
+		<field name="ORDER">10</field>
+		<field name="CLS_DATA_TYPE_ID">2</field>
+		<field name="PARAMETER_ID">3</field>
+	</row>
+	<row>
+		<field name="ID">10</field>
+		<field name="CODE">PM</field>
+		<field name="NAME">POSSIBLE MATCHING TABLE</field>
+		<field name="DESCR">POSSIBLE MATCHING TABLE</field>
+		<field name="ORDER">9</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">11</field>
+		<field name="CODE">M</field>
+		<field name="NAME">RANKING</field>
+		<field name="DESCR">INFLUENCE RANKING</field>
+		<field name="ORDER">5</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">12</field>
+		<field name="CODE">S</field>
+		<field name="NAME">STRATA</field>
+		<field name="DESCR">PARTIZIONAMENTO DEL DATASET</field>
+		<field name="ORDER">6</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">13</field>
+		<field name="CODE">RA</field>
+		<field name="NAME">RESIDUAL A</field>
+		<field name="DESCR">RESIDUAL DATASET  A</field>
+		<field name="ORDER">6</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">14</field>
+		<field name="CODE">RB</field>
+		<field name="NAME">RESIDUAL B</field>
+		<field name="DESCR">RESIDUAL DATASET  B</field>
+		<field name="ORDER">5</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">15</field>
+		<field name="CODE">MD</field>
+		<field name="NAME">DATA</field>
+		<field name="DESCR">DATA</field>
+		<field name="ORDER">1</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">16</field>
+		<field name="CODE">RS</field>
+		<field name="NAME">RULESET</field>
+		<field name="DESCR">RULESET</field>
+		<field name="ORDER">2</field>
+		<field name="CLS_DATA_TYPE_ID">4</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">100</field>
+		<field name="CODE">N</field>
+		<field name="NAME">SKIP</field>
+		<field name="DESCR">VARIABILE NON UTILIZZATA</field>
+		<field name="ORDER">100</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">101</field>
+		<field name="CODE">I</field>
+		<field name="NAME">IDENTIFICATIVO</field>
+		<field name="DESCR">CHIAVE OSSERVAZIONE</field>
+		<field name="ORDER">1</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">102</field>
+		<field name="CODE">Y</field>
+		<field name="NAME">TARGET</field>
+		<field name="DESCR">VARIABILE DI OGGETTO DI ANALISI</field>
+		<field name="ORDER">3</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">103</field>
+		<field name="CODE">X</field>
+		<field name="NAME">COVARIATA</field>
+		<field name="DESCR">VARIABILE INDIPENDENTE</field>
+		<field name="ORDER">4</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">104</field>
+		<field name="CODE">P</field>
+		<field name="NAME">PREDIZIONE</field>
+		<field name="DESCR">VARIABILE DI PREDIZIONE</field>
+		<field name="ORDER">5</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">105</field>
+		<field name="CODE">O</field>
+		<field name="NAME">OUTLIER</field>
+		<field name="DESCR">FLAG OUTLIER</field>
+		<field name="ORDER">6</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">106</field>
+		<field name="CODE">W</field>
+		<field name="NAME">PESO</field>
+		<field name="DESCR">PESO CAMPIONARIO</field>
+		<field name="ORDER">7</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">107</field>
+		<field name="CODE">E</field>
+		<field name="NAME">ERRORE</field>
+		<field name="DESCR">ERRORE INFLUENTE</field>
+		<field name="ORDER">10</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">108</field>
+		<field name="CODE">R</field>
+		<field name="NAME">RANKING</field>
+		<field name="DESCR">INFLUENCE RANKING</field>
+		<field name="ORDER">11</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">109</field>
+		<field name="CODE">T</field>
+		<field name="NAME">OUTPUT</field>
+		<field name="DESCR">VARIABILE DI OUTPUT</field>
+		<field name="ORDER">20</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">110</field>
+		<field name="CODE">S</field>
+		<field name="NAME">STRATO</field>
+		<field name="DESCR">PARTIZIONAMENTO DEL DATASET</field>
+		<field name="ORDER">2</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">111</field>
+		<field name="CODE">Z</field>
+		<field name="NAME">PARAMETRI</field>
+		<field name="DESCR">PARAMETRI DI INPUT</field>
+		<field name="ORDER">997</field>
+		<field name="CLS_DATA_TYPE_ID">2</field>
+		<field name="PARAMETER_ID">102</field>
+	</row>
+	<row>
+		<field name="ID">112</field>
+		<field name="CODE">M</field>
+		<field name="NAME">MODELLO</field>
+		<field name="DESCR">MODELLO DATI</field>
+		<field name="ORDER">998</field>
+		<field name="CLS_DATA_TYPE_ID">2</field>
+		<field name="PARAMETER_ID">101</field>
+	</row>
+	<row>
+		<field name="ID">113</field>
+		<field name="CODE">F</field>
+		<field name="NAME">SCORE</field>
+		<field name="DESCR">INFLUENCE SCORE</field>
+		<field name="ORDER">12</field>
+		<field name="CLS_DATA_TYPE_ID">1</field>
+		<field name="PARAMETER_ID" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">114</field>
+		<field name="CODE">G</field>
+		<field name="NAME">INFO</field>
+		<field name="DESCR">PARAMETRI OUT - INFO RIEPILOGO</field>
+		<field name="ORDER">999</field>
+		<field name="CLS_DATA_TYPE_ID">2</field>
+		<field name="PARAMETER_ID">103</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_app_service">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="IMPLEMENTATION_LANGUAGE" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="SOURCE" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="BUSINESS_SERVICE_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_app_service" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="3" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_app_service" Non_unique="1" Key_name="fk_is2_app_service_is2_business_service" Seq_in_index="1" Column_name="BUSINESS_SERVICE_ID" Collation="A" Cardinality="2" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_app_service" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="4" Avg_row_length="4096" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="301" Create_time="2020-02-03 13:34:24" Update_time="2020-02-03 13:43:24" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_app_service">
+	<row>
+		<field name="ID">100</field>
+		<field name="NAME">SeleMix</field>
+		<field name="DESCR">Selemix is an R package to treat quantitative data, which aims to identify a set of units affected by errors which potentially influence the estimates of interest (selective editing)</field>
+		<field name="IMPLEMENTATION_LANGUAGE">R</field>
+		<field name="SOURCE">selemix/IS2_selemix.r</field>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">200</field>
+		<field name="NAME">Relais R</field>
+		<field name="DESCR">R package implementing record linkage methods</field>
+		<field name="IMPLEMENTATION_LANGUAGE">R</field>
+		<field name="SOURCE">relais/relais.R</field>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+	</row>
+	<row>
+		<field name="ID">250</field>
+		<field name="NAME">Relais Java</field>
+		<field name="DESCR">Java package implementing record linkage methods</field>
+		<field name="IMPLEMENTATION_LANGUAGE">JAVA</field>
+		<field name="SOURCE">it.istat.is2.catalogue.relais.service.RelaisService</field>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+	</row>
+	<row>
+		<field name="ID">300</field>
+		<field name="NAME">Validate</field>
+		<field name="DESCR">R package implementing a set of data validation functions</field>
+		<field name="IMPLEMENTATION_LANGUAGE">R</field>
+		<field name="SOURCE">validate/validate.r</field>
+		<field name="BUSINESS_SERVICE_ID">300</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_business_function">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="LABEL" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="ACTIVE" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="is2_business_function" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="3" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_business_function" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="3" Avg_row_length="5461" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Auto_increment="4" Create_time="2020-02-03 13:34:16" Update_time="2020-02-03 13:42:41" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_business_function">
+	<row>
+		<field name="ID">1</field>
+		<field name="NAME">Record Linkage</field>
+		<field name="DESCR">The purpose of record linkage is to identify the same real world entity that can be differently represented in data sources, even if unique identifiers are not available or are affected by errors.</field>
+		<field name="LABEL">RL</field>
+		<field name="ACTIVE">1</field>
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="NAME">Data Editing</field>
+		<field name="DESCR">Data editing is the process of reviewing the data for consistency, detection of errors and outliers and correction of errors, in order to improve the quality, accuracy and adequacy of the data and make it suitable for the purpose for which it was collected.</field>
+		<field name="LABEL">EDIT</field>
+		<field name="ACTIVE">1</field>
+	</row>
+	<row>
+		<field name="ID">3</field>
+		<field name="NAME">Data Validation</field>
+		<field name="DESCR">Data validation is the process of ensuring data have undergone data cleansing to ensure they have data quality, that is, that they are both correct and useful. It uses routines, often called &quot;validation rules&quot;, that check for correctness, meaningfulness, and security of data that are input to the system.</field>
+		<field name="LABEL">VALIDATE</field>
+		<field name="ACTIVE">1</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_business_process">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="LABEL" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="ORDER" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="PARENT" Type="int(11)" Null="YES" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_business_process" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="12" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_business_process" Non_unique="1" Key_name="fk_is2_business_process_is2_business_process" Seq_in_index="1" Column_name="PARENT" Collation="A" Cardinality="5" Null="YES" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_business_process" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="12" Avg_row_length="1365" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="131" Create_time="2020-02-03 13:34:17" Update_time="2020-02-03 13:43:23" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_business_process">
+	<row>
+		<field name="ID">1</field>
+		<field name="NAME">Probabilistic Record Linkage</field>
+		<field name="DESCR">Probabilistic Record Linkage</field>
+		<field name="LABEL">PRL</field>
+		<field name="ORDER">1</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="NAME">Deterministic Record Linkage</field>
+		<field name="DESCR">Deterministic Record Linkage</field>
+		<field name="LABEL">DRL</field>
+		<field name="ORDER">2</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">3</field>
+		<field name="NAME">R data validation</field>
+		<field name="DESCR">R data validation</field>
+		<field name="LABEL">ValidateR</field>
+		<field name="ORDER">1</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">4</field>
+		<field name="NAME">Data validation Van der Loo</field>
+		<field name="DESCR">Data validation Van der Loo</field>
+		<field name="LABEL">VanDerLoo</field>
+		<field name="ORDER">1</field>
+		<field name="PARENT">3</field>
+	</row>
+	<row>
+		<field name="ID">5</field>
+		<field name="NAME">Probabilistic Record Linkage MultiStep</field>
+		<field name="DESCR">Probabilistic Record Linkage MultiStep</field>
+		<field name="LABEL">PRL-MS</field>
+		<field name="ORDER">3</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">6</field>
+		<field name="NAME">Probabilistic Record Linkage MultiStep</field>
+		<field name="DESCR">Probabilistic Record Linkage MultiStep</field>
+		<field name="LABEL">PRL-MS1</field>
+		<field name="ORDER">4</field>
+		<field name="PARENT">5</field>
+	</row>
+	<row>
+		<field name="ID">70</field>
+		<field name="NAME">Contingency Table</field>
+		<field name="DESCR">Calculate contingency table</field>
+		<field name="LABEL">CrossTable</field>
+		<field name="ORDER">1</field>
+		<field name="PARENT">1</field>
+	</row>
+	<row>
+		<field name="ID">71</field>
+		<field name="NAME">Fellegi Sunter</field>
+		<field name="DESCR">Fellegi Sunter algorithm</field>
+		<field name="LABEL">FellegiSunter</field>
+		<field name="ORDER">2</field>
+		<field name="PARENT">1</field>
+	</row>
+	<row>
+		<field name="ID">72</field>
+		<field name="NAME">Matching Table</field>
+		<field name="DESCR">Matching records</field>
+		<field name="LABEL">MatchingTable</field>
+		<field name="ORDER">3</field>
+		<field name="PARENT">1</field>
+	</row>
+	<row>
+		<field name="ID">80</field>
+		<field name="NAME">Selezione Errori Influenti multi process</field>
+		<field name="DESCR">Esegue la stima, predizione e valuta gli errori influenti in due processi successivi</field>
+		<field name="LABEL">Selezione2P</field>
+		<field name="ORDER">1</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">110</field>
+		<field name="NAME">Stima e Predizione</field>
+		<field name="DESCR">Escuzione del processo di stima e predizione</field>
+		<field name="LABEL">Estimates</field>
+		<field name="ORDER">1</field>
+		<field name="PARENT">80</field>
+	</row>
+	<row>
+		<field name="ID">130</field>
+		<field name="NAME">Editing Selettivo</field>
+		<field name="DESCR">Esecuzione del processo di selezione dei valori influenti</field>
+		<field name="LABEL">Selection</field>
+		<field name="ORDER">2</field>
+		<field name="PARENT">80</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_business_service">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="GSBPM_PROCESS_ID" Type="int(11)" Null="YES" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_business_service" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="2" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_business_service" Non_unique="1" Key_name="fk_is2_business_service_is2_gsbpm_process" Seq_in_index="1" Column_name="GSBPM_PROCESS_ID" Collation="A" Cardinality="2" Null="YES" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_business_service" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="3" Avg_row_length="5461" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="301" Create_time="2020-02-03 13:34:18" Update_time="2020-02-03 13:43:23" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_business_service">
+	<row>
+		<field name="ID">100</field>
+		<field name="NAME">SeleMix</field>
+		<field name="DESCR">Selemix is an R package to treat quantitative data, which aims to identify a set of units affected by errors which potentially influence the estimates of interest (selective editing)</field>
+		<field name="GSBPM_PROCESS_ID">53</field>
+	</row>
+	<row>
+		<field name="ID">200</field>
+		<field name="NAME">Relais</field>
+		<field name="DESCR">RELAIS (REcord Linkage At IStat) is a toolkit providing a set of techniques for dealing with record linkage projects. The principal features of RELAIS are: It is designed and developed to allow the combination of different techniques for each of the record linkage phases. It has been developed as an open source project under the EUPL license (European Union Public License).</field>
+		<field name="GSBPM_PROCESS_ID">51</field>
+	</row>
+	<row>
+		<field name="ID">300</field>
+		<field name="NAME">Validate</field>
+		<field name="DESCR">The validate R-package makes it easy to check whether data lives up to expectations you have based on domain knowledge. It works by allowing you to define data validation rules independent of the code or data set</field>
+		<field name="GSBPM_PROCESS_ID">53</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_cls_data_type">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="is2_cls_data_type" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="6" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_cls_data_type" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="6" Avg_row_length="2730" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Auto_increment="7" Create_time="2020-02-03 13:34:12" Update_time="2020-02-03 13:42:41" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_cls_data_type">
+	<row>
+		<field name="ID">1</field>
+		<field name="NAME">VARIABLE</field>
+		<field name="DESCR" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="NAME">PARAMETER</field>
+		<field name="DESCR" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">3</field>
+		<field name="NAME">DATASET</field>
+		<field name="DESCR" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">4</field>
+		<field name="NAME">RULESET</field>
+		<field name="DESCR" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">5</field>
+		<field name="NAME">RULE</field>
+		<field name="DESCR" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">6</field>
+		<field name="NAME">MODEL</field>
+		<field name="DESCR" xsi:nil="true" />
+	</row>
+	</table_data>
+	<table_structure name="is2_cls_rule">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="NOTE" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="is2_cls_rule" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="7" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_cls_rule" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="7" Avg_row_length="2340" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Auto_increment="8" Create_time="2020-02-03 13:34:13" Update_time="2020-02-03 13:42:41" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_cls_rule">
+	<row>
+		<field name="ID">1</field>
+		<field name="NAME">Dominio</field>
+		<field name="DESCR">Definisce i valori o le modalità ammissibili della variabile</field>
+		<field name="NOTE">Può comprendere missing e/o zero; distinguere tra variabile qualitativa e quantitativa</field>
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="NAME">Coerenza logica</field>
+		<field name="DESCR">Definisce le combinazioni ammissibili di valori e/o modalità tra due o più variabili </field>
+		<field name="NOTE">Prevalentemente per  variabli qualitative, anche se la regola può riguardare entrambe le tipologie di variabili (es. ETA(0-15) STACIV(coniugato) con ETA fissa)</field>
+	</row>
+	<row>
+		<field name="ID">3</field>
+		<field name="NAME">Quadratura</field>
+		<field name="DESCR">Definisce l'uguaglianza ammissibile tra la somma di due o più variabili quantitative e il totale corrispondente (che può essere noto a priori o a sua volta ottenuto dalla somma di altre variabili del dataset)</field>
+		<field name="NOTE">Solo variabili quantitative</field>
+	</row>
+	<row>
+		<field name="ID">4</field>
+		<field name="NAME">Disuguaglianza forma semplice</field>
+		<field name="DESCR">Definisce la relazione matematica ammissibile (&gt;, &gt;=, &lt;, &lt;=) tra due variabili quantitative</field>
+		<field name="NOTE">Solo variabili quantitative</field>
+	</row>
+	<row>
+		<field name="ID">5</field>
+		<field name="NAME">Disuguaglianza forma composta</field>
+		<field name="DESCR">Definisce la relazione matematica ammissibile (&gt;, &gt;=, &lt;, &lt;=) tra due quantità, dove ciascuna quantità può essere costituita da una sola variabile X o dalla somma/differenza/prodotto tra due o più variabili X</field>
+		<field name="NOTE">Solo variabili quantitative</field>
+	</row>
+	<row>
+		<field name="ID">6</field>
+		<field name="NAME">Validazione/Completezza</field>
+		<field name="DESCR">Verifica in base alle regole di compilazione del questionario che i dati siano stati immessi correttamente</field>
+		<field name="NOTE">Distinguere tra variabile qualitativa e quantitativa</field>
+	</row>
+	<row>
+		<field name="ID">7</field>
+		<field name="NAME">Editing</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="NOTE">Valore di default al caricamento del file</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_cls_statistical_variable">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="TYPE" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="ORDER" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="VARIABLE_NAME_ITA" Type="varchar(500)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="VARIABLE_NAME_ENG" Type="varchar(500)" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="is2_cls_statistical_variable" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="12" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_cls_statistical_variable" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="12" Avg_row_length="1365" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Auto_increment="13" Create_time="2020-02-03 13:34:13" Update_time="2020-02-03 13:42:41" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_cls_statistical_variable">
+	<row>
+		<field name="ID">1</field>
+		<field name="NAME" xsi:nil="true" />
+		<field name="DESCR">Variabili identificative delle unità</field>
+		<field name="TYPE">8</field>
+		<field name="ORDER">1</field>
+		<field name="VARIABLE_NAME_ITA">VARIABILI IDENTIFICATIVE DELLE UNITÀ</field>
+		<field name="VARIABLE_NAME_ENG">UNIT INDENTIFIER</field>
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="NAME" xsi:nil="true" />
+		<field name="DESCR">Variabili statistiche di classificazione</field>
+		<field name="TYPE">1</field>
+		<field name="ORDER">2</field>
+		<field name="VARIABLE_NAME_ITA">VARIABILI STATISTICHE DI CLASSIFICAZIONE</field>
+		<field name="VARIABLE_NAME_ENG">CLASSIFICATION</field>
+	</row>
+	<row>
+		<field name="ID">3</field>
+		<field name="NAME" xsi:nil="true" />
+		<field name="DESCR">Variabili statistiche numeriche</field>
+		<field name="TYPE">2</field>
+		<field name="ORDER">3</field>
+		<field name="VARIABLE_NAME_ITA">VARIABILI STATISTICHE NUMERICHE</field>
+		<field name="VARIABLE_NAME_ENG">NUMERIC</field>
+	</row>
+	<row>
+		<field name="ID">4</field>
+		<field name="NAME" xsi:nil="true" />
+		<field name="DESCR">Variabili statistiche testuali</field>
+		<field name="TYPE">3</field>
+		<field name="ORDER">4</field>
+		<field name="VARIABLE_NAME_ITA">VARIABILI STATISTICHE TESTUALI</field>
+		<field name="VARIABLE_NAME_ENG">TEXTUAL/OPENED</field>
+	</row>
+	<row>
+		<field name="ID">5</field>
+		<field name="NAME" xsi:nil="true" />
+		<field name="DESCR">Concetti relativi al contenuto dei dati</field>
+		<field name="TYPE">6</field>
+		<field name="ORDER">5</field>
+		<field name="VARIABLE_NAME_ITA">AGGREGATO</field>
+		<field name="VARIABLE_NAME_ENG">AGGREGATE</field>
+	</row>
+	<row>
+		<field name="ID">6</field>
+		<field name="NAME" xsi:nil="true" />
+		<field name="DESCR">Concetti di tipo operativo</field>
+		<field name="TYPE">4</field>
+		<field name="ORDER">6</field>
+		<field name="VARIABLE_NAME_ITA">CONCETTI DI TIPO OPERATIVO</field>
+		<field name="VARIABLE_NAME_ENG">OPERATIONAL</field>
+	</row>
+	<row>
+		<field name="ID">7</field>
+		<field name="NAME" xsi:nil="true" />
+		<field name="DESCR">Concetti di tipo temporale</field>
+		<field name="TYPE">5</field>
+		<field name="ORDER">7</field>
+		<field name="VARIABLE_NAME_ITA">CONCETTI DI TIPO TEMPORALE</field>
+		<field name="VARIABLE_NAME_ENG">TEMPORAL</field>
+	</row>
+	<row>
+		<field name="ID">8</field>
+		<field name="NAME" xsi:nil="true" />
+		<field name="DESCR">Concetti relativi alla frequenza</field>
+		<field name="TYPE">7</field>
+		<field name="ORDER">8</field>
+		<field name="VARIABLE_NAME_ITA">CONCETTI RELATIVI ALLA FREQUENZA</field>
+		<field name="VARIABLE_NAME_ENG">FREQUENCY</field>
+	</row>
+	<row>
+		<field name="ID">9</field>
+		<field name="NAME" xsi:nil="true" />
+		<field name="DESCR">Concetti usati per identificare il peso campionario</field>
+		<field name="TYPE">10</field>
+		<field name="ORDER">9</field>
+		<field name="VARIABLE_NAME_ITA">PESO</field>
+		<field name="VARIABLE_NAME_ENG">PESO</field>
+	</row>
+	<row>
+		<field name="ID">10</field>
+		<field name="NAME" xsi:nil="true" />
+		<field name="DESCR">Paradati ..</field>
+		<field name="TYPE">12</field>
+		<field name="ORDER">10</field>
+		<field name="VARIABLE_NAME_ITA">PARADATO</field>
+		<field name="VARIABLE_NAME_ENG">PARADATA</field>
+	</row>
+	<row>
+		<field name="ID">11</field>
+		<field name="NAME" xsi:nil="true" />
+		<field name="DESCR">Variabili statistiche composte</field>
+		<field name="TYPE">11</field>
+		<field name="ORDER">11</field>
+		<field name="VARIABLE_NAME_ITA">CONCETTI IDENTIFICATIVI DEL DATASET</field>
+		<field name="VARIABLE_NAME_ENG">DATASET IDENTIFIER</field>
+	</row>
+	<row>
+		<field name="ID">12</field>
+		<field name="NAME" xsi:nil="true" />
+		<field name="DESCR">Variabili non definite</field>
+		<field name="TYPE">9</field>
+		<field name="ORDER">12</field>
+		<field name="VARIABLE_NAME_ITA">NON DEFINITA</field>
+		<field name="VARIABLE_NAME_ENG">UNDEFINED</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_cls_type_io">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="is2_cls_type_io" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="3" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_cls_type_io" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="3" Avg_row_length="5461" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Auto_increment="4" Create_time="2020-02-03 13:34:12" Update_time="2020-02-03 13:42:41" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_cls_type_io">
+	<row>
+		<field name="ID">1</field>
+		<field name="NAME">INPUT</field>
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="NAME">OUTPUT</field>
+	</row>
+	<row>
+		<field name="ID">3</field>
+		<field name="NAME">INPUT_OUTPUT</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_data_bridge">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="VALUE" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="TYPE" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="bridge_name" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="is2_data_bridge" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_data_bridge" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:30" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_data_bridge">
+	</table_data>
+	<table_structure name="is2_data_processing">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="LAST_UPDATE" Type="datetime" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="BUSINESS_PROCESS_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="WORK_SESSION_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_data_processing" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="1" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_data_processing" Non_unique="1" Key_name="fk_is2_data_processing_business_process" Seq_in_index="1" Column_name="BUSINESS_PROCESS_ID" Collation="A" Cardinality="1" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_data_processing" Non_unique="1" Key_name="fk_is2_data_processing_worksession" Seq_in_index="1" Column_name="WORK_SESSION_ID" Collation="A" Cardinality="1" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_data_processing" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="1" Avg_row_length="16384" Data_length="16384" Max_data_length="0" Index_length="32768" Data_free="0" Auto_increment="3" Create_time="2020-02-03 13:34:26" Update_time="2020-02-03 13:53:29" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_data_processing">
+	<row>
+		<field name="ID">2</field>
+		<field name="NAME">Prova</field>
+		<field name="DESCR">ahahah</field>
+		<field name="LAST_UPDATE">2020-02-03 13:53:29</field>
+		<field name="BUSINESS_PROCESS_ID">80</field>
+		<field name="WORK_SESSION_ID">2</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_dataset_column">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="ORDER_CODE" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="CONTENT" Type="json" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="CONTENT_SIZE" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DATASET_FILE_ID" Type="int(11)" Null="YES" Key="MUL" Extra="" Comment="" />
+		<field Field="STATISTICAL_VARIABLE_ID" Type="int(11)" Null="YES" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_dataset_column" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_dataset_column" Non_unique="1" Key_name="fk_is2_dataset_column_dataset_id" Seq_in_index="1" Column_name="DATASET_FILE_ID" Collation="A" Cardinality="0" Null="YES" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_dataset_column" Non_unique="1" Key_name="fk_is2_dataset_column_statistical_variable" Seq_in_index="1" Column_name="STATISTICAL_VARIABLE_ID" Collation="A" Cardinality="0" Null="YES" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_dataset_column" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="32768" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:22" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_dataset_column">
+	</table_data>
+	<table_structure name="is2_dataset_file">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="FILE_NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="FILE_LABEL" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="FILE_FORMAT" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="FIELD_SEPARATOR" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="TOTAL_ROWS" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="LAST_UPDATE" Type="datetime" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="CLS_DATA_TYPE_ID" Type="int(11)" Null="YES" Key="MUL" Extra="" Comment="" />
+		<field Field="WORK_SESSION_ID" Type="int(11)" Null="YES" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_dataset_file" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_dataset_file" Non_unique="1" Key_name="fk_is2_datakset_file_data_type" Seq_in_index="1" Column_name="CLS_DATA_TYPE_ID" Collation="A" Cardinality="0" Null="YES" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_dataset_file" Non_unique="1" Key_name="fk_is2_datakset_file_worksession" Seq_in_index="1" Column_name="WORK_SESSION_ID" Collation="A" Cardinality="0" Null="YES" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_dataset_file" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="32768" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:21" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_dataset_file">
+	</table_data>
+	<table_structure name="is2_gsbpm_process">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(250)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="ACTIVE" Type="tinyint(4)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="ORDER_CODE" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="PARENT" Type="int(11)" Null="YES" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_gsbpm_process" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="52" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_gsbpm_process" Non_unique="1" Key_name="fk_is2_gsbpm_process_is2_gsbpm_process" Seq_in_index="1" Column_name="PARENT" Collation="A" Cardinality="9" Null="YES" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_gsbpm_process" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="52" Avg_row_length="315" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="84" Create_time="2020-02-03 13:34:14" Update_time="2020-02-03 13:42:41" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_gsbpm_process">
+	<row>
+		<field name="ID">1</field>
+		<field name="NAME">Specify needs</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">0</field>
+		<field name="ORDER_CODE">1</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="NAME">Design</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">2</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">3</field>
+		<field name="NAME">Build</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">3</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">4</field>
+		<field name="NAME">Collect</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">4</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">5</field>
+		<field name="NAME">Process</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">5</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">6</field>
+		<field name="NAME">Analyse</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">6</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">7</field>
+		<field name="NAME">Disseminate</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">7</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">8</field>
+		<field name="NAME">Evaluate</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">0</field>
+		<field name="ORDER_CODE">8</field>
+		<field name="PARENT" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">11</field>
+		<field name="NAME">1.1 Identify needs</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">0</field>
+		<field name="ORDER_CODE">1</field>
+		<field name="PARENT">1</field>
+	</row>
+	<row>
+		<field name="ID">12</field>
+		<field name="NAME">1.2 Consult and confirm needs</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">0</field>
+		<field name="ORDER_CODE">2</field>
+		<field name="PARENT">1</field>
+	</row>
+	<row>
+		<field name="ID">13</field>
+		<field name="NAME">1.3 Establish output objectives</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">0</field>
+		<field name="ORDER_CODE">3</field>
+		<field name="PARENT">1</field>
+	</row>
+	<row>
+		<field name="ID">14</field>
+		<field name="NAME">1.4 Identify concepts</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">0</field>
+		<field name="ORDER_CODE">4</field>
+		<field name="PARENT">1</field>
+	</row>
+	<row>
+		<field name="ID">15</field>
+		<field name="NAME">1.5 Check data availability</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">0</field>
+		<field name="ORDER_CODE">5</field>
+		<field name="PARENT">1</field>
+	</row>
+	<row>
+		<field name="ID">16</field>
+		<field name="NAME">1.6 Prepare and submit business case</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">0</field>
+		<field name="ORDER_CODE">6</field>
+		<field name="PARENT">1</field>
+	</row>
+	<row>
+		<field name="ID">21</field>
+		<field name="NAME">2.1 Design outputs</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">1</field>
+		<field name="PARENT">2</field>
+	</row>
+	<row>
+		<field name="ID">22</field>
+		<field name="NAME">2.2 Design variable descriptions</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">2</field>
+		<field name="PARENT">2</field>
+	</row>
+	<row>
+		<field name="ID">23</field>
+		<field name="NAME">2.3 Design collection</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">3</field>
+		<field name="PARENT">2</field>
+	</row>
+	<row>
+		<field name="ID">24</field>
+		<field name="NAME">2.4 Design frame &amp; sample</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">4</field>
+		<field name="PARENT">2</field>
+	</row>
+	<row>
+		<field name="ID">25</field>
+		<field name="NAME">2.5 Design processing &amp; analysis</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">5</field>
+		<field name="PARENT">2</field>
+	</row>
+	<row>
+		<field name="ID">26</field>
+		<field name="NAME">2.6 Design production systems &amp; workflow</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">6</field>
+		<field name="PARENT">2</field>
+	</row>
+	<row>
+		<field name="ID">31</field>
+		<field name="NAME">3.1 Reuse or build collection instruments</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">1</field>
+		<field name="PARENT">3</field>
+	</row>
+	<row>
+		<field name="ID">32</field>
+		<field name="NAME">3.2 Reuse or build processing and analysis components</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">2</field>
+		<field name="PARENT">3</field>
+	</row>
+	<row>
+		<field name="ID">33</field>
+		<field name="NAME">3.3 Reuse or build dissemination components</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">3</field>
+		<field name="PARENT">3</field>
+	</row>
+	<row>
+		<field name="ID">34</field>
+		<field name="NAME">3.4 Configure workflows</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">4</field>
+		<field name="PARENT">3</field>
+	</row>
+	<row>
+		<field name="ID">35</field>
+		<field name="NAME">3.5 Test production system</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">5</field>
+		<field name="PARENT">3</field>
+	</row>
+	<row>
+		<field name="ID">36</field>
+		<field name="NAME">3.6 Test statistical business process</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">6</field>
+		<field name="PARENT">3</field>
+	</row>
+	<row>
+		<field name="ID">37</field>
+		<field name="NAME">3.7 Finalise production system</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">7</field>
+		<field name="PARENT">3</field>
+	</row>
+	<row>
+		<field name="ID">41</field>
+		<field name="NAME">4.1 Create frame and select sample</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">1</field>
+		<field name="PARENT">4</field>
+	</row>
+	<row>
+		<field name="ID">42</field>
+		<field name="NAME">4.2 Set up collection</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">2</field>
+		<field name="PARENT">4</field>
+	</row>
+	<row>
+		<field name="ID">43</field>
+		<field name="NAME">4.3 Run collection</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">3</field>
+		<field name="PARENT">4</field>
+	</row>
+	<row>
+		<field name="ID">44</field>
+		<field name="NAME">4.4 Finalize collection</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">4</field>
+		<field name="PARENT">4</field>
+	</row>
+	<row>
+		<field name="ID">51</field>
+		<field name="NAME">5.1 Integrate data</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">1</field>
+		<field name="PARENT">5</field>
+	</row>
+	<row>
+		<field name="ID">52</field>
+		<field name="NAME">5.2 Classify &amp; code</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">2</field>
+		<field name="PARENT">5</field>
+	</row>
+	<row>
+		<field name="ID">53</field>
+		<field name="NAME">5.3 Review &amp; validate</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">3</field>
+		<field name="PARENT">5</field>
+	</row>
+	<row>
+		<field name="ID">54</field>
+		<field name="NAME">5.4 Edit &amp; impute</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">4</field>
+		<field name="PARENT">5</field>
+	</row>
+	<row>
+		<field name="ID">55</field>
+		<field name="NAME">5.5 Derive new variables &amp; units</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">5</field>
+		<field name="PARENT">5</field>
+	</row>
+	<row>
+		<field name="ID">56</field>
+		<field name="NAME">5.6 Calculate weights</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">6</field>
+		<field name="PARENT">5</field>
+	</row>
+	<row>
+		<field name="ID">57</field>
+		<field name="NAME">5.7 Calculate aggregates</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">7</field>
+		<field name="PARENT">5</field>
+	</row>
+	<row>
+		<field name="ID">58</field>
+		<field name="NAME">5.8 Finalise data files</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">8</field>
+		<field name="PARENT">5</field>
+	</row>
+	<row>
+		<field name="ID">61</field>
+		<field name="NAME">6.1 Prepare draft outputs</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">1</field>
+		<field name="PARENT">6</field>
+	</row>
+	<row>
+		<field name="ID">62</field>
+		<field name="NAME">6.2 Validate outputs</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">2</field>
+		<field name="PARENT">6</field>
+	</row>
+	<row>
+		<field name="ID">63</field>
+		<field name="NAME">6.3 Interpret &amp; explain outputs</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">3</field>
+		<field name="PARENT">6</field>
+	</row>
+	<row>
+		<field name="ID">64</field>
+		<field name="NAME">6.4 Apply disclosure control</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">4</field>
+		<field name="PARENT">6</field>
+	</row>
+	<row>
+		<field name="ID">65</field>
+		<field name="NAME">6.5 Finalise outputs</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">5</field>
+		<field name="PARENT">6</field>
+	</row>
+	<row>
+		<field name="ID">71</field>
+		<field name="NAME">7.1 Update output systems</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">1</field>
+		<field name="PARENT">7</field>
+	</row>
+	<row>
+		<field name="ID">72</field>
+		<field name="NAME">7.2 Produce dissemination products</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">2</field>
+		<field name="PARENT">7</field>
+	</row>
+	<row>
+		<field name="ID">73</field>
+		<field name="NAME">7.3 Manage release of dissemination products</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">3</field>
+		<field name="PARENT">7</field>
+	</row>
+	<row>
+		<field name="ID">74</field>
+		<field name="NAME">7.4 Promote dissemination products</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">4</field>
+		<field name="PARENT">7</field>
+	</row>
+	<row>
+		<field name="ID">75</field>
+		<field name="NAME">7.5 Manage user support</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">1</field>
+		<field name="ORDER_CODE">5</field>
+		<field name="PARENT">7</field>
+	</row>
+	<row>
+		<field name="ID">81</field>
+		<field name="NAME">8.1 Update output systems</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">0</field>
+		<field name="ORDER_CODE">1</field>
+		<field name="PARENT">8</field>
+	</row>
+	<row>
+		<field name="ID">82</field>
+		<field name="NAME">8.2 Produce dissemination products</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">0</field>
+		<field name="ORDER_CODE">2</field>
+		<field name="PARENT">8</field>
+	</row>
+	<row>
+		<field name="ID">83</field>
+		<field name="NAME">8.3 Manage release of dissemination products</field>
+		<field name="DESCR" xsi:nil="true" />
+		<field name="ACTIVE">0</field>
+		<field name="ORDER_CODE">3</field>
+		<field name="PARENT">8</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_link_business_service_app_role">
+		<field Field="BUSINESS_SERVICE_ID" Type="int(11)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<field Field="APP_ROLE_ID" Type="int(11)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<key Table="is2_link_business_service_app_role" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="BUSINESS_SERVICE_ID" Collation="A" Cardinality="3" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_link_business_service_app_role" Non_unique="0" Key_name="PRIMARY" Seq_in_index="2" Column_name="APP_ROLE_ID" Collation="A" Cardinality="31" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_link_business_service_app_role" Non_unique="1" Key_name="fk_is2_business_service_app_role_app_role" Seq_in_index="1" Column_name="APP_ROLE_ID" Collation="A" Cardinality="31" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_link_business_service_app_role" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="31" Avg_row_length="528" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:29" Update_time="2020-02-03 13:43:28" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_link_business_service_app_role">
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">1</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">2</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">3</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">4</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">5</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">6</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">7</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">8</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">9</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">10</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">11</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">12</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">13</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+		<field name="APP_ROLE_ID">14</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">300</field>
+		<field name="APP_ROLE_ID">15</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">300</field>
+		<field name="APP_ROLE_ID">16</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">100</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">101</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">102</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">103</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">104</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">105</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">106</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">107</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">108</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">109</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">110</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">111</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">112</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">113</field>
+	</row>
+	<row>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+		<field name="APP_ROLE_ID">114</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_link_function_process">
+		<field Field="BUSINESS_FUNCTION_ID" Type="int(11)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<field Field="BUSINESS_PROCESS_ID" Type="int(11)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<key Table="is2_link_function_process" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="BUSINESS_FUNCTION_ID" Collation="A" Cardinality="2" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_link_function_process" Non_unique="0" Key_name="PRIMARY" Seq_in_index="2" Column_name="BUSINESS_PROCESS_ID" Collation="A" Cardinality="4" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_link_function_process" Non_unique="1" Key_name="fk_is2_bfunc_bprocess_is2_business_process" Seq_in_index="1" Column_name="BUSINESS_PROCESS_ID" Collation="A" Cardinality="4" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_link_function_process" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="5" Avg_row_length="3276" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:19" Update_time="2020-02-03 13:43:23" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_link_function_process">
+	<row>
+		<field name="BUSINESS_FUNCTION_ID">1</field>
+		<field name="BUSINESS_PROCESS_ID">1</field>
+	</row>
+	<row>
+		<field name="BUSINESS_FUNCTION_ID">1</field>
+		<field name="BUSINESS_PROCESS_ID">2</field>
+	</row>
+	<row>
+		<field name="BUSINESS_FUNCTION_ID">3</field>
+		<field name="BUSINESS_PROCESS_ID">3</field>
+	</row>
+	<row>
+		<field name="BUSINESS_FUNCTION_ID">1</field>
+		<field name="BUSINESS_PROCESS_ID">5</field>
+	</row>
+	<row>
+		<field name="BUSINESS_FUNCTION_ID">2</field>
+		<field name="BUSINESS_PROCESS_ID">80</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_link_function_view_data_type">
+		<field Field="BUSINESS_FUNCTION_ID" Type="int(11)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<field Field="VIEW_DATA_TYPE_ID" Type="int(11)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<key Table="is2_link_function_view_data_type" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="BUSINESS_FUNCTION_ID" Collation="A" Cardinality="3" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_link_function_view_data_type" Non_unique="0" Key_name="PRIMARY" Seq_in_index="2" Column_name="VIEW_DATA_TYPE_ID" Collation="A" Cardinality="5" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_link_function_view_data_type" Non_unique="1" Key_name="fk_is2_view_data_type_is2_view_data_type" Seq_in_index="1" Column_name="VIEW_DATA_TYPE_ID" Collation="A" Cardinality="2" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_link_function_view_data_type" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="5" Avg_row_length="3276" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:20" Update_time="2020-02-03 13:42:43" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_link_function_view_data_type">
+	<row>
+		<field name="BUSINESS_FUNCTION_ID">1</field>
+		<field name="VIEW_DATA_TYPE_ID">1</field>
+	</row>
+	<row>
+		<field name="BUSINESS_FUNCTION_ID">2</field>
+		<field name="VIEW_DATA_TYPE_ID">1</field>
+	</row>
+	<row>
+		<field name="BUSINESS_FUNCTION_ID">3</field>
+		<field name="VIEW_DATA_TYPE_ID">1</field>
+	</row>
+	<row>
+		<field name="BUSINESS_FUNCTION_ID">2</field>
+		<field name="VIEW_DATA_TYPE_ID">2</field>
+	</row>
+	<row>
+		<field name="BUSINESS_FUNCTION_ID">3</field>
+		<field name="VIEW_DATA_TYPE_ID">2</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_link_process_step">
+		<field Field="BUSINESS_PROCESS_ID" Type="int(11)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<field Field="PROCESS_STEP_ID" Type="int(11)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<key Table="is2_link_process_step" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="BUSINESS_PROCESS_ID" Collation="A" Cardinality="7" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_link_process_step" Non_unique="0" Key_name="PRIMARY" Seq_in_index="2" Column_name="PROCESS_STEP_ID" Collation="A" Cardinality="9" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_link_process_step" Non_unique="1" Key_name="fk_is2_bprocess_bstep_is2_process_step" Seq_in_index="1" Column_name="PROCESS_STEP_ID" Collation="A" Cardinality="6" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_link_process_step" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="9" Avg_row_length="1820" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:20" Update_time="2020-02-03 13:43:23" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_link_process_step">
+	<row>
+		<field name="BUSINESS_PROCESS_ID">4</field>
+		<field name="PROCESS_STEP_ID">4</field>
+	</row>
+	<row>
+		<field name="BUSINESS_PROCESS_ID">110</field>
+		<field name="PROCESS_STEP_ID">10</field>
+	</row>
+	<row>
+		<field name="BUSINESS_PROCESS_ID">130</field>
+		<field name="PROCESS_STEP_ID">30</field>
+	</row>
+	<row>
+		<field name="BUSINESS_PROCESS_ID">6</field>
+		<field name="PROCESS_STEP_ID">70</field>
+	</row>
+	<row>
+		<field name="BUSINESS_PROCESS_ID">70</field>
+		<field name="PROCESS_STEP_ID">70</field>
+	</row>
+	<row>
+		<field name="BUSINESS_PROCESS_ID">6</field>
+		<field name="PROCESS_STEP_ID">71</field>
+	</row>
+	<row>
+		<field name="BUSINESS_PROCESS_ID">71</field>
+		<field name="PROCESS_STEP_ID">71</field>
+	</row>
+	<row>
+		<field name="BUSINESS_PROCESS_ID">6</field>
+		<field name="PROCESS_STEP_ID">72</field>
+	</row>
+	<row>
+		<field name="BUSINESS_PROCESS_ID">72</field>
+		<field name="PROCESS_STEP_ID">72</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_link_step_instance">
+		<field Field="PROCESS_STEP_ID" Type="int(11)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<field Field="PROCESS_STEP_INSTANCE_ID" Type="int(11)" Null="NO" Key="PRI" Extra="" Comment="" />
+		<key Table="is2_link_step_instance" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="PROCESS_STEP_ID" Collation="A" Cardinality="12" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_link_step_instance" Non_unique="0" Key_name="PRIMARY" Seq_in_index="2" Column_name="PROCESS_STEP_INSTANCE_ID" Collation="A" Cardinality="12" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_link_step_instance" Non_unique="1" Key_name="fk_is2_step_instance_step_instance" Seq_in_index="1" Column_name="PROCESS_STEP_INSTANCE_ID" Collation="A" Cardinality="11" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_link_step_instance" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="12" Avg_row_length="1365" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:28" Update_time="2020-02-03 13:43:28" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_link_step_instance">
+	<row>
+		<field name="PROCESS_STEP_ID">10</field>
+		<field name="PROCESS_STEP_INSTANCE_ID">1</field>
+	</row>
+	<row>
+		<field name="PROCESS_STEP_ID">20</field>
+		<field name="PROCESS_STEP_INSTANCE_ID">2</field>
+	</row>
+	<row>
+		<field name="PROCESS_STEP_ID">40</field>
+		<field name="PROCESS_STEP_INSTANCE_ID">2</field>
+	</row>
+	<row>
+		<field name="PROCESS_STEP_ID">30</field>
+		<field name="PROCESS_STEP_INSTANCE_ID">3</field>
+	</row>
+	<row>
+		<field name="PROCESS_STEP_ID">50</field>
+		<field name="PROCESS_STEP_INSTANCE_ID">4</field>
+	</row>
+	<row>
+		<field name="PROCESS_STEP_ID">15</field>
+		<field name="PROCESS_STEP_INSTANCE_ID">7</field>
+	</row>
+	<row>
+		<field name="PROCESS_STEP_ID">25</field>
+		<field name="PROCESS_STEP_INSTANCE_ID">8</field>
+	</row>
+	<row>
+		<field name="PROCESS_STEP_ID">35</field>
+		<field name="PROCESS_STEP_INSTANCE_ID">9</field>
+	</row>
+	<row>
+		<field name="PROCESS_STEP_ID">70</field>
+		<field name="PROCESS_STEP_INSTANCE_ID">11</field>
+	</row>
+	<row>
+		<field name="PROCESS_STEP_ID">71</field>
+		<field name="PROCESS_STEP_INSTANCE_ID">12</field>
+	</row>
+	<row>
+		<field name="PROCESS_STEP_ID">72</field>
+		<field name="PROCESS_STEP_INSTANCE_ID">13</field>
+	</row>
+	<row>
+		<field name="PROCESS_STEP_ID">4</field>
+		<field name="PROCESS_STEP_INSTANCE_ID">14</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_log">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="MSG" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="MSG_TIME" Type="datetime" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="TYPE" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="WORK_SESSION_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_log" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="1" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_log" Non_unique="1" Key_name="fk_is2_log_worksession" Seq_in_index="1" Column_name="WORK_SESSION_ID" Collation="A" Cardinality="1" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_log" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="1" Avg_row_length="16384" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="3" Create_time="2020-02-03 13:34:29" Update_time="2020-02-03 13:53:29" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_log">
+	<row>
+		<field name="ID">2</field>
+		<field name="MSG">Elaborazione Prova creata con successo</field>
+		<field name="MSG_TIME">2020-02-03 13:53:29</field>
+		<field name="TYPE">OUT</field>
+		<field name="WORK_SESSION_ID">2</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_parameter">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DEFAULT_VAL" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="JSON_TEMPLATE" Type="longtext" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="is2_parameter" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="6" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_parameter" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="6" Avg_row_length="2730" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Auto_increment="104" Create_time="2020-02-03 13:34:25" Update_time="2020-02-03 13:43:24" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_parameter">
+	<row>
+		<field name="ID">1</field>
+		<field name="NAME">MATCHING VARIABLES</field>
+		<field name="DESCR">MATCHING VARIABLES</field>
+		<field name="DEFAULT_VAL" xsi:nil="true" />
+		<field name="JSON_TEMPLATE">{ &quot;data&quot;: [], &quot;schema&quot;: { &quot;items&quot;: { &quot;properties&quot;: { &quot;MatchingVariable&quot;: { &quot;maxLength&quot;: 50, &quot;required&quot;: true, &quot;title&quot;: &quot;MatchingVariable&quot;, &quot;type&quot;: &quot;string&quot; }, &quot;MatchingVariableA&quot;: { &quot;maxLength&quot;: 50, &quot;required&quot;: true, &quot;title&quot;: &quot;MatchingVariableA&quot;, &quot;type&quot;: &quot;string&quot; }, &quot;MatchingVariableB&quot;: { &quot;maxLength&quot;: 50, &quot;required&quot;: true, &quot;title&quot;: &quot;MatchingVariableB&quot;, &quot;type&quot;: &quot;string&quot; }, &quot;Method&quot;: { &quot;enum&quot;: [ &quot;Equality&quot;, &quot;Jaro&quot;, &quot;Dice&quot;, &quot;JaroWinkler&quot;, &quot;Levenshtein&quot;, &quot;3Grams&quot;, &quot;Soundex&quot;, &quot;NumericComparison&quot;, &quot;NumericEuclideanDistance&quot;, &quot;WindowEquality&quot;, &quot;Inclusion3Grams&quot; ], &quot;required&quot;: true, &quot;title&quot;: &quot;Method&quot; }, &quot;Threshold&quot;: { &quot;title&quot;: &quot;Threshold&quot;, &quot;type&quot;: &quot;number&quot;, &quot;default&quot;: 1 }, &quot;Window&quot;: { &quot;title&quot;: &quot;Window&quot;, &quot;type&quot;: &quot;integer&quot;, &quot;default&quot;: 1 } }, &quot;type&quot;: &quot;object&quot; }, &quot;type&quot;: &quot;array&quot; }, &quot;options&quot;: { &quot;type&quot;: &quot;table&quot;, &quot;showActionsColumn&quot;: false, &quot;hideAddItemsBtn&quot;: true, &quot;items&quot;: { &quot;fields&quot;: { &quot;Method&quot;: { &quot;type&quot;: &quot;select&quot;, &quot;noneLabel&quot;: &quot;&quot;, &quot;removeDefaultNone&quot;: false }, &quot;MatchingVariableA&quot;: { &quot;type&quot;: &quot;select&quot;, &quot;noneLabel&quot;: &quot;&quot;, &quot;dataSource&quot;: &quot;matchedVariables&quot; }, &quot;MatchingVariableB&quot;: { &quot;type&quot;: &quot;select&quot;, &quot;noneLabel&quot;: &quot;&quot;, &quot;dataSource&quot;: &quot;matchedVariables&quot; } } }, &quot;form&quot;: { &quot;buttons&quot;: { &quot;addRow&quot;: &quot;addRow&quot;, &quot;removeRow&quot;: &quot;removeRow&quot; } }, &quot;view&quot;: { &quot;templates&quot;: { &quot;container-array-toolbar&quot;: &quot;#addItemsBtn&quot; } } }}</field>
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="NAME">THRESHOLD MATCHING</field>
+		<field name="DESCR">THRESHOLD MATCHING</field>
+		<field name="DEFAULT_VAL">1</field>
+		<field name="JSON_TEMPLATE">{&quot;data&quot;:[],&quot;schema&quot;:{&quot;name&quot;:&quot;THRESHOLD MATCHING&quot;,&quot;type&quot;:&quot;number&quot;, &quot;minimum&quot;: 0.01,&quot;maximum&quot;: 1}}</field>
+	</row>
+	<row>
+		<field name="ID">3</field>
+		<field name="NAME">THRESHOLD UNMATCHING</field>
+		<field name="DESCR">THRESHOLD UNMATCHING</field>
+		<field name="DEFAULT_VAL">1</field>
+		<field name="JSON_TEMPLATE">{&quot;data&quot;:[],&quot;schema&quot;:{&quot;name&quot;:&quot;THRESHOLD UNMATCHING&quot;,&quot;type&quot;:&quot;number&quot;, &quot;minimum&quot;: 0.01,&quot;maximum&quot;: 1}}</field>
+	</row>
+	<row>
+		<field name="ID">101</field>
+		<field name="NAME">MODEL</field>
+		<field name="DESCR">DATA MODEL</field>
+		<field name="DEFAULT_VAL" xsi:nil="true" />
+		<field name="JSON_TEMPLATE">{ &quot;data&quot;: [], &quot;schema&quot;: {&quot;items&quot;: {&quot;properties&quot;: { &quot;lambda&quot;: {&quot;required&quot;: true,&quot;title&quot;: &quot;Lambda&quot;,&quot;description&quot;:&quot;Estimated value for the variance inflation factor&quot;,&quot;type&quot;: &quot;number&quot;, &quot;default&quot;:3,&quot;minimum&quot;: 0.01,&quot;maximum&quot;: 10 },&quot;w&quot;: {&quot;required&quot;: true,&quot;title&quot;: &quot;W&quot;,&quot;description&quot;:&quot;Estimated value for the proportion of contaminated data&quot;,&quot;type&quot;: &quot;number&quot;,&quot;default&quot;:0.05,&quot;minimum&quot;: 0.01,&quot;maximum&quot;: 1 }, &quot;B&quot;: {&quot;required&quot;: true,&quot;title&quot;: &quot;B&quot;,&quot;description&quot;:&quot;Matrix of estimated regression coefficients&quot;,&quot;type&quot;: &quot;number&quot;}, &quot;sigma&quot;: {&quot;required&quot;: true,&quot;title&quot;: &quot;sigma&quot;,&quot;description&quot;:&quot;Estimated covariance matrix&quot;,&quot;type&quot;: &quot;number&quot;} },&quot;type&quot;: &quot;object&quot;},&quot;type&quot;: &quot;array&quot; }, &quot;options&quot;: {&quot;type&quot;: &quot;array&quot;,&quot;showActionsColumn&quot;: false,&quot;hideAddItemsBtn&quot;: true }}</field>
+	</row>
+	<row>
+		<field name="ID">102</field>
+		<field name="NAME">INPUT_PARAMETERS</field>
+		<field name="DESCR">INPUT PARAMETERS</field>
+		<field name="DEFAULT_VAL" xsi:nil="true" />
+		<field name="JSON_TEMPLATE">{&quot;data&quot;: [],&quot;schema&quot;: { &quot;properties&quot;: {&quot;graph&quot;: {&quot;required&quot;: true,&quot;title&quot;: &quot;Graph&quot;,&quot;description&quot;: &quot;Activates graphic output&quot;,&quot;type&quot;: &quot;number&quot;,&quot;default&quot;: 0,&quot;minimum&quot;: 0.01,&quot;maximum&quot;: 10},&quot;model&quot;: {&quot;required&quot;: true,&quot;title&quot;: &quot;Model&quot;,&quot;description&quot;: &quot;Data Distribution: LN lognormal / N Normal&quot;,&quot;default&quot;: &quot;LN&quot;},&quot;tot&quot;: {&quot;title&quot;: &quot;Tot&quot;,&quot;description&quot;: &quot;Estimates of originals vector for the target variables&quot;},&quot;t.sel&quot;: {&quot;title&quot;: &quot;t.sel&quot;,&quot;description&quot;: &quot;Optional vector of threshold values for selective edinting on the target variables&quot;},&quot;t.outl&quot;: {&quot;required&quot;: true,&quot;title&quot;: &quot;t.outl&quot;,&quot;description&quot;: &quot;Threshold value for posterior probabilities of identifying outliers&quot;,&quot;type&quot;: &quot;number&quot;,&quot;default&quot;: 0.05,&quot;minimum&quot;: 0.01,&quot;maximum&quot;: 10},&quot;eps&quot;: {&quot;required&quot;: true,&quot;title&quot;: &quot;eps&quot;,&quot;description&quot;: &quot;Tolerance for the log-likelihood convergence&quot;,&quot;type&quot;: &quot;number&quot;,&quot;default&quot;: 0.0000001,&quot;minimum&quot;: 0.0000001,&quot;maximum&quot;: 1},&quot;lambda.fix&quot;: {&quot;required&quot;: true,&quot;title&quot;: &quot;lambda.fix&quot;,&quot;description&quot;: &quot;TRUE if w is known&quot;,&quot;type&quot;: &quot;number&quot;,&quot;default&quot;: 0,&quot;maximum&quot;: 1 },&quot;w.fix&quot;: {&quot;required&quot;: true,&quot;title&quot;: &quot;w.fix&quot;,&quot;description&quot;: &quot;TRUE if w is known&quot;,&quot;type&quot;: &quot;number&quot;,&quot;default&quot;: 0,&quot;minimum&quot;: 0.01,&quot;maximum&quot;: 1}},&quot;type&quot;: &quot;object&quot; }}</field>
+	</row>
+	<row>
+		<field name="ID">103</field>
+		<field name="NAME">OUTPUT_PARAMETERS</field>
+		<field name="DESCR">OUTPUT PARAMETERS - INFO REPORT</field>
+		<field name="DEFAULT_VAL" xsi:nil="true" />
+		<field name="JSON_TEMPLATE" xsi:nil="true" />
+	</row>
+	</table_data>
+	<table_structure name="is2_process_step">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="LABEL" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="BUSINESS_SERVICE_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_process_step" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="10" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_process_step" Non_unique="1" Key_name="fk_is2_process_step_business_service" Seq_in_index="1" Column_name="BUSINESS_SERVICE_ID" Collation="A" Cardinality="3" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_process_step" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="10" Avg_row_length="1638" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="73" Create_time="2020-02-03 13:34:18" Update_time="2020-02-03 13:43:23" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_process_step">
+	<row>
+		<field name="ID">4</field>
+		<field name="NAME">VALIDATE</field>
+		<field name="LABEL" xsi:nil="true" />
+		<field name="DESCR">Validate dataset with ruleset</field>
+		<field name="BUSINESS_SERVICE_ID">300</field>
+	</row>
+	<row>
+		<field name="ID">10</field>
+		<field name="NAME">MLEST</field>
+		<field name="LABEL" xsi:nil="true" />
+		<field name="DESCR">This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the “true” data for all units that were used for the estimation</field>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">15</field>
+		<field name="NAME">MLEST_STRATA</field>
+		<field name="LABEL" xsi:nil="true" />
+		<field name="DESCR">MLEST with stratification</field>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">20</field>
+		<field name="NAME">PREDY</field>
+		<field name="LABEL" xsi:nil="true" />
+		<field name="DESCR">On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates</field>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">25</field>
+		<field name="NAME">PREDY_STRATA</field>
+		<field name="LABEL" xsi:nil="true" />
+		<field name="DESCR">PREDY with stratification</field>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">30</field>
+		<field name="NAME">SELEDIT</field>
+		<field name="LABEL" xsi:nil="true" />
+		<field name="DESCR">This function performs Selective Editing. On the basis of a set of observed data and the corresponding predictions for the true data, it selects the units required for interactive editing</field>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">35</field>
+		<field name="NAME">SELEDIT_STRATA</field>
+		<field name="LABEL" xsi:nil="true" />
+		<field name="DESCR">SELEDIT with stratification</field>
+		<field name="BUSINESS_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">70</field>
+		<field name="NAME">CONTINGENCY_TABLE</field>
+		<field name="LABEL" xsi:nil="true" />
+		<field name="DESCR">The first step of the probabilistic procedure consists of computing the comparison vector, given by the result of the function on the k matching variables, for all the pairs in the space. Indeed, starting from the vector distribution among the pairs (reported in the contingency table) the goal is the estimation of the probability distribution of the unknown random variable “link status”, which assigns each pair to the set M or to the set U. The comparison vector considered in RELAIS is a binary one, i.e. for each matching variable it reports the equality (corresponding to value 1) or the inequality (corresponding to value 0) between the units.</field>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+	</row>
+	<row>
+		<field name="ID">71</field>
+		<field name="NAME">FELLEGI_SUNTER</field>
+		<field name="LABEL" xsi:nil="true" />
+		<field name="DESCR">The Fellegi and Sunter method is a probabilistic approach to solve record linkage problem based on decision model.  According to the method, given two (or more) sources of data, all pairs coming from the Cartesian product of the two sources has to be classified in three independent and mutually exclusive subsets: the set of matches, the set of non-matches and the set of pairs requiring manual review. In order to classify the pairs, the comparisons on common attributes are used to estimate for each pair the probabilities to belong to both the set of matches and the set of non-matches. The pair classification criteria is based on the ratio between such conditional probabilities. The decision model aims to minimize both the misclassification errors and the probability of classifying a pair as belonging to the subset of pairs requiring manual review</field>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+	</row>
+	<row>
+		<field name="ID">72</field>
+		<field name="NAME">MATCHING_TABLE</field>
+		<field name="LABEL" xsi:nil="true" />
+		<field name="DESCR">Create result matching table</field>
+		<field name="BUSINESS_SERVICE_ID">200</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_rule">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="CODE" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="BLOCKING" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="ERROR_CODE" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="ACTIVE" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="RULE" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="VARIABLE_ID" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="CLS_RULE_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="RULESET_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_rule" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_rule" Non_unique="1" Key_name="fk_rule_cls_rule" Seq_in_index="1" Column_name="CLS_RULE_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_rule" Non_unique="1" Key_name="fk_rule_ruleset" Seq_in_index="1" Column_name="RULESET_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_rule" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="32768" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:23" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_rule">
+	</table_data>
+	<table_structure name="is2_ruleset">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="FILE_NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="FILE_LABEL" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="RULES_TOTAL" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="LAST_UPDATE" Type="datetime" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="WORK_SESSION_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="DATASET_ID" Type="int(11)" Null="YES" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_ruleset" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_ruleset" Non_unique="1" Key_name="fk_ruleset_work_session" Seq_in_index="1" Column_name="WORK_SESSION_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_ruleset" Non_unique="1" Key_name="fk_ruleset_dataset" Seq_in_index="1" Column_name="DATASET_ID" Collation="A" Cardinality="0" Null="YES" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_ruleset" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="32768" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:22" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_ruleset">
+	</table_data>
+	<table_structure name="is2_step_instance">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="METHOD" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="LABEL" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="APP_SERVICE_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_step_instance" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="10" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_step_instance" Non_unique="1" Key_name="fk_is2_step_instance_is2_app_service" Seq_in_index="1" Column_name="APP_SERVICE_ID" Collation="A" Cardinality="4" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_step_instance" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="10" Avg_row_length="1638" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="15" Create_time="2020-02-03 13:34:24" Update_time="2020-02-03 13:43:24" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_step_instance">
+	<row>
+		<field name="ID">1</field>
+		<field name="METHOD">is2_mlest</field>
+		<field name="DESCR">This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the “true” data for all units that were used for the estimation</field>
+		<field name="LABEL">MLEST</field>
+		<field name="APP_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="METHOD">is2_ypred</field>
+		<field name="DESCR">On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates</field>
+		<field name="LABEL">PREDY</field>
+		<field name="APP_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">3</field>
+		<field name="METHOD">is2_seledit</field>
+		<field name="DESCR">This function performs Selective Editing. On the basis of a set of observed data and the corresponding predictions for the true data, it selects the units required for interactive editing</field>
+		<field name="LABEL">SELEDIT</field>
+		<field name="APP_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">7</field>
+		<field name="METHOD">is2_strata_mlest</field>
+		<field name="DESCR">MLEST with stratification</field>
+		<field name="LABEL">MLEST_STRAT</field>
+		<field name="APP_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">8</field>
+		<field name="METHOD">is2_strata_ypred</field>
+		<field name="DESCR">PREDY with stratification</field>
+		<field name="LABEL">PREDY_STRAT</field>
+		<field name="APP_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">9</field>
+		<field name="METHOD">is2_strata_seledit</field>
+		<field name="DESCR">SELEDIT with stratification</field>
+		<field name="LABEL">SELEDIT_STRATA</field>
+		<field name="APP_SERVICE_ID">100</field>
+	</row>
+	<row>
+		<field name="ID">11</field>
+		<field name="METHOD">contingencyTable</field>
+		<field name="DESCR">This function calculates the contingency Table</field>
+		<field name="LABEL">CONTINGENCY_TABLE</field>
+		<field name="APP_SERVICE_ID">250</field>
+	</row>
+	<row>
+		<field name="ID">12</field>
+		<field name="METHOD">fellegisunter</field>
+		<field name="DESCR">This function implements the Fellegi Sunter algorithm</field>
+		<field name="LABEL">FELLEGI_SUNTER</field>
+		<field name="APP_SERVICE_ID">200</field>
+	</row>
+	<row>
+		<field name="ID">13</field>
+		<field name="METHOD">resultTables</field>
+		<field name="DESCR">This function calculates the Matching Table</field>
+		<field name="LABEL">MATCHING_TABLE</field>
+		<field name="APP_SERVICE_ID">250</field>
+	</row>
+	<row>
+		<field name="ID">14</field>
+		<field name="METHOD">is2_validate_confront</field>
+		<field name="DESCR">This function runs the confront algoritm implemented by Van Der Loo</field>
+		<field name="LABEL">Confront</field>
+		<field name="APP_SERVICE_ID">300</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_step_instance_signature">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="REQUIRED" Type="tinyint(4)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="APP_ROLE_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="STEP_INSTANCE_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="CLS_TYPE_IO_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_step_instance_signature" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="69" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_step_instance_signature" Non_unique="1" Key_name="fk_is2_step_instance_signature_is2_app_role" Seq_in_index="1" Column_name="APP_ROLE_ID" Collation="A" Cardinality="22" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_step_instance_signature" Non_unique="1" Key_name="fk_is2_step_instance_signature_is2_step_instance" Seq_in_index="1" Column_name="STEP_INSTANCE_ID" Collation="A" Cardinality="11" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_step_instance_signature" Non_unique="1" Key_name="fk_is2_step_instance_signature_is2_type_io" Seq_in_index="1" Column_name="CLS_TYPE_IO_ID" Collation="A" Cardinality="2" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_step_instance_signature" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="69" Avg_row_length="237" Data_length="16384" Max_data_length="0" Index_length="49152" Data_free="0" Auto_increment="180" Create_time="2020-02-03 13:34:26" Update_time="2020-02-03 13:43:27" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_step_instance_signature">
+	<row>
+		<field name="ID">1</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">102</field>
+		<field name="STEP_INSTANCE_ID">1</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">103</field>
+		<field name="STEP_INSTANCE_ID">1</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">3</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">105</field>
+		<field name="STEP_INSTANCE_ID">1</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">4</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">104</field>
+		<field name="STEP_INSTANCE_ID">1</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">5</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">110</field>
+		<field name="STEP_INSTANCE_ID">1</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">6</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">111</field>
+		<field name="STEP_INSTANCE_ID">1</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">7</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">112</field>
+		<field name="STEP_INSTANCE_ID">1</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">8</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">102</field>
+		<field name="STEP_INSTANCE_ID">2</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">9</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">103</field>
+		<field name="STEP_INSTANCE_ID">2</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">10</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">105</field>
+		<field name="STEP_INSTANCE_ID">2</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">11</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">104</field>
+		<field name="STEP_INSTANCE_ID">2</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">12</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">110</field>
+		<field name="STEP_INSTANCE_ID">2</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">13</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">111</field>
+		<field name="STEP_INSTANCE_ID">2</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">14</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">112</field>
+		<field name="STEP_INSTANCE_ID">2</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">15</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">102</field>
+		<field name="STEP_INSTANCE_ID">3</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">17</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">104</field>
+		<field name="STEP_INSTANCE_ID">3</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">18</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">110</field>
+		<field name="STEP_INSTANCE_ID">3</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">19</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">111</field>
+		<field name="STEP_INSTANCE_ID">3</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">20</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">107</field>
+		<field name="STEP_INSTANCE_ID">3</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">21</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">108</field>
+		<field name="STEP_INSTANCE_ID">3</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">22</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">113</field>
+		<field name="STEP_INSTANCE_ID">3</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">23</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">102</field>
+		<field name="STEP_INSTANCE_ID">4</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">24</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">103</field>
+		<field name="STEP_INSTANCE_ID">4</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">25</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">111</field>
+		<field name="STEP_INSTANCE_ID">4</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">26</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">112</field>
+		<field name="STEP_INSTANCE_ID">4</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">27</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">114</field>
+		<field name="STEP_INSTANCE_ID">1</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">28</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">114</field>
+		<field name="STEP_INSTANCE_ID">2</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">29</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">114</field>
+		<field name="STEP_INSTANCE_ID">3</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">30</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">114</field>
+		<field name="STEP_INSTANCE_ID">4</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">31</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">111</field>
+		<field name="STEP_INSTANCE_ID">7</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">32</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">110</field>
+		<field name="STEP_INSTANCE_ID">7</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">33</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">104</field>
+		<field name="STEP_INSTANCE_ID">7</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">34</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">105</field>
+		<field name="STEP_INSTANCE_ID">7</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">35</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">103</field>
+		<field name="STEP_INSTANCE_ID">7</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">36</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">102</field>
+		<field name="STEP_INSTANCE_ID">7</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">37</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">114</field>
+		<field name="STEP_INSTANCE_ID">7</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">38</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">102</field>
+		<field name="STEP_INSTANCE_ID">9</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">39</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">113</field>
+		<field name="STEP_INSTANCE_ID">9</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">40</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">114</field>
+		<field name="STEP_INSTANCE_ID">9</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">41</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">111</field>
+		<field name="STEP_INSTANCE_ID">9</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">42</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">110</field>
+		<field name="STEP_INSTANCE_ID">9</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">43</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">104</field>
+		<field name="STEP_INSTANCE_ID">9</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">44</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">108</field>
+		<field name="STEP_INSTANCE_ID">9</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">45</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">107</field>
+		<field name="STEP_INSTANCE_ID">9</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">46</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">114</field>
+		<field name="STEP_INSTANCE_ID">8</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">47</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">103</field>
+		<field name="STEP_INSTANCE_ID">8</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">48</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">105</field>
+		<field name="STEP_INSTANCE_ID">8</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">49</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">104</field>
+		<field name="STEP_INSTANCE_ID">8</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">50</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">110</field>
+		<field name="STEP_INSTANCE_ID">8</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">51</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">111</field>
+		<field name="STEP_INSTANCE_ID">8</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">52</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">102</field>
+		<field name="STEP_INSTANCE_ID">8</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">53</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">112</field>
+		<field name="STEP_INSTANCE_ID">8</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">54</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">111</field>
+		<field name="STEP_INSTANCE_ID">8</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">154</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">2</field>
+		<field name="STEP_INSTANCE_ID">11</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">155</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">3</field>
+		<field name="STEP_INSTANCE_ID">11</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">158</field>
+		<field name="REQUIRED" xsi:nil="true" />
+		<field name="APP_ROLE_ID">11</field>
+		<field name="STEP_INSTANCE_ID">11</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">161</field>
+		<field name="REQUIRED">0</field>
+		<field name="APP_ROLE_ID">7</field>
+		<field name="STEP_INSTANCE_ID">11</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">166</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">1</field>
+		<field name="STEP_INSTANCE_ID">11</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">167</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">4</field>
+		<field name="STEP_INSTANCE_ID">12</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">168</field>
+		<field name="REQUIRED" xsi:nil="true" />
+		<field name="APP_ROLE_ID">5</field>
+		<field name="STEP_INSTANCE_ID">12</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">169</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">2</field>
+		<field name="STEP_INSTANCE_ID">13</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">170</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">3</field>
+		<field name="STEP_INSTANCE_ID">13</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">171</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">5</field>
+		<field name="STEP_INSTANCE_ID">13</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">172</field>
+		<field name="REQUIRED">0</field>
+		<field name="APP_ROLE_ID">4</field>
+		<field name="STEP_INSTANCE_ID">13</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">173</field>
+		<field name="REQUIRED" xsi:nil="true" />
+		<field name="APP_ROLE_ID">7</field>
+		<field name="STEP_INSTANCE_ID">13</field>
+		<field name="CLS_TYPE_IO_ID">2</field>
+	</row>
+	<row>
+		<field name="ID">176</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">8</field>
+		<field name="STEP_INSTANCE_ID">13</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">177</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">9</field>
+		<field name="STEP_INSTANCE_ID">13</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">178</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">15</field>
+		<field name="STEP_INSTANCE_ID">14</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">179</field>
+		<field name="REQUIRED">1</field>
+		<field name="APP_ROLE_ID">16</field>
+		<field name="STEP_INSTANCE_ID">14</field>
+		<field name="CLS_TYPE_IO_ID">1</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_step_runtime">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="ORDER_CODE" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="ROLE_GROUP" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DATA_PROCESSING_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="WORKSET_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="APP_ROLE_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="CLS_DATA_TYPE_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="CLS_TYPE_IO_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="STEP_INSTANCE_SIGNATURE_ID" Type="int(11)" Null="YES" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_step_runtime" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_step_runtime" Non_unique="1" Key_name="fk_is2_step_runtime_is2_data_processing" Seq_in_index="1" Column_name="DATA_PROCESSING_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_step_runtime" Non_unique="1" Key_name="fk_is2_step_runtime_is2_workset" Seq_in_index="1" Column_name="WORKSET_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_step_runtime" Non_unique="1" Key_name="fk_is2_step_runtime_is2_app_role" Seq_in_index="1" Column_name="APP_ROLE_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_step_runtime" Non_unique="1" Key_name="fk_is2_step_runtime_is2_data_type" Seq_in_index="1" Column_name="CLS_DATA_TYPE_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_step_runtime" Non_unique="1" Key_name="fk_is2_step_runtime_is2_type_io" Seq_in_index="1" Column_name="CLS_TYPE_IO_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_step_runtime" Non_unique="1" Key_name="fk_is2_step_runtime_is2_signature" Seq_in_index="1" Column_name="STEP_INSTANCE_SIGNATURE_ID" Collation="A" Cardinality="0" Null="YES" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_step_runtime" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="98304" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:27" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_step_runtime">
+	</table_data>
+	<table_structure name="is2_user_roles">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="ROLE" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="is2_user_roles" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="2" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_user_roles" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="2" Avg_row_length="8192" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Auto_increment="3" Create_time="2020-02-03 13:34:11" Update_time="2020-02-03 13:42:46" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_user_roles">
+	<row>
+		<field name="ID">1</field>
+		<field name="ROLE">ROLE_ADMIN</field>
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="ROLE">ROLE_USER</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_users">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="EMAIL" Type="varchar(255)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="SURNAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="PASSWORD" Type="varchar(500)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="ROLE_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_users" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="2" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_users" Non_unique="1" Key_name="fk_is2_users_is2_user_roles" Seq_in_index="1" Column_name="ROLE_ID" Collation="A" Cardinality="2" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_users" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="2" Avg_row_length="8192" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="3" Create_time="2020-02-03 13:34:12" Update_time="2020-02-03 13:42:46" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_users">
+	<row>
+		<field name="ID">1</field>
+		<field name="EMAIL">admin@is2.it</field>
+		<field name="NAME">Administrator</field>
+		<field name="SURNAME">Workbench</field>
+		<field name="PASSWORD">$2a$10$VB7y/I.oD16QBVaExgH1K.VEuBUKRyXcCUVweUGhs1vDl0waTQPmC</field>
+		<field name="ROLE_ID">1</field>
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="EMAIL">user@is2.it</field>
+		<field name="NAME">User</field>
+		<field name="SURNAME">Workbench</field>
+		<field name="PASSWORD">$2a$10$yK1pW21E8nlZd/YcOt6uB.n8l36a33RP3/hehbWFAcBsFJhVKlZ82</field>
+		<field name="ROLE_ID">2</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_view_data_type">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(50)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<key Table="is2_view_data_type" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="2" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_view_data_type" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="2" Avg_row_length="8192" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Auto_increment="3" Create_time="2020-02-03 13:34:13" Update_time="2020-02-03 13:42:41" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_view_data_type">
+	<row>
+		<field name="ID">1</field>
+		<field name="NAME">DATASET</field>
+		<field name="DESCR" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="ID">2</field>
+		<field name="NAME">RULESET</field>
+		<field name="DESCR" xsi:nil="true" />
+	</row>
+	</table_data>
+	<table_structure name="is2_work_session">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DESCR" Type="text" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="LAST_UPDATE" Type="datetime" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="USER_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<field Field="BUSINESS_FUNCTION_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_work_session" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="1" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_work_session" Non_unique="1" Key_name="fk_is2_worksession_user" Seq_in_index="1" Column_name="USER_ID" Collation="A" Cardinality="1" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_work_session" Non_unique="1" Key_name="fk_is2_worksession_business_function" Seq_in_index="1" Column_name="BUSINESS_FUNCTION_ID" Collation="A" Cardinality="1" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_work_session" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="1" Avg_row_length="16384" Data_length="16384" Max_data_length="0" Index_length="32768" Data_free="0" Auto_increment="3" Create_time="2020-02-03 13:34:19" Update_time="2020-02-03 13:46:49" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_work_session">
+	<row>
+		<field name="ID">2</field>
+		<field name="NAME">Prova</field>
+		<field name="DESCR">Prova</field>
+		<field name="LAST_UPDATE">2020-02-03 13:46:50</field>
+		<field name="USER_ID">1</field>
+		<field name="BUSINESS_FUNCTION_ID">2</field>
+	</row>
+	</table_data>
+	<table_structure name="is2_workflow">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="RULE_ID" Type="int(11)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="STEP" Type="int(11)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="SUB_STEP" Type="int(11)" Null="NO" Key="" Extra="" Comment="" />
+		<field Field="ELSE_STEP" Type="int(11)" Null="NO" Key="" Extra="" Comment="" />
+		<key Table="is2_workflow" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_workflow" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:30" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_workflow">
+	</table_data>
+	<table_structure name="is2_workset">
+		<field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="NAME" Type="varchar(100)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="DATASET_COLUMN" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="ORDER_CODE" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="CONTENT" Type="json" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="CONTENT_SIZE" Type="int(11)" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="VALUE_PARAMETER" Type="longtext" Null="YES" Key="" Extra="" Comment="" />
+		<field Field="CLS_DATA_TYPE_ID" Type="int(11)" Null="NO" Key="MUL" Extra="" Comment="" />
+		<key Table="is2_workset" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<key Table="is2_workset" Non_unique="1" Key_name="fk_is2_workset_data_type" Seq_in_index="1" Column_name="CLS_DATA_TYPE_ID" Collation="A" Cardinality="0" Null="" Index_type="BTREE" Comment="" Index_comment="" Visible="YES" />
+		<options Name="is2_workset" Engine="InnoDB" Version="10" Row_format="Dynamic" Rows="0" Avg_row_length="0" Data_length="16384" Max_data_length="0" Index_length="16384" Data_free="0" Auto_increment="2" Create_time="2020-02-03 13:34:21" Collation="utf8mb4_unicode_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="is2_workset">
+	</table_data>
+</database>
+</mysqldump>
