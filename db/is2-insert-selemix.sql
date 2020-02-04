@@ -7,9 +7,9 @@ SET FOREIGN_KEY_CHECKS=0;
 -- 
 -- BUSINESS_PROCESS
 -- 
-INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) VALUES (80,'Selezione Errori Influenti multi process','Esegue la stima, predizione e valuta gli errori influenti in due processi successivi','Selezione2P',NULL,1);
-INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) VALUES (110,'Stima e Predizione','Escuzione del processo di stima e predizione','Estimates',80,1);
-INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) VALUES (130,'Editing Selettivo','Esecuzione del processo di selezione dei valori influenti','Selection',80,2);
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) VALUES (80,'Selezione errori influenti','Esegue la stima, predizione e valuta gli errori influenti in due processi successivi','Selezione2P',NULL,1);
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) VALUES (110,'Stima e predizione modello','Escuzione del processo di stima e predizione del modello','Estimates',80,1);
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) VALUES (130,'Identificazione errori influenti','Esecuzione del processo di identificazione errori influenti','Selection',80,2);
 
 -- 
 -- BUSINESS SERVICE
@@ -19,14 +19,14 @@ INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`, `GSBPM_PROCESS_ID`) V
 -- 
 -- PROCESS_STEP
 -- 
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (10,'MLEST','This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the “true” data for all units that were used for the estimation',100);
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (15,'MLEST_STRATA','MLEST with stratification',100);
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (20,'PREDY','On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates',100);
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (25,'PREDY_STRATA','PREDY with stratification',100);
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (30,'SELEDIT','This function performs Selective Editing. On the basis of a set of observed data and the corresponding predictions for the true data, it selects the units required for interactive editing',100);
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (35,'SELEDIT_STRATA','SELEDIT with stratification',100);
--- INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (40,'OUTL','Scelta Outlier',100);
--- INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) VALUES (50,'MOD','Imposta Modello',100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (10,'MLEST','This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the “true” data for all units that were used for the estimation','MLEST',100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (15,'MLEST_STRATA','MLEST with stratification','MLEST_STRATA', 100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (20,'PREDY','On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates','PREDY',100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (25,'PREDY_STRATA','PREDY with stratification','PREDY_STRATA',100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (30,'SELEDIT','This function performs Selective Editing. On the basis of a set of observed data and the corresponding predictions for the true data, it selects the units required for interactive editing','SELEDIT',100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (35,'SELEDIT_STRATA','SELEDIT with stratification','SELEDIT_STRATA',100);
+-- INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (40,'OUTL','Scelta Outlier',100);
+-- INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (50,'MOD','Imposta Modello',100);
 
 
 -- 
@@ -38,6 +38,13 @@ INSERT INTO `is2_link_function_process` (`BUSINESS_FUNCTION_ID`, `BUSINESS_PROCE
 -- MANY TO MANY RELATION -> BUSINESS_PROCESS - PROCESS_STEP
 -- 
 INSERT INTO `is2_link_process_step` (`BUSINESS_PROCESS_ID`, `PROCESS_STEP_ID`) VALUES (110,10),(130,30);
+
+-- 
+-- MANY TO MANY RELATION -> BUSINESS_FUNCTION - VIEW_DATA_TYPE
+-- 
+INSERT INTO `is2_link_function_view_data_type` (`BUSINESS_FUNCTION_ID`, `VIEW_DATA_TYPE_ID`) 
+	VALUES (2,1);
+
 
 -- 
 -- APPLICATION SERVICE
@@ -105,7 +112,7 @@ INSERT INTO `is2_step_instance_signature` (`ID`, `STEP_INSTANCE_ID`, `APP_ROLE_I
 INSERT INTO `is2_step_instance_signature` (`ID`, `STEP_INSTANCE_ID`, `APP_ROLE_ID`, `CLS_TYPE_IO_ID`, `REQUIRED`) VALUES (15,3,102,1,1);
 INSERT INTO `is2_step_instance_signature` (`ID`, `STEP_INSTANCE_ID`, `APP_ROLE_ID`, `CLS_TYPE_IO_ID`, `REQUIRED`) VALUES (17,3,104,1,1);
 INSERT INTO `is2_step_instance_signature` (`ID`, `STEP_INSTANCE_ID`, `APP_ROLE_ID`, `CLS_TYPE_IO_ID`, `REQUIRED`) VALUES (18,3,110,1,1);
-INSERT INTO `is2_step_instance_signature` (`ID`, `STEP_INSTANCE_ID`, `APP_ROLE_ID`, `CLS_TYPE_IO_ID`, `REQUIRED`) VALUES (19,3,111,1,1);
+INSERT INTO `is2_step_instance_signature` (`ID`, `STEP_INSTANCE_ID`, `APP_ROLE_ID`, `CLS_TYPE_IO_ID`, `REQUIRED`) VALUES (19,3,111,1,0);
 INSERT INTO `is2_step_instance_signature` (`ID`, `STEP_INSTANCE_ID`, `APP_ROLE_ID`, `CLS_TYPE_IO_ID`, `REQUIRED`) VALUES (20,3,107,2,1);
 INSERT INTO `is2_step_instance_signature` (`ID`, `STEP_INSTANCE_ID`, `APP_ROLE_ID`, `CLS_TYPE_IO_ID`, `REQUIRED`) VALUES (21,3,108,2,1);
 INSERT INTO `is2_step_instance_signature` (`ID`, `STEP_INSTANCE_ID`, `APP_ROLE_ID`, `CLS_TYPE_IO_ID`, `REQUIRED`) VALUES (22,3,113,2,1);

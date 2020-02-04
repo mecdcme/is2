@@ -110,7 +110,7 @@ public class HomeController {
         notificationService.removeAllMessages();
         List<BusinessService> businessServices = businessServiceService.findBusinessServiceByIdGsbpm(idGsbpm);
         GsbpmProcess gsbpmProcess = gsbpmProcessService.findById(idGsbpm);
-        
+
         model.addAttribute("businessServices", businessServices);
         model.addAttribute("gsbpmProcess", gsbpmProcess);
 
@@ -123,19 +123,20 @@ public class HomeController {
         BusinessService businessService = businessServiceService.findBusinessServiceById(idBusinessService);
         List<AppService> appServices = businessServiceService.findAppServices(idBusinessService);
         List<StepInstance> stepInstances = businessServiceService.findStepInstances(idBusinessService);
-        
+
         model.addAttribute("businessService", businessService);
         model.addAttribute("appServices", appServices);
+        model.addAttribute("appService", appServices.get(0)); //DEBUG
         model.addAttribute("stepInstances", stepInstances);
         return "service/home";
     }
-    
+
     @RequestMapping("/code")
     public String getSourceCode(HttpSession session, Model model) {
         notificationService.removeAllMessages();
         return "service/code";
     }
-    
+
     @RequestMapping("/functions")
     public String functions(HttpSession session, Model model) {
         notificationService.removeAllMessages();

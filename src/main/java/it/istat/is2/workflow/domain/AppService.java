@@ -46,9 +46,17 @@ public class AppService implements Serializable {
     private String descr;
     @Column(name = "IMPLEMENTATION_LANGUAGE")
     private String language;
-    @Column(name = "SOURCE")
+    @Column(name = "SOURCE_PATH")
     private String source;
-
+    @Column(name = "SOURCE_CODE")
+    private String sourceCode;
+    @Column(name = "AUTHOR")
+    private String author;
+    @Column(name = "LICENCE")
+    private String licence;
+    @Column(name = "CONTACT")
+    private String contact;
+    
     @ManyToOne
     @JoinColumn(name = "BUSINESS_SERVICE_ID")
     @JsonManagedReference

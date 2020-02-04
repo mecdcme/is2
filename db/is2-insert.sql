@@ -172,12 +172,12 @@ INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`, `GSBPM_PROCESS_ID`)
 -- 
 -- PROCESS_STEP
 -- 
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `BUSINESS_SERVICE_ID`) 
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`,`LABEL`,`BUSINESS_SERVICE_ID`) 
 	VALUES 
-		(4,'VALIDATE','Validate dataset with ruleset',300),
-		(70,'CONTINGENCY_TABLE','The first step of the probabilistic procedure consists of computing the comparison vector, given by the result of the function on the k matching variables, for all the pairs in the space. Indeed, starting from the vector distribution among the pairs (reported in the contingency table) the goal is the estimation of the probability distribution of the unknown random variable “link status”, which assigns each pair to the set M or to the set U. The comparison vector considered in RELAIS is a binary one, i.e. for each matching variable it reports the equality (corresponding to value 1) or the inequality (corresponding to value 0) between the units.',200),
-		(71,'FELLEGI_SUNTER','The Fellegi and Sunter method is a probabilistic approach to solve record linkage problem based on decision model.  According to the method, given two (or more) sources of data, all pairs coming from the Cartesian product of the two sources has to be classified in three independent and mutually exclusive subsets: the set of matches, the set of non-matches and the set of pairs requiring manual review. In order to classify the pairs, the comparisons on common attributes are used to estimate for each pair the probabilities to belong to both the set of matches and the set of non-matches. The pair classification criteria is based on the ratio between such conditional probabilities. The decision model aims to minimize both the misclassification errors and the probability of classifying a pair as belonging to the subset of pairs requiring manual review',200),
-		(72,'MATCHING_TABLE','Create result matching table',200);
+		(4,'VALIDATE','Validate dataset with ruleset','VALIDATE',300),
+		(70,'CONTINGENCY_TABLE','The first step of the probabilistic procedure consists of computing the comparison vector, given by the result of the function on the k matching variables, for all the pairs in the space. Indeed, starting from the vector distribution among the pairs (reported in the contingency table) the goal is the estimation of the probability distribution of the unknown random variable “link status”, which assigns each pair to the set M or to the set U. The comparison vector considered in RELAIS is a binary one, i.e. for each matching variable it reports the equality (corresponding to value 1) or the inequality (corresponding to value 0) between the units.','CONTINGENCY_TABLE', 200),
+		(71,'FELLEGI_SUNTER','The Fellegi and Sunter method is a probabilistic approach to solve record linkage problem based on decision model.  According to the method, given two (or more) sources of data, all pairs coming from the Cartesian product of the two sources has to be classified in three independent and mutually exclusive subsets: the set of matches, the set of non-matches and the set of pairs requiring manual review. In order to classify the pairs, the comparisons on common attributes are used to estimate for each pair the probabilities to belong to both the set of matches and the set of non-matches. The pair classification criteria is based on the ratio between such conditional probabilities. The decision model aims to minimize both the misclassification errors and the probability of classifying a pair as belonging to the subset of pairs requiring manual review','FELLEGI_SUNTER',200),
+		(72,'MATCHING_TABLE','Create result matching table','MATCHING_TABLE',200);
 
 
 -- 
@@ -198,7 +198,7 @@ INSERT INTO `is2_link_process_step` (`BUSINESS_PROCESS_ID`, `PROCESS_STEP_ID`)
 -- MANY TO MANY RELATION -> BUSINESS_FUNCTION - VIEW_DATA_TYPE
 -- 
 INSERT INTO `is2_link_function_view_data_type` (`BUSINESS_FUNCTION_ID`, `VIEW_DATA_TYPE_ID`) 
-	VALUES (1,1), (2,1), (2,2), (3,1), (3,2);
+	VALUES (1,1), (3,1), (3,2);
 
 -- 
 -- 

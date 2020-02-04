@@ -342,7 +342,6 @@
                                                             <th:block th:each="datasetfile ,iter: ${datasetfiles}">
                                                                 <li th:each="element, y: ${datasetfile.columns}" 
                                                                     th:id="${'var_'+element.id}"
-                                                                    
                                                                     th:value="${element.id} + '~' + ${element.name} + '~' + ${element.name}+ '~' + ${datasetfile.FileLabel+ ' - '}" 
                                                                     class="list-group-item varlist" th:classappend="${iter.odd}? 'odd' : 'even'"
                                                                     title="Associa variabile">
@@ -391,7 +390,7 @@
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-check form-check-inline bind-variables-footer">
-                                                <input class="form-check-input" type="checkbox"  id="check-prefix-dataset"  checked="checked" value="prefix"/>
+                                                <input class="form-check-input" type="checkbox"  id="check-prefix-dataset"  th:checked="${datasetfiles.size()>1}" value="prefix"/>
                                                 <label class="form-check-label" for="check-prefix-dataset" th:text="#{process.prefix.dataset}">Aggiungi prefisso dataset</label>
                                             </div>
                                         </div>
