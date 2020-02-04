@@ -33,6 +33,7 @@
         <style>
             .card{
                 min-height: 70px;
+                font-size: 0.95rem;
             }
         </style>
     </head>
@@ -67,14 +68,14 @@
                             <div class="row" th:each="y: ${#numbers.sequence(0, rows - 1)}">
                                 <div class="col-sm-2 col-md-2" th:each="x: ${#numbers.sequence(0, columns - 1)}">
                                     <th:block th:if="${y==0}"><!-- first row-->
-                                        <div class="card bg-info text-white">
+                                        <div class="card bg-gradient-info text-white">
                                             <div class="card-body" th:with="process=${gsbpmMatrix.get(x+'_'+y)}">
                                                 <span th:text="${process.name}"></span>
                                             </div>
                                         </div>
                                     </th:block>
                                     <th:block th:unless="${y==0}">
-                                        <div class="card" th:if="${gsbpmMatrix.get(x+'_'+y)}" th:with="process=${gsbpmMatrix.get(x+'_'+y)}" th:classappend="${process.businessServices.size()>0}? 'bg-success text-white':''">
+                                        <div class="card" th:if="${gsbpmMatrix.get(x+'_'+y)}" th:with="process=${gsbpmMatrix.get(x+'_'+y)}" th:classappend="${process.businessServices.size()>0}? 'bg-gradient-success text-white':''">
                                             <div class="card-body">
                                                 <th:block th:if="${process.businessServices.size()>0}">
                                                     <a th:title="${process.name}" th:href="@{'/gsbpm/' + ${process.id}}" style='color:white'>

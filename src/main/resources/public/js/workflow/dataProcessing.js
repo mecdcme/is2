@@ -132,8 +132,8 @@ $(document).ready(function () {
         tabs.tabs("refresh");
     });
 
-   
-    
+   checkedPrefix = $(this).prop('checked');
+   $(".prefix").toggle(checkedPrefix); 
     
 });
 
@@ -741,11 +741,11 @@ $(function () {
 function selectSelectableElement (selectableContainer, elementsToSelect,checked)
 {
    if(checked){
-	   // add ui-selecting class to the elements to select
-	    $(elementsToSelect).removeClass("ui-unselecting").addClass("ui-selecting").addClass("ui-selected");
+    // add ui-selecting class to the elements to select
+     $(elementsToSelect).removeClass("ui-unselecting").addClass("ui-selecting").addClass("ui-selected");
   }
    else{
-	 	   $(elementsToSelect).removeClass("ui-selected").removeClass("ui-selecting").addClass("ui-unselecting");
+      $(elementsToSelect).removeClass("ui-selected").removeClass("ui-selecting").addClass("ui-unselecting");
   }
    // trigger the mouse stop event (this will select all .ui-selecting elements, and deselect all .ui-unselecting elements)
    selectableContainer.data("ui-selectable")._mouseStop(null);

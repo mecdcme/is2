@@ -106,9 +106,9 @@
                                                                   th:unless="${(dataProcessing.businessProcess.businessSubProcesses == null) or (dataProcessing.businessProcess.businessSubProcesses.size() == 0) }">
                                                             <tr th:each="bStep,stats: ${bProcess.businessSteps}" th:unless="${(bProcess.businessSteps == null) or (bProcess.businessSteps.size() == 0) }">
                                                                 <td th:if="${stats.index == 0}" th:rowspan="${bProcess.businessSteps.size()}">
-                                                                    <span th:text="${bProcess.label + '('+bProcess.name+')'}"></span>
+                                                                    <span th:text="${bProcess.name}"></span>
                                                                 </td>
-                                                                <td th:classappend="${bProcess.businessSteps.size()>1?'td-multi-step':''}"><span th:text="${bStep.label + '('+bStep.name+')'}"></span></td>
+                                                                <td th:classappend="${bProcess.businessSteps.size()>1?'td-multi-step':''}"><span th:text="${bStep.name}"></span></td>
                                                                 <td class="text-center" th:if="${stats.index==0}" th:rowspan="${bProcess.businessSteps.size()}" >
                                                                     <span th:if="${(#lists.isEmpty(paramsMissing.get(bProcess.id)) and #lists.isEmpty(variablesMissing.get(bProcess.id)))}" class="text-success">
                                                                         <i class="fa fa-check" aria-hidden="true"></i>
