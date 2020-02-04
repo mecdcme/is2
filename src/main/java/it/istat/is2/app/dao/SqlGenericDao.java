@@ -33,82 +33,80 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import it.istat.is2.dataset.domain.DatasetFile;
+
 @Repository
 public abstract class SqlGenericDao {
-	
-	
-    public static final String MYSQL = "mysql";  
+
+    public static final String MYSQL = "mysql";
     public static final String POSTGRESSQL = "postgresql";
 
-	@Autowired
-	protected EntityManager em;
+    @Autowired
+    protected EntityManager em;
 
-	public List<DatasetFile> findGenericDatasetFileAll() {
+    public List<DatasetFile> findGenericDatasetFileAll() {
 
-		Query q = em.createNativeQuery("select * from IS2_DATASET_FILE", DatasetFile.class);
+        Query q = em.createNativeQuery("select * from IS2_DATASET_FILE", DatasetFile.class);
 
-		@SuppressWarnings("unchecked")
-		List<DatasetFile> resultList = (List<DatasetFile>) q.getResultList();
-		return resultList;
-	}
+        @SuppressWarnings("unchecked")
+        List<DatasetFile> resultList = (List<DatasetFile>) q.getResultList();
+        return resultList;
+    }
 
-	public DatasetFile findGenericDatasetFileOne(Long id) {
+    public DatasetFile findGenericDatasetFileOne(Long id) {
 
-		Query q = em.createNativeQuery("select * from IS2_DATASET_FILE df where df.id=?", DatasetFile.class);
-		q.setParameter(1, id);
-		DatasetFile result = (DatasetFile) q.getSingleResult();
-		return result;
-	}
+        Query q = em.createNativeQuery("select * from IS2_DATASET_FILE df where df.id=?", DatasetFile.class);
+        q.setParameter(1, id);
+        DatasetFile result = (DatasetFile) q.getSingleResult();
+        return result;
+    }
 
+    public List<Object[]> findDatasetIdColAndName(Long dFile) {
 
-	
-	public List<Object[]> findDatasetIdColAndName(Long dFile) {
+        Query qf = em.createNativeQuery("SELECT id,name FROM IS2_DATASET_COLUMN ss WHERE ss.dataset_file_ID=:dFile order by 1 asc ");
+        qf.setParameter("dFile", dFile);
+        @SuppressWarnings("unchecked")
+        List<Object[]> resulFieldstList = (List<Object[]>) qf.getResultList();
+        return resulFieldstList;
+    }
 
-	    Query qf = em.createNativeQuery("SELECT id,name FROM IS2_DATASET_COLUMN ss WHERE ss.dataset_file_ID=:dFile order by 1 asc ");
-	    qf.setParameter("dFile", dFile);
-	    @SuppressWarnings("unchecked")
-	    List<Object[]>  resulFieldstList = (List<Object[]>) qf.getResultList();
-		return resulFieldstList;
-	}
-	
-	public List<Object[]> findWorsetIdColAndName(Long idDataProcessing,Integer typeIO, Integer groupRole) {
+    public List<Object[]> findWorsetIdColAndName(Long idDataProcessing, Integer typeIO, Integer groupRole) {
 
-	    Query qf = em.createNativeQuery("SELECT ss.ID,ss.NAME from   IS2_WORKSET ss,  IS2_STEP_RUNTIME sv  where  sv.data_processing_id=:idDataProcessing and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id  order by 1 asc ");
-	    qf.setParameter("idDataProcessing", idDataProcessing);
-	    qf.setParameter("typeIO", typeIO);
-	    qf.setParameter("groupRole", groupRole);
-	    @SuppressWarnings("unchecked")
-	    List<Object[]>  resulFieldstList = (List<Object[]>) qf.getResultList();
-		return resulFieldstList;
-	}
-	public List<String> loadFieldValuesTable(String dbschema, String tablename, String field) {
-		// TODO Auto-generated method stub
-	
-		Query q = em.createNativeQuery("SELECT "+field+"  FROM "+dbschema+"."+tablename );
-	  	@SuppressWarnings("unchecked")
-		List<String> resultList = (List<String>) q.getResultList();
-		return resultList;
-	}
+        Query qf = em.createNativeQuery("SELECT ss.ID,ss.NAME from   IS2_WORKSET ss,  IS2_STEP_RUNTIME sv  where  sv.data_processing_id=:idDataProcessing and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id  order by 1 asc ");
+        qf.setParameter("idDataProcessing", idDataProcessing);
+        qf.setParameter("typeIO", typeIO);
+        qf.setParameter("groupRole", groupRole);
+        @SuppressWarnings("unchecked")
+        List<Object[]> resulFieldstList = (List<Object[]>) qf.getResultList();
+        return resulFieldstList;
+    }
 
-	public abstract List<Object[]> findWorKSetDataViewParamsbyQuery( List<Object[]>  resulFieldstList,  Long idDataProcessing, Integer typeIO, Integer groupRole, Integer rigaInf, Integer length,
-			HashMap<String, String> paramsFilter,   String nameColumnToOrder,String dirColumnOrder) ;
- 
-	public abstract List<Object[]> findDatasetDataViewParamsbyQuery( List<Object[]>  resulFieldstList,  Long dFile, Integer rigaInf, Integer length,
-			HashMap<String, String> paramsFilter,   String nameColumnToOrder,String dirColumnOrder);
-	 
-	public abstract List<String> findTablesDB(String table_schema);
-	
-	public abstract List<String> findFieldsTableDB(String table_schema, String table_name);
+    public List<String> loadFieldValuesTable(String dbschema, String tablename, String field) {
+        // TODO Auto-generated method stub
 
-	 
+        Query q = em.createNativeQuery("SELECT " + field + "  FROM " + dbschema + "." + tablename);
+        @SuppressWarnings("unchecked")
+        List<String> resultList = (List<String>) q.getResultList();
+        return resultList;
+    }
+
+    public abstract List<Object[]> findWorKSetDataViewParamsbyQuery(List<Object[]> resulFieldstList, Long idDataProcessing, Integer typeIO, Integer groupRole, Integer rigaInf, Integer length,
+            HashMap<String, String> paramsFilter, String nameColumnToOrder, String dirColumnOrder);
+
+    public abstract List<Object[]> findDatasetDataViewParamsbyQuery(List<Object[]> resulFieldstList, Long dFile, Integer rigaInf, Integer length,
+            HashMap<String, String> paramsFilter, String nameColumnToOrder, String dirColumnOrder);
+
+    public abstract List<String> findTablesDB(String table_schema);
+
+    public abstract List<String> findFieldsTableDB(String table_schema, String table_name);
+
     public static SqlGenericDao getSqlGenericDAOFactory(String database) {
         switch (database.toLowerCase()) {
-        case MYSQL:
-            return new MySqlSqlGenericDao();
-        case POSTGRESSQL:
-             return new PostgreSQLSqlGenericDao();
-        default:
-            return null;
+            case MYSQL:
+                return new MySqlSqlGenericDao();
+            case POSTGRESSQL:
+                return new PostgreSQLSqlGenericDao();
+            default:
+                return null;
         }
     }
 }
