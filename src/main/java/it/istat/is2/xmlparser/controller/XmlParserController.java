@@ -2,14 +2,21 @@ package it.istat.is2.xmlparser.controller;
 import java.io.File;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import it.istat.is2.app.service.NotificationService;
+import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
+import it.istat.is2.workflow.domain.StepInstance;
 import it.istat.is2.workflow.service.BusinessServiceService;
 import it.istat.is2.xmlparser.domain.Service;
 import it.istat.is2.xmlparser.domain.Service.Methods;
@@ -22,6 +29,19 @@ import it.istat.is2.xmlparser.domain.Service.Methods.Method.OutputVariable;
 public class XmlParserController {
 	@Autowired
     private BusinessServiceService businessServiceService;
+	@Autowired
+    private NotificationService notificationService;
+	
+	@GetMapping(value = "/xmlparser")
+    public String getXmlParser(HttpSession session, Model model) {
+        notificationService.removeAllMessages();
+        // Do something
+        
+        
+        
+        return "xmlparser/upload";
+    }
+	
 	
 	public void jaxbXmlFileToObject() {
         
