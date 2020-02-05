@@ -55,7 +55,7 @@ library("SeleMix")
 library("rjson")
 
 #stima del modello
-is2_mlest <- function( workset, roles, wsparams=NULL,...) {
+is2_mlest_ori <- function( workset, roles, wsparams=NULL,...) {
   
   #Output variables
   result          <- list()
@@ -150,12 +150,22 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
       
       print("ml.est did not converge")
       print(cond)
-      
       #Output
       result <-list( IS2_WORKSET_OUT=c(), IS2_ROLES_OUT=c(), IS2_ROLES_GROUP_OUT=c(), IS2_PARAMS_OUT=c(), IS2_REPORT_OUT=c(), IS2_LOG=stdout)
-      
       return(NA)
-    })
+    },
+    warning=function(cond) {
+      print("warning")
+      print("ml.est did not converge")
+      print(cond)
+      #Output
+      result <-list( IS2_WORKSET_OUT=c(), IS2_ROLES_OUT=c(), IS2_ROLES_GROUP_OUT=c(), IS2_PARAMS_OUT=c(), IS2_REPORT_OUT=c(), IS2_LOG=stdout)
+      return(NA)
+   
+    }
+    
+    
+    )
   
   #Create log
   sink()
@@ -167,7 +177,7 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
 
 
 #stima completa con layer
-is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
+is2_mlest <- function( workset, roles, wsparams=NULL,...) {
   
   #Output variables
   result          <- list()
@@ -206,31 +216,32 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   #Set variables
   s <- workset[[roles$S]]
   layers <- sort(unique(s))
+  mod <- c()
+  outparams <- data.frame()
+  predname <- c()
+  n_outlier <- 0
+  n_missing <- 0
+  
   for(layer in layers){
-		rm(workset_layer)
-		rm(x)
-		rm(y)
-		rm(s1)
-		rm(outp)
-		rm(out1)
-		 
-	    workset_layer <- workset[workset[roles$S]==layer, , drop = TRUE ]
+	  rm(workset_layer)
+    rm(est)
+	  rm(x)
+	  rm(y)
+	  rm(s1)
+  	rm(outprediction)
+    workset_layer <- workset[workset[roles$S]==layer, , drop = TRUE ]
 	  
-	    x <- workset_layer[roles$X]
+	  x <- workset_layer[roles$X]
 		y <- workset_layer[roles$Y]
 		s1 <- workset_layer[roles$S]
-  #Execute ml.est
-  run <- tryCatch(
-    {
+    #Execute ml.est
+    run <- tryCatch(
+      {
       est <- ml.est(y=y, x=x, model = model, lambda= as.numeric(lambda), w = as.numeric(w), lambda.fix=lambda.fix, w.fix=w.fix, eps=as.numeric(eps), max.iter=as.numeric(max.iter), t.outl= as.numeric(t.outl), graph=FALSE)
-    
-      print("ml.est execution completed!")
-      
+      print(paste("layer ",layer, " ml.est execution completed!"))
       #Prepare output
       outparams <- data.frame(tau=est$tau, outlier=est$outlier, pattern=est$pattern)
-      
-      predname = c()
-      
+      rm(predname)
       if(ncol(est$ypred) ==1){
         predname = c("YPRED")
       } 
@@ -239,50 +250,51 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
           predname = c(predname, paste("YPRED",i,sep="_"))
         }
       }
-      
       outprediction <- as.data.frame(est$ypred)
       colnames(outprediction) <- predname
       
-      #Set output parameters
-      report <- list(n.outlier = sum(est$outlier), missing = sum(as.numeric(est$pattern)), is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)
-      mod<- toJSON(list(layer="all",B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w ))
-
-      report_out <- list(Report = toJSON(report))
-      params_out <- list(Model = toJSON(mod))
-
-      #Set output variables
-      workset_out <- cbind(x, y, outprediction, outparams)
+      #Set output parameters layer
+      mod <- rbind(mod, toJSON(list(layer=layer,N=nrow(x), B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w, is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)))
+        #Set output variables
+      workset_out <- rbind(workset_out,cbind(x, y, outprediction, outparams))
       
-      #Set output roles & rolesgroup
-      roles_out      <- list (O="outlier", M="Model",G="Report")
-      rolesgroup_out <- list (M="M",G="G")
-      
-      
-      roles_out [[IS2_SELEMIX_PREDIZIONE]]      <- c(roles$X,roles$Y,predname,names(outparams))
-      rolesgroup_out [[IS2_SELEMIX_PREDIZIONE]] <- c("P", "O")
-      
-      #Output
-      result[[IS2_WORKSET_OUT]]     <- workset_out
-      result[[IS2_ROLES_OUT]]       <- roles_out
-      result[[IS2_ROLES_GROUP_OUT]] <- rolesgroup_out
-      result[[IS2_PARAMS_OUT]]      <- params_out
-      result[[IS2_REPORT_OUT]]      <- report_out
-      result[[IS2_LOG]]             <- stdout
-      
+      n_outlier <- n_outlier + sum(est$outlier)
+      n_missing <- n_missing + sum(as.numeric(est$pattern))
+    
     },
     error=function(cond) {
-      
-      print("ml.est did not converge")
+      print(paste("layer ",layer, " ml.est did not converge"))
       print(cond)
-      
-      #Output
-      result <-list( IS2_WORKSET_OUT=c(), IS2_ROLES_OUT=c(), IS2_ROLES_GROUP_OUT=c(), IS2_PARAMS_OUT=c(), IS2_REPORT_OUT=c(), IS2_LOG=stdout)
-      
-      return(NA)
+      outparams <- data.frame(tau=NA, outlier=NA, pattern=NA)
+      outprediction <- NA
+      workset_out <- rbind(workset_out,cbind(x, y, outprediction, outparams))
+      mod <- rbind(mod, toJSON(list(layer=layer,N=nrow(x),B=NA, sigma=NA, lambda=NA, w=NA, is.conv = FALSE, sing = NA, bic.aic = NA )))
+    
     })
    
-    
    }#for
+  #Set output parameters global
+  params_out <- list(Model = toJSON(mod))
+  report <- list(n.outlier = n_outlier, missing =n_missing )
+  report_out <- list(Report = toJSON(report))
+  
+  #Set output roles & rolesgroup
+  roles_out      <- list (O="outlier", M="Model",G="Report")
+  rolesgroup_out <- list (M="M",G="G")
+  
+  roles_out [[IS2_SELEMIX_PREDIZIONE]]      <- c(roles$X,roles$Y,predname,names(outparams))
+  rolesgroup_out [[IS2_SELEMIX_PREDIZIONE]] <- c("P", "O")
+  
+  
+  
+  
+  #Output
+  result[[IS2_WORKSET_OUT]]     <- workset_out
+  result[[IS2_ROLES_OUT]]       <- roles_out
+  result[[IS2_ROLES_GROUP_OUT]] <- rolesgroup_out
+  result[[IS2_PARAMS_OUT]]      <- params_out
+  result[[IS2_REPORT_OUT]]      <- report_out
+  result[[IS2_LOG]]             <- stdout
   
   #Create log
   sink()
