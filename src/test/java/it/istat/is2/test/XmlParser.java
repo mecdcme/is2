@@ -1,6 +1,5 @@
 package it.istat.is2.test;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.File;
@@ -119,7 +118,7 @@ public class XmlParser extends TestBase {
         }    
         
 
-        // Assert       
-        assertNotNull(fileName);
+        // Assert
+        assertNull(fileName);
     }
 }
