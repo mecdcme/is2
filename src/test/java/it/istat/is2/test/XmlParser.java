@@ -71,7 +71,7 @@ public class XmlParser extends TestBase {
             
             // Act
             //buisiServiceDao.save(bs);
-            bss.save(bs);
+            bss.save(bs); 
             
             System.out.println("Inserimento avvenuto");
             
