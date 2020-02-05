@@ -40,5 +40,7 @@ public interface BusinessServiceDao extends CrudRepository<BusinessService, Inte
     Optional<BusinessService> findById(Long idService);
 
     List<BusinessService> findByGsbpmProcess(GsbpmProcess gsbpmProcess);
+    
+    public void save(Optional<BusinessService> businessService);
 
 }

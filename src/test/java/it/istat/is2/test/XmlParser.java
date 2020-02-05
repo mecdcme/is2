@@ -1,5 +1,6 @@
 package it.istat.is2.test;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.File;
@@ -12,12 +13,15 @@ import javax.xml.bind.Unmarshaller;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import it.istat.is2.app.dao.UserRolesDao;
 import it.istat.is2.workflow.dao.BusinessServiceDao;
 import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
+import it.istat.is2.workflow.domain.GsbpmProcess;
+import it.istat.is2.workflow.service.BusinessServiceService;
 import it.istat.is2.xmlparser.domain.Service;
 import it.istat.is2.xmlparser.domain.Service.Methods;
 import it.istat.is2.xmlparser.domain.Service.Methods.Method;
@@ -27,7 +31,9 @@ import it.istat.is2.xmlparser.domain.Service.Methods.Method.OutputVariable;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class XmlParser extends TestBase {
-	@Mock BusinessServiceDao buisiServiceDao;;
+	@Mock BusinessServiceDao buisiServiceDao;
+	@Mock BusinessServiceService bss;
+	
     
 	
 //	public static void main(String[] args) 
@@ -59,8 +65,14 @@ public class XmlParser extends TestBase {
             bs.setDescr(service.getDescription());
             bs.setName(service.getShortname());
             
+//            GsbpmProcess gsbpmProcess = new GsbpmProcess();
+//            gsbpmProcess.setId(54);
+//            bs.setGsbpmProcess(gsbpmProcess);
+            
             // Act
-            buisiServiceDao.save(bs);
+            //buisiServiceDao.save(bs);
+            bss.save(bs);
+            
             System.out.println("Inserimento avvenuto");
             
 //            AppService e = new AppService();
@@ -76,7 +88,7 @@ public class XmlParser extends TestBase {
             		for(int w=0; w<inputVariable.size(); w++) {
             			InputVariable inputv1 = inputVariable.get(w);
             			// Popolare domain e chiamare service per inserimento
-            			System.out.println("Popolo InputVariable");
+            			System.out.println("Inserisco InputVariable");
             		}
             	}
         	
@@ -88,7 +100,7 @@ public class XmlParser extends TestBase {
             		for(int w=0; w<inputParameter.size(); w++) {
             			InputParameter inputp1 = inputParameter.get(w);
             			// Popolare domain e chiamare service per inserimento
-            			System.out.println("Popolo InputParameter");
+            			System.out.println("Inserisco InputParameter");
             		}
             	}
             	
@@ -98,7 +110,7 @@ public class XmlParser extends TestBase {
             		for(int w=0; w<outputVariable.size(); w++) {
             			OutputVariable out1 = outputVariable.get(w);
             			// Popolare domain e chiamare service per inserimento
-            			System.out.println("Popolo OutputVariable");
+            			System.out.println("Inserisco OutputVariable");
             		}
             	}            
             	
@@ -114,6 +126,6 @@ public class XmlParser extends TestBase {
         
 
         // Assert
-        assertNull(fileName);
+        assertNotNull(fileName);       
     }
 }

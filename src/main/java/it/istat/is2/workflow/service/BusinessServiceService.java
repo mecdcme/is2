@@ -60,6 +60,9 @@ public class BusinessServiceService {
     public BusinessService findBusinessServiceById(Integer idService) {
         return businessServiceDao.findById(idService).orElse(null);
     }
+    public void save(BusinessService businessService) {
+        businessServiceDao.save(businessService);
+    }
 
     public List<BusinessService> findBusinessServiceByIdGsbpm(Integer idGsbpm) {
         List<BusinessService> businessServices = null;
