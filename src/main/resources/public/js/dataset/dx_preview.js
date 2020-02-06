@@ -11,7 +11,10 @@ function loadData(idFile) {
 
             $("#gridContainer").dxDataGrid({
                 dataSource: result.data,
+                rowAlternationEnabled: true,
                 showBorders: true,
+                showRowLines: true,
+                columnWidth: 100,
                 selection: {
                     mode: "multiple"
                 },
@@ -48,12 +51,11 @@ function loadData(idFile) {
                     visible: true
                 },
                 paging: {
-                    pageSize: 10
+                    enabled: false
                 },
-                pager: {
-                    showPageSizeSelector: true,
-                    allowedPageSizes: [5, 10, 15, 20, 25],
-                    showInfo: true
+                scrolling: {
+                    mode: "virtual",
+                    columnRenderingMode: "virtual"
                 }
             });
 

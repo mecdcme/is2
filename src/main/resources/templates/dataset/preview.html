@@ -38,7 +38,7 @@
         <script th:src="@{/js/vendors/devextreme/dx.all.js}"></script>
         <script th:src="@{/js/dataset/dx_preview.js}"></script>
         <link th:href="@{/css/vendors/devextreme/dx.common.css}" rel="stylesheet" />
-        <link th:href="@{/css/vendors/devextreme/dx.coreui.css}" rel="stylesheet" />
+        <link th:href="@{/css/vendors/devextreme/dx.coreui3.css}" rel="stylesheet" />
     </head>
     <body class="c-app">
         <div th:replace="layout :: site-aside"></div>
@@ -119,7 +119,7 @@
                                                 </thead>
                                             </table-->
                                             <div class="demo-container">
-                                                <div id="gridContainer">
+                                                <div id="gridContainer" style='height: 500px'>
                                                     <div class="options">
                                                         <div class="caption">Options</div>
                                                         <div class="option">
