@@ -1,4 +1,4 @@
-library("rjson")
+library("jsonlite")
 
 mod1 <- list(x = "c(1,2,3,4)", y = c(5,6,7,8), z = c("a", "b", "b", "c"))
 mod2 <- list("x" = c(1,2,3,5), "y" = c(7,8), "z" = c("b", "b", "c"))

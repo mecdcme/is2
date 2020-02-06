@@ -15,6 +15,6 @@ checkAndInstall("VIM")
 checkAndInstall("rspa")
 checkAndInstall("varhandle")
 checkAndInstall("SeleMix")
-checkAndInstall("rjson")
+checkAndInstall("jsonlite")
 
 print("Loading libraries...ok ")

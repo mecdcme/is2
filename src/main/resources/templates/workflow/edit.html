@@ -40,7 +40,7 @@
                 _paramTemplateMap[replaceAll(_paramList[i].parameter.name," ","_")] = _paramList[i].parameter.jsonTemplate;
             }
             var matchedVariables = [[${matchedVariables}]];
-            var _variable_btn = [[#{btn.title.variable}]];
+            var _variable_btn = [[#{btn.title.bind}]];
             $(document).ready(function () {
                 setMenuActive([[${session.sessionBean.businessFunction.id}]], "pr");
                 if (showTabParam) showPanel('parametri');
@@ -347,7 +347,7 @@
                                                                     title="Associa variabile">
                                                                     <span class="prefix" th:text="${datasetfile.FileLabel+ ' - '}"></span><span th:text="${element.name}"></span>
                                                                     <span th:if="${matchedVariablesMap.get(element.id)}"  th:title="${'Roles: '+matchedVariablesMap.get(element.id)}">&nbsp;&nbsp;
-                                                                        <span class="badge badge-light badge-pill" style="position: static;"th:text="${matchedVariablesMap.get(element.id).size()}">1</span>
+                                                                        <span class="badge badge-info badge-pill pull-right" th:text="${matchedVariablesMap.get(element.id).size()}">1</span>
                                                                      </span>
                                                                 </li>
                                                             </th:block>

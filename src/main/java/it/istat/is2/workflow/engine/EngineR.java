@@ -54,6 +54,7 @@ import it.istat.is2.workflow.domain.StepInstanceSignature;
 import it.istat.is2.workflow.domain.StepRuntime;
 import it.istat.is2.workflow.domain.TypeIO;
 import it.istat.is2.workflow.domain.Workset;
+import org.json.JSONObject;
 
 @Service
 public class EngineR implements EngineService {
@@ -277,6 +278,7 @@ public class EngineR implements EngineService {
                 for (int i = 0; i < lista.size(); i++) {
                     String name = lista.names.get(i).toString();
                     String value = lista.at(i).asString();
+                    System.out.println(value);
                     genericHashMap.put(name, value);
                 }
 
