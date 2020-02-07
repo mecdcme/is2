@@ -50,12 +50,13 @@ IS2_SELEMIX_PREDIZIONE <- "P"
 IS2_SELEMIX_OUTLIER    <- "O"
 IS2_SELEMIX_MODEL      <- "M"
 IS2_SELEMIX_REPORT     <- "G"
+IS2_SELEMIX_ERROR      <- "E"
 
 library("SeleMix")
 library("jsonlite")
 
 #stima del modello
-is2_mlest_ori <- function( workset, roles, wsparams=NULL,...) {
+is2_mlest_nolayer <- function( workset, roles, wsparams=NULL,...) {
   
   #Output variables
   result          <- list()
@@ -177,7 +178,7 @@ is2_mlest_ori <- function( workset, roles, wsparams=NULL,...) {
 
 
 #stima completa con layer
-is2_mlest <- function( workset, roles, wsparams=NULL,...) {
+is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   
   #Output variables
   result          <- list()
@@ -276,9 +277,8 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
   }#for
   
   #Set output parameters global
-  params_out <- list(Model = toJSON(mod, auto_unbox = TRUE))
-  
-  print(toJSON(mod, auto_unbox = TRUE))
+  params_out <- list(Model = toJSON(mod))
+   
   
   report <- list(n.outlier = n_outlier, missing =n_missing )
   report_out <- list(Report = toJSON(report))
@@ -304,105 +304,113 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
   
   return(result)
 }
+ 
+#funzione stima generica 
+is2_mlest <- function( workset, roles, wsparams=NULL,...) {
+  if(is.null(roles$S)){
+	return (is2_mlest_nolayer(workset, roles, wsparams))
+  }
+  else
+  {	
+	return (is2_mlest_layer(workset, roles, wsparams))
+  }
+}
 
-is2_mlest_layer_old <- function( workset, roles, wsparams=NULL,...) {
+
+
+#########################
+#editing selettivo 
+########################
+
+#stima completa con layer
+is2_seledit_layer <- function( workset, roles, wsparams=NULL,...) {
   
+  #Output variables
+  result          <- list()
+  workset_out     <- data.frame()
+  roles_out       <- list() 
+  rolesgroup_out  <- list()
+  params_out      <- list()
+  report_out      <- list() 
+  
+  #Create log
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
   
-  #Default params
-  model="LN"
-  t.outl=0.5
-  lambda=3
-  w=0.05
-  lambda.fix=FALSE
-  w.fix=FALSE
-  eps=1e-7
-  max.iter=500	
+  wgt=rep(1,nrow(workset))
+  t.sel=0.01
   
-  #Parameter check
+  #Check parameters
   if(!is.null(wsparams)){
-    
-    if(exists("wsparams$model")) model=wsparams$model
-    if(exists("wsparams$t.outl")) t.outl=wsparams$t.outl
-    if(exists("wsparams$lambda")) lambda=wsparams$lambda
-    if(exists("wsparams$w")) w=wsparams$w
-    if(exists("wsparams$lambda.fix")) lambda.fix=wsparams$lambda.fix
-    if(exists("wsparams$w.fix")) w.fix=wsparams$w.fix
-    if(exists("wsparams$eps")) eps=wsparams$eps
-    if(exists("wsparams$max.iter")) max.iter=wsparams$max.iter
+    if(exists("wsparams$wgt")) wgt=wsparams$wgt
+    if(exists("wsparams$tot")) tot=wsparams$tot
+    if(exists("wsparams$t.sel")) t.sel=wsparams$t.sel
   }
+
   
-  # get DATASET 
-  
+  #Set variables
   s <- workset[[roles$S]]
-  
   layers <- sort(unique(s))
-  
-  r_out <-c()
-  print(layers)
-  mod <-c()
-  param_mod <-c()
+  n_error <- 0
+  predname<- c() 
+  workset_layer  <- data.frame()
   for(layer in layers){
     rm(workset_layer)
-    rm(x)
-    rm(y)
-    rm(s1)
-    rm(outp)
-    rm(out1)
-    
     workset_layer <- workset[workset[roles$S]==layer, , drop = TRUE ]
-    
-    x <- workset_layer[roles$X]
+     
     y <- workset_layer[roles$Y]
+	ypred <- workset_layer[roles$P]
     s1 <- workset_layer[roles$S]
-    
-    #Execute algorithm (mettere un try catch)
-    
-    est <-  try(ml.est(y=y, x=x, model = model, lambda= as.numeric(lambda),  w= as.numeric(w), lambda.fix=lambda.fix, w.fix=w.fix, eps=as.numeric(eps), max.iter=as.numeric(max.iter), t.outl= as.numeric(t.outl), graph=FALSE))
-    predname = c()
-    out1 = c()
-    if(("est"%in%ls() & class(est)[1]!="try-error")){
-      if(length(workset_layer)>1) ypred <- matrix(est$ypred,nrow=nrow(workset_layer),ncol=length(roles$Y))
-      else ypred <- as.matrix(est$ypred)
-      
-      #reimpostazione nomi delle variabili
-      outp <- data.frame(tau=est$tau, outlier=est$outlier, pattern=est$pattern)
-      
-      for(i in 1:ncol(ypred)) {
-        pred = ypred[,i]
-        predname = c(predname, paste("YPRED",i,sep="_"))
-        out1 <- cbind(out1,pred)
-      }
-      out1=data.frame(out1)
-      colnames(out1) <- predname
-    }
-    else{
-      outp <- data.frame(tau=NA, outlier=NA, pattern=NA)
-    }
-    #output 
-    r_out<- rbind(r_out, cbind(x,y,s1,outp,out1))
-    
-    
-    #output parameters
-    mod <- rbind(mod, toJSON(list(layer=layer,B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w )))
-    
-    #Report output 
-    report <- list(n.outlier = sum(est$outlier), missing = sum(as.numeric(est$pattern)),  is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)
-    param_report <- list( Report = toJSON(report))
-    
-  } 
-  param_mod <- list( Model = toJSON(mod))
-  print(	param_mod)
-  #setting output roles 
-  roles <- list (P= c(roles$X,roles$Y,roles$S, predname,names(outp)), O="outlier", M="Model",G="Report")
-  #setting output rolesgroup 
-  rolesgroup <- list (P= c("P", "O"),  M="M",G="G")
+	
+	tot=colSums(ypred * wgt) 
+	if(exists("wsparams$tot")) tot=wsparams$tot
+	
+    #Execute sel.edit
+    sel_out <- sel.edit (y=y, ypred=ypred, wgt, tot, t.sel= as.numeric(t.sel))
+	inf <- sel_div[, "sel"]
+
+    score <- sel_div[,c("rank","global.score")]
+    n_error =n_error+ sum(out$sel)
+    predname<-c("sel","rank","global.score")
+	#Set output variables
+	workset_out <- rbind(workset_out,cbind(workset_layer, inf, score))
+	
+  }#for
+   
   
-  #result 
-  result <-list( workset_out=r_out, roles_out=roles,rolesgroup_out=rolesgroup, params_out=param_mod, report_out=param_report, log=stdout)
+  report <- list(n.error = n_error )
+  report_out <- list(Report = toJSON(report))
   
+  #Set output roles & rolesgroup
+  roles_out      <- list (E="sel", R= "rank", F="global.score", G=names(report))
+  rolesgroup_out <- list (E="E",G="G")
+  
+  roles_out [[IS2_SELEMIX_ERROR]]      <- c(roles$X,roles$Y,predname)
+  rolesgroup_out [[IS2_SELEMIX_ERROR]] <- c("P", "O")
+  
+  #Output
+  result[[IS2_WORKSET_OUT]]     <- workset_out
+  result[[IS2_ROLES_OUT]]       <- roles_out
+  result[[IS2_ROLES_GROUP_OUT]] <- rolesgroup_out
+  result[[IS2_PARAMS_OUT]]      <- params_out
+  result[[IS2_REPORT_OUT]]      <- report_out
+  result[[IS2_LOG]]             <- stdout
+  
+  #Create log
   sink()
   close(con)
+  
   return(result)
 }
+
+#editing selettivo generica 
+is2_seledit <- function( workset, roles, wsparams=NULL,...) {
+  if(is.null(roles$S)){
+	return (is2_seledit_nolayer(workset, roles, wsparams))
+  }
+  else
+  {	
+	return (is2_seledit_layer(workset, roles, wsparams))
+  }
+}
+
