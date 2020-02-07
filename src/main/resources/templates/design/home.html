@@ -136,12 +136,12 @@
 														<td th:text="${stepP.descr}"></td>
 														<td th:text="${stepP.label}"></td>
 														<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + 'null' + '\', \'' + 'functions' +'\')'">
+																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'subprocesses' +'\')'">
 																	<i class="fa fa-pencil"></i>
 															</a></td>
 
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + 'null' + '\', \'' + 'functions' +'\')'">
+																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \'' + 'subprocesses' +'\')'">
 																	<i class="fa fa-trash-o"></i>
 															</a></td>
 													</tr>
@@ -181,12 +181,12 @@
 														<td th:text="${stepP.descr}"></td>
 														<td th:text="${stepP.label}"></td>
 														<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + 'null' + '\', \'' + 'processes' +'\')'">
+																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'subprocesses' +'\')'">
 																	<i class="fa fa-pencil"></i>
 															</a></td>
 
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + 'null' + '\', \'' + 'processes' +'\')'">
+																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \'' + 'subprocesses' +'\')'">
 																	<i class="fa fa-trash-o"></i>
 															</a></td>
 													</tr>
@@ -224,12 +224,12 @@
 															<td th:text="${stepP.descr}"></td>
 															<td th:text="${stepP.label}"></td>
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + 'null' + '\', \'' + 'subprocesses' +'\')'">
+																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'subprocesses' +'\')'">
 																	<i class="fa fa-pencil"></i>
 															</a></td>
 
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + 'null' + '\', \'' + 'subprocesses' +'\')'">
+																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \'' + 'subprocesses' +'\')'">
 																	<i class="fa fa-trash-o"></i>
 															</a></td>
 														</tr>
@@ -315,7 +315,7 @@
 									id="description" type="text" name="modDescription"
 									th:placeholder="#{generic.description}" autocomplete="off"
 									required="" class="form-control" value="" /> <label
-									for="label" th:text="#{generic.label}">Label:</label> <input
+									for="label" id="lab" th:text="#{generic.label}">Label:</label> <input
 									id="label" type="text" name="modLabel"
 									th:placeholder="#{generic.label}" autocomplete="off"
 									required="" class="form-control" value="" />

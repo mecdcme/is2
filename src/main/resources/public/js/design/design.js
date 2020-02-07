@@ -23,20 +23,44 @@
  */
 
 
-function updateFunctionDialog(idDataset, nomeFile, pluto, paperino, zio) {
+function updateFunctionDialog(id, nome, descrizione, etichetta, funzione) {
    var titolo;
-	switch (zio) {
+	switch (funzione) {
 	case "functions":
 		titolo=_updatefun;
+		 $('#id').val(id);
+		 $('#name').val(nome);
+		 $('#description').val(descrizione);
+		 $('#label').val(etichetta);
+		 $('#label').show();
+		 $('#lab').show();
 		break;
 	case "processes":
 		titolo=_updateproc;
+		$('#id').val(id);
+		 $('#name').val(nome);
+		 $('#description').val(descrizione);
+		 $('#label').val(etichetta);
+		 $('#label').show();
+		 $('#lab').show();
 		break
 	case "subprocesses":
 		titolo=_updatesubproc;
+		$('#id').val(id);
+		 $('#name').val(nome);
+		 $('#description').val(descrizione);
+		 $('#label').val(etichetta);
+		 $('#label').show();
+		 $('#lab').show();
 		break;
 	case "steps":
 		titolo=_updatestep;
+		$('#id').val(id);
+		 $('#name').val(nome);
+		 $('#description').val(descrizione);
+		 $('#label').hide();
+		 $('#lab').hide();
+		
 		break;
 
 	default:
@@ -51,9 +75,9 @@ function updateFunctionDialog(idDataset, nomeFile, pluto, paperino, zio) {
   
     
 }
-function deleteFunctionDialog(ide, ids, op, paperino, zio) {
+function deleteFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 	var titolo;
-	switch (zio) {
+	switch (funzione) {
 	case "functions":
 		titolo=_deletefun;
 		break;
