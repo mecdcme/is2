@@ -109,6 +109,12 @@
 									<div class="card">
 										<div class="card-header">
 											<span th:text="#{Layout.Functions}"></span>
+											<div class="card-header-actions">
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaFunzione();" th:title="#{label.button.session}"> 
+                                                    <i class="fa fa-plus-square-o"></i>
+                                                    <span th:text="#{generic.newFun}">New function</span>
+                                                </a>
+                                            </div>
 										</div>
 										<div class="card-body">
 											<table id="functionsTabList"
@@ -148,6 +154,12 @@
 									<div class="card">
 										<div class="card-header">
 											<span th:text="#{Layout.Processes}"></span>
+											<div class="card-header-actions">
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaFunzione();" th:title="#{label.button.session}"> 
+                                                    <i class="fa fa-plus-square-o"></i>
+                                                    <span th:text="#{generic.newProc}">New Process</span>
+                                                </a>
+                                            </div>
 										</div>
 										<div class="card-body">
 											<table id="processesTabList"
@@ -186,7 +198,12 @@
 										<div class="card">
 											<div class="card-header">
 												<span th:text="#{Layout.Subprocesses}"></span>
-											</div>
+												<div class="card-header-actions">
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaFunzione();" th:title="#{label.button.session}"> 
+                                                    <i class="fa fa-plus-square-o"></i>
+                                                    <span th:text="#{generic.newSubproc}">New Subprocess</span>
+                                                </a>
+                                            </div>
 											<div class="card-body">
 												<table id="processesTabList"
 													class="table table-striped table-bordered">
@@ -226,7 +243,12 @@
 										<div class="card">
 											<div class="card-header">
 												<span th:text="#{Layout.Steps}"></span>
-											</div>
+												<div class="card-header-actions">
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaFunzione();" th:title="#{label.button.session}"> 
+                                                    <i class="fa fa-plus-square-o"></i>
+                                                    <span th:text="#{generic.newStep}">New Step</span>
+                                                </a>
+                                            </div>
 											<div class="card-body">
 												<table id="subProcessesTabList"
 													class="table table-striped table-bordered">
