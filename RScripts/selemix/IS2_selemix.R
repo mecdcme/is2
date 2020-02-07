@@ -276,9 +276,9 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
   }#for
   
   #Set output parameters global
-  params_out <- list(Model = toJSON(mod))
+  params_out <- list(Model = toJSON(mod, auto_unbox = TRUE))
   
-  print(toJSON(mod))
+  print(toJSON(mod, auto_unbox = TRUE))
   
   report <- list(n.outlier = n_outlier, missing =n_missing )
   report_out <- list(Report = toJSON(report))

@@ -8,13 +8,12 @@ function loadData(idFile) {
         type: "GET",
         datatype: "JSON",
         success: function (result) {
-
             $("#gridContainer").dxDataGrid({
                 dataSource: result.data,
                 rowAlternationEnabled: true,
                 showBorders: true,
                 showRowLines: true,
-                columnWidth: 100,
+                columnWidth: 150,
                 selection: {
                     mode: "multiple"
                 },
@@ -27,17 +26,7 @@ function loadData(idFile) {
                     allowExportSelectedData: true
                 },
                 columns: result.columns,
-                summary: {
-                    totalItems: [{
-                            column: "citta",
-                            summaryType: "count"
-                        }, {
-                            column: "variati",
-                            summaryType: "sum"
-
-                        }]
-                },
-                columnsAutoWidth: true,
+                //columnsAutoWidth: true,
                 filterRow: {
                     visible: true,
                     applyFilter: "auto"
@@ -58,7 +47,8 @@ function loadData(idFile) {
                     columnRenderingMode: "virtual"
                 }
             });
-
+            $(".sk-wave").hide();
+            $("#gridContainer").show();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error loading data');
