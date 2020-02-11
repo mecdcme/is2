@@ -230,11 +230,22 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
     rm(y)
     rm(s1)
     rm(outprediction)
+    rm(predname)
     workset_layer <- workset[workset[roles$S]==layer, , drop = TRUE ]
     
     x <- workset_layer[roles$X]
     y <- workset_layer[roles$Y]
     s1 <- workset_layer[roles$S]
+    
+    if(NCOL(y) ==1){
+      predname = c("YPRED")
+    } 
+    else{
+      for(i in 1:NCOL(y)) {
+        predname = c(predname, paste("YPRED",i,sep="_"))
+      }
+    }
+    
     #Execute ml.est
     run <- tryCatch(
       {
@@ -242,42 +253,55 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
         print(paste("layer ",layer, " ml.est execution completed!"))
         #Prepare output
         outparams <- data.frame(tau=est$tau, outlier=est$outlier, pattern=est$pattern)
-        rm(predname)
-        if(ncol(est$ypred) ==1){
-          predname = c("YPRED")
-        } 
-        else{
-          for(i in 1:ncol(est$ypred)) {
-            predname = c(predname, paste("YPRED",i,sep="_"))
-          }
-        }
+        
         outprediction <- as.data.frame(est$ypred)
         colnames(outprediction) <- predname
         
         #Set output parameters layer
-        #mod[[layer]] <- list(layer=layer,N=nrow(x), B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w, is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)
-        mod[[layer]] <- list(layer=layer,N=nrow(x), B="B", sigma=est$sigma, lambda=est$lambda, w=est$w, is.conv = est$is.conv, sing = est$sing, bic.aic = "aic")
+        mod[[layer]] <- list(layer=layer,N=nrow(x), B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w, is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)
         #Set output variables
-        workset_out <- rbind(workset_out,cbind(x, y, outprediction, outparams))
+        workset_out <- rbind(workset_out,cbind(x, y,s1, outprediction, outparams))
         
         n_outlier <- n_outlier + sum(est$outlier)
         n_missing <- n_missing + sum(as.numeric(est$pattern))
         
       },
+      warning=function(cond) {
+        print(paste("Warning: layer ",layer, " ml.est did not converge"))
+        print(cond)
+        outparams <- data.frame(matrix(NA, ncol = 3+NCOL(y), nrow = NROW(y)))
+        colnames(outparams) <- cat(predname,"tau","outlier","pattern")
+        outprediction <- as.data.frame(NA)
+        colnames(outprediction) <- predname
+        workset_out <- rbind(workset_out,cbind(x, y,s1, outparams))
+        mod[[layer]] <- list(layer=layer,N=nrow(x),B=NA, sigma=NA, lambda=NA, w=NA, is.conv = FALSE, sing = NA, bic.aic = NA )
+        print('---------------------')
+        print(layer)
+        print(NROW(workset_out))
+        print(head(workset_out))
+        return(NA)
+      }      ,
       error=function(cond) {
-        print(paste("layer ",layer, " ml.est did not converge"))
+        print(paste("Error: layer ",layer, " ml.est did not converge"))
         print(cond)
         outparams <- data.frame(tau=NA, outlier=NA, pattern=NA)
-        outprediction <- NA
-        workset_out <- rbind(workset_out,cbind(x, y, outprediction, outparams))
-        mod[[layer]] <- list(layer=layer,N=nrow(x),B=NA, sigma=NA, lambda=NA, w=NA, is.conv = FALSE, sing = NA, bic.aic = NA )
         
+        outprediction <- as.data.frame(NA)
+        
+        colnames(outprediction) <- predname
+        workset_out <- rbind(workset_out,cbind(x, y,s1, outprediction, outparams))
+        mod[[layer]] <- list(layer=layer,N=nrow(x),B=NA, sigma=NA, lambda=NA, w=NA, is.conv = FALSE, sing = NA, bic.aic = NA )
+        return(NA)
       })
     
   }#for
   
+  print('---------workset_out------------')
+ 
+  print(NROW(workset_out))
+  print(head(workset_out))
   #Set output parameters global
-  params_out <- list(Model = toJSON(mod))
+  params_out <- list(Model = toJSON(mod, auto_unbox = TRUE))
    
   
   report <- list(n.outlier = n_outlier, missing =n_missing )
@@ -287,7 +311,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   roles_out      <- list (O="outlier", M="Model",G="Report")
   rolesgroup_out <- list (M="M",G="G")
   
-  roles_out [[IS2_SELEMIX_PREDIZIONE]]      <- c(roles$X,roles$Y,predname,names(outparams))
+  roles_out [[IS2_SELEMIX_PREDIZIONE]]      <- c(roles$X,roles$Y,roles$S,predname,names(outparams))
   rolesgroup_out [[IS2_SELEMIX_PREDIZIONE]] <- c("P", "O")
   
   #Output
@@ -308,10 +332,11 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
 #funzione stima generica 
 is2_mlest <- function( workset, roles, wsparams=NULL,...) {
   if(is.null(roles$S)){
+    print('call is2_mlest_nolayer')
 	return (is2_mlest_nolayer(workset, roles, wsparams))
   }
   else
-  {	
+  {	  print('call is2_mlest_layer')
 	return (is2_mlest_layer(workset, roles, wsparams))
   }
 }
@@ -402,6 +427,70 @@ is2_seledit_layer <- function( workset, roles, wsparams=NULL,...) {
   
   return(result)
 }
+
+
+#stima completa con layer
+is2_seledit_nolayer <- function( workset, roles, wsparams=NULL,...) {
+  
+  #Output variables
+  result          <- list()
+  workset_out     <- data.frame()
+  roles_out       <- list() 
+  rolesgroup_out  <- list()
+  params_out      <- list()
+  report_out      <- list() 
+  
+  #Create log
+  stdout <- vector('character')
+  con <- textConnection('stdout', 'wr', local = TRUE)
+  
+  wgt=rep(1,nrow(workset))
+  t.sel=0.01
+  
+  #Check parameters
+  if(!is.null(wsparams)){
+    if(exists("wsparams$wgt")) wgt=wsparams$wgt
+    if(exists("wsparams$tot")) tot=wsparams$tot
+    if(exists("wsparams$t.sel")) t.sel=wsparams$t.sel
+  }
+  
+  
+  #Set variables
+ 
+
+  n_error <- 0
+  predname<- c() 
+  workset_layer  <- data.frame()
+ 
+  ###
+  #to do .......
+  ###
+  
+  report <- list(n.error = n_error )
+  report_out <- list(Report = toJSON(report))
+  
+  #Set output roles & rolesgroup
+  roles_out      <- list (E="sel", R= "rank", F="global.score", G=names(report))
+  rolesgroup_out <- list (E="E",G="G")
+  
+  roles_out [[IS2_SELEMIX_ERROR]]      <- c(roles$X,roles$Y,predname)
+  rolesgroup_out [[IS2_SELEMIX_ERROR]] <- c("P", "O")
+  
+  #Output
+  result[[IS2_WORKSET_OUT]]     <- workset_out
+  result[[IS2_ROLES_OUT]]       <- roles_out
+  result[[IS2_ROLES_GROUP_OUT]] <- rolesgroup_out
+  result[[IS2_PARAMS_OUT]]      <- params_out
+  result[[IS2_REPORT_OUT]]      <- report_out
+  result[[IS2_LOG]]             <- stdout
+  
+  #Create log
+  sink()
+  close(con)
+  
+  return(result)
+}
+
 
 #editing selettivo generica 
 is2_seledit <- function( workset, roles, wsparams=NULL,...) {
