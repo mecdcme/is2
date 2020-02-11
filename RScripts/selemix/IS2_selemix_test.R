@@ -5,7 +5,7 @@ debugSource('C:/Users/framato/git/is2/RScripts/selemix/IS2_selemix.R')
 
 worksetFile <- read.delim("C:/Users/framato/Downloads/datiFATT_SINTESI.csv", header=TRUE, sep=";")
 #rolesFile <- list(X="FEM_p_2016", Y="FEM_g_2017")
-rolesEst <- list(X="FEM_p_2016", Y="FEM_g_2017",S="ATE_lett")
+rolesEst <- list(X="FEM_p_2016", Y="FEM_g_2017",S="ateco")
 rolesEdit <- list(YPRED="YPRED", Y="FEM_g_2017",S="ateco")
 
 
@@ -14,6 +14,15 @@ View(out)
 #out1 <- is2_seledit_layer(out$workset_out, rolesEdit)
 View(out1)
 
+k1<-'ddd'
+k2<-2
+
+
+listn<-list()
 
 
 
+listn[[as.character(k1)]]  <- list(a = 2, b = 3 , c='asa')
+listn[[as.character(k2)]] <- list(a = 4, b = 12, c='adsdssa')
+
+listn<-listn.append(k1=list1)

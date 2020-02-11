@@ -223,7 +223,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   n_outlier <- 0
   n_missing <- 0
   
-  for(layer in layers){
+  for(index in 1:length(layers) ){
     rm(workset_layer)
     rm(est)
     rm(x)
@@ -231,7 +231,10 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
     rm(s1)
     rm(outprediction)
     rm(predname)
+    
+    layer<- as.character(layers[index])
     workset_layer <- workset[workset[roles$S]==layer, , drop = TRUE ]
+    
     
     x <- workset_layer[roles$X]
     y <- workset_layer[roles$Y]
@@ -250,7 +253,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
     run <- tryCatch(
       {
         est <- ml.est(y=y, x=x, model = model, lambda= as.numeric(lambda), w = as.numeric(w), lambda.fix=lambda.fix, w.fix=w.fix, eps=as.numeric(eps), max.iter=as.numeric(max.iter), t.outl= as.numeric(t.outl), graph=FALSE)
-        print(paste("layer ",layer, " ml.est execution completed!"))
+        print(paste("layer ",layer, " ml.est execution completed! rows:" ,nrow(x)))
         #Prepare output
         outparams <- data.frame(tau=est$tau, outlier=est$outlier, pattern=est$pattern)
         
@@ -258,7 +261,9 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
         colnames(outprediction) <- predname
         
         #Set output parameters layer
-        mod[[layer]] <- list(layer=layer,N=nrow(x), B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w, is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)
+        mod[[index]] <- list(layer=layer,N=NROW(x), B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w, is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)
+        #mod <- list(mod, layer=list(layer=layer,N=nrow(x), B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w, is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic))
+        
         #Set output variables
         workset_out <- rbind(workset_out,cbind(x, y,s1, outprediction, outparams))
         
@@ -267,40 +272,31 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
         
       },
       warning=function(cond) {
-        print(paste("Warning: layer ",layer, " ml.est did not converge"))
-        print(cond)
-        outparams <- data.frame(matrix(NA, ncol = 3+NCOL(y), nrow = NROW(y)))
-        colnames(outparams) <- cat(predname,"tau","outlier","pattern")
-        outprediction <- as.data.frame(NA)
-        colnames(outprediction) <- predname
-        workset_out <- rbind(workset_out,cbind(x, y,s1, outparams))
-        mod[[layer]] <- list(layer=layer,N=nrow(x),B=NA, sigma=NA, lambda=NA, w=NA, is.conv = FALSE, sing = NA, bic.aic = NA )
-        print('---------------------')
-        print(layer)
-        print(NROW(workset_out))
-        print(head(workset_out))
+        print(paste("Warning: layer ",layer, " ml.est did not converge! rows:" ,NROW(x)))
         return(NA)
-      }      ,
+       }      ,
       error=function(cond) {
-        print(paste("Error: layer ",layer, " ml.est did not converge"))
+        print(paste("Error: layer ",layer, " rows:" ,NROW(x) ))
         print(cond)
-        outparams <- data.frame(tau=NA, outlier=NA, pattern=NA)
-        
-        outprediction <- as.data.frame(NA)
-        
-        colnames(outprediction) <- predname
-        workset_out <- rbind(workset_out,cbind(x, y,s1, outprediction, outparams))
-        mod[[layer]] <- list(layer=layer,N=nrow(x),B=NA, sigma=NA, lambda=NA, w=NA, is.conv = FALSE, sing = NA, bic.aic = NA )
         return(NA)
       })
-    
+   if(is.na(run)){
+     
+     outparams <- data.frame(matrix(NA, ncol = 3+NCOL(y), nrow = NROW(y)))
+     colnames(outparams) <- c(predname,"tau","outlier","pattern")
+     outprediction <- as.data.frame(NA)
+     colnames(outprediction) <- predname
+     workset_out <- rbind(workset_out,cbind(x, y,s1, outparams))
+     mod[[index]] <- list(layer=layer,N=NROW(x),B=NA, sigma=NA, lambda=NA, w=NA, is.conv = FALSE, sing = NA, bic.aic = NA )
+
+   }
   }#for
+
   
-  print('---------workset_out------------')
+  print('--------- mod[[layer]]------------')
  
-  print(NROW(workset_out))
-  print(head(workset_out))
-  #Set output parameters global
+  
+  print(mod)
   params_out <- list(Model = toJSON(mod, auto_unbox = TRUE))
    
   
