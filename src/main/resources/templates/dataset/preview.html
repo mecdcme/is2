@@ -39,6 +39,15 @@
         <script th:src="@{/js/dataset/dx_preview.js}"></script>
         <link th:href="@{/css/vendors/devextreme/dx.common.css}" rel="stylesheet" />
         <link th:href="@{/css/vendors/devextreme/dx.coreui3.css}" rel="stylesheet" />
+        <style>
+            .sk-wave{
+                margin: 100px auto;
+                width: 50px;
+                height: 40px;
+                text-align: center;
+                font-size: 10px;
+            }
+        </style>
     </head>
     <body class="c-app">
         <div th:replace="layout :: site-aside"></div>
@@ -110,28 +119,26 @@
                                                 </a>
                                             </span>
                                         </div>
-                                        <div class="card-body">
-                                            <!--table id="dataview" class="table table-striped table-sm" cellspacing="0" width="100%" >
-                                                <thead>
-                                                    <tr>
-                                                        <th th:each="varname: ${colonne}" th:text="${varname.name}"></th>
-                                                    </tr>
-                                                </thead>
-                                            </table-->
-                                            <div class="demo-container">
-                                                <div id="gridContainer" style='height: 500px'>
-                                                    <div class="options">
-                                                        <div class="caption">Options</div>
-                                                        <div class="option">
-                                                            <span>Apply Filter</span>
-                                                            <div id="useFilterApplyButton"></div>
-                                                        </div>
-                                                        <div class="option">
-                                                            <div id="filterRow"></div>
-                                                        </div>
-                                                        <div class="option">
-                                                            <div id="headerFilter"></div>
-                                                        </div>
+                                        <div class="card-body" >
+                                            <div class="sk-wave">
+                                                <div class="sk-wave-rect"></div>
+                                                <div class="sk-wave-rect"></div>
+                                                <div class="sk-wave-rect"></div>
+                                                <div class="sk-wave-rect"></div>
+                                                <div class="sk-wave-rect"></div>
+                                            </div>
+                                            <div id="gridContainer" style="height: 500px; display:none">
+                                                <div class="options">
+                                                    <div class="caption">Options</div>
+                                                    <div class="option">
+                                                        <span>Apply Filter</span>
+                                                        <div id="useFilterApplyButton"></div>
+                                                    </div>
+                                                    <div class="option">
+                                                        <div id="filterRow"></div>
+                                                    </div>
+                                                    <div class="option">
+                                                        <div id="headerFilter"></div>
                                                     </div>
                                                 </div>
                                             </div>
