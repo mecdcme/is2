@@ -45,7 +45,10 @@
 	var _deleteproc = [[#{generic.deleteProcess}]];
 	var _deletesubproc = [[#{generic.deleteSubprocess}]]; 
 	var _deletestep = [[#{generic.deleteStep}]];
-	
+	var _newfun = [[#{generic.newFun}]];
+	var _newproc = [[#{generic.newProc}]];
+	var _newsubproc = [[#{generic.newSubproc}]]; 
+	var _newstep = [[#{generic.newStep}]];
 	$(document).ready(function() {
 		setMenuActive("elaborazione")
 	});
@@ -110,7 +113,8 @@
 										<div class="card-header">
 											<span th:text="#{Layout.Functions}"></span>
 											<div class="card-header-actions">
-                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaFunzione();" th:title="#{label.button.session}"> 
+											
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:newFunctionDialog('functions');" th:title="#{label.button.session}"> 
                                                     <i class="fa fa-plus-square-o"></i>
                                                     <span th:text="#{generic.newFun}">New function</span>
                                                 </a>
@@ -155,7 +159,7 @@
 										<div class="card-header">
 											<span th:text="#{Layout.Processes}"></span>
 											<div class="card-header-actions">
-                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaFunzione();" th:title="#{label.button.session}"> 
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:newFunctionDialog('processes');" th:title="#{label.button.session}"> 
                                                     <i class="fa fa-plus-square-o"></i>
                                                     <span th:text="#{generic.newProc}">New Process</span>
                                                 </a>
@@ -199,7 +203,7 @@
 											<div class="card-header">
 												<span th:text="#{Layout.Subprocesses}"></span>
 												<div class="card-header-actions">
-                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaFunzione();" th:title="#{label.button.session}"> 
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:newFunctionDialog('subprocesses');" th:title="#{label.button.session}"> 
                                                     <i class="fa fa-plus-square-o"></i>
                                                     <span th:text="#{generic.newSubproc}">New Subprocess</span>
                                                 </a>
@@ -244,7 +248,7 @@
 											<div class="card-header">
 												<span th:text="#{Layout.Steps}"></span>
 												<div class="card-header-actions">
-                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNuovaFunzione();" th:title="#{label.button.session}"> 
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:newFunctionDialog('steps');" th:title="#{label.button.session}"> 
                                                     <i class="fa fa-plus-square-o"></i>
                                                     <span th:text="#{generic.newStep}">New Step</span>
                                                 </a>
@@ -304,7 +308,7 @@
 						<div class="modal-body">
 							<form id="dataset-fields-table"
 								th:action="@{'/design/updateRecord'}" method="post">
-								<label for="id" th:text="#{generic.id}">Id:</label> <input
+								<label id="idlab" for="id" th:text="#{generic.id}">Id:</label> <input
 									id="id" type="text" name="modId" th:placeholder="#{generic.id}"
 									autocomplete="off" required="" class="form-control" value="" />
 								<label for="name" th:text="#{generic.name}">Name:</label> <input
@@ -335,61 +339,54 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal fade" id="Delete-Dialog" tabindex="-1"
-				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">
-								<i class="fa fa-trash"></i>&nbsp; <span
-									th:text="#{generic.delete}" id="delTitle">Delete</span>
-							</h5>
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<!-- 						<div class="modal-body"> -->
-						<!-- 							<form id="dataset-fields-table" -->
-						<!-- 								th:action="@{'/dataset/loadtable'}" method="post"> -->
-						<!-- 								<input type="hidden" value="" name="dbschema" id="db-schema" /> -->
-						<!-- 								<input type="hidden" th:value="${session.sessionBean.id}" -->
-						<!-- 									th:name="idsessione" /> <input type="hidden" value="" -->
-						<!-- 									name="tablename" id="table-name" /> -->
-						<!-- 								<div class="form-group row"> -->
-						<!-- 									<div class="col-4"> -->
-						<!-- 										<label><span>Database:</span></label> <select id="sel-db" -->
-						<!-- 											class="form-control"> -->
-						<!-- 											<option value="IS2" id="db_IS2">IS2</option> -->
-						<!-- 										</select> -->
-						<!-- 									</div> -->
-						<!-- 									<div class="col-3"> -->
-						<!-- 										<label th:text="#{dataset.tables}"></label> <select -->
-						<!-- 											id="sel-tables" class="form-control"></select> -->
-						<!-- 									</div> -->
+<!-- 			<div class="modal fade" id="Delete-Dialog" tabindex="-1" -->
+<!-- 				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> -->
+<!-- 				<div class="modal-dialog modal-lg" role="document"> -->
+<!-- 					<div class="modal-content"> -->
+<!-- 						<div class="modal-header"> -->
+<!-- 							<h5 class="modal-title"> -->
+<!-- 								<i class="fa fa-trash"></i>&nbsp; <span -->
+<!-- 									th:text="#{generic.delete}" id="delTitle">Delete</span> -->
+<!-- 							</h5> -->
+<!-- 							<button type="button" class="close" data-dismiss="modal" -->
+<!-- 								aria-label="Close"> -->
+<!-- 								<span aria-hidden="true">&times;</span> -->
+<!-- 							</button> -->
+<!-- 						</div> -->
+<!-- 						<div class="modal-body"> -->
+<!-- 							<form id="dataset-fields-table" -->
+<!-- 								th:action="@{'/design/updateRecord'}" method="post"> -->
+<!-- 								<label for="id_d" th:text="#{generic.id}">Id:</label> <input -->
+<!-- 									id="id_d" type="text" name="modId" th:placeholder="#{generic.id}" -->
+<!-- 									autocomplete="off" required="" class="form-control" value="" /> -->
+<!-- 								<label for="name_d" th:text="#{generic.name}">Name:</label> <input -->
+<!-- 									id="name_d" type="text" name="modName" -->
+<!-- 									th:placeholder="#{generic.name}" autocomplete="off" required="" -->
+<!-- 									class="form-control" value="" /> <label for="description" -->
+<!-- 									th:text="#{generic.description}">Description:</label> <input -->
+<!-- 									id="description" type="text" name="modDescription" -->
+<!-- 									th:placeholder="#{generic.description}" autocomplete="off" -->
+<!-- 									required="" class="form-control" value="" /> <label -->
+<!-- 									for="label" id="lab" th:text="#{generic.label}">Label:</label> <input -->
+<!-- 									id="label" type="text" name="modLabel" -->
+<!-- 									th:placeholder="#{generic.label}" autocomplete="off" -->
+<!-- 									required="" class="form-control" value="" /> -->
 
-						<!-- 								</div> -->
-						<!-- 								<div class="form-group row"> -->
-						<!-- 									<div class="col-6"> -->
-						<!-- 										<label th:text="#{dataset.fields}"></label> -->
-						<!-- 										<ul class="list-group list-group-flush" id="check-list-fields"></ul> -->
-						<!-- 									</div> -->
-						<!-- 								</div> -->
-						<!-- 							</form> -->
-						<!-- 						</div> -->
-						<div class="modal-footer">
-							<button type="button" class="btn btn-light" data-dismiss="modal">
-								<span th:title="#{generic.title.close.button}"
-									th:text="#{Layout.Close}">Annulla</span>
-							</button>
-							<button type="button" id="btn-invia-table"
-								class="btn btn-primary towait " onclick="inviaFormTable();"
-								th:title="#{submit.button.title}" th:text="#{submit.button}"
-								data-dismiss="modal">Invia</button>
-						</div>
-					</div>
-				</div>
-			</div>
+<!-- 							</form> -->
+<!-- 						</div> -->
+<!-- 						<div class="modal-footer"> -->
+<!-- 							<button type="button" class="btn btn-light" data-dismiss="modal"> -->
+<!-- 								<span th:title="#{generic.title.close.button}" -->
+<!-- 									th:text="#{Layout.Close}">Annulla</span> -->
+<!-- 							</button> -->
+<!-- 							<button type="button" id="btn-invia-table" -->
+<!-- 								class="btn btn-primary towait " onclick="inviaFormTable();" -->
+<!-- 								th:title="#{submit.button.title}" th:text="#{submit.button}" -->
+<!-- 								data-dismiss="modal">Invia</button> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
 		</div>
 		<footer th:replace="layout :: site-footer"></footer>
 	</div>

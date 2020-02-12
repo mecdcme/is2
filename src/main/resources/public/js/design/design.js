@@ -25,7 +25,9 @@
 
 function updateFunctionDialog(id, nome, descrizione, etichetta, funzione) {
    var titolo;
+   $('.form-control').removeAttr("readonly","readonly");
 	switch (funzione) {
+	
 	case "functions":
 		titolo=_updatefun;
 		 $('#id').val(id);
@@ -75,20 +77,115 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, funzione) {
   
     
 }
+
+
+function newFunctionDialog(funzione) {
+	   var titolo;
+	   $('.form-control').removeAttr("readonly","readonly");
+	   $('#id').hide();
+	   $('#idlab').hide();
+	   
+		switch (funzione) {
+		
+		case "functions":
+			titolo=_newfun;
+//			 $('#id').val(id);
+			 $('#name').val("");
+			 $('#description').val("");
+			 $('#label').val("");
+			 $('#label').show();
+			 $('#lab').show();
+			break;
+		case "processes":
+			titolo=_newproc;
+//			$('#id').val(id);
+			 $('#name').val("");
+			 $('#description').val("");
+			 $('#label').val("");
+			 $('#label').show();
+			 $('#lab').show();
+			break
+		case "subprocesses":
+			titolo=_newsubproc;
+//			$('#id').val(id);
+			 $('#name').val("");
+			 $('#description').val("");
+			 $('#label').val("");
+			 $('#label').show();
+			 $('#lab').show();
+			break;
+		case "steps":
+			titolo=_newstep;
+//			$('#id').val(id);
+			 $('#name').val("");
+			 $('#description').val("");
+			 $('#label').hide();
+			 $('#lab').hide();
+			
+			break;
+
+		default:
+			titolo="";
+			break;
+		}
+		
+		
+		$("#modTitle").text(titolo);
+
+	    $('#Update-Dialog').modal('show');
+	  
+	    
+	}
+
+
+
+
 function deleteFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 	var titolo;
+	 $('.form-control').attr("readonly","readonly");
 	switch (funzione) {
 	case "functions":
 		titolo=_deletefun;
+		 $('#id').val(id);
+		 $('#name').val(nome);
+		 $('#description').val(descrizione);
+		 $('#label').val(etichetta);
+		 $('#label').show();
+		 $('#lab').show();
+		 
+//		 $(':input').readOnly(true);
+//		 $('[name="id"]').prop("readOnly", false);  
+
+			
+		
 		break;
 	case "processes":
 		titolo=_deleteproc;
+		$('#id').val(id);
+		 $('#name').val(nome);
+		 $('#description').val(descrizione);
+		 $('#label').val(etichetta);
+		 $('#label').show();
+		 $('#lab').show();
+		
 		break
 	case "subprocesses":
 		titolo=_deletesubproc;
+		$('#id').val(id);
+		 $('#name').val(nome);
+		 $('#description').val(descrizione);
+		 $('#label').val(etichetta);
+		 $('#label').show();
+		 $('#lab').show();
 		break;
 	case "steps":
 		titolo=_deletestep;
+		$('#id').val(id);
+		 $('#name').val(nome);
+		 $('#description').val(descrizione);
+		 $('#label').hide();
+		 $('#lab').hide();
+		
 		break;
 
 	default:
@@ -97,8 +194,8 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 	}
 	
 	
-	$("#delTitle").text(titolo);
-    $('#Delete-Dialog').modal('show');
+	$("#modTitle").text(titolo);
+    $('#Update-Dialog').modal('show');
 }
 $(document).ready(function () {
    
