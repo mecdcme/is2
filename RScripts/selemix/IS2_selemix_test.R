@@ -11,18 +11,5 @@ rolesEdit <- list(YPRED="YPRED", Y="FEM_g_2017",S="ateco")
 
 out <- is2_mlest (worksetFile, rolesEst)
 View(out)
-#out1 <- is2_seledit_layer(out$workset_out, rolesEdit)
+out1 <- is2_seledit(out$workset_out, rolesEdit)
 View(out1)
-
-k1<-'ddd'
-k2<-2
-
-
-listn<-list()
-
-
-
-listn[[as.character(k1)]]  <- list(a = 2, b = 3 , c='asa')
-listn[[as.character(k2)]] <- list(a = 4, b = 12, c='adsdssa')
-
-listn<-listn.append(k1=list1)
