@@ -248,7 +248,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
         predname = c(predname, paste("YPRED",i,sep="_"))
       }
     }
-    
+    est<-NA
     #Execute ml.est
     run <- tryCatch(
       {
@@ -270,11 +270,14 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
         n_outlier <- n_outlier + sum(est$outlier)
         n_missing <- n_missing + sum(as.numeric(est$pattern))
         
-      },
-      warning=function(cond) {
-        print(paste("Warning: layer ",layer, " ml.est did not converge! rows:" ,NROW(x)))
-        return(NA)
-       }      ,
+      }
+    #  ,
+    #  warning=function(cond) {
+    #    print(est)
+    #    print(paste("Warning: layer ",layer, " ml.est did not converge! rows:" ,NROW(x)))
+    #    return(NA)
+  #     }     
+  ,
       error=function(cond) {
         print(paste("Error: layer ",layer, " rows:" ,NROW(x) ))
         print(cond)
@@ -292,11 +295,6 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
    }
   }#for
 
-  
-  print('--------- mod[[layer]]------------')
- 
-  
-  print(mod)
   params_out <- list(Model = toJSON(mod, auto_unbox = TRUE))
    
   
