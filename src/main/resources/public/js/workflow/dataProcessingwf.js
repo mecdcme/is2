@@ -152,6 +152,7 @@ function getDynamicSchema(data) {
 
 
 function viewParamsAlpacaTemplate(identifier) {
+	var indexParam = $(identifier).data('index-param');
 	var nameParameter = $(identifier).data('name-workset');
 	$('#param-text-edit').text(nameParameter);
 	var jsontemplate = $(identifier).data('param-template');
@@ -166,14 +167,17 @@ function viewParamsAlpacaTemplate(identifier) {
 	} else {
 		schema=getDynamicSchema(data);
 	}
-	console.log(schema);
+	 console.log(schema);
+	var schemaJson=JSON.stringify(schema);
+	
 	var dataContent = "{\"data\":" + JSON.stringify(data) + ",\"schema\":"
-			+ JSON.stringify(schema) + ",\"options\":" + options
-			+ ",\"view\":\"web-display-horizontal\"}";
+			+ schemaJson + ",\"options\":" + options
+  		+ ",\"view\":\"bootstrap-display\"}";
+
 
 	var jsonObj = JSON.parse(dataContent);
 
-	$('#view-param').empty();
-	$('#view-param').alpaca(jsonObj);
+	$('#view-param-'+indexParam).empty();
+ 	$('#view-param-'+indexParam).alpaca(jsonObj);
 }
 

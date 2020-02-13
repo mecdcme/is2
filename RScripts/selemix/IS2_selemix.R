@@ -248,7 +248,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
         predname = c(predname, paste("YPRED",i,sep="_"))
       }
     }
-    est<-NA 
+    est<-NA
     #Execute ml.est
     run <- tryCatch(
       {
@@ -342,69 +342,106 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
 ########################
 
 #stima completa con layer
-is2_seledit_layer <- function( workset, roles, wsparams=NULL,...) {
-  
+is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
   #Output variables
   result          <- list()
   workset_out     <- data.frame()
-  roles_out       <- list() 
+  roles_out       <- list()
   rolesgroup_out  <- list()
   params_out      <- list()
-  report_out      <- list() 
+  report_out      <- list()
   
   #Create log
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
   
-  wgt=rep(1,nrow(workset))
-  t.sel=0.01
+  
+  t.sel = 0.01
   
   #Check parameters
-  if(!is.null(wsparams)){
-    if(exists("wsparams$wgt")) wgt=wsparams$wgt
-    if(exists("wsparams$tot")) tot=wsparams$tot
-    if(exists("wsparams$t.sel")) t.sel=wsparams$t.sel
+  if (!is.null(wsparams)) {
+    if (exists("wsparams$tot"))
+      tot = wsparams$tot
+    if (exists("wsparams$t.sel"))
+      t.sel = wsparams$t.sel
   }
-
+  
   
   #Set variables
   s <- workset[[roles$S]]
   layers <- sort(unique(s))
   n_error <- 0
-  predname<- c() 
+  predname <- c()
   workset_layer  <- data.frame()
-  for(layer in layers){
+  for (index in 1:length(layers)) {
     rm(workset_layer)
-    workset_layer <- workset[workset[roles$S]==layer, , drop = TRUE ]
-     
+    layer <- as.character(layers[index])
+    workset_layer <-
+      workset[workset[roles$S] == layer, , drop = TRUE]
+    
+    wgt = rep(1, NROW(workset_layer))
+    if (exists("wsparams$wgt"))
+      wgt = wsparams$wgt
+    
     y <- workset_layer[roles$Y]
-	ypred <- workset_layer[roles$P]
+    ypred <- workset_layer[roles$P]
     s1 <- workset_layer[roles$S]
-	
-	tot=colSums(ypred * wgt) 
-	if(exists("wsparams$tot")) tot=wsparams$tot
-	
+    
+    # tot=colSums(ypred * wgt)
+    if (exists("wsparams$tot"))
+      tot = wsparams$tot
+    
     #Execute sel.edit
-    sel_out <- sel.edit (y=y, ypred=ypred, wgt, tot, t.sel= as.numeric(t.sel))
-	inf <- sel_div[, "sel"]
-
-    score <- sel_div[,c("rank","global.score")]
-    n_error =n_error+ sum(out$sel)
-    predname<-c("sel","rank","global.score")
-	#Set output variables
-	workset_out <- rbind(workset_out,cbind(workset_layer, inf, score))
-	
+    #  sel_out <- sel.edit (y=y, ypred=ypred, wgt, tot, t.sel= as.numeric(t.sel))
+    sel_out <- NA
+    #Execute ml.est
+    run <- tryCatch({
+      sel_out <- sel.edit (y = y,
+                           ypred = ypred,
+                           t.sel = as.numeric(t.sel))
+      inf <- sel_div[, "sel"]
+      
+      score <- sel_div[, c("rank", "global.score")]
+      n_error = n_error + sum(out$sel)
+      predname <- c("sel", "rank", "global.score")
+      #Set output variables
+      workset_out <-
+        rbind(workset_out, cbind(workset_layer, inf, score))
+      
+    }
+    #  ,
+    #  warning=function(cond) {
+    #    print(est)
+    #    print(paste("Warning: layer ",layer, " ml.est did not converge! rows:" ,NROW(x)))
+    #    return(NA)
+    #     }
+    ,
+    error = function(cond) {
+      print(paste("Error: layer ", layer, " rows:" , NROW(x)))
+      print(cond)
+      return(NA)
+    })
+    if (is.na(run)) {
+      
+    }
   }#for
-   
   
-  report <- list(n.error = n_error )
+  
+  report <- list(n.error = n_error)
   report_out <- list(Report = toJSON(report))
   
   #Set output roles & rolesgroup
-  roles_out      <- list (E="sel", R= "rank", F="global.score", G=names(report))
-  rolesgroup_out <- list (E="E",G="G")
+  roles_out      <-
+    list (
+      E = "sel",
+      R = "rank",
+      F = "global.score",
+      G = names(report)
+    )
+  rolesgroup_out <- list (E = "E", G = "G")
   
-  roles_out [[IS2_SELEMIX_ERROR]]      <- c(roles$X,roles$Y,predname)
+  roles_out [[IS2_SELEMIX_ERROR]]      <-
+    c(roles$X, roles$Y, predname)
   rolesgroup_out [[IS2_SELEMIX_ERROR]] <- c("P", "O")
   
   #Output
