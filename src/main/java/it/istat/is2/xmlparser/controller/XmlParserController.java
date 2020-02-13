@@ -1,22 +1,25 @@
 package it.istat.is2.xmlparser.controller;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import it.istat.is2.app.bean.InputFormBean;
+import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.NotificationService;
-import it.istat.is2.workflow.domain.AppService;
+import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.workflow.domain.BusinessService;
-import it.istat.is2.workflow.domain.StepInstance;
 import it.istat.is2.workflow.service.BusinessServiceService;
 import it.istat.is2.xmlparser.domain.Service;
 import it.istat.is2.xmlparser.domain.Service.Methods;
@@ -41,14 +44,25 @@ public class XmlParserController {
         
         return "xmlparser/upload";
     }
-	
-	
-	public void jaxbXmlFileToObject() {
+	@RequestMapping(value = "/loadXmlFile", method = RequestMethod.POST)
+    public String loadInputData(HttpSession session, HttpServletRequest request, Model model,
+            @AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") InputFormBean form) throws IOException {	
+        notificationService.removeAllMessages();
         
-		// Arrange
-		String fileName = "C:\\Users\\Renzo\\Desktop\\Java xml parser\\is2_mlest_Form.xml";
-        File xmlFile = new File(fileName);
-         
+        File file = FileHandler.convertMultipartFileToXmlFile(form.getFileName());        
+        
+        if(jaxbXmlFileToObject(file)) {
+        	notificationService.addInfoMessage("Il file è stato caricato con successo nel db");
+        }else {
+        	notificationService.addErrorMessage("Non è stato possibile caricare il file nel db");
+        }
+
+        return "xmlparser/upload";
+    }
+	
+	// TEST inserimento del solo Service
+	public boolean jaxbXmlFileToObject(File file) {
+		
         JAXBContext jaxbContext;
         try
         {
@@ -56,7 +70,7 @@ public class XmlParserController {
             jaxbContext = JAXBContext.newInstance("it.istat.is2.xmlparser.domain");
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             
-            Service service = (Service) jaxbUnmarshaller.unmarshal(xmlFile);
+            Service service = (Service) jaxbUnmarshaller.unmarshal(file);
              
             System.out.println(service);
             
@@ -122,5 +136,6 @@ public class XmlParserController {
         {
             e.printStackTrace();
         }       
+        return true;
     }
 }

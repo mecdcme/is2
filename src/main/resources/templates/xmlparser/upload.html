@@ -30,6 +30,7 @@
         </script>
         <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
         <script th:src="@{/js/user/usersList.js}"></script>
+        <script th:src="@{/js/xml/uploadxml.js}"></script>
         <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet"/>
     </head>
     <body class="c-app">
@@ -66,15 +67,33 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="card">
-                                        <div class="card-header">
+                                        <div
+                                         class="card-header">
                                             <span >Upload xml</span>
-                                            <div class="card-header-actions">
-                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:add_user();" th:title="#{user.title.adduser}"> 
-                                                    <i class="fa fa-plus-square-o"></i>
-                                                    <span>TODO</span>
-                                                </a>
-                                            </div>
+                                            
                                         </div>
+                                        <div class="card-body">
+                                            <form id="inputFileForm" th:action="@{'/loadXmlFile'}" method="post" enctype="multipart/form-data" >
+                                                <input type="hidden" value="" name="descrizione" id="desc" /> 
+                                                
+                                                <input type="hidden" value="" name="delimiter" id="delimiter" />
+                                                <input type="hidden" value="" name="labelFile" id="label_f" />
+                                                <input type="hidden" value="" name="fileType" id="tipo_dat" />
+                                                <div id="upload" class="row">
+                                                    <div class="col-lg-8">
+                                                        <div id="upload_file" class="form-group">
+                                                            <label class="control-label" th:text="#{selection.file.xml}">Seleziona un file xml</label>
+                                                            <!-- Impostare data-show-preview a true per avere la preview del file -->
+                                                            <input id="file" accept=".xml" class="file" type="file" name="fileName"
+                                                                   data-show-preview="false" data-show-caption="true"
+                                                                   data-show-upload="false" data-toggle="tooltip"
+                                                                   data-placement="top" data-show-remove="false" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button id="btn-submit-xml" type="submit" th:text="#{submit.xml.file.button}">Invia</button>
+                                            </form> 
+                                       </div>
                                        
                                     </div>
                                 </div>

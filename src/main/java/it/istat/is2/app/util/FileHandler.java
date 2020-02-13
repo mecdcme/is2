@@ -406,6 +406,13 @@ public class FileHandler {
         fos.close();
         return convFile;
     }
+    public static File convertMultipartFileToXmlFile(MultipartFile file) throws IOException {
+        File convFile = File.createTempFile("temp", ".xml");
+        FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(file.getBytes());
+        fos.close();
+        return convFile;
+    }
 
     // Inposta il tab (\t) come delimiter se da form arriva il valore 0
     public static char checkDelimiter(char delimiter) {
