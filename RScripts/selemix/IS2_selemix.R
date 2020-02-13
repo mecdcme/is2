@@ -399,9 +399,9 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
       sel_out <- sel.edit (y = y,
                            ypred = ypred,
                            t.sel = as.numeric(t.sel))
-      inf <- sel_div[, "sel"]
+      inf <- sel_out[, "sel"]
       
-      score <- sel_div[, c("rank", "global.score")]
+      score <- sel_out[, c("rank", "global.score")]
       n_error = n_error + sum(out$sel)
       predname <- c("sel", "rank", "global.score")
       #Set output variables
