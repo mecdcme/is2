@@ -30,6 +30,7 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 	
 	case "functions":
 		titolo=_updatefun;
+		 $('#action').val("uf");
 		 $('#id').val(id);
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
@@ -39,6 +40,7 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 		break;
 	case "processes":
 		titolo=_updateproc;
+		$('#action').val("up");
 		$('#id').val(id);
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
@@ -48,6 +50,7 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 		break
 	case "subprocesses":
 		titolo=_updatesubproc;
+		$('#action').val("usp");
 		$('#id').val(id);
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
@@ -57,6 +60,7 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 		break;
 	case "steps":
 		titolo=_updatestep;
+		$('#action').val("us");
 		$('#id').val(id);
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
@@ -89,6 +93,7 @@ function newFunctionDialog(funzione) {
 		
 		case "functions":
 			titolo=_newfun;
+			 $('#action').val("nf");
 //			 $('#id').val(id);
 			 $('#name').val("");
 			 $('#description').val("");
@@ -98,6 +103,7 @@ function newFunctionDialog(funzione) {
 			break;
 		case "processes":
 			titolo=_newproc;
+			 $('#action').val("np");
 //			$('#id').val(id);
 			 $('#name').val("");
 			 $('#description').val("");
@@ -107,6 +113,7 @@ function newFunctionDialog(funzione) {
 			break
 		case "subprocesses":
 			titolo=_newsubproc;
+			 $('#action').val("nsp");
 //			$('#id').val(id);
 			 $('#name').val("");
 			 $('#description').val("");
@@ -116,6 +123,7 @@ function newFunctionDialog(funzione) {
 			break;
 		case "steps":
 			titolo=_newstep;
+			 $('#action').val("ns");
 //			$('#id').val(id);
 			 $('#name').val("");
 			 $('#description').val("");
@@ -146,6 +154,7 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 	switch (funzione) {
 	case "functions":
 		titolo=_deletefun;
+		 $('#action').val("df");
 		 $('#id').val(id);
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
@@ -161,6 +170,7 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 		break;
 	case "processes":
 		titolo=_deleteproc;
+		 $('#action').val("dp");
 		$('#id').val(id);
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
@@ -171,6 +181,7 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 		break
 	case "subprocesses":
 		titolo=_deletesubproc;
+		 $('#action').val("dsp");
 		$('#id').val(id);
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
@@ -180,6 +191,7 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 		break;
 	case "steps":
 		titolo=_deletestep;
+		 $('#action').val("ds");
 		$('#id').val(id);
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
@@ -197,6 +209,13 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 	$("#modTitle").text(titolo);
     $('#Update-Dialog').modal('show');
 }
+
+function playAction(){
+    
+   $("#dialog").submit();
+   
+}
+
 $(document).ready(function () {
    
 

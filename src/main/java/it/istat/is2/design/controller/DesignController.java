@@ -27,12 +27,19 @@ import java.util.ArrayList;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import it.istat.is2.app.forms.UserCreateForm;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.TreeNode;
 import it.istat.is2.workflow.domain.BusinessFunction;
@@ -77,7 +84,7 @@ public class DesignController {
                             listaBs.forEach((p) -> {
                                 p.getBusinessProcesses().forEach((k) -> {
                                     if (k.getId().equals(s.getId())) {
-                                        tempNode.addChild(p.getDescr());
+                                        tempNode.addChild(p.getName());
                                     };
                                 });
                             });
@@ -97,4 +104,136 @@ public class DesignController {
         return "design/home.html";
 
     }
+   
+    @RequestMapping(value = "/playaction", method = RequestMethod.POST)
+    public String action(Model model, @RequestParam("fieldId") Long fieldId, @RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr, 
+    		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldAction") String fieldAction ) {
+        notificationService.removeAllMessages();
+
+        switch (fieldAction) {
+    	
+    	case "uf":
+    		try {
+    			BusinessFunction funzione = businessFunctionService.findBFunctionById(fieldId);
+        		funzione.setName(fieldName);
+        		funzione.setDescr(fieldDescr);
+        		funzione.setLabel(fieldLabel);
+        		BusinessFunction prova=  businessFunctionService.updateBFunction(funzione);
+        		
+			} catch (Exception e) {
+				// TODO: handle exception
+				
+				
+				
+			}
+    		
+    		
+    		break;
+    	case "up":
+    		try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+    		
+    		break;
+    	case "usp":
+    		try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+    		
+    		break;
+    	case "us":
+    		try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+    		
+    		break;
+    	case "df":
+    		try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+    		
+    		break;
+    	case "dp":
+    		try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+    		
+    		break;
+    	case "dsp":
+    		try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+    		
+    		break;
+    	case "ds":
+    		try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+    		
+    		break;
+    	case "nf":
+    		try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+    		
+    		break;
+    	case "np":
+    		try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+    		
+    		break;
+    	case "nsp":
+    		try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+    		
+    		break;
+    	case "ns":
+    		try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+    		
+    		break;
+
+    	default:
+    		try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+    		break;
+    	}
+
+        return "redirect:/settings";
+
+    }
+    
+    
+    
+    
 }
+
+

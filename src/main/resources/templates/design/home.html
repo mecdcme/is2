@@ -140,12 +140,12 @@
 														<td th:text="${stepP.descr}"></td>
 														<td th:text="${stepP.label}"></td>
 														<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'subprocesses' +'\')'">
+																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'functions' +'\')'">
 																	<i class="fa fa-pencil"></i>
 															</a></td>
 
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \'' + 'subprocesses' +'\')'">
+																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \'' + 'functions' +'\')'">
 																	<i class="fa fa-trash-o"></i>
 															</a></td>
 													</tr>
@@ -185,12 +185,12 @@
 														<td th:text="${stepP.descr}"></td>
 														<td th:text="${stepP.label}"></td>
 														<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'subprocesses' +'\')'">
+																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'processes' +'\')'">
 																	<i class="fa fa-pencil"></i>
 															</a></td>
 
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \'' + 'subprocesses' +'\')'">
+																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \'' + 'processes' +'\')'">
 																	<i class="fa fa-trash-o"></i>
 															</a></td>
 													</tr>
@@ -306,21 +306,23 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<form id="dataset-fields-table"
-								th:action="@{'/design/updateRecord'}" method="post">
+							<form id="dialog"
+								th:action="@{'/playaction'}" method="post">
+								<input
+									id="action" type="text" name="fieldAction" hidden/>
 								<label id="idlab" for="id" th:text="#{generic.id}">Id:</label> <input
-									id="id" type="text" name="modId" th:placeholder="#{generic.id}"
+									id="id" type="text" name="fieldId" th:placeholder="#{generic.id}"
 									autocomplete="off" required="" class="form-control" value="" />
 								<label for="name" th:text="#{generic.name}">Name:</label> <input
-									id="name" type="text" name="modName"
+									id="name" type="text" name="fieldName"
 									th:placeholder="#{generic.name}" autocomplete="off" required=""
 									class="form-control" value="" /> <label for="description"
 									th:text="#{generic.description}">Description:</label> <input
-									id="description" type="text" name="modDescription"
+									id="description" type="text" name="fieldDescription"
 									th:placeholder="#{generic.description}" autocomplete="off"
 									required="" class="form-control" value="" /> <label
 									for="label" id="lab" th:text="#{generic.label}">Label:</label> <input
-									id="label" type="text" name="modLabel"
+									id="label" type="text" name="fieldLabel"
 									th:placeholder="#{generic.label}" autocomplete="off"
 									required="" class="form-control" value="" />
 
@@ -332,7 +334,7 @@
 									th:text="#{Layout.Close}">Annulla</span>
 							</button>
 							<button type="button" id="btn-invia-table"
-								class="btn btn-primary towait " onclick="inviaFormTable();"
+								class="btn btn-primary towait " onclick="playAction();"
 								th:title="#{submit.button.title}" th:text="#{submit.button}"
 								data-dismiss="modal">Invia</button>
 						</div>

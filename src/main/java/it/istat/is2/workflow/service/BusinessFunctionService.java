@@ -44,4 +44,9 @@ public class BusinessFunctionService {
     public BusinessFunction findBFunctionById(long idfunction) {
         return businessFunctionDao.findById(idfunction).orElse(null);
     }
+    public BusinessFunction updateBFunction(BusinessFunction function) {
+    	 
+    	return businessFunctionDao.save(function);
+    }
+    
 }
