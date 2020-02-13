@@ -118,12 +118,10 @@ public class DesignController {
         		funzione.setName(fieldName);
         		funzione.setDescr(fieldDescr);
         		funzione.setLabel(fieldLabel);
-        		BusinessFunction prova=  businessFunctionService.updateBFunction(funzione);
+        		BusinessFunction bf=  businessFunctionService.updateBFunction(funzione);
         		
 			} catch (Exception e) {
 				// TODO: handle exception
-				
-				
 				
 			}
     		
@@ -131,7 +129,11 @@ public class DesignController {
     		break;
     	case "up":
     		try {
-				
+    			BusinessProcess process = businessProcessService.findBProcessById(fieldId);
+        		process.setName(fieldName);
+        		process.setDescr(fieldDescr);
+        		process.setLabel(fieldLabel);
+        		BusinessProcess bp=  businessProcessService.updateBProcess(process);
 			} catch (Exception e) {
 				// TODO: handle exception
 			}

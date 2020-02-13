@@ -58,4 +58,9 @@ public class BusinessProcessService {
 	public List<BusinessProcess> findAll() {
 		return businessProcessDao.findAll();
 	}
+	public BusinessProcess updateBProcess(BusinessProcess process) {
+   	 
+    	return businessProcessDao.save(process);
+    }
 }
+

@@ -26,6 +26,7 @@
 function updateFunctionDialog(id, nome, descrizione, etichetta, funzione) {
    var titolo;
    $('.form-control').removeAttr("readonly","readonly");
+   $('#id').attr("readonly","readonly");
 	switch (funzione) {
 	
 	case "functions":
