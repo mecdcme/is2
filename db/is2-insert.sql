@@ -32,7 +32,7 @@ INSERT INTO `is2_cls_type_io` (`ID`, `NAME`)
 -- 
 -- VARIABLE CLASSIFICATION (FROM ISTAT CORPORATE METADATA SYSTEM)
 -- 
-INSERT INTO `is2_cls_statistical_variable` (`ID`, `VARIABLE_NAME_ITA`, `VARIABLE_NAME_ENG`, `TYPE`, `DESCR`, `ORDER`) 
+INSERT INTO `is2_cls_statistical_variable` (`ID`, `VARIABLE_NAME_ITA`, `VARIABLE_NAME_ENG`, `TYPE`, `DESCR`, `ORDER_CODE`) 
 	VALUES 
 		(1,'VARIABILI IDENTIFICATIVE DELLE UNITÀ','UNIT INDENTIFIER',8,'Variabili identificative delle unità',1),
 		(2,'VARIABILI STATISTICHE DI CLASSIFICAZIONE','CLASSIFICATION',1,'Variabili statistiche di classificazione',2),
@@ -146,7 +146,7 @@ INSERT INTO `is2_business_function` (`ID`, `NAME`, `DESCR`, `LABEL`, `ACTIVE`)
 -- 
 -- BUSINESS_PROCESS
 -- 
-INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) 
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER_CODE`) 
 	VALUES 
 		(1,'Probabilistic Record Linkage','Probabilistic Record Linkage','PRL',NULL,1),
         (2,'Deterministic Record Linkage','Deterministic Record Linkage','DRL',NULL,2),
@@ -157,8 +157,8 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `O
         (72,'Matching Table','Matching records','MatchingTable',1,3);
 
 -- add multi-step process
-INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER`) VALUES ('5', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS', '3');
-INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER`, `PARENT`) VALUES ('6', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS1', '4', '5');
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER_CODE`) VALUES ('5', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS', '3');
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER_CODE`, `PARENT`) VALUES ('6', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS1', '4', '5');
 
 
 -- 
@@ -236,7 +236,7 @@ INSERT INTO `is2_parameter` (`ID`, `NAME`, `DESCR`, `DEFAULT_VAL`, `JSON_TEMPLAT
 -- 
 -- ROLE
 -- 
-INSERT INTO `is2_app_role` (`ID`, `NAME`, `CODE`, `DESCR`, `ORDER`, `CLS_DATA_TYPE_ID`,`PARAMETER_ID`) 
+INSERT INTO `is2_app_role` (`ID`, `NAME`, `CODE`, `DESCR`, `ORDER_CODE`, `CLS_DATA_TYPE_ID`,`PARAMETER_ID`) 
 	VALUES  
 		(1,'MATCHING VARIABLES','X','MATCHING VARAIBLES',1,2,1),
 		(2,'MATCHING A','X1','MATCHING VARIABLE IN DATASET A',2,1,NULL),
