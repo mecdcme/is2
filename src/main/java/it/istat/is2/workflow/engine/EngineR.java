@@ -462,6 +462,8 @@ public class EngineR implements EngineService {
             if (stepRuntime != null) { // update
                 stepRuntime.getWorkset().setContents(value);
                 stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+                stepRuntime.setAppRole(sxRuolo);
+                stepRuntime.setRoleGroup(sxRuoloGruppo);
             } else {
                 stepRuntime = new StepRuntime();
                 stepRuntime.setDataProcessing(dataProcessing);
@@ -506,6 +508,8 @@ public class EngineR implements EngineService {
 
                 stepRuntime.getWorkset().setParamValue(value);
                 stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+                stepRuntime.setAppRole(sxRuolo);
+                stepRuntime.setRoleGroup(sxRuoloGruppo);
             } else {
                 stepRuntime = new StepRuntime();
                 stepRuntime.setDataProcessing(dataProcessing);

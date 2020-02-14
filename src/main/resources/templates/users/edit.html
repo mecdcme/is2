@@ -27,48 +27,47 @@
         <head th:include="layout :: site-head" th:remove="tag"/> 
         <script th:src="@{/js/user.js}"></script>
     </head>
-    <body>
-        <!-- Body -->
-        <div class="wrapper">
-            <header th:replace="layout :: site-header" />
-            <aside th:replace="layout :: site-aside" />
-            <!-- START MAIN CONTAINER -->
-            <section>
-                <div class="content-wrapper">
-                    <div class="content-heading">
-                        <span th:text="#{Edituser.Edit}">Edit User</span> <small><span th:text="#{Edituser.edit}">edit</span></small>
+    <body class="c-app">
+        <div th:replace="layout :: site-aside"></div>
+        <div th:replace="layout :: site-modals"></div>
+
+        <div class="c-wrapper">
+            <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+                <div th:include="layout :: site-header" th:remove="tag"></div>
+                <div class="c-subheader justify-content-between px-3">
+                    <!-- Breadcrumb-->
+                    <ol class="breadcrumb border-0 m-0">
+                        <li class="breadcrumb-item">
+                            <a th:title="#{home.link.title}" th:href="@{/}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span th:text="#{Layout.edituser}"></span>
+                        </li>
+                    </ol>
+                    <!-- Right navigation menu -->
+                    <div class="c-header-nav d-md-down-none mfe-2">
+                        <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{'/'}">
+                            <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
+                        </a>
                     </div>
+                </div>
+            </header>
+
+            <div class="c-body">
+                <main class="c-main">
                     <div class="container-fluid">
-                        <div class="row mb-lg">
+                        <div class="row">
                             <div class="col-lg-6">
-                                <div class="panel panel-default">
-                                    <!--div class="panel-heading">
-                                        <h3><i class="fa  fa-edit "></i> <span th:text="#{Edituser.user}">User</span></h3>
-                                    </div-->
-                                    <div class="panel-body">                                    
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <span th:text="#{Layout.edituser}">Modifica  utente</span>
+                                             
+                                        </div>
+                                        <div class="card-body">                                    
                                         <form action="#" th:action="@{/users/edituser}" 
                                               th:object="${userCreateForm}" method="post">
                                             <div class="form-body">
-                                                <div class="form-group row ">
-                                                    <div class="col-md-10">
-                                                        <div class="alert alert-danger panel-danger" 
-                                                             th:if="${#fields.hasErrors()}">Error</div>                                        
-                                                        <div>
-                                                            <ul id="messages" th:with="notifyMessages=${session[T(it.istat.is2.app.service.NotificationService).NOTIFY_MSG_SESSION_KEY]}">
-                                                                <li th:each="msg : ${notifyMessages}" 
-                                                                    th:text="${msg.text}" 
-                                                                    class="alert" 
-                                                                    style="list-style-type: none;" 
-                                                                    th:class="${#strings.toLowerCase(msg.type)}">                                                                
-                                                                </li>
-                                                                <span th:if="${notifyMessages}" 
-                                                                      th:remove="all" 
-                                                                      th:text="${session.remove(T(it.istat.is2.app.service.NotificationService).NOTIFY_MSG_SESSION_KEY)}"></span>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row ">
+                                              <div class="form-group row ">
                                                     <div class="col-md-12">
                                                         <div class="col-md-3">
                                                             <label class="control-label">Email*</label>
@@ -143,7 +142,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <input type="hidden" th:field="*{userid}" /> 
+                                                <input type="hidden" th:field="*{id}" /> 
                                                 <input type="hidden" name="password" value="password" />
                                             </div>
                                             <div class="modal-footer">
@@ -158,11 +157,12 @@
                             </div>
 
                             <div class="col-lg-5">
-                                <div class="panel panel-default">
-                                    <!--div class="panel-heading">
-                                        <h3><i class="fa  fa-key"></i> <span th:text="#{Edituser.changepassword}">Change Password</span></h3>
-                                    </div-->
-                                    <div class="panel-body  ">
+                                   <div class="card">
+                                        <div class="card-header">
+                                            <span th:text="#{Edituser.changepassword}">Cambia password</span>
+                                            
+                                        </div>
+                                        <div class="card-body">
                                         <div class="form-body">
                                             <div class="form-group row ">
                                                 <div class="col-md-10">
@@ -209,8 +209,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                     </main>
+            </div>
+            <!-- End body -->
             <!-- END MAIN CONTAINER -->
             <footer th:replace="layout :: site-footer" />
         </div>

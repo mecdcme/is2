@@ -3,13 +3,29 @@ rm(list=ls())
 debugSource('C:/Users/framato/git/is2/RScripts/selemix/IS2_selemix.R')
 #debugSource('G:/development/git/is2/RScripts/selemix/IS2_selemix.R')
 
-worksetFile <- read.delim("C:/Users/framato/Downloads/datiFATT_SINTESI.csv", header=TRUE, sep=";")
+worksetFile <- read.delim("G:/IS2_datiFATT/datiFATT_SINTESI_1000.txt", header=TRUE, sep=";")
 #rolesFile <- list(X="FEM_p_2016", Y="FEM_g_2017")
 rolesEst <- list(X="FEM_p_2016", Y="FEM_g_2017",S="ateco")
 rolesEdit <- list(P="YPRED", Y="FEM_g_2017",S="ateco")
 
 
 out <- is2_mlest (worksetFile, rolesEst)
-View(out)
+out
 out1 <- is2_seledit(out$workset_out, rolesEdit)
 View(out1)
+
+
+library(base64enc)
+
+setpwd("G:/")
+enc <- base64encode("G:/Graf_selemix_AT3_81_0.01_.JPEG")
+conn <- file("w.bin","wb")
+ writeBin(enc, conn)
+ close(conn)
+ inconn <- file("w.bin","rb")
+ outconn <- file("img2.jpg","wb")
+ base64decode(what=inconn, output=outconn)
+ close(inconn)
+ close(outconn)
+
+ 

@@ -47,10 +47,15 @@ IS2_LOG             <- "log"
 
 #IS2 Selemix roles
 IS2_SELEMIX_PREDIZIONE <- "P"
+IS2_SELEMIX_OUTPUT_VARIABLES <- "T"
 IS2_SELEMIX_OUTLIER    <- "O"
 IS2_SELEMIX_MODEL      <- "M"
 IS2_SELEMIX_REPORT     <- "G"
 IS2_SELEMIX_ERROR      <- "E"
+IS2_SELEMIX_TARGET     <- "Y"
+IS2_SELEMIX_COVARIATA  <- "X"
+IS2_SELEMIX_STRATO     <- "S"
+IS2_SELEMIX_MODEL      <- "M"
 
 library("SeleMix")
 library("jsonlite")
@@ -69,6 +74,7 @@ is2_mlest_nolayer <- function( workset, roles, wsparams=NULL,...) {
   #Create log
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
+  sink(con)
   
   #Set default parameters
   model="LN"
@@ -191,6 +197,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   #Create log
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
+  #sink(con)
   
   #Set default parameters
   model="LN"
@@ -222,7 +229,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   predname <- c()
   n_outlier <- 0
   n_missing <- 0
-  
+  n_layers <- length(layers)
   for(index in 1:length(layers) ){
     rm(workset_layer)
     rm(est)
@@ -255,7 +262,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
         est <- ml.est(y=y, x=x, model = model, lambda= as.numeric(lambda), w = as.numeric(w), lambda.fix=lambda.fix, w.fix=w.fix, eps=as.numeric(eps), max.iter=as.numeric(max.iter), t.outl= as.numeric(t.outl), graph=FALSE)
         print(paste("layer ",layer, " ml.est execution completed! rows:" ,nrow(x)))
         #Prepare output
-        outparams <- data.frame(tau=est$tau, outlier=est$outlier, pattern=est$pattern)
+        outparams <- data.frame(tau=est$tau, outlier=est$outlier, pattern=est$pattern, conv = est$is.conv)
         
         outprediction <- as.data.frame(est$ypred)
         colnames(outprediction) <- predname
@@ -286,7 +293,8 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
    if(is.na(run)){
      
      outparams <- data.frame(matrix(NA, ncol = 3+NCOL(y), nrow = NROW(y)))
-     colnames(outparams) <- c(predname,"tau","outlier","pattern")
+     outparams$conv <- rep(FALSE, NROW(y))
+     colnames(outparams) <- c(predname,"tau","outlier","pattern","conv")
      outprediction <- as.data.frame(NA)
      colnames(outprediction) <- predname
      workset_out <- rbind(workset_out,cbind(x, y,s1, outparams))
@@ -298,15 +306,19 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   params_out <- list(Model = toJSON(mod, auto_unbox = TRUE))
    
   
-  report <- list(n.outlier = n_outlier, missing =n_missing )
-  report_out <- list(Report = toJSON(report))
+  report <- list(n.outlier = n_outlier, missing =n_missing, "layers"=n_layers )
+  report_out <- list(Report = toJSON(report, auto_unbox = TRUE))
   
   #Set output roles & rolesgroup
   roles_out      <- list (O="outlier", M="Model",G="Report")
   rolesgroup_out <- list (M="M",G="G")
   
-  roles_out [[IS2_SELEMIX_PREDIZIONE]]      <- c(roles$X,roles$Y,roles$S,predname,names(outparams))
-  rolesgroup_out [[IS2_SELEMIX_PREDIZIONE]] <- c("P", "O")
+  roles_out [[IS2_SELEMIX_COVARIATA]]       <- c(roles$X)
+  roles_out [[IS2_SELEMIX_TARGET]]          <- c(roles$Y)
+  roles_out [[IS2_SELEMIX_STRATO]]          <- c(roles$S)
+  roles_out [[IS2_SELEMIX_PREDIZIONE]]      <- c(predname)
+  roles_out [[IS2_SELEMIX_OUTPUT_VARIABLES]]<- c(names(outparams))
+  rolesgroup_out [[IS2_SELEMIX_PREDIZIONE]] <- c(IS2_SELEMIX_COVARIATA,IS2_SELEMIX_TARGET,IS2_SELEMIX_STRATO,IS2_SELEMIX_PREDIZIONE,IS2_SELEMIX_OUTPUT_VARIABLES,IS2_SELEMIX_OUTLIER)
   
   #Output
   result[[IS2_WORKSET_OUT]]     <- workset_out
@@ -315,6 +327,8 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   result[[IS2_PARAMS_OUT]]      <- params_out
   result[[IS2_REPORT_OUT]]      <- report_out
   result[[IS2_LOG]]             <- stdout
+  
+  print("Execution mlest completed!!")
   
   #Create log
   sink()
@@ -354,16 +368,16 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
   #Create log
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
+  #sink(con)
   
-  
-  t.sel = 0.01
+  t_sel = 0.01
   
   #Check parameters
   if (!is.null(wsparams)) {
     if (exists("wsparams$tot"))
       tot = wsparams$tot
-    if (exists("wsparams$t.sel"))
-      t.sel = wsparams$t.sel
+    if (exists("wsparams$t_sel"))
+      t_sel = wsparams$t_sel
   }
   
   
@@ -386,19 +400,20 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
     y <- workset_layer[roles$Y]
     ypred <- workset_layer[roles$P]
     s1 <- workset_layer[roles$S]
+    out_layer<- workset_layer[roles$O]
     
     # tot=colSums(ypred * wgt)
     if (exists("wsparams$tot"))
       tot = wsparams$tot
     
     #Execute sel.edit
-    #  sel_out <- sel.edit (y=y, ypred=ypred, wgt, tot, t.sel= as.numeric(t.sel))
+    #  sel_out <- sel.edit (y=y, ypred=ypred, wgt, tot, t_sel= as.numeric(t_sel))
     sel_out <- NA
     #Execute ml.est
     run <- tryCatch({
       sel_out <- sel.edit (y = y,
                            ypred = ypred,
-                           t.sel = as.numeric(t.sel))
+                           t.sel = as.numeric(t_sel))
       inf <- sel_out[, "sel"]
       
       score <- sel_out[, c("rank", "global.score")]
@@ -407,6 +422,13 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
       #Set output variables
       workset_out <-
         rbind(workset_out, cbind(workset_layer, inf, score))
+      
+      # esportiamo in file esterno i risultati
+      x <- cbind(workset$X, workset$Y )
+      nome.grafico=paste(paste("G:","/Graf_selemix_AT3",sep=""), layer, t_sel,".jpeg",sep="_")
+      bmp(nome.grafico)
+      sel.pairs(x, outl=out_layer, sel=inf, log = TRUE)
+   
       
     }
     #  ,
@@ -417,12 +439,12 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
     #     }
     ,
     error = function(cond) {
-      print(paste("Error: layer ", layer, " rows:" , NROW(x)))
+      print(paste("Error: layer ", layer, " rows:" , NROW(y)))
       print(cond)
       return(NA)
     })
     if (is.na(run)) {
-      
+      print("Error")
     }
   }#for
   
@@ -474,15 +496,16 @@ is2_seledit_nolayer <- function( workset, roles, wsparams=NULL,...) {
   #Create log
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
+  sink(con)
   
   wgt=rep(1,nrow(workset))
-  t.sel=0.01
+  t_sel=0.01
   
   #Check parameters
   if(!is.null(wsparams)){
     if(exists("wsparams$wgt")) wgt=wsparams$wgt
     if(exists("wsparams$tot")) tot=wsparams$tot
-    if(exists("wsparams$t.sel")) t.sel=wsparams$t.sel
+    if(exists("wsparams$t_sel")) t_sel=wsparams$t_sel
   }
   
   

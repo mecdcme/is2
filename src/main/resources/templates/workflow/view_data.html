@@ -115,8 +115,8 @@
 											th:unless="${(stepRList == null) or (stepRList.size() == 0) }"
 											class="form-group">
 											<label th:for="${'view-param-'+stats.index}"> <span
-												th:text="${stepR.workset.name}"></span></label> <span
-												th:id="${'view-param-'+stats.index}"> <a th:id="${'btn-view-param-'+stats.index}"
+												th:text="${stepR.workset.name}"></span></label> <div
+												th:id="${'view-param-'+stats.index}" class="pre-scrollable"> <a th:id="${'btn-view-param-'+stats.index}"
 												href="javascript:void(0);" title="Modifica parametro"
 												th:attr="data-index-param=${stats.index},data-param-template=${stepR.appRole.parameter.jsonTemplate},data-name-workset=${stepR.workset.name},data-value-param=${stepR.workset.paramValue},onclick='javascript:viewParamsAlpacaTemplate(this);'">
 													<i class="fa fa-pencil"></i>
@@ -124,7 +124,7 @@
                     											 	$("#btn-view-param-[[${stats.index}]]").click();
                                                                   </script>
 
-											</span>
+											</div>
 										</div>
 
 									</div>
