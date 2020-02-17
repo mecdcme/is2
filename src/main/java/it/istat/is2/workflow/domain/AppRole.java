@@ -54,7 +54,7 @@ public class AppRole implements Serializable {
     private String descr;
     @Column(name = "CODE")
     private String code;
-    @Column(name = "ORDER")
+    @Column(name = "ORDER_CODE")
     private Short order;
     
     @ManyToOne
