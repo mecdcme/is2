@@ -357,6 +357,12 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
 
 #stima completa con layer
 is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
+  
+  print("workset")
+  print(workset)
+  print("roles")
+  print(roles)
+  
   #Output variables
   result          <- list()
   workset_out     <- data.frame()
@@ -389,20 +395,23 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
   workset_layer  <- data.frame()
   for (index in 1:length(layers)) {
     rm(workset_layer)
+    run<-NA
+    
     layer <- as.character(layers[index])
     workset_layer <-
-      workset[workset[roles$S] == layer, , drop = TRUE]
-    
-    wgt = rep(1, NROW(workset_layer))
-    if (exists("wsparams$wgt"))
-      wgt = wsparams$wgt
-    
+      workset[workset[roles$S] == layer , , drop = TRUE]
     y <- workset_layer[roles$Y]
     ypred <- workset_layer[roles$P]
     s1 <- workset_layer[roles$S]
     out_layer<- workset_layer[roles$O]
     
-    # tot=colSums(ypred * wgt)
+    workset_layer_conv <-  workset_layer[ workset_layer$conv, , drop = TRUE]
+  
+      if(NROW(workset_layer_conv)>0){
+    wgt = rep(1, NROW(workset_layer))
+    if (exists("wsparams$wgt"))
+      wgt = wsparams$wgt
+       # tot=colSums(ypred * wgt)
     if (exists("wsparams$tot"))
       tot = wsparams$tot
     
@@ -418,17 +427,17 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
       
       score <- sel_out[, c("rank", "global.score")]
       n_error = n_error + sum(out$sel)
-      predname <- c("sel", "rank", "global.score")
+   
       #Set output variables
       workset_out <-
         rbind(workset_out, cbind(workset_layer, inf, score))
       
       # esportiamo in file esterno i risultati
-      x <- cbind(workset$X, workset$Y )
-      nome.grafico=paste(paste("G:","/Graf_selemix_AT3",sep=""), layer, t_sel,".jpeg",sep="_")
-      bmp(nome.grafico)
-      sel.pairs(x, outl=out_layer, sel=inf, log = TRUE)
-   
+      #x <- cbind(workset$X, workset$Y )
+      #nome.grafico=paste(paste("G:","/Graf_selemix_AT3",sep=""), layer, t_sel,".jpeg",sep="_")
+      #bmp(nome.grafico)
+      #sel.pairs(x, outl=out_layer, sel=inf, log = TRUE)
+     #dev.off()
       
     }
     #  ,
@@ -443,8 +452,13 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
       print(cond)
       return(NA)
     })
-    if (is.na(run)) {
-      print("Error")
+    }
+    
+    if (is.null(run) ||is.na(run)) {
+      outparams <- data.frame(matrix(NA, ncol = 3, nrow = NROW(y)))
+      colnames(outparams) <- c("sel", "rank", "global.score")
+      workset_out <- rbind(workset_out,cbind(workset_layer, outparams))
+      
     }
   }#for
   
