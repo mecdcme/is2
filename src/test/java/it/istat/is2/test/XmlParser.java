@@ -18,12 +18,6 @@ import it.istat.is2.workflow.dao.BusinessServiceDao;
 import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
 import it.istat.is2.workflow.service.BusinessServiceService;
-import it.istat.is2.xmlparser.domain.Service;
-import it.istat.is2.xmlparser.domain.Service.Methods;
-import it.istat.is2.xmlparser.domain.Service.Methods.Method;
-import it.istat.is2.xmlparser.domain.Service.Methods.Method.InputParameter;
-import it.istat.is2.xmlparser.domain.Service.Methods.Method.InputVariable;
-import it.istat.is2.xmlparser.domain.Service.Methods.Method.OutputVariable;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class XmlParser extends TestBase {
@@ -44,7 +38,7 @@ public class XmlParser extends TestBase {
         File xmlFile = new File(fileName);
          
         JAXBContext jaxbContext;
-        try
+        /*try
         {
             //jaxbContext = JAXBContext.newInstance("xmlparser");
             jaxbContext = JAXBContext.newInstance("it.istat.is2.xmlparser.domain");
@@ -114,7 +108,7 @@ public class XmlParser extends TestBase {
         catch (JAXBException e) 
         {
             e.printStackTrace();
-        }    
+        }   */ 
         
 
         // Assert

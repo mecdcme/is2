@@ -21,12 +21,14 @@ import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.workflow.domain.BusinessService;
 import it.istat.is2.workflow.service.BusinessServiceService;
-import it.istat.is2.xmlparser.domain.Service;
-import it.istat.is2.xmlparser.domain.Service.Methods;
-import it.istat.is2.xmlparser.domain.Service.Methods.Method;
-import it.istat.is2.xmlparser.domain.Service.Methods.Method.InputParameter;
-import it.istat.is2.xmlparser.domain.Service.Methods.Method.InputVariable;
-import it.istat.is2.xmlparser.domain.Service.Methods.Method.OutputVariable;
+import it.istat.is2.xmlparser.domain.BusinessServiceXml;
+import it.istat.is2.xmlparser.domain.BusinessServiceXml.AppServiceXml;
+import it.istat.is2.xmlparser.domain.BusinessServiceXml.AppServiceXml.Instances;
+import it.istat.is2.xmlparser.domain.BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml;
+import it.istat.is2.xmlparser.domain.BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature;
+import it.istat.is2.xmlparser.domain.BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables.InputVariable;
+import it.istat.is2.xmlparser.domain.BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables.OutputVariable;
+import it.istat.is2.xmlparser.domain.BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.Parameters.ParameterXml;
 
 @Controller
 public class XmlParserController {
@@ -70,14 +72,16 @@ public class XmlParserController {
             jaxbContext = JAXBContext.newInstance("it.istat.is2.xmlparser.domain");
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             
-            Service service = (Service) jaxbUnmarshaller.unmarshal(file);
+            BusinessServiceXml service = (BusinessServiceXml) jaxbUnmarshaller.unmarshal(file);
              
             System.out.println(service);
             
             // TEST inserimento
             BusinessService bs=new BusinessService();
-            bs.setDescr(service.getDescription());
-            bs.setName(service.getShortname());
+            bs.setDescr(service.getDescr());
+            bs.setName(service.getName());
+           
+            
             
             
             businessServiceService.save(bs);
@@ -87,18 +91,31 @@ public class XmlParserController {
 //            bs.getAppServices().add(e);
             
             
-            Methods methods = (Methods) service.getMethods();
+            // TEST ALBERO XML STATICO
+            AppServiceXml appServices = (AppServiceXml) service.getAppServiceXml();
             
             
-        	List<Method> method = (List<Method>)methods.getMethod();
+        	//List<Method> appServices = (List<Method>)appServices.getMethod();
+            
+            List<Instances> listaIstances = (List<Instances>) appServices.getInstances();
         	
-        	
-        	for(int y=0; y<method.size(); y++) {
-        		List<InputVariable> inputVariable = (List<InputVariable>) method.get(y).getInputVariable();
+            // Per il momento mi occupo solo della prima instances
+            List<StepInstanceXml> listaInstancesXml = listaIstances.get(0).getStepInstanceXml();
+            
+            
+        	for(int y=0; y<listaInstancesXml.size(); y++) {
+        		List<Signature> listaSignatures = (List<Signature>) listaInstancesXml.get(y).getSignature();
             	
-            	if(inputVariable!=null) {
-            		for(int w=0; w<inputVariable.size(); w++) {
-            			InputVariable inputv1 = inputVariable.get(w);
+            	if(listaSignatures!=null) {
+            		for(int w=0; w<listaSignatures.size(); w++) {
+            			
+            			List<InputVariable> listaInputVariables = listaSignatures.get(w).getInputVariables().getInputVariable();
+            			List<OutputVariable> listaOutputVariables = listaSignatures.get(w).getOutputVariables().getOutputVariable();
+            			List<ParameterXml> listaParameters = listaSignatures.get(w).getParameters().getParameterXml();
+            			
+            			
+            			// TODO: Finire di ciclare gli elementi finali
+            			
             			// Popolare domain e chiamare service per inserimento
             			System.out.println("Popolo InputVariable");
             		}
@@ -106,25 +123,25 @@ public class XmlParserController {
         	
         	
         	
-            	List<InputParameter> inputParameter = (List<InputParameter>) method.get(y).getInputParameter();
-        	
-            	if(inputParameter!=null) {            		
-            		for(int w=0; w<inputParameter.size(); w++) {
-            			InputParameter inputp1 = inputParameter.get(w);
-            			// Popolare domain e chiamare service per inserimento
-            			System.out.println("Popolo InputParameter");
-            		}
-            	}
-            	
-            	List<OutputVariable> outputVariable = (List<OutputVariable>) method.get(y).getOutputVariable();
-            	
-            	if(outputVariable!=null) {
-            		for(int w=0; w<outputVariable.size(); w++) {
-            			OutputVariable out1 = outputVariable.get(w);
-            			// Popolare domain e chiamare service per inserimento
-            			System.out.println("Popolo OutputVariable");
-            		}
-            	}            
+//            	List<InputParameter> inputParameter = (List<InputParameter>) method.get(y).getInputParameter();
+//        	
+//            	if(inputParameter!=null) {
+//            		for(int w=0; w<inputParameter.size(); w++) {
+//            			InputParameter inputp1 = inputParameter.get(w);
+//            			// Popolare domain e chiamare service per inserimento
+//            			System.out.println("Popolo InputParameter");
+//            		}
+//            	}
+//            	
+//            	List<OutputVariable> outputVariable = (List<OutputVariable>) method.get(y).getOutputVariable();
+//            	
+//            	if(outputVariable!=null) {
+//            		for(int w=0; w<outputVariable.size(); w++) {
+//            			OutputVariable out1 = outputVariable.get(w);
+//            			// Popolare domain e chiamare service per inserimento
+//            			System.out.println("Popolo OutputVariable");
+//            		}
+//            	}            
             	
             	
         	}
