@@ -454,7 +454,7 @@ public class EngineR implements EngineService {
             if (ruoloGruppo == null) {
                 ruoloGruppo = ROLE_DEFAULT;
             }
-            AppRole sxRuolo = rolesMap.get(ruolo);
+            AppRole sxRuolo = rolesMap.get(ruolo)!=null? rolesMap.get(ruolo):rolesMap.get(ROLE_DEFAULT);
             AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
 
             stepRuntime = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);

@@ -6,7 +6,7 @@ debugSource('C:/Users/framato/git/is2/RScripts/selemix/IS2_selemix.R')
 worksetFile <- read.delim("G:/IS2_datiFATT/datiFATT_SINTESI_1000.txt", header=TRUE, sep=";")
 #rolesFile <- list(X="FEM_p_2016", Y="FEM_g_2017")
 rolesEst <- list(X="FEM_p_2016", Y="FEM_g_2017",S="ateco")
-rolesEdit <- list(P="YPRED", Y="FEM_g_2017",S="ateco")
+rolesEdit <- list(P="YPRED", Y="FEM_g_2017",S="ateco",V="conv")
 
 
 out <- is2_mlest (worksetFile, rolesEst)
