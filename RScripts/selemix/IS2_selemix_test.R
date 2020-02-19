@@ -1,9 +1,11 @@
+
 rm(list=ls())
+setwd("C:/Users/UTENTE/git/is2")
 #install.packages("jsonlite")
-debugSource('C:/Users/framato/git/is2/RScripts/selemix/IS2_selemix.R')
+debugSource('RScripts/selemix/IS2_selemix.R')
 #debugSource('G:/development/git/is2/RScripts/selemix/IS2_selemix.R')
 
-worksetFile <- read.delim("G:/IS2_datiFATT/datiFATT_SINTESI_1000.txt", header=TRUE, sep=";")
+worksetFile <- read.delim("data/selemix/FATT_1000.csv", header=TRUE, sep=";")
 #rolesFile <- list(X="FEM_p_2016", Y="FEM_g_2017")
 rolesEst <- list(X="FEM_p_2016", Y="FEM_g_2017",S="ateco")
 rolesEdit <- list(P="YPRED", Y="FEM_g_2017",S="ateco",V="conv")
@@ -11,6 +13,7 @@ rolesEdit <- list(P="YPRED", Y="FEM_g_2017",S="ateco",V="conv")
 
 out <- is2_mlest (worksetFile, rolesEst)
 out
+debugSource('RScripts/selemix/IS2_selemix.R')
 out1 <- is2_seledit(out$workset_out, rolesEdit)
 View(out1)
 

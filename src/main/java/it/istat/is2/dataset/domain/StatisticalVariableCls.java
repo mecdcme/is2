@@ -43,7 +43,7 @@ public class StatisticalVariableCls implements Serializable {
     private String name;
     @Column(name = "DESCR")
     private String descr;
-    @Column(name = "ORDER")
+    @Column(name = "ORDER_CODE")
     private Short order;
     @Column(name = "VARIABLE_NAME_ENG")
     private String nameEng;
