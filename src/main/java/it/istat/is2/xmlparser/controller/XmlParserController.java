@@ -53,7 +53,7 @@ public class XmlParserController {
         
         File file = FileHandler.convertMultipartFileToXmlFile(form.getFileName());        
         
-        if(jaxbXmlFileToObject(file)) {
+        if(file !=null && !form.getFileName().equals("") && jaxbXmlFileToObject(file)) {
         	notificationService.addInfoMessage("Il file è stato caricato con successo nel db");
         }else {
         	notificationService.addErrorMessage("Non è stato possibile caricare il file nel db");
@@ -72,11 +72,12 @@ public class XmlParserController {
             jaxbContext = JAXBContext.newInstance("it.istat.is2.xmlparser.domain");
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             
+            
             BusinessServiceXml service = (BusinessServiceXml) jaxbUnmarshaller.unmarshal(file);
              
             System.out.println(service);
             
-            // TEST inserimento
+            // TEST inserimento del solo primo livello
             BusinessService bs=new BusinessService();
             bs.setDescr(service.getDescr());
             bs.setName(service.getName());
@@ -85,7 +86,7 @@ public class XmlParserController {
             
             
             businessServiceService.save(bs);
-            System.out.println("Inserimento avvenuto");
+            System.out.println("BusinessService: inserimento avvenuto");
             
 //            AppService e = new AppService();
 //            bs.getAppServices().add(e);
@@ -97,28 +98,52 @@ public class XmlParserController {
             
         	//List<Method> appServices = (List<Method>)appServices.getMethod();
             
-            List<Instances> listaIstances = (List<Instances>) appServices.getInstances();
+            Instances istancesSet = (Instances) appServices.getInstances();
         	
             // Per il momento mi occupo solo della prima instances
-            List<StepInstanceXml> listaInstancesXml = listaIstances.get(0).getStepInstanceXml();
+            List<StepInstanceXml> listaInstancesXml = istancesSet.getStepInstanceXml();
             
             
         	for(int y=0; y<listaInstancesXml.size(); y++) {
-        		List<Signature> listaSignatures = (List<Signature>) listaInstancesXml.get(y).getSignature();
+        		Signature listaSignatures = (Signature) listaInstancesXml.get(y).getSignature();
             	
             	if(listaSignatures!=null) {
-            		for(int w=0; w<listaSignatures.size(); w++) {
+            		
             			
-            			List<InputVariable> listaInputVariables = listaSignatures.get(w).getInputVariables().getInputVariable();
-            			List<OutputVariable> listaOutputVariables = listaSignatures.get(w).getOutputVariables().getOutputVariable();
-            			List<ParameterXml> listaParameters = listaSignatures.get(w).getParameters().getParameterXml();
+        			List<InputVariable> listaInputVariables = listaSignatures.getInputVariables().getInputVariable();
+        			List<OutputVariable> listaOutputVariables = listaSignatures.getOutputVariables().getOutputVariable();
+        			List<ParameterXml> listaParameters = listaSignatures.getParameters().getParameterXml();
+        			
+        			System.out.println("Lista InputVariables: ");
+        			for(int z=0; z<listaInputVariables.size(); z++) {
+        				InputVariable inputVariable = listaInputVariables.get(z);
+        				inputVariable.getRole().getCode();
+        				inputVariable.getRole().getName();
+        				inputVariable.getRole().getDescr();
+        				inputVariable.getRole().getOrder();
+        				inputVariable.getRole().getClsDataType();
+        				System.out.println(inputVariable.getRole().getName());
+        			}
+        			System.out.println("Lista OutputVariables: ");
+        			for(int z=0; z<listaOutputVariables.size(); z++) {
+        				OutputVariable outputVariable = listaOutputVariables.get(z);
+        				outputVariable.getRole().getCode();
+        				outputVariable.getRole().getName();
+        				outputVariable.getRole().getDescr();
+        				outputVariable.getRole().getOrder();
+        				outputVariable.getRole().getClsDataType();
+        				System.out.println(outputVariable.getRole().getName());
+        			}
+        			System.out.println("Lista Parameters: ");
+        			for(int z=0; z<listaParameters.size(); z++) {
+        				ParameterXml parameterXml = listaParameters.get(z);
+        				parameterXml.getName();
+        				parameterXml.getDescr();
+        				parameterXml.getDefault();  
+        				System.out.println(parameterXml.getName());
+        			}
             			
-            			
-            			// TODO: Finire di ciclare gli elementi finali
-            			
-            			// Popolare domain e chiamare service per inserimento
-            			System.out.println("Popolo InputVariable");
-            		}
+            		
             	}
         	
         	
