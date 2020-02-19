@@ -408,12 +408,8 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
     ypred <- workset_layer[roles$P]
     s1 <- workset_layer[roles$S]
     out_layer<- workset_layer[roles$O]
-    workset_layer_conv <- data.frame()
-   
-     if(NCOL(workset_layer)>1)
-          workset_layer_conv <-  workset_layer[ workset_layer$conv==TRUE, , drop = TRUE]
-    else 
-      if( workset_layer$con)   workset_layer_conv <-  workset_layer
+    workset_layer_conv <- workset_layer[roles$V]
+
     
     if(NROW(workset_layer_conv)>0){
       wgt = rep(1, NROW(workset_layer))
