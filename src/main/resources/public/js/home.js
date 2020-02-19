@@ -123,6 +123,39 @@ $(document).ready(function () {
         }
     });
 
+    var ctxSession = document.getElementById('chart-work-session').getContext('2d');
+    var chartSession = new Chart(ctxSession, {
+        type: 'bar',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April'],
+            datasets: [
+                {
+                    label: 'My First dataset',
+                    backgroundColor: 'rgba(255,255,255,.2)',
+                    borderColor: 'rgba(255,255,255,.55)',
+                    data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82]
+                }
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                        display: false,
+                        barPercentage: 0.6
+                    }],
+                yAxes: [{
+                        display: false
+                    }]
+            }
+        }
+    });
+
+
     chartService.update();
     chartFunction.update();
+    chartSession.update();
 });

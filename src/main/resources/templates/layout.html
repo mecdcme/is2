@@ -56,7 +56,7 @@
     <body class="c-app">
 
         <!-- START SIDEBAR -->
-        <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar" th:fragment="site-aside">
+        <div class="c-sidebar c-sidebar-dark c-sidebar-fixed" id="sidebar" th:fragment="site-aside">
             <div class="c-sidebar-brand brand-full">
                 <i class="icon-chemistry"></i> <span>IS<sup>2</sup> Workbench</span>
             </div>
@@ -152,7 +152,7 @@
                         <span th:text="${#session.removeAttribute('siteNotificationMessages')}"></span>
                     </div>
 
-                    <button class="c-header-toggler c-class-toggler d-lg-none mr-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show">
+                    <button class="c-header-toggler c-class-toggler d-lg-none mr-auto" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show">
                         <span class="c-header-toggler-icon"></span>
                     </button>
                     <a class="c-header-brand d-sm-none" href="#">
