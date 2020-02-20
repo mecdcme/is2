@@ -27,10 +27,8 @@
         <head th:include="layout :: site-head" th:remove="tag" />
         <script th:src="@{/js/worksession/sessioni.js}"></script>
         <script th:inline="javascript">
-            var _remove_process_msg = [[#{process.elimination.message}
-            ]];
-                    var _mandatory_field = [[#{newsession.dialog.mandatory.field}
-                    ]];
+            var _remove_process_msg = [[#{process.elimination.message}]];
+            var _mandatory_field = [[#{newsession.dialog.mandatory.field}]];
         </script>
     </head>
     <body class="c-app">
@@ -71,21 +69,21 @@
                     <div class="container-fluid">
                         <div class="animated fadeIn">
                             <div class="row">
-                                <div class="col-sm-6 col-md-6">
+                                <div class="col-sm-6 col-md-4">
                                     <div class="card">
                                         <div class="card-header">
                                             <span th:text="${businessService.name}" style="font-weight: bold"></span>
                                         </div>
-                                        <div class="card-body">
+                                        <div class="card-body" style="padding-top: 0px">
                                             <table class="table table-sm" cellspacing="0"  style="width:100%">
                                                 <thead>
-                                                    <tr><th style="width:20%"></th><th style="width:80%"></th></tr>
+                                                    <tr><th style="width:10%"></th><th style="width:90%"></th></tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr><td>Author</td><td th:text="${appService.name}"></td></tr>
+                                                    <tr><td style="border-top-color: white">Author</td><td style="border-top-color: white" th:text="${appService.author}"></td></tr>
                                                     <tr><td>Licence</td><td th:text="${appService.licence}"></td></tr>
                                                     <tr><td>Contact</td><td th:text="${appService.contact}"></td></tr>
-                                                    <tr><td>Descr</td><td th:text="${appService.descr}"></td></tr>
+                                                    <tr><td>Descr</td><td th:text="${appService.descr}" style="font-weight: 600"></td></tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -115,10 +113,10 @@
                                                         <tr th:each="stepInstance : ${stepInstances}"
                                                             th:unless="${(stepInstances == null) or (stepInstances.size() == 0) }">
                                                             <td th:text="${stepInstance.id}"></td>
-                                                            <td th:text="${stepInstance.label}"></td>
+                                                            <td th:text="${stepInstance.label}" style="font-weight: 600"></td>
                                                             <td th:text="${stepInstance.descr}"></td>
                                                             <td th:text="${stepInstance.appService.language}"></td>
-                                                            <td th:text="${stepInstance.appService.source}"></td>
+                                                            <td th:text="${stepInstance.appService.source}" style="font-weight: 600"></td>
                                                             <td th:text="${stepInstance.method}"></td>
                                                         </tr>
                                                     </tbody>

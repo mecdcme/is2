@@ -36,6 +36,9 @@
                 font-size: 0.95rem;
                 box-shadow: none;
             }
+            .text-value-lg {
+                font-size: 1.25rem;
+            }
         </style>
     </head>
     <body class="c-app">
@@ -77,7 +80,7 @@
                                     </th:block>
                                     <th:block th:unless="${y==0}">
                                         <div class="card" th:if="${gsbpmMatrix.get(x+'_'+y)}" th:with="process=${gsbpmMatrix.get(x+'_'+y)}" th:classappend="${process.businessServices.size()>0}? 'bg-success text-white':'border-secondary'">
-                                            <div class="card-body">
+                                            <div class="card-body text-center">
                                                 <th:block th:if="${process.businessServices.size()>0}">
                                                     <a th:title="${process.name}" th:href="@{'/gsbpm/' + ${process.id}}" style='color:white'>
                                                         <span th:text="${process.name}"></span>

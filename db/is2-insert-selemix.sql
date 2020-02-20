@@ -14,12 +14,12 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `O
 -- 
 -- BUSINESS SERVICE
 -- 
-INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`, `GSBPM_PROCESS_ID`) VALUES	(100,'SeleMix','Selemix is an R package to treat quantitative data, which aims to identify a set of units affected by errors which potentially influence the estimates of interest (selective editing)', 53) ;
+INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`, `GSBPM_PROCESS_ID`) VALUES	(100,'Selective editing','Selective editing is a general approach for the detection of influential errors. It is based on the idea of looking for influential errors with respect to the main results in order to focus the most accurate treatment on the corresponding subset of units to limit the costs of interactive editing, while maintaining the desired level of quality of estimates [GSDEM 2.0]', 53) ;
 
 -- 
 -- PROCESS_STEP
 -- 
-INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (10,'MLEST','This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the “true” data for all units that were used for the estimation','MLEST',100);
+INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (10,'MLEST','This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the "true" data for all units that were used for the estimation','MLEST',100);
 INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (15,'MLEST_STRATA','MLEST with stratification','MLEST_STRATA', 100);
 INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (20,'PREDY','On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates','PREDY',100);
 INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVICE_ID`) VALUES (25,'PREDY_STRATA','PREDY with stratification','PREDY_STRATA',100);
@@ -59,9 +59,9 @@ INSERT INTO `is2_app_service` (`ID`, `NAME`, `DESCR`, `IMPLEMENTATION_LANGUAGE`,
 INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (1,'is2_mlest','This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the “true” data for all units that were used for the estimation','MLEST',100);
 INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (2,'is2_ypred','On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates','PREDY',100);
 INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (3,'is2_seledit','This function performs Selective Editing. On the basis of a set of observed data and the corresponding predictions for the true data, it selects the units required for interactive editing','SELEDIT',100);
-INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (7,'is2_strata_mlest','MLEST with stratification','MLEST_STRAT',100);
-INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (8,'is2_strata_ypred','PREDY with stratification','PREDY_STRAT',100);
-INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (9,'is2_strata_seledit','SELEDIT with stratification','SELEDIT_STRATA',100);
+INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (4,'is2_strata_mlest','MLEST with stratification','MLEST_STRATA',100);
+INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (5,'is2_strata_ypred','PREDY with stratification','PREDY_STRATA',100);
+INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (6,'is2_strata_seledit','SELEDIT with stratification','SELEDIT_STRATA',100);
 -- INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (4,'is2_modest','Valutazione del modello','MODEL',100);
 -- INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (5,'is2_selpairs','Generazione Grafico','GRAPH',100);
 

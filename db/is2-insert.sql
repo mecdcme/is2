@@ -166,8 +166,8 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER_CODE`
 -- 
 INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`, `GSBPM_PROCESS_ID`) 
 	VALUES  
-		(200,'Relais','RELAIS (REcord Linkage At IStat) is a toolkit providing a set of techniques for dealing with record linkage projects. The principal features of RELAIS are: It is designed and developed to allow the combination of different techniques for each of the record linkage phases. It has been developed as an open source project under the EUPL license (European Union Public License).', 51),
-		(300,'Validate','The validate R-package makes it easy to check whether data lives up to expectations you have based on domain knowledge. It works by allowing you to define data validation rules independent of the code or data set', 53);
+		(200,'Record linkage','The purpose of record linkage is to identify the same real world entity that can be differently represented in data sources, even if unique identifiers are not available or are affected by errors.', 51),
+		(300,'Data validation','An activity aimed at verifying whether the value of a data item comes from the given (finite or infinite) set of acceptable values [OECD]', 53);
 
 -- 
 -- PROCESS_STEP
@@ -211,7 +211,7 @@ INSERT INTO `is2_link_function_view_data_type` (`BUSINESS_FUNCTION_ID`, `VIEW_DA
 -- 
 INSERT INTO `is2_app_service` (`ID`, `NAME`, `DESCR`, `IMPLEMENTATION_LANGUAGE`, `SOURCE_PATH`, `SOURCE_CODE`, `AUTHOR`, `LICENCE`,`CONTACT`,`BUSINESS_SERVICE_ID`) 
 	VALUES  
-		(200,'Relais R','R package implementing record linkage methods','R','relais/relais.R','','Istat','EUPL1.1','Luca Valentino (luvalent@istat.it)',200),
+		(200,'Relais','R package implementing record linkage methods','R','relais/relais.R','','Istat','EUPL1.1','Luca Valentino (luvalent@istat.it)',200),
 		(250,'Relais Java','Java package implementing record linkage methods','JAVA','it.istat.is2.catalogue.relais.service.RelaisService','','Istat','EUPL1.1','Luca Valentino (luvalent@istat.it)',200),
 		(300,'Validate','R package implementing a set of data validation functions','R','validate/validate.r','','Mark van der Loo','GPL-3','Mark van der Loo (mark.vanderloo@gmail.com)',300);
 -- 
