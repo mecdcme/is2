@@ -366,6 +366,8 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
   print(head(workset))
   print("roles")
   print(roles)
+  print("wsparams")
+  print(wsparams)
   
   #Output variables
   result          <- list()
@@ -409,9 +411,13 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
     s1 <- workset_layer[roles$S]
     out_layer<- workset_layer[roles$O]
     workset_layer_conv <- workset_layer[roles$V]
-
+    nr<-0
+    if(NROW(workset_layer_conv)>1) 
+       nr<- NROW(workset_layer_conv[workset_layer_conv[roles$V]==TRUE , , drop = TRUE])
+    else 
+      if(!is.na(workset_layer_conv[roles$V]) && workset_layer_conv[roles$V]==TRUE) nr<-1
     
-    if(NROW(workset_layer_conv)>0){
+    if(nr>0){
       wgt = rep(1, NROW(workset_layer))
       if (exists("wsparams$wgt"))
         wgt = wsparams$wgt
@@ -427,14 +433,14 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
         sel_out <- sel.edit (y = y,
                              ypred = ypred,
                              t.sel = as.numeric(t_sel))
-        inf <- sel_out[, "sel"]
+        sel <- sel_out[, "sel"]
         
         score <- sel_out[, c("rank", "global.score")]
-        n_error = n_error + sum(out$sel)
+        n_error = n_error + sum(sel)
         
         #Set output variables
         workset_out <-
-          rbind(workset_out, cbind(workset_layer, inf, score))
+          rbind(workset_out, cbind(workset_layer, sel, score))
         
         # esportiamo in file esterno i risultati
         #x <- cbind(workset$X, workset$Y )
@@ -466,23 +472,20 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
     }
   }#for
   
+  workset_out<- workset_out[order(workset_out$global.score,decreasing = TRUE),]
   
+
   report <- list(n.error = n_error)
-  report_out <- list(Report = toJSON(report))
+  report_out <- list(Report = toJSON(report, auto_unbox = TRUE))
   
   #Set output roles & rolesgroup
-  roles_out      <-
-    list (
-      E = "sel",
-      R = "rank",
-      F = "global.score",
-      G = names(report)
-    )
+  roles_out      <- list (E = "sel", R = "rank",  F = "global.score")
   rolesgroup_out <- list (E = "E", G = "G")
   
-  roles_out [[IS2_SELEMIX_ERROR]]      <-
-    c(roles$X, roles$Y, predname)
-  rolesgroup_out [[IS2_SELEMIX_ERROR]] <- c("P", "O")
+  roles_out [[IS2_SELEMIX_ERROR]]      <-   c(roles$X,roles$Y, roles$P, roles$S,roles$V, "sel",  "rank", "global.score")
+  rolesgroup_out [[IS2_SELEMIX_ERROR]] <- c("E", "R","F")
+  
+  
   
   #Output
   result[[IS2_WORKSET_OUT]]     <- workset_out
