@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/I3S-ESSnet/is2.svg?branch=master)](https://travis-ci.org/I3S-ESSnet/is2) [![Docker hub](https://img.shields.io/docker/cloud/automated/i3sessnet/is2.svg?label=is2%20docker)](https://cloud.docker.com/u/i3sessnet/repository/docker/i3sessnet/is2) [![Docker hub](https://img.shields.io/docker/cloud/automated/i3sessnet/is2-mysql.svg?label=is2-mysql%20docker)](https://cloud.docker.com/u/i3sessnet/repository/docker/i3sessnet/is2-mysql)
+[![Build Status](https://travis-ci.org/mecdcme/is2.svg?branch=master)](https://travis-ci.org/mecdcme/is2) [![Docker hub](https://img.shields.io/docker/cloud/automated/i3sessnet/is2.svg?label=is2%20docker)](https://cloud.docker.com/u/i3sessnet/repository/docker/i3sessnet/is2) [![Docker hub](https://img.shields.io/docker/cloud/automated/i3sessnet/is2-mysql.svg?label=is2-mysql%20docker)](https://cloud.docker.com/u/i3sessnet/repository/docker/i3sessnet/is2-mysql)
 
 # IS2
 A runtime environment to execute statistical services. IS2 is a workbench that offers a set of tools for data analysis and processing. 
