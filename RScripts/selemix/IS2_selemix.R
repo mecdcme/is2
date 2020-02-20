@@ -199,7 +199,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   #Create log
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
-  #sink(con)
+  sink(con)
   
   #Set default parameters
   model="LN"
@@ -362,12 +362,12 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
 #stima completa con layer
 is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
   
-  print("workset")
-  print(head(workset))
-  print("roles")
-  print(roles)
-  print("wsparams")
-  print(wsparams)
+  #print("workset")
+  #print(head(workset))
+  #print("roles")
+  #print(roles)
+  #print("wsparams")
+  #print(wsparams)
   
   #Output variables
   result          <- list()
@@ -380,7 +380,7 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
   #Create log
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
-  #sink(con)
+  sink(con)
   
   t_sel = 0.01
   
@@ -458,8 +458,8 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
       #     }
       ,
       error = function(cond) {
-        print(paste("Error: layer ", layer, " rows:" , NROW(y)))
-        print(cond)
+        #print(paste("Error: layer ", layer, " rows:" , NROW(y)))
+        #print(cond)
         return(NA)
       })
     }

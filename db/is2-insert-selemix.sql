@@ -59,9 +59,9 @@ INSERT INTO `is2_app_service` (`ID`, `NAME`, `DESCR`, `IMPLEMENTATION_LANGUAGE`,
 INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (1,'is2_mlest','This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the “true” data for all units that were used for the estimation','MLEST',100);
 INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (2,'is2_ypred','On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates','PREDY',100);
 INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (3,'is2_seledit','This function performs Selective Editing. On the basis of a set of observed data and the corresponding predictions for the true data, it selects the units required for interactive editing','SELEDIT',100);
-INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (4,'is2_strata_mlest','MLEST with stratification','MLEST_STRATA',100);
-INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (5,'is2_strata_ypred','PREDY with stratification','PREDY_STRATA',100);
-INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (6,'is2_strata_seledit','SELEDIT with stratification','SELEDIT_STRATA',100);
+-- INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (4,'is2_strata_mlest','MLEST with stratification','MLEST_STRATA',100);
+-- INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (5,'is2_strata_ypred','PREDY with stratification','PREDY_STRATA',100);
+-- INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (6,'is2_strata_seledit','SELEDIT with stratification','SELEDIT_STRATA',100);
 -- INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (4,'is2_modest','Valutazione del modello','MODEL',100);
 -- INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (5,'is2_selpairs','Generazione Grafico','GRAPH',100);
 
