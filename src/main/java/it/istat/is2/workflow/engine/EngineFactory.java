@@ -28,7 +28,10 @@ import org.springframework.stereotype.Service;
 public class EngineFactory {
 
     @Autowired
-    private EngineR engineR;
+    private EngineRServe engineRServe;
+    
+    @Autowired
+    private EngineREnjin engineREInjin;
     
     @Autowired
     private EngineJava engineJava;
@@ -40,8 +43,11 @@ public class EngineFactory {
         if (engineType == null) {
             return null;
         }
-        if (engineType.equalsIgnoreCase(IS2Const.ENGINE_R)) {
-            return engineR;
+        if (engineType.equalsIgnoreCase(IS2Const.ENGINE_RSERVE)) {
+            return engineRServe;
+
+        } else if (engineType.equalsIgnoreCase(IS2Const.ENGINE_RENJIN)) {
+            return engineREInjin;
 
         } else if (engineType.equalsIgnoreCase(IS2Const.ENGINE_JAVA)) {
             return engineJava;

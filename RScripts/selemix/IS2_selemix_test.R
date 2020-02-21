@@ -1,6 +1,6 @@
 
 rm(list=ls())
-setwd("C:/Users/UTENTE/git/is2")
+setwd("C:/Users/framato/git/is2")
 #install.packages("jsonlite")
 debugSource('RScripts/selemix/IS2_selemix.R')
 #debugSource('G:/development/git/is2/RScripts/selemix/IS2_selemix.R')

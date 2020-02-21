@@ -209,11 +209,11 @@ INSERT INTO `is2_link_function_view_data_type` (`BUSINESS_FUNCTION_ID`, `VIEW_DA
 -- 
 -- CATALOGUE OF APPLICATION SERVICES
 -- 
-INSERT INTO `is2_app_service` (`ID`, `NAME`, `DESCR`, `IMPLEMENTATION_LANGUAGE`, `SOURCE_PATH`, `SOURCE_CODE`, `AUTHOR`, `LICENCE`,`CONTACT`,`BUSINESS_SERVICE_ID`) 
+INSERT INTO `is2_app_service` (`ID`, `NAME`, `DESCR`, `IMPLEMENTATION_LANGUAGE`, `ENGINE`,`SOURCE_PATH`, `SOURCE_CODE`, `AUTHOR`, `LICENCE`,`CONTACT`,`BUSINESS_SERVICE_ID`) 
 	VALUES  
-		(200,'Relais','R package implementing record linkage methods','R','relais/relais.R','','Istat','EUPL1.1','Luca Valentino (luvalent@istat.it)',200),
-		(250,'Relais Java','Java package implementing record linkage methods','JAVA','it.istat.is2.catalogue.relais.service.RelaisService','','Istat','EUPL1.1','Luca Valentino (luvalent@istat.it)',200),
-		(300,'Validate','R package implementing a set of data validation functions','R','validate/validate.r','','Mark van der Loo','GPL-3','Mark van der Loo (mark.vanderloo@gmail.com)',300);
+		(200,'Relais','R package implementing record linkage methods','R','RSERVE','relais/relais.R','','Istat','EUPL1.1','Luca Valentino (luvalent@istat.it)',200),
+		(250,'Relais Java','Java package implementing record linkage methods','JAVA','JAVA','it.istat.is2.catalogue.relais.service.RelaisService','','Istat','EUPL1.1','Luca Valentino (luvalent@istat.it)',200),
+		(300,'Validate','R package implementing a set of data validation functions','R','RSERVE','validate/validate.r','','Mark van der Loo','GPL-3','Mark van der Loo (mark.vanderloo@gmail.com)',300);
 -- 
 -- STEP INSTANCE
 -- 

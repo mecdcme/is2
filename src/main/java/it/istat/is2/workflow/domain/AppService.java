@@ -46,6 +46,8 @@ public class AppService implements Serializable {
     private String descr;
     @Column(name = "IMPLEMENTATION_LANGUAGE")
     private String language;
+    @Column(name = "ENGINE")
+    private String engineType;
     @Column(name = "SOURCE_PATH")
     private String source;
     @Column(name = "SOURCE_CODE")

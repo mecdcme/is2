@@ -36,7 +36,8 @@ public interface IS2Const {
     public static final String LIST_BUSINESS_PROCESS = "listBP";
     public static final String SESSION_DATASET = "sessionWSdataset";
 
-    public static final String ENGINE_R = "R";
+    public static final String ENGINE_RSERVE = "RSERVE";
+    public static final String ENGINE_RENJIN = "RENJIN";
     public static final String ENGINE_JAVA = "JAVA";
     public static final String ENGINE_SQL = "SQL";
 

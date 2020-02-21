@@ -59,6 +59,7 @@ IS2_SELEMIX_STRATO     <- "S"
 IS2_SELEMIX_MODEL      <- "M"
 IS2_SELEMIX_CONVERGENZA <- "V"
 
+
 library("SeleMix")
 library("jsonlite")
 
@@ -266,12 +267,21 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
         #Prepare output
         conv  <- data.frame(conv = est$is.conv)
         outparams <- data.frame(tau=est$tau, outlier=est$outlier, pattern=est$pattern)
-       
+        
         outprediction <- as.data.frame(est$ypred)
         colnames(outprediction) <- predname
         
+        bic <- as.matrix(est$bic.aic)
+        bic_norm_at3 <- bic[1,]    
+        bic_mix_at3  <- bic[2,] 
+        
+        aic <- as.matrix(est$bic.aic)
+        aic_norm_at3 <- aic[3,]    
+        aic_mix_at3  <- aic[4,] 
+        
+        
         #Set output parameters layer
-        mod[[index]] <- list(layer=layer,N=NROW(x), B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w, is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)
+        mod[[index]] <- list(layer=layer,N=NROW(x), B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w, is.conv = est$is.conv, bic_norm = bic_norm_at3, bic_mix=bic_mix_at3 , aic_norm=aic_norm_at3,aic_mix=aic_mix_at3  )
         #mod <- list(mod, layer=list(layer=layer,N=nrow(x), B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w, is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic))
         
         #Set output variables
@@ -281,33 +291,33 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
         n_missing <- n_missing + sum(as.numeric(est$pattern))
         
       }
-    #  ,
-    #  warning=function(cond) {
-    #    print(est)
-    #    print(paste("Warning: layer ",layer, " ml.est did not converge! rows:" ,NROW(x)))
-    #    return(NA)
-  #     }     
-  ,
+      #  ,
+      #  warning=function(cond) {
+      #    print(est)
+      #    print(paste("Warning: layer ",layer, " ml.est did not converge! rows:" ,NROW(x)))
+      #    return(NA)
+      #     }     
+      ,
       error=function(cond) {
         print(paste("Error: layer ",layer, " rows:" ,NROW(x) ))
         print(cond)
         return(NA)
       })
-   if(is.na(run)){
-   
-     outparams <- data.frame(matrix(NA, ncol = 3+NCOL(y), nrow = NROW(y)))
-     outparams$conv <- rep(FALSE, NROW(y))
-     colnames(outparams) <- c(predname,"conv","tau","outlier","pattern")
-     outprediction <- as.data.frame(NA)
-     colnames(outprediction) <- predname
-     workset_out <- rbind(workset_out,cbind(x, y,s1, outparams))
-     mod[[index]] <- list(layer=layer,N=NROW(x),B=NA, sigma=NA, lambda=NA, w=NA, is.conv = FALSE, sing = NA, bic.aic = NA )
-
-   }
+    if(is.na(run)){
+      
+      outparams <- data.frame(matrix(NA, ncol = 3+NCOL(y), nrow = NROW(y)))
+      outparams$conv <- rep(FALSE, NROW(y))
+      colnames(outparams) <- c(predname,"conv","tau","outlier","pattern")
+      outprediction <- as.data.frame(NA)
+      colnames(outprediction) <- predname
+      workset_out <- rbind(workset_out,cbind(x, y,s1, outparams))
+      mod[[index]] <- list(layer=layer,N=NROW(x),B=NA, sigma=NA, lambda=NA, w=NA, is.conv = FALSE, bic_norm = NA, bic_mix=NA , aic_norm=NA,aic_mix=NA  )
+      
+    }
   }#for
-
+  
   params_out <- list(Model = toJSON(mod, auto_unbox = TRUE))
-   
+  
   
   report <- list(n.outlier = n_outlier, missing =n_missing, "layers"=n_layers )
   report_out <- list(Report = toJSON(report, auto_unbox = TRUE))
@@ -340,16 +350,16 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   
   return(result)
 }
- 
+
 #funzione stima generica 
 is2_mlest <- function( workset, roles, wsparams=NULL,...) {
   if(is.null(roles$S)){
     print('call is2_mlest_nolayer')
-	return (is2_mlest_nolayer(workset, roles, wsparams))
+    return (is2_mlest_nolayer(workset, roles, wsparams))
   }
   else
   {	  print('call is2_mlest_layer')
-	return (is2_mlest_layer(workset, roles, wsparams))
+    return (is2_mlest_layer(workset, roles, wsparams))
   }
 }
 
@@ -362,12 +372,6 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
 #stima completa con layer
 is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
   
-  #print("workset")
-  #print(head(workset))
-  #print("roles")
-  #print(roles)
-  #print("wsparams")
-  #print(wsparams)
   
   #Output variables
   result          <- list()
@@ -413,7 +417,7 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
     workset_layer_conv <- workset_layer[roles$V]
     nr<-0
     if(NROW(workset_layer_conv)>1) 
-       nr<- NROW(workset_layer_conv[workset_layer_conv[roles$V]==TRUE , , drop = TRUE])
+      nr<- NROW(workset_layer_conv[workset_layer_conv[roles$V]==TRUE , , drop = TRUE])
     else 
       if(!is.na(workset_layer_conv[roles$V]) && workset_layer_conv[roles$V]==TRUE) nr<-1
     
@@ -443,11 +447,11 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
           rbind(workset_out, cbind(workset_layer, sel, score))
         
         # esportiamo in file esterno i risultati
-        #x <- cbind(workset$X, workset$Y )
-        #nome.grafico=paste(paste("G:","/Graf_selemix_AT3",sep=""), layer, t_sel,".jpeg",sep="_")
-        #bmp(nome.grafico)
-        #sel.pairs(x, outl=out_layer, sel=inf, log = TRUE)
-        #dev.off()
+        x <- cbind(workset_layer$X, workset_layer$Y )
+        nome.grafico=paste(paste("G:","/Graf_selemix_AT3",sep=""), layer, t_sel,".jpeg",sep="_")
+        bmp(nome.grafico)
+        sel.pairs(x, outl=out_layer, sel=sel, log = TRUE)
+        dev.off()
         
       }
       #  ,
@@ -458,8 +462,8 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
       #     }
       ,
       error = function(cond) {
-        #print(paste("Error: layer ", layer, " rows:" , NROW(y)))
-        #print(cond)
+      #  print(paste("Error: layer ", layer, " rows:" , NROW(y)))
+      #  print(cond)
         return(NA)
       })
     }
@@ -474,7 +478,7 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
   
   workset_out<- workset_out[order(workset_out$global.score,decreasing = TRUE),]
   
-
+  
   report <- list(n.error = n_error)
   report_out <- list(Report = toJSON(report, auto_unbox = TRUE))
   
@@ -533,12 +537,12 @@ is2_seledit_nolayer <- function( workset, roles, wsparams=NULL,...) {
   
   
   #Set variables
- 
-
+  
+  
   n_error <- 0
   predname<- c() 
   workset_layer  <- data.frame()
- 
+  
   ###
   #to do .......
   ###
@@ -572,11 +576,11 @@ is2_seledit_nolayer <- function( workset, roles, wsparams=NULL,...) {
 #editing selettivo generica 
 is2_seledit <- function( workset, roles, wsparams=NULL,...) {
   if(is.null(roles$S)){
-	return (is2_seledit_nolayer(workset, roles, wsparams))
+    return (is2_seledit_nolayer(workset, roles, wsparams))
   }
   else
   {	
-	return (is2_seledit_layer(workset, roles, wsparams))
+    return (is2_seledit_layer(workset, roles, wsparams))
   }
 }
 

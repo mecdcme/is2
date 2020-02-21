@@ -63,7 +63,7 @@ public class WorkFlowBatchProcessor implements ItemReader<DataProcessing> {
     }
 
     public DataProcessing doStep(DataProcessing elaborazione, StepInstance stepInstance) throws Exception {
-        EngineService engine = engineFactory.getEngine(stepInstance.getAppService().getLanguage());
+        EngineService engine = engineFactory.getEngine(stepInstance.getAppService().getEngineType());
        
         try {
             engine.init(elaborazione, stepInstance);
