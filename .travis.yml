@@ -1,9 +1,11 @@
 language: java
 jdk: openjdk11
-script:
-- mvn clean package
+
 addons: 
   sonarcloud:
     organisation: "mecdcme"
     token:
       secure: zDS1CD+k2JyvH+4wVn8GMOmKrOMEmQbnx/Ia4H0yx03iQrFExDLb1ai+H4QKSBPO4Plla6D9ofMbpuoBipr/08dE5Qn7Q58sOETN6fhZBzAEGkM6M8rhzbMnKlPcKwWawgInPBEHIA+g+QccvbILg266XbOlWR+/+f1zLGSk93YamghJaBfWDB+D0agrEA5Y1e8Pk1I/PVqe1ND4WfDNJg7/K6BuKfAPi0hi8yvYg02O+pGF8CdEO4phcL6cdlJXoq3b5qxRHX8lsXOz+zBXT9L/bNxejfE2/EfzwAH5XcqJvKMO7y02DCFG6aXEA7tGvC6M3IghH+i4k2lNAvJsU7GSJCWd3KRa64nDBiGmUf3l10/XL1/3+ySjz5LP8Pno9hOiou76YfpSokObGLu90DArM6E6afLlDr0uSwzG+fhY6eT7Ah8PDv9NaIyx2c0VQyxW97gmCxfhMmbPJ8VN4rmXdSXhKigvCsDcu+IHj2D25ocC7opU0WyqRuNDR1Eulca4Y1WECkTbiwbWL8M4gY0CCCMGMsZtKHj0QULXwr9r2YoaDzYVT2mYue+EAsGQle5ajBXGBvXa/PXL4VCuviQcYm9paHrgcD93x857NKw2zJZ8OwXpLv7fvhnrce4ntQx0wr65HmwiwLcE+kQtbuPn/2rNc7mFxMnBfEBD+2o=
+
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=mecdcme_is2
