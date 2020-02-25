@@ -83,14 +83,26 @@ public class FileHandler {
 
     public static void writeFile(String nomeFile) {
         String path = "input/" + nomeFile;
+        File file=null;
+        FileWriter fw=null; 
         try {
-            File file = new File(path);
-            FileWriter fw = new FileWriter(file);
-            fw.flush();
-            fw.close();
+            file = new File(path);
+            fw = new FileWriter(file);
+          
         } catch (IOException e) {
             Logger.getRootLogger().error("Errore: ", e);
         }
+        finally {
+        	 try {
+                 if (fw!= null) {
+                	 fw.flush();
+                     fw.close();
+                 }
+                  
+             } catch (IOException ex) {
+                 Logger.getRootLogger().error("Errore: ", ex);
+             }
+		}
     }
 
     // Ritorna ArrayList con i campi dell'header

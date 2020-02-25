@@ -23,11 +23,17 @@
  */
 package it.istat.is2.app.bean;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data 
-public class NotificationMessage {
+public class NotificationMessage implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final String TYPE_SUCCESS = "SUCCESS";
 	public static final String TYPE_ERROR = "ERROR";
 	public static final String TYPE_INFO = "INFO";
