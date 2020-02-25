@@ -235,9 +235,10 @@ public class EngineREnjin implements EngineService {
         Logger.getRootLogger().debug("Eseguo Get " + tipoOutput);
         try {
             ListVector listR = (ListVector) engine.eval(varR + "$" + tipoOutput);
-            StringVector names = (StringVector) engine.eval("names(" + varR + "$" + tipoOutput + ")");
+        //    StringVector names = (StringVector) engine.eval("names(" + varR + "$" + tipoOutput + ")");
             if (listR != null && listR.length() > 0) {
-                getRecursiveOutput(genericHashMap, listR, names);
+             //   getRecursiveOutput(genericHashMap, listR, names);
+                getRecursiveOutput(genericHashMap, listR);
                 Logger.getRootLogger()
                         .debug("Impostati campi di " + tipoOutput + "= " + genericHashMap.values().toString());
             }
@@ -299,19 +300,20 @@ public class EngineREnjin implements EngineService {
         logService.save("Script completed!");
     }
 
-    public void getRecursiveOutput(LinkedHashMap<String, ArrayList<String>> genericHashMap, ListVector listR, StringVector names)
+    public void getRecursiveOutput(LinkedHashMap<String, ArrayList<String>> genericHashMap, ListVector listR)
             throws ScriptException {
         String name = "";
         if (listR != null) {
-            Logger.getRootLogger().info("Campi:> " + names.asString() + " Size(" + listR.length() + ")");
+        //    Logger.getRootLogger().info("Campi:> " + names.asString() + " Size(" + listR.length() + ")");
             for (int i = 0; i < listR.length(); i++) {
                 if (listR.get(i) instanceof  ListVector) {
-                    getRecursiveOutput(genericHashMap, (ListVector) listR.get(i), (StringVector) listR.get(i).getNames());
+              //      getRecursiveOutput(genericHashMap, (ListVector) listR.get(i), (StringVector) listR.get(i).getNames());
+                	  getRecursiveOutput(genericHashMap, (ListVector) listR.get(i));
                 } else {
-                	 StringVector ts =(StringVector) listR.get(i);
+                	Vector values =(Vector) listR.get(i);
                     name = listR.getName(i);
-                    genericHashMap.put(name, (ArrayList<String>) Arrays.asList(ts.toArray()));
-                    Logger.getRootLogger().info(name + " (" + ts.length() + "/" + genericHashMap.get(name).size() + "): "
+                    genericHashMap.put(name, Utility.toArrayListofString(values));
+                    Logger.getRootLogger().info(name + " (" + values.length() + "/" + genericHashMap.get(name).size() + "): "
                             + genericHashMap.get(name).toString());
                 }
             }

@@ -51,6 +51,7 @@ import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.renjin.sexp.Vector;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import it.istat.is2.app.bean.InputFormBean;
@@ -681,6 +682,16 @@ public class Utility {
 		}
 		return ret;
 
+	}
+
+	public static ArrayList<String> toArrayListofString(Vector values) {
+		// TODO Auto-generated method stub
+		ArrayList<String> ret=new ArrayList<String>();
+		for (int i = 0; i < values.length(); i++) {
+			Object elem=values.getElementAsObject(i);
+		 ret.add(String.valueOf(elem));
+		}
+	 	return ret;
 	}
  	
 }

@@ -13,7 +13,7 @@ rolesEdit <- list(P="YPRED", Y="FEM_g_2017",S="ateco",V="conv")
 
 out <- is2_mlest (worksetFile, rolesEst)
 out
-debugSource('RScripts/selemix/IS2_selemix.R')
+
 out1 <- is2_seledit(out$workset_out, rolesEdit)
 View(out1)
 

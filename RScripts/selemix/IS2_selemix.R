@@ -188,7 +188,10 @@ is2_mlest_nolayer <- function( workset, roles, wsparams=NULL,...) {
 
 #stima completa con layer
 is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
-  
+
+  y <- matrix(1:6, nrow=2, ncol=2)
+  .Internal(det_ge_real(y, TRUE))
+  print("aaaaaaaa")
   #Output variables
   result          <- list()
   workset_out     <- data.frame()
@@ -200,7 +203,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   #Create log
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
-  sink(con)
+  #sink(con)
   
   #Set default parameters
   model="LN"

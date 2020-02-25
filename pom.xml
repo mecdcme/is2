@@ -163,21 +163,31 @@
 			<version>1.0.15</version>
 		</dependency>
 		<!-- Renjin -->
-		<dependency>
+		<!-- https://mvnrepository.com/artifact/org.netlib/netlib-java -->
+	<dependency>
 			<groupId>org.renjin</groupId>
 			<artifactId>renjin-script-engine</artifactId>
 			<version>RELEASE</version>
-		</dependency>
+			</dependency>
+
+ 
 		<dependency>
 			<groupId>org.renjin.cran</groupId>
 			<artifactId>SeleMix</artifactId>
 			<version>1.0.1-b16</version>
 		</dependency>
-		<dependency>
+			<dependency>
 			<groupId>org.renjin.cran</groupId>
 			<artifactId>jsonlite</artifactId>
 			<version>1.6-b1</version>
 		</dependency>
+ 
+<dependency>
+  <groupId>com.github.fommil.netlib</groupId>
+  <artifactId>all</artifactId>
+  <version>1.1.2</version>
+  <type>pom</type>
+</dependency>
 	</dependencies>
 
 	<!-- Renjin repository -->
@@ -191,6 +201,7 @@
 			<id>central</id>
 			<url>https://repo1.maven.org/maven2/</url>
 		</repository>
+		 
 	</repositories>
 
 	<build>
