@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -46,8 +45,14 @@ import it.istat.is2.app.bean.ColonnaJson;
 import it.istat.is2.app.bean.DatoJson;
 
 public class FileHandler {
+	
+	
 
-    public static void loadFile(RConnection connection, String inputTable, String nomeFile) {
+    private FileHandler() {
+    	throw new IllegalStateException("Utility class");
+	}
+
+	public static void loadFile(RConnection connection, String inputTable, String nomeFile) {
         try {
             connection.eval(inputTable + " <- read.csv(file='" + nomeFile + "', header=TRUE, sep=',', dec='.')");
         } catch (Exception ex) {
