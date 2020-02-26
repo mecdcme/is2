@@ -81,28 +81,20 @@ public class FileHandler {
         }
     }
 
-    public static void writeFile(String nomeFile) {
+    public static void writeFile(String nomeFile) throws IOException {
         String path = "input/" + nomeFile;
         File file=null;
         FileWriter fw=null; 
         try {
             file = new File(path);
             fw = new FileWriter(file);
-          
+       	    fw.flush();
         } catch (IOException e) {
             Logger.getRootLogger().error("Errore: ", e);
         }
         finally {
-        	 try {
-                 if (fw!= null) {
-                	 fw.flush();
-                     fw.close();
-                 }
-                  
-             } catch (IOException ex) {
-                 Logger.getRootLogger().error("Errore: ", ex);
-             }
-		}
+         if (fw!= null)      fw.close();
+        }
     }
 
     // Ritorna ArrayList con i campi dell'header
