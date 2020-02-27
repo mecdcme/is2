@@ -51,7 +51,7 @@ public class BusinessProcess implements Serializable {
     private String descr;
     @Column(name="LABEL")
     private String label;
-    @Column(name="ORDERCODE")
+    @Column(name="ORDER_CODE")
     private Short order;
    
 

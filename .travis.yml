@@ -1,10 +1,11 @@
 language: java
-services:
-- docker
-before_install:
-- docker build -t i3sessnet/is2 -f app.Dockerfile .
-- docker build -t i3sessnet/is2-mysql -f db.Dockerfile .
-notifications:
-  slack:
-    secure: C2E6ITN9vYLBASozja6Jass1vwnTsUtPYcfC4kRdHNHBTe5pYfO6zar3LPy5HlWI2+5pMuB+8TEGT9mDBeCN/mBeGSeBEBI1KFIK0qfL6NHjMgWTXfU9yK9LTF+GN+F599+AAtIZ04WZwXEuGvO+gdX0Rrq3ZhiK9ldJIjfBw12RQlG9bh+cE798Qtjq7TMDYAuuK5H3CcLLA6mzXG5jcAAaGEdbRzs1qtt0KOHulf6GG1FA4BZbsDPy8nOwR9Fs0ancmC2+Natne5DZWVxLgqWgUYOgnh6V8bvYvxhKUquUmGi8UQ/wmjEpMH7Sx6oWqikI26toU9P1nRhsskqWjrc+TyjmTFSVOazMt3O+gMWMmcC5RphjpZZFon+BvE0DjCUrUAEECJ8tSAjknLmrMF1oXpGQLf3hxW7/ctE0ClsP8QntY9wB1IJFypC1saEzMDyh3eCGh7WGyHkd8of2Rctb4Rmab86K/TJk2KYvZRNXu7yjMthxvK3OrP63EMyIvmgBVVVFFkbo54B/WnJN9kQw97p0EFtxyiLWVjh+lmBmM6AHulNAIZ/fOKeG0QgATxCSM2wk8+oF5EqisZ6I5b2DLkp3OZXqqzdESyy576BZ2UR/I4/poJrNfm+7Fk8xWo4+N75y5iwYSb0eTytnId8acMylxrrP92BV6xgAQTM=
-    
+jdk: openjdk11
+
+addons: 
+  sonarcloud:
+    organisation: "mecdcme"
+    token:
+      secure: zDS1CD+k2JyvH+4wVn8GMOmKrOMEmQbnx/Ia4H0yx03iQrFExDLb1ai+H4QKSBPO4Plla6D9ofMbpuoBipr/08dE5Qn7Q58sOETN6fhZBzAEGkM6M8rhzbMnKlPcKwWawgInPBEHIA+g+QccvbILg266XbOlWR+/+f1zLGSk93YamghJaBfWDB+D0agrEA5Y1e8Pk1I/PVqe1ND4WfDNJg7/K6BuKfAPi0hi8yvYg02O+pGF8CdEO4phcL6cdlJXoq3b5qxRHX8lsXOz+zBXT9L/bNxejfE2/EfzwAH5XcqJvKMO7y02DCFG6aXEA7tGvC6M3IghH+i4k2lNAvJsU7GSJCWd3KRa64nDBiGmUf3l10/XL1/3+ySjz5LP8Pno9hOiou76YfpSokObGLu90DArM6E6afLlDr0uSwzG+fhY6eT7Ah8PDv9NaIyx2c0VQyxW97gmCxfhMmbPJ8VN4rmXdSXhKigvCsDcu+IHj2D25ocC7opU0WyqRuNDR1Eulca4Y1WECkTbiwbWL8M4gY0CCCMGMsZtKHj0QULXwr9r2YoaDzYVT2mYue+EAsGQle5ajBXGBvXa/PXL4VCuviQcYm9paHrgcD93x857NKw2zJZ8OwXpLv7fvhnrce4ntQx0wr65HmwiwLcE+kQtbuPn/2rNc7mFxMnBfEBD+2o=
+
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=mecdcme_is2

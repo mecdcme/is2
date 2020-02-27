@@ -27,7 +27,7 @@
         <head th:include="layout :: site-head" th:remove="tag" />
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
         <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
-         <script th:src="@{/js/vendors/alpaca/handlebars.min.js}"  type="text/javascript"></script>
+        <script th:src="@{/js/vendors/alpaca/handlebars.min.js}"  type="text/javascript"></script>
         <script th:src="@{/js/vendors/alpaca/alpaca.min.js}"  type="text/javascript"></script>
       
         <script th:src="@{/js/workflow/dataProcessingwf.js}"></script>
@@ -37,7 +37,7 @@
             var _roleGroup = [[${currentGroup.id}]];
         </script>
         <link rel="stylesheet" th:href="@{/css/vendors/table/datatables.css}" />
-        <link th:href="@{/css/vendors/alpaca/alpaca.min.css}" rel="stylesheet" />
+         <link th:href="@{/css/vendors/alpaca/alpaca.min.css}" rel="stylesheet" />
       
     </head>
         <body class="c-app">
@@ -95,7 +95,7 @@
                                             </a>
                                         </span>
                                     </div>
-                                    <div class="card-body" th:if="${currentGroup.dataType.id == 1 }" >
+                                    <div class="card-body" th:if="${currentGroup.dataType.id == 1 }" > <!-- Variable type -->
                                         <table id="worksetTab" th:if="${not #lists.isEmpty(stepRList)}"
                                                class="table table-sm table-striped" cellspacing="0" width="auto" style="overflow: auto;">
                                             <thead>
@@ -109,38 +109,26 @@
                                             Nessuna elaborazione eseguita
                                         </span>
                                     </div>
-                                   <div class="card-body" id="card-parametri" th:if="${currentGroup.dataType.id == 2 }">
-                                        <table id="parametersTable" class="table table-sm" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:2%;"><span>#</span></th>
-                                                    <th  style="width:5%;"><span>Name</span></th>
-                                                    <th><span>Value</span></th>
-                                                   
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr th:each="stepR,stats: ${stepRList}" th:unless="${(stepRList == null) or (stepRList.size() == 0) }">
-                                                    <td><span th:text="${stats.index+1}"></span></td>
-                                                    <td th:text="${stepR.workset.name}"></td>
-                                                    <td>
-												 	 <span id="view-param">
-														<a  id="btn-view-param" href="javascript:void(0);" title="Modifica parametro"
-                                                                   th:attr="data-param-template=${stepR.appRole.parameter.jsonTemplate},data-name-workset=${stepR.workset.name},data-value-param=${stepR.workset.paramValue},onclick='javascript:viewParamsAlpacaTemplate(this);'">
-                                                                    <i class="fa fa-pencil"></i>
-                                                                </a>
-                    											 <script th:inline="javascript">
-                    											 	$("#btn-view-param").click();
+									<div class="card-body" id="card-parametri"
+										th:if="${currentGroup.dataType.id == 2 }"> <!-- Parameter  type -->
+										<div th:each="stepR,stats: ${stepRList}"
+											th:unless="${(stepRList == null) or (stepRList.size() == 0) }"
+											class="form-group">
+											<label th:for="${'view-param-'+stats.index}"> <span
+												th:text="${stepR.workset.name}"></span></label> <div
+												th:id="${'view-param-'+stats.index}" class="pre-scrollable"> <a th:id="${'btn-view-param-'+stats.index}"
+												href="javascript:void(0);" title="Modifica parametro"
+												th:attr="data-index-param=${stats.index},data-param-template=${stepR.appRole.parameter.jsonTemplate},data-name-workset=${stepR.workset.name},data-value-param=${stepR.workset.paramValue},onclick='javascript:viewParamsAlpacaTemplate(this);'">
+													<i class="fa fa-pencil"></i>
+											</a> <script th:inline="javascript">
+                    											 	$("#btn-view-param-[[${stats.index}]]").click();
                                                                   </script>
-														
-													</span>
-												</td>
 
-											</tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+											</div>
+										</div>
+
+									</div>
+								</div>
                             </div>
                         </div>
                         <!-- row -->

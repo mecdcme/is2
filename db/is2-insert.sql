@@ -32,7 +32,7 @@ INSERT INTO `is2_cls_type_io` (`ID`, `NAME`)
 -- 
 -- VARIABLE CLASSIFICATION (FROM ISTAT CORPORATE METADATA SYSTEM)
 -- 
-INSERT INTO `is2_cls_statistical_variable` (`ID`, `VARIABLE_NAME_ITA`, `VARIABLE_NAME_ENG`, `TYPE`, `DESCR`, `ORDER`) 
+INSERT INTO `is2_cls_statistical_variable` (`ID`, `VARIABLE_NAME_ITA`, `VARIABLE_NAME_ENG`, `TYPE`, `DESCR`, `ORDER_CODE`) 
 	VALUES 
 		(1,'VARIABILI IDENTIFICATIVE DELLE UNITÀ','UNIT INDENTIFIER',8,'Variabili identificative delle unità',1),
 		(2,'VARIABILI STATISTICHE DI CLASSIFICAZIONE','CLASSIFICATION',1,'Variabili statistiche di classificazione',2),
@@ -146,7 +146,7 @@ INSERT INTO `is2_business_function` (`ID`, `NAME`, `DESCR`, `LABEL`, `ACTIVE`)
 -- 
 -- BUSINESS_PROCESS
 -- 
-INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER`) 
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `ORDER_CODE`) 
 	VALUES 
 		(1,'Probabilistic Record Linkage','Probabilistic Record Linkage','PRL',NULL,1),
         (2,'Deterministic Record Linkage','Deterministic Record Linkage','DRL',NULL,2),
@@ -157,8 +157,8 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `O
         (72,'Matching Table','Matching records','MatchingTable',1,3);
 
 -- add multi-step process
-INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER`) VALUES ('5', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS', '3');
-INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER`, `PARENT`) VALUES ('6', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS1', '4', '5');
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER_CODE`) VALUES ('5', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS', '3');
+INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER_CODE`, `PARENT`) VALUES ('6', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS1', '4', '5');
 
 
 -- 
@@ -166,8 +166,8 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER`, `PA
 -- 
 INSERT INTO `is2_business_service` (`ID`, `NAME`, `DESCR`, `GSBPM_PROCESS_ID`) 
 	VALUES  
-		(200,'Relais','RELAIS (REcord Linkage At IStat) is a toolkit providing a set of techniques for dealing with record linkage projects. The principal features of RELAIS are: It is designed and developed to allow the combination of different techniques for each of the record linkage phases. It has been developed as an open source project under the EUPL license (European Union Public License).', 51),
-		(300,'Validate','The validate R-package makes it easy to check whether data lives up to expectations you have based on domain knowledge. It works by allowing you to define data validation rules independent of the code or data set', 53);
+		(200,'Record linkage','The purpose of record linkage is to identify the same real world entity that can be differently represented in data sources, even if unique identifiers are not available or are affected by errors.', 51),
+		(300,'Data validation','An activity aimed at verifying whether the value of a data item comes from the given (finite or infinite) set of acceptable values [OECD]', 53);
 
 -- 
 -- PROCESS_STEP
@@ -209,11 +209,11 @@ INSERT INTO `is2_link_function_view_data_type` (`BUSINESS_FUNCTION_ID`, `VIEW_DA
 -- 
 -- CATALOGUE OF APPLICATION SERVICES
 -- 
-INSERT INTO `is2_app_service` (`ID`, `NAME`, `DESCR`, `IMPLEMENTATION_LANGUAGE`, `SOURCE_PATH`, `SOURCE_CODE`, `AUTHOR`, `LICENCE`,`CONTACT`,`BUSINESS_SERVICE_ID`) 
+INSERT INTO `is2_app_service` (`ID`, `NAME`, `DESCR`, `IMPLEMENTATION_LANGUAGE`, `ENGINE`,`SOURCE_PATH`, `SOURCE_CODE`, `AUTHOR`, `LICENCE`,`CONTACT`,`BUSINESS_SERVICE_ID`) 
 	VALUES  
-		(200,'Relais R','R package implementing record linkage methods','R','relais/relais.R','','Istat','EUPL1.1','Luca Valentino (luvalent@istat.it)',200),
-		(250,'Relais Java','Java package implementing record linkage methods','JAVA','it.istat.is2.catalogue.relais.service.RelaisService','','Istat','EUPL1.1','Luca Valentino (luvalent@istat.it)',200),
-		(300,'Validate','R package implementing a set of data validation functions','R','validate/validate.r','','Mark van der Loo','GPL-3','Mark van der Loo (mark.vanderloo@gmail.com)',300);
+		(200,'Relais','R package implementing record linkage methods','R','RSERVE','relais/relais.R','','Istat','EUPL1.1','Luca Valentino (luvalent@istat.it)',200),
+		(250,'Relais Java','Java package implementing record linkage methods','JAVA','JAVA','it.istat.is2.catalogue.relais.service.RelaisService','','Istat','EUPL1.1','Luca Valentino (luvalent@istat.it)',200),
+		(300,'Validate','R package implementing a set of data validation functions','R','RSERVE','validate/validate.r','','Mark van der Loo','GPL-3','Mark van der Loo (mark.vanderloo@gmail.com)',300);
 -- 
 -- STEP INSTANCE
 -- 
@@ -236,7 +236,7 @@ INSERT INTO `is2_parameter` (`ID`, `NAME`, `DESCR`, `DEFAULT_VAL`, `JSON_TEMPLAT
 -- 
 -- ROLE
 -- 
-INSERT INTO `is2_app_role` (`ID`, `NAME`, `CODE`, `DESCR`, `ORDER`, `CLS_DATA_TYPE_ID`,`PARAMETER_ID`) 
+INSERT INTO `is2_app_role` (`ID`, `NAME`, `CODE`, `DESCR`, `ORDER_CODE`, `CLS_DATA_TYPE_ID`,`PARAMETER_ID`) 
 	VALUES  
 		(1,'MATCHING VARIABLES','X','MATCHING VARAIBLES',1,2,1),
 		(2,'MATCHING A','X1','MATCHING VARIABLE IN DATASET A',2,1,NULL),

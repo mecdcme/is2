@@ -1,4 +1,4 @@
-library(varhandle)
+#library(varhandle)
 #eliminazione di ogni precedente elaborazione (pulizia memoria)
 rm(list=ls())
 #Programma valido per una variabile latente dicotomica e k variabili manifeste dicotomiche

@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -46,8 +45,14 @@ import it.istat.is2.app.bean.ColonnaJson;
 import it.istat.is2.app.bean.DatoJson;
 
 public class FileHandler {
+	
+	
 
-    public static void loadFile(RConnection connection, String inputTable, String nomeFile) {
+    private FileHandler() {
+    	throw new IllegalStateException("Utility class");
+	}
+
+	public static void loadFile(RConnection connection, String inputTable, String nomeFile) {
         try {
             connection.eval(inputTable + " <- read.csv(file='" + nomeFile + "', header=TRUE, sep=',', dec='.')");
         } catch (Exception ex) {
@@ -81,17 +86,7 @@ public class FileHandler {
         }
     }
 
-    public static void writeFile(String nomeFile) {
-        String path = "input/" + nomeFile;
-        try {
-            File file = new File(path);
-            FileWriter fw = new FileWriter(file);
-            fw.flush();
-            fw.close();
-        } catch (IOException e) {
-            Logger.getRootLogger().error("Errore: ", e);
-        }
-    }
+   
 
     // Ritorna ArrayList con i campi dell'header
     public static ArrayList<String> getCampiHeader(String urlFile, char delimiter) {
@@ -401,6 +396,13 @@ public class FileHandler {
 
     public static File convertMultipartFileToFile(MultipartFile file) throws IOException {
         File convFile = File.createTempFile("temp", ".csv");
+        FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(file.getBytes());
+        fos.close();
+        return convFile;
+    }
+    public static File convertMultipartFileToXmlFile(MultipartFile file) throws IOException {
+        File convFile = File.createTempFile("temp", ".xml");
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(file.getBytes());
         fos.close();
