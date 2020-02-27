@@ -141,6 +141,12 @@ public class DesignController {
     		break;
     	case "usp":
     		try {
+    			BusinessProcess process = businessProcessService.findBProcessById(fieldId);
+    			process.setName(fieldName);
+    			//process.setBusinessProcessParent(new ArrayList().add(new BusinessProcess()) );
+        		process.setDescr(fieldDescr);
+        		process.setLabel(fieldLabel);
+        		BusinessProcess bp=  businessProcessService.updateBProcess(process);
 				
 			} catch (Exception e) {
 				// TODO: handle exception
