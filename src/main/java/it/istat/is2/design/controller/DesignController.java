@@ -26,28 +26,27 @@ package it.istat.is2.design.controller;
 import java.util.ArrayList;
 
 import java.util.List;
-
-import javax.validation.Valid;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import it.istat.is2.app.forms.UserCreateForm;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.TreeNode;
 import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.domain.BusinessProcess;
+import it.istat.is2.workflow.domain.BusinessService;
 import it.istat.is2.workflow.domain.ProcessStep;
 import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.workflow.service.ProcessStepService;
 import it.istat.is2.workflow.service.BusinessProcessService;
+import it.istat.is2.workflow.service.BusinessStepService;
 
 @Controller
 public class DesignController {
@@ -60,6 +59,7 @@ public class DesignController {
     private BusinessProcessService businessProcessService;
     @Autowired
     private ProcessStepService processStepService;
+   
 
     @RequestMapping("/settings")
     public String viewSettings(Model model) {
@@ -107,7 +107,7 @@ public class DesignController {
    
     @RequestMapping(value = "/playaction", method = RequestMethod.POST)
     public String action(Model model, @RequestParam("fieldId") Long fieldId, @RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr, 
-    		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldAction") String fieldAction ) {
+    		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldFatherId") String fieldFatherId, @RequestParam("fieldAction") String fieldAction ) {
         notificationService.removeAllMessages();
 
         switch (fieldAction) {
@@ -142,10 +142,11 @@ public class DesignController {
     	case "usp":
     		try {
     			BusinessProcess process = businessProcessService.findBProcessById(fieldId);
+    			BusinessProcess newprocessParent = businessProcessService.findBProcessById(Long.parseLong(fieldFatherId));
     			process.setName(fieldName);
-    			//process.setBusinessProcessParent(new ArrayList().add(new BusinessProcess()) );
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
+        		process.setBusinessProcessParent(newprocessParent);
         		BusinessProcess bp=  businessProcessService.updateBProcess(process);
 				
 			} catch (Exception e) {
@@ -156,6 +157,13 @@ public class DesignController {
     	case "us":
     		try {
 				
+    			ProcessStep step = processStepService.findProcessStep(fieldId);
+    			step.setName(fieldName);
+        		step.setDescr(fieldDescr);
+        		step.setLabel(fieldLabel);
+        		ProcessStep ps= processStepService.save(step);
+    			
+    			
 			} catch (Exception e) {
 				// TODO: handle exception
 			}

@@ -140,12 +140,12 @@
 														<td th:text="${stepP.descr}"></td>
 														<td th:text="${stepP.label}"></td>
 														<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'functions' +'\')'">
+																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \''  + 'null' +  '\', \'' + 'functions' +'\')'">
 																	<i class="fa fa-pencil"></i>
 															</a></td>
 
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \'' + 'functions' +'\')'">
+																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \'' + 'null' +  '\', \'' + 'functions' +'\')'">
 																	<i class="fa fa-trash-o"></i>
 															</a></td>
 													</tr>
@@ -185,12 +185,12 @@
 														<td th:text="${stepP.descr}"></td>
 														<td th:text="${stepP.label}"></td>
 														<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'processes' +'\')'">
+																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'null' +  '\', \'' + 'processes' +'\')'">
 																	<i class="fa fa-pencil"></i>
 															</a></td>
 
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \'' + 'processes' +'\')'">
+																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \''  + 'null' +  '\', \'' + 'processes' +'\')'">
 																	<i class="fa fa-trash-o"></i>
 															</a></td>
 													</tr>
@@ -228,12 +228,12 @@
 															<td th:text="${stepP.descr}"></td>
 															<td th:text="${stepP.label}"></td>
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'subprocesses' +'\')'">
+																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + ${stepP.businessProcessParent.getId()} + '\', \'' + 'subprocesses' +'\')'">
 																	<i class="fa fa-pencil"></i>
 															</a></td>
 
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \'' + 'subprocesses' +'\')'">
+																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + ${stepP.label} + '\', \'' + ${stepP.businessProcessParent.getId()} + '\', \'' + 'subprocesses' +'\')'">
 																	<i class="fa fa-trash-o"></i>
 															</a></td>
 														</tr>
@@ -271,12 +271,12 @@
 															<td th:text="${stepP.name}"></td>
 															<td th:text="${stepP.descr}"></td>
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + 'null' + '\', \'' + 'steps' +'\')'">
+																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + 'null' +  '\', \'' + 'null' +  '\', \'' + 'steps' +'\')'">
 																	<i class="fa fa-pencil"></i>
 															</a></td>
 
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + 'null' + '\', \'' + 'steps' +'\')'">
+																th:attr="onclick='javascript:deleteFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \''  + 'null' + '\', \'' + 'null' +  '\', \'' + 'steps' +'\')'">
 																	<i class="fa fa-trash-o"></i>
 															</a></td>
 														</tr>
@@ -306,25 +306,27 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<form id="dialog"
-								th:action="@{'/playaction'}" method="post">
-								<input
-									id="action" type="text" name="fieldAction" hidden/>
-								<label id="idlab" for="id" th:text="#{generic.id}">Id:</label> <input
-									id="id" type="text" name="fieldId" th:placeholder="#{generic.id}"
-									autocomplete="off" required="" class="form-control" value="" />
-								<label for="name" th:text="#{generic.name}">Name:</label> <input
-									id="name" type="text" name="fieldName"
-									th:placeholder="#{generic.name}" autocomplete="off" required=""
-									class="form-control" value="" /> <label for="description"
-									th:text="#{generic.description}">Description:</label> <input
-									id="description" type="text" name="fieldDescription"
-									th:placeholder="#{generic.description}" autocomplete="off"
-									required="" class="form-control" value="" /> <label
-									for="label" id="lab" th:text="#{generic.label}">Label:</label> <input
-									id="label" type="text" name="fieldLabel"
-									th:placeholder="#{generic.label}" autocomplete="off"
-									required="" class="form-control" value="" />
+							<form id="dialog" th:action="@{'/playaction'}" method="post">
+								<input id="action" type="text" name="fieldAction" hidden /> 
+								<label id="fatherLabel" for="fieldFather" th:text="#{generic.fatherProcess}">Processo Padre:</label>
+								<div class="form-group blu-margin">
+									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
+									<select class="form-control" id="fatherProcess" name="fieldFatherId">
+										<!-- 								    <option value="0">select operator</option> -->
+										<option th:each="bp : ${listaAllBp}" th:value="${bp.id}"
+											th:text="${bp.Name}"></option>
+									</select>
+								</div>
+
+
+								<label id="idlab" for="id" th:text="#{generic.id}">Id:</label>
+								<input id="id" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required="" class="form-control" value="" /> 
+								<label for="name" th:text="#{generic.name}">Name:</label> 
+								<input id="name" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off" required="" class="form-control" value="" /> 
+								<label for="description" th:text="#{generic.description}">Description:</label> 
+								<input id="description" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required="" class="form-control" value="" /> 
+								<label for="label" id="lab" th:text="#{generic.label}">Label:</label> 
+								<input id="label" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off" required="" class="form-control" value="" />
 
 							</form>
 						</div>

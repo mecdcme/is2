@@ -23,10 +23,14 @@
  */
 
 
-function updateFunctionDialog(id, nome, descrizione, etichetta, funzione) {
+function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre, funzione) {
    var titolo;
    $('.form-control').removeAttr("readonly","readonly");
    $('#id').attr("readonly","readonly");
+   $('#fatherProcess').hide();
+   $('#fatherLabel').hide();
+   
+   
 	switch (funzione) {
 	
 	case "functions":
@@ -52,6 +56,9 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 	case "subprocesses":
 		titolo=_updatesubproc;
 		$('#action').val("usp");
+		$('#fatherProcess').show();
+		 $('#fatherLabel').show();
+		$('#fatherProcess').val(idPadre);
 		$('#id').val(id);
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
@@ -89,6 +96,8 @@ function newFunctionDialog(funzione) {
 	   $('.form-control').removeAttr("readonly","readonly");
 	   $('#id').hide();
 	   $('#idlab').hide();
+	   $('#fatherProcess').hide();
+	   $('#fatherLabel').hide();
 	   
 		switch (funzione) {
 		
@@ -116,6 +125,8 @@ function newFunctionDialog(funzione) {
 			titolo=_newsubproc;
 			 $('#action').val("nsp");
 //			$('#id').val(id);
+			 $('#fatherProcess').show();
+			 $('#fatherLabel').show();
 			 $('#name').val("");
 			 $('#description').val("");
 			 $('#label').val("");
@@ -149,9 +160,12 @@ function newFunctionDialog(funzione) {
 
 
 
-function deleteFunctionDialog(id, nome, descrizione, etichetta, funzione) {
+function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, funzione) {
 	var titolo;
 	 $('.form-control').attr("readonly","readonly");
+	 $('#fatherProcess').hide();
+	 $('#fatherLabel').hide();
+	 
 	switch (funzione) {
 	case "functions":
 		titolo=_deletefun;
@@ -183,6 +197,8 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, funzione) {
 	case "subprocesses":
 		titolo=_deletesubproc;
 		 $('#action').val("dsp");
+		 $('#fatherProcess').show();
+		 $('#fatherLabel').show();
 		$('#id').val(id);
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);

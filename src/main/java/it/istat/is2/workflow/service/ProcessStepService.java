@@ -28,8 +28,15 @@ public class ProcessStepService {
         return ProcessStepDao.findAll();
     }
 
-    public Optional<ProcessStep> findProcessStep(Long idbstep) {
+    public ProcessStep findProcessStep(Long idbstep) {
+        return ProcessStepDao.findById(idbstep).get();
+    }
+    public Optional<ProcessStep> findProcessStepById(Long idbstep) {
         return ProcessStepDao.findById(idbstep);
     }
 
+	public ProcessStep save(ProcessStep step) {
+		// TODO Auto-generated method stub
+		return ProcessStepDao.save(step);
+	}
 }

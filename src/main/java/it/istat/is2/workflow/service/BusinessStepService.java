@@ -55,4 +55,8 @@ public class BusinessStepService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	public ProcessStep updateProcessStep(ProcessStep process) {
+	   	 
+    	return processStepDao.save(process);
+    }
 }
