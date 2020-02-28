@@ -312,7 +312,7 @@
 								<div class="form-group blu-margin">
 									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
 									<select class="form-control" id="fatherProcess" name="fieldFatherId">
-										<!-- 								    <option value="0">select operator</option> -->
+										<option value="0" th:text="#{generic.selectFatherProcess}">Select father process..</option>
 										<option th:each="bp : ${listaAllBp}" th:value="${bp.id}"
 											th:text="${bp.Name}"></option>
 									</select>

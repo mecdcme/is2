@@ -125,6 +125,7 @@ function newFunctionDialog(funzione) {
 			titolo=_newsubproc;
 			 $('#action').val("nsp");
 //			$('#id').val(id);
+			 $('#fatherProcess').val("0");
 			 $('#fatherProcess').show();
 			 $('#fatherLabel').show();
 			 $('#name').val("");
