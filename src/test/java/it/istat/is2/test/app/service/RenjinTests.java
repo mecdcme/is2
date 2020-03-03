@@ -43,13 +43,12 @@ public class RenjinTests extends TestBase {
 				  .setClassLoader(classLoader)
 				  .build();
 		RenjinScriptEngineFactory factory = new RenjinScriptEngineFactory();
-		RenjinScriptEngine engine = factory.getScriptEngine(session);
+		RenjinScriptEngine engine = factory.getScriptEngine();
   
-	        	AtomicVector vec = (AtomicVector)engine.eval("matrix(1:6, nrow=2, ncol=2)");
-	       System.out.println(org.renjin.base.Lapack.det_ge_real(vec, true));
-	        	
-				engine.eval(" y <- matrix(1:6, nrow=2, ncol=2)");
-				  //   engine.eval("t<-.Internal(org.renjin.base.Lapack.det_ge_real(y, TRUE))") ;
+		  engine.eval("library(netlib) ");
+
+	    		engine.eval(" y <- matrix(1:6, nrow=2, ncol=2)");
+		  	engine.eval("t<-.Internal(det_ge_real(y, TRUE))") ;
 				     SEXP res = (SEXP)  engine.eval("print(y)");
 				     System.out.println(res);
 			} catch (ScriptException | MalformedURLException e) {
