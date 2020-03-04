@@ -171,7 +171,7 @@ public class DesignController {
     		break;
     	case "df":
     		try {
-				
+    			
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -203,6 +203,11 @@ public class DesignController {
     		break;
     	case "nf":
     		try {
+    			BusinessFunction funzione = new BusinessFunction();
+        		funzione.setName(fieldName);
+        		funzione.setDescr(fieldDescr);
+        		funzione.setLabel(fieldLabel);
+        		BusinessFunction bf=  businessFunctionService.updateBFunction(funzione);
 				
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -211,7 +216,11 @@ public class DesignController {
     		break;
     	case "np":
     		try {
-				
+    			BusinessProcess process = new BusinessProcess();
+        		process.setName(fieldName);
+        		process.setDescr(fieldDescr);
+        		process.setLabel(fieldLabel);
+        		BusinessProcess bp=  businessProcessService.updateBProcess(process);
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -219,7 +228,13 @@ public class DesignController {
     		break;
     	case "nsp":
     		try {
-				
+    			BusinessProcess process = new BusinessProcess();
+    			BusinessProcess newprocessParent = businessProcessService.findBProcessById(Long.parseLong(fieldFatherId));
+    			process.setName(fieldName);
+        		process.setDescr(fieldDescr);
+        		process.setLabel(fieldLabel);
+        		process.setBusinessProcessParent(newprocessParent);
+        		BusinessProcess bp=  businessProcessService.updateBProcess(process);
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -227,7 +242,11 @@ public class DesignController {
     		break;
     	case "ns":
     		try {
-				
+    			ProcessStep step = new ProcessStep();
+    			step.setName(fieldName);
+        		step.setDescr(fieldDescr);
+        		step.setLabel(fieldLabel);
+        		ProcessStep ps= processStepService.save(step);
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
