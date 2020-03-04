@@ -28,16 +28,15 @@ public class ProcessStepService {
         return ProcessStepDao.findAll();
     }
 
-    public ProcessStep findProcessStep(Long idbstep) {
-    	 ProcessStep returnValue = null;
-    	if (ProcessStepDao.findById(idbstep).isPresent()) {
-    		returnValue = ProcessStepDao.findById(idbstep).get();
-    		}
-       
+
+    public ProcessStep findProcessStepById(Long idbstep) {
+   	ProcessStep returnValue = null;
+   	if (ProcessStepDao.findById(idbstep).isPresent()) {
+   		returnValue = ProcessStepDao.findById(idbstep).get();
+   		}
+      
 		return returnValue;
-    }
-    public Optional<ProcessStep> findProcessStepById(Long idbstep) {
-        return ProcessStepDao.findById(idbstep);
+
     }
 
 	public ProcessStep save(ProcessStep step) {

@@ -161,7 +161,7 @@ public class DesignController {
     	case "us":
     		try {
 				
-    			ProcessStep step = processStepService.findProcessStep(fieldId);
+    			ProcessStep step = processStepService.findProcessStepById(fieldId);
     			step.setName(fieldName);
         		step.setDescr(fieldDescr);
         		step.setLabel(fieldLabel);
