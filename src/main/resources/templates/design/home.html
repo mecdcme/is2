@@ -327,11 +327,11 @@
 								<input id="description" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required="" class="form-control" value="" /> 
 								<label for="label" id="lab" th:text="#{generic.label}">Label:</label> 
 								<input id="label" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off" required="" class="form-control" value="" />
-								<label id="processLabel" for="businessProcess" th:text="#{generic.businessProcess}">Processo:</label>
+								<label id="processLabel" for="businessProcess" th:text="#{generic.businessProcess}">Process:</label>
 								<div class="form-group blu-margin">
 									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
 									<select class="form-control" id="businessProcess" name="fieldBusinessProcessId">
-										<option value="0" th:text="#{generic.selectFatherProcess}">Select father process..</option>
+										<option value="0" th:text="#{generic.selectBusinessProcess}">Select business process..</option>
 										<option th:each="bp : ${listaAllBusinessService}" th:value="${bp.id}"
 											th:text="${bp.Name}"></option>
 									</select>

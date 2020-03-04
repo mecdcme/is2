@@ -250,6 +250,8 @@ public class DesignController {
     			step.setName(fieldName);
         		step.setDescr(fieldDescr);
         		step.setLabel(fieldLabel);
+        		BusinessService temp= businessService.findBusinessServiceById(Integer.parseInt("100"));
+        		step.setBusinessService(temp);
         		ProcessStep ps= processStepService.save(step);
 			} catch (Exception e) {
 				// TODO: handle exception
