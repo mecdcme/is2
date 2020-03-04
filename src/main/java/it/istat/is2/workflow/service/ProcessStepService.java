@@ -29,7 +29,12 @@ public class ProcessStepService {
     }
 
     public ProcessStep findProcessStep(Long idbstep) {
-        return ProcessStepDao.findById(idbstep).get();
+    	 ProcessStep returnValue = null;
+    	if (ProcessStepDao.findById(idbstep).isPresent()) {
+    		returnValue = ProcessStepDao.findById(idbstep).get();
+    		}
+       
+		return returnValue;
     }
     public Optional<ProcessStep> findProcessStepById(Long idbstep) {
         return ProcessStepDao.findById(idbstep);

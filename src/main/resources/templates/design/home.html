@@ -327,7 +327,15 @@
 								<input id="description" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required="" class="form-control" value="" /> 
 								<label for="label" id="lab" th:text="#{generic.label}">Label:</label> 
 								<input id="label" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off" required="" class="form-control" value="" />
-
+								<label id="processLabel" for="businessProcess" th:text="#{generic.businessProcess}">Processo:</label>
+								<div class="form-group blu-margin">
+									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
+									<select class="form-control" id="businessProcess" name="fieldBusinessProcessId">
+										<option value="0" th:text="#{generic.selectFatherProcess}">Select father process..</option>
+										<option th:each="bp : ${listaAllBusinessService}" th:value="${bp.id}"
+											th:text="${bp.Name}"></option>
+									</select>
+								</div>
 							</form>
 						</div>
 						<div class="modal-footer">
@@ -343,54 +351,7 @@
 					</div>
 				</div>
 			</div>
-<!-- 			<div class="modal fade" id="Delete-Dialog" tabindex="-1" -->
-<!-- 				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> -->
-<!-- 				<div class="modal-dialog modal-lg" role="document"> -->
-<!-- 					<div class="modal-content"> -->
-<!-- 						<div class="modal-header"> -->
-<!-- 							<h5 class="modal-title"> -->
-<!-- 								<i class="fa fa-trash"></i>&nbsp; <span -->
-<!-- 									th:text="#{generic.delete}" id="delTitle">Delete</span> -->
-<!-- 							</h5> -->
-<!-- 							<button type="button" class="close" data-dismiss="modal" -->
-<!-- 								aria-label="Close"> -->
-<!-- 								<span aria-hidden="true">&times;</span> -->
-<!-- 							</button> -->
-<!-- 						</div> -->
-<!-- 						<div class="modal-body"> -->
-<!-- 							<form id="dataset-fields-table" -->
-<!-- 								th:action="@{'/design/updateRecord'}" method="post"> -->
-<!-- 								<label for="id_d" th:text="#{generic.id}">Id:</label> <input -->
-<!-- 									id="id_d" type="text" name="modId" th:placeholder="#{generic.id}" -->
-<!-- 									autocomplete="off" required="" class="form-control" value="" /> -->
-<!-- 								<label for="name_d" th:text="#{generic.name}">Name:</label> <input -->
-<!-- 									id="name_d" type="text" name="modName" -->
-<!-- 									th:placeholder="#{generic.name}" autocomplete="off" required="" -->
-<!-- 									class="form-control" value="" /> <label for="description" -->
-<!-- 									th:text="#{generic.description}">Description:</label> <input -->
-<!-- 									id="description" type="text" name="modDescription" -->
-<!-- 									th:placeholder="#{generic.description}" autocomplete="off" -->
-<!-- 									required="" class="form-control" value="" /> <label -->
-<!-- 									for="label" id="lab" th:text="#{generic.label}">Label:</label> <input -->
-<!-- 									id="label" type="text" name="modLabel" -->
-<!-- 									th:placeholder="#{generic.label}" autocomplete="off" -->
-<!-- 									required="" class="form-control" value="" /> -->
 
-<!-- 							</form> -->
-<!-- 						</div> -->
-<!-- 						<div class="modal-footer"> -->
-<!-- 							<button type="button" class="btn btn-light" data-dismiss="modal"> -->
-<!-- 								<span th:title="#{generic.title.close.button}" -->
-<!-- 									th:text="#{Layout.Close}">Annulla</span> -->
-<!-- 							</button> -->
-<!-- 							<button type="button" id="btn-invia-table" -->
-<!-- 								class="btn btn-primary towait " onclick="inviaFormTable();" -->
-<!-- 								th:title="#{submit.button.title}" th:text="#{submit.button}" -->
-<!-- 								data-dismiss="modal">Invia</button> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
-<!-- 			</div> -->
 		</div>
 		<footer th:replace="layout :: site-footer"></footer>
 	</div>
