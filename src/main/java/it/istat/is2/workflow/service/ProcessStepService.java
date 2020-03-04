@@ -15,29 +15,27 @@ import it.istat.is2.workflow.domain.ProcessStep;
 @Service
 public class ProcessStepService {
 
-    @Autowired
-    ProcessStepDao ProcessStepDao;
+	@Autowired
+	ProcessStepDao ProcessStepDao;
 
-    public List<ProcessStep> findBStepByIdProcess(Long idprocess) {
-        List<BusinessProcess> businessProcesses = new ArrayList<>();
-        businessProcesses.add(new BusinessProcess(idprocess));
-        return ProcessStepDao.findByBusinessProcessesIn(businessProcesses);
-    }
+	public List<ProcessStep> findBStepByIdProcess(Long idprocess) {
+		List<BusinessProcess> businessProcesses = new ArrayList<>();
+		businessProcesses.add(new BusinessProcess(idprocess));
+		return ProcessStepDao.findByBusinessProcessesIn(businessProcesses);
+	}
 
-    public List<ProcessStep> findAll() {
-        return ProcessStepDao.findAll();
-    }
+	public List<ProcessStep> findAll() {
+		return ProcessStepDao.findAll();
+	}
 
-
-    public ProcessStep findProcessStepById(Long idbstep) {
-   	ProcessStep returnValue = null;
-   	if (ProcessStepDao.findById(idbstep).isPresent()) {
-   		returnValue = ProcessStepDao.findById(idbstep).get();
-   		}
-      
+	public ProcessStep findProcessStepById(Long idbstep) {
+		ProcessStep returnValue = null;
+		Optional<ProcessStep> value = ProcessStepDao.findById(idbstep);
+		if (value.isPresent()) {
+			returnValue = value.get();
+		}
 		return returnValue;
-
-    }
+	}
 
 	public ProcessStep save(ProcessStep step) {
 		// TODO Auto-generated method stub
