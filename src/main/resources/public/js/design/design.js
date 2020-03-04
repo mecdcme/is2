@@ -29,6 +29,8 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre, funzion
    $('#id').attr("readonly","readonly");
    $('#fatherProcess').hide();
    $('#fatherLabel').hide();
+   $('#businessProcess').hide();
+   $('#processLabel').hide();
    
    
 	switch (funzione) {
@@ -137,6 +139,8 @@ function newFunctionDialog(funzione) {
 		case "steps":
 			titolo=_newstep;
 			 $('#action').val("ns");
+			 $('#businessProcess').show();
+			 $('#processLabel').show();
 //			$('#id').val(id);
 			 $('#name').val("");
 			 $('#description').val("");

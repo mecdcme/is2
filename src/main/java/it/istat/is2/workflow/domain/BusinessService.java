@@ -21,6 +21,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import it.istat.is2.workflow.dao.BusinessServiceDao;
+
 import javax.persistence.ManyToOne;
 
 import lombok.Data;
@@ -85,4 +88,5 @@ public class BusinessService implements Serializable {
         return result;
     }
 
+	
 }

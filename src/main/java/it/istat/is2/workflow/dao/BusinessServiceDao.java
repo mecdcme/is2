@@ -34,8 +34,8 @@ import java.util.Optional;
 @Repository
 public interface BusinessServiceDao extends CrudRepository<BusinessService, Integer> {
 
-    @Override
-    List<BusinessService> findAll();
+//    @Override
+//    List<BusinessService> findAll();
 
     Optional<BusinessService> findById(Long idService);
 

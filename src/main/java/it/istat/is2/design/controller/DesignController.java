@@ -46,6 +46,7 @@ import it.istat.is2.workflow.domain.ProcessStep;
 import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.workflow.service.ProcessStepService;
 import it.istat.is2.workflow.service.BusinessProcessService;
+import it.istat.is2.workflow.service.BusinessServiceService;
 import it.istat.is2.workflow.service.BusinessStepService;
 
 @Controller
@@ -59,7 +60,8 @@ public class DesignController {
     private BusinessProcessService businessProcessService;
     @Autowired
     private ProcessStepService processStepService;
-   
+    @Autowired
+    private BusinessServiceService businessService;
 
     @RequestMapping("/settings")
     public String viewSettings(Model model) {
@@ -70,6 +72,7 @@ public class DesignController {
         List<ProcessStep> listaBs = processStepService.findAll();
         List<BusinessProcess> listaAllBp = businessProcessService.findAllProcesses();
         List<BusinessProcess> listaAllSubBp = businessProcessService.findAllSubProcesses();
+        List<BusinessService> listaAllBusinessServices = businessService.findBusinessServices();
 
         List<TreeNode> albero = new ArrayList<>();
 
@@ -100,6 +103,7 @@ public class DesignController {
         model.addAttribute("listaAllSubBp", listaAllSubBp);
         model.addAttribute("listaFunzioni", listaFunzioni);
         model.addAttribute("listaBusinessStep", listaBs);
+        model.addAttribute("listaAllBusinessService", listaAllBusinessServices);
 
         return "design/home.html";
 
@@ -157,7 +161,7 @@ public class DesignController {
     	case "us":
     		try {
 				
-    			ProcessStep step = processStepService.findProcessStep(fieldId);
+    			ProcessStep step = processStepService.findProcessStepById(fieldId);
     			step.setName(fieldName);
         		step.setDescr(fieldDescr);
         		step.setLabel(fieldLabel);
@@ -246,6 +250,8 @@ public class DesignController {
     			step.setName(fieldName);
         		step.setDescr(fieldDescr);
         		step.setLabel(fieldLabel);
+        		BusinessService temp= businessService.findBusinessServiceById(Integer.parseInt("100"));
+        		step.setBusinessService(temp);
         		ProcessStep ps= processStepService.save(step);
 			} catch (Exception e) {
 				// TODO: handle exception

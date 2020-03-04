@@ -54,7 +54,7 @@ public class BusinessServiceService {
     StepInstanceDao stepInstanceDao;
 
     public List<BusinessService> findBusinessServices() {
-        return businessServiceDao.findAll();
+        return (List<BusinessService>) businessServiceDao.findAll();
     }
 
     public BusinessService findBusinessServiceById(Integer idService) {
