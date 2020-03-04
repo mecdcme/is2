@@ -51,12 +51,17 @@ public class XmlParserController {
             @AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") InputFormBean form) throws IOException {	
         notificationService.removeAllMessages();
         
-        File file = FileHandler.convertMultipartFileToXmlFile(form.getFileName());        
+        File file = null;
+        
+        
+        file = FileHandler.convertMultipartFileToXmlFile(form.getFileName());
+        
+        	         
         
         if(file !=null && !form.getFileName().equals("") && jaxbXmlFileToObject(file)) {
         	notificationService.addInfoMessage("Il file è stato caricato con successo nel db");
         }else {
-        	notificationService.addErrorMessage("Non è stato possibile caricare il file nel db");
+        	notificationService.addErrorMessage("ERRORE: Non è stato possibile caricare il file nel db");
         }
 
         return "xmlparser/upload";
@@ -73,14 +78,14 @@ public class XmlParserController {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             
             
-            BusinessServiceXml service = (BusinessServiceXml) jaxbUnmarshaller.unmarshal(file);
+            BusinessServiceXml bservice = (BusinessServiceXml) jaxbUnmarshaller.unmarshal(file);
              
-            System.out.println(service);
+            System.out.println(bservice);
             
             // TEST inserimento del solo primo livello
             BusinessService bs=new BusinessService();
-            bs.setDescr(service.getDescr());
-            bs.setName(service.getName());
+            bs.setDescr(bservice.getDescr());
+            bs.setName(bservice.getName());
            
             
             
@@ -93,7 +98,7 @@ public class XmlParserController {
             
             
             // TEST ALBERO XML STATICO
-            AppServiceXml appServices = (AppServiceXml) service.getAppServiceXml();
+            AppServiceXml appServices = (AppServiceXml) bservice.getAppServiceXml();
             
             
         	//List<Method> appServices = (List<Method>)appServices.getMethod();

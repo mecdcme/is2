@@ -47,151 +47,26 @@ IS2_LOG             <- "log"
 
 
 #IS2 Selemix roles
-IS2_SELEMIX_PREDIZIONE <- "P"
-IS2_SELEMIX_OUTPUT_VARIABLES <- "T"
-IS2_SELEMIX_OUTLIER    <- "O"
-IS2_SELEMIX_MODEL      <- "M"
-IS2_SELEMIX_REPORT     <- "G"
-IS2_SELEMIX_ERROR      <- "E"
+IS2_SELEMIX_PREDICTION <- "PRED"
+IS2_SELEMIX_OUTPUT_VARIABLES <- "OUTVARS"
+IS2_SELEMIX_OUTLIER    <- "OUTLIERS"
+IS2_SELEMIX_MODEL      <- "MDLOUT"
+IS2_SELEMIX_REPORT     <- "REP"
+IS2_SELEMIX_ERROR      <- "INFLS"
 IS2_SELEMIX_TARGET     <- "Y"
-IS2_SELEMIX_COVARIATA  <- "X"
-IS2_SELEMIX_STRATO     <- "S"
-IS2_SELEMIX_MODEL      <- "M"
-IS2_SELEMIX_CONVERGENZA <- "V"
+IS2_SELEMIX_COVARIATE  <- "X"
+IS2_SELEMIX_STRATA     <- "STRATA"
+IS2_SELEMIX_CONVERGENCE <- "CONV"
 
 
 library("SeleMix")
 library("jsonlite")
 
-#stima del modello
-is2_mlest_nolayer <- function( workset, roles, wsparams=NULL,...) {
-  
-  #Output variables
-  result          <- list()
-  workset_out     <- data.frame()
-  roles_out       <- list() 
-  rolesgroup_out  <- list()
-  params_out      <- list()
-  report_out      <- list() 
-  
-  #Create log
-  stdout <- vector('character')
-  con <- textConnection('stdout', 'wr', local = TRUE)
-  sink(con)
-  
-  #Set default parameters
-  model="LN"
-  t.outl=0.5
-  lambda=3
-  w=0.05
-  lambda.fix=FALSE
-  w.fix=FALSE
-  eps=1e-7
-  max.iter=500	
-  
-  #Check parameters
-  if(!is.null(wsparams)){
-    if(exists("wsparams$model")) model=wsparams$model
-    if(exists("wsparams$t.outl")) t.outl=wsparams$t.outl
-    if(exists("wsparams$lambda")) lambda=wsparams$lambda
-    if(exists("wsparams$w")) w=wsparams$w
-    if(exists("wsparams$lambda.fix")) lambda.fix=wsparams$lambda.fix
-    if(exists("wsparams$w.fix")) w.fix=wsparams$w.fix
-    if(exists("wsparams$eps")) eps=wsparams$eps
-    if(exists("wsparams$max.iter")) max.iter=wsparams$max.iter
-  }
-  
-  #Set variables
-  x <- workset[roles$X]
-  y <- workset[roles$Y]
-  
-  #Execute ml.est
-  run <- tryCatch(
-    {
-      est <- ml.est(y=y, x=x, model = model, lambda= as.numeric(lambda), w = as.numeric(w), lambda.fix=lambda.fix, w.fix=w.fix, eps=as.numeric(eps), max.iter=as.numeric(max.iter), t.outl= as.numeric(t.outl), graph=FALSE)
-      
-      print("ml.est execution completed!")
-      
-      #Prepare output
-      outparams <- data.frame(tau=est$tau, outlier=est$outlier, pattern=est$pattern)
-      
-      predname = c()
-      
-      if(ncol(est$ypred) ==1){
-        predname = c("YPRED")
-      } 
-      else{
-        for(i in 1:ncol(est$ypred)) {
-          predname = c(predname, paste("YPRED",i,sep="_"))
-        }
-      }
-      
-      outprediction <- as.data.frame(est$ypred)
-      colnames(outprediction) <- predname
-      
-      #Set output parameters
-      report <- list(n.outlier = sum(est$outlier), missing = sum(as.numeric(est$pattern)), is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic)
-      mod<- toJSON(list(layer="all",B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w ))
-      
-      report_out <- list(Report = toJSON(report))
-      params_out <- list(Model = toJSON(mod))
-      
-      #Set output variables
-      workset_out <- cbind(x, y, outprediction, outparams)
-      
-      #Set output roles & rolesgroup
-      roles_out      <- list (O="outlier", M="Model",G="Report")
-      rolesgroup_out <- list (M="M",G="G")
-      
-      
-      roles_out [[IS2_SELEMIX_PREDIZIONE]]      <- c(roles$X,roles$Y,predname,names(outparams))
-      rolesgroup_out [[IS2_SELEMIX_PREDIZIONE]] <- c("P", "O")
-      
-      #Output
-      result[[IS2_WORKSET_OUT]]     <- workset_out
-      result[[IS2_ROLES_OUT]]       <- roles_out
-      result[[IS2_ROLES_GROUP_OUT]] <- rolesgroup_out
-      result[[IS2_PARAMS_OUT]]      <- params_out
-      result[[IS2_REPORT_OUT]]      <- report_out
-      result[[IS2_LOG]]             <- stdout
-      
-    },
-    error=function(cond) {
-      
-      print("ml.est did not converge")
-      print(cond)
-      #Output
-      result <-list( IS2_WORKSET_OUT=c(), IS2_ROLES_OUT=c(), IS2_ROLES_GROUP_OUT=c(), IS2_PARAMS_OUT=c(), IS2_REPORT_OUT=c(), IS2_LOG=stdout)
-      return(NA)
-    },
-    warning=function(cond) {
-      print("warning")
-      print("ml.est did not converge")
-      print(cond)
-      #Output
-      result <-list( IS2_WORKSET_OUT=c(), IS2_ROLES_OUT=c(), IS2_ROLES_GROUP_OUT=c(), IS2_PARAMS_OUT=c(), IS2_REPORT_OUT=c(), IS2_LOG=stdout)
-      return(NA)
-      
-    }
-    
-    
-  )
-  
-  #Create log
-  sink()
-  close(con)
-  
-  return(result)
-}
-
-
 
 #stima completa con layer
 is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
 
-  y <- matrix(1:6, nrow=2, ncol=2)
-  .Internal(det_ge_real(y, TRUE))
-  print("aaaaaaaa")
+  
   #Output variables
   result          <- list()
   workset_out     <- data.frame()
@@ -227,15 +102,16 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
     if(exists("wsparams$max.iter")) max.iter=wsparams$max.iter
   }
   
-  #Set variables
-  s <- workset[[roles$S]]
+  #Set input variables
+  s <- workset[[roles$STRATA]]
   layers <- sort(unique(s))
   mod <- list()
-  outparams <- data.frame()
+  outvars<- data.frame()
   predname <- c()
   n_outlier <- 0
-  n_missing <- 0
+  n_layers_conv <- 0
   n_layers <- length(layers)
+  
   for(index in 1:length(layers) ){
     rm(workset_layer)
     rm(est)
@@ -246,18 +122,18 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
     rm(predname)
     
     layer<- as.character(layers[index])
-    workset_layer <- workset[workset[roles$S]==layer, , drop = TRUE ]
+    workset_layer <- workset[workset[roles$STRATA]==layer, , drop = TRUE ]
     
     
     x <- workset_layer[roles$X]
     y <- workset_layer[roles$Y]
-    s1 <- workset_layer[roles$S]
+    s1 <- workset_layer[roles$STRATA]
     
-    if(NCOL(y) ==1){
+    if(NCOL(y) ==1){ #  UNIVARIATE
       predname = c("YPRED")
     } 
     else{
-      for(i in 1:NCOL(y)) {
+      for(i in 1:NCOL(y)) { # MULTIVARIATE
         predname = c(predname, paste("YPRED",i,sep="_"))
       }
     }
@@ -268,30 +144,30 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
         est <- ml.est(y=y, x=x, model = model, lambda= as.numeric(lambda), w = as.numeric(w), lambda.fix=lambda.fix, w.fix=w.fix, eps=as.numeric(eps), max.iter=as.numeric(max.iter), t.outl= as.numeric(t.outl), graph=FALSE)
         print(paste("layer ",layer, " ml.est execution completed! rows:" ,nrow(x)))
         #Prepare output
-        conv  <- data.frame(conv = est$is.conv)
-        outparams <- data.frame(tau=est$tau, outlier=est$outlier, pattern=est$pattern)
         
         outprediction <- as.data.frame(est$ypred)
         colnames(outprediction) <- predname
         
+        conv  <- data.frame(conv = est$is.conv)
+        
+        outvars <- data.frame(tau=est$tau, outlier=est$outlier, pattern=est$pattern)
+        
         bic <- as.matrix(est$bic.aic)
-        bic_norm_at3 <- bic[1,]    
-        bic_mix_at3  <- bic[2,] 
+        bic_norm <- bic[1,]    
+        bic_mix  <- bic[2,] 
         
         aic <- as.matrix(est$bic.aic)
-        aic_norm_at3 <- aic[3,]    
-        aic_mix_at3  <- aic[4,] 
-        
-        
+        aic_norm <- aic[3,]    
+        aic_mix  <- aic[4,] 
+   
         #Set output parameters layer
-        mod[[index]] <- list(layer=layer,N=NROW(x), B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w, is.conv = est$is.conv, bic_norm = bic_norm_at3, bic_mix=bic_mix_at3 , aic_norm=aic_norm_at3,aic_mix=aic_mix_at3  )
-        #mod <- list(mod, layer=list(layer=layer,N=nrow(x), B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w, is.conv = est$is.conv, sing = est$sing, bic.aic = est$bic.aic))
-        
-        #Set output variables
-        workset_out <- rbind(workset_out,cbind(x, y,s1, outprediction, conv,outparams))
+        mod[[index]] <- list(layer=layer,N=NROW(x), is.conv = est$is.conv, B=est$B, sigma=est$sigma, lambda=est$lambda, w=est$w, bic_norm = bic_norm, bic_mix=bic_mix, aic_norm=aic_norm,aic_mix=aic_mix,n.iter=est$n.iter)
+         
+        #Set output variables layer
+        workset_out <- rbind(workset_out,cbind(x, y,s1, outprediction, conv, outvars))
         
         n_outlier <- n_outlier + sum(est$outlier)
-        n_missing <- n_missing + sum(as.numeric(est$pattern))
+        if( length(conv[conv==TRUE])>0){ n_layers_conv= n_layers_conv+1}
         
       }
       #  ,
@@ -308,33 +184,40 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
       })
     if(is.na(run)){
       
-      outparams <- data.frame(matrix(NA, ncol = 3+NCOL(y), nrow = NROW(y)))
-      outparams$conv <- rep(FALSE, NROW(y))
-      colnames(outparams) <- c(predname,"conv","tau","outlier","pattern")
+      outvars <- data.frame(matrix(NA, ncol = 3+NCOL(y), nrow = NROW(y)))
+      outvars$conv <- rep(FALSE, NROW(y))
+      colnames(outvars) <- c(predname,"conv","tau","outlier","pattern")
       outprediction <- as.data.frame(NA)
       colnames(outprediction) <- predname
-      workset_out <- rbind(workset_out,cbind(x, y,s1, outparams))
-      mod[[index]] <- list(layer=layer,N=NROW(x),B=NA, sigma=NA, lambda=NA, w=NA, is.conv = FALSE, bic_norm = NA, bic_mix=NA , aic_norm=NA,aic_mix=NA  )
+      workset_out <- rbind(workset_out,cbind(x, y,s1, outvars))
+      mod[[index]] <- list(layer=layer,N=NROW(x), is.conv = FALSE, B=NA, sigma=NA, lambda=NA, w=NA, bic_norm =NA, bic_mix=NA, aic_norm=NA,aic_mix=NA,n.iter=0)
       
     }
   }#for
   
-  params_out <- list(Model = toJSON(mod, auto_unbox = TRUE))
+  params_out <- list("Contamination Model" = toJSON(mod, auto_unbox = TRUE))
   
   
-  report <- list(n.outlier = n_outlier, missing =n_missing, "layers"=n_layers )
+  report <- list(n.outlier = n_outlier, "Layers"=n_layers ,"Convergent layers"=n_layers_conv)
   report_out <- list(Report = toJSON(report, auto_unbox = TRUE))
   
   #Set output roles & rolesgroup
-  roles_out      <- list (O="outlier", M="Model",G="Report")
-  rolesgroup_out <- list (M="M",G="G")
+
+  roles_out [[IS2_SELEMIX_OUTLIER]] <- c("outlier")
+  roles_out [[IS2_SELEMIX_MODEL]]   <- c("Contamination Model")
+  roles_out [[IS2_SELEMIX_REPORT]]  <- c("Report")
+  
   
   roles_out [[IS2_SELEMIX_COVARIATA]]       <- c(roles$X)
   roles_out [[IS2_SELEMIX_TARGET]]          <- c(roles$Y)
-  roles_out [[IS2_SELEMIX_STRATO]]          <- c(roles$S)
+  roles_out [[IS2_SELEMIX_STRATO]]          <- c(roles$STRATA)
   roles_out [[IS2_SELEMIX_PREDIZIONE]]      <- c(predname)
   roles_out [[IS2_SELEMIX_CONVERGENZA]]     <- c("conv")
-  roles_out [[IS2_SELEMIX_OUTPUT_VARIABLES]]<- c(names(outparams))
+  roles_out [[IS2_SELEMIX_OUTPUT_VARIABLES]]<- c(names(outvars))
+  
+  rolesgroup_out [[IS2_SELEMIX_MODEL]]    <- c(IS2_SELEMIX_MODEL)
+  rolesgroup_out [[IS2_SELEMIX_REPORT]]   <- c(IS2_SELEMIX_REPORT)
+
   rolesgroup_out [[IS2_SELEMIX_PREDIZIONE]] <- c(IS2_SELEMIX_COVARIATA,IS2_SELEMIX_TARGET,IS2_SELEMIX_STRATO,IS2_SELEMIX_PREDIZIONE,IS2_SELEMIX_CONVERGENZA,IS2_SELEMIX_OUTPUT_VARIABLES,IS2_SELEMIX_OUTLIER)
   
   #Output
@@ -472,9 +355,9 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
     }
     
     if (is.null(run) ||is.na(run)) {
-      outparams <- data.frame(matrix(NA, ncol = 3, nrow = NROW(y)))
-      colnames(outparams) <- c("sel", "rank", "global.score")
-      workset_out <- rbind(workset_out,cbind(workset_layer, outparams))
+      outvars <- data.frame(matrix(NA, ncol = 3, nrow = NROW(y)))
+      colnames(outvars) <- c("sel", "rank", "global.score")
+      workset_out <- rbind(workset_out,cbind(workset_layer, outvars))
       
     }
   }#for

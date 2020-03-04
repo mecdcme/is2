@@ -5,9 +5,9 @@ setwd("C:/Users/framato/git/is2")
 debugSource('RScripts/selemix/IS2_selemix.R')
 #debugSource('G:/development/git/is2/RScripts/selemix/IS2_selemix.R')
 
-worksetFile <- read.delim("data/selemix/FATT_1000.csv", header=TRUE, sep=";")
+worksetFile <- read.delim("data/selemix/data.csv", header=TRUE, sep=";")
 #rolesFile <- list(X="FEM_p_2016", Y="FEM_g_2017")
-rolesEst <- list(X="FEM_p_2016", Y="FEM_g_2017",S="ateco")
+rolesEst <- list(X="FN.p.9.2016", Y="FN.g.9.2017",STRATA="GRUPPI")
 rolesEdit <- list(P="YPRED", Y="FEM_g_2017",S="ateco",V="conv")
 
 
