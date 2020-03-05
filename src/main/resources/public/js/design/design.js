@@ -23,7 +23,7 @@
  */
 
 
-function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre, funzione) {
+function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusinessFunction, funzione) {
    var titolo;
    $('.form-control').removeAttr("readonly","readonly");
    $('#id').attr("readonly","readonly");
@@ -74,6 +74,9 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre, funzion
 		$('#id').val(id);
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
+		 $('#businessProcess').val(idBusinessFunction);
+		 $('#businessProcess').show();
+		 $('#processLabel').show();
 		 $('#label').hide();
 		 $('#lab').hide();
 		
@@ -100,7 +103,8 @@ function newFunctionDialog(funzione) {
 	   $('#idlab').hide();
 	   $('#fatherProcess').hide();
 	   $('#fatherLabel').hide();
-	   
+	   $('#businessProcess').hide();
+	   $('#processLabel').hide();
 		switch (funzione) {
 		
 		case "functions":
@@ -139,11 +143,12 @@ function newFunctionDialog(funzione) {
 		case "steps":
 			titolo=_newstep;
 			 $('#action').val("ns");
-			 $('#businessProcess').show();
-			 $('#processLabel').show();
+			
 //			$('#id').val(id);
 			 $('#name').val("");
 			 $('#description').val("");
+			 $('#businessProcess').show();
+			 $('#processLabel').show();
 			 $('#label').hide();
 			 $('#lab').hide();
 			

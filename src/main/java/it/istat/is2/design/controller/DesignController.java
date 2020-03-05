@@ -111,7 +111,7 @@ public class DesignController {
    
     @RequestMapping(value = "/playaction", method = RequestMethod.POST)
     public String action(Model model, @RequestParam("fieldId") Long fieldId, @RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr, 
-    		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldFatherId") String fieldFatherId, @RequestParam("fieldAction") String fieldAction ) {
+    		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldFatherId") String fieldFatherId, @RequestParam("fieldBusinessProcessId") String fieldBusinessProcessId, @RequestParam("fieldAction") String fieldAction ) {
         notificationService.removeAllMessages();
 
         switch (fieldAction) {
@@ -162,9 +162,11 @@ public class DesignController {
     		try {
 				
     			ProcessStep step = processStepService.findProcessStepById(fieldId);
+    			BusinessService newBusinessService = businessService.findBusinessServiceById(Integer.parseInt(fieldBusinessProcessId));
     			step.setName(fieldName);
         		step.setDescr(fieldDescr);
         		step.setLabel(fieldLabel);
+        		step.setBusinessService(newBusinessService);
         		ProcessStep ps= processStepService.save(step);
     			
     			
@@ -247,11 +249,11 @@ public class DesignController {
     	case "ns":
     		try {
     			ProcessStep step = new ProcessStep();
+    			BusinessService newBusinessService = businessService.findBusinessServiceById(Integer.parseInt(fieldBusinessProcessId));
     			step.setName(fieldName);
         		step.setDescr(fieldDescr);
         		step.setLabel(fieldLabel);
-        		BusinessService temp= businessService.findBusinessServiceById(Integer.parseInt("100"));
-        		step.setBusinessService(temp);
+        		step.setBusinessService(newBusinessService);
         		ProcessStep ps= processStepService.save(step);
 			} catch (Exception e) {
 				// TODO: handle exception
