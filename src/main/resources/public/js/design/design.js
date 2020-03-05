@@ -143,6 +143,7 @@ function newFunctionDialog(funzione) {
 		case "steps":
 			titolo=_newstep;
 			 $('#action').val("ns");
+			 $('#businessProcess').val("0");
 			
 //			$('#id').val(id);
 			 $('#name').val("");
