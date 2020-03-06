@@ -171,12 +171,18 @@ function newFunctionDialog(funzione) {
 
 
 
-function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, funzione) {
+function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusinessFunction, funzione) {
 	var titolo;
-	 $('.form-control').attr("readonly","readonly");
+	 
+	 
+	 $('#id').show();
+	 $('#idlab').show();
+	 $('#label').show();
+	 $('#lab').show();
 	 $('#fatherProcess').hide();
 	 $('#fatherLabel').hide();
-	 
+	 $('#businessProcess').hide();
+	 $('#processLabel').hide();
 	switch (funzione) {
 	case "functions":
 		titolo=_deletefun;
@@ -185,8 +191,7 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, funzion
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
 		 $('#label').val(etichetta);
-		 $('#label').show();
-		 $('#lab').show();
+		
 		 
 //		 $(':input').readOnly(true);
 //		 $('[name="id"]').prop("readOnly", false);  
@@ -201,21 +206,18 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, funzion
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
 		 $('#label').val(etichetta);
-		 $('#label').show();
-		 $('#lab').show();
 		
 		break
 	case "subprocesses":
 		titolo=_deletesubproc;
 		 $('#action').val("dsp");
-		 $('#fatherProcess').show();
-		 $('#fatherLabel').show();
+//		 $('#fatherProcess').show();
+//		 $('#fatherLabel').show();
 		$('#id').val(id);
 		 $('#name').val(nome);
 		 $('#description').val(descrizione);
 		 $('#label').val(etichetta);
-		 $('#label').show();
-		 $('#lab').show();
+		
 		break;
 	case "steps":
 		titolo=_deletestep;
@@ -233,7 +235,7 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, funzion
 		break;
 	}
 	
-	
+	$('.form-control').attr("readonly","readonly");
 	$("#modTitle").text(titolo);
     $('#Update-Dialog').modal('show');
 }

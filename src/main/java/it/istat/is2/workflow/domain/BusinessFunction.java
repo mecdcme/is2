@@ -72,4 +72,6 @@ public class BusinessFunction implements Serializable {
         this.id = idfunction;
     }
 
+	
+
 }

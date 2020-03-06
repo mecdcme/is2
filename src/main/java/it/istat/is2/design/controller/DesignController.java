@@ -177,23 +177,27 @@ public class DesignController {
     		break;
     	case "df":
     		try {
-    			
-			} catch (Exception e) {
+    			BusinessFunction funzione = businessFunctionService.findBFunctionById(fieldId);
+    			businessFunctionService.deleteBFunction(funzione);
+    		
+    		} catch (Exception e) {
 				// TODO: handle exception
 			}
     		
     		break;
     	case "dp":
     		try {
-				
-			} catch (Exception e) {
+    			BusinessProcess process = businessProcessService.findBProcessById(fieldId);
+    			 businessProcessService.deleteBProcess(process);
+    		} catch (Exception e) {
 				// TODO: handle exception
 			}
     		
     		break;
     	case "dsp":
     		try {
-				
+    			BusinessProcess process = businessProcessService.findBProcessById(fieldId);
+    			businessProcessService.deleteBProcess(process);
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -201,7 +205,8 @@ public class DesignController {
     		break;
     	case "ds":
     		try {
-				
+    			ProcessStep step = processStepService.findProcessStepById(fieldId);
+    			processStepService.deleteStepService(step);
 			} catch (Exception e) {
 				// TODO: handle exception
 			}

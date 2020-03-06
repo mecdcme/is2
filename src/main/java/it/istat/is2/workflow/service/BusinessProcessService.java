@@ -62,5 +62,10 @@ public class BusinessProcessService {
    	 
     	return businessProcessDao.save(process);
     }
+
+	public void deleteBProcess(BusinessProcess process) {
+		// TODO Auto-generated method stub
+		businessProcessDao.delete(process);
+	}
 }
 

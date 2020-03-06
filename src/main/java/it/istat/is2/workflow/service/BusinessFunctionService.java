@@ -48,6 +48,12 @@ public class BusinessFunctionService {
     	 
     	return businessFunctionDao.save(function);
     }
+    public BusinessFunction deleteBFunction(BusinessFunction funzione) {
+    	
+    	businessFunctionDao.delete(funzione);
+    	
+    	return funzione;
+    }
 
 	
 }

@@ -29,6 +29,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import it.istat.is2.workflow.domain.BusinessFunction;
+import it.istat.is2.workflow.domain.BusinessService;
 @Repository
 public interface BusinessFunctionDao extends CrudRepository<BusinessFunction,Long> {
 
@@ -36,4 +37,6 @@ public interface BusinessFunctionDao extends CrudRepository<BusinessFunction,Lon
 	List<BusinessFunction> findAll();
         @Override
 	Optional<BusinessFunction> findById(Long idfunction);
+    public void delete(BusinessFunction function); 
+        
 }

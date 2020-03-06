@@ -45,4 +45,10 @@ public class ProcessStepService {
 		 
 		return processStepDao.save(step);
 	}
+
+	public ProcessStep deleteStepService(ProcessStep step) {
+		// TODO Auto-generated method stub
+		processStepDao.delete(step);
+		return step;
+	}
 }
