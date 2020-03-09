@@ -29,14 +29,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import it.istat.is2.app.bean.NotificationMessage;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.TreeNode;
 import it.istat.is2.workflow.domain.BusinessFunction;
@@ -45,6 +48,7 @@ import it.istat.is2.workflow.domain.BusinessService;
 import it.istat.is2.workflow.domain.ProcessStep;
 import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.workflow.service.ProcessStepService;
+import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.workflow.service.BusinessProcessService;
 import it.istat.is2.workflow.service.BusinessServiceService;
 import it.istat.is2.workflow.service.BusinessStepService;
@@ -62,6 +66,8 @@ public class DesignController {
     private ProcessStepService processStepService;
     @Autowired
     private BusinessServiceService businessService;
+    @Autowired
+    private MessageSource messages;
 
     @RequestMapping("/settings")
     public String viewSettings(Model model) {
@@ -111,9 +117,20 @@ public class DesignController {
    
     @RequestMapping(value = "/playaction", method = RequestMethod.POST)
     public String action(Model model, @RequestParam("fieldId") Long fieldId, @RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr, 
-    		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldFatherId") String fieldFatherId, @RequestParam("fieldBusinessProcessId") String fieldBusinessProcessId, @RequestParam("fieldAction") String fieldAction ) {
+    		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldFatherId") String fieldFatherId, @RequestParam("fieldBusinessProcessId") String fieldBusinessProcessId, @RequestParam("fieldAction") String fieldAction, RedirectAttributes ra ) {
+      
         notificationService.removeAllMessages();
-
+        
+        
+       
+        
+    
+       
+        
+       
+        
+        
+       
         switch (fieldAction) {
     	
     	case "uf":
@@ -123,9 +140,16 @@ public class DesignController {
         		funzione.setDescr(fieldDescr);
         		funzione.setLabel(fieldLabel);
         		BusinessFunction bf=  businessFunctionService.updateBFunction(funzione);
+        		NotificationMessage    okmessage = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
+                        "session.created.success", null, LocaleContextHolder.getLocale()));
         		
+        		ra.addFlashAttribute("message", okmessage);
 			} catch (Exception e) {
 				// TODO: handle exception
+				NotificationMessage     errmessage = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+	                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+	                    e.getMessage());
+				ra.addFlashAttribute("message", errmessage);
 				
 			}
     		
@@ -138,8 +162,16 @@ public class DesignController {
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
         		BusinessProcess bp=  businessProcessService.updateBProcess(process);
+        		NotificationMessage    okmessage = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
+                        "session.created.success", null, LocaleContextHolder.getLocale()));
+        		ra.addFlashAttribute("message", okmessage);
+        		
 			} catch (Exception e) {
 				// TODO: handle exception
+				NotificationMessage     errmessage = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+	                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+	                    e.getMessage());
+				ra.addFlashAttribute("message", errmessage);
 			}
     		
     		break;
@@ -152,9 +184,16 @@ public class DesignController {
         		process.setLabel(fieldLabel);
         		process.setBusinessProcessParent(newprocessParent);
         		BusinessProcess bp=  businessProcessService.updateBProcess(process);
+        		NotificationMessage    okmessage = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
+                        "session.created.success", null, LocaleContextHolder.getLocale()));
+        		ra.addFlashAttribute("message", okmessage);
 				
 			} catch (Exception e) {
 				// TODO: handle exception
+				NotificationMessage     errmessage = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+	                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+	                    e.getMessage());
+				ra.addFlashAttribute("message", errmessage);
 			}
     		
     		break;
@@ -168,10 +207,17 @@ public class DesignController {
         		step.setLabel(fieldLabel);
         		step.setBusinessService(newBusinessService);
         		ProcessStep ps= processStepService.save(step);
+        		NotificationMessage    okmessage = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
+                        "session.created.success", null, LocaleContextHolder.getLocale()));
+        		ra.addFlashAttribute("message", okmessage);
     			
     			
 			} catch (Exception e) {
 				// TODO: handle exception
+				NotificationMessage     errmessage = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+	                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+	                    e.getMessage());
+				ra.addFlashAttribute("message", errmessage);
 			}
     		
     		break;
@@ -179,9 +225,17 @@ public class DesignController {
     		try {
     			BusinessFunction funzione = businessFunctionService.findBFunctionById(fieldId);
     			businessFunctionService.deleteBFunction(funzione);
+    			
+    			NotificationMessage    okmessage = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
+                        "session.created.success", null, LocaleContextHolder.getLocale()));
+    			ra.addFlashAttribute("message", okmessage);
     		
     		} catch (Exception e) {
 				// TODO: handle exception
+    			NotificationMessage     errmessage = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+	                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+	                    e.getMessage());
+				ra.addFlashAttribute("message", errmessage);
 			}
     		
     		break;
@@ -189,8 +243,16 @@ public class DesignController {
     		try {
     			BusinessProcess process = businessProcessService.findBProcessById(fieldId);
     			 businessProcessService.deleteBProcess(process);
+    			 
+    			 NotificationMessage    okmessage = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
+                         "session.created.success", null, LocaleContextHolder.getLocale()));
+    			 ra.addFlashAttribute("message", okmessage);
     		} catch (Exception e) {
 				// TODO: handle exception
+    			NotificationMessage     errmessage = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+	                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+	                    e.getMessage());
+				ra.addFlashAttribute("message", errmessage);
 			}
     		
     		break;
@@ -198,8 +260,16 @@ public class DesignController {
     		try {
     			BusinessProcess process = businessProcessService.findBProcessById(fieldId);
     			businessProcessService.deleteBProcess(process);
+    			
+    			NotificationMessage    okmessage = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
+                        "session.created.success", null, LocaleContextHolder.getLocale()));
+    			ra.addFlashAttribute("message", okmessage);
 			} catch (Exception e) {
 				// TODO: handle exception
+				NotificationMessage     errmessage = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+	                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+	                    e.getMessage());
+				ra.addFlashAttribute("message", errmessage);
 			}
     		
     		break;
@@ -207,8 +277,16 @@ public class DesignController {
     		try {
     			ProcessStep step = processStepService.findProcessStepById(fieldId);
     			processStepService.deleteStepService(step);
+    			
+    			NotificationMessage    okmessage = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
+                        "session.created.success", null, LocaleContextHolder.getLocale()));
+    			ra.addFlashAttribute("message", okmessage);
 			} catch (Exception e) {
 				// TODO: handle exception
+				NotificationMessage     errmessage = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+	                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+	                    e.getMessage());
+				ra.addFlashAttribute("message", errmessage);
 			}
     		
     		break;
@@ -219,9 +297,17 @@ public class DesignController {
         		funzione.setDescr(fieldDescr);
         		funzione.setLabel(fieldLabel);
         		BusinessFunction bf=  businessFunctionService.updateBFunction(funzione);
+        		
+        		NotificationMessage    okmessage = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
+                        "session.created.success", null, LocaleContextHolder.getLocale()));
+        		ra.addFlashAttribute("message", okmessage);
 				
 			} catch (Exception e) {
 				// TODO: handle exception
+				NotificationMessage     errmessage = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+	                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+	                    e.getMessage());
+				ra.addFlashAttribute("message", errmessage);
 			}
     		
     		break;
@@ -232,8 +318,15 @@ public class DesignController {
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
         		BusinessProcess bp=  businessProcessService.updateBProcess(process);
+        		NotificationMessage    okmessage = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
+                        "session.created.success", null, LocaleContextHolder.getLocale()));
+        		ra.addFlashAttribute("message", okmessage);
 			} catch (Exception e) {
 				// TODO: handle exception
+				NotificationMessage     errmessage = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+	                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+	                    e.getMessage());
+				ra.addFlashAttribute("message", errmessage);
 			}
     		
     		break;
@@ -246,8 +339,15 @@ public class DesignController {
         		process.setLabel(fieldLabel);
         		process.setBusinessProcessParent(newprocessParent);
         		BusinessProcess bp=  businessProcessService.updateBProcess(process);
+        		NotificationMessage    okmessage = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
+                        "session.created.success", null, LocaleContextHolder.getLocale()));
+        		ra.addFlashAttribute("message", okmessage);
 			} catch (Exception e) {
 				// TODO: handle exception
+				NotificationMessage     errmessage = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+	                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+	                    e.getMessage());
+				ra.addFlashAttribute("message", errmessage);
 			}
     		
     		break;
@@ -260,8 +360,15 @@ public class DesignController {
         		step.setLabel(fieldLabel);
         		step.setBusinessService(newBusinessService);
         		ProcessStep ps= processStepService.save(step);
+        		NotificationMessage    okmessage = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
+                        "session.created.success", null, LocaleContextHolder.getLocale()));
+        		ra.addFlashAttribute("message", okmessage);
 			} catch (Exception e) {
 				// TODO: handle exception
+				NotificationMessage     errmessage = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+	                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+	                    e.getMessage());
+				ra.addFlashAttribute("message", errmessage);
 			}
     		
     		break;
@@ -274,7 +381,8 @@ public class DesignController {
 			}
     		break;
     	}
-
+        
+        notificationService.addInfoMessage("Operazione avvenuta con successo!");
         return "redirect:/settings";
 
     }
