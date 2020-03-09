@@ -83,8 +83,7 @@ public abstract class SqlGenericDao {
     public List<String> loadFieldValuesTable(String dbschema, String tablename, String field) {
         // TODO Auto-generated method stub
        
-    	String strQuery= "SELECT " + field + "  FROM " + dbschema + "." + tablename;
-        Query q = em.createNativeQuery(strQuery);
+        Query q = em.createNativeQuery("SELECT " + field + "  FROM " + dbschema + "." + tablename);
         @SuppressWarnings("unchecked")
         List<String> resultList = (List<String>) q.getResultList();
         return resultList;
