@@ -241,8 +241,25 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 }
 
 function playAction(){
+	
+	switch ($('#action').val()) {
+	case "nsp":
+		
+			
+		 $("#dialog").submit();
+		break;
+	case "ns":
+		
+		 $("#dialog").submit();
+		break
+	
+
+	default:
+		 $("#dialog").submit();
+		break;
+	}
     
-   $("#dialog").submit();
+  
    
 }
 
