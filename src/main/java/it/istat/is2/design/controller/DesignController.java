@@ -71,7 +71,7 @@ public class DesignController {
 
     @RequestMapping("/settings")
     public String viewSettings(Model model) {
-        notificationService.removeAllMessages();
+      
 
         List<BusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
         List<BusinessProcess> listaBp = businessProcessService.findAll();
@@ -120,18 +120,7 @@ public class DesignController {
     		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldFatherId") String fieldFatherId, @RequestParam("fieldBusinessProcessId") String fieldBusinessProcessId, @RequestParam("fieldAction") String fieldAction, RedirectAttributes ra ) {
       
         notificationService.removeAllMessages();
-        
-        
-       
-        
-    
-       
-        
-       
-        
-        
-       
-        switch (fieldAction) {
+         switch (fieldAction) {
     	
     	case "uf":
     		try {
