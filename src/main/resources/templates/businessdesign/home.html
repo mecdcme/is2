@@ -51,7 +51,7 @@
 				<!-- Breadcrumb-->
 				<ol class="breadcrumb border-0 m-0">
 					<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-					<li class="breadcrumb-item"><span>Process design</span></li>
+					<li class="breadcrumb-item"><span th:text="#{bs.home.link}">Business service design</span></li>
 				</ol>
 				<!-- Right navigation menu -->
 				<div class="c-header-nav d-md-down-none mfe-2">
@@ -73,7 +73,7 @@
 								<div>
 									<div class="card">
 										<div class="card-header">
-											<span th:text="#{Layout.Functions}"></span>
+											<span th:text="#{bs.list.title.label}"></span>
 											<div class="card-header-actions">
 											
                                                 <a class="card-header-action" href="javascript:void(0)" onclick="javascript:newFunctionDialog('functions');" th:title="#{bs.label.create.new}"> 
@@ -117,6 +117,65 @@
 									</div>
 								</div>
 							</div>
+							
+							<!-- TEST -->
+							<div class="row">
+								<div>
+									<div class="card">
+										<div class="card-header">
+											<span th:text="#{as.list.title.label}">App Service</span>
+											<div class="card-header-actions">
+											
+                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:newFunctionDialog('functions');" th:title="#{bs.label.create.new}"> 
+                                                    <i class="fa fa-plus-square-o"></i>
+                                                    <span th:text="#{as.label.create.new}">New Application Service</span>
+                                                </a>
+                                            </div>
+										</div>
+										<div class="card-body">
+											<table id="functionsTabList"
+												class="table table-striped table-bordered">
+												<thead>
+													<tr>
+														<th><span>ID</span></th>
+														<th><span>NOME</span></th>
+														<th><span>DESCRIZIONE</span></th>
+														<th><span>IMPL. LANGUAGE</span></th>
+														<th><span>ENGINE</span></th>
+														<th><span>AUTORE</span></th>
+														
+														<th style="width: 1%"></th>
+														<th style="width: 1%"></th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="appservice: ${listaAppService}">
+														<td th:text="${appservice.id}"></td>
+														<td th:text="${appservice.name}"></td>
+														<td th:text="${appservice.descr}"></td>
+														<td th:text="${appservice.language}"></td>
+														<td th:text="${appservice.engineType}"></td>
+														<td th:text="${appservice.author}"></td>
+														
+														<td><a href="javascript:void(0)" role="button"
+																th:attr="onclick='javascript:updateFunctionDialog(' + ${appservice.id} + ', \'' + ${appservice.name} + '\',\'' + ${appservice.descr} + '\', \''  + 'null' +'\')'">
+																	<i class="fa fa-pencil"></i>
+															</a></td>
+
+															<td><a href="javascript:void(0)" role="button"
+																th:attr="onclick='javascript:deleteFunctionDialog(' + ${appservice.id} + ', \'' + ${appservice.name} + '\',\'' + ${appservice.descr} + '\', \''  + 'null' +'\')'">
+																	<i class="fa fa-trash-o"></i>
+															</a></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							
+							
 						</div>	
 					</div>
 				</div>

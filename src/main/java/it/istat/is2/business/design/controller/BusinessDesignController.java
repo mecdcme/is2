@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import it.istat.is2.app.service.NotificationService;
+import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
+import it.istat.is2.workflow.service.AppServiceService;
 import it.istat.is2.workflow.service.BusinessServiceService;
 
 @Controller
@@ -18,6 +20,8 @@ public class BusinessDesignController {
     private NotificationService notificationService;
     @Autowired
     private BusinessServiceService businessServiceService;
+    @Autowired
+    private AppServiceService appServiceService;
    
 
     @GetMapping("/busservlist")
@@ -25,8 +29,10 @@ public class BusinessDesignController {
         notificationService.removeAllMessages();
 
         List<BusinessService> listaBService = businessServiceService.findBusinessServices();  
+        List<AppService> listaAppService = appServiceService.findAllAppService();
       
         model.addAttribute("listaBService", listaBService);
+        model.addAttribute("listaAppService", listaAppService);
 
         return "businessdesign/home.html";
 
