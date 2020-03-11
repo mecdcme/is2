@@ -129,11 +129,10 @@ public class DesignController {
         		funzione.setDescr(fieldDescr);
         		funzione.setLabel(fieldLabel);
         		BusinessFunction bf=  businessFunctionService.updateBFunction(funzione);
-        		notificationService.addInfoMessage(messages.getMessage("session.created.success", null, LocaleContextHolder.getLocale()));
+        		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
-	                    e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
 			}
@@ -147,11 +146,11 @@ public class DesignController {
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
         		BusinessProcess bp=  businessProcessService.updateBProcess(process);
-        		notificationService.addInfoMessage(messages.getMessage("session.created.success", null, LocaleContextHolder.getLocale()));
+        		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
-	                    e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
 				
 			}
     		
@@ -165,11 +164,11 @@ public class DesignController {
         		process.setLabel(fieldLabel);
         		process.setBusinessProcessParent(newprocessParent);
         		BusinessProcess bp=  businessProcessService.updateBProcess(process);
-        		notificationService.addInfoMessage(messages.getMessage("session.created.success", null, LocaleContextHolder.getLocale()));
+        		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
-	                    e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
 				
 			}
     		
@@ -184,10 +183,10 @@ public class DesignController {
         		step.setLabel(fieldLabel);
         		step.setBusinessService(newBusinessService);
         		ProcessStep ps= processStepService.save(step);
-        		notificationService.addInfoMessage(messages.getMessage("session.created.success", null, LocaleContextHolder.getLocale()));
+        		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+				notificationService.addErrorMessage(messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()),
 	                    e.getMessage());
 				
 			}
@@ -198,11 +197,11 @@ public class DesignController {
     			BusinessFunction funzione = businessFunctionService.findBFunctionById(fieldId);
     			businessFunctionService.deleteBFunction(funzione);
     			
-    			notificationService.addInfoMessage(messages.getMessage("session.created.success", null, LocaleContextHolder.getLocale()));
+    			notificationService.addInfoMessage(messages.getMessage("design.delete.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
-	                    e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.delete.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
 				
 			}
     		
@@ -212,11 +211,11 @@ public class DesignController {
     			BusinessProcess process = businessProcessService.findBProcessById(fieldId);
     			 businessProcessService.deleteBProcess(process);
     			 
-    			 notificationService.addInfoMessage(messages.getMessage("session.created.success", null, LocaleContextHolder.getLocale()));
+    			 notificationService.addInfoMessage(messages.getMessage("design.delete.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
-	                    e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.delete.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
 				
 			}
     		
@@ -226,11 +225,11 @@ public class DesignController {
     			BusinessProcess process = businessProcessService.findBProcessById(fieldId);
     			businessProcessService.deleteBProcess(process);
     			
-    			notificationService.addInfoMessage(messages.getMessage("session.created.success", null, LocaleContextHolder.getLocale()));
+    			notificationService.addInfoMessage(messages.getMessage("design.delete.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
-	                    e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.delete.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
 				
 			}
     		
@@ -240,11 +239,11 @@ public class DesignController {
     			ProcessStep step = processStepService.findProcessStepById(fieldId);
     			processStepService.deleteStepService(step);
     			
-    			notificationService.addInfoMessage(messages.getMessage("session.created.success", null, LocaleContextHolder.getLocale()));
+    			notificationService.addInfoMessage(messages.getMessage("design.delete.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
-	                    e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.delete.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
 				
 			}
     		
@@ -257,14 +256,13 @@ public class DesignController {
         		funzione.setLabel(fieldLabel);
         		BusinessFunction bf=  businessFunctionService.updateBFunction(funzione);
         		
-        		notificationService.addInfoMessage(messages.getMessage("session.created.success", null, LocaleContextHolder.getLocale()));
+        		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
-	                    e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.create.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
 				
 			}
-    		
     		break;
     	case "np":
     		try {
@@ -273,11 +271,11 @@ public class DesignController {
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
         		BusinessProcess bp=  businessProcessService.updateBProcess(process);
-        		notificationService.addInfoMessage(messages.getMessage("session.created.success", null, LocaleContextHolder.getLocale()));
+        		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
-	                    e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.create.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
 				
 			}
     		
@@ -291,11 +289,11 @@ public class DesignController {
         		process.setLabel(fieldLabel);
         		process.setBusinessProcessParent(newprocessParent);
         		BusinessProcess bp=  businessProcessService.updateBProcess(process);
-        		notificationService.addInfoMessage(messages.getMessage("session.created.success", null, LocaleContextHolder.getLocale()));
+        		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
-	                    e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.create.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
 				
 			}
     		
@@ -309,11 +307,11 @@ public class DesignController {
         		step.setLabel(fieldLabel);
         		step.setBusinessService(newBusinessService);
         		ProcessStep ps= processStepService.save(step);
-        		notificationService.addInfoMessage(messages.getMessage("session.created.success", null, LocaleContextHolder.getLocale()));
+        		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
-	                    e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.create.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
 				
 			}
     		
