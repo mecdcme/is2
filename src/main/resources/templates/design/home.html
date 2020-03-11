@@ -176,6 +176,7 @@
 														<th><span>ETICHETTA</span></th>
 														<th style="width: 1%"></th>
 														<th style="width: 1%"></th>
+														<th style="width: 1%"></th>
 													</tr>
 												</thead>
 												<tbody>
@@ -184,6 +185,11 @@
 														<td th:text="${stepP.name}"></td>
 														<td th:text="${stepP.descr}"></td>
 														<td th:text="${stepP.label}"></td>
+														
+														<td><a href="javascript:void(0)" role="button"
+																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'null' +  '\', \'' + 'null' +  '\', \'' + 'processes' +'\')'">
+																	<i class="fa fa-exchange"></i>
+															</a></td>
 														<td><a href="javascript:void(0)" role="button"
 																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'null' +  '\', \'' + 'null' +  '\', \'' + 'processes' +'\')'">
 																	<i class="fa fa-pencil"></i>
@@ -263,6 +269,7 @@
 															<th><span>DESCRIZIONE</span></th>
 															<th style="width: 1%"></th>
 															<th style="width: 1%"></th>
+															<th style="width: 1%"></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -270,6 +277,11 @@
 															<td th:text="${stepP.id}"></td>
 															<td th:text="${stepP.name}"></td>
 															<td th:text="${stepP.descr}"></td>
+															
+															<td><a href="javascript:void(0)" role="button"
+																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + 'null' +  '\', \'' + 'null' + '\',\'' +  ${stepP.businessService.getId()} +  '\', \'' + 'steps' +'\')'">
+																	<i class="fa fa-exchange"></i>
+															</a></td>
 															<td><a href="javascript:void(0)" role="button"
 																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + 'null' +  '\', \'' + 'null' + '\',\'' +  ${stepP.businessService.getId()} +  '\', \'' + 'steps' +'\')'">
 																	<i class="fa fa-pencil"></i>
