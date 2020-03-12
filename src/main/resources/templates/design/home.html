@@ -187,7 +187,7 @@
 														<td th:text="${stepP.label}"></td>
 														
 														<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'null' +  '\', \'' + 'null' +  '\', \'' + 'processes' +'\')'">
+																th:attr="onclick='javascript:bindingFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + ${stepP.label} + '\', \'' + 'null' +  '\', \'' + 'null' +  '\', \'' + 'processes' +'\')'">
 																	<i class="fa fa-exchange"></i>
 															</a></td>
 														<td><a href="javascript:void(0)" role="button"
@@ -279,7 +279,7 @@
 															<td th:text="${stepP.descr}"></td>
 															
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + 'null' +  '\', \'' + 'null' + '\',\'' +  ${stepP.businessService.getId()} +  '\', \'' + 'steps' +'\')'">
+																th:attr="onclick='javascript:bindingFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + 'null' +  '\', \'' + 'null' + '\',\'' +  ${stepP.businessService.getId()} +  '\', \'' + 'steps' +'\')'">
 																	<i class="fa fa-exchange"></i>
 															</a></td>
 															<td><a href="javascript:void(0)" role="button"
@@ -348,6 +348,47 @@
 											th:text="${bp.Name}"></option>
 									</select>
 								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-light" data-dismiss="modal">
+								<span th:title="#{generic.title.close.button}"
+									th:text="#{Layout.Close}">Annulla</span>
+							</button>
+							<button type="button" id="btn-invia-table"
+								class="btn btn-primary towait " onclick="playAction();"
+								th:title="#{submit.button.title}" th:text="#{submit.button}"
+								data-dismiss="modal">Invia</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="binding-Dialog" tabindex="-1"
+				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">
+								<i class="fa fa-edit"></i>&nbsp; <span
+									th:text="#{generic.update}" id="modTitle">Update</span>
+							</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form id="dialog" th:action="@{'/bindingAction'}" method="post">
+								<input id="action" type="text" name="fieldAction" hidden /> 
+								<input id="subjectId" type="text" name="fieldIdSubject" hidden /> 
+								
+								<textarea class="span6" rows="3" placeholder="What's up?" required></textarea>
+								<textarea class="span6" rows="3" placeholder="What's up?" required></textarea>
+								
+															
+								 
+
+								
 							</form>
 						</div>
 						<div class="modal-footer">

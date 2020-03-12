@@ -240,6 +240,120 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusin
     $('#Update-Dialog').modal('show');
 }
 
+function newFunctionDialog(funzione) {
+	   var titolo;
+	   $('.form-control').removeAttr("readonly","readonly");
+	   $('#id').hide();
+	   $('#idlab').hide();
+	   $('#fatherProcess').hide();
+	   $('#fatherLabel').hide();
+	   $('#businessProcess').hide();
+	   $('#processLabel').hide();
+		switch (funzione) {
+		
+		case "functions":
+			titolo=_newfun;
+			 $('#action').val("nf");
+//			 $('#id').val(id);
+			 $('#name').val("");
+			 $('#description').val("");
+			 $('#label').val("");
+			 $('#label').show();
+			 $('#lab').show();
+			break;
+		case "processes":
+			titolo=_newproc;
+			 $('#action').val("np");
+//			$('#id').val(id);
+			 $('#name').val("");
+			 $('#description').val("");
+			 $('#label').val("");
+			 $('#label').show();
+			 $('#lab').show();
+			break
+		case "subprocesses":
+			titolo=_newsubproc;
+			 $('#action').val("nsp");
+//			$('#id').val(id);
+			 $('#fatherProcess').val("0");
+			 $('#fatherProcess').show();
+			 $('#fatherLabel').show();
+			 $('#name').val("");
+			 $('#description').val("");
+			 $('#label').val("");
+			 $('#label').show();
+			 $('#lab').show();
+			break;
+		case "steps":
+			titolo=_newstep;
+			 $('#action').val("ns");
+			 $('#businessProcess').val("0");
+			
+//			$('#id').val(id);
+			 $('#name').val("");
+			 $('#description').val("");
+			 $('#businessProcess').show();
+			 $('#processLabel').show();
+			 $('#label').hide();
+			 $('#lab').hide();
+			
+			break;
+
+		default:
+			titolo="";
+			break;
+		}
+		
+		
+		$("#modTitle").text(titolo);
+
+	    $('#Update-Dialog').modal('show');
+	  
+	    
+	}
+
+
+
+
+function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusinessFunction, funzione) {
+	var titolo;
+	 
+	 
+	
+	switch (funzione) {
+	
+	case "processes":
+		titolo=_deleteproc;
+		 $('#action').val("dp");
+		$('#id').val(id);
+		 $('#name').val(nome);
+		 $('#description').val(descrizione);
+		 $('#label').val(etichetta);
+		
+		break
+	
+	case "steps":
+		titolo=_deletestep;
+		 $('#action').val("ds");
+		$('#id').val(id);
+		 $('#name').val(nome);
+		 $('#description').val(descrizione);
+		 $('#label').hide();
+		 $('#lab').hide();
+		
+		break;
+
+	default:
+		titolo="";
+		break;
+	}
+	
+	$('.form-control').attr("readonly","readonly");
+	$("#modTitle").text(titolo);
+ $('#binding-Dialog').modal('show');
+}
+
+
 function playAction(){
 	
 	switch ($('#action').val()) {
