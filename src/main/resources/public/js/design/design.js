@@ -318,28 +318,24 @@ function newFunctionDialog(funzione) {
 function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusinessFunction, funzione) {
 	var titolo;
 	 
+	$('.form-controlbinding').removeAttr("readonly","readonly");
 	 
-	
+	$('#idb').val(id);
+	$('#nameb').val(nome);
+	$('#descriptionb').val(descrizione);
 	switch (funzione) {
 	
 	case "processes":
-		titolo=_deleteproc;
-		 $('#action').val("dp");
-		$('#id').val(id);
-		 $('#name').val(nome);
-		 $('#description').val(descrizione);
-		 $('#label').val(etichetta);
+		titolo=_bindingprocess;
+		 $('#action').val("bp");
+		
 		
 		break
 	
 	case "steps":
-		titolo=_deletestep;
-		 $('#action').val("ds");
-		$('#id').val(id);
-		 $('#name').val(nome);
-		 $('#description').val(descrizione);
-		 $('#label').hide();
-		 $('#lab').hide();
+		titolo=_bindingstep;
+		 $('#action').val("bs")
+		
 		
 		break;
 
@@ -349,7 +345,7 @@ function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusi
 	}
 	
 	$('.form-control').attr("readonly","readonly");
-	$("#modTitle").text(titolo);
+	$("#bindingTitle").text(titolo);
  $('#binding-Dialog').modal('show');
 }
 

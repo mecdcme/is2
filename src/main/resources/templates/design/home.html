@@ -49,6 +49,8 @@
 	var _newproc = [[#{generic.newProc}]];
 	var _newsubproc = [[#{generic.newSubproc}]]; 
 	var _newstep = [[#{generic.newStep}]];
+	var _bindingprocess = [[#{generic.bindingProcess}]];
+	var _bindingstep = [[#{generic.bindingStep}]];
 	$(document).ready(function() {
 		setMenuActive("elaborazione")
 	});
@@ -370,7 +372,7 @@
 						<div class="modal-header">
 							<h5 class="modal-title">
 								<i class="fa fa-edit"></i>&nbsp; <span
-									th:text="#{generic.update}" id="modTitle">Update</span>
+									th:text="#{generic.bindingProcess}" id="bindingTitle">Update</span>
 							</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
@@ -378,12 +380,19 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<form id="dialog" th:action="@{'/bindingAction'}" method="post">
-								<input id="action" type="text" name="fieldAction" hidden /> 
-								<input id="subjectId" type="text" name="fieldIdSubject" hidden /> 
+							<form id="bindingDialog" th:action="@{'/bindingAction'}" method="post">
+								<input id="actionb" type="text" name="fieldAction" hidden /> 
 								
-								<textarea class="span6" rows="3" placeholder="What's up?" required></textarea>
-								<textarea class="span6" rows="3" placeholder="What's up?" required></textarea>
+								<label id="idlab" for="id" th:text="#{generic.id}">Id:</label>
+								<input id="idb" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required class="form-control" value="" /> 
+								<label for="nameb" th:text="#{generic.name}">Name:</label> 
+								<input id="nameb" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off" required class="form-control" value="" /> 
+								<label for="descriptionb" th:text="#{generic.description}">Description:</label> 
+								<input id="descriptionb" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required class="form-control" value="" /> 
+								
+								
+								<textarea class="span6" cols="50%" rows="10"  placeholder="What's up?" required ></textarea>
+								<textarea class="span6" cols="50%" rows="10"  placeholder="What's up?" required ></textarea>
 								
 															
 								 
