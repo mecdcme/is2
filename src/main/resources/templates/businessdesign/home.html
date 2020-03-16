@@ -1,7 +1,7 @@
 <!-- 
  Copyright 2019 ISTAT
 
- Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+ Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
  the European Commission - subsequent versions of the EUPL (the "Licence");
  You may not use this work except in compliance with the Licence. You may
  obtain a copy of the Licence at:
@@ -26,22 +26,18 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <head th:include="layout :: site-head" th:remove="tag" />
-<link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
-</head>
-<script th:src="@{/js/servicedesign/servicedesign.js}"></script>
-
 <script th:inline="javascript">
-
-	$(document).ready(function() {
-		setMenuActive("elaborazione")
-	});
-
-
+	
 </script>
+<script th:src="@{/js/vendors/table/datatables.min.js}"></script>
+<script th:src="@{/js/user/usersList.js}"></script>
+<script th:src="@{/js/servicedesign/servicedesign.js}"></script>
+<link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet" />
+</head>
 <body class="c-app">
 	<div th:replace="layout :: site-aside"></div>
 	<div th:replace="layout :: site-modals"></div>
-	<!-- Body -->
+
 	<div class="c-wrapper">
 		<header
 			class="c-header c-header-light c-header-fixed c-header-with-subheader">
@@ -50,7 +46,8 @@
 				<!-- Breadcrumb-->
 				<ol class="breadcrumb border-0 m-0">
 					<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-					<li class="breadcrumb-item"><span th:text="#{bs.home.link}">Business service design</span></li>
+					<li class="breadcrumb-item"><span th:text="#{bs.home.link}">Business
+							service design</span></li>
 				</ol>
 				<!-- Right navigation menu -->
 				<div class="c-header-nav d-md-down-none mfe-2">
@@ -66,7 +63,7 @@
 			<main class="c-main">
 				<div class="container-fluid">
 					<div class="row justify-start">
-						
+
 						<div class="col-lg-8">
 							<div class="row">
 								<div>
@@ -74,12 +71,15 @@
 										<div class="card-header">
 											<span th:text="#{bs.list.title.label}"></span>
 											<div class="card-header-actions">
-											
-                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNewBServiceDialog();" th:title="#{bs.label.create.new}"> 
-                                                    <i class="fa fa-plus-square-o"></i>
-                                                    <span th:text="#{bs.label.create.new}">New Business Service</span>
-                                                </a>
-                                            </div>
+
+												<a class="card-header-action" href="javascript:void(0)"
+													onclick="javascript:openNewBServiceDialog();"
+													th:title="#{bs.label.create.new}"> <i
+													class="fa fa-plus-square-o"></i> <span
+													th:text="#{bs.label.create.new}">New Business
+														Service</span>
+												</a>
+											</div>
 										</div>
 										<div class="card-body">
 											<table id="functionsTabList"
@@ -89,7 +89,7 @@
 														<th><span>ID</span></th>
 														<th><span>NOME</span></th>
 														<th><span>DESCRIZIONE</span></th>
-														
+
 														<th style="width: 1%"></th>
 														<th style="width: 1%"></th>
 													</tr>
@@ -99,16 +99,16 @@
 														<td th:text="${bservice.id}"></td>
 														<td th:text="${bservice.name}"></td>
 														<td th:text="${bservice.descr}"></td>
-														
-														<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + 'null' +'\')'">
-																	<i class="fa fa-pencil"></i>
-															</a></td>
 
-															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:deleteFunctionDialog(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + 'null' +'\')'">
-																	<i class="fa fa-trash-o"></i>
-															</a></td>
+														<td><a href="javascript:void(0)" role="button"
+															th:attr="onclick='javascript:updateFunctionDialog(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + 'null' +'\')'">
+																<i class="fa fa-pencil"></i>
+														</a></td>
+
+														<td><a href="javascript:void(0)" role="button"
+															th:attr="onclick='javascript:deleteFunctionDialog(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + 'null' +'\')'">
+																<i class="fa fa-trash-o"></i>
+														</a></td>
 													</tr>
 												</tbody>
 											</table>
@@ -116,7 +116,7 @@
 									</div>
 								</div>
 							</div>
-							
+
 							<!-- TEST -->
 							<div class="row">
 								<div>
@@ -124,12 +124,15 @@
 										<div class="card-header">
 											<span th:text="#{as.list.title.label}">App Service</span>
 											<div class="card-header-actions">
-											
-                                                <a class="card-header-action" href="javascript:void(0)" onclick="javascript:openNewAppServiceDialog();" th:title="#{bs.label.create.new}"> 
-                                                    <i class="fa fa-plus-square-o"></i>
-                                                    <span th:text="#{as.label.create.new}">New Application Service</span>
-                                                </a>
-                                            </div>
+
+												<a class="card-header-action" href="javascript:void(0)"
+													onclick="javascript:openNewAppServiceDialog();"
+													th:title="#{as.label.create.new}"> <i
+													class="fa fa-plus-square-o"></i> <span
+													th:text="#{as.label.create.new}">New Application
+														Service</span>
+												</a>
+											</div>
 										</div>
 										<div class="card-body">
 											<table id="functionsTabList"
@@ -142,7 +145,7 @@
 														<th><span>IMPL. LANGUAGE</span></th>
 														<th><span>ENGINE</span></th>
 														<th><span>AUTORE</span></th>
-														
+
 														<th style="width: 1%"></th>
 														<th style="width: 1%"></th>
 													</tr>
@@ -155,16 +158,16 @@
 														<td th:text="${appservice.language}"></td>
 														<td th:text="${appservice.engineType}"></td>
 														<td th:text="${appservice.author}"></td>
-														
-														<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:updateFunctionDialog(' + ${appservice.id} + ', \'' + ${appservice.name} + '\',\'' + ${appservice.descr} + '\', \''  + 'null' +'\')'">
-																	<i class="fa fa-pencil"></i>
-															</a></td>
 
-															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:deleteFunctionDialog(' + ${appservice.id} + ', \'' + ${appservice.name} + '\',\'' + ${appservice.descr} + '\', \''  + 'null' +'\')'">
-																	<i class="fa fa-trash-o"></i>
-															</a></td>
+														<td><a href="javascript:void(0)" role="button"
+															th:attr="onclick='javascript:updateFunctionDialog(' + ${appservice.id} + ', \'' + ${appservice.name} + '\',\'' + ${appservice.descr} + '\', \''  + 'null' +'\')'">
+																<i class="fa fa-pencil"></i>
+														</a></td>
+
+														<td><a href="javascript:void(0)" role="button"
+															th:attr="onclick='javascript:deleteFunctionDialog(' + ${appservice.id} + ', \'' + ${appservice.name} + '\',\'' + ${appservice.descr} + '\', \''  + 'null' +'\')'">
+																<i class="fa fa-trash-o"></i>
+														</a></td>
 													</tr>
 												</tbody>
 											</table>
@@ -172,10 +175,10 @@
 									</div>
 								</div>
 							</div>
-							
-							
-							
-						</div>	
+
+
+
+						</div>
 					</div>
 				</div>
 			</main>
@@ -195,26 +198,36 @@
 						</div>
 						<div class="modal-body">
 							<form id="dialog" th:action="@{'/playaction'}" method="post">
-								<input id="action" type="text" name="fieldAction" hidden /> 
-								<label id="fatherLabel" for="fieldFather" th:text="#{generic.fatherProcess}">Processo Padre:</label>
+								<input id="action" type="text" name="fieldAction" hidden /> <label
+									id="fatherLabel" for="fieldFather"
+									th:text="#{generic.fatherProcess}">Processo Padre:</label>
 								<div class="form-group blu-margin">
 									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
-									<select class="form-control" id="fatherProcess" name="fieldFatherId">
-										<option value="0" th:text="#{generic.selectFatherProcess}">Select father process..</option>
+									<select class="form-control" id="fatherProcess"
+										name="fieldFatherId">
+										<option value="0" th:text="#{generic.selectFatherProcess}">Select
+											father process..</option>
 										<option th:each="bp : ${listaAllBp}" th:value="${bp.id}"
 											th:text="${bp.Name}"></option>
 									</select>
 								</div>
 
 
-								<label id="idlab" for="id" th:text="#{generic.id}">Id:</label>
-								<input id="id" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required="" class="form-control" value="" /> 
-								<label for="name" th:text="#{generic.name}">Name:</label> 
-								<input id="name" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off" required="" class="form-control" value="" /> 
-								<label for="description" th:text="#{generic.description}">Description:</label> 
-								<input id="description" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required="" class="form-control" value="" /> 
-								<label for="label" id="lab" th:text="#{generic.label}">Label:</label> 
-								<input id="label" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off" required="" class="form-control" value="" />
+								<label id="idlab" for="id" th:text="#{generic.id}">Id:</label> <input
+									id="id" type="text" name="fieldId"
+									th:placeholder="#{generic.id}" autocomplete="off" required=""
+									class="form-control" value="" /> <label for="name"
+									th:text="#{generic.name}">Name:</label> <input id="name"
+									type="text" name="fieldName" th:placeholder="#{generic.name}"
+									autocomplete="off" required="" class="form-control" value="" />
+								<label for="description" th:text="#{generic.description}">Description:</label>
+								<input id="description" type="text" name="fieldDescription"
+									th:placeholder="#{generic.description}" autocomplete="off"
+									required="" class="form-control" value="" /> <label
+									for="label" id="lab" th:text="#{generic.label}">Label:</label>
+								<input id="label" type="text" name="fieldLabel"
+									th:placeholder="#{generic.label}" autocomplete="off"
+									required="" class="form-control" value="" />
 
 							</form>
 						</div>
@@ -233,89 +246,108 @@
 			</div>
 
 		</div>
+		<!-- End body -->
 		<footer th:replace="layout :: site-footer"></footer>
+
 		<!-- New business service modal -->
-        <div class="modal fade" id="new-bservice-modal" role="dialog" >
-            <div class="modal-dialog " role="document">
-                <div class="modal-content ">
-                    <form th:action="@{/sessione/nuovasessione}" id="form" class="form-horizontal" method="post">
-                        <input type="hidden" name="idBusinessFunction" th:value="${session.sessionBean.businessFunction.id}"/>
-                        <div class="modal-header">
-                            <h5 class="modal-title">
-                                <i class="fa fa-folder-open"></i>
-                                <span th:text="#{dialog.title.new.bs}">New Business Service</span>
-                            </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body form">
-                            <div class="form-group">
-                                <label class="control-label" th:text="#{nuova.sessione.name}+'*'"><span>Nome</span></label>
-                                <input name="nome" id="nome-sessione" th:title="#{generic.label.name}" class="form-control" type="text" />
-                                <span class="help-block">
-                                    <small class="text-danger" id="nomesesserror"></small>
-                                </span>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" th:text="#{nuova.sessione.descr}"> <span>Descrizione</span></label>
-                                <input name="descrizione" th:title="#{generic.label.description}" class="form-control" type="text" />
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
-                        </button>
-                        <button type="button" id="btn-submit-ns" class=" btn btn-primary">
-                            <span th:title="#{session.button.save}" th:text="#{session.button.save}">Salva</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- New app service modal -->
-        <div class="modal fade" id="new-app-service-modal" role="dialog" >
-            <div class="modal-dialog " role="document">
-                <div class="modal-content ">
-                    <form th:action="@{/sessione/nuovasessione}" id="form" class="form-horizontal" method="post">
-                        <input type="hidden" name="idBusinessFunction" th:value="${session.sessionBean.businessFunction.id}"/>
-                        <div class="modal-header">
-                            <h5 class="modal-title">
-                                <i class="fa fa-folder-open"></i>
-                                <span th:text="#{dialog.title.new.as}">New Application Service</span>
-                            </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body form">
-                            <div class="form-group">
-                                <label class="control-label" th:text="#{nuova.sessione.name}+'*'"><span>Nome</span></label>
-                                <input name="nome" id="nome-sessione" th:title="#{generic.label.name}" class="form-control" type="text" />
-                                <span class="help-block">
-                                    <small class="text-danger" id="nomesesserror"></small>
-                                </span>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" th:text="#{nuova.sessione.descr}"> <span>Descrizione</span></label>
-                                <input name="descrizione" th:title="#{generic.label.description}" class="form-control" type="text" />
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">
-                            <span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
-                        </button>
-                        <button type="button" id="btn-submit-ns" class=" btn btn-primary">
-                            <span th:title="#{session.button.save}" th:text="#{session.button.save}">Salva</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="modal fade" id="new-bservice-modal" role="dialog">
+			<div class="modal-dialog " role="document">
+				<div class="modal-content ">
+					<form th:action="@{/newbservice}" id="form" class="form-horizontal"
+						method="post">
+						<input type="hidden" name="idBusinessFunction"
+							th:value="${session.sessionBean.businessFunction.id}" />
+						<div class="modal-header">
+							<h5 class="modal-title">
+								<i class="fa fa-folder-open"></i> <span
+									th:text="#{dialog.title.new.bs}">New Business Service</span>
+							</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body form">
+							<div class="form-group">
+								<label class="control-label"
+									th:text="#{nuova.sessione.name}+'*'"><span>Nome</span></label>
+								<input name="nome" id="nome-sessione"
+									th:title="#{generic.label.name}" class="form-control"
+									type="text" /> <span class="help-block"> <small
+									class="text-danger" id="nomesesserror"></small>
+								</span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{nuova.sessione.descr}">
+									<span>Descrizione</span>
+								</label> <input name="descrizione"
+									th:title="#{generic.label.description}" class="form-control"
+									type="text" /> <span class="help-block"></span>
+							</div>
+						</div>
+					</form>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-light" data-dismiss="modal">
+							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
+						</button>
+						<button type="button" id="btn-submit-ns" class=" btn btn-primary">
+							<span th:title="#{session.button.save}"
+								th:text="#{session.button.save}">Salva</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- New app service modal -->
+		<div class="modal fade" id="new-app-service-modal" role="dialog">
+			<div class="modal-dialog " role="document">
+				<div class="modal-content ">
+					<form th:action="@{/sessione/nuovasessione}" id="form"
+						class="form-horizontal" method="post">
+						<input type="hidden" name="idBusinessFunction"
+							th:value="${session.sessionBean.businessFunction.id}" />
+						<div class="modal-header">
+							<h5 class="modal-title">
+								<i class="fa fa-folder-open"></i> <span
+									th:text="#{dialog.title.new.as}">New Application Service</span>
+							</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body form">
+							<div class="form-group">
+								<label class="control-label"
+									th:text="#{nuova.sessione.name}+'*'"><span>Nome</span></label>
+								<input name="nome" id="nome-sessione"
+									th:title="#{generic.label.name}" class="form-control"
+									type="text" /> <span class="help-block"> <small
+									class="text-danger" id="nomesesserror"></small>
+								</span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{nuova.sessione.descr}">
+									<span>Descrizione</span>
+								</label> <input name="descrizione"
+									th:title="#{generic.label.description}" class="form-control"
+									type="text" /> <span class="help-block"></span>
+							</div>
+						</div>
+					</form>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-light" data-dismiss="modal">
+							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
+						</button>
+						<button type="button" id="btn-submit-ns" class=" btn btn-primary">
+							<span th:title="#{session.button.save}"
+								th:text="#{session.button.save}">Salva</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 </html>
+
