@@ -23,6 +23,9 @@
  */
 
 
+
+
+
 function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusinessFunction, funzione) {
    var titolo;
    $('.form-control').removeAttr("readonly","readonly");
@@ -319,6 +322,7 @@ function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusi
 	var titolo;
 	 
 	$('.form-controlbinding').removeAttr("readonly","readonly");
+	
 	 
 	$('#idb').val(id);
 	$('#nameb').val(nome);
@@ -345,6 +349,8 @@ function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusi
 	}
 	
 	$('.form-control').attr("readonly","readonly");
+	$('.filter').removeAttr("readonly","readonly");
+	
 	$("#bindingTitle").text(titolo);
  $('#binding-Dialog').modal('show');
 }
@@ -373,9 +379,18 @@ function playAction(){
    
 }
 
-$(document).ready(function () {
-   
 
+
+$(document).ready(function () {
+	var demo1 = $('select[name="duallistbox_demo[]"]').bootstrapDualListbox({
+		  nonSelectedListLabel: 'Non-selected',
+		  selectedListLabel: 'Selected',
+		  preserveSelectionOnMove: 'moved',
+		  moveOnSelect: false,
+		  nonSelectedFilter: ''
+			  
+		});
+	
 });
 
 

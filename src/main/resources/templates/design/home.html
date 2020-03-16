@@ -26,15 +26,14 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <head th:include="layout :: site-head" th:remove="tag" />
-<script th:inline="javascript">
-	$(document).ready(function() {
-		setMenuActive("elaborazione")
-	});
-</script>
-<link rel="stylesheet" th:href="@{/css/table/datatables.css}" />
+ 
+ 
+<link rel="stylesheet" th:href="@{/css/dualListbox/bootstrap-duallistbox.min.css}" />
 </head>
-<script th:src="@{/js/design/design.js}"></script>
 
+
+<script th:src="@{/js/dualListbox/jquery.bootstrap-duallistbox.js}"></script>
+<script th:src="@{/js/design/design.js}"></script>
 <script th:inline="javascript"> 
 
 	var _updatefun = [[#{generic.updateFunction}]];
@@ -51,10 +50,9 @@
 	var _newstep = [[#{generic.newStep}]];
 	var _bindingprocess = [[#{generic.bindingProcess}]];
 	var _bindingstep = [[#{generic.bindingStep}]];
-	$(document).ready(function() {
-		setMenuActive("elaborazione")
-	});
-
+// 	$(document).ready(function() {
+// 		setMenuActive("elaborazione")
+// 	});
 
 </script>
 <body class="c-app">
@@ -391,11 +389,62 @@
 								<input id="descriptionb" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required class="form-control" value="" /> 
 								
 								
-								<textarea class="span6" cols="50%" rows="10"  placeholder="What's up?" style="resize: none;" required  ></textarea>
+								<label >Elenco funzioni</label>
 								
-								<textarea class="span6" cols="50%" rows="10"  placeholder="What's up?" style="resize: none;" required  ></textarea>
 								
-															
+								<div class="col-lg-10">
+									<div class="row">
+									
+									
+									 <select multiple="multiple" name="duallistbox_demo[]"  class="demo1" title="duallistbox_demo[]">
+									    <option value="option1">Option 1</option>
+									    <option value="option2">Option 2</option>
+									    <option value="option3" selected="selected">Option 3</option>
+									    <option value="option4">Option 4</option>
+									    <option value="option5">Option 5</option>
+									    <option value="option6" selected="selected">Option 6</option>
+									    <option value="option7">Option 7</option>
+									    <option value="option8">Option 8</option>
+									    <option value="option9">Option 9</option>
+									    <option value="option0">Option 10</option>
+									  </select>
+									
+									
+<!-- 										<div class="col-lg-5"> -->
+<!-- 											<div class="list-group"> -->
+<!-- 											  <a href="#" class="list-group-item list-group-item-action active"> -->
+<!-- 											    Cras justo odio -->
+<!-- 											  </a> -->
+<!-- 											  <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a> -->
+<!-- 											  <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a> -->
+<!-- 											  <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a> -->
+<!-- 											  <a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros</a> -->
+<!-- 											   <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a> -->
+<!-- 											  <a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros</a> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 										<div class="col-lg-1" allign=center>	 -->
+<!-- 											<button type="button" class="btn btn-primary btn-xs">>></button> -->
+<!-- 											<button type="button" class="btn btn-primary btn-xs"><<</button> -->
+<!-- 											<button type="button" class="btn btn-primary btn-xs">></button> -->
+<!-- 											<button type="button" class="btn btn-primary btn-xs"><</button> -->
+											
+<!-- 										</div>	 -->
+<!-- 										<div class="col-lg-5">	 -->
+<!-- 											<div class="list-group"> -->
+<!-- 											  <a href="#" class="list-group-item list-group-item-action active"> -->
+<!-- 											    Cras justo odio -->
+<!-- 											  </a> -->
+<!-- 											  <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a> -->
+<!-- 											  <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a> -->
+<!-- 											  <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a> -->
+<!-- 											  <a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros</a> -->
+<!-- 											</div> -->
+<!--  										</div> -->
+ 									</div>
+ 								</div>
+								
+								
 								 
 
 								
