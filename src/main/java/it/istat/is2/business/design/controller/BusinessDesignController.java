@@ -11,9 +11,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.NotificationService;
@@ -35,8 +37,7 @@ public class BusinessDesignController {
    
 
     @GetMapping("/busservlist")
-    public String serviceList(HttpSession session,Model model) {
-        notificationService.removeAllMessages();
+    public String serviceList(HttpSession session,Model model) {        
 
         List<BusinessService> listaBService = businessServiceService.findBusinessServices();  
         List<AppService> listaAppService = appServiceService.findAllAppService();
@@ -56,8 +57,6 @@ public class BusinessDesignController {
         businessService.setName(name);
         businessService.setDescr(description);
         // TODO: l'id di GsbpmProcess va gestito
-        businessService.setAppServices(null);
-        businessService.setGsbpmProcess(null);
         
         try {
         	businessServiceService.save(businessService);
@@ -66,6 +65,21 @@ public class BusinessDesignController {
         	notificationService.addErrorMessage(messages.getMessage("generic.saving.error.messager", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
         }       
 
+        return "redirect:/busservlist";
+    }
+    
+    @GetMapping(value = "/deletebservice/{idbservice}")
+    public String deleteBService(HttpSession session, Model model, RedirectAttributes ra, @AuthenticationPrincipal User user, 
+    		@PathVariable("idbservice") Integer idbservice) {
+        notificationService.removeAllMessages();
+        
+        BusinessService businessService = businessServiceService.findBusinessServiceById(idbservice);
+        try {
+        	businessServiceService.deleteBusinessService(idbservice);
+        	notificationService.addInfoMessage(messages.getMessage("bs.removed.success.message", new Object[]{businessService.getName()}, LocaleContextHolder.getLocale()));
+        }catch(Exception e) {
+        	notificationService.addErrorMessage(messages.getMessage("bs.remove.error.message", null, LocaleContextHolder.getLocale()));
+        }        
         return "redirect:/busservlist";
     }
 }

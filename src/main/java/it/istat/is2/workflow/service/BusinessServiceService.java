@@ -96,4 +96,7 @@ public class BusinessServiceService {
         }
         return appServiceList;
     }
+    public void deleteBusinessService(Integer idbs){
+    	businessServiceDao.deleteById(idbs);
+    }
 }

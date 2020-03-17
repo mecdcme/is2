@@ -28,8 +28,14 @@ $(document).ready(function () {
     $( "#new-bservice-modal" ).keydown(function( event ) { 
     	  if ( event.which == 13 ) {check_and_send_req();}
     });
+    $( "#modalDeleteBS" ).keydown(function( event ) {
+  	  if ( event.which == 13 ) {delete_bservice();}
+  });
     $("#btn-submit-bs").click(function () {
     	check_and_send_req();
+    });
+    $('#btn_delete_bs').click(function () {
+    	delete_bservice();
     });
     
 });
@@ -59,4 +65,14 @@ function check_and_send_elab_req(){
     } else {
         $("#form").submit();
     }
+    
+}
+function deleteBusinessService(id) {
+    $('#id_bs_delete').val(id);
+    $('#del_bs_msg').text(_remove_bs_msg_dialog);
+    $('#modalDeleteBS').modal('show');
+}
+function delete_bservice(){
+    var idbs = $('#id_bs_delete').val();
+    window.location = _ctx + '/deletebservice/' + idbs;
 }
