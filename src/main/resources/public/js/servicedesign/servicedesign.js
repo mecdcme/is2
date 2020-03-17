@@ -28,6 +28,9 @@ $(document).ready(function () {
     $( "#new-bservice-modal" ).keydown(function( event ) { 
     	  if ( event.which == 13 ) {check_and_send_req();}
     });
+    $("#btn-submit-bs").click(function () {
+    	check_and_send_req();
+    });
     
 });
 
@@ -42,11 +45,11 @@ function openNewAppServiceDialog() {
 }
 
 function check_and_send_req(){
-    var nomesess = $('#nome-sessione').val();
-    if (nomesess.length < 1) {           
-        $("#nomesesserror").text(_mandatory_field);
+    var bsname = $('#bs-name').val();
+    if (bsname.length < 1) {           
+        $("#bs-name-error").text(_mandatory_field);
     } else {
-        $("#form").submit();
+        $("#bs-form").submit();
     }
 }
 function check_and_send_elab_req(){
