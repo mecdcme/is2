@@ -28,6 +28,15 @@ $(document).ready(function () {
     $( "#new-bservice-modal" ).keydown(function( event ) { 
     	  if ( event.which == 13 ) {check_and_send_req();}
     });
+    $( "#modalDeleteBS" ).keydown(function( event ) {
+  	  if ( event.which == 13 ) {delete_bservice();}
+  });
+    $("#btn-submit-bs").click(function () {
+    	check_and_send_req();
+    });
+    $('#btn_delete_bs').click(function () {
+    	delete_bservice();
+    });
     
 });
 
@@ -42,11 +51,11 @@ function openNewAppServiceDialog() {
 }
 
 function check_and_send_req(){
-    var nomesess = $('#nome-sessione').val();
-    if (nomesess.length < 1) {           
-        $("#nomesesserror").text(_mandatory_field);
+    var bsname = $('#bs-name').val();
+    if (bsname.length < 1) {           
+        $("#bs-name-error").text(_mandatory_field);
     } else {
-        $("#form").submit();
+        $("#bs-form").submit();
     }
 }
 function check_and_send_elab_req(){
@@ -56,4 +65,14 @@ function check_and_send_elab_req(){
     } else {
         $("#form").submit();
     }
+    
+}
+function deleteBusinessService(id) {
+    $('#id_bs_delete').val(id);
+    $('#del_bs_msg').text(_remove_bs_msg_dialog);
+    $('#modalDeleteBS').modal('show');
+}
+function delete_bservice(){
+    var idbs = $('#id_bs_delete').val();
+    window.location = _ctx + '/deletebservice/' + idbs;
 }

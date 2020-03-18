@@ -27,7 +27,7 @@
 <head>
 <head th:include="layout :: site-head" th:remove="tag" />
 <script th:inline="javascript">
-	
+	var _remove_bs_msg_dialog = [[#{dialog.elimination.bs.message}]];
 </script>
 <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
 <script th:src="@{/js/user/usersList.js}"></script>
@@ -106,7 +106,7 @@
 														</a></td>
 
 														<td><a href="javascript:void(0)" role="button"
-															th:attr="onclick='javascript:deleteFunctionDialog(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + 'null' +'\')'">
+															th:attr="onclick='javascript:deleteBusinessService(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + 'null' +'\')'">
 																<i class="fa fa-trash-o"></i>
 														</a></td>
 													</tr>
@@ -253,10 +253,8 @@
 		<div class="modal fade" id="new-bservice-modal" role="dialog">
 			<div class="modal-dialog " role="document">
 				<div class="modal-content ">
-					<form th:action="@{/newbservice}" id="form" class="form-horizontal"
-						method="post">
-						<input type="hidden" name="idBusinessFunction"
-							th:value="${session.sessionBean.businessFunction.id}" />
+					<form th:action="@{/newbservice}" id="bs-form" class="form-horizontal"
+						method="post">						
 						<div class="modal-header">
 							<h5 class="modal-title">
 								<i class="fa fa-folder-open"></i> <span
@@ -271,16 +269,16 @@
 							<div class="form-group">
 								<label class="control-label"
 									th:text="#{nuova.sessione.name}+'*'"><span>Nome</span></label>
-								<input name="nome" id="nome-sessione"
+								<input name="name" id="bs-name"
 									th:title="#{generic.label.name}" class="form-control"
 									type="text" /> <span class="help-block"> <small
-									class="text-danger" id="nomesesserror"></small>
+									class="text-danger" id="bs-name-error"></small>
 								</span>
 							</div>
 							<div class="form-group">
 								<label class="control-label" th:text="#{nuova.sessione.descr}">
 									<span>Descrizione</span>
-								</label> <input name="descrizione"
+								</label> <input name="description"
 									th:title="#{generic.label.description}" class="form-control"
 									type="text" /> <span class="help-block"></span>
 							</div>
@@ -290,7 +288,7 @@
 						<button type="button" class="btn btn-light" data-dismiss="modal">
 							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
 						</button>
-						<button type="button" id="btn-submit-ns" class=" btn btn-primary">
+						<button type="button" id="btn-submit-bs" class=" btn btn-primary">
 							<span th:title="#{session.button.save}"
 								th:text="#{session.button.save}">Salva</span>
 						</button>
@@ -302,10 +300,9 @@
 		<div class="modal fade" id="new-app-service-modal" role="dialog">
 			<div class="modal-dialog " role="document">
 				<div class="modal-content ">
-					<form th:action="@{/sessione/nuovasessione}" id="form"
+					<form th:action="@{/sessione/nuovasessione}" id="bs-form"
 						class="form-horizontal" method="post">
-						<input type="hidden" name="idBusinessFunction"
-							th:value="${session.sessionBean.businessFunction.id}" />
+						
 						<div class="modal-header">
 							<h5 class="modal-title">
 								<i class="fa fa-folder-open"></i> <span
@@ -347,6 +344,27 @@
 				</div>
 			</div>
 		</div>
+		<!-- Delete Business Service modal -->
+            <div class="modal fade" id="modalDeleteBS" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                <i class="fa fa-trash"></i>&nbsp;<span th:text="#{confirm.elimination.title}">Conferma eliminazione</span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="del_bs_msg">Eliminare il Business Service?</div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="" id="id_bs_delete" value="" />
+                            <button type="button" class="btn btn-light" data-dismiss="modal" th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</button>
+                            <button type="button" id="btn_delete_bs" class="btn btn-primary towait" data-dismiss="modal" th:title="#{generic.delete.button.label}" th:text="#{generic.delete.button.label}">Elimina</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 	</div>
 </body>
 </html>
