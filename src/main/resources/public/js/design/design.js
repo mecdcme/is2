@@ -321,39 +321,41 @@ function newFunctionDialog(funzione) {
 function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusinessFunction, funzione) {
 	var titolo;
 	 
-	$('.form-controlbinding').removeAttr("readonly","readonly");
+	$('.bindingProcessesForm').removeAttr("readonly","readonly");
 	
 	 
-	$('#idb').val(id);
-	$('#nameb').val(nome);
-	$('#descriptionb').val(descrizione);
-	switch (funzione) {
+	$('#idf').val(id);
+	$('#namef').val(nome);
+	$('#descriptionf').val(descrizione);
 	
-	case "processes":
-		titolo=_bindingprocess;
-		 $('#action').val("bp");
-		
-		
-		break
-	
-	case "steps":
-		titolo=_bindingstep;
-		 $('#action').val("bs")
-		
-		
-		break;
-
-	default:
-		titolo="";
-		break;
-	}
 	
 	$('.form-control').attr("readonly","readonly");
 	$('.filter').removeAttr("readonly","readonly");
 	
 	$("#bindingTitle").text(titolo);
- $('#binding-Dialog').modal('show');
+ $('#binding-Functions').modal('show');
 }
+
+
+
+function bindingProcessDialog(id, nome, descrizione, etichetta, idPadre, idBusinessFunction, funzione) {
+	var titolo;
+	 
+	$('.bindingFunctionsForm').removeAttr("readonly","readonly");
+	
+	 
+	$('#idp').val(id);
+	$('#namep').val(nome);
+	$('#descriptionp').val(descrizione);
+	
+	
+	$('.form-control').attr("readonly","readonly");
+	$('.filter').removeAttr("readonly","readonly");
+	
+	$("#bindingTitle").text(titolo);
+ $('#binding-Processes').modal('show');
+}
+
 
 
 function playAction(){
@@ -379,10 +381,31 @@ function playAction(){
    
 }
 
+function playBindingProcesses(){
+	
 
+	$("#bindingProcessesForm").submit();
+	
+}
+
+
+function playBindingFunctions(){
+	
+
+	$("#bindingFunctionsForm").submit();
+	
+}
 
 $(document).ready(function () {
-	var demo1 = $('select[name="duallistbox_demo[]"]').bootstrapDualListbox({
+	var demo = $('select[name="duallistbox_demo[]"]').bootstrapDualListbox({
+		  nonSelectedListLabel: 'Non-selected',
+		  selectedListLabel: 'Selected',
+		  preserveSelectionOnMove: 'moved',
+		  moveOnSelect: false,
+		  nonSelectedFilter: ''
+			  
+		});
+	var demo1 = $('select[name="duallistbox_demo1[]"]').bootstrapDualListbox({
 		  nonSelectedListLabel: 'Non-selected',
 		  selectedListLabel: 'Selected',
 		  preserveSelectionOnMove: 'moved',

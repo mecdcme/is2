@@ -26,6 +26,7 @@ package it.istat.is2.design.controller;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +118,7 @@ public class DesignController {
    
     @RequestMapping(value = "/playaction", method = RequestMethod.POST)
     public String action(Model model, @RequestParam("fieldId") Long fieldId, @RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr, 
-    		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldFatherId") String fieldFatherId, @RequestParam("fieldBusinessProcessId") String fieldBusinessProcessId, @RequestParam("fieldAction") String fieldAction, RedirectAttributes ra ) {
+    		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldBusinessProcessId") String fieldBusinessProcessId, @RequestParam("fieldAction") String fieldAction ) {
       
         notificationService.removeAllMessages();
          switch (fieldAction) {
@@ -158,11 +159,11 @@ public class DesignController {
     	case "usp":
     		try {
     			BusinessProcess process = businessProcessService.findBProcessById(fieldId);
-    			BusinessProcess newprocessParent = businessProcessService.findBProcessById(Long.parseLong(fieldFatherId));
+    		
     			process.setName(fieldName);
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
-        		process.setBusinessProcessParent(newprocessParent);
+        		
         		BusinessProcess bp=  businessProcessService.updateBProcess(process);
         		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
@@ -283,11 +284,11 @@ public class DesignController {
     	case "nsp":
     		try {
     			BusinessProcess process = new BusinessProcess();
-    			BusinessProcess newprocessParent = businessProcessService.findBProcessById(Long.parseLong(fieldFatherId));
+    			
     			process.setName(fieldName);
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
-        		process.setBusinessProcessParent(newprocessParent);
+        		
         		BusinessProcess bp=  businessProcessService.updateBProcess(process);
         		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
@@ -331,8 +332,31 @@ public class DesignController {
 
     }
     
+//    @RequestParam Map<String,String> allParams 
     
+    @RequestMapping(value = "/bindingFunctions", method = RequestMethod.POST)
+    public String bindingFunctions(Model model, @RequestParam("fieldId") Long fieldId, @RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr, 
+    		  @RequestParam("duallistbox_demo[]") String duallistbox_demo[]) {
+    	
+    	
+        notificationService.removeAllMessages();
+        
+        return "redirect:/settings";
+
+    }
     
+    @RequestMapping(value = "/bindingProcesses", method = RequestMethod.POST)
+    public String bindingProcesses(Model model, @RequestParam("fieldId") Long fieldId, @RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr, 
+    		  @RequestParam("duallistbox_demo1[]") String duallistbox_demo1[]) {
+    	
+    	
+        notificationService.removeAllMessages();
+        
+        
+        
+        return "redirect:/settings";
+
+    }  
     
 }
 

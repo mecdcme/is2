@@ -279,7 +279,7 @@
 															<td th:text="${stepP.descr}"></td>
 															
 															<td><a href="javascript:void(0)" role="button"
-																th:attr="onclick='javascript:bindingFunctionDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + 'null' +  '\', \'' + 'null' + '\',\'' +  ${stepP.businessService.getId()} +  '\', \'' + 'steps' +'\')'">
+																th:attr="onclick='javascript:bindingProcessDialog(' + ${stepP.id} + ', \'' + ${stepP.name} + '\',\'' + ${stepP.descr} + '\', \'' + 'null' +  '\', \'' + 'null' + '\',\'' +  ${stepP.businessService.getId()} +  '\', \'' + 'steps' +'\')'">
 																	<i class="fa fa-exchange"></i>
 															</a></td>
 															<td><a href="javascript:void(0)" role="button"
@@ -363,14 +363,14 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal fade" id="binding-Dialog" tabindex="-1"
+			<div class="modal fade" id="binding-Functions" tabindex="-1"
 				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
 							<h5 class="modal-title">
 								<i class="fa fa-edit"></i>&nbsp; <span
-									th:text="#{generic.bindingProcess}" id="bindingTitle">Update</span>
+									th:text="#{generic.bindingFunctions}" id="bindingTitle">Update</span>
 							</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
@@ -378,69 +378,31 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<form id="bindingDialog" th:action="@{'/bindingAction'}" method="post">
-								<input id="actionb" type="text" name="fieldAction" hidden /> 
-								
-								<label id="idlab" for="id" th:text="#{generic.id}">Id:</label>
-								<input id="idb" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required class="form-control" value="" /> 
-								<label for="nameb" th:text="#{generic.name}">Name:</label> 
-								<input id="nameb" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off" required class="form-control" value="" /> 
-								<label for="descriptionb" th:text="#{generic.description}">Description:</label> 
-								<input id="descriptionb" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required class="form-control" value="" /> 
+							<form id="bindingFunctionsForm" th:action="@{'/bindingFunctions'}" method="post">
 								
 								
-								<label >Elenco funzioni</label>
+								<label id="idlabf" for="idf" th:text="#{generic.id}">Id:</label>
+								<input id="idf" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required class="form-control" value="" /> 
+								<label for="namef" th:text="#{generic.name}">Name:</label> 
+								<input id="namef" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off" required class="form-control" value="" /> 
+								<label for="descriptionf" th:text="#{generic.description}">Description:</label> 
+								<input id="descriptionf" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required class="form-control" value="" /> 
+								
+								
+								<label th:text="#{generic.processList}">Id:</label>
 								
 								
 								<div class="col-lg-10">
 									<div class="row">
 									
 									
-									 <select multiple="multiple" name="duallistbox_demo[]"  class="demo1" title="duallistbox_demo[]">
-									    <option value="option1">Option 1</option>
-									    <option value="option2">Option 2</option>
-									    <option value="option3" selected="selected">Option 3</option>
-									    <option value="option4">Option 4</option>
-									    <option value="option5">Option 5</option>
-									    <option value="option6" selected="selected">Option 6</option>
-									    <option value="option7">Option 7</option>
-									    <option value="option8">Option 8</option>
-									    <option value="option9">Option 9</option>
-									    <option value="option0">Option 10</option>
+									 <select  multiple="multiple" name="duallistbox_demo[]"  class="demo" title="duallistbox_demo[]">
+									    <option th:each="stepP: ${listaFunzioni}" th:text="${stepP.name}"  th:value="${stepP.id}"></option>
+								
 									  </select>
 									
 									
-<!-- 										<div class="col-lg-5"> -->
-<!-- 											<div class="list-group"> -->
-<!-- 											  <a href="#" class="list-group-item list-group-item-action active"> -->
-<!-- 											    Cras justo odio -->
-<!-- 											  </a> -->
-<!-- 											  <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a> -->
-<!-- 											  <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a> -->
-<!-- 											  <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a> -->
-<!-- 											  <a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros</a> -->
-<!-- 											   <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a> -->
-<!-- 											  <a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros</a> -->
-<!-- 											</div> -->
-<!-- 										</div> -->
-<!-- 										<div class="col-lg-1" allign=center>	 -->
-<!-- 											<button type="button" class="btn btn-primary btn-xs">>></button> -->
-<!-- 											<button type="button" class="btn btn-primary btn-xs"><<</button> -->
-<!-- 											<button type="button" class="btn btn-primary btn-xs">></button> -->
-<!-- 											<button type="button" class="btn btn-primary btn-xs"><</button> -->
-											
-<!-- 										</div>	 -->
-<!-- 										<div class="col-lg-5">	 -->
-<!-- 											<div class="list-group"> -->
-<!-- 											  <a href="#" class="list-group-item list-group-item-action active"> -->
-<!-- 											    Cras justo odio -->
-<!-- 											  </a> -->
-<!-- 											  <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a> -->
-<!-- 											  <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a> -->
-<!-- 											  <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a> -->
-<!-- 											  <a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros</a> -->
-<!-- 											</div> -->
-<!--  										</div> -->
+
  									</div>
  								</div>
 								
@@ -456,7 +418,69 @@
 									th:text="#{Layout.Close}">Annulla</span>
 							</button>
 							<button type="button" id="btn-invia-table"
-								class="btn btn-primary towait " onclick="playAction();"
+								class="btn btn-primary towait " onclick="playBindingFunctions();"
+								th:title="#{submit.button.title}" th:text="#{submit.button}"
+								data-dismiss="modal">Invia</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="binding-Processes" tabindex="-1"
+				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">
+								<i class="fa fa-edit"></i>&nbsp; <span
+									th:text="#{generic.bindingSubProcesses}" id="bindingTitle">Update</span>
+							</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form id="bindingProcessesForm" th:action="@{'/bindingProcesses'}" method="post">
+								
+								
+								<label id="idlabp" for="idp" th:text="#{generic.id}">Id:</label>
+								<input id="idp" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required class="form-control" value="" /> 
+								<label for="namep" th:text="#{generic.name}">Name:</label> 
+								<input id="namep" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off" required class="form-control" value="" /> 
+								<label for="descriptionp" th:text="#{generic.description}">Description:</label> 
+								<input id="descriptionp" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required class="form-control" value="" /> 
+								
+								
+								
+								<label th:text="#{generic.stepList}">Id:</label>
+								
+								<div class="col-lg-10">
+									<div class="row">
+									
+									
+									 <select  multiple="multiple" name="duallistbox_demo1[]"  class="demo1" title="duallistbox_demo1[]">
+									    <option th:each="stepP: ${listaAllSubBp}" th:text="${stepP.name}"  th:value="${stepP.id}"></option>
+								
+									  </select>
+									
+									
+
+ 									</div>
+ 								</div>
+								
+								
+								 
+
+								
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-light" data-dismiss="modal">
+								<span th:title="#{generic.title.close.button}"
+									th:text="#{Layout.Close}">Annulla</span>
+							</button>
+							<button type="button" id="btn-invia-table"
+								class="btn btn-primary towait " onclick="playBindingProcesses();"
 								th:title="#{submit.button.title}" th:text="#{submit.button}"
 								data-dismiss="modal">Invia</button>
 						</div>
