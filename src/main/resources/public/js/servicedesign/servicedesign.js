@@ -40,6 +40,11 @@ $(document).ready(function() {
 			delete_bservice();
 		}
 	});
+	$("#modalDeleteAS").keydown(function(event) {
+		if (event.which == 13) {
+			delete_appservice();
+		}
+	});
 	$("#btn-submit-bs").click(function() {
 		check_and_send_req();
 	});
@@ -48,6 +53,9 @@ $(document).ready(function() {
 	});
 	$('#btn_delete_bs').click(function() {
 		delete_bservice();
+	});
+	$('#btn_delete_as').click(function() {
+		delete_appservice();
 	});
 
 });
@@ -59,6 +67,10 @@ function openNewBServiceDialog() {
 function openNewAppServiceDialog() {
 	$("#as-name-error").text('');
 	$('#new-app-service-modal').modal('show');
+}
+function openNewStepInstanceDialog() {
+	$("#si-name-error").text('');
+	$('#new-step-instance-modal').modal('show');
 }
 
 function check_and_send_req() {
@@ -91,7 +103,16 @@ function deleteBusinessService(id) {
 	$('#del_bs_msg').text(_remove_bs_msg_dialog);
 	$('#modalDeleteBS').modal('show');
 }
+function deleteAppService(id) {
+	$('#id_as_delete').val(id);
+	$('#del_as_msg').text(_remove_as_msg_dialog);
+	$('#modalDeleteAS').modal('show');
+}
 function delete_bservice() {
 	var idbs = $('#id_bs_delete').val();
 	window.location = _ctx + '/deletebservice/' + idbs;
+}
+function delete_appservice() {
+	var idas = $('#id_as_delete').val();
+	window.location = _ctx + '/deleteappservice/' + idas;
 }

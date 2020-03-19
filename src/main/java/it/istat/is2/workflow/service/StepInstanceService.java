@@ -22,34 +22,19 @@
  * @version 1.0
  */
 package it.istat.is2.workflow.service;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import it.istat.is2.workflow.dao.AppServiceDao;
-import it.istat.is2.workflow.domain.AppService;
+import it.istat.is2.workflow.dao.StepInstanceDao;
+import it.istat.is2.workflow.domain.StepInstance;
 
 @Service
-public class AppServiceService {
+public class StepInstanceService {
 
 	@Autowired
-	AppServiceDao appServiceDao;
-
-	public List<AppService> findAllAppService() {
-		return (List<AppService>) appServiceDao.findAll();
-	}
-
-	public AppService findAppServiceById(Integer idappservice) {
-		return (AppService) appServiceDao.findById(idappservice).orElse(null);
-	}
-
-	public void save(AppService appservice) {
-		appServiceDao.save(appservice);
-	}
-
-	public void deleteAppService(Integer idappservice) {
-		appServiceDao.deleteById(idappservice);
+	StepInstanceDao sepInstanceDao;
+	
+	public List<StepInstance> findAllStepInstance() {
+		return (List<StepInstance>) sepInstanceDao.findAll();
 	}
 }
