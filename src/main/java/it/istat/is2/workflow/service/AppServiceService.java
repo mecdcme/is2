@@ -41,7 +41,15 @@ public class AppServiceService {
 		return (List<AppService>) appServiceDao.findAll();
 	}
 
+	public AppService findAppServiceById(Integer idappservice) {
+		return (AppService) appServiceDao.findById(idappservice).orElse(null);
+	}
+
 	public void save(AppService appservice) {
 		appServiceDao.save(appservice);
+	}
+
+	public void deleteAppService(Integer idappservice) {
+		appServiceDao.deleteById(idappservice);
 	}
 }

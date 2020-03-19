@@ -147,4 +147,20 @@ public class BusinessDesignController {
 		}
 		return "redirect:/busservlist";
 	}
+	@GetMapping(value = "/deleteappservice/{idappservice}")
+	public String deleteAppService(HttpSession session, Model model, RedirectAttributes ra,
+			@AuthenticationPrincipal User user, @PathVariable("idappservice") Integer idappservice) {
+		notificationService.removeAllMessages();
+
+		AppService appService = appServiceService.findAppServiceById(idappservice);
+		try {
+			appServiceService.deleteAppService(idappservice);
+			notificationService.addInfoMessage(messages.getMessage("as.removed.success.message",
+					new Object[] { appService.getName() }, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			notificationService.addErrorMessage(
+					messages.getMessage("as.remove.error.message", null, LocaleContextHolder.getLocale()));
+		}
+		return "redirect:/busservlist";
+	}
 }
