@@ -333,6 +333,7 @@ function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusi
 		type : "GET",
 		contentType : "application/json",
 		url : _ctx + "/rest/design/getProcess/" + id,
+		dataType : 'json',
 		cache : true,
 		success : function(data) {
 			

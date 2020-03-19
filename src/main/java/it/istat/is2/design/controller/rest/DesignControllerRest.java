@@ -1,17 +1,18 @@
 package it.istat.is2.design.controller.rest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.istat.is2.app.service.NotificationService;
@@ -32,13 +33,16 @@ public class DesignControllerRest {
 		 private NotificationService notificationService;
 		 @Autowired
 		private MessageSource messages;
-		    
-	    @GetMapping("/rest/design/getProcess/{id}")
-	    public BusinessProcess getProcess(HttpServletRequest request, @PathVariable("id") Integer id) {
+		 
+		 
+		@GetMapping("/rest/design/getProcess/{id}")
+		@ResponseBody    
+//		@RequestMapping(value = "/rest/design/getProcess/{id}", method = RequestMethod.GET)
+	    public  ResponseEntity<?>  getProcess(HttpServletRequest request, @PathVariable("id") Integer id) {
 	    	notificationService.removeAllMessages();
-	    	BusinessProcess process = null;
+	    	BusinessProcess processo = null;
 	    	try {
-	    		process = businessProcessService.findBProcessById(id);
+	    		processo = businessProcessService.findBProcessById(id);
         		
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -46,10 +50,10 @@ public class DesignControllerRest {
 				
 				
 			}
-	    	return process;
+	    	return ResponseEntity.ok(processo);
 	    }
 	    
-	    @GetMapping("/rest/design/getStep/{id}")
+	    @RequestMapping(value = "/rest/design/getStep/{id}", method = RequestMethod.GET)
 	    public ProcessStep getColumns(HttpServletRequest request, @PathVariable("id") Long id) {
 	    	notificationService.removeAllMessages();
 	    	ProcessStep step = null;
