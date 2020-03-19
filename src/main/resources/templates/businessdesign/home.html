@@ -67,6 +67,7 @@
 					<div class="row justify-start">
 
 						<div class="col-lg-8">
+							<!-- Business Service list -->
 							<div class="row">
 								<div>
 									<div class="card">
@@ -118,7 +119,7 @@
 								</div>
 							</div>
 
-							<!-- TEST -->
+							<!-- App Service list -->
 							<div class="row">
 								<div>
 									<div class="card">
@@ -178,6 +179,58 @@
 								</div>
 							</div>
 
+							<!-- Spep Instance list -->
+							<div class="row">
+								<div>
+									<div class="card">
+										<div class="card-header">
+											<span th:text="#{si.list.title.label}">Step Instance</span>
+											<div class="card-header-actions">
+
+												<a class="card-header-action" href="javascript:void(0)"
+													onclick="javascript:openNewStepInstanceDialog();"
+													th:title="#{as.label.create.new}"> <i
+													class="fa fa-plus-square-o"></i> <span
+													th:text="#{si.label.create.new}">New Step Instance</span>
+												</a>
+											</div>
+										</div>
+										<div class="card-body">
+											<table id="functionsTabList"
+												class="table table-striped table-bordered">
+												<thead>
+													<tr>
+														<th><span th:text="#{generic.label.id}">ID</span></th>
+														<th><span th:text="#{generic.label.name}">MTHOD</span></th>
+														<th><span th:text="#{generic.label.description}">DESCRIPTION</span></th>
+														<th><span th:text="#{as.impl.language.label}">LABEL</span></th>
+														<th style="width: 1%"></th>
+														<th style="width: 1%"></th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="stepInstance: ${listaStepInstance}">
+														<td th:text="${stepInstance.id}"></td>
+														<td th:text="${stepInstance.method}"></td>
+														<td th:text="${stepInstance.descr}"></td>
+														<td th:text="${stepInstance.label}"></td>														
+
+														<td><a href="javascript:void(0)" role="button"
+															th:attr="onclick='javascript:updateFunctionDialog(' + ${stepInstance.id} + ', \'' + ${stepInstance.method} + '\',\'' + ${stepInstance.descr} + '\', \''  + 'null' +'\')'">
+																<i class="fa fa-pencil"></i>
+														</a></td>
+
+														<td><a href="javascript:void(0)" role="button"
+															th:attr="onclick='javascript:deleteAppService(' + ${stepInstance.id} + ', \'' + ${stepInstance.method} + '\',\'' + ${stepInstance.descr} + '\', \''  + 'null' +'\')'">
+																<i class="fa fa-trash-o"></i>
+														</a></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
 
 
 						</div>
@@ -270,7 +323,7 @@
 						<div class="modal-body form">
 							<div class="form-group">
 								<label class="control-label"
-									th:text="#{nuova.sessione.name}+'*'"><span>Nome</span></label>
+									th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
 								<input name="name" id="bs-name" th:title="#{generic.label.name}"
 									class="form-control" type="text" /> <span class="help-block">
 									<small class="text-danger" id="bs-name-error"></small>
@@ -317,7 +370,7 @@
 						<div class="modal-body form">
 							<div class="form-group">
 								<label class="control-label"
-									th:text="#{nuova.sessione.name}+'*'"><span>Nome</span></label>
+									th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
 								<input name="name" id="as-name" th:title="#{generic.label.name}"
 									class="form-control" type="text" /> <span class="help-block">
 									<small class="text-danger" id="as-name-error"></small>
@@ -384,6 +437,52 @@
 							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
 						</button>
 						<button type="button" id="btn-submit-as" class=" btn btn-primary">
+							<span th:title="#{session.button.save}"
+								th:text="#{session.button.save}">Salva</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- New step instance modal -->
+		<div class="modal fade" id="new-step-instance-modal" role="dialog">
+			<div class="modal-dialog " role="document">
+				<div class="modal-content ">
+					<form th:action="@{/newbservice}" id="bs-form"
+						class="form-horizontal" method="post">
+						<div class="modal-header">
+							<h5 class="modal-title">
+								<i class="fa fa-folder-open"></i> <span
+									th:text="#{dialog.title.new.bs}">New Business Service</span>
+							</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body form">
+							<div class="form-group">
+								<label class="control-label"
+									th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
+								<input name="name" id="si-name" th:title="#{generic.label.name}"
+									class="form-control" type="text" /> <span class="help-block">
+									<small class="text-danger" id="si-name-error"></small>
+								</span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{nuova.sessione.descr}">
+									<span>Descrizione</span>
+								</label> <input name="description"
+									th:title="#{generic.label.description}" class="form-control"
+									type="text" /> <span class="help-block"></span>
+							</div>
+						</div>
+					</form>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-light" data-dismiss="modal">
+							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
+						</button>
+						<button type="button" id="btn-submit-bs" class=" btn btn-primary">
 							<span th:title="#{session.button.save}"
 								th:text="#{session.button.save}">Salva</span>
 						</button>

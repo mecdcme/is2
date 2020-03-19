@@ -44,8 +44,10 @@ import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
+import it.istat.is2.workflow.domain.StepInstance;
 import it.istat.is2.workflow.service.AppServiceService;
 import it.istat.is2.workflow.service.BusinessServiceService;
+import it.istat.is2.workflow.service.StepInstanceService;
 
 @Controller
 public class BusinessDesignController {
@@ -56,6 +58,8 @@ public class BusinessDesignController {
 	@Autowired
 	private AppServiceService appServiceService;
 	@Autowired
+	private StepInstanceService stepInstanceService;
+	@Autowired
 	private MessageSource messages;
 
 	@GetMapping("/busservlist")
@@ -63,9 +67,10 @@ public class BusinessDesignController {
 
 		List<BusinessService> listaBService = businessServiceService.findBusinessServices();
 		List<AppService> listaAppService = appServiceService.findAllAppService();
-
+		List<StepInstance> listaStepInstance = stepInstanceService.findAllStepInstance();
 		model.addAttribute("listaBService", listaBService);
 		model.addAttribute("listaAppService", listaAppService);
+		model.addAttribute("listaStepInstance", listaStepInstance);
 
 		return "businessdesign/home.html";
 

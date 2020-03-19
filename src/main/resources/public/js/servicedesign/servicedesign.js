@@ -68,6 +68,10 @@ function openNewAppServiceDialog() {
 	$("#as-name-error").text('');
 	$('#new-app-service-modal').modal('show');
 }
+function openNewStepInstanceDialog() {
+	$("#si-name-error").text('');
+	$('#new-step-instance-modal').modal('show');
+}
 
 function check_and_send_req() {
 	var bsname = $('#bs-name').val();
