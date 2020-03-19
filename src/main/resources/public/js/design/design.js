@@ -327,13 +327,32 @@ function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusi
 	$('#idf').val(id);
 	$('#namef').val(nome);
 	$('#descriptionf').val(descrizione);
+	console.log("Getting process...");
+
+	$.ajax({
+		type : "GET",
+		contentType : "application/json",
+		url : _ctx + "/rest/design/getProcess/" + id,
+		dataType : 'json',
+		cache : true,
+		success : function(data) {
+			
+			$('.form-control').attr("readonly","readonly");
+			$('.filter').removeAttr("readonly","readonly");
+			
+			$("#bindingTitle").text(titolo);
+			$('#binding-Functions').modal('show');
+		},
+		error : function(e) {
+			
+			console.log("ERROR : ", e);
+		},
+		complete : function() {
+			setTimeout(5000);
+		}
+	});
 	
 	
-	$('.form-control').attr("readonly","readonly");
-	$('.filter').removeAttr("readonly","readonly");
-	
-	$("#bindingTitle").text(titolo);
- $('#binding-Functions').modal('show');
 }
 
 
