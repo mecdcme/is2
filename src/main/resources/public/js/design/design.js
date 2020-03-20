@@ -316,7 +316,9 @@ function newFunctionDialog(funzione) {
 	}
 
 
-
+function checkSelected(value) {
+	  alert(value.id);
+	}
 
 function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusinessFunction, funzione) {
 	var titolo;
@@ -337,6 +339,9 @@ function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusi
 		cache : true,
 		success : function(data) {
 			
+			
+			data.businessFunctions.forEach(checkSelected);
+			
 			$('.form-control').attr("readonly","readonly");
 			$('.filter').removeAttr("readonly","readonly");
 			
@@ -348,7 +353,7 @@ function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusi
 			console.log("ERROR : ", e);
 		},
 		complete : function() {
-			setTimeout(5000);
+			
 		}
 	});
 	

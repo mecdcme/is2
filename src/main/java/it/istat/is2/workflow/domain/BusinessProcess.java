@@ -27,6 +27,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -37,6 +38,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "IS2_BUSINESS_PROCESS")
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class BusinessProcess implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,7 +57,7 @@ public class BusinessProcess implements Serializable {
     private Short order;
    
 
-    @JsonBackReference
+    
     @ManyToMany(mappedBy = "businessProcesses")
     private List<BusinessFunction> businessFunctions;
 
@@ -68,7 +70,7 @@ public class BusinessProcess implements Serializable {
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "is2_link_process_step", joinColumns = @JoinColumn(name = "BUSINESS_PROCESS_ID"), inverseJoinColumns = @JoinColumn(name = "PROCESS_STEP_ID"))
     private List<ProcessStep> businessSteps;
-
+    @JsonBackReference
     @OneToMany(mappedBy = "businessProcessParent")
     private List<BusinessProcess> businessSubProcesses = new ArrayList<>();
     

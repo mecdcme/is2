@@ -26,6 +26,8 @@ package it.istat.is2.workflow.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 import lombok.Data;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -50,10 +52,13 @@ public class BusinessFunction implements Serializable {
     @Column(name="ACTIVE")
     private Short active;
 
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToMany(cascade = {CascadeType.ALL})
+   
     @JoinTable(name = "is2_link_function_process", joinColumns = {
+    		
         @JoinColumn(name = "BUSINESS_FUNCTION_ID", referencedColumnName = "ID", nullable = false)}, inverseJoinColumns = {
+        
         @JoinColumn(name = "BUSINESS_PROCESS_ID", referencedColumnName = "ID", nullable = false)})
     private List<BusinessProcess> businessProcesses;
 
