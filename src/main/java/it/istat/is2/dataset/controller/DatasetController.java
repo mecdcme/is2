@@ -25,6 +25,7 @@ package it.istat.is2.dataset.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +47,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import it.istat.is2.app.bean.InputFormBean;
 import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Log;
-import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
@@ -180,7 +180,7 @@ public class DatasetController {
 
 	@PostMapping(value = "/loadInputData")
 	public String loadInputData(HttpSession session, HttpServletRequest request, Model model,
-			@AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") InputFormBean form)
+			@AuthenticationPrincipal Principal user, @ModelAttribute("inputFormBean") InputFormBean form)
 			throws IOException {
 
 		notificationService.removeAllMessages();
@@ -229,7 +229,7 @@ public class DatasetController {
 	}
 
 	@GetMapping(value = "/deleteDataset/{datasetid}")
-	public String deleteDataset(HttpSession session, Model model, @AuthenticationPrincipal User user,
+	public String deleteDataset(HttpSession session, Model model,
 			@PathVariable("datasetid") Long idDataset) {
 
 		notificationService.removeAllMessages();

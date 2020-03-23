@@ -29,6 +29,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import it.istat.is2.app.dao.UserDao;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.UserService;
 import it.istat.is2.dataset.domain.DatasetFile;
@@ -45,6 +46,8 @@ public class WorkSessionService {
     @Autowired
     private UserService userService;
     @Autowired
+    private UserDao userDao;
+    @Autowired
     private DatasetService datasetService;
 
     public WorkSession getSessione(Long id) {
@@ -56,12 +59,14 @@ public class WorkSessionService {
         return dataset.getWorkSession();
     }
 
-    public List<WorkSession> getSessioneList(User user) {
+    public List<WorkSession> getSessioneList(String username) {
+    	User user=userDao.findByEmail(username);
         return sessioneDao.findByUserOrderByLastUpdateDesc(user);
     }
     
-    public List<WorkSession> getSessioneList(User user, Long idBusinessFunction) {
+    public List<WorkSession> getSessioneList(String username, Long idBusinessFunction) {
         BusinessFunction businessFunction = new BusinessFunction(idBusinessFunction);
+        User user=userDao.findByEmail(username);
         return sessioneDao.findByUserAndBusinessFunctionOrderByLastUpdateDesc(user, businessFunction);
     }
 

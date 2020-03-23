@@ -24,6 +24,7 @@
 package it.istat.is2.workflow.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +56,6 @@ import it.istat.is2.app.bean.BusinessProcessBean;
 import it.istat.is2.app.bean.ProcessStepBean;
 import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Log;
-import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.DataProcessingService;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
@@ -426,7 +426,7 @@ public class WorkflowController {
     }
 
     @GetMapping(value = "/elimina/{dataProcessingId}/{idsessione}")
-    public String eliminaWS(HttpSession session, Model model, @AuthenticationPrincipal User user,
+    public String eliminaWS(HttpSession session, Model model, @AuthenticationPrincipal Principal user,
             @PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("idsessione") Long idsessione) {
         notificationService.removeAllMessages();
 
@@ -440,7 +440,7 @@ public class WorkflowController {
                     e.getMessage());
         }
 
-        List<WorkSession> listasessioni = workSessionService.getSessioneList(user);
+        List<WorkSession> listasessioni = workSessionService.getSessioneList(user.getName());
         model.addAttribute("listasessioni", listasessioni);
 
         logService.save("Elaborazione " + dataProcessingId + " Eliminata con successo");

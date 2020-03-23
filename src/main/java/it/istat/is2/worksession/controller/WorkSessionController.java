@@ -45,7 +45,6 @@ import it.istat.is2.app.bean.ElaborazioneFormBean;
 import it.istat.is2.app.bean.NotificationMessage;
 import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Log;
-import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.DataProcessingService;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
@@ -60,6 +59,8 @@ import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.workflow.service.BusinessProcessService;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
+
+import java.security.Principal;
 import java.util.ArrayList;
 
 @Controller
@@ -81,7 +82,7 @@ public class WorkSessionController {
     private MessageSource messages;
 
     @GetMapping(value = "/sessione/mostraSessioni/{idBusinessFunction}")
-    public String mostraSessioni(HttpSession session, Model model, @AuthenticationPrincipal User user,
+    public String mostraSessioni(HttpSession session, Model model, @AuthenticationPrincipal Principal user,
             @PathVariable("idBusinessFunction") Long idBusinessFunction,
             @ModelAttribute("message") NotificationMessage messsage) {
         notificationService.removeAllMessages();
@@ -94,7 +95,7 @@ public class WorkSessionController {
         sessionBean.setBusinessFunction(businessFunctionBean);
         session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
-        List<WorkSession> listasessioni = workSessionService.getSessioneList(user, idBusinessFunction);
+        List<WorkSession> listasessioni = workSessionService.getSessioneList(user.getName(), idBusinessFunction);
         model.addAttribute("listasessioni", listasessioni);
 
         return "worksession/list";
@@ -102,12 +103,12 @@ public class WorkSessionController {
 
     @RequestMapping(value = "/sessione/nuovasessione")
     public String nuovaSessione(HttpSession session, RedirectAttributes ra, Model model,
-            @AuthenticationPrincipal User user, @RequestParam("descrizione") String descrizione,
+            @AuthenticationPrincipal Principal user, @RequestParam("descrizione") String descrizione,
             @RequestParam("nome") String nome, @RequestParam("idBusinessFunction") Long idBusinessFunction) {
         notificationService.removeAllMessages();
         NotificationMessage message;
         try {
-            WorkSession workSession = workSessionService.newWorkSession(user.getEmail(), descrizione, nome,
+            WorkSession workSession = workSessionService.newWorkSession(user.getName(), descrizione, nome,
                     idBusinessFunction);
             message = new NotificationMessage(NotificationMessage.TYPE_SUCCESS, messages.getMessage(
                     "session.created.success", new Object[]{workSession.getName()}, LocaleContextHolder.getLocale()));
@@ -122,7 +123,7 @@ public class WorkSessionController {
     }
 
     @GetMapping(value = "/sessione/apriseselab/{idSessione}/{idElaborazione}")
-    public String apriSesElab(HttpSession session, Model model, @AuthenticationPrincipal User user,
+    public String apriSesElab(HttpSession session, Model model, @AuthenticationPrincipal Principal user,
             @PathVariable("idSessione") Long idSessione, @PathVariable("idElaborazione") Long idElaborazione) {
 
         WorkSession workSession = workSessionService.getSessione(idSessione);
@@ -185,7 +186,7 @@ public class WorkSessionController {
     }
 
     @RequestMapping(value = "/sessione/nuovoworkingset", method = RequestMethod.POST)
-    public String nuovoWorkingSet(HttpSession session, RedirectAttributes ra, Model model, @AuthenticationPrincipal User user,
+    public String nuovoWorkingSet(HttpSession session, RedirectAttributes ra, Model model, @AuthenticationPrincipal Principal user,
             @ModelAttribute("elaborazioneFormBean") ElaborazioneFormBean form) {
         notificationService.removeAllMessages();      
         
@@ -222,7 +223,7 @@ public class WorkSessionController {
     }
 
     @GetMapping(value = "/sessione/chiudisessione/{idBusinessFunction}")
-    public String chiudiSessione(HttpSession session, @AuthenticationPrincipal User user,
+    public String chiudiSessione(HttpSession session,
             @PathVariable("idBusinessFunction") Long idBusinessFunction) {
         session.removeAttribute(IS2Const.SESSION_BEAN);
         session.removeAttribute(IS2Const.SESSION_DATASET);
@@ -231,7 +232,7 @@ public class WorkSessionController {
     }
 
     @GetMapping(value = "/sessione/elimina/{idsessione}")
-    public String eliminaWS(HttpSession session, Model model, RedirectAttributes ra, @AuthenticationPrincipal User user,
+    public String eliminaWS(HttpSession session, Model model, RedirectAttributes ra, 
             @PathVariable("idsessione") Long idsessione) {
         notificationService.removeAllMessages();
         NotificationMessage message;
