@@ -106,11 +106,11 @@ public class WorkflowService {
 	private WorkFlowBatchDao workFlowBatchDao;
 
 	public WorkSession findWorkSession(Long id) {
-		return workSessionDao.findById(id).get();
+		return workSessionDao.findById(id).orElse(null);
 	}
 
 	public DataProcessing findDataProcessing(Long id) {
-		return dataProcessingDao.findById(id).get();
+		return dataProcessingDao.findById(id).orElse(null);
 	}
 
 	public void eliminaDataProcessing(Long id) {
@@ -178,7 +178,7 @@ public class WorkflowService {
 			Integer groupRole) {
 		Map<String, List<String>> ret = new LinkedHashMap<>();
 		DataProcessing el = findDataProcessing(idDataProcessing);
-		AppRole groupAppRole =appRoleDao.findById(groupRole).get();
+		AppRole groupAppRole =appRoleDao.findById(groupRole).orElse(null);
 		for (Iterator<?> iterator = el.getStepRuntimes().iterator(); iterator.hasNext();) {
 			StepRuntime stepRuntime = (StepRuntime) iterator.next();
 			if (groupAppRole.equals(stepRuntime.getRoleGroup())) {
@@ -216,7 +216,7 @@ public class WorkflowService {
 
 			if (workset == null) {
 				workset = new Workset();
-				DatasetColumn dscolumn = datasetColumnDao.findById((Long.parseLong(form.getVariable()[i]))).get();
+				DatasetColumn dscolumn = datasetColumnDao.findById((Long.parseLong(form.getVariable()[i]))).orElse(null);
 				workset.setName(dscolumn.getDatasetFile().getFileLabel() + "_"
 						+ dscolumn.getName().replaceAll(PATTERN_NAME, "_"));
 				workset.setContents(dscolumn.getContents());
@@ -245,7 +245,7 @@ public class WorkflowService {
 		List<StepRuntime> varList = dataProcessing.getStepRuntimes();
 		Workset workset = null;
 		Integer idVar = Integer.parseInt(form.getVariable()[0]);
-		StepRuntime stepRuntime = stepRuntimeDao.findById(idVar).get();
+		StepRuntime stepRuntime = stepRuntimeDao.findById(idVar).orElse(null);
 		String idr = form.getRole()[0];
 		String nomeVar = form.getValue()[0];
 		String nomeOld = form.getValueOld();
@@ -313,7 +313,7 @@ public class WorkflowService {
 
 			AppRole sxruolo = null;
 			String idparam = null;
-			String nomeparam = null;
+			String nomeparam = "";
 			String ruoloparam = null;
 
 			while (stringTokenizer.hasMoreTokens()) {
@@ -350,7 +350,7 @@ public class WorkflowService {
 			String[] all_parametri = form.getParameters();
 			String idWorkset = all_parametri[i];
 
-			Workset workset = workSetDao.findById(Long.valueOf(idWorkset)).get();
+			Workset workset = workSetDao.findById(Long.valueOf(idWorkset)).orElse(null);
 			String value = form.getValue()[i];
 			workset.setParamValue(value);
 			workSetDao.save(workset);
@@ -460,11 +460,11 @@ public class WorkflowService {
 	}
 
 	public DataTypeCls getDataTypeById(Integer dataType) {
-		return dataTypeDao.findById(dataType).get();
+		return dataTypeDao.findById(dataType).orElse(null);
 	}
 
 	public TypeIO getTypeIOById(Integer typeIo) {
-		return typeIODao.findById(typeIo).get();
+		return typeIODao.findById(typeIo).orElse(null);
 	}
 
 	public List<AppRole> getOutputRoleGroupsStepRuntimes(Long idDataProcessing, TypeIO typeIO, DataTypeCls dataType) {
@@ -591,7 +591,7 @@ public class WorkflowService {
 	public void setRuleset(DataProcessing dataProcessing, Integer idResultset)
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
-		Ruleset ruleset = rulesetDao.findById(idResultset).get();
+		Ruleset ruleset = rulesetDao.findById(idResultset).orElse(null);
 		AppRole appRole = appRoleDao.findByName(IS2Const.ROLE_NAME_RULESET);
 
 		StepRuntime stepRuntimeID = new StepRuntime();
@@ -635,7 +635,7 @@ public class WorkflowService {
 
 	public String getAppRoleNameById(Integer groupRole) {
 		// TODO Auto-generated method stub
-		AppRole role= appRoleDao.findById(groupRole).get();
+		AppRole role= appRoleDao.findById(groupRole).orElse(null);
 		return role.getName();
 	}
 
