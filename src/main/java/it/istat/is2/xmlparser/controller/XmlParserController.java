@@ -13,8 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import it.istat.is2.app.bean.InputFormBean;
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.NotificationService;
@@ -46,9 +45,9 @@ public class XmlParserController {
         
         return "xmlparser/upload";
     }
-	@RequestMapping(value = "/loadXmlFile", method = RequestMethod.POST)
+	@PostMapping(value = "/loadXmlFile")
     public String loadInputData(HttpSession session, HttpServletRequest request, Model model,
-            @AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") InputFormBean form) throws IOException {	
+            @ModelAttribute("inputFormBean") InputFormBean form) throws IOException {	
         notificationService.removeAllMessages();
         
         File file = null;
