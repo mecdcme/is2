@@ -144,13 +144,13 @@ public class WorkflowService {
 	}
 
 	public String loadWorkSetValoriByDataProcessing(Long idDataProcessing, Integer typeIO, Integer groupRole,
-			Integer length, Integer start, Integer draw, HashMap<String, String> paramsFilter) throws JSONException {
+			Integer length, Integer start, Integer draw, Map<String, String> paramsFilter)  {
 
 		int offset = 2;
 		List<Object[]> resulFieldstList = sqlGenericDao.findWorsetIdColAndName(idDataProcessing, typeIO, groupRole);
 		List<Object[]> dataList = sqlGenericDao.findWorKSetDataViewParamsbyQuery(resulFieldstList, idDataProcessing,
 				typeIO, groupRole, start, length, paramsFilter, null, null);
-		// start, start + length, query_filter);
+		
 		Integer numRighe = 0;
 
 		JSONObject obj = new JSONObject();
@@ -251,8 +251,7 @@ public class WorkflowService {
 		String nomeVar = form.getValue()[0];
 		String nomeOld = form.getValueOld();
 		AppRole sxruolo = appRolesAllMap.get(Integer.valueOf(idr));
-		workset = null;
-
+		
 		for (int y = 0; y < varList.size(); y++) {
 			if (varList.get(y).getWorkset() != null && nomeOld.equals(varList.get(y).getWorkset().getName())) {
 				workset = varList.get(y).getWorkset();
@@ -358,13 +357,13 @@ public class WorkflowService {
 		List<AppRole> ret = new ArrayList<>();
 		List<AppRole> ret2 = new ArrayList<>();
 		List<StepInstance> instanceBF = findAllStepInstanceByProcess(businessProcess);
-		AppRole sxappRoles = new AppRole();
+		AppRole sxappRoles = null;
 
 		for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
-			StepInstance stepInstance = (StepInstance) iterator.next();
+			StepInstance stepInstance = iterator.next();
 			List<StepInstanceSignature> stepSignatures = stepInstance.getStepInstanceSignatures();
 			for (Iterator<StepInstanceSignature> iterator2 = stepSignatures.iterator(); iterator2.hasNext();) {
-				StepInstanceSignature stepSignature = (StepInstanceSignature) iterator2.next();
+				StepInstanceSignature stepSignature =iterator2.next();
 				if (flagIO == 0) {// flagIO All
 					if ((stepSignature.getTypeIO().equals(new TypeIO(IS2Const.TYPE_IO_INPUT))
 							&& stepSignature.getAppRole().getDataType().equals(dataType))) {
@@ -384,6 +383,7 @@ public class WorkflowService {
 		}
 		// Rimuovo i appRoles duplicati nel caso si disponga di più variabili per
 		// processo
+		
 		for (int i = 0; i < ret.size(); i++) {
 			sxappRoles = ret.get(i);
 			if (!ret2.contains(sxappRoles)) {
@@ -407,7 +407,7 @@ public class WorkflowService {
 		List<StepInstanceSignature> ret = new ArrayList<>();
 		List<StepInstance> instanceBF = findAllStepInstanceByProcess(businessProcess);
 		for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
-			StepInstance stepInstance = (StepInstance) iterator.next();
+			StepInstance stepInstance =iterator.next();
 			List<StepInstanceSignature> sxsetpppList = stepInstanceSignatureDao.findAllStepSignaturesByStepAndTypeIO(
 					stepInstance, new TypeIO(IS2Const.TYPE_IO_INPUT),
 					new DataTypeCls(Integer.valueOf(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETRO
@@ -422,13 +422,13 @@ public class WorkflowService {
 		Map<Long, List<StepInstanceSignature>> ret = new HashMap<>();
 
 		for (Iterator<BusinessProcess> iteratorb = businessProcess.getBusinessSubProcesses().iterator(); iteratorb.hasNext();) {
-			BusinessProcess suBusinessProcess = (BusinessProcess) iteratorb.next();
+			BusinessProcess suBusinessProcess =iteratorb.next();
 
 			List<StepInstanceSignature> paramsList = new ArrayList<>();
 			List<StepInstance> instanceBF = findAllStepInstanceBySubBProcess(suBusinessProcess);
 
 			for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
-				StepInstance stepInstance = (StepInstance) iterator.next();
+				StepInstance stepInstance =iterator.next();
 				List<StepInstanceSignature> sxsetpppList = stepInstanceSignatureDao
 						.findAllStepSignaturesByStepAndTypeIO(stepInstance, new TypeIO(IS2Const.TYPE_IO_INPUT),
 								new DataTypeCls(Integer.valueOf(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETER
