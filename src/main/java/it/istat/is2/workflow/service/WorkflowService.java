@@ -179,13 +179,14 @@ public class WorkflowService {
 		Map<String, List<String>> ret = new LinkedHashMap<>();
 		DataProcessing el = findDataProcessing(idDataProcessing);
 		AppRole groupAppRole =appRoleDao.findById(groupRole).orElse(null);
+		if(groupAppRole!=null) {
 		for (Iterator<?> iterator = el.getStepRuntimes().iterator(); iterator.hasNext();) {
 			StepRuntime stepRuntime = (StepRuntime) iterator.next();
 			if (groupAppRole.equals(stepRuntime.getRoleGroup())) {
 				ret.put(stepRuntime.getWorkset().getName(), stepRuntime.getWorkset().getContents());
 			}
 		}
-
+		}
 		return ret;
 	}
 
@@ -216,7 +217,7 @@ public class WorkflowService {
 
 			if (workset == null) {
 				workset = new Workset();
-				DatasetColumn dscolumn = datasetColumnDao.findById((Long.parseLong(form.getVariable()[i]))).orElse(null);
+				DatasetColumn dscolumn = datasetColumnDao.findById((Long.parseLong(form.getVariable()[i]))).orElse(new DatasetColumn());
 				workset.setName(dscolumn.getDatasetFile().getFileLabel() + "_"
 						+ dscolumn.getName().replaceAll(PATTERN_NAME, "_"));
 				workset.setContents(dscolumn.getContents());
@@ -245,7 +246,7 @@ public class WorkflowService {
 		List<StepRuntime> varList = dataProcessing.getStepRuntimes();
 		Workset workset = null;
 		Integer idVar = Integer.parseInt(form.getVariable()[0]);
-		StepRuntime stepRuntime = stepRuntimeDao.findById(idVar).orElse(null);
+		StepRuntime stepRuntime = stepRuntimeDao.findById(idVar).orElse(new StepRuntime());
 		String idr = form.getRole()[0];
 		String nomeVar = form.getValue()[0];
 		String nomeOld = form.getValueOld();
@@ -278,18 +279,7 @@ public class WorkflowService {
 		stepRuntimeDao.save(stepRuntime);
 	}
 
-	/*
-	 * public DataProcessing doBusinessProc(DataProcessing dataProcessing, Long
-	 * idBProc) throws Exception { BusinessProcess businessProcess =
-	 * businessProcessDao.findById(idBProc).orElse(new BusinessProcess()); for
-	 * (Iterator<?> iterator = businessProcess.getBusinessSteps().iterator();
-	 * iterator.hasNext();) { BusinessStep businessStep = (BusinessStep)
-	 * iterator.next(); for (Iterator<?> iteratorStep =
-	 * businessStep.getStepInstances().iterator(); iteratorStep.hasNext();) {
-	 * StepInstance stepInstance = (StepInstance) iteratorStep.next();
-	 * dataProcessing = doStep(dataProcessing, stepInstance); } } return
-	 * dataProcessing; }
-	 */
+
 	public List<StepRuntime> getStepRuntimesNoValues(Long idDataProcessing, DataTypeCls dataType) {
 		return stepRuntimeDao.findByDataProcessingNoValues(new DataProcessing(idDataProcessing), dataType);
 	}
@@ -434,10 +424,10 @@ public class WorkflowService {
 
 		Map<Long, List<StepInstanceSignature>> ret = new HashMap<>();
 
-		for (Iterator iteratorb = businessProcess.getBusinessSubProcesses().iterator(); iteratorb.hasNext();) {
+		for (Iterator<BusinessProcess> iteratorb = businessProcess.getBusinessSubProcesses().iterator(); iteratorb.hasNext();) {
 			BusinessProcess suBusinessProcess = (BusinessProcess) iteratorb.next();
 
-			List<StepInstanceSignature> paramsList = new ArrayList();
+			List<StepInstanceSignature> paramsList = new ArrayList<>();
 			List<StepInstance> instanceBF = findAllStepInstanceBySubBProcess(suBusinessProcess);
 
 			for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
@@ -480,7 +470,7 @@ public class WorkflowService {
 			stepRuntimesRoles.add(stepRuntime.getAppRole());
 		}
 
-		for (Iterator iteratorb = dataProcessing.getBusinessProcess().getBusinessSubProcesses().iterator(); iteratorb.hasNext();) {
+		for (Iterator<BusinessProcess> iteratorb = dataProcessing.getBusinessProcess().getBusinessSubProcesses().iterator(); iteratorb.hasNext();) {
 			BusinessProcess suBusinessProcess = (BusinessProcess) iteratorb.next();
 
 			Set<String> roleNameSet = new HashSet<String>();
@@ -580,9 +570,7 @@ public class WorkflowService {
 		if (jobInstanceIds != null && jobInstanceIds.size() > 0) {
 			for (int i = 0; i < jobInstanceIds.size(); i++) {
 
-				// workFlowBatchDao.deleteBatchJobExecutionContextById(jobInstanceIds.get(i));
-				// workFlowBatchDao.deleteBatchJobExecutionById(jobInstanceIds.get(i));
-				workFlowBatchDao.deleteJobInstanceById(jobInstanceIds.get(i));
+		 		workFlowBatchDao.deleteJobInstanceById(jobInstanceIds.get(i));
 			}
 		}
 
@@ -635,7 +623,7 @@ public class WorkflowService {
 
 	public String getAppRoleNameById(Integer groupRole) {
 		// TODO Auto-generated method stub
-		AppRole role= appRoleDao.findById(groupRole).orElse(null);
+		AppRole role= appRoleDao.findById(groupRole).orElse(new AppRole());
 		return role.getName();
 	}
 
