@@ -77,7 +77,7 @@ import it.istat.is2.worksession.domain.WorkSession;
 @Service
 public class WorkflowService {
 
-	private final String PATTERN_NAME = "\\.|\\s";
+	private final String PATTERNNAME = "\\.|\\s";
 	@Autowired
 	private WorkSessionDao workSessionDao;
 	@Autowired
@@ -219,7 +219,7 @@ public class WorkflowService {
 				workset = new Workset();
 				DatasetColumn dscolumn = datasetColumnDao.findById((Long.parseLong(form.getVariable()[i]))).orElse(new DatasetColumn());
 				workset.setName(dscolumn.getDatasetFile().getFileLabel() + "_"
-						+ dscolumn.getName().replaceAll(PATTERN_NAME, "_"));
+						+ dscolumn.getName().replaceAll(PATTERNNAME, "_"));
 				workset.setContents(dscolumn.getContents());
 				workset.setContentSize(workset.getContents().size());
 				workset.setDatasetColumnId(dscolumn.getId());
@@ -263,7 +263,7 @@ public class WorkflowService {
 			workset = new Workset();
 			DatasetColumn dscolumn = datasetColumnDao.findById((Long.parseLong(form.getVariable()[0])))
 					.orElse(new DatasetColumn());
-			workset.setName(dscolumn.getName().replaceAll(PATTERN_NAME, "_"));
+			workset.setName(dscolumn.getName().replaceAll(PATTERNNAME, "_"));
 			workset.setContents(dscolumn.getContents());
 			workset.setContentSize(workset.getContents().size());
 			workset.setDatasetColumnId(dscolumn.getId());
@@ -298,18 +298,15 @@ public class WorkflowService {
 		for (int i = 0; i < form.getDataProcessing().length; i++) {
 			String[] all_parametri = form.getParameters();
 			String parametri = all_parametri[i];
-			// String[] stringTokenizer = parametri.split("|");
 			StringTokenizer stringTokenizer = new StringTokenizer(parametri, "|");
 
 			AppRole sxruolo = null;
-			String idparam = null;
 			String nomeparam = "";
 			String ruoloparam = null;
 
 			while (stringTokenizer.hasMoreTokens()) {
 				// ordine: nomeParam, idParam, ruolo
 				nomeparam = stringTokenizer.nextToken();
-				idparam = stringTokenizer.nextToken();
 				ruoloparam = stringTokenizer.nextToken();
 			}
 			sxruolo = appRolesAllMap.get(Integer.valueOf(ruoloparam));
@@ -317,7 +314,7 @@ public class WorkflowService {
 			stepRuntime.setDataProcessing(dataProcessing);
 			stepRuntime.setAppRole(sxruolo);
 			Workset workset = new Workset();
-			workset.setName(nomeparam.replaceAll(PATTERN_NAME, "_"));
+			workset.setName(nomeparam.replaceAll(PATTERNNAME, "_"));
 			stepRuntime.setOrderCode(sxruolo.getOrder());
 			stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
 			stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_INPUT));
@@ -335,12 +332,12 @@ public class WorkflowService {
 		}
 	}
 
-	public void updateParametri(MappingVarsFormBean form, DataProcessing dataProcessing) {
+	public void updateParametri(MappingVarsFormBean form) {
 		for (int i = 0; i < form.getDataProcessing().length; i++) {
-			String[] all_parametri = form.getParameters();
-			String idWorkset = all_parametri[i];
+			String[] allParametri = form.getParameters();
+			String idWorkset = allParametri[i];
 
-			Workset workset = workSetDao.findById(Long.valueOf(idWorkset)).orElse(null);
+			Workset workset = workSetDao.findById(Long.valueOf(idWorkset)).orElse(new Workset());
 			String value = form.getValue()[i];
 			workset.setParamValue(value);
 			workSetDao.save(workset);
@@ -537,7 +534,7 @@ public class WorkflowService {
 					String nameWorkset = "";
 					if (prefixDataset)
 						nameWorkset = dscolumn.getDatasetFile().getFileLabel() + "_";
-					nameWorkset += dscolumn.getName().replaceAll(PATTERN_NAME, "_");
+					nameWorkset += dscolumn.getName().replaceAll(PATTERNNAME, "_");
 					workset.setName(nameWorkset);
 					workset.setContents(dscolumn.getContents());
 					workset.setContentSize(workset.getContents().size());

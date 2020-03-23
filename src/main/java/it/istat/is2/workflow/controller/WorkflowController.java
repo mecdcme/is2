@@ -519,7 +519,7 @@ public class WorkflowController {
 
         DataProcessing dataProcessing = workflowService.findDataProcessing(dataProcessingId);
 
-        workflowService.updateParametri(form2, dataProcessing);
+        workflowService.updateParametri(form2);
         notificationService.addInfoMessage("Parametro modificato");
 
         model.addAttribute("dataProcessing", dataProcessing);
