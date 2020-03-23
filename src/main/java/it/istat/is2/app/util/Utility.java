@@ -40,9 +40,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.log4j.Logger;
@@ -52,7 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.renjin.sexp.Vector;
-import org.springframework.web.context.request.RequestContextHolder;
+
 
 import it.istat.is2.app.bean.InputFormBean;
 import it.istat.is2.workflow.domain.BusinessProcess;
@@ -63,6 +60,7 @@ import it.istat.is2.workflow.domain.AppRole;
 
 public class Utility {
 
+	@SuppressWarnings("rawtypes")
 	public static String printJsonToHtml(String jsonString)  {
 		StringBuffer ret=new StringBuffer();
 		JSONParser jSONParser;
@@ -87,14 +85,15 @@ public class Utility {
 		return ret.toString();
 	}
 
-	public static String parseList(List list,String ret) throws JSONException {
+	@SuppressWarnings("unchecked")
+	public static String parseList(List<?> list,String ret) throws JSONException {
 		 
 		
 		for (Object object : list) {
 			if(object instanceof List)
-				ret =parseList((List)object,ret);
+				ret =parseList((List<?>)object,ret);
 			else if(object instanceof Map)
-		 		ret=parseMap((Map)object,ret);
+		 		ret=parseMap((Map<String, ?>)object,ret);
 			else	 
 		 		ret+=object.toString();
 		}
@@ -102,7 +101,7 @@ public class Utility {
         return ret;
     }
 
-	public static String parseMap(Map jsonObject, String ret) throws JSONException {
+	public static String parseMap(Map<String, ?> jsonObject, String ret) throws JSONException {
 
 		Iterator<String> iterator = jsonObject.keySet().iterator();
 		int len = jsonObject.keySet().size();
@@ -112,7 +111,7 @@ public class Utility {
 			if(jsonObject instanceof List) {
 				ret += "<ul>";
 				ret += obj;
-				ret =parseList((List)jsonObject.get(obj),ret);
+				ret =parseList((List<?>)jsonObject.get(obj),ret);
 				ret += "</ul>";
 			} else {
 				if (index == 0)
@@ -184,7 +183,7 @@ public class Utility {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMMM-yyyy HH:mm:ss");
 			dataOutput = simpleDateFormat.format(today);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.getRootLogger().debug(e);
 		}
 		return dataOutput;
 	}
