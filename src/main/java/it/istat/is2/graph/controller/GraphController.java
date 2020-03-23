@@ -26,19 +26,18 @@ package it.istat.is2.graph.controller;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import it.istat.is2.app.service.LogService;
-import it.istat.is2.app.service.NotificationService;
+
 import it.istat.is2.dataset.domain.DatasetColumn;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
-import it.istat.is2.workflow.service.DataTypeService;
-import it.istat.is2.worksession.service.WorkSessionService;
+
+
 
 @Controller
 public class GraphController {
@@ -47,18 +46,9 @@ public class GraphController {
     private DatasetService datasetService;
     @Autowired
     ServletContext context;
-    @Autowired
-    private NotificationService notificationService;
-    @Autowired
-    private MessageSource messages;
-    @Autowired
-    private WorkSessionService workSessionService;
-    @Autowired
-    private DataTypeService dataTypeService;
-    @Autowired
-    private LogService logService;
+ 
 
-    @RequestMapping("/graph/home/{idfile}")
+    @GetMapping("/graph/home/{idfile}")
     public String caricaMetadati(Model model, @PathVariable("idfile") Long idfile) {
 
         DatasetFile dfile = datasetService.findDataSetFile(idfile);
@@ -72,19 +62,12 @@ public class GraphController {
         return "graph/home";
     }
 
-    @RequestMapping("/metadatiDatasetGrafici/{idfile}")
+    @GetMapping("/metadatiDatasetGrafici/{idfile}")
     public String caricaGraph(Model model, @PathVariable("idfile") Long idfile) {
 
-        DatasetFile dfile = datasetService.findDataSetFile(idfile);
-
-        /*        
-         List<DatasetColonna> colonne = datasetService.findAllNomeColonne(idfile);
-         List<TipoVariabileSum> variabiliSum = datasetService.findAllVariabiliSum();       
-         model.addAttribute("colonne", colonne);
-         model.addAttribute("idfile", idfile);
-         model.addAttribute("variabili", variabiliSum);
-         model.addAttribute("dfile", dfile);
-         */
+        @SuppressWarnings("unused")
+		DatasetFile dfile = datasetService.findDataSetFile(idfile);
+ 
         return "dataset/graph3";
     }
 }
