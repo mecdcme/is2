@@ -30,7 +30,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +39,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
@@ -77,8 +75,7 @@ public class BusinessDesignController {
 	}
 
 	@RequestMapping(value = "/newbservice", method = RequestMethod.POST)
-	public String createNewBService(HttpSession session, Model model, @AuthenticationPrincipal User user,
-			@RequestParam("name") String name, @RequestParam("description") String description) {
+	public String createNewBService(HttpSession session, Model model, @RequestParam("name") String name, @RequestParam("description") String description) {
 		notificationService.removeAllMessages();
 
 		BusinessService businessService = new BusinessService();
@@ -100,7 +97,7 @@ public class BusinessDesignController {
 	}
 
 	@RequestMapping(value = "/newappservice", method = RequestMethod.POST)
-	public String createNewAppService(HttpSession session, Model model, @AuthenticationPrincipal User user,
+	public String createNewAppService(HttpSession session, Model model,
 			@RequestParam("name") String name, @RequestParam("description") String description,
 			@RequestParam("language") String language, @RequestParam("engine") String engine,
 			@RequestParam("sourcepath") String sourcepath, @RequestParam("sourcecode") String sourcecode,
@@ -138,7 +135,7 @@ public class BusinessDesignController {
 
 	@GetMapping(value = "/deletebservice/{idbservice}")
 	public String deleteBService(HttpSession session, Model model, RedirectAttributes ra,
-			@AuthenticationPrincipal User user, @PathVariable("idbservice") Integer idbservice) {
+			@PathVariable("idbservice") Integer idbservice) {
 		notificationService.removeAllMessages();
 
 		BusinessService businessService = businessServiceService.findBusinessServiceById(idbservice);
@@ -154,7 +151,7 @@ public class BusinessDesignController {
 	}
 	@GetMapping(value = "/deleteappservice/{idappservice}")
 	public String deleteAppService(HttpSession session, Model model, RedirectAttributes ra,
-			@AuthenticationPrincipal User user, @PathVariable("idappservice") Integer idappservice) {
+			@PathVariable("idappservice") Integer idappservice) {
 		notificationService.removeAllMessages();
 
 		AppService appService = appServiceService.findAppServiceById(idappservice);
