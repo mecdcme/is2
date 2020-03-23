@@ -35,6 +35,11 @@ $(document).ready(function() {
 			check_and_send_as_req();
 		}
 	});
+	$("#new-step-instance-modal").keydown(function(event) {
+		if (event.which == 13) {
+			check_and_send_si_req();
+		}
+	});
 	$("#modalDeleteBS").keydown(function(event) {
 		if (event.which == 13) {
 			delete_bservice();
@@ -50,6 +55,9 @@ $(document).ready(function() {
 	});
 	$("#btn-submit-as").click(function() {
 		check_and_send_as_req();
+	});
+	$("#btn-submit-si").click(function() {
+		check_and_send_si_req();
 	});
 	$('#btn_delete_bs').click(function() {
 		delete_bservice();
@@ -76,7 +84,7 @@ function openNewStepInstanceDialog() {
 function check_and_send_req() {
 	var bsname = $('#bs-name').val();
 	if (bsname.length < 1) {
-		$("#bs-name-error").text(_mandatory_field);
+		$("#bs-name-error").text(_mandatory_name_field);
 	} else {
 		$("#bs-form").submit();
 	}
@@ -84,15 +92,23 @@ function check_and_send_req() {
 function check_and_send_as_req() {
 	var asname = $('#as-name').val().length;	
 	if (asname.length < 1) {
-		$("#as-name-error").text(_mandatory_field);
+		$("#as-method-error").text(_mandatory_name_field);
 	} else {
 		$("#as-form").submit();
+	}
+}
+function check_and_send_si_req() {
+	var method = $('#si-method').val().length;	
+	if (method.length < 1) {
+		$("#si-method-error").text(_mandatory_method_field);
+	} else {
+		$("#si-form").submit();
 	}
 }
 function check_and_send_elab_req() {
 	var nomeelab = $('#nome-elab').val();
 	if (nomeelab.length < 1) {
-		$("#nomesesserror").text(_mandatory_field);
+		$("#nomesesserror").text(_mandatory_name_field);
 	} else {
 		$("#form").submit();
 	}
