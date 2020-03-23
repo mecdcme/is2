@@ -23,8 +23,8 @@
  */
 package it.istat.is2.app.dao;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -81,21 +81,24 @@ public abstract class SqlGenericDao {
 
     @SuppressWarnings("unchecked")
 	public List<String> loadFieldValuesTable(String dbschema, String tablename, String field) {
-        String query="SELECT " + field + "  FROM " + dbschema + "." + tablename;
-    	Query q = em.createNativeQuery(query);
+    	
+    	String table=dbschema + "." + tablename;
+        String query="SELECT  ?  FROM " +table;
+       	Query q = em.createNativeQuery(query);
+    	q.setParameter(1, field);
        return  q.getResultList();
         
     }
 
     public abstract List<Object[]> findWorKSetDataViewParamsbyQuery(List<Object[]> resulFieldstList, Long idDataProcessing, Integer typeIO, Integer groupRole, Integer rigaInf, Integer length,
-            HashMap<String, String> paramsFilter, String nameColumnToOrder, String dirColumnOrder);
+            Map<String, String> paramsFilter, String nameColumnToOrder, String dirColumnOrder);
 
     public abstract List<Object[]> findDatasetDataViewParamsbyQuery(List<Object[]> resulFieldstList, Long dFile, Integer rigaInf, Integer length,
-            HashMap<String, String> paramsFilter, String nameColumnToOrder, String dirColumnOrder);
+            Map<String, String> paramsFilter, String nameColumnToOrder, String dirColumnOrder);
 
-    public abstract List<String> findTablesDB(String table_schema);
+    public abstract List<String> findTablesDB(String tableSchema);
 
-    public abstract List<String> findFieldsTableDB(String table_schema, String table_name);
+    public abstract List<String> findFieldsTableDB(String tableSchema, String tableName);
 
     public static SqlGenericDao getSqlGenericDAOFactory(String database) {
         switch (database.toLowerCase()) {
