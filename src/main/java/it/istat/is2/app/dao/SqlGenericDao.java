@@ -37,77 +37,80 @@ import it.istat.is2.dataset.domain.DatasetFile;
 @Repository
 public abstract class SqlGenericDao {
 
-    public static final String MYSQL = "mysql";
-    public static final String POSTGRESSQL = "postgresql";
+	public static final String MYSQL = "mysql";
+	public static final String POSTGRESSQL = "postgresql";
 
-    @Autowired
-    protected EntityManager em;
+	@Autowired
+	protected EntityManager em;
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public List<DatasetFile> findGenericDatasetFileAll() {
 
-        Query q = em.createNativeQuery("select * from IS2_DATASET_FILE", DatasetFile.class);
+		Query q = em.createNativeQuery("select * from IS2_DATASET_FILE", DatasetFile.class);
 		List<?> resultList = q.getResultList();
-        return (List<DatasetFile>)resultList;
-    }
+		return (List<DatasetFile>) resultList;
+	}
 
-    public DatasetFile findGenericDatasetFileOne(Long id) {
+	public DatasetFile findGenericDatasetFileOne(Long id) {
 
-        Query q = em.createNativeQuery("select * from IS2_DATASET_FILE df where df.id=?", DatasetFile.class);
-        q.setParameter(1, id);
-        return (DatasetFile) q.getSingleResult();
-         
-    }
+		Query q = em.createNativeQuery("select * from IS2_DATASET_FILE df where df.id=?", DatasetFile.class);
+		q.setParameter(1, id);
+		return (DatasetFile) q.getSingleResult();
 
-    @SuppressWarnings("unchecked")
+	}
+
+	@SuppressWarnings("unchecked")
 	public List<Object[]> findDatasetIdColAndName(Long dFile) {
+		Query qf = em.createNativeQuery(
+				"SELECT id,name FROM IS2_DATASET_COLUMN ss WHERE ss.dataset_file_ID=:dFile order by 1 asc ");
+		qf.setParameter("dFile", dFile);
+		return qf.getResultList();
 
-        Query qf = em.createNativeQuery("SELECT id,name FROM IS2_DATASET_COLUMN ss WHERE ss.dataset_file_ID=:dFile order by 1 asc ");
-        qf.setParameter("dFile", dFile);
-         return (List<Object[]>) qf.getResultList();
-         
-    }
+	}
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public List<Object[]> findWorsetIdColAndName(Long idDataProcessing, Integer typeIO, Integer groupRole) {
 
-        Query qf = em.createNativeQuery("SELECT ss.ID,ss.NAME from   IS2_WORKSET ss,  IS2_STEP_RUNTIME sv  where  sv.data_processing_id=:idDataProcessing and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id  order by 1 asc ");
-        qf.setParameter("idDataProcessing", idDataProcessing);
-        qf.setParameter("typeIO", typeIO);
-        qf.setParameter("groupRole", groupRole);
-        return  qf.getResultList();
-         
-    }
+		Query qf = em.createNativeQuery(
+				"SELECT ss.ID,ss.NAME from   IS2_WORKSET ss,  IS2_STEP_RUNTIME sv  where  sv.data_processing_id=:idDataProcessing and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id  order by 1 asc ");
+		qf.setParameter("idDataProcessing", idDataProcessing);
+		qf.setParameter("typeIO", typeIO);
+		qf.setParameter("groupRole", groupRole);
+		return qf.getResultList();
 
-    @SuppressWarnings("unchecked")
+	}
+
+	@SuppressWarnings("unchecked")
 	public List<String> loadFieldValuesTable(String dbschema, String tablename, String field) {
-    	
-    	String table=dbschema + "." + tablename;
-        String query="SELECT  ?  FROM " +table;
-       	Query q = em.createNativeQuery(query);
-    	q.setParameter(1, field);
-       return  q.getResultList();
-        
-    }
 
-    public abstract List<Object[]> findWorKSetDataViewParamsbyQuery(List<Object[]> resulFieldstList, Long idDataProcessing, Integer typeIO, Integer groupRole, Integer rigaInf, Integer length,
-            Map<String, String> paramsFilter, String nameColumnToOrder, String dirColumnOrder);
+		String table = dbschema + "." + tablename;
+		String query = "SELECT  ?  FROM " + table;
+		Query q = em.createNativeQuery(query);
+		q.setParameter(1, field);
+		return q.getResultList();
 
-    public abstract List<Object[]> findDatasetDataViewParamsbyQuery(List<Object[]> resulFieldstList, Long dFile, Integer rigaInf, Integer length,
-            Map<String, String> paramsFilter, String nameColumnToOrder, String dirColumnOrder);
+	}
 
-    public abstract List<String> findTablesDB(String tableSchema);
+	public abstract List<Object[]> findWorKSetDataViewParamsbyQuery(List<Object[]> resulFieldstList,
+			Long idDataProcessing, Integer typeIO, Integer groupRole, Integer rigaInf, Integer length,
+			Map<String, String> paramsFilter, String nameColumnToOrder, String dirColumnOrder);
 
-    public abstract List<String> findFieldsTableDB(String tableSchema, String tableName);
+	public abstract List<Object[]> findDatasetDataViewParamsbyQuery(List<Object[]> resulFieldstList, Long dFile,
+			Integer rigaInf, Integer length, Map<String, String> paramsFilter, String nameColumnToOrder,
+			String dirColumnOrder);
 
-    public static SqlGenericDao getSqlGenericDAOFactory(String database) {
-        switch (database.toLowerCase()) {
-            case MYSQL:
-                return new MySqlSqlGenericDao();
-            case POSTGRESSQL:
-                return new PostgreSQLSqlGenericDao();
-            default:
-                return null;
-        }
-    }
+	public abstract List<String> findTablesDB(String tableSchema);
+
+	public abstract List<String> findFieldsTableDB(String tableSchema, String tableName);
+
+	public static SqlGenericDao getSqlGenericDAOFactory(String database) {
+		switch (database.toLowerCase()) {
+		case MYSQL:
+			return new MySqlSqlGenericDao();
+		case POSTGRESSQL:
+			return new PostgreSQLSqlGenericDao();
+		default:
+			return null;
+		}
+	}
 }
