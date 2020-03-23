@@ -78,7 +78,7 @@ public class DatasetService {
         DataTypeCls tipoD = new DataTypeCls();
         tipoD.setId(tipoDato);
         dFile.setDataType(tipoD);
-        dFile.setWorkSession(sessioneLavoroDao.findById(Long.parseLong(idsessione)).get());
+        dFile.setWorkSession(sessioneLavoroDao.findById(Long.parseLong(idsessione)).orElse(null));
         dFile.setFileName(desc);
         dFile.setFileFormat("CSV");
         dFile.setFieldSeparator(separatore);
