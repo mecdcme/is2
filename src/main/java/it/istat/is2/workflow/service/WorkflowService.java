@@ -579,7 +579,7 @@ public class WorkflowService {
 	public void setRuleset(DataProcessing dataProcessing, Integer idResultset)
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
-		Ruleset ruleset = rulesetDao.findById(idResultset).orElse(null);
+		Ruleset ruleset = rulesetDao.findById(idResultset).orElse(new Ruleset());
 		AppRole appRole = appRoleDao.findByName(IS2Const.ROLE_NAME_RULESET);
 
 		StepRuntime stepRuntimeID = new StepRuntime();
