@@ -43,50 +43,48 @@ public abstract class SqlGenericDao {
     @Autowired
     protected EntityManager em;
 
-    public List<DatasetFile> findGenericDatasetFileAll() {
+    @SuppressWarnings("unchecked")
+	public List<DatasetFile> findGenericDatasetFileAll() {
 
         Query q = em.createNativeQuery("select * from IS2_DATASET_FILE", DatasetFile.class);
-
-        @SuppressWarnings("unchecked")
-        List<DatasetFile> resultList = (List<DatasetFile>) q.getResultList();
-        return resultList;
+		List<?> resultList = q.getResultList();
+        return (List<DatasetFile>)resultList;
     }
 
     public DatasetFile findGenericDatasetFileOne(Long id) {
 
         Query q = em.createNativeQuery("select * from IS2_DATASET_FILE df where df.id=?", DatasetFile.class);
         q.setParameter(1, id);
-        DatasetFile result = (DatasetFile) q.getSingleResult();
-        return result;
+        return (DatasetFile) q.getSingleResult();
+         
     }
 
-    public List<Object[]> findDatasetIdColAndName(Long dFile) {
+    @SuppressWarnings("unchecked")
+	public List<Object[]> findDatasetIdColAndName(Long dFile) {
 
         Query qf = em.createNativeQuery("SELECT id,name FROM IS2_DATASET_COLUMN ss WHERE ss.dataset_file_ID=:dFile order by 1 asc ");
         qf.setParameter("dFile", dFile);
-        @SuppressWarnings("unchecked")
-        List<Object[]> resulFieldstList = (List<Object[]>) qf.getResultList();
-        return resulFieldstList;
+         return (List<Object[]>) qf.getResultList();
+         
     }
 
-    public List<Object[]> findWorsetIdColAndName(Long idDataProcessing, Integer typeIO, Integer groupRole) {
+    @SuppressWarnings("unchecked")
+	public List<Object[]> findWorsetIdColAndName(Long idDataProcessing, Integer typeIO, Integer groupRole) {
 
         Query qf = em.createNativeQuery("SELECT ss.ID,ss.NAME from   IS2_WORKSET ss,  IS2_STEP_RUNTIME sv  where  sv.data_processing_id=:idDataProcessing and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id  order by 1 asc ");
         qf.setParameter("idDataProcessing", idDataProcessing);
         qf.setParameter("typeIO", typeIO);
         qf.setParameter("groupRole", groupRole);
-        @SuppressWarnings("unchecked")
-        List<Object[]> resulFieldstList = (List<Object[]>) qf.getResultList();
-        return resulFieldstList;
+        return  qf.getResultList();
+         
     }
 
-    public List<String> loadFieldValuesTable(String dbschema, String tablename, String field) {
-        // TODO Auto-generated method stub
-       
-        Query q = em.createNativeQuery("SELECT " + field + "  FROM " + dbschema + "." + tablename);
-        @SuppressWarnings("unchecked")
-        List<String> resultList = (List<String>) q.getResultList();
-        return resultList;
+    @SuppressWarnings("unchecked")
+	public List<String> loadFieldValuesTable(String dbschema, String tablename, String field) {
+        String query="SELECT " + field + "  FROM " + dbschema + "." + tablename;
+    	Query q = em.createNativeQuery(query);
+       return  q.getResultList();
+        
     }
 
     public abstract List<Object[]> findWorKSetDataViewParamsbyQuery(List<Object[]> resulFieldstList, Long idDataProcessing, Integer typeIO, Integer groupRole, Integer rigaInf, Integer length,
