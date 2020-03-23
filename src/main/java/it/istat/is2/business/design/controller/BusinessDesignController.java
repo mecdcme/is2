@@ -34,8 +34,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -74,7 +73,7 @@ public class BusinessDesignController {
 
 	}
 
-	@RequestMapping(value = "/newbservice", method = RequestMethod.POST)
+	@PostMapping(value = "/newbservice")
 	public String createNewBService(HttpSession session, Model model, @RequestParam("name") String name, @RequestParam("description") String description) {
 		notificationService.removeAllMessages();
 
@@ -96,7 +95,7 @@ public class BusinessDesignController {
 		return "redirect:/busservlist";
 	}
 
-	@RequestMapping(value = "/newappservice", method = RequestMethod.POST)
+	@PostMapping(value = "/newappservice")
 	public String createNewAppService(HttpSession session, Model model,
 			@RequestParam("name") String name, @RequestParam("description") String description,
 			@RequestParam("language") String language, @RequestParam("engine") String engine,
@@ -122,6 +121,32 @@ public class BusinessDesignController {
 		
 		try {
 			appServiceService.save(appService);
+			notificationService.addInfoMessage(
+					messages.getMessage("generic.successfull.saved.message", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			notificationService.addErrorMessage(
+					messages.getMessage("generic.saving.error.message", null, LocaleContextHolder.getLocale()) + ": "
+							+ e.getMessage());
+		}
+
+		return "redirect:/busservlist";
+	}
+	@PostMapping(value = "/newstepinstance")
+	public String createNewStepInstance(HttpSession session, Model model,
+			@RequestParam("method") String method, @RequestParam("description") String description,
+			@RequestParam("label") String label, @RequestParam("idappservice") Integer idappservice) {
+		notificationService.removeAllMessages();
+
+		StepInstance stepInstance = new StepInstance();
+		stepInstance.setMethod(method);
+		stepInstance.setDescr(description);				
+		
+		AppService appService = appServiceService.findAppServiceById(idappservice);
+		stepInstance.setAppService(appService);		
+		
+		
+		try {
+			stepInstanceService.save(stepInstance);			
 			notificationService.addInfoMessage(
 					messages.getMessage("generic.successfull.saved.message", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {

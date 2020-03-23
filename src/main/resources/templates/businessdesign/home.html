@@ -28,7 +28,8 @@
 <head th:include="layout :: site-head" th:remove="tag" />
 <script th:inline="javascript">
 	var _remove_bs_msg_dialog = [[#{dialog.elimination.bs.message}]];
-	var _mandatory_field = [[#{as.field.name.mandatory}]];
+	var _mandatory_name_field = [[#{as.field.name.mandatory}]];
+	var _mandatory_method_field = [[#{si.field.method.mandatory}]];
 	var _remove_as_msg_dialog = [[#{dialog.elimination.as.message}]];
 </script>
 <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
@@ -448,12 +449,12 @@
 		<div class="modal fade" id="new-step-instance-modal" role="dialog">
 			<div class="modal-dialog " role="document">
 				<div class="modal-content ">
-					<form th:action="@{/newbservice}" id="bs-form"
+					<form th:action="@{/newstepinstance}" id="si-form"
 						class="form-horizontal" method="post">
 						<div class="modal-header">
 							<h5 class="modal-title">
 								<i class="fa fa-folder-open"></i> <span
-									th:text="#{dialog.title.new.bs}">New Business Service</span>
+									th:text="#{dialog.title.new.si}">New Step Instance</span>
 							</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
@@ -463,18 +464,36 @@
 						<div class="modal-body form">
 							<div class="form-group">
 								<label class="control-label"
-									th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
-								<input name="name" id="si-name" th:title="#{generic.label.name}"
+									th:text="#{si.method.label}+'*'"><span>Method</span></label>
+								<input name="method" id="si-method" th:title="#{si.method.label}"
 									class="form-control" type="text" /> <span class="help-block">
-									<small class="text-danger" id="si-name-error"></small>
+									<small class="text-danger" id="si-method-error"></small>
 								</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label" th:text="#{nuova.sessione.descr}">
+								<label class="control-label" th:text="#{generic.label.description}">
 									<span>Descrizione</span>
 								</label> <input name="description"
 									th:title="#{generic.label.description}" class="form-control"
 									type="text" /> <span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{si.label.label}">
+									<span>Label</span>
+								</label> <input name="label"
+									th:title="#{si.label.label}" class="form-control"
+									type="text" /> <span class="help-block"></span>
+							</div>							
+							<div class="form-group">
+								<label class="control-label"
+									th:text="#{si.appservice.link.label}"><span>Collega
+										App. Service</span> </label> <select name="idappservice"
+									th:title="#{si.appservice.link.label}"
+									class="form-control">
+									<option th:each="appService : ${listaAppService}"
+										th:value="${appService.id}" th:text="${appService.name}" />
+								</select><span class="help-block"></span>
+
 							</div>
 						</div>
 					</form>
@@ -482,7 +501,7 @@
 						<button type="button" class="btn btn-light" data-dismiss="modal">
 							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
 						</button>
-						<button type="button" id="btn-submit-bs" class=" btn btn-primary">
+						<button type="button" id="btn-submit-si" class=" btn btn-primary">
 							<span th:title="#{session.button.save}"
 								th:text="#{session.button.save}">Salva</span>
 						</button>

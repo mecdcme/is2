@@ -37,4 +37,7 @@ public class StepInstanceService {
 	public List<StepInstance> findAllStepInstance() {
 		return (List<StepInstance>) sepInstanceDao.findAll();
 	}
+	public void save(StepInstance stepInstance) {
+		sepInstanceDao.save(stepInstance);
+	}
 }
