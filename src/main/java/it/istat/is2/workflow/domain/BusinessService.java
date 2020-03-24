@@ -40,7 +40,6 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import it.istat.is2.workflow.dao.BusinessServiceDao;
 
 import javax.persistence.ManyToOne;
 

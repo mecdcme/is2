@@ -27,7 +27,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import it.istat.is2.app.domain.converter.ListToStringConverter;
-import it.istat.is2.dataset.domain.DatasetColumn;
 import lombok.Data;
 
 import java.util.List;
