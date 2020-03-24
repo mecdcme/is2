@@ -86,7 +86,7 @@ public class DesignController {
                 if (m.getBusinessProcessParent() == null) {
                     albero.get(albero.size() - 1).addChild(m.getName());
                     listaBp.forEach((s) -> {
-                        if (s.getBusinessProcessParent() != null && s.getBusinessProcessParent().getId() == m.getId()) {
+                        if (s.getBusinessProcessParent() != null && s.getBusinessProcessParent().getId().equals(m.getId())) {
                             TreeNode<String> tempNode = ((TreeNode<String>) albero.get(albero.size() - 1).getChildren().get(albero.get(albero.size() - 1).getChildren().size() - 1)).addChild(s.getName());
                             listaBs.forEach((p) -> {
                                 p.getBusinessProcesses().forEach((k) -> {
