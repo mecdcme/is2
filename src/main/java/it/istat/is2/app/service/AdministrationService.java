@@ -26,7 +26,6 @@ package it.istat.is2.app.service;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +38,8 @@ public class AdministrationService {
 	@Value("${RServe.file.start}")
 	private String startRServe;
 
-	public void startR() throws IOException {
+	public Long startR() throws IOException {
  	 		Process process = Runtime.getRuntime().exec("cmd /c "+startRServe, null, new File(pathR));
-	 Logger.getRootLogger().debug(process.pid());
+	 return process.pid();
 	}
 }
