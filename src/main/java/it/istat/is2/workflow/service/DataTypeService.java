@@ -24,7 +24,7 @@
 package it.istat.is2.workflow.service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class DataTypeService {
     }
 
     public DataTypeCls findById(Integer idtipodato) {
-        return dataTypeDao.findById(idtipodato).get();
+        return dataTypeDao.findById(idtipodato).orElse(null);
     }
     
     public DataTypeCls findByName(String name) {

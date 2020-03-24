@@ -42,6 +42,6 @@ public class AppRoleService {
     }
 
     public AppRole findRuolo(Integer idruolo) {
-        return ruoloDao.findById(idruolo).get();
+        return ruoloDao.findById(idruolo).orElse(null);
     }
 }
