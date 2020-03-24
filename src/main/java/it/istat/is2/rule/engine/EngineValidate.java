@@ -14,6 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.rosuda.REngine.REXPMismatchException;
+import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.RList;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
@@ -31,7 +33,7 @@ public class EngineValidate {
     public static final String VALIDATE_FOLDER = "validate";
     public static final String VALIDATE_SRC = "validate.R";
     public static final String FUNCTION_DETECT_INFEASIBLE = "is2_detect_infeasible";
-    public static final String PREFIX_FUNCTION_ = "is2_";
+    public static final String PREFIX_FUNCTION = "is2_";
     
     @Value("${serverR.host}")
     private String serverRHost;
@@ -68,12 +70,12 @@ public class EngineValidate {
         logService.save("Validate R script loaded");
     }
 
-    public Map<String,List<String>> detectInfeasibleRules(String[]input, String[]inputNames) throws Exception {
+    public Map<String,List<String>> detectInfeasibleRules(String[]input, String[]inputNames) throws  REXPMismatchException, REngineException {
     	 
     	String[] result;
         String[] rlog;
         String[] validates;
-        Map<String,List<String>>  ret=new HashMap<String, List<String>>();       
+        Map<String,List<String>>  ret=new HashMap<>();       
         
         connection.assign(INPUT, input);
         connection.assign(INPUT_NAMES, inputNames);
@@ -96,27 +98,26 @@ public class EngineValidate {
     }
 
     public void destroy() {
-        if (connection != null || !connection.isConnected()) {
+        if (connection != null && connection.isConnected()) {
             connection.close();
         }
         logService.save("Connection to R server closed!");
     }
 
 	
-	public Map<String, Object> runFunction(String functionName, String[] input, String[] inputNames) throws Exception  {
-		// TODO Auto-generated method stub
-		String[] result;
-        String[] rlog;
-        Object validates;
+	public Map<String, Object> runFunction(String functionName, String[] input, String[] inputNames) throws REngineException, REXPMismatchException {
+		
+		 String[] rlog;
         Map<String,Object>  ret=new HashMap<String, Object>();       
         
         connection.assign(INPUT, input);
         connection.assign(INPUT_NAMES, inputNames);
         connection.eval(INPUT + " <- data.frame(rule=" + INPUT + ")");
-        out = connection.eval(PREFIX_FUNCTION_+ functionName + "(" + INPUT + ", " + INPUT_NAMES + ")").asList();
+        out = connection.eval(PREFIX_FUNCTION+ functionName + "(" + INPUT + ", " + INPUT_NAMES + ")").asList();
 
-        for (Iterator iterator = out.keySet().iterator(); iterator.hasNext();) {
-			     	String key = (String) iterator.next();
+        for (@SuppressWarnings("unchecked")
+		Iterator<String> iterator = out.keySet().iterator(); iterator.hasNext();) {
+			     	String key = iterator.next();
 			     	 ret.put(key, out.at(key).asNativeJavaObject());
 			
 		}
