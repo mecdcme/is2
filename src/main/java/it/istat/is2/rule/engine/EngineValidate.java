@@ -108,7 +108,7 @@ public class EngineValidate {
 	public Map<String, Object> runFunction(String functionName, String[] input, String[] inputNames) throws REngineException, REXPMismatchException {
 		
 		 String[] rlog;
-        Map<String,Object>  ret=new HashMap<String, Object>();       
+        Map<String,Object>  ret=new HashMap<>();       
         
         connection.assign(INPUT, input);
         connection.assign(INPUT_NAMES, inputNames);
