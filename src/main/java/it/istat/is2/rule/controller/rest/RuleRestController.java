@@ -22,24 +22,17 @@
  * @version 1.0
  */
 package it.istat.is2.rule.controller.rest;
-
-import it.istat.is2.app.bean.NotificationMessage;
 import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
-import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.rule.domain.Rule;
-import it.istat.is2.rule.domain.Ruleset;
 import it.istat.is2.rule.forms.RuleCreateForm;
 import it.istat.is2.rule.service.RuleService;
 import static it.istat.is2.app.util.IS2Const.OUTPUT_R;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +47,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

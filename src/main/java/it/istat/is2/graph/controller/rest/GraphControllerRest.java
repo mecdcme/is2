@@ -46,7 +46,7 @@ public class GraphControllerRest {
 
     @GetMapping("/rest/graph/getColumns/{ids}")
     public List<DatasetColumn> getColumns(HttpServletRequest request, @PathVariable("ids") List<Integer> ids) {
-        List<DatasetColumn> colonne = new ArrayList();
+        List<DatasetColumn> colonne = new ArrayList<DatasetColumn>();
         DatasetColumn colonna;
         for (Integer id : ids) {
             colonna = datasetService.findOneColonna(Long.valueOf(id));
@@ -60,7 +60,7 @@ public class GraphControllerRest {
     public List<Point> getPoints(HttpServletRequest request, @PathVariable("ids") List<Integer> ids) {
         List<String> valorix;
         List<String> valoriy;
-        List<Point> points = new ArrayList();
+        List<Point> points = new ArrayList<Point>();
         valorix = datasetService.findOneColonna(Long.valueOf(ids.get(0))).getContents();
         valoriy = datasetService.findOneColonna(Long.valueOf(ids.get(1))).getContents();
         for (int i = 0; i < valorix.size(); i++) {

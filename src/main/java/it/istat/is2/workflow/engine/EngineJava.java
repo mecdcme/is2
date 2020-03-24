@@ -77,7 +77,7 @@ public class EngineJava implements EngineService {
 
     private LinkedHashMap<String, ArrayList<String>> ruoliOutputStep;
     private HashMap<String, String> ruoliGruppoOutputStep;
-    private LinkedHashMap<String, ArrayList<String>> parametriOutput = new LinkedHashMap<>();
+    private LinkedHashMap<String, ArrayList<String>> parametriOutput = new LinkedHashMap<String, ArrayList<String>>();
 
     public EngineJava() {
         super();
