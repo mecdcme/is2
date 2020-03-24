@@ -28,7 +28,6 @@ import it.istat.is2.app.bean.NewRuleFormBean;
 import it.istat.is2.app.bean.NewRulesetFormBean;
 import it.istat.is2.app.bean.SessionBean;
 import it.istat.is2.app.domain.Log;
-import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
@@ -61,7 +60,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -116,13 +114,13 @@ public class RuleController {
 			String label = rs.getFileLabel();
 			// Controlla che la label assegnata dall'utente non sia già presente
 			if (etichetta.equals(label)) {
-				notificationService
-						.addErrorMessage(messages.getMessage("ruleset.error.name", null, LocaleContextHolder.getLocale()));
+				notificationService.addErrorMessage(
+						messages.getMessage("ruleset.error.name", null, LocaleContextHolder.getLocale()));
 				check = true;
 				break;
 			}
 		}
-		if (!check ) {
+		if (!check) {
 			File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());
 			try {
 				int rules = ruleService.loadRules(fileRules, idsessione, etichetta, labelCodeRule, idclassificazione,
@@ -165,9 +163,9 @@ public class RuleController {
 			String label = rs.getFileLabel();
 			// Controlla che la label assegnata dall'utente non sia già presente
 			if (nomeRuleset.equals(label)) {
-				notificationService
-				.addErrorMessage(messages.getMessage("ruleset.error.name", null, LocaleContextHolder.getLocale()));
-	
+				notificationService.addErrorMessage(
+						messages.getMessage("ruleset.error.name", null, LocaleContextHolder.getLocale()));
+
 				check = true;
 				break;
 			}
@@ -259,8 +257,7 @@ public class RuleController {
 
 	@PostMapping(value = "/newRule")
 	public String newRule(HttpSession session, HttpServletRequest request, Model model,
-			 @ModelAttribute("inputFormBean") NewRuleFormBean form)
-			throws IOException {
+			@ModelAttribute("inputFormBean") NewRuleFormBean form) throws IOException {
 
 		notificationService.removeAllMessages();
 
@@ -396,7 +393,7 @@ public class RuleController {
 
 		List<Log> logs = logService.findByIdSessione();
 		List<Log> rlogs = logService.findByIdSessioneAndTipo(OUTPUT_R);
-		// TODO: Controllare findRulesetById
+
 		Ruleset ruleset = ruleService.findRulesetById(idfile);
 		List<Rule> rules = ruleService.findRules(ruleset);
 
@@ -438,7 +435,6 @@ public class RuleController {
 		}
 		List<Log> logs = logService.findByIdSessione();
 		List<Log> rlogs = logService.findByIdSessioneAndTipo(OUTPUT_R);
-		// TODO: Controllare findRulesetById
 
 		List<Rule> rules = ruleService.findRules(ruleset);
 
