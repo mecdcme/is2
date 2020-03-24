@@ -140,6 +140,7 @@ public class BusinessDesignController {
 		StepInstance stepInstance = new StepInstance();
 		stepInstance.setMethod(method);
 		stepInstance.setDescr(description);				
+		stepInstance.setLabel(label);
 		
 		AppService appService = appServiceService.findAppServiceById(idappservice);
 		stepInstance.setAppService(appService);		
