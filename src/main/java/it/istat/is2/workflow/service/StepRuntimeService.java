@@ -24,7 +24,7 @@
 package it.istat.is2.workflow.service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,8 +44,8 @@ public class StepRuntimeService {
         return stepRuntimeDao.findByDataProcessing(new DataProcessing(idelab));
     }
 
-    public Optional<StepRuntime> findById(Integer idstep) {
-        return stepRuntimeDao.findById(idstep);
+    public StepRuntime findById(Integer idstep) {
+        return stepRuntimeDao.findById(idstep).orElse(new StepRuntime());
     }
 
     public List<StepRuntime> findByAppRole(AppRole ruolo) {

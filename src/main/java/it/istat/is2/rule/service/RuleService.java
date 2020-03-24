@@ -142,29 +142,31 @@ public class RuleService {
 		Iterable<CSVRecord> records = null;
 		try {
 			records = CSVFormat.RFC4180.withDelimiter(delimiter).parse(in);
+			if (records != null) {
+				String formula = null;
+				RuleCls classificazione = new RuleCls();
+				classificazione.setId(Short.parseShort(idclassificazione));
+				Iterator<CSVRecord> itr = records.iterator();
+				// If skipFirstLine equals 1 skips first line
+				if (skipFirstLine == 1) {
+					itr.next();
+				}
+				while (itr.hasNext()) {
+					CSVRecord rec = itr.next();
+					formula = rec.get(0);
+					Rule regola = new Rule();
+					regola.setActive((short) 1);
+					regola.setRule(formula);
+					regola.setRuleType(classificazione);
+					regola.setRuleset(ruleset);
+					regola.setCode(labelCodeRule + (counter++));
+					ruleset.getRules().add(regola);
+
+				}
+			}
+
 		} catch (IOException e) {
 			Logger.getRootLogger().error("Errore: ", e);
-		}
-
-		String formula = null;
-		RuleCls classificazione = new RuleCls();
-		classificazione.setId(Short.parseShort(idclassificazione));
-		Iterator<CSVRecord> itr = records.iterator();
-		// If skipFirstLine equals 1 skips first line
-		if (skipFirstLine == 1) {
-			itr.next();
-		}
-		while (itr.hasNext()) {
-			CSVRecord rec = itr.next();
-			formula = rec.get(0);
-			Rule regola = new Rule();
-			regola.setActive((short) 1);
-			regola.setRule(formula);
-			regola.setRuleType(classificazione);
-			regola.setRuleset(ruleset);
-			regola.setCode(labelCodeRule + (counter++));
-			ruleset.getRules().add(regola);
-
 		}
 
 		ruleset.setFileName(nomeFile);

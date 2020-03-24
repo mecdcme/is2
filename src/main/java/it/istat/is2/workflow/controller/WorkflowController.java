@@ -187,7 +187,7 @@ public class WorkflowController {
             @PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("idvar") Integer idvar) {
         notificationService.removeAllMessages();
 
-        StepRuntime stepRuntime = stepRuntimeservice.findById(idvar).get();
+        StepRuntime stepRuntime = stepRuntimeservice.findById(idvar);
         List<StepRuntime> listaVars = stepRuntime.getWorkset().getStepRuntimes();
 
         if (listaVars.size() == 1) {
@@ -223,7 +223,7 @@ public class WorkflowController {
             @PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("idparametro") Integer idparametro) {
         notificationService.removeAllMessages();
 
-        StepRuntime stepRuntime = stepRuntimeservice.findById(idparametro).get();
+        StepRuntime stepRuntime = stepRuntimeservice.findById(idparametro);
         List<StepRuntime> listaVars = stepRuntime.getWorkset().getStepRuntimes();
 
         if (listaVars.size() == 1) {
