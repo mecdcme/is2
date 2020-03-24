@@ -42,7 +42,7 @@ public class StepInstance implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Integer id;
+    private Long id;
     @Column(name = "METHOD")
     private String method;
     @Column(name = "DESCR")

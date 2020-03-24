@@ -24,9 +24,7 @@
 package it.istat.is2.business.design.controller;
 
 import java.util.List;
-
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -37,7 +35,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
@@ -188,6 +185,24 @@ public class BusinessDesignController {
 		} catch (Exception e) {
 			notificationService.addErrorMessage(
 					messages.getMessage("as.remove.error.message", null, LocaleContextHolder.getLocale()));
+		}
+		return "redirect:/busservlist";
+	}
+	@GetMapping(value = "/deletestepinstance/{idstepinstance}")
+	public String deleteStepInstance(HttpSession session, Model model, RedirectAttributes ra,
+			@PathVariable("idstepinstance") String idstepinstance) {
+		notificationService.removeAllMessages();
+		
+		Long idStepInstance = Long.parseLong(idstepinstance);
+		
+		StepInstance stepInstance = stepInstanceService.findStepInstanceById(idStepInstance);
+		try {
+			stepInstanceService.deleteStepInstance(idStepInstance);	
+			notificationService.addInfoMessage(messages.getMessage("si.removed.success.message",
+					new Object[] { stepInstance.getMethod() }, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			notificationService.addErrorMessage(
+					messages.getMessage("si.remove.error.message", null, LocaleContextHolder.getLocale()));
 		}
 		return "redirect:/busservlist";
 	}
