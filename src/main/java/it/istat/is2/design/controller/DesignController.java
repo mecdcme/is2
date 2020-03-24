@@ -67,7 +67,7 @@ public class DesignController {
     @Autowired
     private MessageSource messages;
 
-    @RequestMapping("/settings")
+    @RequestMapping(value ="/settings", method = RequestMethod.GET)
     public String viewSettings(Model model) {
       
 
