@@ -25,18 +25,16 @@ public class WorkFlowBatchListener extends JobExecutionListenerSupport {
     @Autowired
     private HttpSession httpSession;
 
-    private JobParameters params;
-
-    private SessionBean sessionBean;
+ 
 
     @Override
     public void beforeJob(JobExecution jobExecution) {
-        params = jobExecution.getJobParameters();
-        sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+    	JobParameters params = jobExecution.getJobParameters();
+    	SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
         String msg = "Job for elaborazione[" + params.getLong("idElaborazione") + "] and " + " process["
                 + params.getLong("idBProc") + "] " + BatchStatus.STARTED.name();
         try {
-            this.save(jobExecution, sessionBean, BatchStatus.STARTED.name(), params, msg);
+            this.save(jobExecution, sessionBean, params, msg);
         } catch (Exception e) {
             logService.save(e.getMessage());
         }
@@ -59,9 +57,9 @@ public class WorkFlowBatchListener extends JobExecutionListenerSupport {
         logService.save(msg);
     }
 
-    private Batch save(JobExecution jobExecution, SessionBean sessionBean, String status, JobParameters params,
+    private Batch save(JobExecution jobExecution, SessionBean sessionBean,  JobParameters params,
             String msg) throws Exception {
-        Batch batch = workFlowBatchService.findById(jobExecution.getJobId()).orElse(null);
+        Batch batch = workFlowBatchService.findById(jobExecution.getJobId()).orElse(new Batch());
         batch.setIdElaborazione(params.getLong("idElaborazione"));
         batch.setIdProcesso(params.getLong("idBProc"));
         if (sessionBean != null) {
@@ -70,7 +68,7 @@ public class WorkFlowBatchListener extends JobExecutionListenerSupport {
             batch.setIdSessione(Long.valueOf(-1));
         }
         logService.save(msg);
-        if (jobExecution.getAllFailureExceptions().size() > 0) {
+        if (!jobExecution.getAllFailureExceptions().isEmpty()) {
             for (int i = 0; i < jobExecution.getAllFailureExceptions().size(); i++) {
                 logService.save("ERROR: " + jobExecution.getAllFailureExceptions().get(i));
             }
