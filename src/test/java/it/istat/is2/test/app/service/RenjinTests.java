@@ -11,15 +11,11 @@ import javax.script.ScriptException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.renjin.base.Lapack;
 import org.renjin.eval.Session;
 import org.renjin.eval.SessionBuilder;
 import org.renjin.script.RenjinScriptEngine;
 import org.renjin.script.RenjinScriptEngineFactory;
-import org.renjin.sexp.AtomicVector;
-import org.renjin.sexp.Environment;
 import org.renjin.sexp.SEXP;
-import org.renjin.sexp.Vector;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import it.istat.is2.test.*;

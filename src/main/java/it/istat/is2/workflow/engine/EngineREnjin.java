@@ -24,7 +24,6 @@
 package it.istat.is2.workflow.engine;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -339,7 +338,7 @@ public class EngineREnjin implements EngineService {
         // {S=[S], X=[X], Y=[Y], Z=[Z]}
         HashMap<String, ArrayList<String>> ruoliInputStep = new HashMap<>();
         // {P=[P], M=[M], O=[O]}
-        rolesOut = new LinkedHashMap();
+        rolesOut = new LinkedHashMap<String, ArrayList<String>>();
         rolesGroupOut = new LinkedHashMap<>();
 
         for (Iterator<?> iterator = stepInstance.getStepInstanceSignatures().iterator(); iterator.hasNext();) {

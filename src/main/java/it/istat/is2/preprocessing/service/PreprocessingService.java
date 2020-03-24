@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +61,7 @@ public class PreprocessingService {
 		DatasetColumn colum = findOneColonna(Long.parseLong(idColonna));
 		List<String> datiColonna = colum.getContents();
 		// cambia i valori della colum
-		List<String> datiColonnaTemp = new ArrayList();
+		List<String> datiColonnaTemp = new ArrayList<String>();
 		// cambia i valori della colum
 		switch (commandField) {
 		case "0001":

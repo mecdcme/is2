@@ -29,7 +29,6 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import it.istat.is2.dataset.domain.DatasetFile;
-import it.istat.is2.workflow.domain.ProcessStep;
 import it.istat.is2.worksession.domain.WorkSession;
 import lombok.Data;
 

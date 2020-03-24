@@ -22,27 +22,19 @@
  * @version 1.0
  */
 package it.istat.is2.dataset.service;
-
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.transaction.Transactional;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
-import it.istat.is2.app.bean.DataTableBean;
 import it.istat.is2.app.dao.SqlGenericDao;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.dataset.dao.DatasetColumnDao;

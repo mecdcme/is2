@@ -71,7 +71,7 @@ public class RelaisGenericDao {
 
 		String query = " SELECT  " + selectFields + " FROM  ";
 		int indexRole = 0;
-		for (Iterator iterator = ruoliVariabileNome.keySet().iterator(); iterator.hasNext();) {
+		for (Iterator<String> iterator = ruoliVariabileNome.keySet().iterator(); iterator.hasNext();) {
 			String codRole = (String) iterator.next();
 			indexRole++;
 			String paramCodRole = "codRole" + indexRole;
@@ -80,7 +80,7 @@ public class RelaisGenericDao {
 			ArrayList<String> variableList = ruoliVariabileNome.get(codRole);
 			query += " ( SELECT " + String.join(",", variableList) + " FROM  ";
 			int indexVariableName = 0;
-			for (Iterator iterator2 = variableList.iterator(); iterator2.hasNext();) {
+			for (Iterator<String> iterator2 = variableList.iterator(); iterator2.hasNext();) {
 				String variableName = (String) iterator2.next();
 				indexVariableName++;
 				String paramVariableName = "variabilename" + indexRole + "_" + indexVariableName;
@@ -119,10 +119,10 @@ public class RelaisGenericDao {
 
 		List<Object[]> risList = q.getResultList();
 
-		for (Iterator iterator = risList.iterator(); iterator.hasNext();) {
+		for (Iterator<Object[]> iterator = risList.iterator(); iterator.hasNext();) {
 			Object[] ris = (Object[]) iterator.next();
 			int indexValues = 0;
-			for (Iterator iterator2 = variabileNomeList.iterator(); iterator2.hasNext();) {
+			for (Iterator<String> iterator2 = variabileNomeList.iterator(); iterator2.hasNext();) {
 				String name = (String) iterator2.next();
 				ArrayList<String> valueList = worksetOut.get(name);
 				valueList.add(ris[indexValues].toString());
