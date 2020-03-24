@@ -380,7 +380,83 @@ public class Utility {
 		return tipoDato;
 	}
 
-	
+	public static HashMap<String, List<String>> recuperaVariabiliForm(InputFormBean form,
+			HashMap<String, List<String>> headerValuesSelected) {
+		headerValuesSelected = new HashMap<String, List<String>>();
+		String identificativo = form.getIdentificativo();
+		if (!identificativo.equals("")) {
+			identificativo = identificativo.substring(0, identificativo.length() - 1);
+		}
+		String target = form.getTarget();
+		if (!target.equals("")) {
+			target = target.substring(0, target.length() - 1);
+		}
+		String covariata = form.getCovariata();
+		if (!covariata.equals("")) {
+			covariata = covariata.substring(0, covariata.length() - 1);
+		}
+		String predizione = form.getPredizioni();
+		if (!predizione.equals("")) {
+			predizione = predizione.substring(0, predizione.length() - 1);
+		}
+		String outlier = form.getOutlier();
+		if (outlier == null) {
+			outlier = "";
+		}
+		if (outlier != null && !outlier.equals("")) {
+			outlier = outlier.substring(0, outlier.length() - 1);
+		}
+		String delim = ",";
+
+		StringTokenizer st = new StringTokenizer(identificativo, delim);
+		String chiaveId = "identificativo";
+
+		ArrayList<String> valoriId = new ArrayList<String>();
+		while (st.hasMoreTokens()) {
+			String value = st.nextToken();
+			valoriId.add(value);
+		}
+		headerValuesSelected.put(chiaveId, valoriId);
+
+		StringTokenizer st2 = new StringTokenizer(target, delim);
+		String chiaveCorr = "target";
+		ArrayList<String> valoriCorr = new ArrayList<String>();
+		while (st2.hasMoreTokens()) {
+			String value = st2.nextToken();
+			valoriCorr.add(value);
+		}
+		headerValuesSelected.put(chiaveCorr, valoriCorr);
+
+		StringTokenizer st3 = new StringTokenizer(covariata, delim);
+		String chiaveCov = "covariata";
+		ArrayList<String> valoriCov = new ArrayList<String>();
+		while (st3.hasMoreTokens()) {
+			String value = st3.nextToken();
+			valoriCov.add(value);
+		}
+		headerValuesSelected.put(chiaveCov, valoriCov);
+
+		StringTokenizer st4 = new StringTokenizer(predizione, delim);
+		String chiavePred = "predizione";
+		ArrayList<String> valoriPred = new ArrayList<String>();
+		while (st4.hasMoreTokens()) {
+			String value = st4.nextToken();
+			valoriPred.add(value);
+		}
+		headerValuesSelected.put(chiavePred, valoriPred);
+
+		StringTokenizer st5 = new StringTokenizer(outlier, delim);
+		String chiaveOutl = "outlier";
+		ArrayList<String> valoriOutl = new ArrayList<String>();
+		while (st5.hasMoreTokens()) {
+			String value = st5.nextToken();
+			valoriOutl.add(value);
+		}
+		headerValuesSelected.put(chiaveOutl, valoriOutl);
+
+		return headerValuesSelected;
+	}
+
 	public static LinkedHashMap<String, ArrayList<String>> getMapWorkSetValues(Map<String, ArrayList<StepRuntime>> dataMap,
 			DataTypeCls dataType) {
 

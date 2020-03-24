@@ -30,7 +30,6 @@ import it.istat.is2.rule.domain.Rule;
 import it.istat.is2.rule.domain.RuleCls;
 import it.istat.is2.rule.domain.Ruleset;
 import it.istat.is2.rule.engine.EngineValidate;
-import static it.istat.is2.rule.engine.EngineValidate.INPUT_NAMES_PREFIX;
 import it.istat.is2.rule.forms.RuleCreateForm;
 import it.istat.is2.workflow.dao.RuleDao;
 import it.istat.is2.workflow.dao.RuleTypeDao;
@@ -43,8 +42,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -53,8 +51,6 @@ import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.log4j.Logger;
-import org.rosuda.REngine.REngineException;
-import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -64,42 +60,40 @@ import org.springframework.stereotype.Service;
 @Service
 public class RuleService {
 
-    @Autowired
-    private WorkSessionService sessioneLavoroService;
-    @Autowired
-    private RuleDao ruleDao;
-    @Autowired
-    private RuleTypeDao ruleTypeDao;
-    @Autowired
-    private RulesetDao rulesetDao;
-    @Autowired
-    private EngineValidate engine;
-    @Autowired
+	@Autowired
+	private WorkSessionService sessioneLavoroService;
+	@Autowired
+	private RuleDao ruleDao;
+	@Autowired
+	private RuleTypeDao ruleTypeDao;
+	@Autowired
+	private RulesetDao rulesetDao;
+	@Autowired
+	private EngineValidate engine;
+	@Autowired
 	private NotificationService notificationService;
-    @Autowired
+	@Autowired
 	private MessageSource messages;
 
-    private String[] input;
-    private String[] inputNames;
-     
+	private String[] input;
+	private String[] inputNames;
 
-    public List<Rule> findAll() {
-        return (List<Rule>) this.ruleDao.findAll();
-    }
+	public List<Rule> findAll() {
+		return (List<Rule>) this.ruleDao.findAll();
+	}
 
-    public List<RuleCls> findAllRuleType() {
-        return (List<RuleCls>) ruleTypeDao.findAll();
-    }
- 
-    public RuleCls findRuleTypeById(short idrule) {
-        return ruleTypeDao.findById(idrule);
-    }
+	public List<RuleCls> findAllRuleType() {
+		return (List<RuleCls>) ruleTypeDao.findAll();
+	}
 
-	public Map<String,List<String>> runValidate(Ruleset ruleset) throws Exception {
-		Rule rule;
-		Integer ruleId;
-		Map<String,List<String>> ret=new HashMap<String, List<String>>();
-	 	List<Rule> rules = ruleDao.findByRulesetOrderByIdAsc(ruleset);
+	public RuleCls findRuleTypeById(short idrule) {
+		return ruleTypeDao.findById(idrule);
+	}
+
+	public Map<String, List<String>> runValidate(Ruleset ruleset) throws Exception {
+
+		Map<String, List<String>> ret = new HashMap<String, List<String>>();
+		List<Rule> rules = ruleDao.findByRulesetOrderByIdAsc(ruleset);
 
 		// Create array of rules for R
 		input = new String[rules.size()];
@@ -118,144 +112,150 @@ public class RuleService {
 			ret = engine.detectInfeasibleRules(input, inputNames);
 		} catch (RserveException e) {
 			Logger.getRootLogger().error(e.getMessage());
-			notificationService.addErrorMessage(messages.getMessage("r.connectiom.error", null, LocaleContextHolder.getLocale()),e.getMessage()); 
-			throw  e;
+			notificationService.addErrorMessage(
+					messages.getMessage("r.connectiom.error", null, LocaleContextHolder.getLocale()), e.getMessage());
+			throw e;
 		} catch (Exception e) {
 			notificationService.addErrorMessage("Error: " + e.getMessage());
 			Logger.getRootLogger().error(e.getMessage());
-			throw  e;
+			throw e;
 		} finally {
-         engine.destroy();
-        }
+			engine.destroy();
+		}
 		return ret;
 	}
 
-    public int loadRules(File fileRules, String idsessione, String etichetta, String labelCodeRule, String idclassificazione, String separatore, String nomeFile, String descrizione, Integer skipFirstLine) {
-        String pathTmpFile = fileRules.getAbsolutePath().replace("\\", "/");
-        WorkSession sessionelv = sessioneLavoroService.getSessione(Long.parseLong(idsessione));
-        Ruleset ruleset = new Ruleset();
-        int counter=1;  
-        Reader in = null;
-        char delimiter = 9;
-        try {
-            in = new FileReader(pathTmpFile);
-            delimiter = FileHandler.checkDelimiter(separatore.toCharArray()[0]);
-        } catch (FileNotFoundException e) {
-            Logger.getRootLogger().error("Errore: ", e);
-        }
-        Iterable<CSVRecord> records = null;
-        try {
-            records = CSVFormat.RFC4180.withDelimiter(delimiter).parse(in);
-        } catch (IOException e) {
-            Logger.getRootLogger().error("Errore: ", e);
-        }
+	public int loadRules(File fileRules, String idsessione, String etichetta, String labelCodeRule,
+			String idclassificazione, String separatore, String nomeFile, String descrizione, Integer skipFirstLine) {
+		String pathTmpFile = fileRules.getAbsolutePath().replace("\\", "/");
+		WorkSession sessionelv = sessioneLavoroService.getSessione(Long.parseLong(idsessione));
+		Ruleset ruleset = new Ruleset();
+		int counter = 1;
+		Reader in = null;
+		char delimiter = 9;
+		try {
+			in = new FileReader(pathTmpFile);
+			delimiter = FileHandler.checkDelimiter(separatore.toCharArray()[0]);
+		} catch (FileNotFoundException e) {
+			Logger.getRootLogger().error("Errore: ", e);
+		}
+		Iterable<CSVRecord> records = null;
+		try {
+			records = CSVFormat.RFC4180.withDelimiter(delimiter).parse(in);
+		} catch (IOException e) {
+			Logger.getRootLogger().error("Errore: ", e);
+		}
 
-        String formula = null;
-        RuleCls classificazione = new RuleCls();
-        classificazione.setId(Short.parseShort(idclassificazione));
-        Iterator<CSVRecord> itr = records.iterator();
-        // If skipFirstLine equals 1 skips first line
-        if(skipFirstLine==1) {
-        	itr.next();
-        }        
-        while (itr.hasNext()) {
-            CSVRecord rec = itr.next();
-            formula = rec.get(0);
-            Rule regola = new Rule();
-            regola.setActive((short) 1);
-            regola.setRule(formula);          
-            regola.setRuleType(classificazione);
-            regola.setRuleset(ruleset);
-            regola.setCode(labelCodeRule+(counter++));
-            ruleset.getRules().add(regola);
+		String formula = null;
+		RuleCls classificazione = new RuleCls();
+		classificazione.setId(Short.parseShort(idclassificazione));
+		Iterator<CSVRecord> itr = records.iterator();
+		// If skipFirstLine equals 1 skips first line
+		if (skipFirstLine == 1) {
+			itr.next();
+		}
+		while (itr.hasNext()) {
+			CSVRecord rec = itr.next();
+			formula = rec.get(0);
+			Rule regola = new Rule();
+			regola.setActive((short) 1);
+			regola.setRule(formula);
+			regola.setRuleType(classificazione);
+			regola.setRuleset(ruleset);
+			regola.setCode(labelCodeRule + (counter++));
+			ruleset.getRules().add(regola);
 
-        }
+		}
 
-        ruleset.setFileName(nomeFile);
-        ruleset.setDescr(descrizione);
-        ruleset.setFileLabel(etichetta);
-        ruleset.setRulesTotal(ruleset.getRules().size());
-        ruleset.setWorkSession(sessionelv);
+		ruleset.setFileName(nomeFile);
+		ruleset.setDescr(descrizione);
+		ruleset.setFileLabel(etichetta);
+		ruleset.setRulesTotal(ruleset.getRules().size());
+		ruleset.setWorkSession(sessionelv);
 
-        ruleset = rulesetDao.save(ruleset);
+		ruleset = rulesetDao.save(ruleset);
 
-        return ruleset.getRules().size();
-    }
+		return ruleset.getRules().size();
+	}
 
-    public void saveRuleSet(Ruleset ruleset) {
+	public void saveRuleSet(Ruleset ruleset) {
 
-        rulesetDao.save(ruleset);
-    }
-    public void deleteRuleset(Integer rulesetId) {       
-        rulesetDao.deleteById(rulesetId);        
-    }
+		rulesetDao.save(ruleset);
+	}
 
-    public Ruleset findRulesetByDatasetFile(DatasetFile ds) {        
-        return rulesetDao.findByDatasetFile(ds).orElse(null);
-    }
-    public List<Ruleset> findAllRuleset() {
-        return rulesetDao.findAll();
-    }
-    
-    public List<Ruleset> findRulesetBySessioneLavoro(WorkSession sessionlv) {
-        return rulesetDao.findByWorkSession(sessionlv);
-    }
-    public Ruleset findRulesetById(Integer id) {        
-        return rulesetDao.findById(id).orElse(null);
-    }
+	public void deleteRuleset(Integer rulesetId) {
+		rulesetDao.deleteById(rulesetId);
+	}
 
-    public List<Rule> findRules(Ruleset ruleset) {
-        return ruleDao.findByRulesetOrderByIdAsc(ruleset);
-    }
+	public Ruleset findRulesetByDatasetFile(DatasetFile ds) {
+		return rulesetDao.findByDatasetFile(ds).orElse(null);
+	}
 
-    public Rule findRuleByid(Integer ruleId) {
-        return ruleDao.findById(ruleId).orElse(null);
-    }   
-    public void save(RuleCreateForm ruleForm) {
+	public List<Ruleset> findAllRuleset() {
+		return rulesetDao.findAll();
+	}
 
-        Rule rule = new Rule();
+	public List<Ruleset> findRulesetBySessioneLavoro(WorkSession sessionlv) {
+		return rulesetDao.findByWorkSession(sessionlv);
+	}
 
-        Ruleset ruleSet = rulesetDao.findById(ruleForm.getRuleSetId()).orElse(null);
+	public Ruleset findRulesetById(Integer id) {
+		return rulesetDao.findById(id).orElse(null);
+	}
 
-        rule.setId(ruleForm.getRuleId());
-        rule.setRuleset(ruleSet);
-        rule.setRule(ruleForm.getRule());
+	public List<Rule> findRules(Ruleset ruleset) {
+		return ruleDao.findByRulesetOrderByIdAsc(ruleset);
+	}
 
-        ruleDao.save(rule);
+	public Rule findRuleByid(Integer ruleId) {
+		return ruleDao.findById(ruleId).orElse(null);
+	}
 
-    }
+	public void save(RuleCreateForm ruleForm) {
 
-    public void update(RuleCreateForm ruleForm) {
+		Rule rule = new Rule();
 
-        Rule rule = ruleDao.findById(ruleForm.getRuleId()).orElse(null);
+		Ruleset ruleSet = rulesetDao.findById(ruleForm.getRuleSetId()).orElse(null);
 
-        RuleCls classif = findRuleTypeById(ruleForm.getClassificazione());
-        if (rule != null) {
-            rule.setRule(ruleForm.getRule());
-            rule.setDescr(ruleForm.getDescrizione());
-            rule.setCode(ruleForm.getCodeRule());
-            rule.setRuleType(classif);
-            ruleDao.save(rule);
-        }
+		rule.setId(ruleForm.getRuleId());
+		rule.setRuleset(ruleSet);
+		rule.setRule(ruleForm.getRule());
 
-    }
+		ruleDao.save(rule);
 
-    public void delete(Integer ruleId) {
-        
-        Rule rule =  ruleDao.findById(ruleId).orElse(null);
-        Ruleset ruleSet;
-        Integer numberOfRules;
-        //decrease the number of rules of the ruleset
-        if(rule != null){
-            ruleSet = rule.getRuleset();
-            numberOfRules = ruleDao.countByRuleset(ruleSet);
-            ruleSet.setRulesTotal(numberOfRules - 1);
-            rulesetDao.save(ruleSet);
-        }
-        
-        ruleDao.deleteById(ruleId);
-        
-    }
+	}
+
+	public void update(RuleCreateForm ruleForm) {
+
+		Rule rule = ruleDao.findById(ruleForm.getRuleId()).orElse(null);
+
+		RuleCls classif = findRuleTypeById(ruleForm.getClassificazione());
+		if (rule != null) {
+			rule.setRule(ruleForm.getRule());
+			rule.setDescr(ruleForm.getDescrizione());
+			rule.setCode(ruleForm.getCodeRule());
+			rule.setRuleType(classif);
+			ruleDao.save(rule);
+		}
+
+	}
+
+	public void delete(Integer ruleId) {
+
+		Rule rule = ruleDao.findById(ruleId).orElse(null);
+		Ruleset ruleSet;
+		Integer numberOfRules;
+		// decrease the number of rules of the ruleset
+		if (rule != null) {
+			ruleSet = rule.getRuleset();
+			numberOfRules = ruleDao.countByRuleset(ruleSet);
+			ruleSet.setRulesTotal(numberOfRules - 1);
+			rulesetDao.save(ruleSet);
+		}
+
+		ruleDao.deleteById(ruleId);
+
+	}
 
 	/**
 	 * @param ruleset
@@ -264,9 +264,9 @@ public class RuleService {
 	 */
 	public Map<String, ?> runValidateR(Integer rulesetId, String function) throws Exception {
 		// TODO Auto-generated method stub
-		
-		Map<String,Object> ret=new HashMap<String, Object>();
-	 	List<Rule> rules = ruleDao.findByRulesetOrderByIdAsc(new Ruleset(rulesetId) );
+
+		Map<String, Object> ret = new HashMap<String, Object>();
+		List<Rule> rules = ruleDao.findByRulesetOrderByIdAsc(new Ruleset(rulesetId));
 
 		// Create array of rules for R
 		input = new String[rules.size()];
@@ -282,18 +282,19 @@ public class RuleService {
 
 		try {
 			engine.connect();
-			ret = engine.runFunction(function,input, inputNames);
+			ret = engine.runFunction(function, input, inputNames);
 		} catch (RserveException e) {
 			Logger.getRootLogger().error(e.getMessage());
-			notificationService.addErrorMessage(messages.getMessage("r.connectiom.error", null, LocaleContextHolder.getLocale()),e.getMessage()); 
-			throw  e;
+			notificationService.addErrorMessage(
+					messages.getMessage("r.connectiom.error", null, LocaleContextHolder.getLocale()), e.getMessage());
+			throw e;
 		} catch (Exception e) {
 			notificationService.addErrorMessage("Error: " + e.getMessage());
 			Logger.getRootLogger().error(e.getMessage());
-			throw  e;
+			throw e;
 		} finally {
-         engine.destroy();
-        }
+			engine.destroy();
+		}
 		return ret;
 	}
 

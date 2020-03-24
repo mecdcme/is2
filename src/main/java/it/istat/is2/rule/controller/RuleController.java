@@ -71,7 +71,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @RequestMapping("/rule")
 @Controller
@@ -92,10 +91,9 @@ public class RuleController {
 	@Autowired
 	private DatasetService datasetService;
 
-	@RequestMapping(value = "/loadRulesFile", method = RequestMethod.POST)
+	@PostMapping(value = "/loadRulesFile")
 	public String loadInputRulesData(HttpSession httpSession, HttpServletRequest request, Model model,
-			@AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") InputFormBean form)
-			throws IOException {
+			@ModelAttribute("inputFormBean") InputFormBean form) throws IOException {
 
 		notificationService.removeAllMessages();
 		// è il nome del file acquisito in automatico nel form di upload
@@ -144,10 +142,9 @@ public class RuleController {
 		return "redirect:/rule/viewRuleset/" + form.getIdsessione();
 	}
 
-	@RequestMapping(value = "/newRuleset", method = RequestMethod.POST)
+	@PostMapping(value = "/newRuleset")
 	public String newRulesetData(HttpSession session, HttpServletRequest request, Model model,
-			@AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") NewRulesetFormBean form)
-			throws IOException {
+			@ModelAttribute("inputFormBean") NewRulesetFormBean form) throws IOException {
 
 		notificationService.removeAllMessages();
 
@@ -225,10 +222,9 @@ public class RuleController {
 		return "redirect:/rule/viewRuleset/" + workSession.getId();
 	}
 
-	@RequestMapping(value = "/modificaRuleset", method = RequestMethod.POST)
+	@PostMapping(value = "/modificaRuleset")
 	public String modificaRuleset(HttpSession session, HttpServletRequest request, Model model,
-			@AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") NewRulesetFormBean form)
-			throws IOException {
+			@ModelAttribute("inputFormBean") NewRulesetFormBean form) throws IOException {
 
 		Ruleset ruleset = ruleService.findRulesetById(Integer.parseInt(form.getRulesetId()));
 		String nomeRuleset = form.getRulesetName();
@@ -260,7 +256,7 @@ public class RuleController {
 
 	}
 
-	@RequestMapping(value = "/newRule", method = RequestMethod.POST)
+	@PostMapping(value = "/newRule")
 	public String newRule(HttpSession session, HttpServletRequest request, Model model,
 			@AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") NewRuleFormBean form)
 			throws IOException {
@@ -392,7 +388,7 @@ public class RuleController {
 		return "ruleset/list";
 	}
 
-	@RequestMapping("/viewRules/{idfile}")
+	@GetMapping("/viewRules/{idfile}")
 	public String viewRules(HttpSession session, Model model, @PathVariable("idfile") Integer idfile) {
 
 		session.removeAttribute("dfile");
