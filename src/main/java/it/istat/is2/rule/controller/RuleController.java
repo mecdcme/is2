@@ -117,12 +117,12 @@ public class RuleController {
 			// Controlla che la label assegnata dall'utente non sia già presente
 			if (etichetta.equals(label)) {
 				notificationService
-						.addErrorMessage("Esiste già un Ruleset con quel nome. Specificare un nome diverso.");
+						.addErrorMessage(messages.getMessage("ruleset.error.name", null, LocaleContextHolder.getLocale()));
 				check = true;
 				break;
 			}
 		}
-		if (check == false) {
+		if (!check ) {
 			File fileRules = FileHandler.convertMultipartFileToFile(form.getFileName());
 			try {
 				int rules = ruleService.loadRules(fileRules, idsessione, etichetta, labelCodeRule, idclassificazione,
@@ -144,7 +144,7 @@ public class RuleController {
 
 	@PostMapping(value = "/newRuleset")
 	public String newRulesetData(HttpSession session, HttpServletRequest request, Model model,
-			@ModelAttribute("inputFormBean") NewRulesetFormBean form) throws IOException {
+			@ModelAttribute("inputFormBean") NewRulesetFormBean form) {
 
 		notificationService.removeAllMessages();
 
@@ -166,12 +166,13 @@ public class RuleController {
 			// Controlla che la label assegnata dall'utente non sia già presente
 			if (nomeRuleset.equals(label)) {
 				notificationService
-						.addErrorMessage("Esiste già un Ruleset con quel nome. Specificare un nome diverso.");
+				.addErrorMessage(messages.getMessage("ruleset.error.name", null, LocaleContextHolder.getLocale()));
+	
 				check = true;
 				break;
 			}
 		}
-		if (check == false) {
+		if (!check) {
 			String descrRuleset = form.getRulesetDesc();
 			Long dataset = form.getDataset();
 			DatasetFile dfile = null;
@@ -224,7 +225,7 @@ public class RuleController {
 
 	@PostMapping(value = "/modificaRuleset")
 	public String modificaRuleset(HttpSession session, HttpServletRequest request, Model model,
-			@ModelAttribute("inputFormBean") NewRulesetFormBean form) throws IOException {
+			@ModelAttribute("inputFormBean") NewRulesetFormBean form) {
 
 		Ruleset ruleset = ruleService.findRulesetById(Integer.parseInt(form.getRulesetId()));
 		String nomeRuleset = form.getRulesetName();
@@ -258,7 +259,7 @@ public class RuleController {
 
 	@PostMapping(value = "/newRule")
 	public String newRule(HttpSession session, HttpServletRequest request, Model model,
-			@AuthenticationPrincipal User user, @ModelAttribute("inputFormBean") NewRuleFormBean form)
+			 @ModelAttribute("inputFormBean") NewRuleFormBean form)
 			throws IOException {
 
 		notificationService.removeAllMessages();
@@ -346,7 +347,7 @@ public class RuleController {
 		List<Ruleset> listaRuleSet = sessionelv.getRuleSets();
 		String etichetta = null;
 		if (listaRuleSet != null) {
-			if (listaRuleSet.size() > 0) {
+			if (!listaRuleSet.isEmpty()) {
 				String progressivo = Integer.toString(listaRuleSet.size() + 1);
 				etichetta = "RS" + progressivo;
 
