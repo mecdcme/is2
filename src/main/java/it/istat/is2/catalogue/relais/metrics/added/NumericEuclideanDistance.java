@@ -38,7 +38,7 @@ public final class NumericEuclideanDistance extends AbstractStringMetric impleme
             num1 = Integer.parseInt(string1);
             num2 = Integer.parseInt(string2);
             
-            euclideanD = (double)Math.sqrt((num1-num2)*(num1-num2));
+            euclideanD = Math.sqrt((double)(num1-num2)*(double)(num1-num2));
            
             return (float) euclideanD;
         } catch (Exception e) {
