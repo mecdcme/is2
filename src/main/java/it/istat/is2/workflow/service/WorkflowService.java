@@ -295,8 +295,8 @@ public class WorkflowService {
 		Map<Integer, AppRole> appRolesAllMap = Utility.getMapRuoliById(appRolesAll);
 
 		for (int i = 0; i < form.getDataProcessing().length; i++) {
-			String[] all_parametri = form.getParameters();
-			String parametri = all_parametri[i];
+			String[] allParametri = form.getParameters();
+			String parametri = allParametri[i];
 			StringTokenizer stringTokenizer = new StringTokenizer(parametri, "|");
 
 			AppRole sxruolo = null;
@@ -458,7 +458,7 @@ public class WorkflowService {
 		return stepRuntimeDao.getOutputRoleGroupsStepRuntimes(idDataProcessing, dataType, typeIO);
 	}
 
-	public HashMap<Long, List<String>> findMissingAppRoleySubProcessAndTipoVar(DataProcessing dataProcessing,
+	public Map<Long, List<String>> findMissingAppRoleySubProcessAndTipoVar(DataProcessing dataProcessing,
 			DataTypeCls dataType) {
 		HashMap<Long, List<String>> ret = new HashMap<>();
 		List<StepRuntime> stepRuntimes = getStepRuntimesNoValues(dataProcessing.getId(), dataType);
@@ -468,9 +468,9 @@ public class WorkflowService {
 		}
 
 		for (Iterator<BusinessProcess> iteratorb = dataProcessing.getBusinessProcess().getBusinessSubProcesses().iterator(); iteratorb.hasNext();) {
-			BusinessProcess suBusinessProcess = (BusinessProcess) iteratorb.next();
+			BusinessProcess suBusinessProcess =iteratorb.next();
 
-			Set<String> roleNameSet = new HashSet<String>();
+			Set<String> roleNameSet = new HashSet<>();
 			List<StepInstance> instanceBF = findAllStepInstanceBySubBProcess(suBusinessProcess);
 			boolean firstStepInInstance = true;
 			for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
@@ -497,9 +497,7 @@ public class WorkflowService {
 		return ret;
 	}
 
-	public HashMap<Long, List<String>> findMissingVariablesParamsBySubProcess(DataProcessing dataProcessing) {
-		return null;
-	}
+
 
 	@Transactional
 	public void creaAssociazionVarRole(DataProcessing dataProcessing,
@@ -530,7 +528,7 @@ public class WorkflowService {
 
 				if (workset == null) {
 					workset = new Workset();
-					dscolumn = datasetColumnDao.findById(variable.getIdVar()).orElse(null);
+					dscolumn = datasetColumnDao.findById(variable.getIdVar()).orElse(new DatasetColumn());
 					String nameWorkset = "";
 					if (prefixDataset)
 						nameWorkset = dscolumn.getDatasetFile().getFileLabel() + "_";
@@ -564,7 +562,7 @@ public class WorkflowService {
 		}
 
 		List<Long> jobInstanceIds = workFlowBatchDao.findJobInstanceIdByElabId(idDataProcessing);
-		if (jobInstanceIds != null && jobInstanceIds.size() > 0) {
+		if (jobInstanceIds != null && !jobInstanceIds.isEmpty()) {
 			for (int i = 0; i < jobInstanceIds.size(); i++) {
 
 		 		workFlowBatchDao.deleteJobInstanceById(jobInstanceIds.get(i));
@@ -574,7 +572,7 @@ public class WorkflowService {
 	}
 
 	public void setRuleset(DataProcessing dataProcessing, Integer idResultset)
-			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+			throws NoSuchFieldException,  IllegalAccessException {
 
 		Ruleset ruleset = rulesetDao.findById(idResultset).orElse(new Ruleset());
 		AppRole appRole = appRoleDao.findByName(IS2Const.ROLE_NAME_RULESET);
@@ -619,7 +617,7 @@ public class WorkflowService {
 	}
 
 	public String getAppRoleNameById(Integer groupRole) {
-		// TODO Auto-generated method stub
+		
 		AppRole role= appRoleDao.findById(groupRole).orElse(new AppRole());
 		return role.getName();
 	}
