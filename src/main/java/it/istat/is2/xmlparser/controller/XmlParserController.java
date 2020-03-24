@@ -8,14 +8,14 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import it.istat.is2.app.bean.InputFormBean;
-import it.istat.is2.app.domain.User;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.FileHandler;
 import it.istat.is2.workflow.domain.BusinessService;
@@ -35,6 +35,8 @@ public class XmlParserController {
     private BusinessServiceService businessServiceService;
 	@Autowired
     private NotificationService notificationService;
+	@Autowired
+	private MessageSource messages;
 	
 	@GetMapping(value = "/xmlparser")
     public String getXmlParser(HttpSession session, Model model) {
@@ -57,7 +59,7 @@ public class XmlParserController {
         
         	         
         
-        if(file !=null && !form.getFileName().equals("") && jaxbXmlFileToObject(file)) {
+        if(file !=null && !form.getName().equals("") && jaxbXmlFileToObject(file)) {
         	notificationService.addInfoMessage("Il file è stato caricato con successo nel db");
         }else {
         	notificationService.addErrorMessage("ERRORE: Non è stato possibile caricare il file nel db");
@@ -72,44 +74,37 @@ public class XmlParserController {
         JAXBContext jaxbContext;
         try
         {
-            //jaxbContext = JAXBContext.newInstance("xmlparser");
+            
             jaxbContext = JAXBContext.newInstance("it.istat.is2.xmlparser.domain");
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             
             
-            BusinessServiceXml bservice = (BusinessServiceXml) jaxbUnmarshaller.unmarshal(file);
-             
-            System.out.println(bservice);
+            BusinessServiceXml bservice = (BusinessServiceXml) jaxbUnmarshaller.unmarshal(file);             
+           
             
             // TEST inserimento del solo primo livello
             BusinessService bs=new BusinessService();
             bs.setDescr(bservice.getDescr());
             bs.setName(bservice.getName());
-           
-            
-            
-            
+
             businessServiceService.save(bs);
-            System.out.println("BusinessService: inserimento avvenuto");
             
-//            AppService e = new AppService();
-//            bs.getAppServices().add(e);
-            
+
             
             // TEST ALBERO XML STATICO
-            AppServiceXml appServices = (AppServiceXml) bservice.getAppServiceXml();
+            AppServiceXml appServices = bservice.getAppServiceXml();
             
             
         	//List<Method> appServices = (List<Method>)appServices.getMethod();
             
-            Instances istancesSet = (Instances) appServices.getInstances();
+            Instances istancesSet = appServices.getInstances();
         	
             // Per il momento mi occupo solo della prima instances
             List<StepInstanceXml> listaInstancesXml = istancesSet.getStepInstanceXml();
             
             
         	for(int y=0; y<listaInstancesXml.size(); y++) {
-        		Signature listaSignatures = (Signature) listaInstancesXml.get(y).getSignature();
+        		Signature listaSignatures = listaInstancesXml.get(y).getSignature();
             	
             	if(listaSignatures!=null) {
             		
@@ -118,7 +113,7 @@ public class XmlParserController {
         			List<OutputVariable> listaOutputVariables = listaSignatures.getOutputVariables().getOutputVariable();
         			List<ParameterXml> listaParameters = listaSignatures.getParameters().getParameterXml();
         			
-        			System.out.println("Lista InputVariables: ");
+        			
         			for(int z=0; z<listaInputVariables.size(); z++) {
         				InputVariable inputVariable = listaInputVariables.get(z);
         				inputVariable.getRole().getCode();
@@ -128,7 +123,7 @@ public class XmlParserController {
         				inputVariable.getRole().getClsDataType();
         				System.out.println(inputVariable.getRole().getName());
         			}
-        			System.out.println("Lista OutputVariables: ");
+        			
         			for(int z=0; z<listaOutputVariables.size(); z++) {
         				OutputVariable outputVariable = listaOutputVariables.get(z);
         				outputVariable.getRole().getCode();
@@ -138,49 +133,25 @@ public class XmlParserController {
         				outputVariable.getRole().getClsDataType();
         				System.out.println(outputVariable.getRole().getName());
         			}
-        			System.out.println("Lista Parameters: ");
+        			
         			for(int z=0; z<listaParameters.size(); z++) {
         				ParameterXml parameterXml = listaParameters.get(z);
         				parameterXml.getName();
         				parameterXml.getDescr();
         				parameterXml.getDefault();  
-        				System.out.println(parameterXml.getName());
+        				
         			}
             			
             		
             	}
-        	
-        	
-        	
-//            	List<InputParameter> inputParameter = (List<InputParameter>) method.get(y).getInputParameter();
-//        	
-//            	if(inputParameter!=null) {
-//            		for(int w=0; w<inputParameter.size(); w++) {
-//            			InputParameter inputp1 = inputParameter.get(w);
-//            			// Popolare domain e chiamare service per inserimento
-//            			System.out.println("Popolo InputParameter");
-//            		}
-//            	}
-//            	
-//            	List<OutputVariable> outputVariable = (List<OutputVariable>) method.get(y).getOutputVariable();
-//            	
-//            	if(outputVariable!=null) {
-//            		for(int w=0; w<outputVariable.size(); w++) {
-//            			OutputVariable out1 = outputVariable.get(w);
-//            			// Popolare domain e chiamare service per inserimento
-//            			System.out.println("Popolo OutputVariable");
-//            		}
-//            	}            
-            	
-            	
+
         	}
-            
-            
-            
+   
         }
         catch (JAXBException e) 
         {
-            e.printStackTrace();
+        	notificationService.addErrorMessage(
+					messages.getMessage("error.message.xml.parsing", null, LocaleContextHolder.getLocale()));
         }       
         return true;
     }
