@@ -104,8 +104,8 @@
 														<td th:text="${bservice.name}"></td>
 														<td th:text="${bservice.descr}"></td>
 
-														<td><a href="javascript:void(0)" role="button"
-															th:attr="onclick='javascript:updateFunctionDialog(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + 'null' +'\')'">
+														<td><a href="javascript:void(0)" role="button"												
+															th:attr="onclick='javascript:updateBusinessService(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + ${bservice.gsbpmProcess.id} +'\')'">
 																<i class="fa fa-pencil"></i>
 														</a></td>
 
@@ -181,7 +181,7 @@
 								</div>
 							</div>
 
-							<!-- Spep Instance list -->
+							<!-- Step Instance list -->
 							<div class="row">
 								<div>
 									<div class="card">
@@ -238,70 +238,7 @@
 						</div>
 					</div>
 				</div>
-			</main>
-			<div class="modal fade" id="Update-Dialog" tabindex="-1"
-				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">
-								<i class="fa fa-edit"></i>&nbsp; <span
-									th:text="#{generic.update}" id="modTitle">Update</span>
-							</h5>
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<form id="dialog" th:action="@{'/playaction'}" method="post">
-								<input id="action" type="text" name="fieldAction" hidden /> <label
-									id="fatherLabel" for="fieldFather"
-									th:text="#{generic.fatherProcess}">Processo Padre:</label>
-								<div class="form-group blu-margin">
-									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
-									<select class="form-control" id="fatherProcess"
-										name="fieldFatherId">
-										<option value="0" th:text="#{generic.selectFatherProcess}">Select
-											father process..</option>
-										<option th:each="bp : ${listaAllBp}" th:value="${bp.id}"
-											th:text="${bp.Name}"></option>
-									</select>
-								</div>
-
-
-								<label id="idlab" for="id" th:text="#{generic.id}">Id:</label> <input
-									id="id" type="text" name="fieldId"
-									th:placeholder="#{generic.id}" autocomplete="off" required=""
-									class="form-control" value="" /> <label for="name"
-									th:text="#{generic.name}">Name:</label> <input id="name"
-									type="text" name="fieldName" th:placeholder="#{generic.name}"
-									autocomplete="off" required="" class="form-control" value="" />
-								<label for="description" th:text="#{generic.description}">Description:</label>
-								<input id="description" type="text" name="fieldDescription"
-									th:placeholder="#{generic.description}" autocomplete="off"
-									required="" class="form-control" value="" /> <label
-									for="label" id="lab" th:text="#{generic.label}">Label:</label>
-								<input id="label" type="text" name="fieldLabel"
-									th:placeholder="#{generic.label}" autocomplete="off"
-									required="" class="form-control" value="" />
-
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-light" data-dismiss="modal">
-								<span th:title="#{generic.title.close.button}"
-									th:text="#{Layout.Close}">Annulla</span>
-							</button>
-							<button type="button" id="btn-invia-table"
-								class="btn btn-primary towait " onclick="playAction();"
-								th:title="#{submit.button.title}" th:text="#{submit.button}"
-								data-dismiss="modal">Invia</button>
-						</div>
-					</div>
-				</div>
-			</div>
-
+			</main>			
 		</div>
 		<!-- End body -->
 		<footer th:replace="layout :: site-footer"></footer>
@@ -337,6 +274,76 @@
 								</label> <input name="description"
 									th:title="#{generic.label.description}" class="form-control"
 									type="text" /> <span class="help-block"></span>
+							</div>							
+							<div class="form-group">
+								<label class="control-label"
+									th:text="#{bs.gsbpm.label}"><span>Processo Gsbpm</span> </label> 
+									<select name="gsbpmid"
+									th:title="#{bs.gsbpm.label}"
+									class="form-control">
+									<option th:each="gsbpm : ${listaGsbpmProcess}"
+										th:value="${gsbpm.id}" th:text="${gsbpm.name}" />
+								</select><span class="help-block"></span>
+
+							</div>
+						</div>
+					</form>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-light" data-dismiss="modal">
+							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
+						</button>
+						<button type="button" id="btn-submit-bs" class=" btn btn-primary">
+							<span th:title="#{session.button.save}"
+								th:text="#{session.button.save}">Salva</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Update business service modal -->
+		<div class="modal fade" id="update-bservice-modal" role="dialog">
+			<div class="modal-dialog " role="document">
+				<div class="modal-content ">
+					<form th:action="@{/updatebservice}" id="bs-form"
+						class="form-horizontal" method="post">
+						<input name="bserviceid" id="up-bs-id" type="hidden" />
+						<div class="modal-header">
+							<h5 class="modal-title">
+								<i class="fa fa-folder-open"></i> <span
+									th:text="#{dialog.title.new.bs}">Update Business Service</span>
+							</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body form">
+							<div class="form-group">
+								<label class="control-label"
+									th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
+								<input name="name" id="up-bs-name" th:title="#{generic.label.name}"
+									class="form-control" type="text" /> <span class="help-block">
+									<small class="text-danger" id="bs-name-error"></small>
+								</span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{generic.label.description}">
+									<span>Descrizione</span>
+								</label> <input name="description" id="up-bs-description"
+									th:title="#{generic.label.description}" class="form-control"
+									type="text" /> <span class="help-block"></span>
+							</div>		
+							<!-- TODO: Da finire -->					
+							<div class="form-group">
+								<label class="control-label"
+									th:text="#{bs.gsbpm.label}"><span>Processo Gsbpm</span> </label> 
+									<select name="gsbpmid" id="up-bs-gsbpm"
+									th:title="#{bs.gsbpm.label}"
+									class="form-control">
+									<option th:each="gsbpm : ${listaGsbpmProcess}"
+										th:value="${gsbpm.id}" th:text="${gsbpm.name}" />
+								</select>
+
 							</div>
 						</div>
 					</form>

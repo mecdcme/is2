@@ -38,9 +38,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
+import it.istat.is2.workflow.domain.GsbpmProcess;
 import it.istat.is2.workflow.domain.StepInstance;
 import it.istat.is2.workflow.service.AppServiceService;
 import it.istat.is2.workflow.service.BusinessServiceService;
+import it.istat.is2.workflow.service.GsbpmProcessService;
 import it.istat.is2.workflow.service.StepInstanceService;
 
 @Controller
@@ -55,6 +57,8 @@ public class BusinessDesignController {
 	private StepInstanceService stepInstanceService;
 	@Autowired
 	private MessageSource messages;
+	@Autowired
+    private GsbpmProcessService gsbpmProcessService;
 
 	@GetMapping("/busservlist")
 	public String serviceList(HttpSession session, Model model) {
@@ -62,6 +66,8 @@ public class BusinessDesignController {
 		List<BusinessService> listaBService = businessServiceService.findBusinessServices();
 		List<AppService> listaAppService = appServiceService.findAllAppService();
 		List<StepInstance> listaStepInstance = stepInstanceService.findAllStepInstance();
+		List<GsbpmProcess> listaGsbpmProcess = gsbpmProcessService.findAllProcesses();		
+		model.addAttribute("listaGsbpmProcess", listaGsbpmProcess);
 		model.addAttribute("listaBService", listaBService);
 		model.addAttribute("listaAppService", listaAppService);
 		model.addAttribute("listaStepInstance", listaStepInstance);
@@ -70,14 +76,42 @@ public class BusinessDesignController {
 
 	}
 
+	@PostMapping(value = "/updatebservice")
+	public String updateBService(HttpSession session, Model model, @RequestParam("bserviceid") Integer bserviceid, @RequestParam("name") String name, @RequestParam("description") String description,
+			@RequestParam("gsbpmid") Integer gsbpmid) {
+		notificationService.removeAllMessages();
+
+		BusinessService businessService = businessServiceService.findBusinessServiceById(bserviceid);
+		
+		businessService.setName(name);
+		businessService.setDescr(description);
+		GsbpmProcess gsbpmProcess = gsbpmProcessService.findById(gsbpmid);
+		businessService.setGsbpmProcess(gsbpmProcess);
+
+		try {
+			businessServiceService.save(businessService);
+			notificationService.addInfoMessage(
+					messages.getMessage("generic.successfull.saved.message", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			notificationService.addErrorMessage(
+					messages.getMessage("generic.saving.error.message", null, LocaleContextHolder.getLocale()) + ": "
+							+ e.getMessage());
+		}
+
+		return "redirect:/busservlist";
+	}
+	
 	@PostMapping(value = "/newbservice")
-	public String createNewBService(HttpSession session, Model model, @RequestParam("name") String name, @RequestParam("description") String description) {
+	public String createNewBService(HttpSession session, Model model, @RequestParam("name") String name, @RequestParam("description") String description, 
+			@RequestParam("gsbpmid") Integer gsbpmid) {
 		notificationService.removeAllMessages();
 
 		BusinessService businessService = new BusinessService();
 		businessService.setName(name);
 		businessService.setDescr(description);
-		// TODO: l'id di GsbpmProcess va gestito
+		GsbpmProcess gsbpmProcess = new GsbpmProcess();
+		gsbpmProcess = gsbpmProcessService.findById(gsbpmid);
+		businessService.setGsbpmProcess(gsbpmProcess);
 
 		try {
 			businessServiceService.save(businessService);

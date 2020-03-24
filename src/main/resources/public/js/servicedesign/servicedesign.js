@@ -88,6 +88,13 @@ function openNewStepInstanceDialog() {
 	$("#si-name-error").text('');
 	$('#new-step-instance-modal').modal('show');
 }
+function updateBusinessService(id, name, description, gsbpmid) {	
+	$("#up-bs-id").val(id);
+	$("#up-bs-name").val(name);
+	$("#up-bs-description").val(description);	
+	$("#up-bs-gsbpm").val(gsbpmid);
+	$('#update-bservice-modal').modal('show');
+}
 
 function check_and_send_req() {
 	var bsname = $('#bs-name').val();
