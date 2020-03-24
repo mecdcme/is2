@@ -40,4 +40,13 @@ public class StepInstanceService {
 	public void save(StepInstance stepInstance) {
 		sepInstanceDao.save(stepInstance);
 	}
+	public void deleteStepInstance(StepInstance stepInstance) {
+		sepInstanceDao.delete(stepInstance);
+	}
+	public StepInstance findStepInstanceById(Long id) {		
+		return (StepInstance) sepInstanceDao.findById(id).orElse(null);
+	}
+	public void deleteStepInstance(Long id) {
+		sepInstanceDao.deleteById(id);
+	}
 }

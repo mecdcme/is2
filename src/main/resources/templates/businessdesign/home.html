@@ -31,6 +31,7 @@
 	var _mandatory_name_field = [[#{as.field.name.mandatory}]];
 	var _mandatory_method_field = [[#{si.field.method.mandatory}]];
 	var _remove_as_msg_dialog = [[#{dialog.elimination.as.message}]];
+	var _remove_si_msg_dialog = [[#{dialog.elimination.si.message}]];
 </script>
 <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
 <script th:src="@{/js/user/usersList.js}"></script>
@@ -222,7 +223,7 @@
 														</a></td>
 
 														<td><a href="javascript:void(0)" role="button"
-															th:attr="onclick='javascript:deleteAppService(' + ${stepInstance.id} + ', \'' + ${stepInstance.method} + '\',\'' + ${stepInstance.descr} + '\', \''  + 'null' +'\')'">
+															th:attr="onclick='javascript:deleteStepInstance(' + ${stepInstance.id} + ', \'' + ${stepInstance.method} + '\',\'' + ${stepInstance.descr} + '\', \''  + 'null' +'\')'">
 																<i class="fa fa-trash-o"></i>
 														</a></td>
 													</tr>
@@ -562,6 +563,35 @@
 						<button type="button" class="btn btn-light" data-dismiss="modal"
 							th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</button>
 						<button type="button" id="btn_delete_as"
+							class="btn btn-primary towait" data-dismiss="modal"
+							th:title="#{generic.delete.button.label}"
+							th:text="#{generic.delete.button.label}">Elimina</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Delete Step Instance modal -->
+		<div class="modal fade" id="modalDeleteSI" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">
+							<i class="fa fa-trash"></i>&nbsp;<span
+								th:text="#{confirm.elimination.title}">Conferma
+								eliminazione</span>
+						</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" id="del_si_msg">Eliminare la Step Instance</div>
+					<div class="modal-footer">
+						<input type="hidden" name="" id="id_si_delete" value="" />
+						<button type="button" class="btn btn-light" data-dismiss="modal"
+							th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</button>
+						<button type="button" id="btn_delete_si"
 							class="btn btn-primary towait" data-dismiss="modal"
 							th:title="#{generic.delete.button.label}"
 							th:text="#{generic.delete.button.label}">Elimina</button>
