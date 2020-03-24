@@ -145,12 +145,12 @@ public class WorkflowController {
         List<Log> logs = logService.findByIdSessione(sessionBean.getId());
         model.addAttribute("logs", logs);
 
-        HashMap<Long, List<String>> paramsMissing = workflowService
+        Map<Long, List<String>> paramsMissing = workflowService
                 .findMissingAppRoleySubProcessAndTipoVar(dataProcessing, new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
-        HashMap<Long, List<String>> variablesMissing = workflowService
+        Map<Long, List<String>> variablesMissing = workflowService
                 .findMissingAppRoleySubProcessAndTipoVar(dataProcessing, new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
 
-        HashMap<Long, List<String>> rulesetMissing = workflowService
+        Map<Long, List<String>> rulesetMissing = workflowService
                 .findMissingAppRoleySubProcessAndTipoVar(dataProcessing, new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
 
         // all in paramterers
