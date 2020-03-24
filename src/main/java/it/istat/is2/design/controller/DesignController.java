@@ -26,21 +26,19 @@ package it.istat.is2.design.controller;
 import java.util.ArrayList;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import it.istat.is2.app.bean.NotificationMessage;
+
+
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.TreeNode;
 import it.istat.is2.workflow.domain.BusinessFunction;
@@ -49,10 +47,9 @@ import it.istat.is2.workflow.domain.BusinessService;
 import it.istat.is2.workflow.domain.ProcessStep;
 import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.workflow.service.ProcessStepService;
-import it.istat.is2.worksession.domain.WorkSession;
+
 import it.istat.is2.workflow.service.BusinessProcessService;
 import it.istat.is2.workflow.service.BusinessServiceService;
-import it.istat.is2.workflow.service.BusinessStepService;
 
 @Controller
 public class DesignController {
@@ -90,7 +87,7 @@ public class DesignController {
                     albero.get(albero.size() - 1).addChild(m.getName());
                     listaBp.forEach((s) -> {
                         if (s.getBusinessProcessParent() != null && s.getBusinessProcessParent().getId() == m.getId()) {
-                            TreeNode tempNode = ((TreeNode) albero.get(albero.size() - 1).getChildren().get(albero.get(albero.size() - 1).getChildren().size() - 1)).addChild(s.getName());
+                            TreeNode<String> tempNode = ((TreeNode<String>) albero.get(albero.size() - 1).getChildren().get(albero.get(albero.size() - 1).getChildren().size() - 1)).addChild(s.getName());
                             listaBs.forEach((p) -> {
                                 p.getBusinessProcesses().forEach((k) -> {
                                     if (k.getId().equals(s.getId())) {
@@ -129,7 +126,7 @@ public class DesignController {
         		funzione.setName(fieldName);
         		funzione.setDescr(fieldDescr);
         		funzione.setLabel(fieldLabel);
-        		BusinessFunction bf=  businessFunctionService.updateBFunction(funzione);
+        		businessFunctionService.updateBFunction(funzione);
         		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -146,7 +143,7 @@ public class DesignController {
         		process.setName(fieldName);
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
-        		BusinessProcess bp=  businessProcessService.updateBProcess(process);
+        		businessProcessService.updateBProcess(process);
         		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -164,7 +161,7 @@ public class DesignController {
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
         		
-        		BusinessProcess bp=  businessProcessService.updateBProcess(process);
+        		businessProcessService.updateBProcess(process);
         		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -183,7 +180,7 @@ public class DesignController {
         		step.setDescr(fieldDescr);
         		step.setLabel(fieldLabel);
         		step.setBusinessService(newBusinessService);
-        		ProcessStep ps= processStepService.save(step);
+        		processStepService.save(step);
         		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -255,7 +252,7 @@ public class DesignController {
         		funzione.setName(fieldName);
         		funzione.setDescr(fieldDescr);
         		funzione.setLabel(fieldLabel);
-        		BusinessFunction bf=  businessFunctionService.updateBFunction(funzione);
+        		businessFunctionService.updateBFunction(funzione);
         		
         		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
@@ -271,7 +268,7 @@ public class DesignController {
         		process.setName(fieldName);
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
-        		BusinessProcess bp=  businessProcessService.updateBProcess(process);
+        		businessProcessService.updateBProcess(process);
         		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -289,7 +286,7 @@ public class DesignController {
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
         		
-        		BusinessProcess bp=  businessProcessService.updateBProcess(process);
+        		businessProcessService.updateBProcess(process);
         		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -307,7 +304,7 @@ public class DesignController {
         		step.setDescr(fieldDescr);
         		step.setLabel(fieldLabel);
         		step.setBusinessService(newBusinessService);
-        		ProcessStep ps= processStepService.save(step);
+        		processStepService.save(step);
         		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
 				// TODO: handle exception
