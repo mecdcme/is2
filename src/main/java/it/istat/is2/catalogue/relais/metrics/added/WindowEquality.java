@@ -48,7 +48,7 @@ public final class  WindowEquality extends AbstractStringMetric implements Seria
         Float x = Float.valueOf(string1);
         Float y = Float.valueOf(string2);
        
-        if(x==y){
+        if(Float.compare(x,y)==0){
             return(1);
         }
         else if((Math.abs(x-y))<=window){
@@ -78,7 +78,7 @@ public final class  WindowEquality extends AbstractStringMetric implements Seria
     public float getUnNormalisedSimilarity(String string1, String string2) {
         Float x = Float.valueOf(string1);
         Float y = Float.valueOf(string2);
-        if(x==y)
+        if(Float.compare(x,y)==0)
             return(1);
         else if((Math.abs(x-y))<=window)
            return(1);
