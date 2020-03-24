@@ -47,7 +47,7 @@ public final class EuclideanDistance extends AbstractStringMetric implements Ser
     public float getSimilarity(final String string1, final String string2) {
         final ArrayList<String> str1Tokens = tokeniser.tokenizeToArrayList(string1);
         final ArrayList<String> str2Tokens = tokeniser.tokenizeToArrayList(string2);
-        float totalPossible = (float) Math.sqrt((str1Tokens.size()*str1Tokens.size()) + (str2Tokens.size()*str2Tokens.size()));
+        float totalPossible = (float) Math.sqrt((str1Tokens.size()*str1Tokens.size()) + (float)(str2Tokens.size()*str2Tokens.size()));
         final float totalDistance = getUnNormalisedSimilarity(string1, string2);
         return (totalPossible - totalDistance) / totalPossible;
     }
@@ -56,7 +56,7 @@ public final class EuclideanDistance extends AbstractStringMetric implements Ser
         final ArrayList<String> str1Tokens = tokeniser.tokenizeToArrayList(string1);
         final ArrayList<String> str2Tokens = tokeniser.tokenizeToArrayList(string2);
 
-        final Set<String> allTokens = new HashSet<String>();
+        final Set<String> allTokens = new HashSet<>();
         allTokens.addAll(str1Tokens);
         allTokens.addAll(str2Tokens);
 
@@ -86,7 +86,7 @@ public final class EuclideanDistance extends AbstractStringMetric implements Ser
         final ArrayList<String> str1Tokens = tokeniser.tokenizeToArrayList(string1);
         final ArrayList<String> str2Tokens = tokeniser.tokenizeToArrayList(string2);
 
-        final Set<String> allTokens = new HashSet<String>();
+        final Set<String> allTokens = new HashSet<>();
         allTokens.addAll(str1Tokens);
         allTokens.addAll(str2Tokens);
 

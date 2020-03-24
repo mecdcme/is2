@@ -2,8 +2,6 @@ package it.istat.is2.catalogue.relais.metrics.added;
 
 import it.istat.is2.catalogue.relais.metrics.dataStructure.MetricMatchingVariable;
 import it.istat.is2.catalogue.relais.metrics.utility.AbstractStringMetric;
-import it.istat.is2.catalogue.relais.metrics.utility.AbstractSubstitutionCost;
-import it.istat.is2.catalogue.relais.metrics.utility.SubCost01;
 
 import java.io.Serializable;
 
@@ -15,8 +13,6 @@ public final class  WindowEquality extends AbstractStringMetric implements Seria
 
     private final float ESTIMATEDTIMINGCONST = 1e-4f;
 
-    private final AbstractSubstitutionCost dCostFunc = new SubCost01();
-    
     public WindowEquality(MetricMatchingVariable mmv) {
         this.window = mmv.getWindowSize(); 
      }
@@ -48,7 +44,7 @@ public final class  WindowEquality extends AbstractStringMetric implements Seria
         Float x = Float.valueOf(string1);
         Float y = Float.valueOf(string2);
        
-        if(x==y){
+        if(Float.compare(x,y)==0){
             return(1);
         }
         else if((Math.abs(x-y))<=window){
@@ -78,7 +74,7 @@ public final class  WindowEquality extends AbstractStringMetric implements Seria
     public float getUnNormalisedSimilarity(String string1, String string2) {
         Float x = Float.valueOf(string1);
         Float y = Float.valueOf(string2);
-        if(x==y)
+        if(Float.compare(x,y)==0)
             return(1);
         else if((Math.abs(x-y))<=window)
            return(1);

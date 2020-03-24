@@ -76,7 +76,7 @@ public class RelaisService {
         Map<String, String> rolesGroupOut = new HashMap<>();
 
         // <codRuolo,[namevar1,namevar2..]
-        int indexItems = 0;
+     
         ArrayList<String> variabileNomeListMA = new ArrayList<>();
         ArrayList<String> variabileNomeListMB = new ArrayList<>();
 
@@ -128,7 +128,7 @@ public class RelaisService {
 
                 String pattern = contingencyService.getPattern(valuesI);
                 contengencyTable.put(pattern, contengencyTable.get(pattern) + 1);
-                indexItems++;
+                
             }
 
         }
@@ -291,14 +291,5 @@ public class RelaisService {
         }
 
     }
-
-    private void cleanValuesWorksetOut(Map<String, ArrayList<String>> worksetOut) {
-        // TODO Auto-generated method stub
-        worksetOut.values().forEach(value -> {
-            value.clear();
-        });
-
-    }
-
 
 }

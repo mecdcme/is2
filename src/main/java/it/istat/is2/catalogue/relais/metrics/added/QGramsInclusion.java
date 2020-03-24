@@ -1,5 +1,5 @@
 package it.istat.is2.catalogue.relais.metrics.added;
-import it.istat.is2.catalogue.relais.metrics.*;
+
 import it.istat.is2.catalogue.relais.metrics.utility.AbstractStringMetric;
 import it.istat.is2.catalogue.relais.metrics.utility.InterfaceTokeniser;
 import it.istat.is2.catalogue.relais.metrics.utility.TokeniserQGram3Extended;

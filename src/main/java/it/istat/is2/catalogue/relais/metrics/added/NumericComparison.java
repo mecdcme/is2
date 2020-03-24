@@ -3,8 +3,6 @@ package it.istat.is2.catalogue.relais.metrics.added;
 import java.io.Serializable;
 
 import it.istat.is2.catalogue.relais.metrics.utility.AbstractStringMetric;
-import it.istat.is2.catalogue.relais.metrics.utility.AbstractSubstitutionCost;
-import it.istat.is2.catalogue.relais.metrics.utility.SubCost01;
 
 public final class NumericComparison extends AbstractStringMetric implements Serializable {
 
@@ -12,7 +10,6 @@ public final class NumericComparison extends AbstractStringMetric implements Ser
 
     private final float ESTIMATEDTIMINGCONST = 1e-4f;
 
-    private final AbstractSubstitutionCost dCostFunc = new SubCost01();
 
     public NumericComparison() {
     }
