@@ -31,13 +31,14 @@ public final class NumericEuclideanDistance extends AbstractStringMetric impleme
     }
 
     public float getSimilarity(final String string1, final String string2) {
-        int num1=0, num2=0;
+        int num1=0;
+        int num2=0;
         double euclideanD = 0.0;
         try {
             num1 = Integer.parseInt(string1);
             num2 = Integer.parseInt(string2);
             
-            euclideanD = Math.sqrt((num1-num2)*(num1-num2));
+            euclideanD = (double)Math.sqrt((num1-num2)*(num1-num2));
            
             return (float) euclideanD;
         } catch (Exception e) {
