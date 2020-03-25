@@ -317,8 +317,34 @@ function newFunctionDialog(funzione) {
 
 
 function checkSelected(value) {
-	  alert(value.id);
-	}
+	  
+	
+//	alert(value.id);
+	$("#functionsList > option").each(function() {
+		  if (this.value==value.id) {
+			  
+			  $(this).prop("selected", true);
+			  $('.demo').bootstrapDualListbox('refresh')
+		};
+	});
+
+
+}
+function checkSelectedSteps(value) {
+	  
+	
+//	alert(value.id);
+	$("#stepsList > option").each(function() {
+		  if (this.value==value.id) {
+			  
+			  $(this).prop("selected", true);
+			  $('.demo1').bootstrapDualListbox('refresh')
+		};
+	});
+
+
+}
+
 
 function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusinessFunction, funzione) {
 	var titolo;
@@ -329,7 +355,7 @@ function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusi
 	$('#idf').val(id);
 	$('#namef').val(nome);
 	$('#descriptionf').val(descrizione);
-	console.log("Getting process...");
+	
 
 	$.ajax({
 		type : "GET",
@@ -339,13 +365,14 @@ function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusi
 		cache : true,
 		success : function(data) {
 			
-			
+			$("#functionsList > option").each(function() { $(this).prop("selected", false)});
+			$('.demo').bootstrapDualListbox('refresh');
 			data.businessFunctions.forEach(checkSelected);
 			
 			$('.form-control').attr("readonly","readonly");
 			$('.filter').removeAttr("readonly","readonly");
 			
-			$("#bindingTitle").text(titolo);
+			$("#bindingTitleFunctions").text(titolo);
 			$('#binding-Functions').modal('show');
 		},
 		error : function(e) {
@@ -372,12 +399,35 @@ function bindingProcessDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 	$('#namep').val(nome);
 	$('#descriptionp').val(descrizione);
 	
+	$.ajax({
+		type : "GET",
+		contentType : "application/json",
+		url : _ctx + "/rest/design/getStep/" + id,
+		dataType : 'json',
+		cache : true,
+		success : function(data) {
+			
+			$("#stepsList > option").each(function() { $(this).prop("selected", false)});
+			$('.demo1').bootstrapDualListbox('refresh');
+			data.businessProcesses.forEach(checkSelectedSteps);
+			
+			$('.form-control').attr("readonly","readonly");
+			$('.filter').removeAttr("readonly","readonly");
+			
+			$("#bindingTitleSteps").text(titolo);
+			$('#binding-Processes').modal('show');
+		},
+		error : function(e) {
+			
+			console.log("ERROR : ", e);
+		},
+		complete : function() {
+			
+		}
+	});
 	
-	$('.form-control').attr("readonly","readonly");
-	$('.filter').removeAttr("readonly","readonly");
 	
-	$("#bindingTitle").text(titolo);
- $('#binding-Processes').modal('show');
+	
 }
 
 

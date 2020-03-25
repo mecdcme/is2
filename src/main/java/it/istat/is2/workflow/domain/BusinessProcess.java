@@ -66,7 +66,7 @@ public class BusinessProcess implements Serializable {
     @JoinColumn(name = "PARENT")
     private BusinessProcess businessProcessParent;
 
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "is2_link_process_step", joinColumns = @JoinColumn(name = "BUSINESS_PROCESS_ID"), inverseJoinColumns = @JoinColumn(name = "PROCESS_STEP_ID"))
     private List<ProcessStep> businessSteps;
