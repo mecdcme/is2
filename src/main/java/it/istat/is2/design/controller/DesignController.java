@@ -66,6 +66,7 @@ public class DesignController {
     private BusinessServiceService businessService;
     @Autowired
     private MessageSource messages;
+	
 
     @GetMapping(value ="/settings")
     public String viewSettings(Model model) {
@@ -337,6 +338,25 @@ public class DesignController {
     	
     	
         notificationService.removeAllMessages();
+        try {
+        	int i;
+        	BusinessFunction funzione  = businessFunctionService.findBFunctionById(fieldId);
+        	funzione.getBusinessProcesses().clear();
+        	for (i = 0; i < duallistbox_demo.length; i++) { 
+        		  
+                BusinessProcess temp = businessProcessService.findBProcessById(Integer.parseInt(duallistbox_demo[i]));
+        		funzione.getBusinessProcesses().add(temp);
+                
+             } 
+        	
+        	businessFunctionService.updateBFunction(funzione);
+    		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			// TODO: handle exception
+			notificationService.addErrorMessage(messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()),
+                    e.getMessage());
+			
+		}
         
         return "redirect:/settings";
 
