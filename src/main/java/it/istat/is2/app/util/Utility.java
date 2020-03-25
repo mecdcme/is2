@@ -54,22 +54,22 @@ import it.istat.is2.workflow.domain.DataTypeCls;
 import it.istat.is2.workflow.domain.StepRuntime;
 import it.istat.is2.workflow.domain.AppRole;
 
-
 public class Utility {
 
 	@SuppressWarnings("rawtypes")
-	public static String printJsonToHtml(String jsonString)  {
-		StringBuffer ret=new StringBuffer();
+	public static String printJsonToHtml(String jsonString) {
+		StringBuffer ret = new StringBuffer();
 		JSONParser jSONParser;
 		Object jsonObject;
 		try {
-			jSONParser=new JSONParser(jsonString);
-			jsonObject=	jSONParser.parse();
-			if(jsonObject instanceof JSONObject)
-		 		ret.append(parseJson((JSONObject)jsonObject,""));
-			else if(jsonObject instanceof List)
-		 		ret.append(parseList((List)jsonObject,""));
-			else ret.append(jsonString);
+			jSONParser = new JSONParser(jsonString);
+			jsonObject = jSONParser.parse();
+			if (jsonObject instanceof JSONObject)
+				ret.append(parseJson((JSONObject) jsonObject, ""));
+			else if (jsonObject instanceof List)
+				ret.append(parseList((List) jsonObject, ""));
+			else
+				ret.append(jsonString);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			ret.append(jsonString);
@@ -77,26 +77,24 @@ public class Utility {
 			// TODO Auto-generated catch block
 			ret.append(jsonString);
 		}
-		
 
 		return ret.toString();
 	}
 
 	@SuppressWarnings("unchecked")
-	public static String parseList(List<?> list,String ret) throws JSONException {
-		 
-		
+	public static String parseList(List<?> list, String ret) throws JSONException {
+
 		for (Object object : list) {
-			if(object instanceof List)
-				ret =parseList((List<?>)object,ret);
-			else if(object instanceof Map)
-		 		ret=parseMap((Map<String, ?>)object,ret);
-			else	 
-		 		ret+=object.toString();
+			if (object instanceof List)
+				ret = parseList((List<?>) object, ret);
+			else if (object instanceof Map)
+				ret = parseMap((Map<String, ?>) object, ret);
+			else
+				ret += object.toString();
 		}
 
-        return ret;
-    }
+		return ret;
+	}
 
 	public static String parseMap(Map<String, ?> jsonObject, String ret) throws JSONException {
 
@@ -105,10 +103,10 @@ public class Utility {
 		int index = 0;
 		while (iterator.hasNext()) {
 			String obj = iterator.next();
-			if(jsonObject instanceof List) {
+			if (jsonObject instanceof List) {
 				ret += "<ul>";
 				ret += obj;
-				ret =parseList((List<?>)jsonObject.get(obj),ret);
+				ret = parseList((List<?>) jsonObject.get(obj), ret);
 				ret += "</ul>";
 			} else {
 				if (index == 0)
@@ -377,8 +375,8 @@ public class Utility {
 		return tipoDato;
 	}
 
-	public static LinkedHashMap<String, ArrayList<String>> getMapWorkSetValues(Map<String, ArrayList<StepRuntime>> dataMap,
-			DataTypeCls dataType) {
+	public static LinkedHashMap<String, ArrayList<String>> getMapWorkSetValues(
+			Map<String, ArrayList<StepRuntime>> dataMap, DataTypeCls dataType) {
 
 		LinkedHashMap<String, ArrayList<String>> ret = new LinkedHashMap<>();
 		for (Map.Entry<String, ArrayList<StepRuntime>> entry : dataMap.entrySet()) {
@@ -419,7 +417,7 @@ public class Utility {
 
 		LinkedHashMap<String, ArrayList<StepRuntime>> ret = new LinkedHashMap<>();
 		for (StepRuntime stepRuntime : dataList) {
-			
+
 			ArrayList<StepRuntime> stepList = ret.get(stepRuntime.getWorkset().getName());
 			if (stepList == null)
 				stepList = new ArrayList<>();
@@ -519,14 +517,14 @@ public class Utility {
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		ArrayList<String> ret = new ArrayList<String>();
 		Field field;
-		 
-			field = classObject.getDeclaredField(fieldName);
-			for (Object object : values) {
-				field.setAccessible(true);
-				Object value = field.get(object);
-				ret.add(value.toString());
-			}
-		 
+
+		field = classObject.getDeclaredField(fieldName);
+		for (Object object : values) {
+			field.setAccessible(true);
+			Object value = field.get(object);
+			ret.add(value.toString());
+		}
+
 		return ret;
 	}
 
@@ -580,7 +578,8 @@ public class Utility {
 
 		return ret;
 	}
- 	public static Map<String, String> getMapWorkSetValuesParams(Map<String, ArrayList<StepRuntime>> dataMap,
+
+	public static Map<String, String> getMapWorkSetValuesParams(Map<String, ArrayList<StepRuntime>> dataMap,
 			DataTypeCls dataType) {
 		// TODO Auto-generated method stub
 		HashMap<String, String> ret = new HashMap<>();
@@ -605,12 +604,26 @@ public class Utility {
 
 	public static ArrayList<String> toArrayListofString(Vector values) {
 		// TODO Auto-generated method stub
-		ArrayList<String> ret=new ArrayList<String>();
+		ArrayList<String> ret = new ArrayList<String>();
 		for (int i = 0; i < values.length(); i++) {
-			Object elem=values.getElementAsObject(i);
-		 ret.add(String.valueOf(elem));
+			Object elem = values.getElementAsObject(i);
+			ret.add(String.valueOf(elem));
 		}
-	 	return ret;
+		return ret;
 	}
- 	
+
+	public static boolean isNumericR(String[] arrX) {
+		for (String elem : arrX) {
+			if (elem.isEmpty() || "NA".equalsIgnoreCase(elem)) {
+				continue;
+			}
+			try {
+				Double.parseDouble(elem);
+			} catch (NumberFormatException | NullPointerException nfe) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }
