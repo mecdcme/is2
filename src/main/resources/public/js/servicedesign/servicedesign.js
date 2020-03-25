@@ -92,7 +92,7 @@ function updateBusinessService(id, name, description, gsbpmid) {
 	$("#up-bs-id").val(id);
 	$("#up-bs-name").val(name);
 	$("#up-bs-description").val(description);	
-	$("#up-bs-gsbpm").val(gsbpmid);
+	$("#up-bs-gsbpm").val(gsbpmid);	
 	$('#update-bservice-modal').modal('show');
 }
 

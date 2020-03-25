@@ -23,6 +23,7 @@
  */
 package it.istat.is2.business.design.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +67,13 @@ public class BusinessDesignController {
 		List<BusinessService> listaBService = businessServiceService.findBusinessServices();
 		List<AppService> listaAppService = appServiceService.findAllAppService();
 		List<StepInstance> listaStepInstance = stepInstanceService.findAllStepInstance();
-		List<GsbpmProcess> listaGsbpmProcess = gsbpmProcessService.findAllProcesses();		
-		model.addAttribute("listaGsbpmProcess", listaGsbpmProcess);
+		List<GsbpmProcess> listaGsbpmParentProcess = gsbpmProcessService.findAllProcesses();	
+		List<GsbpmProcess> listaGsbpmSubProcess = gsbpmProcessService.findAllSubProcesses();
+		
+		ArrayList<GsbpmProcess>listaAllGsbpmProcess = new ArrayList<GsbpmProcess>();
+		listaAllGsbpmProcess.addAll(listaGsbpmParentProcess);
+		listaAllGsbpmProcess.addAll(listaGsbpmSubProcess);
+		model.addAttribute("listaAllGsbpmProcess", listaAllGsbpmProcess);
 		model.addAttribute("listaBService", listaBService);
 		model.addAttribute("listaAppService", listaAppService);
 		model.addAttribute("listaStepInstance", listaStepInstance);

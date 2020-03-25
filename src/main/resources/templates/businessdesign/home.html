@@ -94,6 +94,7 @@
 														<th><span th:text="#{generic.label.id}">ID</span></th>
 														<th><span th:text="#{generic.label.name}">NOME</span></th>
 														<th><span th:text="#{generic.label.description}">DESCRIZIONE</span></th>
+														<th><span th:text="#{bs.gsbpm.label}">GSBPM</span></th>
 														<th style="width: 1%"></th>
 														<th style="width: 1%"></th>
 													</tr>
@@ -103,6 +104,7 @@
 														<td th:text="${bservice.id}"></td>
 														<td th:text="${bservice.name}"></td>
 														<td th:text="${bservice.descr}"></td>
+														<td th:text="${bservice.gsbpmProcess.name}"></td>
 
 														<td><a href="javascript:void(0)" role="button"												
 															th:attr="onclick='javascript:updateBusinessService(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + ${bservice.gsbpmProcess.id} +'\')'">
@@ -281,7 +283,7 @@
 									<select name="gsbpmid"
 									th:title="#{bs.gsbpm.label}"
 									class="form-control">
-									<option th:each="gsbpm : ${listaGsbpmProcess}"
+									<option th:each="gsbpm : ${listaAllGsbpmProcess}"
 										th:value="${gsbpm.id}" th:text="${gsbpm.name}" />
 								</select><span class="help-block"></span>
 
@@ -340,7 +342,7 @@
 									<select name="gsbpmid" id="up-bs-gsbpm"
 									th:title="#{bs.gsbpm.label}"
 									class="form-control">
-									<option th:each="gsbpm : ${listaGsbpmProcess}"
+									<option th:each="gsbpm : ${listaAllGsbpmProcess}"
 										th:value="${gsbpm.id}" th:text="${gsbpm.name}" />
 								</select>
 
