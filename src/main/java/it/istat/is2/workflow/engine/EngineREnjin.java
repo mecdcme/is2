@@ -140,7 +140,7 @@ public class EngineREnjin implements EngineService {
             int size = keys.size();
             String key;
 
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < size; i++) { 
                 key = keys.get(i);
 
                 String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
