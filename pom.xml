@@ -169,9 +169,7 @@
 			<artifactId>renjin-script-engine</artifactId>
 			<version>RELEASE</version>
 			</dependency>
-
- 
-		<dependency>
+ 	<dependency>
 			<groupId>org.renjin.cran</groupId>
 			<artifactId>SeleMix</artifactId>
 			<version>1.0.1-b16</version>
