@@ -145,7 +145,7 @@ public class EngineREnjin implements EngineService {
 
                 String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
                 listaCampi += key + ",";
-                engine.put(key, arrX); // Create a string vector
+                engine.put(key, arrX); // Create a string vector 
                 try {
                     if (Utility.isNumericR(arrX)) {
                         engine.eval(key + " <- as.numeric(" + key + ")");
