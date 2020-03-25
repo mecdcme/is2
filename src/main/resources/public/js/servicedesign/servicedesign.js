@@ -58,6 +58,9 @@ $(document).ready(function() {
 	$("#btn-submit-bs").click(function() {
 		check_and_send_req();
 	});
+	$("#btn-submit-upd-bs").click(function() {
+		check_and_send_upd_bs_req();
+	});
 	$("#btn-submit-as").click(function() {
 		check_and_send_as_req();
 	});
@@ -102,6 +105,14 @@ function check_and_send_req() {
 		$("#bs-name-error").text(_mandatory_name_field);
 	} else {
 		$("#bs-form").submit();
+	}
+}
+function check_and_send_upd_bs_req() {
+	var upbsname = $('#up-bs-name').val();
+	if (upbsname.length < 1) {
+		$("#up-bs-name-error").text(_mandatory_name_field);
+	} else {
+		$("#upd-bs-form").submit();
 	}
 }
 function check_and_send_as_req() {
