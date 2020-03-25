@@ -372,7 +372,7 @@
 						<div class="modal-header">
 							<h5 class="modal-title">
 								<i class="fa fa-edit"></i>&nbsp; <span
-									th:text="#{generic.bindingFunctions}" id="bindingTitle">Update</span>
+									th:text="#{generic.bindingFunctions}" id="bindingTitleFunctions">Update</span>
 							</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
@@ -434,7 +434,7 @@
 						<div class="modal-header">
 							<h5 class="modal-title">
 								<i class="fa fa-edit"></i>&nbsp; <span
-									th:text="#{generic.bindingSubProcesses}" id="bindingTitle">Update</span>
+									th:text="#{generic.bindingSubProcesses}" id="bindingTitleSteps">Update</span>
 							</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
@@ -460,7 +460,7 @@
 									<div class="row">
 									
 									
-									 <select  multiple="multiple" name="duallistbox_demo1[]"  class="demo1" title="duallistbox_demo1[]">
+									 <select id="stepsList" multiple="multiple" name="duallistbox_demo1[]"  class="demo1" title="duallistbox_demo1[]">
 									    <option th:each="stepP: ${listaAllSubBp}" th:text="${stepP.name}"  th:value="${stepP.id}"></option>
 								
 									  </select>

@@ -35,7 +35,7 @@ public class DesignControllerRest {
 		private MessageSource messages;
 		 
 		 
-		@GetMapping("/rest/design/getProcess/{id}")
+		@GetMapping(value = "/rest/design/getProcess/{id}")
 		@ResponseBody    
 //		@RequestMapping(value = "/rest/design/getProcess/{id}", method = RequestMethod.GET)
 	    public  ResponseEntity<?>  getProcess(HttpServletRequest request, @PathVariable("id") Integer id) {
@@ -53,7 +53,7 @@ public class DesignControllerRest {
 	    	return ResponseEntity.ok(processo);
 	    }
 	    
-	    @RequestMapping(value = "/rest/design/getStep/{id}", method = RequestMethod.GET)
+		@GetMapping(value = "/rest/design/getStep/{id}")
 	    public ProcessStep getColumns(HttpServletRequest request, @PathVariable("id") Long id) {
 	    	notificationService.removeAllMessages();
 	    	ProcessStep step = null;

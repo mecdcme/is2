@@ -52,20 +52,20 @@ public class ProcessStep implements Serializable {
     private String descr;
     @Column(name="LABEL")
     private String label;
-    
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "BUSINESS_SERVICE_ID")
     private BusinessService businessService;
-   
+    @JsonBackReference
     @ManyToMany
     @JoinTable(name = "is2_link_step_instance", joinColumns = {
         @JoinColumn(name = "PROCESS_STEP_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "PROCESS_STEP_INSTANCE_ID")})
-    @JsonManagedReference
+    
     private List<StepInstance> stepInstances;
-
+    
+    
     @ManyToMany(mappedBy = "businessSteps")
-    @JsonBackReference
     private List<BusinessProcess> businessProcesses;
 
     public ProcessStep() {
