@@ -147,7 +147,7 @@ public class EngineREnjin implements EngineService {
                 listaCampi += key + ",";
                 engine.put(key, arrX); // Create a string vector
                 try {
-                    if (isNumeric(arrX)) {
+                    if (Utility.isNumericR(arrX)) {
                         engine.eval(key + " <- as.numeric(" + key + ")");
                     }
                 } catch (Exception e) {
@@ -181,20 +181,7 @@ public class EngineREnjin implements EngineService {
         }
     }
 
-    private boolean isNumeric(String[] arrX) {
-        for (String elem : arrX) {
-            if (elem.isEmpty() || DEFAULT_NA.equalsIgnoreCase(elem)) {
-                continue;
-            }
-            try {
-                Double.parseDouble(elem);
-            } catch (NumberFormatException | NullPointerException nfe) {
-                return false;
-            }
-        }
-        return true;
-    }
-
+  
     @Override
     public void doAction() throws ScriptException {
 
