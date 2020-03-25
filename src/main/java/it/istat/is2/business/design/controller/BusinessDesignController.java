@@ -97,7 +97,7 @@ public class BusinessDesignController {
 		try {
 			businessServiceService.save(businessService);
 			notificationService.addInfoMessage(
-					messages.getMessage("generic.successfull.saved.message", null, LocaleContextHolder.getLocale()));
+					messages.getMessage("generic.successfull.updated.message", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
 			notificationService.addErrorMessage(
 					messages.getMessage("generic.saving.error.message", null, LocaleContextHolder.getLocale()) + ": "
