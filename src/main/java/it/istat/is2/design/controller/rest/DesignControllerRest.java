@@ -46,7 +46,7 @@ public class DesignControllerRest {
         		
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
 			}
@@ -62,7 +62,7 @@ public class DesignControllerRest {
         		
 			} catch (Exception e) {
 				// TODO: handle exception
-				notificationService.addErrorMessage(messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				notificationService.addErrorMessage(messages.getMessage("design.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
 			}
