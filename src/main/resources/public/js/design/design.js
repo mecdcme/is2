@@ -317,8 +317,19 @@ function newFunctionDialog(funzione) {
 
 
 function checkSelected(value) {
-	  alert(value.id);
-	}
+	  
+	
+//	alert(value.id);
+	$("#functionsList > option").each(function() {
+		  if (this.value==value.id) {
+			  
+			  $(this).prop("selected", true);
+			  $('.demo').bootstrapDualListbox('refresh')
+		};
+	});
+
+
+}
 
 function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusinessFunction, funzione) {
 	var titolo;
@@ -339,7 +350,8 @@ function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusi
 		cache : true,
 		success : function(data) {
 			
-			
+			$("#functionsList > option").each(function() { $(this).prop("selected", false)});
+			$('.demo').bootstrapDualListbox('refresh');
 			data.businessFunctions.forEach(checkSelected);
 			
 			$('.form-control').attr("readonly","readonly");
