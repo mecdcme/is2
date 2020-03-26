@@ -100,7 +100,7 @@ public class WorkSessionController {
 		return "worksession/list";
 	}
 
-	@GetMapping(value = "/sessione/nuovasessione")
+	@PostMapping(value = "/sessione/nuovasessione")
 	public String nuovaSessione(HttpSession session, RedirectAttributes ra, Model model,
 			@AuthenticationPrincipal Principal user, @RequestParam("descrizione") String descrizione,
 			@RequestParam("nome") String nome, @RequestParam("idBusinessFunction") Long idBusinessFunction) {

@@ -302,10 +302,12 @@ public class WorkflowService {
 			AppRole sxruolo = null;
 			String nomeparam = "";
 			String ruoloparam = null;
+			String idparam = null;
 
 			while (stringTokenizer.hasMoreTokens()) {
 				// ordine: nomeParam, idParam, ruolo
 				nomeparam = stringTokenizer.nextToken();
+				idparam = stringTokenizer.nextToken();
 				ruoloparam = stringTokenizer.nextToken();
 			}
 			sxruolo = appRolesAllMap.get(Integer.valueOf(ruoloparam));
