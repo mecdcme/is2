@@ -342,11 +342,12 @@ public class DesignController {
         	int i;
         	BusinessFunction funzione  = businessFunctionService.findBFunctionById(fieldId);
         	funzione.getBusinessProcesses().clear();
+        	
         	for (i = 0; i < duallistbox_demo.length; i++) { 
         		  
-                BusinessProcess temp = businessProcessService.findBProcessById(Integer.parseInt(duallistbox_demo[i]));
+                BusinessProcess temp = businessProcessService.findBProcessById(Long.parseLong(duallistbox_demo[i]));
         		funzione.getBusinessProcesses().add(temp);
-                
+        		
              } 
         	
         	businessFunctionService.updateBFunction(funzione);
@@ -368,7 +369,26 @@ public class DesignController {
     	
     	
         notificationService.removeAllMessages();
-        
+        try {
+        	int i;
+        	BusinessProcess process  = businessProcessService.findBProcessById(fieldId);
+        	process.getBusinessSteps().clear();
+        	
+        	for (i = 0; i < duallistbox_demo1.length; i++) { 
+        		  
+                ProcessStep temp = processStepService.findProcessStepById(Long.parseLong(duallistbox_demo1[i]));
+        		process.getBusinessSteps().add(temp);
+        		
+             } 
+        	
+        	businessProcessService.updateBProcess(process);
+    		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			// TODO: handle exception
+			notificationService.addErrorMessage(messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()),
+                    e.getMessage());
+			
+		}
         
         
         return "redirect:/settings";
