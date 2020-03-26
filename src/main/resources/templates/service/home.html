@@ -58,7 +58,8 @@
                     </ol>
                     <!-- Right navigation menu -->
                     <div class="c-header-nav mfe-2">
-                        <a class="c-header-nav-link" th:title="#{session.button.close}" th:href="@{/gsbpm/100}">
+                        <a class="c-header-nav-link" th:title="#{session.button.close}"
+                           th:href="@{'/gsbpm/' + ${businessService.gsbpmProcess.id}}">
                             <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                         </a>
                     </div>
