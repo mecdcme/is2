@@ -334,7 +334,7 @@ function checkSelectedSteps(value) {
 	  
 	
 //	alert(value.id);
-	$("#stepsList > option").each(function() {
+	$("#processesList > option").each(function() {
 		  if (this.value==value.id) {
 			  
 			  $(this).prop("selected", true);
@@ -407,7 +407,7 @@ function bindingProcessDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 		cache : true,
 		success : function(data) {
 			
-			$("#stepsList > option").each(function() { $(this).prop("selected", false)});
+			$("#processesList > option").each(function() { $(this).prop("selected", false)});
 			$('.demo1').bootstrapDualListbox('refresh');
 			data.businessProcesses.forEach(checkSelectedSteps);
 			
@@ -456,17 +456,34 @@ function playAction(){
 }
 
 function playBindingProcesses(){
+	var atLastOne = new Boolean(0)
+	$("#processesList > option").each(function() {
+		if ($(this).prop("selected")==true) {
+			atLastOne= true;
+	}  });
+	if (atLastOne==true) {
+		$("#bindingProcessesForm").submit();
+	} else {
+		alert("select at last one option");
+	}
 	
-
-	$("#bindingProcessesForm").submit();
+	
 	
 }
 
 
 function playBindingFunctions(){
+	var atLastOne = new Boolean(0)
+	$("#functionsList > option").each(function() {
+		if ($(this).prop("selected")==true) {
+			atLastOne= true;
+	}  });
+	if (atLastOne==true) {
+		$("#bindingFunctionsForm").submit();
+	} else {
+		alert("select at last one option");
+	}
 	
-
-	$("#bindingFunctionsForm").submit();
 	
 }
 

@@ -420,7 +420,7 @@
 									th:text="#{Layout.Close}">Annulla</span>
 							</button>
 							<button type="button" id="btn-invia-table"
-								class="btn btn-primary towait " onclick="playBindingFunctions();"
+								class="btn btn-primary" onclick="playBindingFunctions();"
 								th:title="#{submit.button.title}" th:text="#{submit.button}"
 								data-dismiss="modal">Invia</button>
 						</div>
@@ -460,7 +460,7 @@
 									<div class="row">
 									
 									
-									 <select id="stepsList" multiple="multiple" name="duallistbox_demo1[]"  class="demo1" title="duallistbox_demo1[]">
+									 <select id="processesList" multiple="multiple" name="duallistbox_demo1[]"  class="demo1" title="duallistbox_demo1[]">
 									    <option th:each="stepP: ${listaAllSubBp}" th:text="${stepP.name}"  th:value="${stepP.id}"></option>
 								
 									  </select>
@@ -482,7 +482,7 @@
 									th:text="#{Layout.Close}">Annulla</span>
 							</button>
 							<button type="button" id="btn-invia-table"
-								class="btn btn-primary towait " onclick="playBindingProcesses();"
+								class="btn btn-primary" onclick="playBindingProcesses();"
 								th:title="#{submit.button.title}" th:text="#{submit.button}"
 								data-dismiss="modal">Invia</button>
 						</div>

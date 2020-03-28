@@ -113,10 +113,10 @@ public class DesignController {
         return "design/home.html";
 
     }
-   
+    
     @RequestMapping(value = "/playaction", method = RequestMethod.POST)
     public String action(Model model, @RequestParam("fieldId") Long fieldId, @RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr, 
-    		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldBusinessProcessId") String fieldBusinessProcessId, @RequestParam("fieldAction") String fieldAction ) {
+    		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldBusinessProcessId") String fieldBusinessProcessId, @RequestParam("fieldFatherId") String fieldFatherId, @RequestParam("fieldAction") String fieldAction ) {
       
         notificationService.removeAllMessages();
          switch (fieldAction) {
@@ -282,11 +282,11 @@ public class DesignController {
     	case "nsp":
     		try {
     			BusinessProcess process = new BusinessProcess();
-    			
+    			BusinessProcess fatherProcess = businessProcessService.findBProcessById(Integer.parseInt(fieldFatherId));
     			process.setName(fieldName);
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
-        		
+        		process.setBusinessProcessParent(fatherProcess);
         		businessProcessService.updateBProcess(process);
         		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
