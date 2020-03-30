@@ -157,11 +157,11 @@ public class DesignController {
     	case "usp":
     		try {
     			BusinessProcess process = businessProcessService.findBProcessById(fieldId);
-    		
+    			BusinessProcess fatherProcess = businessProcessService.findBProcessById(Integer.parseInt(fieldFatherId));
     			process.setName(fieldName);
         		process.setDescr(fieldDescr);
         		process.setLabel(fieldLabel);
-        		
+        		process.setBusinessProcessParent(fatherProcess);
         		businessProcessService.updateBProcess(process);
         		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
