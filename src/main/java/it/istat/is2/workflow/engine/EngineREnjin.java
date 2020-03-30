@@ -136,7 +136,7 @@ public class EngineREnjin implements EngineService {
 
         if (!workset.isEmpty()) {
             List<String> keys = new ArrayList<>(workset.keySet());
-            String listaCampi = "";
+            StringBuilder listaCampi =new StringBuilder();
             int size = keys.size();
             String key;
 
@@ -144,7 +144,7 @@ public class EngineREnjin implements EngineService {
                 key = keys.get(i);
 
                 String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
-                listaCampi += key + ",";
+                listaCampi.append(key + ",");
                 engine.put(key, arrX); // Create a string vector 
                 try {
                     if (Utility.isNumericR(arrX)) {
@@ -155,8 +155,8 @@ public class EngineREnjin implements EngineService {
                 }
 
             }
-            listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
-            engine.eval(varR + " <- data.frame(" + listaCampi + ")"); // Create a data frame
+          
+            engine.eval(varR + " <- data.frame(" + listaCampi.substring(0,listaCampi.length()-1) + ")"); // Create a data frame
         }
     }
 
@@ -164,19 +164,17 @@ public class EngineREnjin implements EngineService {
 
         if (!workset.isEmpty()) {
             List<String> keys = new ArrayList<>(workset.keySet());
-            String listaCampi = "";
+            StringBuilder listaCampi =new StringBuilder();
             int size = keys.size();
             String key;
-
             for (int i = 0; i < size; i++) {
                 key = keys.get(i);
                 String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
-                listaCampi += key + ",";
+                listaCampi.append( key + ",");
                 engine.put(key, arrX);
             }
-            listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
-
-            engine.eval(varR + " <- list(" + listaCampi + ")");
+             
+            engine.eval(varR + " <- list(" + listaCampi.substring(0,listaCampi.length()-1) + ")");
 
         }
     }
@@ -240,7 +238,8 @@ public class EngineREnjin implements EngineService {
         try {
             ListVector listR = (ListVector) engine.eval(varR + "$" + tipoOutput);
             StringVector names = (StringVector) engine.eval("names(" + varR + "$" + tipoOutput + ")");
-            String name, value;
+            String name;
+            String value;
             if (listR != null && listR.length() > 0) {
                 for (int i = 0; i < listR.length(); i++) {
                     name = names.getElementAsString(i);
@@ -325,7 +324,7 @@ public class EngineREnjin implements EngineService {
         // {S=[S], X=[X], Y=[Y], Z=[Z]}
         HashMap<String, ArrayList<String>> ruoliInputStep = new HashMap<>();
         // {P=[P], M=[M], O=[O]}
-        rolesOut = new LinkedHashMap<String, ArrayList<String>>();
+        rolesOut = new LinkedHashMap<>();
         rolesGroupOut = new LinkedHashMap<>();
 
         for (Iterator<?> iterator = stepInstance.getStepInstanceSignatures().iterator(); iterator.hasNext();) {
@@ -375,7 +374,7 @@ public class EngineREnjin implements EngineService {
             String codR = entry.getKey();
             ArrayList<StepRuntime> listSVariable = entry.getValue();
             for (Iterator<StepRuntime> iterator = listSVariable.iterator(); iterator.hasNext();) {
-                StepRuntime stepRuntime = (StepRuntime) iterator.next();
+                StepRuntime stepRuntime = iterator.next();
 
                 rolesVariablesMap.put(stepRuntime.getWorkset().getName(), codR);
 
@@ -396,7 +395,7 @@ public class EngineREnjin implements EngineService {
         getGenericOutput(rolesOut, RESULTSET, ROLES_OUT);
         getGenericParamterOutput(parameterOut, RESULTSET, PARAMETERS_OUT);
         getGenericParamterOutput(parameterOut, RESULTSET, REPORT_OUT);
-        //getGenericOutput(worksetOut, RESULTSET, REPORT_OUT);
+        
         getRolesGroup(rolesGroupOut, RESULTSET, ROLES_GROUP_OUT);
         writeLogScriptR();
         saveOutputDB();
@@ -408,7 +407,7 @@ public class EngineREnjin implements EngineService {
         for (Map.Entry<String, ArrayList<String>> entry : rolesOut.entrySet()) {
             String nomeR = entry.getKey();
             ArrayList<String> value = entry.getValue();
-            value.forEach((nomevar) -> ruoliOutputStepInversa.put(nomevar, nomeR));
+            value.forEach(nomevar -> ruoliOutputStepInversa.put(nomevar, nomeR));
         }
 
         // salva output su DB

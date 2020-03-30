@@ -110,8 +110,8 @@ public class DatasetService {
     }
 
     public List<DatasetFile> findAllDatasetFile() {
-        List<DatasetFile> datain = (List<DatasetFile>) datasetFileDao.findAll();
-        return datain;
+    	return (List<DatasetFile>) datasetFileDao.findAll();
+         
     }
 
     public DatasetFile findDataSetFile(Long id) {
@@ -123,18 +123,18 @@ public class DatasetService {
     }
 
     public DatasetFile findDataSetFileSQL(Long id) {
-        DatasetFile df = sqlgenericDao.findGenericDatasetFileOne(id);
-        return df;
+    	return sqlgenericDao.findGenericDatasetFileOne(id);
+        
     }
 
     public List<DatasetFile> findAllDatasetFileSQL() {
-        List<DatasetFile> dataList = sqlgenericDao.findGenericDatasetFileAll();
-        return dataList;
+    	return sqlgenericDao.findGenericDatasetFileAll();
+        
     }
 
     public List<DatasetColumn> findAllDatasetColumnSQL(Long dFile, Integer rigaInf, Integer rigaSup) {
-        List<DatasetColumn> dataList = datasetColumnDao.findDatasetColumnbyQuery(dFile, rigaInf, rigaSup);
-        return dataList;
+    	return datasetColumnDao.findDatasetColumnbyQuery(dFile, rigaInf, rigaSup);
+        
     }
 
     public List<DatasetColumn> findAllNameColum(Long dFile) {
@@ -220,17 +220,17 @@ public class DatasetService {
     }
 
     public List<String> findTablesDB(String db) {
-        // TODO Auto-generated method stub
+       
         return sqlgenericDao.findTablesDB(db);
     }
 
     public List<String> findFieldsTableDB(String db, String table) {
-        // TODO Auto-generated method stub
+        
         return sqlgenericDao.findFieldsTableDB(db, table);
     }
 
     public DatasetFile loadDatasetFromTable(String idsessione, String dbschema, String tablename, String[] fields) {
-        // TODO Auto-generated method stub
+         
         DatasetFile dFile = new DatasetFile();
         dFile.setFileLabel(dbschema);
         DataTypeCls tipoD = new DataTypeCls(IS2Const.DATA_TYPE_DATASET);
@@ -240,7 +240,7 @@ public class DatasetService {
         dFile.setFileFormat("DB");
         dFile.setFieldSeparator("");
         dFile.setLastUpdate(new Date());
-        List<DatasetColumn> colonne = new ArrayList<DatasetColumn>();
+        List<DatasetColumn> colonne = new ArrayList<>();
         for (short i = 0; i < fields.length; i++) {
             String field = fields[i];
             List<String> vals = sqlgenericDao.loadFieldValuesTable(dbschema, tablename, field);
@@ -259,7 +259,7 @@ public class DatasetService {
         return dFile;
     }
     
-    public List<Object[]> getDataset(Long idfile) throws JSONException {
+    public List<Object[]> getDataset(Long idfile) {
 
         DatasetFile datasetFile = this.findDataSetFile(idfile);
 
@@ -272,7 +272,7 @@ public class DatasetService {
         return dataList;
     }
     
-    public List<String> getDatasetColumns(Long idfile) throws JSONException {
+    public List<String> getDatasetColumns(Long idfile)  {
 
         List<String> columnList = new ArrayList<>();
         List<Object[]> resulFieldstList = sqlgenericDao.findDatasetIdColAndName(idfile);
