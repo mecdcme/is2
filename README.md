@@ -12,32 +12,26 @@ In order to build the IS2 application, your environment should fulfill the follo
 * Mysql Server 8.0 or later;
 
 ## What you’ll build
-IS2 is a workbench that, regardless of the statistical method executed, provides the following functionalities:
-
-1.	Upload and management of input data and metadata;
-2.	Setting of variables and parameters needed by an algorithm, written in Java, R or PL/SQL; 
-3.	Algorithm execution;
-4.	Analysis of output data and reports.
-
-The main concepts in the context of IS2 are:
-1.	Work Session: a work session is a logical environment that allows to upload and preprocess your data. The system provides a set of functionalities to create new variables by transforming the existing ones, or select a subset of records and/or variables.
-2.	Processing Session: by mapping initial data with standardized metadata, input data are transformed in working data. In this step, the user can classify and manage the information to process by: i) assigning specific roles to some variables (e.g. identification variable, classification, core variables); ii) selecting auxiliary information (if needed); iii) setting the model parameters. 
-3.	Run method: working data, with their standardized data structures, can be processed by one or more iterations of the statistical method. The result of each iteration is stored in standardized data structures (output data).
-4.	Analyse output: this process step can be used to perform quality checks and/or to calculate statistical indicators to assess the outcome of each iteration.
-
-
+Istat has realized a generalized environment (Istat Statistical Service - IS2) that allows to select statistical services from a catalogue and execute them through a web application (IS2 workbench).
+The IS2 Workbench has been designed to offer a set of functionalities that allow to:
+1.  **Select a business function**: the landing page contains the list of available business functions classified according to GSBPM phases (e.g. ReLais performs GSBPM 5.1 “Data integration”). A business function is a high level goal (What) that can be realized by one or more statistical processes, implemented by one or more services available in the catalogue.
+2.  **Select a business process**: the system provides the list of available processes for the selected function (e.g. Probabilistic Record Linkage or Deterministic Record Linkage). A business process is implemented by a set of process steps. Each process step is linked to a statistical service available in the catalogue. Statistical services perform specific statistical method, implemented in an open source language.
+The following figure shows the link between the “Record linkage” business function, available in the workbench, the “Probabilistic record linkage” process and the related statistical service (Relais).
+![IS2 Core concepts](/doc/img/is2-concepts.png)
+3.  **Upload process input data**: in order to launch a process, the system requires the specification of input data to process. The initial set of data may include a list of rules, and/or other parameters used by the statistical method embedded in the process steps.
+4.  **Set process metadata**: a statistical service may require further information, depending on the statistical function to perform. This set of metadata is provided by the user and is usually tied to input data structure, or concerns model parameters (e.g. specification of matching variables in the datasets to be linked, setting of matching/unmatching thresholds).
+5.  **Execute a business process according to a predetermined workflow**: this function allows to execute the process previously configured.
 ## How to build
 Download and unzip the source code in your workspace `IS2_PATH`.
 Before building the application you must create a MySQL database. From the command line go to MySQL installation directory `MYSQL_PATH`:
 ```
 cd MYSQL_PATH\bin;
 mysql -u db_username -p
-mysql> create database is2;
 ```
 Then create the tables needed to run the application, using the script `is2.sql` stored in the [IS2_PATH/db](db/is2.sql) folder:
 ```
-mysql> use is2;
-mysql> source is2.sql
+mysql> source is2-create.sql
+mysql> source is2-insert.sql
 ```
 
 The script will populate the `USER/ROLES` tables with the user:
