@@ -195,6 +195,34 @@ public class BusinessDesignController {
 
 		return "redirect:/busservlist";
 	}
+	
+	@PostMapping(value = "/updatestepinstance")
+	public String updateStepInstance(HttpSession session, Model model,
+			@RequestParam("idstepinstance") Long idstepinstance, @RequestParam("method") String method, @RequestParam("description") String description,
+			@RequestParam("label") String label, @RequestParam("idappservice") Integer idappservice) {
+		notificationService.removeAllMessages();
+		 
+		StepInstance stepInstance = stepInstanceService.findStepInstanceById(idstepinstance);
+		stepInstance.setMethod(method);
+		stepInstance.setDescr(description);				
+		stepInstance.setLabel(label);
+		
+		AppService appService = appServiceService.findAppServiceById(idappservice);
+		stepInstance.setAppService(appService);		
+		
+		
+		try {
+			stepInstanceService.save(stepInstance);			
+			notificationService.addInfoMessage(
+					messages.getMessage("generic.successfull.updated.message", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			notificationService.addErrorMessage(
+					messages.getMessage("generic.saving.error.message", null, LocaleContextHolder.getLocale()) + ": "
+							+ e.getMessage());
+		}
+
+		return "redirect:/busservlist";
+	}
 
 	@GetMapping(value = "/deletebservice/{idbservice}")
 	public String deleteBService(HttpSession session, Model model, RedirectAttributes ra,

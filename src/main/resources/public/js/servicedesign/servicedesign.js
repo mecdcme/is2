@@ -30,14 +30,29 @@ $(document).ready(function() {
 			check_and_send_req();
 		}
 	});
+	$("#update-bservice-modal").keydown(function(event) {
+		if (event.which == 13) {
+			check_and_send_upd_bs_req();
+		}
+	});
 	$("#new-app-service-modal").keydown(function(event) {
 		if (event.which == 13) {
 			check_and_send_as_req();
 		}
 	});
+	$("#update-app-service-modal").keydown(function(event) {
+		if (event.which == 13) {
+			check_and_send_upd_as_req();
+		}
+	});
 	$("#new-step-instance-modal").keydown(function(event) {
 		if (event.which == 13) {
 			check_and_send_si_req();
+		}
+	});
+	$("#update-step-instance-modal").keydown(function(event) {
+		if (event.which == 13) {
+			check_and_send_upd_si_req();
 		}
 	});
 	$("#modalDeleteBS").keydown(function(event) {
@@ -64,8 +79,14 @@ $(document).ready(function() {
 	$("#btn-submit-as").click(function() {
 		check_and_send_as_req();
 	});
+	$("#btn-submit-as-upd").click(function() {
+		check_and_send_upd_as_req();
+	});
 	$("#btn-submit-si").click(function() {
 		check_and_send_si_req();
+	});
+	$("#btn-submit-upd-si").click(function() {
+		check_and_send_upd_si_req();
 	});
 	$('#btn_delete_bs').click(function() {
 		delete_bservice();
@@ -92,13 +113,39 @@ function openNewStepInstanceDialog() {
 	$('#new-step-instance-modal').modal('show');
 }
 function updateBusinessService(id, name, description, gsbpmid) {	
+	$("#up-bs-name-error").text('');
 	$("#up-bs-id").val(id);
 	$("#up-bs-name").val(name);
 	$("#up-bs-description").val(description);	
 	$("#up-bs-gsbpm").val(gsbpmid);	
 	$('#update-bservice-modal').modal('show');
 }
-
+function updateAppServiceDialog(id, name, description, language, engineType, path, sourceCode, author, licence, contact, bserviceid) {
+	alert("nella funzione");
+	$("#as-name-error").text("");
+	$("#upd-as-name").val(name);
+	$("#upd-as-description").val(description);
+	
+	$("#upd-as-language").val(language);
+	$("#upd-as-engine").val(engineType);
+	$("#upd-as-sourcepath").val(path);
+	$("#upd-as-sourcecode").val(sourceCode);
+	
+	$("#upd-as-author").val(author);
+	$("#upd-as-licence").val(licence);
+	$("#upd-as-contact").val(contact);
+	$("#upd-as-select").val(bserviceid);
+	$('#update-bservice-modal').modal('show');
+}
+function updateStepInstanceDialog(id, method, description, label, appserviceid) {	
+	$("#upd-si-method-error").text('');
+	$("#id-upd-step-instance").val(id);
+	$("#upd-si-method").val(method);	
+	$("#upd-si-description").val(description);	
+	$("#upd-si-label").val(label);	
+	$("#select-si-upd-appservice").val(appserviceid);
+	$('#update-step-instance-modal').modal('show');
+}
 function check_and_send_req() {
 	var bsname = $('#bs-name').val();
 	if (bsname.length < 1) {
@@ -115,12 +162,12 @@ function check_and_send_upd_bs_req() {
 		$("#upd-bs-form").submit();
 	}
 }
-function check_and_send_as_req() {
-	var asname = $('#as-name').val().length;	
-	if (asname.length < 1) {
-		$("#as-method-error").text(_mandatory_name_field);
+function check_and_send_upd_as_req() {
+	var updasname = $('#upd-as-name').val().length;	
+	if (updasname.length < 1) {
+		$("#upd-as-method-error").text(_mandatory_name_field);
 	} else {
-		$("#as-form").submit();
+		$("#upd-as-form").submit();
 	}
 }
 function check_and_send_si_req() {
@@ -129,6 +176,14 @@ function check_and_send_si_req() {
 		$("#si-method-error").text(_mandatory_method_field);
 	} else {
 		$("#si-form").submit();
+	}
+}
+function check_and_send_upd_si_req() {
+	var method = $('#upd-si-method').val().length;	
+	if (method.length < 1) {
+		$("#upd-si-method-error").text(_mandatory_method_field);
+	} else {
+		$("#upd-si-form").submit();
 	}
 }
 function check_and_send_elab_req() {

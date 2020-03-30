@@ -167,7 +167,9 @@
 														<td th:text="${appservice.author}"></td>
 
 														<td><a href="javascript:void(0)" role="button"
-															th:attr="onclick='javascript:updateFunctionDialog(' + ${appservice.id} + ', \'' + ${appservice.name} + '\',\'' + ${appservice.descr} + '\', \''  + 'null' +'\')'">
+															th:attr="onclick='javascript:updateAppServiceDialog(' + ${appservice.id} + ', \'' + ${appservice.name} + '\',\'' + ${appservice.descr} + '\', \'' + 
+															${appservice.language} + '\',\'' + ${appservice.engineType} + '\',\'' + ${appservice.source} + '\',\'' + ${appservice.sourceCode} + '\',\'' + 
+															${appservice.author} + '\',\'' + ${appservice.licence} + '\',\'' + ${appservice.contact} + '\',\'' + ${appservice.businessService.id} +'\')'">
 																<i class="fa fa-pencil"></i>
 														</a></td>
 
@@ -220,7 +222,8 @@
 														<td th:text="${stepInstance.label}"></td>														
 
 														<td><a href="javascript:void(0)" role="button"
-															th:attr="onclick='javascript:updateFunctionDialog(' + ${stepInstance.id} + ', \'' + ${stepInstance.method} + '\',\'' + ${stepInstance.descr} + '\', \''  + 'null' +'\')'">
+															th:attr="onclick='javascript:updateStepInstanceDialog(' + ${stepInstance.id} + ', \'' + ${stepInstance.method} + '\',\'' +
+															 ${stepInstance.descr} + '\', \''  + ${stepInstance.label} + '\',\'' + ${stepInstance.appService.id} + '\')'">
 																<i class="fa fa-pencil"></i>
 														</a></td>
 
@@ -454,6 +457,101 @@
 				</div>
 			</div>
 		</div>
+		<!-- Update app service modal -->
+		<div class="modal fade" id="update-app-service-modal" role="dialog">
+			<div class="modal-dialog " role="document">
+				<div class="modal-content ">
+					<form th:action="@{/updateappservice}" id="upd-as-form"
+						class="form-horizontal" method="post">
+
+						<div class="modal-header">
+							<h5 class="modal-title">
+								<i class="fa fa-folder-open"></i> <span
+									th:text="#{dialog.title.new.as}">New Application Service</span>
+							</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body form">
+							<div class="form-group">
+								<label class="control-label"
+									th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
+								<input name="name" id="upd-as-name" th:title="#{generic.label.name}"
+									class="form-control" type="text" /> <span class="help-block">
+									<small class="text-danger" id="upd-as-name-error"></small>
+								</span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{nuova.sessione.descr}">
+									<span>Descrizione</span>
+								</label> <input name="description" id="upd-as-description"
+									th:title="#{generic.label.description}" class="form-control"
+									type="text" /> <span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{as.impl.language.label}"><span>Impl.
+										language</span> </label> <input name="language" id="upd-as-language"
+									th:title="#{as.impl.language.label}" class="form-control"
+									type="text" /> <span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{as.engine.label}"><span>Motore</span>
+								</label> <input name="engine" th:title="#{as.engine.label}" id="upd-as-engine"
+									class="form-control" type="text" /> <span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{as.source.path.label}"><span>Percorso</span>
+								</label> <input name="sourcepath" th:title="#{as.source.path.label}" id="upd-as-sourcepath"
+									class="form-control" type="text" /> <span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{as.source.code.label}"><span>Codice</span>
+								</label> <input name="sourcecode" th:title="#{as.source.code.label}" id="upd-as-sourcecode"
+									class="form-control" type="text" /> <span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{as.author.label}"><span>Autore</span>
+								</label> <input name="author" th:title="#{as.author.label}" id="upd-as-author"
+									class="form-control" type="text" /> <span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{as.licence.label}"><span>Licenza</span>
+								</label> <input name="licence" th:title="#{as.licence.label}" id="upd-as-licence"
+									class="form-control" type="text" /> <span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{as.contact.label}"><span>Contatto</span>
+								</label> <input name="contact" th:title="#{as.contact.label}" id="upd-as-contact"
+									class="form-control" type="text" /> <span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="control-label"
+									th:text="#{as.busines.service.link.label}"><span>Collega
+										Business Service</span> </label> 
+									<select name="idbservice" id="upd-as-select"
+									th:title="#{as.busines.service.link.label}"
+									class="form-control">
+									<option th:each="bService : ${listaBService}"
+										th:value="${bService.id}" th:text="${bService.name}" />
+								</select><span class="help-block"></span>
+
+							</div>
+						</div>
+					</form>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-light" data-dismiss="modal">
+							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
+						</button>
+						<button type="button" id="btn-submit-as-upd" class=" btn btn-primary">
+							<span th:title="#{session.button.save}"
+								th:text="#{session.button.save}">Salva</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<!-- New step instance modal -->
 		<div class="modal fade" id="new-step-instance-modal" role="dialog">
 			<div class="modal-dialog " role="document">
@@ -511,6 +609,71 @@
 							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
 						</button>
 						<button type="button" id="btn-submit-si" class=" btn btn-primary">
+							<span th:title="#{session.button.save}"
+								th:text="#{session.button.save}">Salva</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Update step instance modal -->
+		<div class="modal fade" id="update-step-instance-modal" role="dialog">
+			<div class="modal-dialog " role="document">
+				<div class="modal-content ">
+					<form th:action="@{/updatestepinstance}" id="upd-si-form"
+						class="form-horizontal" method="post">
+						<input type="hidden" name="idstepinstance" id="id-upd-step-instance"/>
+						<div class="modal-header">
+							<h5 class="modal-title">
+								<i class="fa fa-folder-open"></i> <span
+									th:text="#{dialog.title.upd.si}">Update Step Instance</span>
+							</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body form">
+							<div class="form-group">
+								<label class="control-label"
+									th:text="#{si.method.label}+'*'"><span>Method</span></label>
+								<input name="method" id="upd-si-method" th:title="#{si.method.label}"
+									class="form-control" type="text" /> <span class="help-block">
+									<small class="text-danger" id="upd-si-method-error"></small>
+								</span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{generic.label.description}">
+									<span>Descrizione</span>
+								</label> <input name="description" id="upd-si-description"
+									th:title="#{generic.label.description}" class="form-control"
+									type="text" /> <span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="control-label" th:text="#{si.label.label}">
+									<span>Label</span>
+								</label> <input name="label" id="upd-si-label"
+									th:title="#{si.label.label}" class="form-control"
+									type="text" /> <span class="help-block"></span>
+							</div>							
+							<div class="form-group">
+								<label class="control-label"
+									th:text="#{si.appservice.link.label}"><span>Collega
+										App. Service</span> </label> <select name="idappservice"
+									th:title="#{si.appservice.link.label}" id="select-si-upd-appservice"
+									class="form-control">
+									<option th:each="appService : ${listaAppService}"
+										th:value="${appService.id}" th:text="${appService.name}" />
+								</select><span class="help-block"></span>
+
+							</div>
+						</div>
+					</form>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-light" data-dismiss="modal">
+							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
+						</button>
+						<button type="button" id="btn-submit-upd-si" class=" btn btn-primary">
 							<span th:title="#{session.button.save}"
 								th:text="#{session.button.save}">Salva</span>
 						</button>
