@@ -340,17 +340,70 @@ public class DesignController {
         notificationService.removeAllMessages();
         try {
         	int i;
-        	BusinessProcess process  = businessProcessService.findBProcessById(fieldId);
-        	process.getBusinessFunctions().clear();
-        	
-        	for (i = 0; i < duallistbox_demo.length; i++) { 
-        		  
-                BusinessFunction temp = businessFunctionService.findBFunctionById(Long.parseLong(duallistbox_demo[i]));
-        		process.getBusinessFunctions().add(temp);
-        		
-             } 
-        	
-        	businessProcessService.updateBProcess(process);
+        	int j;
+//        	List<BusinessFunction> elencoFunzioni = new ArrayList<BusinessFunction>();
+//        	BusinessProcess process  = businessProcessService.findBProcessById(fieldId);
+//        	
+//        	for (i = 0; i < duallistbox_demo.length; i++) { 
+//      		  
+//        		BusinessFunction temp=businessFunctionService.findBFunctionById(Long.parseLong(duallistbox_demo[i]));
+//        		if(!temp.getBusinessProcesses().contains(process)){ 
+//        			temp.getBusinessProcesses().add(process);
+//        		}
+//        		
+//        		businessFunctionService.updateBFunction(temp);     		
+//        		elencoFunzioni.add(temp);
+//      		
+//      		
+//           } 
+//        	
+//       	 process.getBusinessFunctions().clear();
+//       	 process.setBusinessFunctions(elencoFunzioni);
+//       	 businessProcessService.updateBProcess(process);
+       	
+	       	 List<BusinessFunction> allFunctions = businessFunctionService.findBFunctions();
+	       	 List<BusinessFunction> elencoFunzioni = new ArrayList<BusinessFunction>();
+	       	 BusinessProcess process  = businessProcessService.findBProcessById(fieldId);
+	       	 for (i = 0; i < allFunctions.size(); i++) { 
+	       		
+	       		
+	       		
+	       		 for (j = 0; j < duallistbox_demo.length; j++) { 
+	        		  
+	
+	        		if( !allFunctions.get(i).getId().equals(duallistbox_demo[j]) &  allFunctions.get(i).getBusinessProcesses().contains(process)){ 
+	        			
+	        			BusinessFunction temp=businessFunctionService.findBFunctionById(allFunctions.get(i).getId());
+	        			
+	        			temp.getBusinessProcesses().remove(process);
+	        			businessFunctionService.updateBFunction(temp);     		
+	            		process.getBusinessFunctions().remove(temp);
+	            		businessProcessService.updateBProcess(process);
+	       	
+	        		}
+	        		
+	        		
+	        		
+	      		
+	       		 } 
+	       	} 
+	       	for (i = 0; i < duallistbox_demo.length; i++) { 
+			  
+	        		BusinessFunction temp=businessFunctionService.findBFunctionById(Long.parseLong(duallistbox_demo[i]));
+	        		if(!temp.getBusinessProcesses().contains(process)){ 
+	        			temp.getBusinessProcesses().add(process);
+	        		}
+	  		
+	        		businessFunctionService.updateBFunction(temp);     		
+	        		elencoFunzioni.add(temp);
+			
+			
+	       	} 
+  	
+	        process.getBusinessFunctions().clear();
+	        process.setBusinessFunctions(elencoFunzioni);
+	        businessProcessService.updateBProcess(process);
+    		  
     		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -371,17 +424,72 @@ public class DesignController {
         notificationService.removeAllMessages();
         try {
         	int i;
-        	ProcessStep step  = processStepService.findProcessStepById(fieldId);
-        	step.getBusinessProcesses().clear();
+        	int j;
+//        	ProcessStep step  = processStepService.findProcessStepById(fieldId);
+//        	step.getBusinessProcesses().clear();
+//        	
+//        	for (i = 0; i < duallistbox_demo1.length; i++) { 
+//        		  
+//                BusinessProcess temp = businessProcessService.findBProcessById(Long.parseLong(duallistbox_demo1[i]));
+//        		step.getBusinessProcesses().add(temp);
+//        		
+//             } 
+//        	
+//        	processStepService.save(step);
         	
-        	for (i = 0; i < duallistbox_demo1.length; i++) { 
-        		  
-                BusinessProcess temp = businessProcessService.findBProcessById(Long.parseLong(duallistbox_demo1[i]));
-        		step.getBusinessProcesses().add(temp);
-        		
-             } 
         	
-        	processStepService.save(step);
+        	 List<BusinessProcess> allSubProcesses = businessProcessService.findAllSubProcesses();
+	       	 List<BusinessProcess> listSubProcesses = new ArrayList<BusinessProcess>();
+	       	 ProcessStep step  =processStepService.findProcessStepById(fieldId);
+	       	 for (i = 0; i < allSubProcesses.size(); i++) { 
+	       		
+	       		
+	       		
+	       		 for (j = 0; j < duallistbox_demo1.length; j++) { 
+	        		  
+	
+	        		if( !allSubProcesses.get(i).getId().equals(duallistbox_demo1[j]) &  allSubProcesses.get(i).getBusinessSteps().contains(step)){ 
+	        			
+	        			BusinessProcess temp=businessProcessService.findBProcessById(allSubProcesses.get(i).getId());
+	        			
+	        			temp.getBusinessSteps().remove(step);
+	        			businessProcessService.updateBProcess(temp);     		
+	            		step.getBusinessProcesses().remove(temp);
+	            		processStepService.save(step);
+	       	
+	        		}
+	        		
+	        		
+	        		
+	      		
+	       		 } 
+	       	} 
+	       	for (i = 0; i < duallistbox_demo1.length; i++) { 
+			  
+	       		BusinessProcess temp=businessProcessService.findBProcessById(Long.parseLong(duallistbox_demo1[i]));
+	        		if(!temp.getBusinessSteps().contains(step)){ 
+	        			temp.getBusinessSteps().add(step);
+	        		}
+	  		
+	        		businessProcessService.updateBProcess(temp);     		
+	        		listSubProcesses.add(temp);
+			
+			
+	       	} 
+ 	
+	        step.getBusinessProcesses().clear();
+	        step.setBusinessProcesses(listSubProcesses);
+	        processStepService.save(step);
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
     		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
 			// TODO: handle exception
