@@ -7,7 +7,7 @@ A runtime environment to execute statistical services. IS2 is a workbench that o
 In order to build the IS2 application, your environment should fulfill the following requirements:
 
 * A favorite text editor or IDE
-* JDK 1.8 or later
+* JDK 11 or later
 * Maven 3.0+
 * Mysql Server 8.0 or later
 
