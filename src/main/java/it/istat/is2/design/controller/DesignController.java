@@ -340,17 +340,17 @@ public class DesignController {
         notificationService.removeAllMessages();
         try {
         	int i;
-        	BusinessFunction funzione  = businessFunctionService.findBFunctionById(fieldId);
-        	funzione.getBusinessProcesses().clear();
+        	BusinessProcess process  = businessProcessService.findBProcessById(fieldId);
+        	process.getBusinessFunctions().clear();
         	
         	for (i = 0; i < duallistbox_demo.length; i++) { 
         		  
-                BusinessProcess temp = businessProcessService.findBProcessById(Long.parseLong(duallistbox_demo[i]));
-        		funzione.getBusinessProcesses().add(temp);
+                BusinessFunction temp = businessFunctionService.findBFunctionById(Long.parseLong(duallistbox_demo[i]));
+        		process.getBusinessFunctions().add(temp);
         		
              } 
         	
-        	businessFunctionService.updateBFunction(funzione);
+        	businessProcessService.updateBProcess(process);
     		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -371,17 +371,17 @@ public class DesignController {
         notificationService.removeAllMessages();
         try {
         	int i;
-        	BusinessProcess process  = businessProcessService.findBProcessById(fieldId);
-        	process.getBusinessSteps().clear();
+        	ProcessStep step  = processStepService.findProcessStepById(fieldId);
+        	step.getBusinessProcesses().clear();
         	
         	for (i = 0; i < duallistbox_demo1.length; i++) { 
         		  
-                ProcessStep temp = processStepService.findProcessStepById(Long.parseLong(duallistbox_demo1[i]));
-        		process.getBusinessSteps().add(temp);
+                BusinessProcess temp = businessProcessService.findBProcessById(Long.parseLong(duallistbox_demo1[i]));
+        		step.getBusinessProcesses().add(temp);
         		
              } 
         	
-        	businessProcessService.updateBProcess(process);
+        	processStepService.save(step);
     		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
 			// TODO: handle exception
