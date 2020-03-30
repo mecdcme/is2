@@ -310,7 +310,7 @@ public class WorkflowService {
 				idparam = stringTokenizer.nextToken();
 				ruoloparam = stringTokenizer.nextToken();
 			}
-			sxruolo = appRolesAllMap.get(Integer.valueOf(ruoloparam));
+			sxruolo = appRolesAllMap.get(Long.valueOf(ruoloparam));
 			StepRuntime stepRuntime = new StepRuntime();
 			stepRuntime.setDataProcessing(dataProcessing);
 			stepRuntime.setAppRole(sxruolo);
@@ -462,7 +462,7 @@ public class WorkflowService {
 
 	public Map<Long, List<String>> findMissingAppRoleySubProcessAndTipoVar(DataProcessing dataProcessing,
 			DataTypeCls dataType) {
-		HashMap<Long, List<String>> ret = new HashMap<>();
+		Map<Long, List<String>> ret = new HashMap<>();
 		List<StepRuntime> stepRuntimes = getStepRuntimesNoValues(dataProcessing.getId(), dataType);
 		List<AppRole> stepRuntimesRoles = new ArrayList<>();
 		for (StepRuntime stepRuntime : stepRuntimes) {
