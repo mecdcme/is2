@@ -33,15 +33,13 @@ import java.util.Map;
 import javax.script.ScriptException;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+
+
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
-import it.istat.is2.workflow.dao.AppRoleDao;
-import it.istat.is2.workflow.dao.StepRuntimeDao;
+
 import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.DataProcessing;
 import it.istat.is2.workflow.domain.DataTypeCls;
@@ -56,36 +54,14 @@ import org.renjin.script.RenjinScriptEngineFactory;
 import org.renjin.sexp.*;
 
 @Service
-public class EngineREnjin implements EngineService {
+public class EngineREnjin extends EngineR implements EngineService {
 
-    @Autowired
-    AppRoleDao ruoloDao;
-    @Autowired
-    StepRuntimeDao stepRuntimeDao;
-    @Autowired
-    LogService logService;
+ 
 
     RenjinScriptEngine  engine;
 
-    @Value("${path.script.R}")
-    private String pathR;
-    private String fileScriptR;
-    private String command;
 
-    private DataProcessing dataProcessing;
-    private StepInstance stepInstance;
-    private LinkedHashMap<String, ArrayList<StepRuntime>> dataMap;
-    private Map<String, AppRole> rolesMap;
-    private LinkedHashMap<String, ArrayList<String>> parametersMap;
-    private LinkedHashMap<String, ArrayList<String>> worksetVariables;
-    private LinkedHashMap<String, ArrayList<String>> rulesetMap;
-
-    private LinkedHashMap<String, ArrayList<String>> variablesRolesMap;
-
-    private LinkedHashMap<String, ArrayList<String>> worksetOut;
-    private LinkedHashMap<String, String> parameterOut;
-    private LinkedHashMap<String, ArrayList<String>> rolesOut;
-    private LinkedHashMap<String, String> rolesGroupOut;
+ 
 
     public EngineREnjin(String pathR, String fileScriptR) {
         super();

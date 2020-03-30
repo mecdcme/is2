@@ -37,15 +37,14 @@ import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.RList;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.app.service.LogService;
+
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
-import it.istat.is2.workflow.dao.AppRoleDao;
-import it.istat.is2.workflow.dao.StepRuntimeDao;
+ 
 import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.DataProcessing;
 import it.istat.is2.workflow.domain.DataTypeCls;
@@ -57,44 +56,15 @@ import it.istat.is2.workflow.domain.Workset;
 
 
 @Service
-public class EngineRServe implements EngineService {
+public class EngineRServe extends EngineR implements EngineService {
 
-    @Autowired
-    AppRoleDao ruoloDao;
-    @Autowired
-    StepRuntimeDao stepRuntimeDao;
-    @Autowired
-    LogService logService;
 
     @Value("${serverR.host}")
     private String serverRHost;
     @Value("${serverR.port}")
     private Integer serverRPort;
-
-    @Value("${path.script.R}")
-    private String pathR;
-
-    private String fileScriptR;
-
-    private RConnection connection;
-
-    private String command;
-
-    private DataProcessing dataProcessing;
-    private StepInstance stepInstance;
-    private LinkedHashMap<String, ArrayList<StepRuntime>> dataMap;
-    private Map<String, AppRole> rolesMap;
-    private LinkedHashMap<String, ArrayList<String>> parametersMap;
-    private LinkedHashMap<String, ArrayList<String>> worksetVariables;
-    private LinkedHashMap<String, ArrayList<String>> rulesetMap;
-
-    private LinkedHashMap<String, ArrayList<String>> variablesRolesMap;
-    
-
-    private LinkedHashMap<String, ArrayList<String>> worksetOut;
-    private LinkedHashMap<String, String> parameterOut;
-    private LinkedHashMap<String, ArrayList<String>> rolesOut;
-    private LinkedHashMap<String, String> rolesGroupOut;
+     private RConnection connection;
+ 
 
     public EngineRServe(String serverRHost, int serverRPort, String pathR, String fileScriptR) {
         super();
