@@ -10,9 +10,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.bind.annotation.RestController;
 
 import it.istat.is2.app.service.NotificationService;
@@ -36,9 +34,7 @@ public class DesignControllerRest {
 		 
 		 
 		@GetMapping(value = "/rest/design/getProcess/{id}")
-		@ResponseBody    
-//		@RequestMapping(value = "/rest/design/getProcess/{id}", method = RequestMethod.GET)
-	    public  ResponseEntity<?>  getProcess(HttpServletRequest request, @PathVariable("id") Integer id) {
+ 	    public  ResponseEntity<BusinessProcess>  getProcess(HttpServletRequest request, @PathVariable("id") Integer id) {
 	    	notificationService.removeAllMessages();
 	    	BusinessProcess processo = null;
 	    	try {
