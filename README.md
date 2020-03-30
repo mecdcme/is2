@@ -2,7 +2,8 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mecdcme_is2&metric=alert_status)](https://sonarcloud.io/dashboard?id=mecdcme_is2)
 # IS2
 A runtime environment to execute statistical services. IS2 is a workbench that offers a set of tools for data analysis and processing. 
-Among the tools for data processing and integration, the workbench allows to perform the probabilistic record linkage  applying the Fellegi-Sunter method (RELAIS statistical service). 
+
+Among the tools for data processing and integration, the workbench allows to perform the probabilistic record linkage  applying the Fellegi-Sunter method (**RELAIS statistical service**). 
 ## What you’ll need
 In order to build the IS2 application, your environment should fulfill the following requirements:
 
