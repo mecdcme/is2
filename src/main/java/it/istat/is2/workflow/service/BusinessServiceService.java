@@ -64,7 +64,7 @@ public class BusinessServiceService {
         businessServiceDao.save(businessService);
     } 
 
-    public List<BusinessService> findBusinessServiceByIdGsbpm(Integer idGsbpm) {
+    public List<BusinessService> findBusinessServiceByIdGsbpm(Long idGsbpm) {
         List<BusinessService> businessServices = null;
         GsbpmProcess gsbpmProcess = gsbpmProcessDao.findById(idGsbpm).orElse(null);
         if(gsbpmProcess != null){

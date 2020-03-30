@@ -25,28 +25,26 @@ package it.istat.is2.workflow.domain;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lombok.Data;
+import it.istat.is2.workflow.domain.common.AbstractDomainObject;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+
 @Entity
 @Table(name = "IS2_CLS_DATA_TYPE")
-public class DataTypeCls implements Serializable {
+public class DataTypeCls extends AbstractDomainObject implements Serializable {
     
     private static final long serialVersionUID = 1L;
-
-    @Id
-    private Integer id;
-    private String name;
-    private String descr;
-
+    
     public DataTypeCls() {
         super();
     }
 
-    public DataTypeCls(Integer id) {
+    public DataTypeCls(Long id) {
         super();
         this.id = id;
     }

@@ -26,57 +26,51 @@ package it.istat.is2.workflow.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import it.istat.is2.workflow.domain.common.AbstractDomainObject;
+
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "IS2_BUSINESS_FUNCTION")
-public class BusinessFunction implements Serializable {
+public class BusinessFunction extends AbstractDomainObject implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="ID")
-    private Long id;
-    @Column(name="NAME")
-    private String name;
-    @Column(name="DESCR")
-    private String descr;
-    @Column(name="LABEL")
-    private String label;
-    @Column(name="ACTIVE")
-    private Short active;
+	@Column(name = "LABEL")
+	private String label;
+	@Column(name = "ACTIVE")
+	private Short active;
 
-    @JsonBackReference
-    @ManyToMany(cascade = {CascadeType.ALL})
-   
-    @JoinTable(name = "is2_link_function_process", joinColumns = {
-    		
-        @JoinColumn(name = "BUSINESS_FUNCTION_ID", referencedColumnName = "ID", nullable = false)}, inverseJoinColumns = {
-        
-        @JoinColumn(name = "BUSINESS_PROCESS_ID", referencedColumnName = "ID", nullable = false)})
-    private List<BusinessProcess> businessProcesses;
+	@JsonBackReference
+	@ManyToMany(cascade = { CascadeType.ALL })
 
-    @JsonManagedReference
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "is2_link_function_view_data_type", joinColumns = {
-        @JoinColumn(name = "BUSINESS_FUNCTION_ID", referencedColumnName = "ID", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "VIEW_DATA_TYPE_ID", referencedColumnName = "ID", nullable = false)})
-    private List<ViewDataType> viewDataType;
+	@JoinTable(name = "is2_link_function_process", joinColumns = {
 
-    public BusinessFunction() {
-    }
+			@JoinColumn(name = "BUSINESS_FUNCTION_ID", referencedColumnName = "ID", nullable = false) }, inverseJoinColumns = {
 
-    public BusinessFunction(Long idfunction) {
-        super();
-        this.id = idfunction;
-    }
+					@JoinColumn(name = "BUSINESS_PROCESS_ID", referencedColumnName = "ID", nullable = false) })
+	private List<BusinessProcess> businessProcesses;
 
-	
+	@JsonManagedReference
+	@ManyToMany(cascade = { CascadeType.ALL })
+	@JoinTable(name = "is2_link_function_view_data_type", joinColumns = {
+			@JoinColumn(name = "BUSINESS_FUNCTION_ID", referencedColumnName = "ID", nullable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "VIEW_DATA_TYPE_ID", referencedColumnName = "ID", nullable = false) })
+	private List<ViewDataType> viewDataType;
+
+	public BusinessFunction() {
+	}
+
+	public BusinessFunction(Long idfunction) {
+		super();
+		this.id = idfunction;
+	}
 
 }

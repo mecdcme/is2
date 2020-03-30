@@ -31,7 +31,7 @@ import it.istat.is2.workflow.domain.DataTypeCls;
 
 
 @Repository
-public interface DataTypeDao extends CrudRepository<DataTypeCls, Integer> {
+public interface DataTypeDao extends CrudRepository<DataTypeCls, Long> {
 
 	List<DataTypeCls> findAll();
 	DataTypeCls findByName(String name);

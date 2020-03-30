@@ -186,7 +186,7 @@ public class DatasetController {
 		notificationService.removeAllMessages();
 
 		String labelFile = form.getLabelFile();
-		Integer tipoDato = form.getFileType();
+		Long tipoDato = form.getFileType();
 		String separatore = form.getDelimiter();
 		String idsessione = form.getIdsessione();
 

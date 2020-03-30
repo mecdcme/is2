@@ -6,25 +6,22 @@
 package it.istat.is2.workflow.domain;
 
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import lombok.Data;
 
-@Data
+import javax.persistence.Entity;
+
+import javax.persistence.Table;
+
+import it.istat.is2.workflow.domain.common.AbstractDomainObject;
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Getter
+@Setter
 @Entity
 @Table(name = "IS2_PARAMTER_TYPE")
-public class ParameterType implements Serializable {
+public class ParameterType extends AbstractDomainObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    @Id
-    @Column(name = "ID")
-    private Long id;
-    @Column(name = "NAME")
-    private String name;
-    @Column(name = "DESCR")
-    private String descr;
-
+ 
 }

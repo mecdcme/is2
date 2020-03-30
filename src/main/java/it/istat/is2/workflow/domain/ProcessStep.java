@@ -25,31 +25,25 @@ package it.istat.is2.workflow.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import it.istat.is2.workflow.domain.common.AbstractDomainObject;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
-@EqualsAndHashCode(exclude = "stepInstances")
+@EqualsAndHashCode(callSuper = false, exclude = "stepInstances")
 @Table(name = "IS2_PROCESS_STEP")
-public class ProcessStep implements Serializable {
+public class ProcessStep extends AbstractDomainObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="ID")
-    private Long id;
-    @Column(name="NAME")
-    private String name;
-    @Column(name="DESCR")
-    private String descr;
     @Column(name="LABEL")
     private String label;
     @JsonBackReference
@@ -76,10 +70,5 @@ public class ProcessStep implements Serializable {
         this.id = id;
     }
     
-    
-    
-    
   
-
-
 }

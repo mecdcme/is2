@@ -43,7 +43,7 @@ public class DataTypeService {
         return dataTypeDao.findAll();
     }
 
-    public DataTypeCls findById(Integer idtipodato) {
+    public DataTypeCls findById(Long idtipodato) {
         return dataTypeDao.findById(idtipodato).orElse(null);
     }
     

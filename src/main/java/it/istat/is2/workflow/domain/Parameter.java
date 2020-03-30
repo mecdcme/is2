@@ -24,33 +24,30 @@
 package it.istat.is2.workflow.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import it.istat.is2.workflow.domain.common.AbstractDomainObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 @Entity
 @Table(name = "IS2_PARAMETER")
-public class Parameter implements Serializable {
+public class Parameter extends AbstractDomainObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    @Id
-    @Column(name="ID")
-    private Integer id;
-    @Column(name="NAME")
-    private String name;
-    @Column(name="DESCR")
-    private String descr;
     @Column(name = "DEFAULT_VAL")
     private String defaultVal;
-//    @Lob
+
     @Column(name = "JSON_TEMPLATE")
     private String jsonTemplate;
     

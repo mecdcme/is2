@@ -52,10 +52,10 @@ public interface IS2Const {
 
     public static final String TEXT_RULE = "RULE";
 
-    public static final int DATA_TYPE_VARIABLE = 1;
-    public static final int DATA_TYPE_PARAMETER = 2;
-    public static final int DATA_TYPE_DATASET = 3;
-    public static final int DATA_TYPE_RULESET = 4;
+    public static final long DATA_TYPE_VARIABLE = 1;
+    public static final long DATA_TYPE_PARAMETER = 2;
+    public static final long DATA_TYPE_DATASET = 3;
+    public static final long DATA_TYPE_RULESET = 4;
     public static final int DATA_TYPE_RULE = 5;
     public static final int DATA_TYPE_MODEL = 6;
 

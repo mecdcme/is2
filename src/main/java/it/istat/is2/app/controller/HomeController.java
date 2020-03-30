@@ -105,7 +105,7 @@ public class HomeController {
 	}
 
 	@GetMapping("/gsbpm/{idGsbpm}")
-	public String getServiceByGsbpm(HttpSession session, Model model, @PathVariable("idGsbpm") Integer idGsbpm) {
+	public String getServiceByGsbpm(HttpSession session, Model model, @PathVariable("idGsbpm") Long idGsbpm) {
 		notificationService.removeAllMessages();
 		List<BusinessService> businessServices = businessServiceService.findBusinessServiceByIdGsbpm(idGsbpm);
 		GsbpmProcess gsbpmProcess = gsbpmProcessService.findById(idGsbpm);

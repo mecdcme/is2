@@ -10,7 +10,7 @@ public class Ruolo implements Serializable {
 
 	private static final long serialVersionUID = -82732477292756353L;
 
-	private  long idRole;
+	private  Long idRole;
 	
 	private String name;
 	

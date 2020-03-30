@@ -28,25 +28,22 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import lombok.Data;
+import it.istat.is2.workflow.domain.common.AbstractDomainObject;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "IS2_GSBPM_PROCESS")
-public class GsbpmProcess implements Serializable {
+public class GsbpmProcess extends AbstractDomainObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name="ID")
-    private Integer id;
-    @Column(name="NAME")
-    private String name;  
-    @Column(name="DESCR")
-    private String descr;
+ 
     @Column(name="ACTIVE")
     private Boolean active;
     @Column(name="ORDER_CODE")
@@ -66,7 +63,7 @@ public class GsbpmProcess implements Serializable {
     public GsbpmProcess() {
     }
 
-    public GsbpmProcess(Integer idFunction) {
+    public GsbpmProcess(Long idFunction) {
         super();
         this.id = idFunction;
     }

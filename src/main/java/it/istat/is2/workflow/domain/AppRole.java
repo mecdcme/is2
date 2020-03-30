@@ -28,30 +28,22 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-
-import lombok.Data;
+import it.istat.is2.workflow.domain.common.AbstractDomainObject;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
-
-/**
- * The persistent class for the SX_RUOLI database table.
- *
- */
-@Data
+ 
+@Getter
+@Setter
 @Entity
 @Table(name = "IS2_APP_ROLE")
 @NamedQuery(name = "AppRole.findAll", query = "SELECT s FROM AppRole s")
-public class AppRole implements Serializable {
+public class AppRole  extends AbstractDomainObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "ID")
-    private Integer id;
-    @Column(name = "NAME")
-    private String name;
-    @Column(name = "DESCR")
-    private String descr;
+  
     @Column(name = "CODE")
     private String code;
     @Column(name = "ORDER_CODE")
@@ -76,7 +68,7 @@ public class AppRole implements Serializable {
     public AppRole() {
     }
 
-    public AppRole(Integer id) {
+    public AppRole(Long id) {
         this.id = id;
     }
 

@@ -32,7 +32,7 @@ import org.springframework.stereotype.Repository;
 import it.istat.is2.workflow.domain.GsbpmProcess;
 
 @Repository
-public interface GsbpmProcessDao extends CrudRepository<GsbpmProcess, Integer> {
+public interface GsbpmProcessDao extends CrudRepository<GsbpmProcess, Long> {
 
     @Query("SELECT gp FROM GsbpmProcess gp WHERE gp.gsbpmProcessParent IS NULL and gp.active = 1 ORDER BY gp.orderCode ASC ")
     List<GsbpmProcess> findAllProcesses();

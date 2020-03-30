@@ -28,24 +28,22 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Data;
+
+import it.istat.is2.workflow.domain.common.AbstractDomainObject;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "IS2_APP_SERVICE")
-public class AppService implements Serializable {
+public class AppService extends AbstractDomainObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Integer id;
-    @Column(name = "NAME")
-    private String name;
-    @Column(name = "DESCR")
-    private String descr;
+   
     @Column(name = "IMPLEMENTATION_LANGUAGE")
     private String language;
     @Column(name = "ENGINE")
@@ -73,7 +71,7 @@ public class AppService implements Serializable {
     public AppService() {
     }
 
-    public AppService(Integer id) {
+    public AppService(Long id) {
         this.id = id;
     }
 }

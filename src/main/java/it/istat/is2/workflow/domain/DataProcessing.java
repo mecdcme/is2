@@ -45,23 +45,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.istat.is2.worksession.domain.WorkSession;
 
 import javax.persistence.Temporal;
-import lombok.Data;
+import it.istat.is2.workflow.domain.common.AbstractDomainObject;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "IS2_DATA_PROCESSING")
-public class DataProcessing implements Serializable {
+public class DataProcessing extends AbstractDomainObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
-    private Long id;
-    @Column(name = "NAME")
-    private String name;
-    @Column(name = "DESCR")
-    private String descr;
+ 
     @Column(name = "LAST_UPDATE")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date lastUpdate;

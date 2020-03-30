@@ -62,7 +62,7 @@ public class DatasetService {
     private StatisticalVariableClsDao variabileSumDao;
 
     public DatasetFile save(HashMap<String, ArrayList<String>> campi, HashMap<Integer, String> valoriHeaderNum,
-            String labelFile, Integer tipoDato, String separatore, String desc, String idsessione) throws Exception {
+            String labelFile, Long tipoDato, String separatore, String desc, String idsessione) throws Exception {
 
         DatasetFile dFile = new DatasetFile();
 

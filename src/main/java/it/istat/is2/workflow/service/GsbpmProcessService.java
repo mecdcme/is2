@@ -39,7 +39,7 @@ public class GsbpmProcessService {
     @Autowired
     GsbpmProcessDao gsbpmProcessDao;
     
-    public GsbpmProcess findById(Integer sbpmProcessId){
+    public GsbpmProcess findById(Long sbpmProcessId){
         return gsbpmProcessDao.findById(sbpmProcessId).orElse(null);
     }
 
@@ -63,7 +63,8 @@ public class GsbpmProcessService {
 
         HashMap<String, GsbpmProcess> matrix = new LinkedHashMap<>();
 
-        int x = 0, y = 0, parent = -1;
+        int x = 0, y = 0;
+        long parent = -1;
         boolean isFirst = true;
 
         //Process row (x>=0, y=0)

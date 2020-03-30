@@ -197,7 +197,7 @@ public class WorkflowService {
 	public void creaAssociazioni(MappingVarsFormBean form, DataProcessing dataProcessing) {
 
 		List<AppRole> appRolesAll = appRoleDao.findAll();
-		Map<Integer, AppRole> appRolesAllMap = Utility.getMapRuoliById(appRolesAll);
+		Map<Long, AppRole> appRolesAllMap = Utility.getMapRuoliById(appRolesAll);
 		List<StepRuntime> varList = dataProcessing.getStepRuntimes();
 		Workset workset = null;
 
@@ -206,7 +206,7 @@ public class WorkflowService {
 			stepRuntime.setDataProcessing(dataProcessing);
 			String idr = form.getRole()[i];
 			String nomeVar = form.getValue()[i];
-			AppRole sxruolo = appRolesAllMap.get(Integer.valueOf(idr));
+			AppRole sxruolo = appRolesAllMap.get(Long.valueOf(idr));
 			workset = null;
 			for (int y = 0; y < varList.size(); y++) {
 				if (varList.get(y).getWorkset() != null && nomeVar.equals(varList.get(y).getWorkset().getName())
@@ -242,7 +242,7 @@ public class WorkflowService {
 	public void updateAssociazione(MappingVarsFormBean form, DataProcessing dataProcessing) {
 
 		List<AppRole> appRolesAll = appRoleDao.findAll();
-		Map<Integer, AppRole> appRolesAllMap = Utility.getMapRuoliById(appRolesAll);
+		Map<Long, AppRole> appRolesAllMap = Utility.getMapRuoliById(appRolesAll);
 		List<StepRuntime> varList = dataProcessing.getStepRuntimes();
 		Workset workset = null;
 		Integer idVar = Integer.parseInt(form.getVariable()[0]);
@@ -250,7 +250,7 @@ public class WorkflowService {
 		String idr = form.getRole()[0];
 		String nomeVar = form.getValue()[0];
 		String nomeOld = form.getValueOld();
-		AppRole sxruolo = appRolesAllMap.get(Integer.valueOf(idr));
+		AppRole sxruolo = appRolesAllMap.get(Long.valueOf(idr));
 		
 		for (int y = 0; y < varList.size(); y++) {
 			if (varList.get(y).getWorkset() != null && nomeOld.equals(varList.get(y).getWorkset().getName())) {
@@ -292,7 +292,7 @@ public class WorkflowService {
 	public void associaParametri(MappingVarsFormBean form, DataProcessing dataProcessing) {
 
 		List<AppRole> appRolesAll = appRoleDao.findAll();
-		Map<Integer, AppRole> appRolesAllMap = Utility.getMapRuoliById(appRolesAll);
+		Map<Long, AppRole> appRolesAllMap = Utility.getMapRuoliById(appRolesAll);
 
 		for (int i = 0; i < form.getDataProcessing().length; i++) {
 			String[] allParametri = form.getParameters();
@@ -412,7 +412,7 @@ public class WorkflowService {
 			StepInstance stepInstance =iterator.next();
 			List<StepInstanceSignature> sxsetpppList = stepInstanceSignatureDao.findAllStepSignaturesByStepAndTypeIO(
 					stepInstance, new TypeIO(IS2Const.TYPE_IO_INPUT),
-					new DataTypeCls(Integer.valueOf(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETRO
+					new DataTypeCls(Long.valueOf(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETRO
 			ret.addAll(sxsetpppList);
 		}
 		return ret;
@@ -433,7 +433,7 @@ public class WorkflowService {
 				StepInstance stepInstance =iterator.next();
 				List<StepInstanceSignature> sxsetpppList = stepInstanceSignatureDao
 						.findAllStepSignaturesByStepAndTypeIO(stepInstance, new TypeIO(IS2Const.TYPE_IO_INPUT),
-								new DataTypeCls(Integer.valueOf(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETER
+								new DataTypeCls(Long.valueOf(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETER
 				paramsList.addAll(sxsetpppList);
 			}
 			ret.put(suBusinessProcess.getId(), paramsList);
@@ -448,7 +448,7 @@ public class WorkflowService {
 		return true;
 	}
 
-	public DataTypeCls getDataTypeById(Integer dataType) {
+	public DataTypeCls getDataTypeById(Long dataType) {
 		return dataTypeDao.findById(dataType).orElse(null);
 	}
 
@@ -505,7 +505,7 @@ public class WorkflowService {
 	public void creaAssociazionVarRole(DataProcessing dataProcessing,
 			AssociazioneVarRoleBean[] associazioneVarRoleBean) {
 		List<AppRole> appRolesAll = appRoleDao.findAll();
-		Map<Integer, AppRole> appRolesAllMap = Utility.getMapRuoliById(appRolesAll);
+		Map<Long, AppRole> appRolesAllMap = Utility.getMapRuoliById(appRolesAll);
 		List<StepRuntime> varList = dataProcessing.getStepRuntimes();
 
 		for (AssociazioneVarRoleBean varRoleBean : associazioneVarRoleBean) {
@@ -518,7 +518,7 @@ public class WorkflowService {
 				Workset workset = null;
 				StepRuntime stepRuntime = new StepRuntime();
 				stepRuntime.setDataProcessing(dataProcessing);
-				AppRole appRole = appRolesAllMap.get((int) ruolo.getIdRole());
+				AppRole appRole = appRolesAllMap.get( ruolo.getIdRole());
 
 				for (int i = 0; i < varList.size(); i++) {
 					if (varList.get(i).getWorkset() != null

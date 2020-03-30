@@ -84,7 +84,7 @@ public class BusinessDesignController {
 
 	@PostMapping(value = "/updatebservice")
 	public String updateBService(HttpSession session, Model model, @RequestParam("bserviceid") Integer bserviceid, @RequestParam("name") String name, @RequestParam("description") String description,
-			@RequestParam("gsbpmid") Integer gsbpmid) {
+			@RequestParam("gsbpmid") Long gsbpmid) {
 		notificationService.removeAllMessages();
 
 		BusinessService businessService = businessServiceService.findBusinessServiceById(bserviceid);
@@ -109,7 +109,7 @@ public class BusinessDesignController {
 	
 	@PostMapping(value = "/newbservice")
 	public String createNewBService(HttpSession session, Model model, @RequestParam("name") String name, @RequestParam("description") String description, 
-			@RequestParam("gsbpmid") Integer gsbpmid) {
+			@RequestParam("gsbpmid") Long gsbpmid) {
 		notificationService.removeAllMessages();
 
 		BusinessService businessService = new BusinessService();

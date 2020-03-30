@@ -450,8 +450,8 @@ public class Utility {
 		return c;
 	}
 
-	public static Map<Integer, AppRole> getMapRuoliById(List<AppRole> ruoliAll) {
-		HashMap<Integer, AppRole> ret = new HashMap<>();
+	public static Map<Long, AppRole> getMapRuoliById(List<AppRole> ruoliAll) {
+		HashMap<Long, AppRole> ret = new HashMap<>();
 		for (AppRole appRoles : ruoliAll) {
 			ret.put(appRoles.getId(), appRoles);
 		}
@@ -546,7 +546,7 @@ public class Utility {
 				StepRuntime stepRuntime = iterator.next();
 
 				String codeRole = stepRuntime.getAppRole().getCode();
-				Integer idTipoVar = stepRuntime.getWorkset().getDataType().getId();
+				Long idTipoVar = stepRuntime.getWorkset().getDataType().getId();
 
 				if (roles.contains(codeRole) && idTipoVar.equals(dataType.getId())) {
 					ret.put(nomeW, (ArrayList<String>) stepRuntime.getWorkset().getContents());

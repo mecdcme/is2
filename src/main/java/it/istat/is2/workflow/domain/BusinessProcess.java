@@ -30,34 +30,28 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import lombok.Data;
+import it.istat.is2.workflow.domain.common.AbstractDomainObject;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "IS2_BUSINESS_PROCESS")
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class BusinessProcess implements Serializable {
+public class BusinessProcess extends AbstractDomainObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="ID")
-    private Long id;
-    @Column(name="NAME")
-    private String name;  
-    @Column(name="DESCR")
-    private String descr;
+
     @Column(name="LABEL")
     private String label;
     @Column(name="ORDER_CODE")
     private Short order;
    
-
-    
     @ManyToMany(mappedBy = "businessProcesses")
     private List<BusinessFunction> businessFunctions;
 
