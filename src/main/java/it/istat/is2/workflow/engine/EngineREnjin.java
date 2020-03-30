@@ -78,10 +78,9 @@ public class EngineREnjin implements EngineService {
     private Map<String, AppRole> rolesMap;
     private LinkedHashMap<String, ArrayList<String>> parametersMap;
     private LinkedHashMap<String, ArrayList<String>> worksetVariables;
-    private LinkedHashMap<String, ArrayList<String>> ruleset;
+    private LinkedHashMap<String, ArrayList<String>> rulesetMap;
 
     private LinkedHashMap<String, ArrayList<String>> variablesRolesMap;
-    private LinkedHashMap<String, String> rolesVariablesMap;
 
     private LinkedHashMap<String, ArrayList<String>> worksetOut;
     private LinkedHashMap<String, String> parameterOut;
@@ -111,7 +110,7 @@ public class EngineREnjin implements EngineService {
         createConnection();
         bindInputColumns(worksetVariables, WORKSET_IN);
         bindInputColumnsParams(parametersMap, PARAMETERS_IN);
-        bindInputColumns(ruleset, RULESET);
+        bindInputColumns(rulesetMap, RULESET);
         setRoles(variablesRolesMap);
 
     }
@@ -189,7 +188,7 @@ public class EngineREnjin implements EngineService {
         if (!parametersMap.isEmpty()) {
             command += PARAMETERS_IN + ",";
         }
-        if (!ruleset.isEmpty()) {
+        if (!rulesetMap.isEmpty()) {
             command += RULESET + ",";
         }
 
@@ -317,6 +316,7 @@ public class EngineREnjin implements EngineService {
     }
 
     public void prepareEnv() {
+    	
         // Get all roles
         rolesMap = ruoloDao.findByServiceAsCodMap(stepInstance.getAppService().getBusinessService());
 
@@ -361,13 +361,13 @@ public class EngineREnjin implements EngineService {
 
         // Parameters
         parametersMap = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
-        ruleset = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
+        rulesetMap = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
         worksetOut = new LinkedHashMap<>();
 
         // associo il codice ruolo alla variabile
         // codiceRuolo, lista nome variabili {X=[X1], Y=[Y1]}
         variablesRolesMap = new LinkedHashMap<>();
-        rolesVariablesMap = new LinkedHashMap<>();
+        LinkedHashMap<String, String>  rolesVariablesMap = new LinkedHashMap<>();
         parameterOut = new LinkedHashMap<>();
 
         for (Map.Entry<String, ArrayList<StepRuntime>> entry : dataRuoliStepVarMap.entrySet()) {
