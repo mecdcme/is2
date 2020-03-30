@@ -46,7 +46,7 @@ import it.istat.is2.app.dao.SqlGenericDao;
 
 @Configuration
 public class AppConfiguration implements WebMvcConfigurer {
-
+ 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();

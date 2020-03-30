@@ -34,14 +34,14 @@ import lombok.Data;
 public class DatasetBean {
 
 	private Long id;
-	private Integer id_utente;
+	private Integer idUtente;
 	private Integer numerorighe;
 	private Integer numerocolonne;
 	private String tipoFile;
 	private String separatore;
 	private String nomeFile;
 	private Date dataCaricamento;
-	private String Note;
+	private String note;
 	private HashMap<String, List<String>> colonne;
 	private HashMap<Integer, String> posizione;
 }
