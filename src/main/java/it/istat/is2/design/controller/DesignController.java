@@ -33,6 +33,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -114,7 +115,7 @@ public class DesignController {
 
     }
     
-    @RequestMapping(value = "/playaction", method = RequestMethod.POST)
+    @PostMapping(value = "/playaction")
     public String action(Model model, @RequestParam("fieldId") Long fieldId, @RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr, 
     		@RequestParam("fieldLabel") String fieldLabel, @RequestParam("fieldBusinessProcessId") String fieldBusinessProcessId, @RequestParam("fieldFatherId") String fieldFatherId, @RequestParam("fieldAction") String fieldAction ) {
       
@@ -130,7 +131,7 @@ public class DesignController {
         		businessFunctionService.updateBFunction(funzione);
         		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				notificationService.addErrorMessage(messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
@@ -147,7 +148,7 @@ public class DesignController {
         		businessProcessService.updateBProcess(process);
         		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				notificationService.addErrorMessage(messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
@@ -165,7 +166,7 @@ public class DesignController {
         		businessProcessService.updateBProcess(process);
         		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				notificationService.addErrorMessage(messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
@@ -184,7 +185,7 @@ public class DesignController {
         		processStepService.save(step);
         		notificationService.addInfoMessage(messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
-				// TODO: handle exception
+			
 				notificationService.addErrorMessage(messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()),
 	                    e.getMessage());
 				
@@ -198,7 +199,7 @@ public class DesignController {
     			
     			notificationService.addInfoMessage(messages.getMessage("design.delete.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
-				// TODO: handle exception
+			
 				notificationService.addErrorMessage(messages.getMessage("design.delete.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
@@ -212,7 +213,7 @@ public class DesignController {
     			 
     			 notificationService.addInfoMessage(messages.getMessage("design.delete.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
-				// TODO: handle exception
+		
 				notificationService.addErrorMessage(messages.getMessage("design.delete.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
@@ -226,7 +227,7 @@ public class DesignController {
     			
     			notificationService.addInfoMessage(messages.getMessage("design.delete.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
-				// TODO: handle exception
+			
 				notificationService.addErrorMessage(messages.getMessage("design.delete.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
@@ -240,7 +241,7 @@ public class DesignController {
     			
     			notificationService.addInfoMessage(messages.getMessage("design.delete.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
-				// TODO: handle exception
+		
 				notificationService.addErrorMessage(messages.getMessage("design.delete.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
@@ -257,7 +258,7 @@ public class DesignController {
         		
         		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
-				// TODO: handle exception
+			
 				notificationService.addErrorMessage(messages.getMessage("design.create.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
@@ -272,7 +273,7 @@ public class DesignController {
         		businessProcessService.updateBProcess(process);
         		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				notificationService.addErrorMessage(messages.getMessage("design.create.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
@@ -290,7 +291,7 @@ public class DesignController {
         		businessProcessService.updateBProcess(process);
         		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				notificationService.addErrorMessage(messages.getMessage("design.create.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
@@ -308,7 +309,7 @@ public class DesignController {
         		processStepService.save(step);
         		notificationService.addInfoMessage(messages.getMessage("design.create.success", null, LocaleContextHolder.getLocale()));
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				notificationService.addErrorMessage(messages.getMessage("design.create.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 				
 				
@@ -320,7 +321,7 @@ public class DesignController {
     		try {
 				
 			} catch (Exception e) {
-				// TODO: handle exception
+			
 			}
     		break;
     	}
@@ -332,7 +333,7 @@ public class DesignController {
     
 //    @RequestParam Map<String,String> allParams 
     
-    @RequestMapping(value = "/bindingFunctions", method = RequestMethod.POST)
+    @PostMapping(value = "/bindingFunctions")
     public String bindingFunctions(Model model, @RequestParam("fieldId") Long fieldId, @RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr, 
     		  @RequestParam("duallistbox_demo[]") String duallistbox_demo[]) {
     	
@@ -341,28 +342,10 @@ public class DesignController {
         try {
         	int i;
         	int j;
-//        	List<BusinessFunction> elencoFunzioni = new ArrayList<BusinessFunction>();
-//        	BusinessProcess process  = businessProcessService.findBProcessById(fieldId);
-//        	
-//        	for (i = 0; i < duallistbox_demo.length; i++) { 
-//      		  
-//        		BusinessFunction temp=businessFunctionService.findBFunctionById(Long.parseLong(duallistbox_demo[i]));
-//        		if(!temp.getBusinessProcesses().contains(process)){ 
-//        			temp.getBusinessProcesses().add(process);
-//        		}
-//        		
-//        		businessFunctionService.updateBFunction(temp);     		
-//        		elencoFunzioni.add(temp);
-//      		
-//      		
-//           } 
-//        	
-//       	 process.getBusinessFunctions().clear();
-//       	 process.setBusinessFunctions(elencoFunzioni);
-//       	 businessProcessService.updateBProcess(process);
+
        	
 	       	 List<BusinessFunction> allFunctions = businessFunctionService.findBFunctions();
-	       	 List<BusinessFunction> elencoFunzioni = new ArrayList<BusinessFunction>();
+	       	 List<BusinessFunction> elencoFunzioni = new ArrayList<>();
 	       	 BusinessProcess process  = businessProcessService.findBProcessById(fieldId);
 	       	 for (i = 0; i < allFunctions.size(); i++) { 
 	       		
@@ -425,21 +408,11 @@ public class DesignController {
         try {
         	int i;
         	int j;
-//        	ProcessStep step  = processStepService.findProcessStepById(fieldId);
-//        	step.getBusinessProcesses().clear();
-//        	
-//        	for (i = 0; i < duallistbox_demo1.length; i++) { 
-//        		  
-//                BusinessProcess temp = businessProcessService.findBProcessById(Long.parseLong(duallistbox_demo1[i]));
-//        		step.getBusinessProcesses().add(temp);
-//        		
-//             } 
-//        	
-//        	processStepService.save(step);
+
         	
         	
         	 List<BusinessProcess> allSubProcesses = businessProcessService.findAllSubProcesses();
-	       	 List<BusinessProcess> listSubProcesses = new ArrayList<BusinessProcess>();
+	       	 List<BusinessProcess> listSubProcesses = new ArrayList<>();
 	       	 ProcessStep step  =processStepService.findProcessStepById(fieldId);
 	       	 for (i = 0; i < allSubProcesses.size(); i++) { 
 	       		
@@ -480,13 +453,6 @@ public class DesignController {
 	        step.getBusinessProcesses().clear();
 	        step.setBusinessProcesses(listSubProcesses);
 	        processStepService.save(step);
-        	
-        	
-        	
-        	
-        	
-        	
-        	
         	
         	
         	
