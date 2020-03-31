@@ -473,18 +473,18 @@ function playBindingProcesses(){
 
 
 function playBindingFunctions(){
-	var atLastOne = new Boolean(0)
-	$("#functionsList > option").each(function() {
-		if ($(this).prop("selected")==true) {
-			atLastOne= true;
-	}  });
-	if (atLastOne==true) {
-		$("#bindingFunctionsForm").submit();
-	} else {
-		alert("select at last one option");
-	}
+//	var atLastOne = new Boolean(0)
+//	$("#functionsList > option").each(function() {
+//		if ($(this).prop("selected")==true) {
+//			atLastOne= true;
+//	}  });
+//	if (atLastOne==true) {
+//		$("#bindingFunctionsForm").submit();
+//	} else {
+//		alert("select at last one option");
+//	}
 	
-	
+	$("#bindingFunctionsForm").submit();
 }
 
 $(document).ready(function () {
