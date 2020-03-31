@@ -300,7 +300,7 @@ public class DesignController {
     	case "ns":
     		try {
     			ProcessStep step = new ProcessStep();
-    			BusinessService newBusinessService = businessService.findBusinessServiceById(Integer.parseInt(fieldBusinessProcessId));
+    			BusinessService newBusinessService = businessService.findBusinessServiceById(Long.parseLong(fieldBusinessProcessId));
     			step.setName(fieldName);
         		step.setDescr(fieldDescr);
         		step.setLabel(fieldLabel);

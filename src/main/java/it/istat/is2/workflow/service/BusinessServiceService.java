@@ -57,8 +57,8 @@ public class BusinessServiceService {
         return (List<BusinessService>) businessServiceDao.findAll();
     }
 
-    public BusinessService findBusinessServiceById(Integer idService) {
-        return businessServiceDao.findById(idService).orElse(null);
+    public BusinessService findBusinessServiceById(long l) {
+        return businessServiceDao.findById(l).orElse(null);
     }
     public void save(BusinessService businessService) {
         businessServiceDao.save(businessService);
