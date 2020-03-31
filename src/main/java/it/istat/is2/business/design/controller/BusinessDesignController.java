@@ -168,6 +168,42 @@ public class BusinessDesignController {
 
 		return "redirect:/busservlist";
 	}
+	@PostMapping(value = "/updateappservice")
+	public String updateAppService(HttpSession session, Model model, @RequestParam("appserviceupdateid") Integer id,
+			@RequestParam("name") String name, @RequestParam("description") String description,
+			@RequestParam("language") String language, @RequestParam("engine") String engine,
+			@RequestParam("sourcepath") String sourcepath, @RequestParam("sourcecode") String sourcecode,
+			@RequestParam("author") String author, @RequestParam("licence") String licence,
+			@RequestParam("contact") String contact, @RequestParam("idbservice") String idbservice) {
+		notificationService.removeAllMessages();
+
+		AppService appService = appServiceService.findAppServiceById(id);
+		appService.setName(name);
+		appService.setDescr(description);
+		appService.setLanguage(language);
+		appService.setEngineType(engine);
+		appService.setSource(sourcepath);
+		appService.setSourceCode(sourcecode);
+		appService.setAuthor(author);
+		appService.setLicence(licence);
+		appService.setContact(contact);
+		
+		Integer idbs = Integer.parseInt(idbservice);
+		BusinessService businessService = businessServiceService.findBusinessServiceById(idbs);		
+		appService.setBusinessService(businessService);
+		
+		try {
+			appServiceService.save(appService);
+			notificationService.addInfoMessage(
+					messages.getMessage("generic.successfull.updated.message", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			notificationService.addErrorMessage(
+					messages.getMessage("generic.saving.error.message", null, LocaleContextHolder.getLocale()) + ": "
+							+ e.getMessage());
+		}
+
+		return "redirect:/busservlist";
+	}
 	@PostMapping(value = "/newstepinstance")
 	public String createNewStepInstance(HttpSession session, Model model,
 			@RequestParam("method") String method, @RequestParam("description") String description,
