@@ -8,7 +8,7 @@ Among the tools for data processing and integration, the workbench allows to per
 In order to build the IS2 application, your environment should fulfill the following requirements:
 
 * A favorite text editor or IDE;
-* JDK 11 or later;
+* JDK 11 or later; 
 * Maven 3.0+;
 * Mysql Server 8.0 or later;
 
