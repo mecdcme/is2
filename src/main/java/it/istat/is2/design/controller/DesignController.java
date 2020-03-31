@@ -368,24 +368,24 @@ public class DesignController {
 	       		
 	       		
 	       		
-	       		 for (j = 0; j < duallistbox_demo.length; j++) { 
-	        		  
-	
-	        		if( !allFunctions.get(i).getId().equals(duallistbox_demo[j]) &&  allFunctions.get(i).getBusinessProcesses().contains(process)){ 
-	        			
+	       		 for (j = 0; j < duallistbox_demo.length; j++) {
+
+
+	        		if( allFunctions.get(i).getBusinessProcesses().contains(process)){
+
 	        			BusinessFunction temp=businessFunctionService.findBFunctionById(allFunctions.get(i).getId());
-	        			
+
 	        			temp.getBusinessProcesses().remove(process);
-	        			businessFunctionService.updateBFunction(temp);     		
+	        			businessFunctionService.updateBFunction(temp);
 	            		process.getBusinessFunctions().remove(temp);
 	            		businessProcessService.updateBProcess(process);
-	       	
+
 	        		}
-	        		
-	        		
-	        		
-	      		
-	       		 } 
+
+
+
+
+	       		 }
 	       	} 
 	       	for (i = 0; i < duallistbox_demo.length; i++) { 
 			  
@@ -448,7 +448,7 @@ public class DesignController {
 	       		 for (j = 0; j < duallistbox_demo1.length; j++) { 
 	        		  
 	
-	        		if( !allSubProcesses.get(i).getId().equals(duallistbox_demo1[j]) &&  allSubProcesses.get(i).getBusinessSteps().contains(step)){ 
+	        		if( allSubProcesses.get(i).getBusinessSteps().contains(step)){
 	        			
 	        			BusinessProcess temp=businessProcessService.findBProcessById(allSubProcesses.get(i).getId());
 	        			

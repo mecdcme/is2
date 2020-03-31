@@ -74,7 +74,7 @@
                             <i class="c-sidebar-nav-icon icon-calculator"></i> <span th:title=${businessService.name} th:text="${businessService.name}"></span>
                         </a>
                     </li>
-                    <li class="c-sidebar-nav-title">Statistical processes</li>
+                    <li class="c-sidebar-nav-title">Process catalogue</li>
                     <li th:each="businessFunction, iter : ${session.businessFunctionList}" th:id="'bf'+${businessFunction.id}"
                         th:classappend="${(session.sessionBean!=null) and (session.sessionBean.businessFunction.id == businessFunction.id) and (session.sessionBean.id>0)}? 'c-sidebar-nav-item c-sidebar-nav-dropdown': 'c-sidebar-nav-item'">
                         <a class ="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" th:href="@{#}"
@@ -122,24 +122,24 @@
                         
                     </li> 
                     <!-- TEST -->
-                    <li class="c-sidebar-nav-title">Manage xlm</li>
+                    <!--li class="c-sidebar-nav-title">Manage xlm</li>
                      
                     <li>                    
                     	<a class ="c-sidebar-nav-link" th:href="@{'/xmlparser'}">
                     	<i class="c-sidebar-nav-icon icon-calculator"></i>
                            <span class="truncate" th:title="prova">Upload xml</span>
                         </a> 
-                    </li>
+                    </li-->
                     
                     <!-- TEST -->
-                    <li class="c-sidebar-nav-title">Service Design</li>
+                    <!--li class="c-sidebar-nav-title">Service Design</li>
                      
                     <li>                    
                     	<a class ="c-sidebar-nav-link" th:href="@{'/busservlist'}">
                     	<i class="c-sidebar-nav-icon icon-calculator"></i>
                            <span class="truncate" th:title="prova">Business Service Design</span>
                         </a> 
-                    </li>
+                    </li-->
                     
                     
                     
@@ -188,12 +188,12 @@
                                 <div class="dropdown-header bg-light py-2">
                                     <strong>IS<sup>2</sup> Workbench</strong>
                                 </div>
-                                <a class="dropdown-item" th:title="#{Layout.server.conf}" th:href="@{/settings}">
+                                <!--a class="dropdown-item" th:title="#{Layout.server.conf}" th:href="@{/settings}">
                                     <i class="c-icon mfe-2 icon-organization"></i> Process design
-                                </a>
-                                <a class="dropdown-item" th:title="#{Layout.server.conf}" th:href="@{/admin}">
+                                </a-->
+                                <!--a class="dropdown-item" th:title="#{Layout.server.conf}" th:href="@{/admin}">
                                     <i class="c-icon mfe-2 icon-wrench"></i> Server configuration
-                                </a>
+                                </a-->
                                 <a class="dropdown-item" th:title="#{Layout.user.settings}" th:href="@{/users/userlist}">
                                     <i class="c-icon mfe-2 icon-people"></i><span th:text="#{Layout.users}"></span>
                                 </a>
