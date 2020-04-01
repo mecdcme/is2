@@ -513,7 +513,6 @@ public class DesignController {
 			notificationService.addInfoMessage(
 					messages.getMessage("design.binding.success", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
-			// TODO: handle exception
 			notificationService.addErrorMessage(
 					messages.getMessage("design.binding.error", null, LocaleContextHolder.getLocale()), e.getMessage());
 
