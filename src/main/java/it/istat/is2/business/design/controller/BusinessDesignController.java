@@ -169,7 +169,7 @@ public class BusinessDesignController {
 		return "redirect:/busservlist";
 	}
 	@PostMapping(value = "/updateappservice")
-	public String updateAppService(HttpSession session, Model model, @RequestParam("appserviceupdateid") Integer id,
+	public String updateAppService(HttpSession session, Model model, @RequestParam("appserviceupdateid") Long id,
 			@RequestParam("name") String name, @RequestParam("description") String description,
 			@RequestParam("language") String language, @RequestParam("engine") String engine,
 			@RequestParam("sourcepath") String sourcepath, @RequestParam("sourcecode") String sourcecode,
@@ -207,7 +207,7 @@ public class BusinessDesignController {
 	@PostMapping(value = "/newstepinstance")
 	public String createNewStepInstance(HttpSession session, Model model,
 			@RequestParam("method") String method, @RequestParam("description") String description,
-			@RequestParam("label") String label, @RequestParam("idappservice") Integer idappservice) {
+			@RequestParam("label") String label, @RequestParam("idappservice") Long idappservice) {
 		notificationService.removeAllMessages();
 
 		StepInstance stepInstance = new StepInstance();
@@ -235,7 +235,7 @@ public class BusinessDesignController {
 	@PostMapping(value = "/updatestepinstance")
 	public String updateStepInstance(HttpSession session, Model model,
 			@RequestParam("idstepinstance") Long idstepinstance, @RequestParam("method") String method, @RequestParam("description") String description,
-			@RequestParam("label") String label, @RequestParam("idappservice") Integer idappservice) {
+			@RequestParam("label") String label, @RequestParam("idappservice") Long idappservice) {
 		notificationService.removeAllMessages();
 		 
 		StepInstance stepInstance = stepInstanceService.findStepInstanceById(idstepinstance);
@@ -278,7 +278,7 @@ public class BusinessDesignController {
 	}
 	@GetMapping(value = "/deleteappservice/{idappservice}")
 	public String deleteAppService(HttpSession session, Model model, RedirectAttributes ra,
-			@PathVariable("idappservice") Integer idappservice) {
+			@PathVariable("idappservice") Long idappservice) {
 		notificationService.removeAllMessages();
 
 		AppService appService = appServiceService.findAppServiceById(idappservice);

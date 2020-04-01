@@ -41,7 +41,7 @@ public class AppServiceService {
 		return (List<AppService>) appServiceDao.findAll();
 	}
 
-	public AppService findAppServiceById(Integer idappservice) {
+	public AppService findAppServiceById(Long idappservice) {
 		return (AppService) appServiceDao.findById(idappservice).orElse(null);
 	}
 
@@ -49,7 +49,7 @@ public class AppServiceService {
 		appServiceDao.save(appservice);
 	}
 
-	public void deleteAppService(Integer idappservice) {
+	public void deleteAppService(Long idappservice) {
 		appServiceDao.deleteById(idappservice);
 	}
 }

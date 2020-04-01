@@ -106,12 +106,12 @@
 														<td th:text="${bservice.descr}"></td>
 														<td th:text="${bservice.gsbpmProcess.name}"></td>
 
-														<td><a href="javascript:void(0)" role="button"												
+														<td><a href="javascript:void(0)" role="button" th:title="#{link.title.upd.bs}"										
 															th:attr="onclick='javascript:updateBusinessService(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + ${bservice.gsbpmProcess.id} +'\')'">
 																<i class="fa fa-pencil"></i>
 														</a></td>
 
-														<td><a href="javascript:void(0)" role="button"
+														<td><a href="javascript:void(0)" role="button" th:title="#{link.title.delete.bs}"	
 															th:attr="onclick='javascript:deleteBusinessService(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + 'null' +'\')'">
 																<i class="fa fa-trash-o"></i>
 														</a></td>
@@ -151,7 +151,7 @@
 														<th><span th:text="#{as.impl.language.label}">IMPL.
 																LANGUAGE</span></th>
 														<th><span th:text="#{as.engine.label}">ENGINE</span></th>
-														<th><span th:text="#{as.author.label}">AUTORE</span></th>
+														<th><span th:text="#{as.author.label}">AUTORE</span></th>														
 
 														<th style="width: 1%"></th>
 														<th style="width: 1%"></th>
@@ -164,16 +164,16 @@
 														<td th:text="${appservice.descr}"></td>
 														<td th:text="${appservice.language}"></td>
 														<td th:text="${appservice.engineType}"></td>
-														<td th:text="${appservice.author}"></td>
+														<td th:text="${appservice.author}"></td>														
 
-														<td><a href="javascript:void(0)" role="button"
-															th:attr="onclick='javascript:updateAppServiceDialog(' + ${appservice.id} + ', \'' + ${appservice.name} + '\',\'' + ${appservice.descr} + '\', \'' + 
-															${appservice.language} + '\',\'' + ${appservice.engineType} + '\',\'' + ${appservice.source} + '\',\'' + ${appservice.sourceCode} + '\',\'' + 
-															${appservice.author} + '\',\'' + ${appservice.licence} + '\',\'' + ${appservice.contact} + '\',\'' + ${appservice.businessService.id} +'\')'">
+														<td><a href="javascript:void(0)" role="button" th:title="#{link.title.upd.as}"
+														th:attr="data-id-app-service=${appservice.id},data-name=${appservice.name},data-descr=${appservice.descr},data-language=${appservice.language},data-engine=${appservice.engineType},
+														data-source-path=${appservice.source},data-source-code=${appservice.sourceCode},data-author=${appservice.author},data-licence=${appservice.licence},
+														data-contact=${appservice.contact},data-bservice-id=${appservice.businessService.id},onclick='javascript:updateAppServiceDialog(this);'">															
 																<i class="fa fa-pencil"></i>
 														</a></td>
 
-														<td><a href="javascript:void(0)" role="button"
+														<td><a href="javascript:void(0)" role="button" th:title="#{link.title.delete.as}"
 															th:attr="onclick='javascript:deleteAppService(' + ${appservice.id} + ', \'' + ${appservice.name} + '\',\'' + ${appservice.descr} + '\', \''  + 'null' +'\')'">
 																<i class="fa fa-trash-o"></i>
 														</a></td>
@@ -221,13 +221,13 @@
 														<td th:text="${stepInstance.descr}"></td>
 														<td th:text="${stepInstance.label}"></td>														
 
-														<td><a href="javascript:void(0)" role="button"
+														<td><a href="javascript:void(0)" role="button" th:title="#{link.title.upd.si}"
 															th:attr="onclick='javascript:updateStepInstanceDialog(' + ${stepInstance.id} + ', \'' + ${stepInstance.method} + '\',\'' +
 															 ${stepInstance.descr} + '\', \''  + ${stepInstance.label} + '\',\'' + ${stepInstance.appService.id} + '\')'">
 																<i class="fa fa-pencil"></i>
 														</a></td>
 
-														<td><a href="javascript:void(0)" role="button"
+														<td><a href="javascript:void(0)" role="button" th:title="#{link.title.delete.si}"
 															th:attr="onclick='javascript:deleteStepInstance(' + ${stepInstance.id} + ', \'' + ${stepInstance.method} + '\',\'' + ${stepInstance.descr} + '\', \''  + 'null' +'\')'">
 																<i class="fa fa-trash-o"></i>
 														</a></td>
@@ -463,11 +463,11 @@
 				<div class="modal-content ">
 					<form th:action="@{/updateappservice}" id="upd-as-form"
 						class="form-horizontal" method="post">
-						<input type="hidden" name="appserviceupdateid"/>
+						<input type="hidden" name="appserviceupdateid" id="upd-as-id"/>
 						<div class="modal-header">
 							<h5 class="modal-title">
 								<i class="fa fa-folder-open"></i> <span
-									th:text="#{dialog.title.new.as}">New Application Service</span>
+									th:text="#{dialog.title.upd.as}">Update Application Service</span>
 							</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">

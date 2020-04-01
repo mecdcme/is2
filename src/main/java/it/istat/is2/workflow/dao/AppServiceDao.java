@@ -30,10 +30,14 @@ import org.springframework.stereotype.Repository;
 import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface AppServiceDao extends CrudRepository<AppService, Integer> {
+public interface AppServiceDao extends CrudRepository<AppService, Long> {
     
     List<AppService> findByBusinessService(BusinessService businessService);
+    
+    public Optional<AppService> findById(Long id);    
+    
 
 }
