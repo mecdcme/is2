@@ -456,7 +456,7 @@ public class DesignController {
 	@RequestMapping(value = "/bindingProcesses", method = RequestMethod.POST)
 	public String bindingProcesses(Model model, @RequestParam("fieldId") Long fieldId,
 			@RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr,
-			@RequestParam("duallistbox_demo1[]") String duallistbox_demo1[]) {
+			@RequestParam(value="duallistbox_demo1[]",required=false) String duallistbox_demo1[]) {
 
 		notificationService.removeAllMessages();
 		try {
@@ -466,38 +466,59 @@ public class DesignController {
 			List<BusinessProcess> allSubProcesses = businessProcessService.findAllSubProcesses();
 			List<BusinessProcess> listSubProcesses = new ArrayList<>();
 			ProcessStep step = processStepService.findProcessStepById(fieldId);
-			for (i = 0; i < allSubProcesses.size(); i++) {
-
-				for (j = 0; j < duallistbox_demo1.length; j++) {
-
-					if (allSubProcesses.get(i).getBusinessSteps().contains(step)) {
-
-						BusinessProcess temp = businessProcessService.findBProcessById(allSubProcesses.get(i).getId());
-
-						temp.getBusinessSteps().remove(step);
-						businessProcessService.updateBProcess(temp);
-						step.getBusinessProcesses().remove(temp);
-						processStepService.save(step);
-
+			if (duallistbox_demo1!=null && duallistbox_demo1.length!=0) {
+				for (i = 0; i < allSubProcesses.size(); i++) {
+	
+					for (j = 0; j < duallistbox_demo1.length; j++) {
+	
+						if (allSubProcesses.get(i).getBusinessSteps().contains(step)) {
+	
+							BusinessProcess temp = businessProcessService.findBProcessById(allSubProcesses.get(i).getId());
+	
+							temp.getBusinessSteps().remove(step);
+							businessProcessService.updateBProcess(temp);
+							step.getBusinessProcesses().remove(temp);
+							processStepService.save(step);
+	
+						}
+	
 					}
-
+				}
+				for (i = 0; i < duallistbox_demo1.length; i++) {
+	
+					BusinessProcess temp = businessProcessService.findBProcessById(Long.parseLong(duallistbox_demo1[i]));
+					if (!temp.getBusinessSteps().contains(step)) {
+						temp.getBusinessSteps().add(step);
+					}
+	
+					businessProcessService.updateBProcess(temp);
+					listSubProcesses.add(temp);
+	
+				}
+	
+				step.getBusinessProcesses().clear();
+				step.setBusinessProcesses(listSubProcesses);
+				processStepService.save(step);
+			}else {
+				for (i = 0; i < allSubProcesses.size(); i++) {
+					
+					
+	
+						if (allSubProcesses.get(i).getBusinessSteps().contains(step)) {
+	
+							BusinessProcess temp = businessProcessService.findBProcessById(allSubProcesses.get(i).getId());
+	
+							temp.getBusinessSteps().remove(step);
+							businessProcessService.updateBProcess(temp);
+							step.getBusinessProcesses().remove(temp);
+							processStepService.save(step);
+	
+						}
+	
+					
 				}
 			}
-			for (i = 0; i < duallistbox_demo1.length; i++) {
-
-				BusinessProcess temp = businessProcessService.findBProcessById(Long.parseLong(duallistbox_demo1[i]));
-				if (!temp.getBusinessSteps().contains(step)) {
-					temp.getBusinessSteps().add(step);
-				}
-
-				businessProcessService.updateBProcess(temp);
-				listSubProcesses.add(temp);
-
-			}
-
-			step.getBusinessProcesses().clear();
-			step.setBusinessProcesses(listSubProcesses);
-			processStepService.save(step);
+			
 
 			notificationService.addInfoMessage(
 					messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));

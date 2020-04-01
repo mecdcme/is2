@@ -456,18 +456,18 @@ function playAction(){
 }
 
 function playBindingProcesses(){
-	var atLastOne = new Boolean(0)
-	$("#processesList > option").each(function() {
-		if ($(this).prop("selected")==true) {
-			atLastOne= true;
-	}  });
-	if (atLastOne==true) {
-		$("#bindingProcessesForm").submit();
-	} else {
-		alert("select at last one option");
-	}
+//	var atLastOne = new Boolean(0)
+//	$("#processesList > option").each(function() {
+//		if ($(this).prop("selected")==true) {
+//			atLastOne= true;
+//	}  });
+//	if (atLastOne==true) {
+//		$("#bindingProcessesForm").submit();
+//	} else {
+//		alert("select at last one option");
+//	}
 	
-	
+	$("#bindingProcessesForm").submit();
 	
 }
 
