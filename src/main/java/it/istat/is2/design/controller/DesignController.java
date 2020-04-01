@@ -92,11 +92,9 @@ public class DesignController {
 									if (k.getId().equals(s.getId())) {
 										tempNode.addChild(p.getName());
 									}
-									;
 								});
 							});
 						}
-						;
 					});
 				}
 			});
@@ -347,11 +345,7 @@ public class DesignController {
 			break;
 
 		default:
-			try {
-
-			} catch (Exception e) {
-
-			}
+			
 			break;
 		}
 
