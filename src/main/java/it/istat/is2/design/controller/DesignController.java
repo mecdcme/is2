@@ -26,8 +26,6 @@ package it.istat.is2.design.controller;
 import java.util.ArrayList;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -36,8 +34,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 import it.istat.is2.app.service.NotificationService;
@@ -440,11 +437,11 @@ public class DesignController {
 				
 			}
 			notificationService.addInfoMessage(
-					messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
+					messages.getMessage("design.binding.success", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
 			// TODO: handle exception
 			notificationService.addErrorMessage(
-					messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()), e.getMessage());
+					messages.getMessage("design.binding.error", null, LocaleContextHolder.getLocale()), e.getMessage());
 
 		}
 
@@ -520,11 +517,11 @@ public class DesignController {
 			
 
 			notificationService.addInfoMessage(
-					messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale()));
+					messages.getMessage("design.binding.success", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
 			// TODO: handle exception
 			notificationService.addErrorMessage(
-					messages.getMessage("design.update.error", null, LocaleContextHolder.getLocale()), e.getMessage());
+					messages.getMessage("design.binding.error", null, LocaleContextHolder.getLocale()), e.getMessage());
 
 		}
 
