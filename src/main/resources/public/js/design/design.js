@@ -436,18 +436,27 @@ function playAction(){
 	
 	switch ($('#action').val()) {
 	case "nsp":
+		if($('#fatherProcess').val()!=0) {
+			$("#dialog").submit();
+		}else {
+			alert("select the father process");
+		}
 		
-			
-		 $("#dialog").submit();
+		 
 		break;
 	case "ns":
+		if($('#fbusinessProcess').val()!=0) {
+			$("#dialog").submit();
+		}else {
+			alert("select the business process");
+		}
 		
-		 $("#dialog").submit();
+		
 		break
 	
 
 	default:
-		 $("#dialog").submit();
+		
 		break;
 	}
     
@@ -456,16 +465,7 @@ function playAction(){
 }
 
 function playBindingProcesses(){
-//	var atLastOne = new Boolean(0)
-//	$("#processesList > option").each(function() {
-//		if ($(this).prop("selected")==true) {
-//			atLastOne= true;
-//	}  });
-//	if (atLastOne==true) {
-//		$("#bindingProcessesForm").submit();
-//	} else {
-//		alert("select at last one option");
-//	}
+
 	
 	$("#bindingProcessesForm").submit();
 	
@@ -473,16 +473,7 @@ function playBindingProcesses(){
 
 
 function playBindingFunctions(){
-//	var atLastOne = new Boolean(0)
-//	$("#functionsList > option").each(function() {
-//		if ($(this).prop("selected")==true) {
-//			atLastOne= true;
-//	}  });
-//	if (atLastOne==true) {
-//		$("#bindingFunctionsForm").submit();
-//	} else {
-//		alert("select at last one option");
-//	}
+
 	
 	$("#bindingFunctionsForm").submit();
 }

@@ -367,7 +367,7 @@ public class DesignController {
 	@PostMapping(value = "/bindingFunctions")
 	public String bindingFunctions(Model model, @RequestParam("fieldId") Long fieldId,
 			@RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr,
-    		  @RequestParam(value="duallistbox_demo[]", required = false) Optional<String> duallistbox_demo[]) {   
+    		  @RequestParam(value="duallistbox_demo[]", required = false) String duallistbox_demo[]) {   
 
 
 		notificationService.removeAllMessages();
@@ -402,8 +402,7 @@ public class DesignController {
 				}
 				for (i = 0; i < duallistbox_demo.length; i++) {
 
-					BusinessFunction temp = businessFunctionService
-							.findBFunctionById(Long.parseLong(duallistbox_demo[i].get()));
+					BusinessFunction temp = businessFunctionService.findBFunctionById(Long.parseLong(duallistbox_demo[i]));
 					if (!temp.getBusinessProcesses().contains(process)) {
 						temp.getBusinessProcesses().add(process);
 					}
@@ -453,7 +452,7 @@ public class DesignController {
 
 	}
 
-	@RequestMapping(value = "/bindingProcesses", method = RequestMethod.POST)
+	@PostMapping(value = "/bindingProcesses")
 	public String bindingProcesses(Model model, @RequestParam("fieldId") Long fieldId,
 			@RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr,
 			@RequestParam(value="duallistbox_demo1[]",required=false) String duallistbox_demo1[]) {
