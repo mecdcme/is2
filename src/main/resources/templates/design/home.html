@@ -83,27 +83,47 @@
 			<main class="c-main">
 				<div class="container-fluid">
 					<div class="row justify-start">
-						<div class="col-lg-4">
-							<ul id="myUL">
-								<li><span class="caret">Albero delle Funzioni</span>
+<!-- 						<div class="col-lg-4"> -->
+						<div class="treeview-animated w-35 border mx-4">
+							<ul id="myUL" class="treeview-animated-list mb-3">
+<!-- 							<ul id="myUL"> -->
+								<h6 class="pt-3 pl-3">Albero delle Funzioni</h6>
+								<hr>
+<!-- 								<li><span class="caret">Albero delle Funzioni</span> -->
+<!-- 									<ul class="nested" th:each="alb: ${albero}"> -->
+									 
+<!-- 										<li><span class="caret" th:text="${alb.getData()}"></span></li> -->
+<!-- 											<ul class="nested" th:each="foglio: ${alb.getChildren()}"> -->
+<!-- 												<li th:text="${foglio.getData()}"> </li> -->
+<!-- 												<ul class="nested" th:each="foglio2: ${foglio.getChildren()}"> -->
+<!-- 													<li th:text="${foglio2.getData()}"></li> -->
+<!-- 													<ul class="nested" th:each="foglio3: ${foglio2.getChildren()}"> -->
+<!-- 														<li th:text="${foglio3.getData()}"></li> -->
+<!-- 														<ul class="nested" th:each="foglio4: ${foglio3.getChildren()}"> -->
+<!-- 															<li th:text="${foglio4.getData()}"></li> -->
+<!-- 														</ul> -->
+<!-- 													</ul> -->
+<!-- 												</ul> -->
+<!-- 											</ul> -->
+<!-- 									</ul> -->
 									<ul class="nested" th:each="alb: ${albero}">
-										<li><span class="caret" th:text="${alb.getData()}"></span>
+									 
+										<li class="treeview-animated-items"><span class="caret" th:text="${alb.getData()}"></span></li>
 											<ul class="nested" th:each="foglio: ${alb.getChildren()}">
-												<li th:text="${foglio.getData()}"></li>
-												<ul class="nested"
-													th:each="foglio2: ${foglio.getChildren()}">
-													<li th:text="${foglio2.getData()}"></li>
-													<ul class="nested"
-														th:each="foglio3: ${foglio2.getChildren()}">
-														<li th:text="${foglio3.getData()}"></li>
-														<ul class="nested"
-															th:each="foglio4: ${foglio3.getChildren()}">
-															<li th:text="${foglio4.getData()}"></li>
+												<li class="treeview-animated-items"><div class="treeview-animated-element"><i th:text="${foglio.getData()}" class="far fa-folder-open ic-w mr-1"></i></li>
+												<ul class="nested" th:each="foglio2: ${foglio.getChildren()}">
+													<li class="treeview-animated-items"> <div class="treeview-animated-element"><i th:text="${foglio2.getData()}" class="far fa-folder-open ic-w mr-1"></i> </li>
+													<ul class="nested" th:each="foglio3: ${foglio2.getChildren()}">
+														<li class="treeview-animated-items"> <div class="treeview-animated-element"><i th:text="${foglio3.getData()}" class="far fa-folder-open ic-w mr-1"></i></li>
+														<ul class="nested" th:each="foglio4: ${foglio3.getChildren()}">
+															<li > <div class="treeview-animated-element"><i th:text="${foglio4.getData()}" class="far fa-folder-open ic-w mr-1"></i></li>
 														</ul>
 													</ul>
 												</ul>
-											</ul></li>
-									</ul></li>
+											</ul>
+									</ul>
+
+
 							</ul>
 						</div>
 						<div class="col-lg-8">
