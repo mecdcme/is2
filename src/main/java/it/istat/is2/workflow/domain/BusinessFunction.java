@@ -42,7 +42,7 @@ import java.util.List;
 public class BusinessFunction extends AbstractDomainObject implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Column(name = "LABEL")
 	private String label;
 	@Column(name = "ACTIVE")

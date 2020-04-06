@@ -435,6 +435,15 @@ function bindingProcessDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 function playAction(){
 	
 	switch ($('#action').val()) {
+	
+	case "nf":
+		$("#dialog").submit();
+	break;
+	
+	case "np":
+		$("#dialog").submit();
+	break;
+
 	case "nsp":
 		if($('#fatherProcess').val()!=0) {
 			$("#dialog").submit();
@@ -454,7 +463,6 @@ function playAction(){
 		
 		break
 	
-
 	default:
 		
 		break;
