@@ -31,8 +31,8 @@
 <link rel="stylesheet" th:href="@{/css/dualListbox/bootstrap-duallistbox.min.css}" />
 </head>
 
-
 <script th:src="@{/js/dualListbox/jquery.bootstrap-duallistbox.js}"></script>
+
 <script th:src="@{/js/design/design.js}"></script>
 <script th:inline="javascript"> 
 
@@ -83,48 +83,38 @@
 			<main class="c-main">
 				<div class="container-fluid">
 					<div class="row justify-start">
-<!-- 						<div class="col-lg-4"> -->
-						<div class="treeview-animated w-35 border mx-4">
-							<ul id="myUL" class="treeview-animated-list mb-3">
-<!-- 							<ul id="myUL"> -->
-								<h6 class="pt-3 pl-3">Albero delle Funzioni</h6>
-								<hr>
-<!-- 								<li><span class="caret">Albero delle Funzioni</span> -->
-<!-- 									<ul class="nested" th:each="alb: ${albero}"> -->
-									 
-<!-- 										<li><span class="caret" th:text="${alb.getData()}"></span></li> -->
-<!-- 											<ul class="nested" th:each="foglio: ${alb.getChildren()}"> -->
-<!-- 												<li th:text="${foglio.getData()}"> </li> -->
-<!-- 												<ul class="nested" th:each="foglio2: ${foglio.getChildren()}"> -->
-<!-- 													<li th:text="${foglio2.getData()}"></li> -->
-<!-- 													<ul class="nested" th:each="foglio3: ${foglio2.getChildren()}"> -->
-<!-- 														<li th:text="${foglio3.getData()}"></li> -->
-<!-- 														<ul class="nested" th:each="foglio4: ${foglio3.getChildren()}"> -->
-<!-- 															<li th:text="${foglio4.getData()}"></li> -->
-<!-- 														</ul> -->
-<!-- 													</ul> -->
-<!-- 												</ul> -->
-<!-- 											</ul> -->
-<!-- 									</ul> -->
-									<ul class="nested" th:each="alb: ${albero}">
-									 
-										<li class="treeview-animated-items"><span class="caret" th:text="${alb.getData()}"></span></li>
-											<ul class="nested" th:each="foglio: ${alb.getChildren()}">
-												<li class="treeview-animated-items"><div class="treeview-animated-element"><i th:text="${foglio.getData()}" class="far fa-folder-open ic-w mr-1"></i></li>
-												<ul class="nested" th:each="foglio2: ${foglio.getChildren()}">
-													<li class="treeview-animated-items"> <div class="treeview-animated-element"><i th:text="${foglio2.getData()}" class="far fa-folder-open ic-w mr-1"></i> </li>
-													<ul class="nested" th:each="foglio3: ${foglio2.getChildren()}">
-														<li class="treeview-animated-items"> <div class="treeview-animated-element"><i th:text="${foglio3.getData()}" class="far fa-folder-open ic-w mr-1"></i></li>
-														<ul class="nested" th:each="foglio4: ${foglio3.getChildren()}">
-															<li > <div class="treeview-animated-element"><i th:text="${foglio4.getData()}" class="far fa-folder-open ic-w mr-1"></i></li>
+ 						<div class="col-lg-4"> 								
+									
+							<div class="treeview-animated w-20 border mx-4">
+	
+									<h6 class="pt-3 pl-3">Schema Funzionale</h6>
+									<hr>
+										<ul class="treeview-animated-list mb-3" >
+										 
+											<li th:each="alb: ${albero}" class="treeview-animated-items" >
+											 <a class="open closed"><i class="fas fa-angle-right"></i> <span th:text="${alb.getData()}"><i class="far fa-envelope-open ic-w mx-1"></i></span></a>
+												<ul class="nested" >
+													<li th:each="foglio: ${alb.getChildren()}" class="treeview-animated-items">
+													<a class="open closed"><i class="fas fa-angle-right"></i> <span th:text="${foglio.getData()}"><i class="far fa-envelope-open ic-w mx-1"></i></span></a>
+														<ul class="nested">
+															<li th:each="foglio2: ${foglio.getChildren()}" class="treeview-animated-items">
+		     								 		  		  <a class="open closed"><i class="fas fa-angle-right"></i > <span th:text="${foglio2.getData()}"><i class="far fa-envelope-open ic-w mx-1"></i></span></a>
+																<ul class="nested">
+																	<li th:each="foglio3: ${foglio2.getChildren()}" class="treeview-animated-items">
+		     								 		  		  		 <div th:text="${foglio3.getData()}" ><i  class="far fa-bell ic-w mr-1"></i></div>
+	
+																	</li>
+															 	</ul>
+															</li>
 														</ul>
-													</ul>
-												</ul>
-											</ul>
-									</ul>
+													</li>
+	 										  </ul>
+	 									  </li> 
+									  </ul>
+								
+								</div>
 
-
-							</ul>
+						
 						</div>
 						<div class="col-lg-8">
 							<div class="row">
