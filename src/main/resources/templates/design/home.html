@@ -28,7 +28,9 @@
 <head th:include="layout :: site-head" th:remove="tag" />
  
  
-<link rel="stylesheet" th:href="@{/css/dualListbox/bootstrap-duallistbox.min.css}" />
+<link rel="stylesheet" th:href="@{/css/dualListbox/bootstrap-duallistbox.min.css}" /> 
+
+        
 </head>
 
 <script th:src="@{/js/dualListbox/jquery.bootstrap-duallistbox.js}"></script>
@@ -87,21 +89,21 @@
 									
 							<div class="treeview-animated w-20 border mx-4">
 	
-									<h6 class="pt-3 pl-3">Schema Funzionale</h6>
+									<h6 class="pt-3 pl-3">Struttura generale</h6>
 									<hr>
 										<ul class="treeview-animated-list mb-3" >
 										 
 											<li th:each="alb: ${albero}" class="treeview-animated-items" >
-											 <a class="open closed"><i class="fas fa-angle-right"></i> <span th:text="${alb.getData()}"><i class="far fa-envelope-open ic-w mx-1"></i></span></a>
+											 <a class="open closed"><i class="fa fa-plus-circle"></i><span th:text="${alb.getData()}"></span></a>
 												<ul class="nested" >
 													<li th:each="foglio: ${alb.getChildren()}" class="treeview-animated-items">
-													<a class="open closed"><i class="fas fa-angle-right"></i> <span th:text="${foglio.getData()}"><i class="far fa-envelope-open ic-w mx-1"></i></span></a>
+													<a class="open closed"><i class="fa fa-plus-circle"></i><span th:text="${foglio.getData()}"></span></a>
 														<ul class="nested">
 															<li th:each="foglio2: ${foglio.getChildren()}" class="treeview-animated-items">
-		     								 		  		  <a class="open closed"><i class="fas fa-angle-right"></i > <span th:text="${foglio2.getData()}"><i class="far fa-envelope-open ic-w mx-1"></i></span></a>
+		     								 		  		  <a class="open closed"><i class="fa fa-plus-circle"></i ><span th:text="${foglio2.getData()}"></span></a>
 																<ul class="nested">
 																	<li th:each="foglio3: ${foglio2.getChildren()}" class="treeview-animated-items">
-		     								 		  		  		 <div th:text="${foglio3.getData()}" ><i  class="far fa-bell ic-w mr-1"></i></div>
+		     								 		  		  		 <div th:text="${foglio3.getData()}" ></div>
 	
 																	</li>
 															 	</ul>
