@@ -436,35 +436,42 @@ function playAction(){
 	
 	switch ($('#action').val()) {
 	
-	case "nf":
-		$("#dialog").submit();
-	break;
 	
-	case "np":
-		$("#dialog").submit();
-	break;
+	
+	
+	
+	
+//	case "nf":
+//		$("#dialog").submit();
+//	break;
+//	
+//	case "np":
+//		$("#dialog").submit();
+//	break;
 
 	case "nsp":
-		if($('#fatherProcess').val()!=0) {
+		if($('#fatherProcess').val()!="0") {
 			$("#dialog").submit();
 		}else {
 			alert("select the father process");
+			
 		}
 		
-		 
-		break;
+		
+		return;
 	case "ns":
-		if($('#fbusinessProcess').val()!=0) {
+		if($('#businessProcess').val()!="0") {
 			$("#dialog").submit();
 		}else {
 			alert("select the business process");
+			
+		
+		
+			
 		}
-		
-		
-		break
-	
+		return;
 	default:
-		
+		$("#dialog").submit();
 		break;
 	}
     

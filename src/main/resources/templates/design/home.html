@@ -119,8 +119,33 @@
 						
 						</div>
 						<div class="col-lg-8">
+						
 							<div class="row">
-								<div>
+								
+								<ul class="nav nav-tabs" id="myTab" role="tablist">
+								  <li class="nav-item">
+								    <a class="nav-link active" id="function-tab" data-toggle="tab" href="#functionsTab" role="tab" aria-controls="home"
+								      aria-selected="true">Funzioni</a>
+								  
+								  </li>
+								  <li class="nav-item">
+								    <a class="nav-link" id="process-tab" data-toggle="tab" href="#procTab" role="tab" aria-controls="profile"
+								      aria-selected="false">Processi</a>
+								  </li>
+								  <li class="nav-item">
+								    <a class="nav-link" id="subprocess-tab" data-toggle="tab" href="#subprocTab" role="tab" aria-controls="contact"
+								      aria-selected="false">Sottoprocessi</a>
+								  </li>
+								  <li class="nav-item">
+								    <a class="nav-link" id="step-tab" data-toggle="tab" href="#stepTab" role="tab" aria-controls="contact"
+								      aria-selected="false">Fasi</a>
+								  </li>
+								</ul>
+							
+					
+							
+							<div class="tab-content" id="myTabContent">
+								<div class="tab-pane fade show active" id="functionsTab" role="tabpanel" aria-labelledby="function-tab">
 									<div class="card">
 										<div class="card-header">
 											<span th:text="#{Layout.Functions}"></span>
@@ -166,7 +191,7 @@
 										</div>
 									</div>
 								</div>
-								<div>
+								<div class="tab-pane fade" id="procTab" role="tabpanel" aria-labelledby="process-tab">
 									<div class="card">
 										<div class="card-header">
 											<span th:text="#{Layout.Processes}"></span>
@@ -216,7 +241,8 @@
 											</table>
 										</div>
 									</div>
-									<div>
+								</div>	
+									<div class="tab-pane fade" id="subprocTab" role="tabpanel" aria-labelledby="subprocess-tab">
 										<div class="card">
 											<div class="card-header">
 												<span th:text="#{Layout.Subprocesses}"></span>
@@ -262,7 +288,7 @@
 										</div>
 									</div>
 
-									<div>
+									<div class="tab-pane fade" id="stepTab" role="tabpanel" aria-labelledby="step-tab">
 										<div class="card">
 											<div class="card-header">
 												<span th:text="#{Layout.Steps}"></span>
@@ -333,7 +359,7 @@
 						</div>
 						<div class="modal-body">
 							<form id="dialog" th:action="@{'/playaction'}" method="post">
-								<input id="action" type="text" name="fieldAction" hidden /> 
+								<input id="action" type="text" name="fieldAction" hidden=true /> 
 								<label id="fatherLabel" for="fieldFather" th:text="#{generic.fatherProcess}">Processo Padre:</label>
 								<div class="form-group blu-margin">
 									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
@@ -346,13 +372,13 @@
 
 
 								<label id="idlab" for="id" th:text="#{generic.id}">Id:</label>
-								<input id="id" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required="" class="form-control" value="" /> 
+								<input id="id" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" /> 
 								<label for="name" th:text="#{generic.name}">Name:</label> 
-								<input id="name" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off" required="" class="form-control" value="" /> 
+								<input id="name" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control" value="" /> 
 								<label for="description" th:text="#{generic.description}">Description:</label> 
-								<input id="description" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required="" class="form-control" value="" /> 
+								<input id="description" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control" value="" /> 
 								<label for="label" id="lab" th:text="#{generic.label}">Label:</label> 
-								<input id="label" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off" required="" class="form-control" value="" />
+								<input id="label" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control" value="" />
 								<label id="processLabel" for="businessProcess" th:text="#{generic.businessProcess}">Process:</label>
 								<div class="form-group blu-margin">
 									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
