@@ -99,6 +99,10 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 }
 
 
+
+
+
+
 function newFunctionDialog(funzione) {
 	   var titolo;
 	   $('.form-control').removeAttr("readonly","readonly");
@@ -346,6 +350,7 @@ function checkSelectedSteps(value) {
 }
 
 
+
 function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusinessFunction, funzione) {
 	var titolo;
 	 
@@ -513,7 +518,9 @@ $(document).ready(function () {
 	
 	$('.treeview-animated').mdbTreeview();
 		
-	
+	$( "#function-tab" ).select(function(e) { // target any selector
+		  alert("ciao");
+	});
 });
 
 
