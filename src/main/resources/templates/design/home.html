@@ -35,7 +35,7 @@
 
 <script th:src="@{/js/dualListbox/jquery.bootstrap-duallistbox.js}"></script>
 
-<script th:src="@{/js/design/design.js}"></script>
+
 <script th:inline="javascript"> 
 
 	var _updatefun = [[#{generic.updateFunction}]];
@@ -52,11 +52,10 @@
 	var _newstep = [[#{generic.newStep}]];
 	var _bindingprocess = [[#{generic.bindingProcess}]];
 	var _bindingstep = [[#{generic.bindingStep}]];
-// 	$(document).ready(function() {
-// 		setMenuActive("elaborazione")
-// 	});
+	var _selectedTab = [[${selectedTab}]];
 
 </script>
+<script th:src="@{/js/design/design.js}"></script>
 <body class="c-app">
 	<div th:replace="layout :: site-aside"></div>
 	<div th:replace="layout :: site-modals"></div>
@@ -120,32 +119,35 @@
 						</div>
 						<div class="col-lg-8">
 						
-							<div class="row">
+							<div class="row" > 
 								
-								<ul class="nav nav-tabs" id="myTab" role="tablist">
-								  <li class="nav-item">
-								    <a class="nav-link active" id="function-tab" data-toggle="tab" href="#functionsTab" role="tab" aria-controls="home"
-								      aria-selected="true">Funzioni</a>
-								  
-								  </li>
-								  <li class="nav-item">
-								    <a class="nav-link" id="process-tab" data-toggle="tab" href="#procTab" role="tab" aria-controls="profile"
-								      aria-selected="false">Processi</a>
-								  </li>
-								  <li class="nav-item">
-								    <a class="nav-link" id="subprocess-tab" data-toggle="tab" href="#subprocTab" role="tab" aria-controls="contact"
-								      aria-selected="false">Sottoprocessi</a>
-								  </li>
-								  <li class="nav-item">
-								    <a class="nav-link" id="step-tab" data-toggle="tab" href="#stepTab" role="tab" aria-controls="contact"
-								      aria-selected="false">Fasi</a>
-								  </li>
-								</ul>
+								
 							
-							</div>
-						<div class="row"><div class="row">	
+								<ul class="nav nav-tabs" id="myTab" role="tablist">
+									<li class="nav-item">
+										    <a class="nav-link" id="function-tab" data-toggle="tab" href="#functionTab" role="tab" aria-controls="functionTab"
+										      aria-selected="true">Funzioni</a>
+										  
+										  </li>
+										  <li class="nav-item">
+										    <a class="nav-link" id="process-tab" data-toggle="tab" href="#procTab" role="tab" aria-controls="procTab"
+										      aria-selected="false">Processi</a>
+										  </li>
+										  <li class="nav-item">
+										    <a class="nav-link" id="subprocess-tab" data-toggle="tab" href="#subprocTab" role="tab" aria-controls="subprocTab"
+										      aria-selected="false">Sottoprocessi</a>
+										  </li>
+										  <li class="nav-item">
+										    <a class="nav-link" id="step-tab" data-toggle="tab" href="#stepTab" role="tab" aria-controls="stepTab"
+										      aria-selected="false">Fasi</a>
+										  </li>
+								</ul>
+						
+						</div>
+		
+								
 							<div class="tab-content" id="myTabContent">
-								<div class="tab-pane fade show active" id="functionsTab" role="tabpanel" aria-labelledby="function-tab">
+								<div class="tab-pane fade" id="functionTab" role="tabpanel" aria-labelledby="function-tab">
 									<div class="card">
 										<div class="card-header">
 											<span th:text="#{Layout.Functions}"></span>
@@ -338,7 +340,7 @@
 										</div>
 									</div>
 								</div>
-							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -360,6 +362,8 @@
 						<div class="modal-body">
 							<form id="dialog" th:action="@{'/playaction'}" method="post">
 								<input id="action" type="text" name="fieldAction" hidden=true /> 
+								<input id="currentTab" type="text" name="selectedTab" hidden=true /> 
+								
 								<label id="fatherLabel" for="fieldFather" th:text="#{generic.fatherProcess}">Processo Padre:</label>
 								<div class="form-group blu-margin">
 									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
@@ -419,7 +423,7 @@
 						</div>
 						<div class="modal-body">
 							<form id="bindingFunctionsForm" th:action="@{'/bindingFunctions'}" method="post">
-								
+								<input id="currentTabFunctionBinding" type="text" name="selectedTab" hidden=true /> 
 								
 								<label id="idlabf" for="idf" th:text="#{generic.id}">Id:</label>
 								<input id="idf" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required class="form-control" value="" /> 
@@ -482,7 +486,7 @@
 						<div class="modal-body">
 							<form id="bindingProcessesForm" th:action="@{'/bindingProcesses'}" method="post">
 								
-								
+								<input id="currentTabProcessBinding" type="text" name="selectedTab" hidden=true /> 
 								<label id="idlabp" for="idp" th:text="#{generic.id}">Id:</label>
 								<input id="idp" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required class="form-control" value="" /> 
 								<label for="namep" th:text="#{generic.name}">Name:</label> 

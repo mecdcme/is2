@@ -33,9 +33,11 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.TreeNode;
@@ -66,7 +68,7 @@ public class DesignController {
 	private MessageSource messages;
 
 	@GetMapping(value = "/settings")
-	public String viewSettings(Model model) {
+	public String viewSettings(Model model, @ModelAttribute("selectedTab") String selectedTab) {
 
 		List<BusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
 		List<BusinessProcess> listaBp = businessProcessService.findAll();
@@ -99,7 +101,7 @@ public class DesignController {
 				}
 			});
 		});
-
+		model.addAttribute("selectedTab", selectedTab);
 		model.addAttribute("albero", albero);
 		model.addAttribute("listaBp", listaBp);
 		model.addAttribute("listaAllBp", listaAllBp);
@@ -113,10 +115,11 @@ public class DesignController {
 	}
 
 	@PostMapping(value = "/playaction")
-	public String action(Model model, @RequestParam("fieldId") Long fieldId,
+	public String action(Model model, @RequestParam("fieldId") Long fieldId,  RedirectAttributes ra,
 			@RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr,
 			@RequestParam("fieldLabel") String fieldLabel,
 			@RequestParam("fieldBusinessProcessId") String fieldBusinessProcessId,
+			@RequestParam("selectedTab") String selectedTab,
 			@RequestParam("fieldFatherId") String fieldFatherId, @RequestParam("fieldAction") String fieldAction) {
 
 		notificationService.removeAllMessages();
@@ -348,7 +351,7 @@ public class DesignController {
 			
 			break;
 		}
-
+		ra.addFlashAttribute("selectedTab", selectedTab);
 		return "redirect:/settings";
 
 	}
@@ -356,9 +359,10 @@ public class DesignController {
 //    @RequestParam Map<String,String> allParams 
 
 	@PostMapping(value = "/bindingFunctions")
-	public String bindingFunctions(Model model, @RequestParam("fieldId") Long fieldId,
+	public String bindingFunctions(Model model, @RequestParam("fieldId") Long fieldId,  RedirectAttributes ra,
 			@RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr,
-    		  @RequestParam(value="duallistbox_demo[]", required = false) String duallistbox_demo[]) {   
+			@RequestParam("selectedTab") String selectedTab,
+    		@RequestParam(value="duallistbox_demo[]", required = false) String duallistbox_demo[]) {   
 
 
 		notificationService.removeAllMessages();
@@ -438,14 +442,15 @@ public class DesignController {
 					messages.getMessage("design.binding.error", null, LocaleContextHolder.getLocale()), e.getMessage());
 
 		}
-
+		ra.addFlashAttribute("selectedTab", selectedTab);
 		return "redirect:/settings";
 
 	}
 
 	@PostMapping(value = "/bindingProcesses")
-	public String bindingProcesses(Model model, @RequestParam("fieldId") Long fieldId,
+	public String bindingProcesses(Model model, @RequestParam("fieldId") Long fieldId, RedirectAttributes ra,
 			@RequestParam("fieldName") String fieldName, @RequestParam("fieldDescription") String fieldDescr,
+			@RequestParam("selectedTab") String selectedTab,
 			@RequestParam(value="duallistbox_demo1[]",required=false) String duallistbox_demo1[]) {
 
 		notificationService.removeAllMessages();
@@ -517,7 +522,7 @@ public class DesignController {
 					messages.getMessage("design.binding.error", null, LocaleContextHolder.getLocale()), e.getMessage());
 
 		}
-
+		ra.addFlashAttribute("selectedTab", selectedTab);
 		return "redirect:/settings";
 
 	}

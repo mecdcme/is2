@@ -40,6 +40,7 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 	
 	case "functions":
 		titolo=_updatefun;
+		 $('#currentTab').val("function");
 		 $('#action').val("uf");
 		 $('#id').val(id);
 		 $('#name').val(nome);
@@ -50,6 +51,7 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 		break;
 	case "processes":
 		titolo=_updateproc;
+		$('#currentTab').val("process");
 		$('#action').val("up");
 		$('#id').val(id);
 		 $('#name').val(nome);
@@ -60,6 +62,7 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 		break
 	case "subprocesses":
 		titolo=_updatesubproc;
+		$('#currentTab').val("subprocess");
 		$('#action').val("usp");
 		$('#fatherProcess').show();
 		 $('#fatherLabel').show();
@@ -73,6 +76,7 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 		break;
 	case "steps":
 		titolo=_updatestep;
+		$('#currentTab').val("step");
 		$('#action').val("us");
 		$('#id').val(id);
 		 $('#name').val(nome);
@@ -116,6 +120,7 @@ function newFunctionDialog(funzione) {
 		
 		case "functions":
 			titolo=_newfun;
+			 $('#currentTab').val("function");
 			 $('#action').val("nf");
 //			 $('#id').val(id);
 			 $('#name').val("");
@@ -126,6 +131,7 @@ function newFunctionDialog(funzione) {
 			break;
 		case "processes":
 			titolo=_newproc;
+			$('#currentTab').val("process");
 			 $('#action').val("np");
 //			$('#id').val(id);
 			 $('#name').val("");
@@ -136,6 +142,7 @@ function newFunctionDialog(funzione) {
 			break
 		case "subprocesses":
 			titolo=_newsubproc;
+			$('#currentTab').val("subprocess");
 			 $('#action').val("nsp");
 //			$('#id').val(id);
 			 $('#fatherProcess').val("0");
@@ -149,6 +156,7 @@ function newFunctionDialog(funzione) {
 			break;
 		case "steps":
 			titolo=_newstep;
+			$('#currentTab').val("step");
 			 $('#action').val("ns");
 			 $('#businessProcess').val("0");
 			
@@ -193,6 +201,7 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 	switch (funzione) {
 	case "functions":
 		titolo=_deletefun;
+		 $('#currentTab').val("function");
 		 $('#action').val("df");
 		 $('#id').val(id);
 		 $('#name').val(nome);
@@ -208,6 +217,7 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 		break;
 	case "processes":
 		titolo=_deleteproc;
+		$('#currentTab').val("process");
 		 $('#action').val("dp");
 		$('#id').val(id);
 		 $('#name').val(nome);
@@ -217,6 +227,7 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 		break
 	case "subprocesses":
 		titolo=_deletesubproc;
+		$('#currentTab').val("subprocess");
 		 $('#action').val("dsp");
 //		 $('#fatherProcess').show();
 //		 $('#fatherLabel').show();
@@ -228,6 +239,7 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 		break;
 	case "steps":
 		titolo=_deletestep;
+		$('#currentTab').val("step");
 		 $('#action').val("ds");
 		$('#id').val(id);
 		 $('#name').val(nome);
@@ -247,77 +259,145 @@ function deleteFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusin
     $('#Update-Dialog').modal('show');
 }
 
-function newFunctionDialog(funzione) {
-	   var titolo;
-	   $('.form-control').removeAttr("readonly","readonly");
-	   $('#id').hide();
-	   $('#idlab').hide();
-	   $('#fatherProcess').hide();
-	   $('#fatherLabel').hide();
-	   $('#businessProcess').hide();
-	   $('#processLabel').hide();
-		switch (funzione) {
+//function newFunctionDialog(funzione) {
+//	   var titolo;
+//	   $('.form-control').removeAttr("readonly","readonly");
+//	   $('#id').hide();
+//	   $('#idlab').hide();
+//	   $('#fatherProcess').hide();
+//	   $('#fatherLabel').hide();
+//	   $('#businessProcess').hide();
+//	   $('#processLabel').hide();
+//		switch (funzione) {
+//		
+//		case "functions":
+//			titolo=_newfun;
+//			 $('#action').val("nf");
+////			 $('#id').val(id);
+//			 $('#name').val("");
+//			 $('#description').val("");
+//			 $('#label').val("");
+//			 $('#label').show();
+//			 $('#lab').show();
+//			break;
+//		case "processes":
+//			titolo=_newproc;
+//			 $('#action').val("np");
+////			$('#id').val(id);
+//			 $('#name').val("");
+//			 $('#description').val("");
+//			 $('#label').val("");
+//			 $('#label').show();
+//			 $('#lab').show();
+//			break
+//		case "subprocesses":
+//			titolo=_newsubproc;
+//			 $('#action').val("nsp");
+////			$('#id').val(id);
+//			 $('#fatherProcess').val("0");
+//			 $('#fatherProcess').show();
+//			 $('#fatherLabel').show();
+//			 $('#name').val("");
+//			 $('#description').val("");
+//			 $('#label').val("");
+//			 $('#label').show();
+//			 $('#lab').show();
+//			break;
+//		case "steps":
+//			titolo=_newstep;
+//			 $('#action').val("ns");
+//			 $('#businessProcess').val("0");
+//			
+////			$('#id').val(id);
+//			 $('#name').val("");
+//			 $('#description').val("");
+//			 $('#businessProcess').show();
+//			 $('#processLabel').show();
+//			 $('#label').hide();
+//			 $('#lab').hide();
+//			
+//			break;
+//
+//		default:
+//			titolo="";
+//			break;
+//		}
+//		
+//		
+//		$("#modTitle").text(titolo);
+//
+//	    $('#Update-Dialog').modal('show');
+//	  
+//	    
+//	}
+
+
+
+
+function setTab(selectedTab) {
+	   
+		switch (selectedTab) {
 		
-		case "functions":
-			titolo=_newfun;
-			 $('#action').val("nf");
-//			 $('#id').val(id);
-			 $('#name').val("");
-			 $('#description').val("");
-			 $('#label').val("");
-			 $('#label').show();
-			 $('#lab').show();
+		case "function":
+			$("#function-tab").attr('class', 'nav-link active');
+			$("#functionTab").attr('class', 'tab-pane fade show active');
+			$("#process-tab").attr('class', 'nav-link');
+			$("#procTab").attr('class', 'tab-pane fade');
+			$("#subprocess-tab").attr('class', 'nav-link');
+			$("#subprocTab").attr('class', 'tab-pane fade');
+			$("#step-tab").attr('class', 'nav-link');
+			$("#stepTab").attr('class', 'tab-pane fade');
+		
 			break;
-		case "processes":
-			titolo=_newproc;
-			 $('#action').val("np");
-//			$('#id').val(id);
-			 $('#name').val("");
-			 $('#description').val("");
-			 $('#label').val("");
-			 $('#label').show();
-			 $('#lab').show();
+		case "process":
+			$("#function-tab").attr('class', 'nav-link');
+			$("#functionTab").attr('class', 'tab-pane fade');
+			$("#process-tab").attr('class', 'nav-link active');
+			$("#procTab").attr('class', 'tab-pane fade show active');
+			$("#subprocess-tab").attr('class', 'nav-link');
+			$("#subprocTab").attr('class', 'tab-pane fade');
+			$("#step-tab").attr('class', 'nav-link');
+			$("#stepTab").attr('class', 'tab-pane fade');
 			break
-		case "subprocesses":
-			titolo=_newsubproc;
-			 $('#action').val("nsp");
-//			$('#id').val(id);
-			 $('#fatherProcess').val("0");
-			 $('#fatherProcess').show();
-			 $('#fatherLabel').show();
-			 $('#name').val("");
-			 $('#description').val("");
-			 $('#label').val("");
-			 $('#label').show();
-			 $('#lab').show();
+		case "subprocess":
+			$("#function-tab").attr('class', 'nav-link');
+			$("#functionTab").attr('class', 'tab-pane fade');
+			$("#process-tab").attr('class', 'nav-link');
+			$("#procTab").attr('class', 'tab-pane fade');
+			$("#subprocess-tab").attr('class', 'nav-link active');
+			$("#subprocTab").attr('class', 'tab-pane fade show active');
+			$("#step-tab").attr('class', 'nav-link');
+			$("#stepTab").attr('class', 'tab-pane fade');
 			break;
-		case "steps":
-			titolo=_newstep;
-			 $('#action').val("ns");
-			 $('#businessProcess').val("0");
+		case "step":
+			$("#function-tab").attr('class', 'nav-link');
+			$("#functionTab").attr('class', 'tab-pane fade');
+			$("#process-tab").attr('class', 'nav-link');
+			$("#procTab").attr('class', 'tab-pane fade');
+			$("#subprocess-tab").attr('class', 'nav-link');
+			$("#subprocTab").attr('class', 'tab-pane fade');
+			$("#step-tab").attr('class', 'nav-link active');
+			$("#stepTab").attr('class', 'tab-pane fade show active');
 			
-//			$('#id').val(id);
-			 $('#name').val("");
-			 $('#description').val("");
-			 $('#businessProcess').show();
-			 $('#processLabel').show();
-			 $('#label').hide();
-			 $('#lab').hide();
-			
+			break;
+		default:
+			$("#function-tab").attr('class', 'nav-link active');
+			$("#functionTab").attr('class', 'tab-pane fade show active');
+			$("#process-tab").attr('class', 'nav-link');
+			$("#procTab").attr('class', 'tab-pane fade');
+			$("#subprocess-tab").attr('class', 'nav-link');
+			$("#subprocTab").attr('class', 'tab-pane fade');
+			$("#step-tab").attr('class', 'nav-link');
+			$("#stepTab").attr('class', 'tab-pane fade');
 			break;
 
-		default:
-			titolo="";
-			break;
 		}
 		
 		
-		$("#modTitle").text(titolo);
-
-	    $('#Update-Dialog').modal('show');
+		
 	  
 	    
-	}
+}
 
 
 function checkSelected(value) {
@@ -360,7 +440,7 @@ function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre, idBusi
 	$('#idf').val(id);
 	$('#namef').val(nome);
 	$('#descriptionf').val(descrizione);
-	
+	$('#currentTabFunctionBinding').val("process");
 
 	$.ajax({
 		type : "GET",
@@ -403,6 +483,7 @@ function bindingProcessDialog(id, nome, descrizione, etichetta, idPadre, idBusin
 	$('#idp').val(id);
 	$('#namep').val(nome);
 	$('#descriptionp').val(descrizione);
+	$('#currentTabProcessBinding').val("step");
 	
 	$.ajax({
 		type : "GET",
@@ -441,18 +522,7 @@ function playAction(){
 	
 	switch ($('#action').val()) {
 	
-	
-	
-	
-	
-	
-//	case "nf":
-//		$("#dialog").submit();
-//	break;
-//	
-//	case "np":
-//		$("#dialog").submit();
-//	break;
+
 
 	case "nsp":
 		if($('#fatherProcess').val()!="0") {
@@ -517,10 +587,36 @@ $(document).ready(function () {
 		});
 	
 	$('.treeview-animated').mdbTreeview();
+	
+	
 		
-	$( "#function-tab" ).select(function(e) { // target any selector
-		  alert("ciao");
+	$( "#function-tab" ).click(function(e) { 
+		 $('#currentTab').val("function");
+		 $('#currentTabFunctionBinding').val("function");
+		 $('#currentTabProcessBinding').val("function");
 	});
+	$( "#process-tab" ).click(function(e) { 
+		$('#currentTab').val("process");
+		$('#currentTabFunctionBinding').val("process");
+		$('#currentTabProcessBinding').val("process");
+	});
+	$( "#subprocess-tab" ).click(function(e) { 
+		$('#currentTab').val("subprocess");
+		$('#currentTabFunctionBinding').val("subprocess");
+		$('#currentTabProcessBinding').val("subprocess");
+		  
+	});$( "#step-tab" ).click(function(e) {
+		$('#currentTab').val("step");
+		$('#currentTabFunctionBinding').val("step");
+		$('#currentTabProcessBinding').val("step");
+	});
+	
+	setTab(_selectedTab);
+	
+	
+	
+	
+	
 });
 
 
