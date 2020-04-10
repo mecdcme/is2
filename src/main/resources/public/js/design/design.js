@@ -533,7 +533,7 @@ function playAction(){
 		}
 		
 		
-		return;
+		break;
 	case "ns":
 		if($('#businessProcess').val()!="0") {
 			$("#dialog").submit();
@@ -544,7 +544,7 @@ function playAction(){
 		
 			
 		}
-		return;
+		break;
 	default:
 		$("#dialog").submit();
 		break;
