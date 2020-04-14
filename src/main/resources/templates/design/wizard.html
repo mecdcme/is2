@@ -1,0 +1,416 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<head th:include="layout :: site-head" th:remove="tag" />
+ 
+ 
+
+
+        
+</head>
+
+
+
+
+<script th:inline="javascript"> 
+
+	var _updatefun = [[#{generic.updateFunction}]];
+	var _updateproc = [[#{generic.updateProcess}]];
+	var _updatesubproc = [[#{generic.updateSubprocess}]]; 
+	var _updatestep = [[#{generic.updateStep}]];
+	var _deletefun = [[#{generic.deleteFunction}]];
+	var _deleteproc = [[#{generic.deleteProcess}]];
+	var _deletesubproc = [[#{generic.deleteSubprocess}]]; 
+	var _deletestep = [[#{generic.deleteStep}]];
+	var _newfun = [[#{generic.newFun}]];
+	var _newproc = [[#{generic.newProc}]];
+	var _newsubproc = [[#{generic.newSubproc}]]; 
+	var _newstep = [[#{generic.newStep}]];
+	var _bindingprocess = [[#{generic.bindingProcess}]];
+	var _bindingstep = [[#{generic.bindingStep}]];
+	var _selectedTab = [[${selectedTab}]];
+    var _alertSelBusinessProcess = [[#{generic.selbusinessprocess}]];
+    var _alertSelFatherProcess = [[#{generic.selfatherprocess}]];
+</script>
+
+<script th:src="@{/js/design/wizard.js}" type="text/javascript"></script>
+ <link th:href="@{/css/design/wizard.css}" rel="stylesheet" />
+<body class="c-app">
+	<div th:replace="layout :: site-aside"></div>
+	<div th:replace="layout :: site-modals"></div>
+	<!-- Body -->
+	<div class="c-wrapper">
+		<header
+			class="c-header c-header-light c-header-fixed c-header-with-subheader">
+			<div th:include="layout :: site-header" th:remove="tag"></div>
+			<div class="c-subheader justify-content-between px-3">
+				<!-- Breadcrumb-->
+				<ol class="breadcrumb border-0 m-0">
+					<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+					<li class="breadcrumb-item"><span>Process design</span></li>
+				</ol>
+				<!-- Right navigation menu -->
+				<div class="c-header-nav d-md-down-none mfe-2">
+					<a class="c-header-nav-link" th:title="#{session.button.close}"
+						th:href="@{'/'}"> <i class="fa fa-close"></i>&nbsp;<span
+						th:text="#{Layout.Close}"></span>
+					</a>
+				</div>
+			</div>
+		</header>
+
+		<div class="c-body">
+			<main class="c-main">
+				<div class="container" >
+					<div class="row .col-auto">
+						<div class="md-form col-12 ml-auto">
+						<section>
+				        <div class="wizard">
+				            <div class="wizard-inner">
+				                <div class="connecting-line"></div>
+				                <ul class="nav nav-tabs" role="tablist">
+				
+				                    <li role="presentation" class="active">
+				                        <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="Step 1">
+				                            <span class="round-tab">
+				                                <i class="glyphicon glyphicon-folder-open"></i>
+				                            </span>
+				                        </a>
+				                    </li>
+				
+				                    <li role="presentation" class="disabled">
+				                        <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="Step 2">
+				                            <span class="round-tab">
+				                                <i class="glyphicon glyphicon-pencil"></i>
+				                            </span>
+				                        </a>
+				                    </li>
+				                    <li role="presentation" class="disabled">
+				                        <a href="#step3" data-toggle="tab" aria-controls="step3" role="tab" title="Step 3">
+				                            <span class="round-tab">
+				                                <i class="glyphicon glyphicon-picture"></i>
+				                            </span>
+				                        </a>
+				                    </li>
+				
+				                    <li role="presentation" class="disabled">
+				                        <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Complete">
+				                            <span class="round-tab">
+				                                <i class="glyphicon glyphicon-ok"></i>
+				                            </span>
+				                        </a>
+				                    </li>
+				                </ul>
+				            </div>
+				
+				            <form role="form">
+				                <div class="tab-content">
+				                    <div class="tab-pane active" role="tabpanel" id="step1">
+				                        <h3>Step 1</h3>
+				                        <p>This is step 1</p>
+				                        <ul class="list-inline pull-right">
+				                            <li><button type="button" class="btn btn-primary next-step">Save and continue</button></li>
+				                        </ul>
+				                    </div>
+				                    <div class="tab-pane" role="tabpanel" id="step2">
+				                        <h3>Step 2</h3>
+				                        <p>This is step 2</p>
+				                        <ul class="list-inline pull-right">
+				                            <li><button type="button" class="btn btn-default prev-step">Previous</button></li>
+				                            <li><button type="button" class="btn btn-primary next-step">Save and continue</button></li>
+				                        </ul>
+				                    </div>
+				                    <div class="tab-pane" role="tabpanel" id="step3">
+				                        <h3>Step 3</h3>
+				                        <p>This is step 3</p>
+				                        <ul class="list-inline pull-right">
+				                            <li><button type="button" class="btn btn-default prev-step">Previous</button></li>
+				                            <li><button type="button" class="btn btn-default next-step">Skip</button></li>
+				                            <li><button type="button" class="btn btn-primary btn-info-full next-step">Save and continue</button></li>
+				                        </ul>
+				                    </div>
+				                    <div class="tab-pane" role="tabpanel" id="complete">
+				                        <h3>Complete</h3>
+				                        <p>You have successfully completed all steps.</p>
+				                    </div>
+				                    <div class="clearfix"></div>
+				                </div>
+				            </form>
+				        </div>
+				    </section>
+				    </div>
+				   </div>
+				</div>
+			
+			
+			
+			
+			
+			
+			
+			
+<!-- 				<div class="container-fluid"> -->
+<!-- 					<div class="row justify-start"> -->
+ 										
+									
+<!-- 							<ul class="stepper horizontal" id="horizontal-stepper"> -->
+<!-- 							  <li class="step active"> -->
+<!-- 							    <div class="step-title waves-effect waves-dark">Step 1</div> -->
+<!-- 							    <div class="step-new-content"> -->
+<!-- 							      <div class="row"> -->
+<!-- 							        <div class="md-form col-12 ml-auto"> -->
+<!-- 							          <input id="email-horizontal" type="email" class="validate form-control" required> -->
+<!-- 							          <label for="email-horizontal">Email</label> -->
+<!-- 							        </div> -->
+<!-- 							      </div> -->
+<!-- 							      <div class="step-actions"> -->
+<!-- 							        <button class="waves-effect waves-dark btn btn-sm btn-primary next-step" data-feedback="someFunction21">CONTINUE</button> -->
+<!-- 							      </div> -->
+<!-- 							    </div> -->
+<!-- 							  </li> -->
+<!-- 							  <li class="step"> -->
+<!-- 							    <div class="step-title waves-effect waves-dark">Step 2</div> -->
+<!-- 							    <div class="step-new-content"> -->
+<!-- 							      <div class="row"> -->
+<!-- 							        <div class="md-form col-12 ml-auto"> -->
+<!-- 							          <input id="password-horizontal" type="password" class="validate form-control" required> -->
+<!-- 							          <label for="password-horizontal">Your password</label> -->
+<!-- 							        </div> -->
+<!-- 							      </div> -->
+<!-- 							      <div class="step-actions"> -->
+<!-- 							        <button class="waves-effect waves-dark btn btn-sm btn-primary next-step" data-feedback="someFunction21">CONTINUE</button> -->
+<!-- 							        <button class="waves-effect waves-dark btn btn-sm btn-secondary previous-step">BACK</button> -->
+<!-- 							      </div> -->
+<!-- 							    </div> -->
+<!-- 							  </li> -->
+<!-- 							  <li class="step"> -->
+<!-- 							    <div class="step-title waves-effect waves-dark">Step 3</div> -->
+<!-- 							    <div class="step-new-content"> -->
+<!-- 							      Finish! -->
+<!-- 							      <div class="step-actions"> -->
+<!-- 							        <button class="waves-effect waves-dark btn-sm btn btn-primary m-0 mt-4" type="button">SUBMIT</button> -->
+<!-- 							      </div> -->
+<!-- 							    </div> -->
+<!-- 							  </li> -->
+<!-- 							</ul> -->
+							
+						
+<!-- 					</div> -->
+<!-- 				</div> -->
+			</main>
+			<div class="modal fade" id="Update-Dialog" tabindex="-1"
+				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">
+								<i class="fa fa-edit"></i>&nbsp; <span
+									th:text="#{generic.update}" id="modTitle">Update</span>
+							</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form id="dialog" th:action="@{'/playaction'}" method="post">
+								<input id="action" type="text" name="fieldAction" hidden=true /> 
+								<input id="currentTab" type="text" name="selectedTab" hidden=true /> 
+								
+								<label id="fatherLabel" for="fieldFather" th:text="#{generic.fatherProcess}">Processo Padre:</label>
+								<div class="form-group blu-margin">
+									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
+									<select class="form-control" id="fatherProcess" name="fieldFatherId">
+										<option value="0" th:text="#{generic.selectFatherProcess}">Select father process..</option>
+										<option th:each="bp : ${listaAllBp}" th:value="${bp.id}"
+											th:text="${bp.Name}"></option>
+									</select>
+								</div>
+
+
+<!-- 								<label id="idlab" for="id" th:text="#{generic.id}">Id:</label> -->
+								<input id="id" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/> 
+								<label for="name" th:text="#{generic.name}">Name:</label> 
+								<input id="name" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control" value="" /> 
+								<label for="description" th:text="#{generic.description}">Description:</label> 
+								<input id="description" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control" value="" /> 
+								<label for="label" id="lab" th:text="#{generic.label}">Label:</label> 
+								<input id="label" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control" value="" />
+								<label id="processLabel" for="businessProcess" th:text="#{generic.businessProcess}">Process:</label>
+								<div class="form-group blu-margin">
+									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
+									<select class="form-control" id="businessProcess" name="fieldBusinessProcessId">
+										<option value="0" th:text="#{generic.selectBusinessProcess}">Select business process..</option>
+										<option th:each="bp : ${listaAllBusinessService}" th:value="${bp.id}"
+											th:text="${bp.Name}"></option>
+									</select>
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-light" data-dismiss="modal">
+								<span th:title="#{generic.title.close.button}"
+									th:text="#{Layout.Close}">Annulla</span>
+							</button>
+							<button type="button" id="btn-invia-table"
+								class="btn btn-primary " onclick="playAction();"
+								th:title="#{submit.button.title}" th:text="#{submit.button}"
+								data-dismiss="modal">Invia</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="binding-Functions" tabindex="-1"
+				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">
+								<i class="fa fa-edit"></i>&nbsp; <span
+									th:text="#{generic.bindingFunctions}" id="bindingTitleFunctions">Update</span>
+							</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form id="bindingFunctionsForm" th:action="@{'/bindingFunctions'}" method="post">
+								<input id="currentTabFunctionBinding" type="text" name="selectedTab" hidden=true /> 
+								
+<!-- 								<label id="idlabf" for="idf" th:text="#{generic.id}">Id:</label> -->
+								<input id="idf" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required class="form-control" value="" hidden=true/> 
+								<label for="namef" th:text="#{generic.name}">Name:</label> 
+								<input id="namef" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off" required class="form-control" value="" /> 
+								<label for="descriptionf" th:text="#{generic.description}">Description:</label> 
+								<input id="descriptionf" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required class="form-control" value="" /> 
+								
+								
+								<label th:text="#{generic.processList}">Id:</label>
+								
+								
+								<div class="col-lg-10">
+									<div class="row">
+									
+									
+									 <select  id="functionsList" multiple="multiple" name="duallistbox_demo[]"  class="demo" title="duallistbox_demo[]">
+									    <option th:each="stepP: ${listaFunzioni}" th:text="${stepP.name}"  th:value="${stepP.id}"></option>
+								
+									  </select>
+									
+									
+
+ 									</div>
+ 								</div>
+								
+								
+								 
+
+								
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-light" data-dismiss="modal">
+								<span th:title="#{generic.title.close.button}"
+									th:text="#{Layout.Close}">Annulla</span>
+							</button>
+							<button type="button" id="btn-invia-table"
+								class="btn btn-primary" onclick="playBindingFunctions();"
+								th:title="#{submit.button.title}" th:text="#{submit.button}"
+								data-dismiss="modal">Invia</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="binding-Processes" tabindex="-1"
+				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">
+								<i class="fa fa-edit"></i>&nbsp; <span
+									th:text="#{generic.bindingSubProcesses}" id="bindingTitleSteps">Update</span>
+							</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form id="bindingProcessesForm" th:action="@{'/bindingProcesses'}" method="post">
+								
+								<input id="currentTabProcessBinding" type="text" name="selectedTab" hidden=true /> 
+<!-- 								<label id="idlabp" for="idp" th:text="#{generic.id}">Id:</label> -->
+								<input id="idp" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required class="form-control" value="" hidden=true/> 
+								<label for="namep" th:text="#{generic.name}">Name:</label> 
+								<input id="namep" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off" required class="form-control" value="" /> 
+								<label for="descriptionp" th:text="#{generic.description}">Description:</label> 
+								<input id="descriptionp" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required class="form-control" value="" /> 
+								
+								
+								
+								<label th:text="#{generic.stepList}">Id:</label>
+								
+								<div class="col-lg-10">
+									<div class="row">
+									
+									
+									 <select id="processesList" multiple="multiple" name="duallistbox_demo1[]"  class="demo1" title="duallistbox_demo1[]">
+									    <option th:each="stepP: ${listaAllSubBp}" th:text="${stepP.name}"  th:value="${stepP.id}"></option>
+								
+									  </select>
+									
+									
+
+ 									</div>
+ 								</div>
+								
+								
+								 
+
+								
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-light" data-dismiss="modal">
+								<span th:title="#{generic.title.close.button}"
+									th:text="#{Layout.Close}">Annulla</span>
+							</button>
+							<button type="button" id="btn-invia-table"
+								class="btn btn-primary" onclick="playBindingProcesses();"
+								th:title="#{submit.button.title}" th:text="#{submit.button}"
+								data-dismiss="modal">Invia</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<footer th:replace="layout :: site-footer"></footer>
+	</div>
+</body>
+</html>

@@ -113,6 +113,29 @@ public class DesignController {
 		return "design/home.html";
 
 	}
+	
+	@GetMapping(value = "/drivensettings")
+	public String viewdrivenSettings(Model model, @ModelAttribute("selectedTab") String selectedTab) {
+
+		List<BusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
+//		List<BusinessProcess> listaBp = businessProcessService.findAll();
+		List<ProcessStep> listaBs = processStepService.findAll();
+		List<BusinessProcess> listaAllBp = businessProcessService.findAllProcesses();
+		List<BusinessProcess> listaAllSubBp = businessProcessService.findAllSubProcesses();
+		List<BusinessService> listaAllBusinessServices = businessService.findBusinessServices();
+
+		
+		
+//		model.addAttribute("listaBp", listaBp);
+		model.addAttribute("listaAllBp", listaAllBp);
+		model.addAttribute("listaAllSubBp", listaAllSubBp);
+		model.addAttribute("listaFunzioni", listaFunzioni);
+		model.addAttribute("listaBusinessStep", listaBs);
+		model.addAttribute("listaAllBusinessService", listaAllBusinessServices);
+
+		return "design/wizard.html";
+
+	}
 
 	@PostMapping(value = "/playaction")
 	public String action(Model model, @RequestParam("fieldId") Long fieldId,  RedirectAttributes ra,
