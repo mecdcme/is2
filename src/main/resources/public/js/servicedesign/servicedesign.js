@@ -97,8 +97,51 @@ $(document).ready(function() {
 	$('#btn_delete_si').click(function() {
 		delete_stepinstance();
 	});
+	setTab(_selectedTab);
 
 });
+
+function setTab(selectedTab) {
+
+	switch (selectedTab) {
+
+	case "business":
+		$("#business-tab").attr('class', 'nav-link active');
+		$("#businessTab").attr('class', 'tab-pane fade show active');
+		$("#application-tab").attr('class', 'nav-link');
+		$("#applicationTab").attr('class', 'tab-pane fade');		
+		$("#step-tab").attr('class', 'nav-link');
+		$("#stepTab").attr('class', 'tab-pane fade');
+		break;
+	case "application":
+		$("#business-tab").attr('class', 'nav-link');
+		$("#businessTab").attr('class', 'tab-pane fade');
+		$("#application-tab").attr('class', 'nav-link active');
+		$("#applicationTab").attr('class', 'tab-pane fade show active');	
+		$("#step-tab").attr('class', 'nav-link');
+		$("#stepTab").attr('class', 'tab-pane fade');
+		break
+	case "step":
+		$("#business-tab").attr('class', 'nav-link');
+		$("#businessTab").attr('class', 'tab-pane fade');
+		$("#application-tab").attr('class', 'nav-link');
+		$("#applicationTab").attr('class', 'tab-pane fade');	
+		$("#step-tab").attr('class', 'nav-link active');
+		$("#stepTab").attr('class', 'tab-pane fade show active');	
+		break;
+
+	default:
+		$("#business-tab").attr('class', 'nav-link active');
+	$("#businessTab").attr('class', 'tab-pane fade show active');
+	$("#application-tab").attr('class', 'nav-link');
+	$("#applicationTab").attr('class', 'tab-pane fade');		
+	$("#step-tab").attr('class', 'nav-link');
+	$("#stepTab").attr('class', 'tab-pane fade');
+		break;
+
+	}
+
+}
 
 function openNewBServiceDialog() {
 	$("#bs-name-error").text('');
@@ -112,38 +155,38 @@ function openNewStepInstanceDialog() {
 	$("#si-name-error").text('');
 	$('#new-step-instance-modal').modal('show');
 }
-function updateBusinessService(id, name, description, gsbpmid) {	
+function updateBusinessService(id, name, description, gsbpmid) {
 	$("#up-bs-name-error").text('');
 	$("#up-bs-id").val(id);
 	$("#up-bs-name").val(name);
-	$("#up-bs-description").val(description);	
-	$("#up-bs-gsbpm").val(gsbpmid);	
+	$("#up-bs-description").val(description);
+	$("#up-bs-gsbpm").val(gsbpmid);
 	$('#update-bservice-modal').modal('show');
 }
-function updateAppServiceDialog(identifier) {	
+function updateAppServiceDialog(identifier) {
 	$("#upd-as-name-error").text("");
-	$("#upd-as-id").val($(identifier).data('id-app-service'));	
-	
+	$("#upd-as-id").val($(identifier).data('id-app-service'));
+
 	$("#upd-as-name").val($(identifier).data('name'));
 	$("#upd-as-description").val($(identifier).data('descr'));
-	
+
 	$("#upd-as-language").val($(identifier).data('language'));
 	$("#upd-as-engine").val($(identifier).data('engine'));
 	$("#upd-as-sourcepath").val($(identifier).data('source-path'));
 	$("#upd-as-sourcecode").val($(identifier).data('source-code'));
-	
+
 	$("#upd-as-author").val($(identifier).data('author'));
 	$("#upd-as-licence").val($(identifier).data('licence'));
 	$("#upd-as-contact").val($(identifier).data('contact'));
 	$("#upd-as-select").val($(identifier).data('bservice-id'));
 	$('#update-app-service-modal').modal('show');
 }
-function updateStepInstanceDialog(id, method, description, label, appserviceid) {	
+function updateStepInstanceDialog(id, method, description, label, appserviceid) {
 	$("#upd-si-method-error").text('');
 	$("#id-upd-step-instance").val(id);
-	$("#upd-si-method").val(method);	
-	$("#upd-si-description").val(description);	
-	$("#upd-si-label").val(label);	
+	$("#upd-si-method").val(method);
+	$("#upd-si-description").val(description);
+	$("#upd-si-label").val(label);
 	$("#select-si-upd-appservice").val(appserviceid);
 	$('#update-step-instance-modal').modal('show');
 }
@@ -172,7 +215,7 @@ function check_and_send_upd_bs_req() {
 	}
 }
 function check_and_send_upd_as_req() {
-	var updasname = $('#upd-as-name').val().length;	
+	var updasname = $('#upd-as-name').val().length;
 	if (updasname.length < 1) {
 		$("#upd-as-method-error").text(_mandatory_name_field);
 	} else {
@@ -180,7 +223,7 @@ function check_and_send_upd_as_req() {
 	}
 }
 function check_and_send_si_req() {
-	var method = $('#si-method').val().length;	
+	var method = $('#si-method').val().length;
 	if (method.length < 1) {
 		$("#si-method-error").text(_mandatory_method_field);
 	} else {
@@ -188,7 +231,7 @@ function check_and_send_si_req() {
 	}
 }
 function check_and_send_upd_si_req() {
-	var method = $('#upd-si-method').val().length;	
+	var method = $('#upd-si-method').val().length;
 	if (method.length < 1) {
 		$("#upd-si-method-error").text(_mandatory_method_field);
 	} else {
