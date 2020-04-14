@@ -32,6 +32,7 @@
 	var _mandatory_method_field = [[#{si.field.method.mandatory}]];
 	var _remove_as_msg_dialog = [[#{dialog.elimination.as.message}]];
 	var _remove_si_msg_dialog = [[#{dialog.elimination.si.message}]];
+	var _selectedTab = [[${selectedTab}]];
 </script>
 <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
 <script th:src="@{/js/user/usersList.js}"></script>
@@ -69,9 +70,35 @@
 					<div class="row justify-start">
 
 						<div class="col-lg-8">
-							<!-- Business Service list -->
+
+
 							<div class="row">
-								<div>
+
+
+
+								<ul class="nav nav-tabs" id="myTab" role="tablist">
+									<li class="nav-item"><a class="nav-link" id="business-tab"
+										data-toggle="tab" href="#businessTab" role="tab"
+										aria-controls="businessTab" aria-selected="true"
+										th:text="#{bs.tab.label}">Business Service</a></li>
+									<li class="nav-item"><a class="nav-link"
+										id="application-tab" data-toggle="tab" href="#applicationTab"
+										role="tab" aria-controls="applicationTab" aria-selected="false"
+										th:text="#{as.tab.label}">Application Service</a></li>
+									<li class="nav-item"><a class="nav-link" id="step-tab"
+										data-toggle="tab" href="#stepTab" role="tab"
+										aria-controls="stepTab" aria-selected="false"
+										th:text="#{si.tab.label}">Step Instance</a></li>
+								</ul>
+
+							</div>
+
+							<div class="tab-content" id="myTabContent">
+
+								<!-- Business Service list -->
+
+								<div class="tab-pane fade" id="businessTab" role="tabpanel"
+									aria-labelledby="business-tab">
 									<div class="card">
 										<div class="card-header">
 											<span th:text="#{bs.list.title.label}"></span>
@@ -106,12 +133,14 @@
 														<td th:text="${bservice.descr}"></td>
 														<td th:text="${bservice.gsbpmProcess.name}"></td>
 
-														<td><a href="javascript:void(0)" role="button" th:title="#{link.title.upd.bs}"										
+														<td><a href="javascript:void(0)" role="button"
+															th:title="#{link.title.upd.bs}"
 															th:attr="onclick='javascript:updateBusinessService(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + ${bservice.gsbpmProcess.id} +'\')'">
 																<i class="fa fa-pencil"></i>
 														</a></td>
 
-														<td><a href="javascript:void(0)" role="button" th:title="#{link.title.delete.bs}"	
+														<td><a href="javascript:void(0)" role="button"
+															th:title="#{link.title.delete.bs}"
 															th:attr="onclick='javascript:deleteBusinessService(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + 'null' +'\')'">
 																<i class="fa fa-trash-o"></i>
 														</a></td>
@@ -121,11 +150,11 @@
 										</div>
 									</div>
 								</div>
-							</div>
 
-							<!-- App Service list -->
-							<div class="row">
-								<div>
+
+								<!-- App Service list -->
+								<div class="tab-pane fade" id="applicationTab" role="tabpanel"
+									aria-labelledby="application-tab">
 									<div class="card">
 										<div class="card-header">
 											<span th:text="#{as.list.title.label}">App Service</span>
@@ -151,7 +180,7 @@
 														<th><span th:text="#{as.impl.language.label}">IMPL.
 																LANGUAGE</span></th>
 														<th><span th:text="#{as.engine.label}">ENGINE</span></th>
-														<th><span th:text="#{as.author.label}">AUTORE</span></th>														
+														<th><span th:text="#{as.author.label}">AUTORE</span></th>
 
 														<th style="width: 1%"></th>
 														<th style="width: 1%"></th>
@@ -164,16 +193,18 @@
 														<td th:text="${appservice.descr}"></td>
 														<td th:text="${appservice.language}"></td>
 														<td th:text="${appservice.engineType}"></td>
-														<td th:text="${appservice.author}"></td>														
+														<td th:text="${appservice.author}"></td>
 
-														<td><a href="javascript:void(0)" role="button" th:title="#{link.title.upd.as}"
-														th:attr="data-id-app-service=${appservice.id},data-name=${appservice.name},data-descr=${appservice.descr},data-language=${appservice.language},data-engine=${appservice.engineType},
+														<td><a href="javascript:void(0)" role="button"
+															th:title="#{link.title.upd.as}"
+															th:attr="data-id-app-service=${appservice.id},data-name=${appservice.name},data-descr=${appservice.descr},data-language=${appservice.language},data-engine=${appservice.engineType},
 														data-source-path=${appservice.source},data-source-code=${appservice.sourceCode},data-author=${appservice.author},data-licence=${appservice.licence},
-														data-contact=${appservice.contact},data-bservice-id=${appservice.businessService.id},onclick='javascript:updateAppServiceDialog(this);'">															
+														data-contact=${appservice.contact},data-bservice-id=${appservice.businessService.id},onclick='javascript:updateAppServiceDialog(this);'">
 																<i class="fa fa-pencil"></i>
 														</a></td>
 
-														<td><a href="javascript:void(0)" role="button" th:title="#{link.title.delete.as}"
+														<td><a href="javascript:void(0)" role="button"
+															th:title="#{link.title.delete.as}"
 															th:attr="onclick='javascript:deleteAppService(' + ${appservice.id} + ', \'' + ${appservice.name} + '\',\'' + ${appservice.descr} + '\', \''  + 'null' +'\')'">
 																<i class="fa fa-trash-o"></i>
 														</a></td>
@@ -183,11 +214,11 @@
 										</div>
 									</div>
 								</div>
-							</div>
 
-							<!-- Step Instance list -->
-							<div class="row">
-								<div>
+
+								<!-- Step Instance list -->
+								<div class="tab-pane fade" id="stepTab" role="tabpanel"
+									aria-labelledby="step-tab">
 									<div class="card">
 										<div class="card-header">
 											<span th:text="#{si.list.title.label}">Step Instance</span>
@@ -219,15 +250,17 @@
 														<td th:text="${stepInstance.id}"></td>
 														<td th:text="${stepInstance.method}"></td>
 														<td th:text="${stepInstance.descr}"></td>
-														<td th:text="${stepInstance.label}"></td>														
+														<td th:text="${stepInstance.label}"></td>
 
-														<td><a href="javascript:void(0)" role="button" th:title="#{link.title.upd.si}"
+														<td><a href="javascript:void(0)" role="button"
+															th:title="#{link.title.upd.si}"
 															th:attr="onclick='javascript:updateStepInstanceDialog(' + ${stepInstance.id} + ', \'' + ${stepInstance.method} + '\',\'' +
 															 ${stepInstance.descr} + '\', \''  + ${stepInstance.label} + '\',\'' + ${stepInstance.appService.id} + '\')'">
 																<i class="fa fa-pencil"></i>
 														</a></td>
 
-														<td><a href="javascript:void(0)" role="button" th:title="#{link.title.delete.si}"
+														<td><a href="javascript:void(0)" role="button"
+															th:title="#{link.title.delete.si}"
 															th:attr="onclick='javascript:deleteStepInstance(' + ${stepInstance.id} + ', \'' + ${stepInstance.method} + '\',\'' + ${stepInstance.descr} + '\', \''  + 'null' +'\')'">
 																<i class="fa fa-trash-o"></i>
 														</a></td>
@@ -237,13 +270,14 @@
 										</div>
 									</div>
 								</div>
-							</div>
 
+
+							</div>
 
 						</div>
 					</div>
 				</div>
-			</main>			
+			</main>
 		</div>
 		<!-- End body -->
 		<footer th:replace="layout :: site-footer"></footer>
@@ -266,8 +300,7 @@
 						</div>
 						<div class="modal-body form">
 							<div class="form-group">
-								<label class="control-label"
-									th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
+								<label class="control-label" th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
 								<input name="name" id="bs-name" th:title="#{generic.label.name}"
 									class="form-control" type="text" /> <span class="help-block">
 									<small class="text-danger" id="bs-name-error"></small>
@@ -279,12 +312,10 @@
 								</label> <input name="description"
 									th:title="#{generic.label.description}" class="form-control"
 									type="text" /> <span class="help-block"></span>
-							</div>							
+							</div>
 							<div class="form-group">
-								<label class="control-label"
-									th:text="#{bs.gsbpm.label}"><span>Processo Gsbpm</span> </label> 
-									<select name="gsbpmid"
-									th:title="#{bs.gsbpm.label}"
+								<label class="control-label" th:text="#{bs.gsbpm.label}"><span>Processo
+										Gsbpm</span> </label> <select name="gsbpmid" th:title="#{bs.gsbpm.label}"
 									class="form-control">
 									<option th:each="gsbpm : ${listaAllGsbpmProcess}"
 										th:value="${gsbpm.id}" th:text="${gsbpm.name}" />
@@ -324,26 +355,24 @@
 						</div>
 						<div class="modal-body form">
 							<div class="form-group">
-								<label class="control-label"
-									th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
-								<input name="name" id="up-bs-name" th:title="#{generic.label.name}"
-									class="form-control" type="text" /> <span class="help-block">
-									<small class="text-danger" id="up-bs-name-error"></small>
+								<label class="control-label" th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
+								<input name="name" id="up-bs-name"
+									th:title="#{generic.label.name}" class="form-control"
+									type="text" /> <span class="help-block"> <small
+									class="text-danger" id="up-bs-name-error"></small>
 								</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label" th:text="#{generic.label.description}">
-									<span>Descrizione</span>
+								<label class="control-label"
+									th:text="#{generic.label.description}"> <span>Descrizione</span>
 								</label> <input name="description" id="up-bs-description"
 									th:title="#{generic.label.description}" class="form-control"
 									type="text" /> <span class="help-block"></span>
-							</div>											
+							</div>
 							<div class="form-group">
-								<label class="control-label"
-									th:text="#{bs.gsbpm.label}"><span>Processo Gsbpm</span> </label> 
-									<select name="gsbpmid" id="up-bs-gsbpm"
-									th:title="#{bs.gsbpm.label}"
-									class="form-control">
+								<label class="control-label" th:text="#{bs.gsbpm.label}"><span>Processo
+										Gsbpm</span> </label> <select name="gsbpmid" id="up-bs-gsbpm"
+									th:title="#{bs.gsbpm.label}" class="form-control">
 									<option th:each="gsbpm : ${listaAllGsbpmProcess}"
 										th:value="${gsbpm.id}" th:text="${gsbpm.name}" />
 								</select>
@@ -355,7 +384,8 @@
 						<button type="button" class="btn btn-light" data-dismiss="modal">
 							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
 						</button>
-						<button type="button" id="btn-submit-upd-bs" class=" btn btn-primary">
+						<button type="button" id="btn-submit-upd-bs"
+							class=" btn btn-primary">
 							<span th:title="#{session.button.save}"
 								th:text="#{session.button.save}">Salva</span>
 						</button>
@@ -382,8 +412,7 @@
 						</div>
 						<div class="modal-body form">
 							<div class="form-group">
-								<label class="control-label"
-									th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
+								<label class="control-label" th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
 								<input name="name" id="as-name" th:title="#{generic.label.name}"
 									class="form-control" type="text" /> <span class="help-block">
 									<small class="text-danger" id="as-name-error"></small>
@@ -463,11 +492,12 @@
 				<div class="modal-content ">
 					<form th:action="@{/updateappservice}" id="upd-as-form"
 						class="form-horizontal" method="post">
-						<input type="hidden" name="appserviceupdateid" id="upd-as-id"/>
+						<input type="hidden" name="appserviceupdateid" id="upd-as-id" />
 						<div class="modal-header">
 							<h5 class="modal-title">
 								<i class="fa fa-folder-open"></i> <span
-									th:text="#{dialog.title.upd.as}">Update Application Service</span>
+									th:text="#{dialog.title.upd.as}">Update Application
+									Service</span>
 							</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
@@ -476,11 +506,11 @@
 						</div>
 						<div class="modal-body form">
 							<div class="form-group">
-								<label class="control-label"
-									th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
-								<input name="name" id="upd-as-name" th:title="#{generic.label.name}"
-									class="form-control" type="text" /> <span class="help-block">
-									<small class="text-danger" id="upd-as-name-error"></small>
+								<label class="control-label" th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
+								<input name="name" id="upd-as-name"
+									th:title="#{generic.label.name}" class="form-control"
+									type="text" /> <span class="help-block"> <small
+									class="text-danger" id="upd-as-name-error"></small>
 								</span>
 							</div>
 							<div class="form-group">
@@ -498,39 +528,44 @@
 							</div>
 							<div class="form-group">
 								<label class="control-label" th:text="#{as.engine.label}"><span>Motore</span>
-								</label> <input name="engine" th:title="#{as.engine.label}" id="upd-as-engine"
-									class="form-control" type="text" /> <span class="help-block"></span>
+								</label> <input name="engine" th:title="#{as.engine.label}"
+									id="upd-as-engine" class="form-control" type="text" /> <span
+									class="help-block"></span>
 							</div>
 							<div class="form-group">
 								<label class="control-label" th:text="#{as.source.path.label}"><span>Percorso</span>
-								</label> <input name="sourcepath" th:title="#{as.source.path.label}" id="upd-as-sourcepath"
-									class="form-control" type="text" /> <span class="help-block"></span>
+								</label> <input name="sourcepath" th:title="#{as.source.path.label}"
+									id="upd-as-sourcepath" class="form-control" type="text" /> <span
+									class="help-block"></span>
 							</div>
 							<div class="form-group">
 								<label class="control-label" th:text="#{as.source.code.label}"><span>Codice</span>
-								</label> <input name="sourcecode" th:title="#{as.source.code.label}" id="upd-as-sourcecode"
-									class="form-control" type="text" /> <span class="help-block"></span>
+								</label> <input name="sourcecode" th:title="#{as.source.code.label}"
+									id="upd-as-sourcecode" class="form-control" type="text" /> <span
+									class="help-block"></span>
 							</div>
 							<div class="form-group">
 								<label class="control-label" th:text="#{as.author.label}"><span>Autore</span>
-								</label> <input name="author" th:title="#{as.author.label}" id="upd-as-author"
-									class="form-control" type="text" /> <span class="help-block"></span>
+								</label> <input name="author" th:title="#{as.author.label}"
+									id="upd-as-author" class="form-control" type="text" /> <span
+									class="help-block"></span>
 							</div>
 							<div class="form-group">
 								<label class="control-label" th:text="#{as.licence.label}"><span>Licenza</span>
-								</label> <input name="licence" th:title="#{as.licence.label}" id="upd-as-licence"
-									class="form-control" type="text" /> <span class="help-block"></span>
+								</label> <input name="licence" th:title="#{as.licence.label}"
+									id="upd-as-licence" class="form-control" type="text" /> <span
+									class="help-block"></span>
 							</div>
 							<div class="form-group">
 								<label class="control-label" th:text="#{as.contact.label}"><span>Contatto</span>
-								</label> <input name="contact" th:title="#{as.contact.label}" id="upd-as-contact"
-									class="form-control" type="text" /> <span class="help-block"></span>
+								</label> <input name="contact" th:title="#{as.contact.label}"
+									id="upd-as-contact" class="form-control" type="text" /> <span
+									class="help-block"></span>
 							</div>
 							<div class="form-group">
 								<label class="control-label"
 									th:text="#{as.busines.service.link.label}"><span>Collega
-										Business Service</span> </label> 
-									<select name="idbservice" id="upd-as-select"
+										Business Service</span> </label> <select name="idbservice" id="upd-as-select"
 									th:title="#{as.busines.service.link.label}"
 									class="form-control">
 									<option th:each="bService : ${listaBService}"
@@ -544,7 +579,8 @@
 						<button type="button" class="btn btn-light" data-dismiss="modal">
 							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
 						</button>
-						<button type="button" id="btn-submit-as-upd" class=" btn btn-primary">
+						<button type="button" id="btn-submit-as-upd"
+							class=" btn btn-primary">
 							<span th:title="#{session.button.save}"
 								th:text="#{session.button.save}">Salva</span>
 						</button>
@@ -570,16 +606,16 @@
 						</div>
 						<div class="modal-body form">
 							<div class="form-group">
-								<label class="control-label"
-									th:text="#{si.method.label}+'*'"><span>Method</span></label>
-								<input name="method" id="si-method" th:title="#{si.method.label}"
-									class="form-control" type="text" /> <span class="help-block">
-									<small class="text-danger" id="si-method-error"></small>
+								<label class="control-label" th:text="#{si.method.label}+'*'"><span>Method</span></label>
+								<input name="method" id="si-method"
+									th:title="#{si.method.label}" class="form-control" type="text" />
+								<span class="help-block"> <small class="text-danger"
+									id="si-method-error"></small>
 								</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label" th:text="#{generic.label.description}">
-									<span>Descrizione</span>
+								<label class="control-label"
+									th:text="#{generic.label.description}"> <span>Descrizione</span>
 								</label> <input name="description"
 									th:title="#{generic.label.description}" class="form-control"
 									type="text" /> <span class="help-block"></span>
@@ -587,16 +623,14 @@
 							<div class="form-group">
 								<label class="control-label" th:text="#{si.label.label}">
 									<span>Label</span>
-								</label> <input name="label"
-									th:title="#{si.label.label}" class="form-control"
-									type="text" /> <span class="help-block"></span>
-							</div>							
+								</label> <input name="label" th:title="#{si.label.label}"
+									class="form-control" type="text" /> <span class="help-block"></span>
+							</div>
 							<div class="form-group">
 								<label class="control-label"
 									th:text="#{si.appservice.link.label}"><span>Collega
 										App. Service</span> </label> <select name="idappservice"
-									th:title="#{si.appservice.link.label}"
-									class="form-control">
+									th:title="#{si.appservice.link.label}" class="form-control">
 									<option th:each="appService : ${listaAppService}"
 										th:value="${appService.id}" th:text="${appService.name}" />
 								</select><span class="help-block"></span>
@@ -622,7 +656,8 @@
 				<div class="modal-content ">
 					<form th:action="@{/updatestepinstance}" id="upd-si-form"
 						class="form-horizontal" method="post">
-						<input type="hidden" name="idstepinstance" id="id-upd-step-instance"/>
+						<input type="hidden" name="idstepinstance"
+							id="id-upd-step-instance" />
 						<div class="modal-header">
 							<h5 class="modal-title">
 								<i class="fa fa-folder-open"></i> <span
@@ -635,16 +670,16 @@
 						</div>
 						<div class="modal-body form">
 							<div class="form-group">
-								<label class="control-label"
-									th:text="#{si.method.label}+'*'"><span>Method</span></label>
-								<input name="method" id="upd-si-method" th:title="#{si.method.label}"
-									class="form-control" type="text" /> <span class="help-block">
-									<small class="text-danger" id="upd-si-method-error"></small>
+								<label class="control-label" th:text="#{si.method.label}+'*'"><span>Method</span></label>
+								<input name="method" id="upd-si-method"
+									th:title="#{si.method.label}" class="form-control" type="text" />
+								<span class="help-block"> <small class="text-danger"
+									id="upd-si-method-error"></small>
 								</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label" th:text="#{generic.label.description}">
-									<span>Descrizione</span>
+								<label class="control-label"
+									th:text="#{generic.label.description}"> <span>Descrizione</span>
 								</label> <input name="description" id="upd-si-description"
 									th:title="#{generic.label.description}" class="form-control"
 									type="text" /> <span class="help-block"></span>
@@ -653,15 +688,15 @@
 								<label class="control-label" th:text="#{si.label.label}">
 									<span>Label</span>
 								</label> <input name="label" id="upd-si-label"
-									th:title="#{si.label.label}" class="form-control"
-									type="text" /> <span class="help-block"></span>
-							</div>							
+									th:title="#{si.label.label}" class="form-control" type="text" />
+								<span class="help-block"></span>
+							</div>
 							<div class="form-group">
 								<label class="control-label"
 									th:text="#{si.appservice.link.label}"><span>Collega
 										App. Service</span> </label> <select name="idappservice"
-									th:title="#{si.appservice.link.label}" id="select-si-upd-appservice"
-									class="form-control">
+									th:title="#{si.appservice.link.label}"
+									id="select-si-upd-appservice" class="form-control">
 									<option th:each="appService : ${listaAppService}"
 										th:value="${appService.id}" th:text="${appService.name}" />
 								</select><span class="help-block"></span>
@@ -673,7 +708,8 @@
 						<button type="button" class="btn btn-light" data-dismiss="modal">
 							<span th:title="#{Layout.Close}" th:text="#{Layout.Close}">Chiudi</span>
 						</button>
-						<button type="button" id="btn-submit-upd-si" class=" btn btn-primary">
+						<button type="button" id="btn-submit-upd-si"
+							class=" btn btn-primary">
 							<span th:title="#{session.button.save}"
 								th:text="#{session.button.save}">Salva</span>
 						</button>
@@ -727,8 +763,8 @@
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<div class="modal-body" id="del_as_msg">Eliminare l'Application
-						Service?</div>
+					<div class="modal-body" id="del_as_msg">Eliminare
+						l'Application Service?</div>
 					<div class="modal-footer">
 						<input type="hidden" name="" id="id_as_delete" value="" />
 						<button type="button" class="btn btn-light" data-dismiss="modal"
@@ -757,7 +793,8 @@
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<div class="modal-body" id="del_si_msg">Eliminare la Step Instance</div>
+					<div class="modal-body" id="del_si_msg">Eliminare la Step
+						Instance</div>
 					<div class="modal-footer">
 						<input type="hidden" name="" id="id_si_delete" value="" />
 						<button type="button" class="btn btn-light" data-dismiss="modal"

@@ -32,6 +32,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,7 +63,7 @@ public class BusinessDesignController {
     private GsbpmProcessService gsbpmProcessService;
 
 	@GetMapping("/busservlist")
-	public String serviceList(HttpSession session, Model model) {
+	public String serviceList(HttpSession session, Model model, @ModelAttribute("selectedTab") String selectedTab) {
 
 		List<BusinessService> listaBService = businessServiceService.findBusinessServices();
 		List<AppService> listaAppService = appServiceService.findAllAppService();
@@ -77,7 +78,7 @@ public class BusinessDesignController {
 		model.addAttribute("listaBService", listaBService);
 		model.addAttribute("listaAppService", listaAppService);
 		model.addAttribute("listaStepInstance", listaStepInstance);
-
+		model.addAttribute("selectedTab", selectedTab);
 		return "businessdesign/home.html";
 
 	}
