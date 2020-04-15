@@ -36,29 +36,12 @@
 
 
 
-<script th:inline="javascript"> 
 
-	var _updatefun = [[#{generic.updateFunction}]];
-	var _updateproc = [[#{generic.updateProcess}]];
-	var _updatesubproc = [[#{generic.updateSubprocess}]]; 
-	var _updatestep = [[#{generic.updateStep}]];
-	var _deletefun = [[#{generic.deleteFunction}]];
-	var _deleteproc = [[#{generic.deleteProcess}]];
-	var _deletesubproc = [[#{generic.deleteSubprocess}]]; 
-	var _deletestep = [[#{generic.deleteStep}]];
-	var _newfun = [[#{generic.newFun}]];
-	var _newproc = [[#{generic.newProc}]];
-	var _newsubproc = [[#{generic.newSubproc}]]; 
-	var _newstep = [[#{generic.newStep}]];
-	var _bindingprocess = [[#{generic.bindingProcess}]];
-	var _bindingstep = [[#{generic.bindingStep}]];
-	var _selectedTab = [[${selectedTab}]];
-    var _alertSelBusinessProcess = [[#{generic.selbusinessprocess}]];
-    var _alertSelFatherProcess = [[#{generic.selfatherprocess}]];
-</script>
 
 <script th:src="@{/js/design/wizard.js}" type="text/javascript"></script>
- <link th:href="@{/css/design/wizard.css}" rel="stylesheet" />
+
+  <link th:href="@{/css/design/wizard.css}" rel="stylesheet" />
+
 <body class="c-app">
 	<div th:replace="layout :: site-aside"></div>
 	<div th:replace="layout :: site-modals"></div>
@@ -85,142 +68,87 @@
 
 		<div class="c-body">
 			<main class="c-main">
-				<div class="container" >
-					<div class="row .col-auto">
-						<div class="md-form col-12 ml-auto">
-						<section>
-				        <div class="wizard">
-				            <div class="wizard-inner">
-				                <div class="connecting-line"></div>
-				                <ul class="nav nav-tabs" role="tablist">
-				
-				                    <li role="presentation" class="active">
-				                        <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="Step 1">
-				                            <span class="round-tab">
-				                                <i class="glyphicon glyphicon-folder-open"></i>
-				                            </span>
-				                        </a>
-				                    </li>
-				
-				                    <li role="presentation" class="disabled">
-				                        <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="Step 2">
-				                            <span class="round-tab">
-				                                <i class="glyphicon glyphicon-pencil"></i>
-				                            </span>
-				                        </a>
-				                    </li>
-				                    <li role="presentation" class="disabled">
-				                        <a href="#step3" data-toggle="tab" aria-controls="step3" role="tab" title="Step 3">
-				                            <span class="round-tab">
-				                                <i class="glyphicon glyphicon-picture"></i>
-				                            </span>
-				                        </a>
-				                    </li>
-				
-				                    <li role="presentation" class="disabled">
-				                        <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Complete">
-				                            <span class="round-tab">
-				                                <i class="glyphicon glyphicon-ok"></i>
-				                            </span>
-				                        </a>
-				                    </li>
-				                </ul>
-				            </div>
-				
-				            <form role="form">
-				                <div class="tab-content">
-				                    <div class="tab-pane active" role="tabpanel" id="step1">
-				                        <h3>Step 1</h3>
-				                        <p>This is step 1</p>
-				                        <ul class="list-inline pull-right">
-				                            <li><button type="button" class="btn btn-primary next-step">Save and continue</button></li>
-				                        </ul>
+				<div class="container-fluid" id="grad1">
+				    <div class="row justify-content-center mt-0">
+				        <div class="col-11 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-3 mb-2">
+				            <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+				                <h2><strong>Sign Up Your User Account</strong></h2>
+				                <p>Fill all form field to go to next step</p>
+				                <div class="row">
+				                    <div class="col-md-12 mx-0">
+				                        <form id="msform">
+				                            <!-- progressbar -->
+				                            <ul id="progressbar">
+				                                <li class="active" id="account"><strong>Account</strong></li>
+				                                <li id="personal"><strong>Personal</strong></li>
+				                                <li id="payment"><strong>Payment</strong></li>
+				                                <li id="confirm"><strong>Finish</strong></li>
+				                            </ul> <!-- fieldsets -->
+				                            <fieldset>
+				                                <div class="form-card">
+				                                    <h2 class="fs-title">Account Information</h2> <input type="email" name="email" placeholder="Email Id" /> <input type="text" name="uname" placeholder="UserName" /> <input type="password" name="pwd" placeholder="Password" /> <input type="password" name="cpwd" placeholder="Confirm Password" />
+				                                </div> <input type="button" name="next" class="next action-button" value="Next Step" />
+				                            </fieldset>
+				                            <fieldset>
+				                                <div class="form-card">
+				                                    <h2 class="fs-title">Personal Information</h2> <input type="text" name="fname" placeholder="First Name" /> <input type="text" name="lname" placeholder="Last Name" /> <input type="text" name="phno" placeholder="Contact No." /> <input type="text" name="phno_2" placeholder="Alternate Contact No." />
+				                                </div> <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="next" class="next action-button" value="Next Step" />
+				                            </fieldset>
+				                            <fieldset>
+				                                <div class="form-card">
+				                                    <h2 class="fs-title">Payment Information</h2>
+				                                    <div class="radio-group">
+				                                        <div class='radio' data-value="credit"><img src="https://i.imgur.com/XzOzVHZ.jpg" width="200px" height="100px"></div>
+				                                        <div class='radio' data-value="paypal"><img src="https://i.imgur.com/jXjwZlj.jpg" width="200px" height="100px"></div> <br>
+				                                    </div> <label class="pay">Card Holder Name*</label> <input type="text" name="holdername" placeholder="" />
+				                                    <div class="row">
+				                                        <div class="col-9"> <label class="pay">Card Number*</label> <input type="text" name="cardno" placeholder="" /> </div>
+				                                        <div class="col-3"> <label class="pay">CVC*</label> <input type="password" name="cvcpwd" placeholder="***" /> </div>
+				                                    </div>
+				                                    <div class="row">
+				                                        <div class="col-3"> <label class="pay">Expiry Date*</label> </div>
+				                                        <div class="col-9"> <select class="list-dt" id="month" name="expmonth">
+				                                                <option selected>Month</option>
+				                                                <option>January</option>
+				                                                <option>February</option>
+				                                                <option>March</option>
+				                                                <option>April</option>
+				                                                <option>May</option>
+				                                                <option>June</option>
+				                                                <option>July</option>
+				                                                <option>August</option>
+				                                                <option>September</option>
+				                                                <option>October</option>
+				                                                <option>November</option>
+				                                                <option>December</option>
+				                                            </select> <select class="list-dt" id="year" name="expyear">
+				                                                <option selected>Year</option>
+				                                            </select> </div>
+				                                    </div>
+				                                </div> <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="make_payment" class="next action-button" value="Confirm" />
+				                            </fieldset>
+				                            <fieldset>
+				                                <div class="form-card">
+				                                    <h2 class="fs-title text-center">Success !</h2> <br><br>
+				                                    <div class="row justify-content-center">
+				                                        <div class="col-3"> <img src="https://img.icons8.com/color/96/000000/ok--v2.png" class="fit-image"> </div>
+				                                    </div> <br><br>
+				                                    <div class="row justify-content-center">
+				                                        <div class="col-7 text-center">
+				                                            <h5>You Have Successfully Signed Up</h5>
+				                                        </div>
+				                                    </div>
+				                                </div>
+				                            </fieldset>
+				                        </form>
 				                    </div>
-				                    <div class="tab-pane" role="tabpanel" id="step2">
-				                        <h3>Step 2</h3>
-				                        <p>This is step 2</p>
-				                        <ul class="list-inline pull-right">
-				                            <li><button type="button" class="btn btn-default prev-step">Previous</button></li>
-				                            <li><button type="button" class="btn btn-primary next-step">Save and continue</button></li>
-				                        </ul>
-				                    </div>
-				                    <div class="tab-pane" role="tabpanel" id="step3">
-				                        <h3>Step 3</h3>
-				                        <p>This is step 3</p>
-				                        <ul class="list-inline pull-right">
-				                            <li><button type="button" class="btn btn-default prev-step">Previous</button></li>
-				                            <li><button type="button" class="btn btn-default next-step">Skip</button></li>
-				                            <li><button type="button" class="btn btn-primary btn-info-full next-step">Save and continue</button></li>
-				                        </ul>
-				                    </div>
-				                    <div class="tab-pane" role="tabpanel" id="complete">
-				                        <h3>Complete</h3>
-				                        <p>You have successfully completed all steps.</p>
-				                    </div>
-				                    <div class="clearfix"></div>
 				                </div>
-				            </form>
+				            </div>
 				        </div>
-				    </section>
 				    </div>
-				   </div>
 				</div>
 			
-			
-			
-			
-			
-			
-			
-			
-<!-- 				<div class="container-fluid"> -->
-<!-- 					<div class="row justify-start"> -->
- 										
-									
-<!-- 							<ul class="stepper horizontal" id="horizontal-stepper"> -->
-<!-- 							  <li class="step active"> -->
-<!-- 							    <div class="step-title waves-effect waves-dark">Step 1</div> -->
-<!-- 							    <div class="step-new-content"> -->
-<!-- 							      <div class="row"> -->
-<!-- 							        <div class="md-form col-12 ml-auto"> -->
-<!-- 							          <input id="email-horizontal" type="email" class="validate form-control" required> -->
-<!-- 							          <label for="email-horizontal">Email</label> -->
-<!-- 							        </div> -->
-<!-- 							      </div> -->
-<!-- 							      <div class="step-actions"> -->
-<!-- 							        <button class="waves-effect waves-dark btn btn-sm btn-primary next-step" data-feedback="someFunction21">CONTINUE</button> -->
-<!-- 							      </div> -->
-<!-- 							    </div> -->
-<!-- 							  </li> -->
-<!-- 							  <li class="step"> -->
-<!-- 							    <div class="step-title waves-effect waves-dark">Step 2</div> -->
-<!-- 							    <div class="step-new-content"> -->
-<!-- 							      <div class="row"> -->
-<!-- 							        <div class="md-form col-12 ml-auto"> -->
-<!-- 							          <input id="password-horizontal" type="password" class="validate form-control" required> -->
-<!-- 							          <label for="password-horizontal">Your password</label> -->
-<!-- 							        </div> -->
-<!-- 							      </div> -->
-<!-- 							      <div class="step-actions"> -->
-<!-- 							        <button class="waves-effect waves-dark btn btn-sm btn-primary next-step" data-feedback="someFunction21">CONTINUE</button> -->
-<!-- 							        <button class="waves-effect waves-dark btn btn-sm btn-secondary previous-step">BACK</button> -->
-<!-- 							      </div> -->
-<!-- 							    </div> -->
-<!-- 							  </li> -->
-<!-- 							  <li class="step"> -->
-<!-- 							    <div class="step-title waves-effect waves-dark">Step 3</div> -->
-<!-- 							    <div class="step-new-content"> -->
-<!-- 							      Finish! -->
-<!-- 							      <div class="step-actions"> -->
-<!-- 							        <button class="waves-effect waves-dark btn-sm btn btn-primary m-0 mt-4" type="button">SUBMIT</button> -->
-<!-- 							      </div> -->
-<!-- 							    </div> -->
-<!-- 							  </li> -->
-<!-- 							</ul> -->
-							
-						
-<!-- 					</div> -->
-<!-- 				</div> -->
+
 			</main>
 			<div class="modal fade" id="Update-Dialog" tabindex="-1"
 				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
