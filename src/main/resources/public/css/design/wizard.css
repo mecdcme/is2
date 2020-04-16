@@ -151,24 +151,49 @@ select.list-dt:focus {
 #progressbar li {
     list-style-type: none;
     font-size: 12px;
-    width: 25%;
+    width: 20%;
     float: left;
     position: relative
 }
 
-#progressbar #account:before {
+/* #progressbar #account:before { */
+/*     font-family: FontAwesome; */
+/*     content: "\f023" */
+/* } */
+
+/* #progressbar #personal:before { */
+/*     font-family: FontAwesome; */
+/*     content: "\f007" */
+/* } */
+
+/* #progressbar #payment:before { */
+/*     font-family: FontAwesome; */
+/*     content: "\f09d" */
+/* } */
+
+/* #progressbar #confirm:before { */
+/*     font-family: FontAwesome; */
+/*     content: "\f00c" */
+/* } */
+
+#progressbar #function:before {
     font-family: FontAwesome;
-    content: "\f023"
+    content: "\f0e7"
 }
 
-#progressbar #personal:before {
+#progressbar #process:before {
     font-family: FontAwesome;
-    content: "\f007"
+    content: "\f013"
 }
 
-#progressbar #payment:before {
+#progressbar #subprocess:before {
     font-family: FontAwesome;
-    content: "\f09d"
+    content: "\f085"
+}
+
+#progressbar #steps:before {
+    font-family: FontAwesome;
+    content: "\f2db"
 }
 
 #progressbar #confirm:before {

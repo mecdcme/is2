@@ -40,7 +40,7 @@
 
 <script th:src="@{/js/design/wizard.js}" type="text/javascript"></script>
 
-  <link th:href="@{/css/design/wizard.css}" rel="stylesheet" />
+<link th:href="@{/css/design/wizard.css}" rel="stylesheet" />
 
 <body class="c-app">
 	<div th:replace="layout :: site-aside"></div>
@@ -54,7 +54,7 @@
 				<!-- Breadcrumb-->
 				<ol class="breadcrumb border-0 m-0">
 					<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-					<li class="breadcrumb-item"><span>Process design</span></li>
+					<li class="breadcrumb-item"><span>Process design wizard</span></li>
 				</ol>
 				<!-- Right navigation menu -->
 				<div class="c-header-nav d-md-down-none mfe-2">
@@ -70,61 +70,54 @@
 			<main class="c-main">
 				<div class="container-fluid" id="grad1">
 				    <div class="row justify-content-center mt-0">
-				        <div class="col-11 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-3 mb-2">
-				            <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
-				                <h2><strong>Sign Up Your User Account</strong></h2>
+				        <div class="col-11 col-sm-9 col-md-7 col-lg-9 text-center p-0 mt-3 mb-2">
+				            <div class="card px-0 pt-5 pb-0 mt-3 mb-3">
+				                <h2><strong>Process design wizard</strong></h2>
 				                <p>Fill all form field to go to next step</p>
 				                <div class="row">
 				                    <div class="col-md-12 mx-0">
 				                        <form id="msform">
 				                            <!-- progressbar -->
 				                            <ul id="progressbar">
-				                                <li class="active" id="account"><strong>Account</strong></li>
-				                                <li id="personal"><strong>Personal</strong></li>
-				                                <li id="payment"><strong>Payment</strong></li>
+				                                <li class="active" id="function"><strong>Function</strong></li>
+				                                <li id="process"><strong>Process</strong></li>
+				                                <li id="subprocess"><strong>Subprocess</strong></li>
+				                                <li id="steps"><strong>Steps</strong></li>
 				                                <li id="confirm"><strong>Finish</strong></li>
 				                            </ul> <!-- fieldsets -->
 				                            <fieldset>
 				                                <div class="form-card">
-				                                    <h2 class="fs-title">Account Information</h2> <input type="email" name="email" placeholder="Email Id" /> <input type="text" name="uname" placeholder="UserName" /> <input type="password" name="pwd" placeholder="Password" /> <input type="password" name="cpwd" placeholder="Confirm Password" />
+				                                    <h2 class="fs-title">Function</h2> 		                                    		
+															<input id="id" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/> 
+															<input id="name" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control" value="" /> 
+															<input id="description" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control" value="" /> 
+															<input id="label" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control" value="" />
 				                                </div> <input type="button" name="next" class="next action-button" value="Next Step" />
 				                            </fieldset>
 				                            <fieldset>
 				                                <div class="form-card">
-				                                    <h2 class="fs-title">Personal Information</h2> <input type="text" name="fname" placeholder="First Name" /> <input type="text" name="lname" placeholder="Last Name" /> <input type="text" name="phno" placeholder="Contact No." /> <input type="text" name="phno_2" placeholder="Alternate Contact No." />
+				                                    <h2 class="fs-title">Process</h2> 
+															<input id="id" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/> 
+															<input id="name" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control" value="" /> 
+															<input id="description" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control" value="" /> 
+															<input id="label" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control" value="" />
 				                                </div> <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="next" class="next action-button" value="Next Step" />
 				                            </fieldset>
 				                            <fieldset>
 				                                <div class="form-card">
-				                                    <h2 class="fs-title">Payment Information</h2>
-				                                    <div class="radio-group">
-				                                        <div class='radio' data-value="credit"><img src="https://i.imgur.com/XzOzVHZ.jpg" width="200px" height="100px"></div>
-				                                        <div class='radio' data-value="paypal"><img src="https://i.imgur.com/jXjwZlj.jpg" width="200px" height="100px"></div> <br>
-				                                    </div> <label class="pay">Card Holder Name*</label> <input type="text" name="holdername" placeholder="" />
-				                                    <div class="row">
-				                                        <div class="col-9"> <label class="pay">Card Number*</label> <input type="text" name="cardno" placeholder="" /> </div>
-				                                        <div class="col-3"> <label class="pay">CVC*</label> <input type="password" name="cvcpwd" placeholder="***" /> </div>
-				                                    </div>
-				                                    <div class="row">
-				                                        <div class="col-3"> <label class="pay">Expiry Date*</label> </div>
-				                                        <div class="col-9"> <select class="list-dt" id="month" name="expmonth">
-				                                                <option selected>Month</option>
-				                                                <option>January</option>
-				                                                <option>February</option>
-				                                                <option>March</option>
-				                                                <option>April</option>
-				                                                <option>May</option>
-				                                                <option>June</option>
-				                                                <option>July</option>
-				                                                <option>August</option>
-				                                                <option>September</option>
-				                                                <option>October</option>
-				                                                <option>November</option>
-				                                                <option>December</option>
-				                                            </select> <select class="list-dt" id="year" name="expyear">
-				                                                <option selected>Year</option>
-				                                            </select> </div>
-				                                    </div>
+				                                    <h2 class="fs-title">Subprocess</h2> 
+				                                    		<input id="id" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/> 
+															<input id="name" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control" value="" /> 
+															<input id="description" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control" value="" /> 
+															<input id="label" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control" value="" />
+				                                </div> <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="next" class="next action-button" value="Next Step" />
+				                            </fieldset>
+				                            <fieldset>
+				                                <div class="form-card">
+				                                    <h2 class="fs-title">Steps</h2>
+				                                    <input id="id" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/> 
+															<input id="name" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control" value="" /> 
+															<input id="description" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control" value="" /> 
 				                                </div> <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="make_payment" class="next action-button" value="Confirm" />
 				                            </fieldset>
 				                            <fieldset>
