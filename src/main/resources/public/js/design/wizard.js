@@ -3,10 +3,36 @@ $(document).ready(function(){
 var current_fs, next_fs, previous_fs; //fieldsets
 var opacity;
 
+
+
+
+
+$("#functionList").on('change', function(e) {
+	$('#namef').val("function");
+	$('#descriptionf').val("function");
+	$('#labelf').val("function");
+});
+$("#processList").on('change', function(e) {
+	$('#namep').val("function");
+	$('#descriptionp').val("function");
+	$('#labelp').val("function");
+});
+$("#subprocessList").on('change', function(e) {
+	$('#names').val("function");
+	$('#descriptions').val("function");
+	$('#labels').val("function");
+
+});
+
+
+
+
 $(".next").click(function(){
 
 current_fs = $(this).parent();
 next_fs = $(this).parent().next();
+
+
 
 //Add Class Active
 $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");

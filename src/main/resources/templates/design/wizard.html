@@ -92,9 +92,9 @@
 				                                    			<div class="col-lg-6">
 				                                    					<h2 class="fs-title">Function</h2> 	
 				                                    			</div>
-				                                    			<label class="col-lg-2" for="functionsList" >Functions list:</label> 
-				                                    			<select  id="functionsList">
-				                                    				
+				                                    			<label class="col-lg-2" for="functionList" >Function list:</label> 
+				                                    			<select  id="functionList">
+				                                    				<option value="0" th:text="#{generic.selectBusinessFunction}">Select business function..</option>
 									   								<option th:each="fun: ${listaFunzioni}" th:text="${fun.name}"  th:value="${fun.id}"></option>
 								
 															  </select>
@@ -104,7 +104,7 @@
 															<input id="namef" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control" value="" /> 
 															<label for="descriptionf" th:text="#{generic.description}">Description:</label> 
 															<input id="descriptionf" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control" value="" /> 
-															<label for="labef" id="lab" th:text="#{generic.label}">Label:</label> 
+															<label for="labelf" id="lab" th:text="#{generic.label}">Label:</label> 
 															<input id="labelf" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control" value="" />
 				                                </div> <input type="button" name="next" class="next action-button" value="Next Step" />
 				                            </fieldset>
@@ -117,7 +117,7 @@
 				                                    			</div>
 				                                    			<label class="col-lg-2" for="processList" >Process list:</label> 
 				                                    			<select  id="processList">
-				                                    				
+				                                    				<option value="0" th:text="#{generic.selectBusinessProcess}">Select business process..</option>
 									   								<option th:each="proc: ${listaAllBp}" th:text="${proc.name}"  th:value="${proc.id}"></option>
 								
 															  </select>
@@ -138,9 +138,9 @@
 				                                    			<div class="col-lg-6">
 				                                    					 <h2 class="fs-title">Subprocess</h2> 
 				                                    			</div>
-				                                    			<label class="col-lg-2" for="processList" >Subprocess list:</label> 
-				                                    			<select  id="processList">
-				                                    				
+				                                    			<label class="col-lg-2" for="subprocessList" >Subprocess list:</label> 
+				                                    			<select  id="subprocessList">
+				                                    				<option value="0" th:text="#{generic.selectBusinessSubprocess}">Select business subprocess..</option>
 									   								<option th:each="proc: ${listaAllSubBp}" th:text="${proc.name}"  th:value="${proc.id}"></option>
 								
 															  </select>
