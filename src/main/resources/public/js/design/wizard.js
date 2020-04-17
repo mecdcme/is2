@@ -8,20 +8,91 @@ var opacity;
 
 
 $("#functionList").on('change', function(e) {
-	$('#namef').val("function");
-	$('#descriptionf').val("function");
-	$('#labelf').val("function");
+	if( $(this).val()!="0"){
+		$.ajax({
+			type : "GET",
+			contentType : "application/json",
+			url : _ctx + "/rest/design/getProcess/" +  $(this).val(),
+			dataType : 'json',
+			cache : true,
+			success : function(data) {
+	
+				$('#namef').val(data.name);
+				$('#descriptionf').val(data.descr);
+				$('#labelf').val(data.label);
+				$('.function').attr("readonly", "readonly");
+			},
+			error : function(e) {
+	
+				console.log("ERROR : ", e);
+			},
+			complete : function() {
+	
+			}
+		});
+	}else{
+		$('.function').removeAttr("readonly", "readonly");
+	};
+	
 });
-$("#processList").on('change', function(e) {
-	$('#namep').val("function");
-	$('#descriptionp').val("function");
-	$('#labelp').val("function");
-});
-$("#subprocessList").on('change', function(e) {
-	$('#names').val("function");
-	$('#descriptions').val("function");
-	$('#labels').val("function");
 
+$("#processList").on('change', function(e) {
+	
+	if( $(this).val()!="0"){
+		$.ajax({
+			type : "GET",
+			contentType : "application/json",
+			url : _ctx + "/rest/design/getProcess/" +  $(this).val(),
+			dataType : 'json',
+			cache : true,
+			success : function(data) {
+				$('#namep').val(data.name);
+				$('#descriptionp').val(data.descr);
+				$('#labelp').val(data.label);
+				$('.process').attr("readonly", "readonly");
+			},
+			error : function(e) {
+	
+				console.log("ERROR : ", e);
+			},
+			complete : function() {
+	
+			}
+		});
+	}else{
+		$('.process').removeAttr("readonly", "readonly");
+	};
+		
+	
+});
+
+$("#subprocessList").on('change', function(e) {
+	if( $(this).val()!="0"){
+		$.ajax({
+			type : "GET",
+			contentType : "application/json",
+			url : _ctx + "/rest/design/getProcess/" +  $(this).val(),
+			dataType : 'json',
+			cache : true,
+			success : function(data) {
+	
+				$('#names').val(data.name);
+				$('#descriptions').val(data.descr);
+				$('#labels').val(data.label);
+				$('.subprocess').attr("readonly", "readonly");
+			},
+			error : function(e) {
+	
+				console.log("ERROR : ", e);
+			},
+			complete : function() {
+	
+			}
+		});
+	}else{
+		$('.subprocess').removeAttr("readonly", "readonly");
+	};
+	
 });
 
 

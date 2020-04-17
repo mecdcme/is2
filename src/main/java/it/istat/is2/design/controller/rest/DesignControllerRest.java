@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.istat.is2.app.service.NotificationService;
+import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.domain.BusinessProcess;
 import it.istat.is2.workflow.domain.ProcessStep;
+import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.workflow.service.BusinessProcessService;
 import it.istat.is2.workflow.service.ProcessStepService;
 
@@ -23,7 +25,10 @@ import it.istat.is2.workflow.service.ProcessStepService;
 @RestController
 public class DesignControllerRest {
 
-		 @Autowired
+		 
+	 	@Autowired
+	 	private BusinessFunctionService businessFunctionService;
+		@Autowired
 		 private BusinessProcessService businessProcessService;
 		 @Autowired
 		 private ProcessStepService processStepService;
@@ -31,6 +36,8 @@ public class DesignControllerRest {
 		 private NotificationService notificationService;
 		 @Autowired
 		private MessageSource messages;
+		 
+		
 		 
 		 
 		@GetMapping(value = "/rest/design/getProcess/{id}")
@@ -48,6 +55,23 @@ public class DesignControllerRest {
 			}
 	    	return ResponseEntity.ok(processo);
 	    }
+		
+		@GetMapping(value = "/rest/design/getFunction/{id}")
+ 	    public  ResponseEntity<BusinessFunction>  getFunction(HttpServletRequest request, @PathVariable("id") Integer id) {
+	    	notificationService.removeAllMessages();
+	    	BusinessFunction function = null;
+	    	try {
+	    		function = businessFunctionService.findBFunctionById(id);
+        		
+			} catch (Exception e) {
+				// TODO: handle exception
+				notificationService.addErrorMessage(messages.getMessage("design.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
+				
+			}
+	    	return ResponseEntity.ok(function);
+	    }
+	    
 	    
 		@GetMapping(value = "/rest/design/getStep/{id}")
 	    public ProcessStep getColumns(HttpServletRequest request, @PathVariable("id") Long id) {
