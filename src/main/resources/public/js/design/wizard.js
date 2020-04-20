@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-var current_fs, next_fs, previous_fs; //fieldsets
+var current_fs, next_fs, previous_fs, test_fs; //fieldsets
 var opacity;
 
 
@@ -16,7 +16,7 @@ $("#functionList").on('change', function(e) {
 			dataType : 'json',
 			cache : true,
 			success : function(data) {
-	
+				$('#idf').val(data.id);
 				$('#namef').val(data.name);
 				$('#descriptionf').val(data.descr);
 				$('#labelf').val(data.label);
@@ -31,6 +31,11 @@ $("#functionList").on('change', function(e) {
 			}
 		});
 	}else{
+		$('#idf').val("");
+		$('#namef').val("");
+		$('#descriptionf').val("");
+		$('#labelf').val("");
+		$('#functionList').val()=="0"
 		$('.function').removeAttr("readonly", "readonly");
 	};
 	
@@ -46,6 +51,7 @@ $("#processList").on('change', function(e) {
 			dataType : 'json',
 			cache : true,
 			success : function(data) {
+				$('#idp').val(data.id);
 				$('#namep').val(data.name);
 				$('#descriptionp').val(data.descr);
 				$('#labelp').val(data.label);
@@ -60,6 +66,11 @@ $("#processList").on('change', function(e) {
 			}
 		});
 	}else{
+		$('#idp').val("");
+		$('#namep').val("");
+		$('#descriptionp').val("");
+		$('#labelp').val("");
+		$('#processList').val()=="0"
 		$('.process').removeAttr("readonly", "readonly");
 	};
 		
@@ -75,7 +86,7 @@ $("#subprocessList").on('change', function(e) {
 			dataType : 'json',
 			cache : true,
 			success : function(data) {
-	
+				$('#ids').val(data.id);
 				$('#names').val(data.name);
 				$('#descriptions').val(data.descr);
 				$('#labels').val(data.label);
@@ -90,6 +101,11 @@ $("#subprocessList").on('change', function(e) {
 			}
 		});
 	}else{
+		$('#ids').val("");
+		$('#names').val("");
+		$('#descriptions').val("");
+		$('#labels').val("");
+		$('#subprocessList').val()=="0"
 		$('.subprocess').removeAttr("readonly", "readonly");
 	};
 	
@@ -100,7 +116,62 @@ $("#subprocessList").on('change', function(e) {
 
 $(".next").click(function(){
 
+test_fs = $(this).parent();
+var tabNMame = test_fs[0].name
+	
+switch (tabNMame) {
+
+	case "function":
+		if($('#functionList').val()=="0"){
+			
+			if($('#namef').val().length!=0  &&  $('#descriptionf').val().length!=0 &&  $('#labelf').val().length!=0 ){
+				
+			}else{
+				alert("fill all fields to proceed!")
+				return;
+			}
+			
+		}
+		break;
+	case "process":
+		if($('#processList').val()=="0"){
+			
+			
+			if($('#namep').val().length!=0  &&  $('#descriptionp').val().length!=0 &&  $('#labelp').val().length!=0 ){
+				
+			}else{
+				alert("fill all fields to proceed!")
+				return;
+			}
+			
+		}
+		break;
+	case "subprocess":
+		if($('#subprocessList').val()=="0"){
+			
+			if($('#names').val().length!=0  &&  $('#descriptions').val().length!=0 &&  $('#labels').val().length!=0 ){
+				
+			}else{
+				alert("fill all fields to proceed!")
+				return;
+			}
+		
+		}
+		break;
+	case "step":
+	
+	
+		break;
+	default:
+		
+		break;
+	
+}	
+	
+	
+	
 current_fs = $(this).parent();
+
 next_fs = $(this).parent().next();
 
 

@@ -84,9 +84,9 @@
 				                                <li id="subprocess"><strong>Subprocess</strong></li>
 				                                <li id="steps"><strong>Steps</strong></li>
 				                                <li id="confirm"><strong>Finish</strong></li>
-				                            </ul> <!-- fieldsets -->
-				                            <fieldset>
-				                                <div class="form-card">
+				                            </ul> 
+				                            <fieldset name="function">
+				                                <div class="form-card" >
 				                                   
 				                                    		<div class="row">
 				                                    			<div class="col-lg-6">
@@ -108,7 +108,7 @@
 															<input id="labelf" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control function" value="" />
 				                                </div> <input type="button" name="next" class="next action-button" value="Next Step" />
 				                            </fieldset>
-				                            <fieldset>
+				                            <fieldset name="process">
 				                                <div class="form-card">
 				                                    
 				                                    		<div class="row">
@@ -131,7 +131,7 @@
 															<input id="labelp" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control process" value="" />
 				                                </div> <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="next" class="next action-button" value="Next Step" />
 				                            </fieldset>
-				                            <fieldset>
+				                            <fieldset name="subprocess">
 				                                <div class="form-card">
 				                                   
 				                                    		<div class="row">
@@ -154,10 +154,9 @@
 															<input id="labels" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control subprocess" value="" />
 				                                </div> <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="next" class="next action-button" value="Next Step" />
 				                            </fieldset>
-				                            <fieldset>
+				                            <fieldset name="step">
 				                                <div class="form-card">
 				                                    <h2 class="fs-title">Step</h2>
-				                                    <input id="id" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/> 
 															<input id="idst" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/> 
 															<label for="namest" th:text="#{generic.name}">Name:</label> 
 															<input id="namest" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control" value="" /> 
@@ -165,7 +164,7 @@
 															<input id="descriptionst" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control" value="" /> 
 				                                </div> <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="make_payment" class="next action-button" value="Confirm" />
 				                            </fieldset>
-				                            <fieldset>
+				                            <fieldset name="">
 				                                <div class="form-card">
 				                                    <h2 class="fs-title text-center">Success !</h2> <br><br>
 				                                    <div class="row justify-content-center">
