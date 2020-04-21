@@ -119,93 +119,138 @@ $(".next").click(function(){
 test_fs = $(this).parent();
 var x = false;
 var tabNMame = test_fs[0].name
-	
-	switch (tabNMame) {
-	
-		case "function":
-			if($('#functionList').val()=="0"){
-				
-				if($('#namef').val().length!=0  &&  $('#descriptionf').val().length!=0 &&  $('#labelf').val().length!=0 ){
-					
 
-					
-					
-					
-				}else{
-					alert("fill all fields to proceed!")
-					return;
-				}
-				
-			}
-			break;
-		case "process":
-			if($('#processList').val()=="0"){
-				
-				
-				if($('#namep').val().length!=0  &&  $('#descriptionp').val().length!=0 &&  $('#labelp').val().length!=0 ){
-//					ciclo for al posto di Ajax
-					
 
-					
-					
-				}else{
-					alert("fill all fields to proceed!")
-					return;
-				}
-				
-			}
-			break;
-		case "subprocess":
-			if($('#subprocessList').val()=="0"){
-				
-				if($('#names').val().length!=0  &&  $('#descriptions').val().length!=0 &&  $('#labels').val().length!=0 ){
-					
-					
 
-					
-					
-					
-				}else{
-					alert("fill all fields to proceed!")
-					return;
-				}
-			
-			}
-			break;
+try {
+		switch (tabNMame) {
 		
-		default:
-			
-			break;
+			case "function":
+				if($('#functionList').val()=="0"){
+					
+					if($('#namef').val().length!=0  &&  $('#descriptionf').val().length!=0 &&  $('#labelf').val().length!=0 ){
+						
+						_functions.forEach(function(item, index){ 
+							if(item.name==$('#namef').val()){
+								alert("Function with this name already exist, please select the function fron the list");
+								$('#idf').val("");
+								$('#namef').val("");
+								$('#descriptionf').val("");
+								$('#labelf').val("");
+								$('#functionList').val()=="0"
+								
+								
+								
+									throw "exit";
+							}
+						});
+						
+						
+						
+					}else{
+						alert("fill all fields to proceed!")
+						throw "exit";
+					}
+					
+				}
+				break;
+			case "process":
+				if($('#processList').val()=="0"){
+					
+					
+					if($('#namep').val().length!=0  &&  $('#descriptionp').val().length!=0 &&  $('#labelp').val().length!=0 ){
 		
-	}	
+						
+						_processes.forEach(function(item, index){ 
+							if(item.name==$('#namep').val()){
+								alert("Process with this name already exist, please select the process fron the list");
+								$('#idp').val("");
+								$('#namep').val("");
+								$('#descriptionp').val("");
+								$('#labelp').val("");
+								$('processList').val()=="0"
+								
+									throw "exit";
+							}
+						});
+						
+						
+					}else{
+						alert("fill all fields to proceed!")
+						throw "exit";
+					}
+					
+				}
+				break;
+			case "subprocess":
+				if($('#subprocessList').val()=="0"){
+					
+					if($('#names').val().length!=0  &&  $('#descriptions').val().length!=0 &&  $('#labels').val().length!=0 ){
+						
+						
+						_subprocesses.forEach(function(item, index){ 
+							if(item.name==$('#names').val()){
+								alert("Subprocess with this name already exist, please select the subprocess fron the list");
+								$('#ids').val("");
+								$('#names').val("");
+								$('#descriptions').val("");
+								$('#labels').val("");
+								$('#subprocessList').val()=="0"
+								
+								
+									throw "exit";
+							}
+						});
+						
+						
+						
+					}else{
+						alert("fill all fields to proceed!")
+						throw "exit";
+					}
+				
+				}
+				break;
+			
+			default:
+				
+				break;
+		
+		}	
 	
 	
 	
-	current_fs = $(this).parent();
+		current_fs = $(this).parent();
+		
+		next_fs = $(this).parent().next();
+		
+		
+		
+		//Add Class Active
+		$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+		
+		//show the next fieldset
+		next_fs.show();
+		//hide the current fieldset with style
+		current_fs.animate({opacity: 0}, {
+		step: function(now) {
+		// for making fielset appear animation
+		opacity = 1 - now;
+		
+		current_fs.css({
+		'display': 'none',
+		'position': 'relative'
+		});
+		next_fs.css({'opacity': opacity});
+		},
+		duration: 600
+		});
+
+	} catch (e) {
+	    // TODO: handle exception
+	}
 	
-	next_fs = $(this).parent().next();
 	
-	
-	
-	//Add Class Active
-	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-	
-	//show the next fieldset
-	next_fs.show();
-	//hide the current fieldset with style
-	current_fs.animate({opacity: 0}, {
-	step: function(now) {
-	// for making fielset appear animation
-	opacity = 1 - now;
-	
-	current_fs.css({
-	'display': 'none',
-	'position': 'relative'
-	});
-	next_fs.css({'opacity': opacity});
-	},
-	duration: 600
-	});
 });
 
 $(".previous").click(function(){
