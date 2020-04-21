@@ -132,7 +132,7 @@ try {
 						
 						_functions.forEach(function(item, index){ 
 							if(item.name==$('#namef').val()){
-								alert("Function with this name already exist, please select the function fron the list");
+								alert("Function with this name already exist, please select the function fron the list or choose a different name");
 								$('#idf').val("");
 								$('#namef').val("");
 								$('#descriptionf').val("");
@@ -163,7 +163,7 @@ try {
 						
 						_processes.forEach(function(item, index){ 
 							if(item.name==$('#namep').val()){
-								alert("Process with this name already exist, please select the process fron the list");
+								alert("Process with this name already exist, please select the process fron the list or choose a different name");
 								$('#idp').val("");
 								$('#namep').val("");
 								$('#descriptionp').val("");
@@ -190,7 +190,7 @@ try {
 						
 						_subprocesses.forEach(function(item, index){ 
 							if(item.name==$('#names').val()){
-								alert("Subprocess with this name already exist, please select the subprocess fron the list");
+								alert("Subprocess with this name already exist, please select the subprocess fron the list or choose a different name");
 								$('#ids').val("");
 								$('#names').val("");
 								$('#descriptions').val("");
@@ -211,7 +211,79 @@ try {
 				
 				}
 				break;
-			
+			case "step":
+				
+					
+					if($('#namest').val().length!=0  &&  $('#descriptionst').val().length!=0  &&  $('#businessService').val()!="0"){
+						
+						
+						_steps.forEach(function(item, index){ 
+							if(item.name==$('#namest').val()){
+								alert("Step with this name already exist, please choose a different name");
+								$('#idst').val("");
+								$('#namest').val("");
+								$('#descriptionst').val("");
+								
+								
+									throw "exit";
+							}
+						});
+						
+						$("#msform").submit();
+						
+					}else{
+						alert("fill all fields to proceed!")
+						throw "exit";
+					}
+					$.ajax({
+						type : "POST",
+						contentType : "application/json",
+						url : _ctx + "/rest/design/saveStep/" + $('#idf').val() + "/" + $('#namef').val() + "/" + $('#descriptionf').val() + "/" + $('#labelf').val() + "/" +
+						$('#idp').val() + "/" + $('#namep').val() + "/" + $('#descriptionp').val() + "/" + $('#labelp').val() + "/" +
+						$('#ids').val() + "/" + $('#names').val() + "/" + $('#descriptions').val() + "/" + $('#labels').val() + "/" +
+						$('#namest').val() + "/" + $('#descriptionst').val() + "/" + $('#businessService').val(),
+						dataType : 'json',
+						cache : true,
+						success : function(data) {
+
+							current_fs = $(this).parent();
+							
+							next_fs = $(this).parent().next();
+							
+							
+							
+							//Add Class Active
+							$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+							
+							//show the next fieldset
+							next_fs.show();
+							//hide the current fieldset with style
+							current_fs.animate({opacity: 0}, {
+							step: function(now) {
+							// for making fielset appear animation
+							opacity = 1 - now;
+							
+							current_fs.css({
+							'display': 'none',
+							'position': 'relative'
+							});
+							next_fs.css({'opacity': opacity});
+							},
+							duration: 600
+							});
+
+						},
+						error : function(e) {
+
+							console.log("ERROR : ", e);
+						},
+						complete : function() {
+
+						}
+					});
+					
+					throw "exit";
+				break;
 			default:
 				
 				break;

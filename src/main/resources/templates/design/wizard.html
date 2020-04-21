@@ -40,8 +40,8 @@
 	var _functions = [[${listaFunzioni}]];
 	var _processes = [[${listaAllBp}]];
 	var _subprocesses = [[${listaAllSubBp}]];
-	
-    
+	var _subprocesses = [[${listaAllSubBp}]];
+	var _steps = [[${listaBusinessStep}]];
 </script>
 
 
@@ -165,11 +165,19 @@
 				                            <fieldset name="step">
 				                                <div class="form-card">
 				                                    <h2 class="fs-title">Step</h2>
-															<input id="idst" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/> 
+<!-- 															<input id="idst" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/>  -->
 															<label for="namest" th:text="#{generic.name}">Name:</label> 
 															<input id="namest" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control" value="" /> 
 															<label for="descriptionst" th:text="#{generic.description}">Description:</label> 
 															<input id="descriptionst" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control" value="" /> 
+				                                			<label id="processLabel" for="businessProcedure" th:text="#{generic.businessService}">Service:</label>
+				                                			<select class="form-control" id="businessService" name="fieldBusinessServiceId">
+																<option value="0" th:text="#{generic.selectBusinessService}">Select service..</option>
+																<option th:each="bp : ${listaAllBusinessService}" th:value="${bp.id}"
+																	th:text="${bp.Name}"></option>
+															</select>
+				                                
+				                                
 				                                </div> <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="make_payment" class="next action-button" value="Confirm" />
 				                            </fieldset>
 				                            <fieldset name="">
