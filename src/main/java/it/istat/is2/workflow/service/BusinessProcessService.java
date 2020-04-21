@@ -67,5 +67,10 @@ public class BusinessProcessService {
 		// TODO Auto-generated method stub
 		businessProcessDao.delete(process);
 	}
+
+	public BusinessProcess findBProcessByName(String name) {
+		
+		return businessProcessDao.findBProcessByName(name);
+	}
 }
 

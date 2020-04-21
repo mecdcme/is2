@@ -37,6 +37,8 @@ public interface BusinessFunctionDao extends CrudRepository<BusinessFunction,Lon
 	List<BusinessFunction> findAll();
         @Override
 	Optional<BusinessFunction> findById(Long idfunction);
-    public void delete(BusinessFunction function); 
+    public void delete(BusinessFunction function);
+    
+	BusinessFunction findBFunctionByName(String name); 
         
 }

@@ -45,4 +45,6 @@ public interface BusinessProcessDao extends CrudRepository<BusinessProcess, Long
     List<BusinessProcess> findAllSubProcesses();
 
     List<BusinessProcess> findByBusinessFunctionsIn(List<BusinessFunction> businessFunctions);
+
+	BusinessProcess findBProcessByName(String name);
 }

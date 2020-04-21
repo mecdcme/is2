@@ -55,5 +55,10 @@ public class BusinessFunctionService {
     	return funzione;
     }
 
+	public BusinessFunction findBFunctionByName(String name) {
+		
+		return businessFunctionDao.findBFunctionByName(name);
+	}
+
 	
 }

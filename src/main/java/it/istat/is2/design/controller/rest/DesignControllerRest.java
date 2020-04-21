@@ -72,9 +72,11 @@ public class DesignControllerRest {
 	    	return ResponseEntity.ok(function);
 	    }
 	    
+	   
+	    
 	    
 		@GetMapping(value = "/rest/design/getStep/{id}")
-	    public ProcessStep getColumns(HttpServletRequest request, @PathVariable("id") Long id) {
+	    public ProcessStep getStep(HttpServletRequest request, @PathVariable("id") Long id) {
 	    	notificationService.removeAllMessages();
 	    	ProcessStep step = null;
 	    	try {
@@ -88,6 +90,37 @@ public class DesignControllerRest {
 			}
 	    	return step;
 	    }
-
+		@GetMapping(value = "/rest/design/getProcessByName/{name}")
+	    public BusinessProcess getSubprocessByName(HttpServletRequest request, @PathVariable("name") String name) {
+	    	notificationService.removeAllMessages();
+	    	BusinessProcess proc = null;
+	    	try {
+	    		proc = businessProcessService.findBProcessByName(name);
+        		
+			} catch (Exception e) {
+				// TODO: handle exception
+				notificationService.addErrorMessage(messages.getMessage("design.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
+				
+			}
+	    	return proc;
+	    }
+		
+		
+		@GetMapping(value = "/rest/design/getFunctionByName/{name}")
+ 	    public  BusinessFunction  getFunctionByName(HttpServletRequest request, @PathVariable("name") String name) {
+	    	notificationService.removeAllMessages();
+	    	BusinessFunction function = null;
+	    	try {
+	    		function = businessFunctionService.findBFunctionByName(name);
+        		
+			} catch (Exception e) {
+				// TODO: handle exception
+				notificationService.addErrorMessage(messages.getMessage("design.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+				
+				
+			}
+	    	return function;
+	    }
 	
 }

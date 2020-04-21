@@ -117,84 +117,95 @@ $("#subprocessList").on('change', function(e) {
 $(".next").click(function(){
 
 test_fs = $(this).parent();
+var x = false;
 var tabNMame = test_fs[0].name
 	
-switch (tabNMame) {
+	switch (tabNMame) {
+	
+		case "function":
+			if($('#functionList').val()=="0"){
+				
+				if($('#namef').val().length!=0  &&  $('#descriptionf').val().length!=0 &&  $('#labelf').val().length!=0 ){
+					
 
-	case "function":
-		if($('#functionList').val()=="0"){
-			
-			if($('#namef').val().length!=0  &&  $('#descriptionf').val().length!=0 &&  $('#labelf').val().length!=0 ){
+					
+					
+					
+				}else{
+					alert("fill all fields to proceed!")
+					return;
+				}
 				
-			}else{
-				alert("fill all fields to proceed!")
-				return;
 			}
-			
-		}
-		break;
-	case "process":
-		if($('#processList').val()=="0"){
-			
-			
-			if($('#namep').val().length!=0  &&  $('#descriptionp').val().length!=0 &&  $('#labelp').val().length!=0 ){
+			break;
+		case "process":
+			if($('#processList').val()=="0"){
 				
-			}else{
-				alert("fill all fields to proceed!")
-				return;
-			}
-			
-		}
-		break;
-	case "subprocess":
-		if($('#subprocessList').val()=="0"){
-			
-			if($('#names').val().length!=0  &&  $('#descriptions').val().length!=0 &&  $('#labels').val().length!=0 ){
 				
-			}else{
-				alert("fill all fields to proceed!")
-				return;
+				if($('#namep').val().length!=0  &&  $('#descriptionp').val().length!=0 &&  $('#labelp').val().length!=0 ){
+//					ciclo for al posto di Ajax
+					
+
+					
+					
+				}else{
+					alert("fill all fields to proceed!")
+					return;
+				}
+				
 			}
+			break;
+		case "subprocess":
+			if($('#subprocessList').val()=="0"){
+				
+				if($('#names').val().length!=0  &&  $('#descriptions').val().length!=0 &&  $('#labels').val().length!=0 ){
+					
+					
+
+					
+					
+					
+				}else{
+					alert("fill all fields to proceed!")
+					return;
+				}
+			
+			}
+			break;
 		
-		}
-		break;
-	case "step":
-	
-	
-		break;
-	default:
+		default:
+			
+			break;
 		
-		break;
-	
-}	
+	}	
 	
 	
 	
-current_fs = $(this).parent();
-
-next_fs = $(this).parent().next();
-
-
-
-//Add Class Active
-$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-//show the next fieldset
-next_fs.show();
-//hide the current fieldset with style
-current_fs.animate({opacity: 0}, {
-step: function(now) {
-// for making fielset appear animation
-opacity = 1 - now;
-
-current_fs.css({
-'display': 'none',
-'position': 'relative'
-});
-next_fs.css({'opacity': opacity});
-},
-duration: 600
-});
+	current_fs = $(this).parent();
+	
+	next_fs = $(this).parent().next();
+	
+	
+	
+	//Add Class Active
+	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+	
+	//show the next fieldset
+	next_fs.show();
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+	step: function(now) {
+	// for making fielset appear animation
+	opacity = 1 - now;
+	
+	current_fs.css({
+	'display': 'none',
+	'position': 'relative'
+	});
+	next_fs.css({'opacity': opacity});
+	},
+	duration: 600
+	});
 });
 
 $(".previous").click(function(){
