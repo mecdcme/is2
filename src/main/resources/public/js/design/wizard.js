@@ -4,15 +4,54 @@ var current_fs, next_fs, previous_fs, test_fs; //fieldsets
 var opacity;
 
 
+//var wizarddata = { 
+//	    
+//		'idfunzione':'',
+//		'namefunzione':'',
+//		'descfunzione':'',
+//		'labelfunzione':'',
+//		'id	proc':'',
+//		'nameproc':'',
+//		'descproc':'',
+//		'labelproc':'',
+//		'idsubproc':'',
+//		'namesubproc':'',
+//		'descsubproc':'',
+//		'labelsubproc':'',
+//		'namestep':'',
+//		'descstep':'',
+//		'idservice':''
+//		
+//		
+//    };
 
-
+var wizarddata = { 
+	    
+		"idfunzione":"",
+		"namefunzione":"",
+		"descfunzione":"",
+		"labelfunzione":"",
+		"id	proc":"",
+		"nameproc":"",
+		"descproc":"",
+		"labelproc":"",
+		"idsubproc":"",
+		"namesubproc":"",
+		"descsubproc":"",
+		"labelsubproc":"",
+		"namestep":"",
+		"descstep":'',
+		"idservice":"",
+		
+		
+    };
 
 $("#functionList").on('change', function(e) {
 	if( $(this).val()!="0"){
 		$.ajax({
 			type : "GET",
 			contentType : "application/json",
-			url : _ctx + "/rest/design/getProcess/" +  $(this).val(),
+			url : _ctx + "/rest/design/getFunction/" +  $(this).val(),
 			dataType : 'json',
 			cache : true,
 			success : function(data) {
@@ -229,60 +268,52 @@ try {
 							}
 						});
 						
-						$("#msform").submit();
+						
 						
 					}else{
 						alert("fill all fields to proceed!")
 						throw "exit";
 					}
+					
+			        wizarddata.idfunzione = $('#idf').val();
+					wizarddata.namefunzione =  $('#namef').val();
+					wizarddata.descfunzione= $('#descriptionf').val();
+					wizarddata.labelfunzione=$('#labelf').val();
+					wizarddata.idproc=$('#idp').val()
+					wizarddata.nameproc=$('#namep').val()
+					wizarddata.descproc=$('#descriptionp').val()
+					wizarddata.labelproc=$('#labelp').val()
+					wizarddata.idsubproc=$('#ids').val()
+					wizarddata.namesubproc=$('#names').val()
+					wizarddata.descsubproc=$('#descriptions').val()
+					wizarddata.labelsubproc=$('#labels').val()
+					wizarddata.namestep=$('#namest').val()
+					wizarddata.descstep= $('#descriptionst').val()
+					wizarddata.idservice= $('#businessService').val()
 					$.ajax({
 						type : "POST",
+						async: false,
 						contentType : "application/json",
-						url : _ctx + "/rest/design/saveStep/" + $('#idf').val() + "/" + $('#namef').val() + "/" + $('#descriptionf').val() + "/" + $('#labelf').val() + "/" +
-						$('#idp').val() + "/" + $('#namep').val() + "/" + $('#descriptionp').val() + "/" + $('#labelp').val() + "/" +
-						$('#ids').val() + "/" + $('#names').val() + "/" + $('#descriptions').val() + "/" + $('#labels').val() + "/" +
-						$('#namest').val() + "/" + $('#descriptionst').val() + "/" + $('#businessService').val(),
 						dataType : 'json',
+						url : _ctx + "/rest/design/savewizard",	
+						data: JSON.stringify(wizarddata),
 						cache : true,
 						success : function(data) {
 
-							current_fs = $(this).parent();
 							
-							next_fs = $(this).parent().next();
-							
-							
-							
-							//Add Class Active
-							$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-							
-							//show the next fieldset
-							next_fs.show();
-							//hide the current fieldset with style
-							current_fs.animate({opacity: 0}, {
-							step: function(now) {
-							// for making fielset appear animation
-							opacity = 1 - now;
-							
-							current_fs.css({
-							'display': 'none',
-							'position': 'relative'
-							});
-							next_fs.css({'opacity': opacity});
-							},
-							duration: 600
-							});
-
+							console.log("OK");
 						},
 						error : function(e) {
 
 							console.log("ERROR : ", e);
+							throw "exit";
 						},
 						complete : function() {
 
 						}
 					});
 					
-					throw "exit";
+					
 				break;
 			default:
 				

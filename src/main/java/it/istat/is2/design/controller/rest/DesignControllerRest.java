@@ -10,9 +10,11 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.istat.is2.app.bean.WizardData;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.domain.BusinessProcess;
@@ -37,7 +39,28 @@ public class DesignControllerRest {
 		 @Autowired
 		private MessageSource messages;
 		 
-		
+		@PostMapping(value = "/rest/design/savewizard")
+	 	    public  ProcessStep saveWizard(HttpServletRequest request, @RequestParam("wizardData")  WizardData wizardData) {
+		    	notificationService.removeAllMessages();
+		    	//ProcessStep step = null;
+		    	ProcessStep step = new ProcessStep();
+		    	step.setId(Long.parseLong("10"));
+		    	
+		    	step.setName("pippo");
+		    	step.setDescr("pluto");
+		    	
+		    	try {
+		    		messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale());
+		    		
+					
+				} catch (Exception e) {
+					// TODO: handle exception
+					notificationService.addErrorMessage(messages.getMessage("design.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+					
+					
+				}
+		    	return step;
+		    }
 		 
 		 
 		@GetMapping(value = "/rest/design/getProcess/{id}")
