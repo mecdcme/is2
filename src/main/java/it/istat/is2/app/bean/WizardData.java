@@ -10,10 +10,10 @@ public class WizardData implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private String idfunzione;
-	private String namefunzione;
-	private String descfunzione;
-	private String labelfunzione;
+	private String idfunction;
+	private String namefunction;
+	private String descfunction;
+	private String labelfunction;
 	private String idproc;
 	private String nameproc;
 	private String descproc;

@@ -6,10 +6,10 @@ var opacity;
 
 //var wizarddata = { 
 //	    
-//		'idfunzione':'',
-//		'namefunzione':'',
-//		'descfunzione':'',
-//		'labelfunzione':'',
+//		'idfunction':'',
+//		'namefunction':'',
+//		'descfunction':'',
+//		'labelfunction':'',
 //		'id	proc':'',
 //		'nameproc':'',
 //		'descproc':'',
@@ -27,11 +27,11 @@ var opacity;
 
 var wizarddata = { 
 	    
-		"idfunzione":"",
-		"namefunzione":"",
-		"descfunzione":"",
-		"labelfunzione":"",
-		"id	proc":"",
+		"idfunction":"",
+		"namefunction":"",
+		"descfunction":"",
+		"labelfunction":"",
+		"idproc":"",
 		"nameproc":"",
 		"descproc":"",
 		"labelproc":"",
@@ -40,11 +40,12 @@ var wizarddata = {
 		"descsubproc":"",
 		"labelsubproc":"",
 		"namestep":"",
-		"descstep":'',
-		"idservice":"",
+		"descstep":"",
+		"idservice":""
 		
 		
-    };
+    }
+
 
 $("#functionList").on('change', function(e) {
 	if( $(this).val()!="0"){
@@ -158,7 +159,7 @@ $(".next").click(function(){
 test_fs = $(this).parent();
 var x = false;
 var tabNMame = test_fs[0].name
-
+var ajaxError=false;
 
 
 try {
@@ -274,29 +275,54 @@ try {
 						alert("fill all fields to proceed!")
 						throw "exit";
 					}
+//					var wizarddata = { 
+//						    
+//							"idfunction":$('#idf').val(),
+//							"namefunction":$('#namef').val(),
+//							"descfunction":$('#descriptionf').val(),
+//							"labelfunction":$('#labelf').val(),
+//							"idproc":$('#idp').val(),
+//							"nameproc":$('#namep').val(),
+//							"descproc":$('#descriptionp').val(),
+//							"labelproc":$('#labelp').val(),
+//							"idsubproc":$('#ids').val(),
+//							"namesubproc":$('#names').val(),
+//							"descsubproc":$('#descriptions').val(),
+//							"labelsubproc":$('#labels').val(),
+//							"namestep":$('#namest').val(),
+//							"descstep":$('#descriptionst').val(),
+//							"idservice":$('#businessService').val()
+//							
+//							
+//					    }
 					
-			        wizarddata.idfunzione = $('#idf').val();
-					wizarddata.namefunzione =  $('#namef').val();
-					wizarddata.descfunzione= $('#descriptionf').val();
-					wizarddata.labelfunzione=$('#labelf').val();
-					wizarddata.idproc=$('#idp').val()
-					wizarddata.nameproc=$('#namep').val()
-					wizarddata.descproc=$('#descriptionp').val()
-					wizarddata.labelproc=$('#labelp').val()
-					wizarddata.idsubproc=$('#ids').val()
-					wizarddata.namesubproc=$('#names').val()
-					wizarddata.descsubproc=$('#descriptions').val()
-					wizarddata.labelsubproc=$('#labels').val()
-					wizarddata.namestep=$('#namest').val()
-					wizarddata.descstep= $('#descriptionst').val()
-					wizarddata.idservice= $('#businessService').val()
+//					var wizarddata = "{'wizarddata':{'idfunction':'" + $('#idf').val() + "','" + "namefunction':'" + $('#namef').val() + "','" + "descfunction':'" +$('#descriptionf').val()+"'}} ";
+			        wizarddata.idfunction = $('#idf').val();
+					wizarddata.namefunction =  $('#namef').val();
+					wizarddata.descfunction= $('#descriptionf').val();
+					wizarddata.labelfunction=$('#labelf').val();
+					wizarddata.idproc=$('#idp').val();
+					wizarddata.nameproc=$('#namep').val();
+					wizarddata.descproc=$('#descriptionp').val();
+					wizarddata.labelproc=$('#labelp').val();
+					wizarddata.idsubproc=$('#ids').val();
+					wizarddata.namesubproc=$('#names').val();
+					wizarddata.descsubproc=$('#descriptions').val();
+					wizarddata.labelsubproc=$('#labels').val();
+					wizarddata.namestep=$('#namest').val();
+					wizarddata.descstep= $('#descriptionst').val();
+					wizarddata.idservice= $('#businessService').val();
+					
+					var pluto ={
+							"wizarddata":wizarddata
+					}
 					$.ajax({
 						type : "POST",
 						async: false,
 						contentType : "application/json",
 						dataType : 'json',
 						url : _ctx + "/rest/design/savewizard",	
-						data: JSON.stringify(wizarddata),
+						data:pluto,
 						cache : true,
 						success : function(data) {
 
@@ -306,7 +332,8 @@ try {
 						error : function(e) {
 
 							console.log("ERROR : ", e);
-							throw "exit";
+							
+							ajaxError=true;
 						},
 						complete : function() {
 
@@ -322,33 +349,33 @@ try {
 		}	
 	
 	
-	
-		current_fs = $(this).parent();
-		
-		next_fs = $(this).parent().next();
-		
-		
-		
-		//Add Class Active
-		$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-		
-		//show the next fieldset
-		next_fs.show();
-		//hide the current fieldset with style
-		current_fs.animate({opacity: 0}, {
-		step: function(now) {
-		// for making fielset appear animation
-		opacity = 1 - now;
-		
-		current_fs.css({
-		'display': 'none',
-		'position': 'relative'
-		});
-		next_fs.css({'opacity': opacity});
-		},
-		duration: 600
-		});
-
+		if(!ajaxError){
+			current_fs = $(this).parent();
+			
+			next_fs = $(this).parent().next();
+			
+			
+			
+			//Add Class Active
+			$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+			
+			//show the next fieldset
+			next_fs.show();
+			//hide the current fieldset with style
+			current_fs.animate({opacity: 0}, {
+			step: function(now) {
+			// for making fielset appear animation
+			opacity = 1 - now;
+			
+			current_fs.css({
+			'display': 'none',
+			'position': 'relative'
+			});
+			next_fs.css({'opacity': opacity});
+			},
+			duration: 600
+			});
+		} 		
 	} catch (e) {
 	    // TODO: handle exception
 	}
