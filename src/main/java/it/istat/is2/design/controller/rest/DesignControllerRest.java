@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.bind.annotation.RestController;
 
 import it.istat.is2.app.bean.WizardData;
@@ -33,17 +33,33 @@ public class DesignControllerRest {
 	 	@Autowired
 	 	private BusinessFunctionService businessFunctionService;
 		@Autowired
-		 private BusinessProcessService businessProcessService;
-		 @Autowired
-		 private ProcessStepService processStepService;
-		 @Autowired
-		 private NotificationService notificationService;
-		 @Autowired
+		private BusinessProcessService businessProcessService;
+		@Autowired
+		private ProcessStepService processStepService;
+		@Autowired
+		private NotificationService notificationService;
+		@Autowired
 		private MessageSource messages;
 		 
-		@PostMapping(value = "/rest/design/savewizard")
-		@ResponseBody
-	 	    public  ProcessStep saveWizard(HttpServletRequest request, @RequestParam("wizarddata")  WizardData wizarddata) {
+		@PostMapping(value = "/rest/design/savewizard/{idf}/{namef}/{descriptionf}/{labelf}/{idp}/{namep}/{descriptionp}/{labelp}/{ids}/{names}/{descriptions}/{labels}/{namest}/{descriptionst}/{businessServiceId}")
+	 	public  ProcessStep saveWizard(HttpServletRequest request, 
+	 			@PathVariable("idf")  String idf,
+	 			@PathVariable("namef")  String namef,
+	 			@PathVariable("descriptionf")  String descriptionf,
+	 			@PathVariable("labelf")  String labelf,
+	 			@PathVariable("idp")  String idp,
+	 			@PathVariable("namep")  String namep,
+	 			@PathVariable("descriptionp")  String descriptionp,
+	 			@PathVariable("labelp")  String labelp,
+	 			@PathVariable("ids")  String ids,
+	 			@PathVariable("names")  String names,
+	 			@PathVariable("descriptions")  String descriptions,
+	 			@PathVariable("labels")  String labels,
+	 			@PathVariable("namest")  String namest,
+	 			@PathVariable("descriptionst")  String descriptionst,
+	 			@PathVariable("businessServiceId")  String businessServiceId
+	 			
+	 																) {
 			
 		    	notificationService.removeAllMessages();
 		    	//ProcessStep step = null;
@@ -64,7 +80,7 @@ public class DesignControllerRest {
 					
 				}
 		    	return step;
-		    }
+		 }
 		 
 		 
 		@GetMapping(value = "/rest/design/getProcess/{id}")

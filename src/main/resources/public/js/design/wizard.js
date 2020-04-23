@@ -4,48 +4,6 @@ var current_fs, next_fs, previous_fs, test_fs; //fieldsets
 var opacity;
 
 
-//var wizarddata = { 
-//	    
-//		'idfunction':'',
-//		'namefunction':'',
-//		'descfunction':'',
-//		'labelfunction':'',
-//		'id	proc':'',
-//		'nameproc':'',
-//		'descproc':'',
-//		'labelproc':'',
-//		'idsubproc':'',
-//		'namesubproc':'',
-//		'descsubproc':'',
-//		'labelsubproc':'',
-//		'namestep':'',
-//		'descstep':'',
-//		'idservice':''
-//		
-//		
-//    };
-
-var wizarddata = { 
-	    
-		"idfunction":"",
-		"namefunction":"",
-		"descfunction":"",
-		"labelfunction":"",
-		"idproc":"",
-		"nameproc":"",
-		"descproc":"",
-		"labelproc":"",
-		"idsubproc":"",
-		"namesubproc":"",
-		"descsubproc":"",
-		"labelsubproc":"",
-		"namestep":"",
-		"descstep":"",
-		"idservice":""
-		
-		
-    }
-
 
 $("#functionList").on('change', function(e) {
 	if( $(this).val()!="0"){
@@ -56,7 +14,7 @@ $("#functionList").on('change', function(e) {
 			dataType : 'json',
 			cache : true,
 			success : function(data) {
-				$('#idf').val(data.id);
+//				$('#idf').val(data.id);
 				$('#namef').val(data.name);
 				$('#descriptionf').val(data.descr);
 				$('#labelf').val(data.label);
@@ -71,7 +29,7 @@ $("#functionList").on('change', function(e) {
 			}
 		});
 	}else{
-		$('#idf').val("");
+//		$('#idf').val("0");
 		$('#namef').val("");
 		$('#descriptionf').val("");
 		$('#labelf').val("");
@@ -91,7 +49,7 @@ $("#processList").on('change', function(e) {
 			dataType : 'json',
 			cache : true,
 			success : function(data) {
-				$('#idp').val(data.id);
+//				$('#idp').val(data.id);
 				$('#namep').val(data.name);
 				$('#descriptionp').val(data.descr);
 				$('#labelp').val(data.label);
@@ -106,7 +64,7 @@ $("#processList").on('change', function(e) {
 			}
 		});
 	}else{
-		$('#idp').val("");
+//		$('#idp').val("");
 		$('#namep').val("");
 		$('#descriptionp').val("");
 		$('#labelp').val("");
@@ -126,7 +84,7 @@ $("#subprocessList").on('change', function(e) {
 			dataType : 'json',
 			cache : true,
 			success : function(data) {
-				$('#ids').val(data.id);
+//				$('#ids').val(data.id);
 				$('#names').val(data.name);
 				$('#descriptions').val(data.descr);
 				$('#labels').val(data.label);
@@ -141,7 +99,7 @@ $("#subprocessList").on('change', function(e) {
 			}
 		});
 	}else{
-		$('#ids').val("");
+//		$('#ids').val("");
 		$('#names').val("");
 		$('#descriptions').val("");
 		$('#labels').val("");
@@ -173,7 +131,7 @@ try {
 						_functions.forEach(function(item, index){ 
 							if(item.name==$('#namef').val()){
 								alert("Function with this name already exist, please select the function fron the list or choose a different name");
-								$('#idf').val("");
+//								$('#idf').val("");
 								$('#namef').val("");
 								$('#descriptionf').val("");
 								$('#labelf').val("");
@@ -204,7 +162,7 @@ try {
 						_processes.forEach(function(item, index){ 
 							if(item.name==$('#namep').val()){
 								alert("Process with this name already exist, please select the process fron the list or choose a different name");
-								$('#idp').val("");
+//								$('#idp').val("");
 								$('#namep').val("");
 								$('#descriptionp').val("");
 								$('#labelp').val("");
@@ -231,7 +189,7 @@ try {
 						_subprocesses.forEach(function(item, index){ 
 							if(item.name==$('#names').val()){
 								alert("Subprocess with this name already exist, please select the subprocess fron the list or choose a different name");
-								$('#ids').val("");
+//								$('#ids').val("");
 								$('#names').val("");
 								$('#descriptions').val("");
 								$('#labels').val("");
@@ -260,7 +218,7 @@ try {
 						_steps.forEach(function(item, index){ 
 							if(item.name==$('#namest').val()){
 								alert("Step with this name already exist, please choose a different name");
-								$('#idst').val("");
+//								$('#idst').val("");
 								$('#namest').val("");
 								$('#descriptionst').val("");
 								
@@ -275,55 +233,15 @@ try {
 						alert("fill all fields to proceed!")
 						throw "exit";
 					}
-//					var wizarddata = { 
-//						    
-//							"idfunction":$('#idf').val(),
-//							"namefunction":$('#namef').val(),
-//							"descfunction":$('#descriptionf').val(),
-//							"labelfunction":$('#labelf').val(),
-//							"idproc":$('#idp').val(),
-//							"nameproc":$('#namep').val(),
-//							"descproc":$('#descriptionp').val(),
-//							"labelproc":$('#labelp').val(),
-//							"idsubproc":$('#ids').val(),
-//							"namesubproc":$('#names').val(),
-//							"descsubproc":$('#descriptions').val(),
-//							"labelsubproc":$('#labels').val(),
-//							"namestep":$('#namest').val(),
-//							"descstep":$('#descriptionst').val(),
-//							"idservice":$('#businessService').val()
-//							
-//							
-//					    }
-					
-//					var wizarddata = "{'wizarddata':{'idfunction':'" + $('#idf').val() + "','" + "namefunction':'" + $('#namef').val() + "','" + "descfunction':'" +$('#descriptionf').val()+"'}} ";
-			        wizarddata.idfunction = $('#idf').val();
-					wizarddata.namefunction =  $('#namef').val();
-					wizarddata.descfunction= $('#descriptionf').val();
-					wizarddata.labelfunction=$('#labelf').val();
-					wizarddata.idproc=$('#idp').val();
-					wizarddata.nameproc=$('#namep').val();
-					wizarddata.descproc=$('#descriptionp').val();
-					wizarddata.labelproc=$('#labelp').val();
-					wizarddata.idsubproc=$('#ids').val();
-					wizarddata.namesubproc=$('#names').val();
-					wizarddata.descsubproc=$('#descriptions').val();
-					wizarddata.labelsubproc=$('#labels').val();
-					wizarddata.namestep=$('#namest').val();
-					wizarddata.descstep= $('#descriptionst').val();
-					wizarddata.idservice= $('#businessService').val();
-					
-					var pluto ={
-							"wizarddata":wizarddata
-					}
+
 					$.ajax({
 						type : "POST",
-						async: false,
 						contentType : "application/json",
-						dataType : 'json',
-						url : _ctx + "/rest/design/savewizard",	
-						data:pluto,
+						async: false,
+						url : _ctx + "/rest/design/savewizard/" +$('#functionList').val() + "/" + $('#namef').val() + "/" + $('#descriptionf').val() + "/" + $('#labelf').val() + "/" + $('#processList').val() + "/" + $('#namep').val() + "/" + $('#descriptionp').val() + "/" + $('#labelp').val() + "/" + $('#subprocessList').val() + 
+						"/" + $('#names').val() + "/" + $('#descriptions').val() + "/" + $('#labels').val() + "/" + $('#namest').val() + "/" +  $('#descriptionst').val() + "/" +  $('#businessService').val(),
 						cache : true,
+						
 						success : function(data) {
 
 							
