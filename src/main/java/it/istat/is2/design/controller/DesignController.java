@@ -116,17 +116,12 @@ public class DesignController {
 	
 	@GetMapping(value = "/drivensettings")
 	public String viewdrivenSettings(Model model, @ModelAttribute("selectedTab") String selectedTab) {
-
-		List<BusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
-//		List<BusinessProcess> listaBp = businessProcessService.findAll();
-		List<ProcessStep> listaBs = processStepService.findAll();
 		List<BusinessProcess> listaAllBp = businessProcessService.findAllProcesses();
 		List<BusinessProcess> listaAllSubBp = businessProcessService.findAllSubProcesses();
+		List<BusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
+		List<ProcessStep> listaBs = processStepService.findAll();
 		List<BusinessService> listaAllBusinessServices = businessService.findBusinessServices();
 
-		
-		
-//		model.addAttribute("listaBp", listaBp);
 		model.addAttribute("listaAllBp", listaAllBp);
 		model.addAttribute("listaAllSubBp", listaAllSubBp);
 		model.addAttribute("listaFunzioni", listaFunzioni);

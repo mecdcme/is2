@@ -42,8 +42,8 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre,
 		$('#name').val(nome);
 		$('#description').val(descrizione);
 		$('#label').val(etichetta);
-		$('#label').show();
-		$('#lab').show();
+//		$('#label').show();
+//		$('#lab').show();
 		break;
 	case "processes":
 		titolo = _updateproc;
@@ -67,8 +67,8 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre,
 		$('#name').val(nome);
 		$('#description').val(descrizione);
 		$('#label').val(etichetta);
-		$('#label').show();
-		$('#lab').show();
+//		$('#label').show();
+//		$('#lab').show();
 		break;
 	case "steps":
 		titolo = _updatestep;
@@ -77,11 +77,12 @@ function updateFunctionDialog(id, nome, descrizione, etichetta, idPadre,
 		$('#id').val(id);
 		$('#name').val(nome);
 		$('#description').val(descrizione);
+		$('#label').val(etichetta);
 		$('#businessProcess').val(idBusinessFunction);
 		$('#businessProcess').show();
 		$('#processLabel').show();
-		$('#label').hide();
-		$('#lab').hide();
+//		$('#label').hide();
+//		$('#lab').hide();
 
 		break;
 
@@ -114,8 +115,8 @@ function newFunctionDialog(funzione) {
 		$('#name').val("");
 		$('#description').val("");
 		$('#label').val("");
-		$('#label').show();
-		$('#lab').show();
+//		$('#label').show();
+//		$('#lab').show();
 		break;
 	case "processes":
 		titolo = _newproc;
@@ -124,8 +125,8 @@ function newFunctionDialog(funzione) {
 		$('#name').val("");
 		$('#description').val("");
 		$('#label').val("");
-		$('#label').show();
-		$('#lab').show();
+//		$('#label').show();
+//		$('#lab').show();
 		break
 	case "subprocesses":
 		titolo = _newsubproc;
@@ -137,8 +138,8 @@ function newFunctionDialog(funzione) {
 		$('#name').val("");
 		$('#description').val("");
 		$('#label').val("");
-		$('#label').show();
-		$('#lab').show();
+//		$('#label').show();
+//		$('#lab').show();
 		break;
 	case "steps":
 		titolo = _newstep;
@@ -149,8 +150,8 @@ function newFunctionDialog(funzione) {
 		$('#description').val("");
 		$('#businessProcess').show();
 		$('#processLabel').show();
-		$('#label').hide();
-		$('#lab').hide();
+//		$('#label').hide();
+//		$('#lab').hide();
 
 		break;
 
@@ -325,6 +326,7 @@ function bindingFunctionDialog(id, nome, descrizione, etichetta, idPadre,
 	$('#idf').val(id);
 	$('#namef').val(nome);
 	$('#descriptionf').val(descrizione);
+	$('#labelf').val(etichetta);
 	$('#currentTabFunctionBinding').val("process");
 
 	$.ajax({
@@ -367,6 +369,7 @@ function bindingProcessDialog(id, nome, descrizione, etichetta, idPadre,
 	$('#idp').val(id);
 	$('#namep').val(nome);
 	$('#descriptionp').val(descrizione);
+	$('#labelp').val(etichetta);
 	$('#currentTabProcessBinding').val("step");
 
 	$.ajax({

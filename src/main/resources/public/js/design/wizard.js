@@ -212,7 +212,7 @@ try {
 			case "step":
 				
 					
-					if($('#namest').val().length!=0  &&  $('#descriptionst').val().length!=0  &&  $('#businessService').val()!="0"){
+					if($('#namest').val().length!=0  &&  $('#descriptionst').val().length!=0  &&  $('#labelst').val().length!=0 &&  $('#businessService').val()!="0"){
 						
 						
 						_steps.forEach(function(item, index){ 
@@ -239,7 +239,7 @@ try {
 						contentType : "application/json",
 						async: false,
 						url : _ctx + "/rest/design/savewizard/" +$('#functionList').val() + "/" + $('#namef').val() + "/" + $('#descriptionf').val() + "/" + $('#labelf').val() + "/" + $('#processList').val() + "/" + $('#namep').val() + "/" + $('#descriptionp').val() + "/" + $('#labelp').val() + "/" + $('#subprocessList').val() + 
-						"/" + $('#names').val() + "/" + $('#descriptions').val() + "/" + $('#labels').val() + "/" + $('#namest').val() + "/" +  $('#descriptionst').val() + "/" +  $('#businessService').val(),
+						"/" + $('#names').val() + "/" + $('#descriptions').val() + "/" + $('#labels').val() + "/" + $('#namest').val() + "/" +  $('#descriptionst').val() + "/" + $('#labelst').val() + "/" + $('#businessService').val(),
 						cache : true,
 						
 						success : function(data) {

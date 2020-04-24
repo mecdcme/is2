@@ -40,9 +40,10 @@
 	var _functions = [[${listaFunzioni}]];
 	var _processes = [[${listaAllBp}]];
 	var _subprocesses = [[${listaAllSubBp}]];
-	var _subprocesses = [[${listaAllSubBp}]];
+// 	var _subprocesses = [[${listaAllSubBp}]];
 	var _steps = [[${listaBusinessStep}]];
 </script>
+
 
 
 
@@ -112,7 +113,7 @@
 															<input id="namef" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control function" value="" /> 
 															<label for="descriptionf" th:text="#{generic.description}">Description:</label> 
 															<input id="descriptionf" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control function" value="" /> 
-															<label for="labelf" id="lab" th:text="#{generic.label}">Label:</label> 
+															<label for="labelf" id="labf" th:text="#{generic.label}">Label:</label> 
 															<input id="labelf" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control function" value="" />
 				                                </div> <input type="button" name="next" class="next action-button" value="Next Step" />
 				                            </fieldset>
@@ -135,7 +136,7 @@
 															<input id="namep" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control process" value="" /> 
 															<label for="descriptionp" th:text="#{generic.description}">Description:</label> 
 															<input id="descriptionp" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control process" value="" /> 
-															<label for="labelp" id="lab" th:text="#{generic.label}">Label:</label> 
+															<label for="labelp" id="labp" th:text="#{generic.label}">Label:</label> 
 															<input id="labelp" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control process" value="" />
 				                                </div> <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="next" class="next action-button" value="Next Step" />
 				                            </fieldset>
@@ -158,7 +159,7 @@
 															<input id="names" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control subprocess" value="" /> 
 															<label for="descriptions" th:text="#{generic.description}">Description:</label> 
 															<input id="descriptions" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control subprocess" value="" /> 
-															<label for="labels" id="lab" th:text="#{generic.label}">Label:</label> 
+															<label for="labels" id="labs" th:text="#{generic.label}">Label:</label> 
 															<input id="labels" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control subprocess" value="" />
 				                                </div> <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="next" class="next action-button" value="Next Step" />
 				                            </fieldset>
@@ -167,10 +168,18 @@
 				                                    <h2 class="fs-title">Step</h2>
 <!-- 															<input id="idst" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/>  -->
 															<label for="namest" th:text="#{generic.name}">Name:</label> 
-															<input id="namest" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control" value="" /> 
+															<input id="namest" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control step" value="" /> 
 															<label for="descriptionst" th:text="#{generic.description}">Description:</label> 
-															<input id="descriptionst" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control" value="" /> 
+															<input id="descriptionst" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control step" value="" /> 
+				                                			<label for="labelst" id="labst" th:text="#{generic.label}">Label:</label> 
+															<input id="labelst" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control step" value="" />
+				                                			
+				                                			
+				                                			
+				                                			
 				                                			<label id="processLabel" for="businessProcedure" th:text="#{generic.businessService}">Service:</label>
+				                                			
+				                                			
 				                                			<select class="form-control" id="businessService" name="fieldBusinessServiceId">
 																<option value="0" th:text="#{generic.selectBusinessService}">Select service..</option>
 																<option th:each="bp : ${listaAllBusinessService}" th:value="${bp.id}"

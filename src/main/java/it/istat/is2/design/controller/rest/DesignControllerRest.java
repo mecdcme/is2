@@ -20,9 +20,11 @@ import it.istat.is2.app.bean.WizardData;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.workflow.domain.BusinessFunction;
 import it.istat.is2.workflow.domain.BusinessProcess;
+import it.istat.is2.workflow.domain.BusinessService;
 import it.istat.is2.workflow.domain.ProcessStep;
 import it.istat.is2.workflow.service.BusinessFunctionService;
 import it.istat.is2.workflow.service.BusinessProcessService;
+import it.istat.is2.workflow.service.BusinessServiceService;
 import it.istat.is2.workflow.service.ProcessStepService;
 
 
@@ -40,8 +42,10 @@ public class DesignControllerRest {
 		private NotificationService notificationService;
 		@Autowired
 		private MessageSource messages;
+		@Autowired
+		private BusinessServiceService businessService;
 		 
-		@PostMapping(value = "/rest/design/savewizard/{idf}/{namef}/{descriptionf}/{labelf}/{idp}/{namep}/{descriptionp}/{labelp}/{ids}/{names}/{descriptions}/{labels}/{namest}/{descriptionst}/{businessServiceId}")
+		@PostMapping(value = "/rest/design/savewizard/{idf}/{namef}/{descriptionf}/{labelf}/{idp}/{namep}/{descriptionp}/{labelp}/{ids}/{names}/{descriptions}/{labels}/{namest}/{descriptionst}/{labelst}/{businessServiceId}")
 	 	public  ProcessStep saveWizard(HttpServletRequest request, 
 	 			@PathVariable("idf")  String idf,
 	 			@PathVariable("namef")  String namef,
@@ -57,19 +61,61 @@ public class DesignControllerRest {
 	 			@PathVariable("labels")  String labels,
 	 			@PathVariable("namest")  String namest,
 	 			@PathVariable("descriptionst")  String descriptionst,
+	 			@PathVariable("labelst")  String labelst,
 	 			@PathVariable("businessServiceId")  String businessServiceId
 	 			
 	 																) {
+			    
 			
 		    	notificationService.removeAllMessages();
-		    	//ProcessStep step = null;
+		    	
 		    	ProcessStep step = new ProcessStep();
-		    	step.setId(Long.parseLong("10"));
-		    	
-		    	step.setName("pippo");
-		    	step.setDescr("pluto");
-		    	
+	    		BusinessProcess process = new BusinessProcess();
+	    		BusinessProcess subprocess = new BusinessProcess();
+	    		BusinessFunction function = new BusinessFunction();
 		    	try {
+		    		
+		    		
+		    		BusinessService newBusinessService = businessService
+							.findBusinessServiceById(Integer.parseInt(businessServiceId));
+		    		step.setName(namest);
+					step.setDescr(descriptionst);
+					step.setLabel(labelst);
+					step.setBusinessService(newBusinessService);
+					step=processStepService.save(step);
+		    		
+		    		
+		    		if(idp=="0") {
+		    			process.setName(namep);
+						process.setDescr(descriptionp);
+						process.setLabel(labelp);
+						process=businessProcessService.updateBProcess(process);
+		    		}else {
+		    			process = businessProcessService.findBProcessById(Long.parseLong(ids));	
+		    		}
+					
+		    		if(ids=="0") {
+		    			subprocess.setName(names);
+						subprocess.setDescr(descriptions);
+						subprocess.setLabel(labels);
+						subprocess.setBusinessProcessParent(process);
+						subprocess=businessProcessService.updateBProcess(subprocess);
+		    		}else {
+		    			subprocess = businessProcessService.findBProcessById(Long.parseLong(ids));	
+		    			subprocess.setBusinessProcessParent(process);
+		    			subprocess=businessProcessService.updateBProcess(subprocess);
+		    		}
+		    		
+		    		if(idf=="0") {
+		    			function.setName(namef);
+		    			function.setDescr(descriptionf);
+		    			function.setLabel(labelf);
+						function=businessFunctionService.updateBFunction(function);
+		    		}else {
+		    			function= businessFunctionService.findBFunctionById(Long.parseLong(idf));
+		    		}
+		    		
+		    		
 		    		messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale());
 		    		
 					
