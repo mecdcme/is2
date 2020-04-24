@@ -2,6 +2,9 @@ package it.istat.is2.design.controller.rest;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,9 +69,9 @@ public class DesignControllerRest {
 	 			
 	 																) {
 			    
-			
+				
 		    	notificationService.removeAllMessages();
-		    	
+		    	Integer i;
 		    	ProcessStep step = new ProcessStep();
 	    		BusinessProcess process = new BusinessProcess();
 	    		BusinessProcess subprocess = new BusinessProcess();
@@ -85,16 +88,16 @@ public class DesignControllerRest {
 					step=processStepService.save(step);
 		    		
 		    		
-		    		if(idp=="0") {
+		    		if(idp.equals("0")) {
 		    			process.setName(namep);
 						process.setDescr(descriptionp);
 						process.setLabel(labelp);
 						process=businessProcessService.updateBProcess(process);
 		    		}else {
-		    			process = businessProcessService.findBProcessById(Long.parseLong(ids));	
+		    			process = businessProcessService.findBProcessById(Long.parseLong(idp));	
 		    		}
 					
-		    		if(ids=="0") {
+		    		if(ids.equals("0")) {
 		    			subprocess.setName(names);
 						subprocess.setDescr(descriptions);
 						subprocess.setLabel(labels);
@@ -106,7 +109,7 @@ public class DesignControllerRest {
 		    			subprocess=businessProcessService.updateBProcess(subprocess);
 		    		}
 		    		
-		    		if(idf=="0") {
+		    		if(idf.equals("0")) {
 		    			function.setName(namef);
 		    			function.setDescr(descriptionf);
 		    			function.setLabel(labelf);
@@ -115,6 +118,64 @@ public class DesignControllerRest {
 		    			function= businessFunctionService.findBFunctionById(Long.parseLong(idf));
 		    		}
 		    		
+		    		List<BusinessFunction> listFunction = new ArrayList<>();
+		    		List<BusinessProcess> listProcess = new ArrayList<>();
+		    		List<BusinessProcess> listSubProcess = new ArrayList<>();
+		    		List<ProcessStep> listStep = new ArrayList<>();
+		    		
+		    		
+		    
+		    			
+		    		try {
+		    			function.getBusinessProcesses().forEach(item-> listProcess.add(item));
+					} catch (Exception e) {
+						
+					}
+		    		
+		    		if (!listProcess.contains(process)) {
+		    			listProcess.add(process);
+		    		};
+		    		function.setBusinessProcesses(listProcess);
+		    		businessFunctionService.updateBFunction(function);
+		  
+		    		try {
+		    			process.getBusinessFunctions().forEach(item-> listFunction.add(item));
+					} catch (Exception e) {
+						
+					}
+		    		    		
+		    		if (!listFunction.contains(function)) {
+		    			listFunction.add(function);
+		    		};
+		    		process.setBusinessFunctions(listFunction);
+		    		businessProcessService.updateBProcess(process);
+		    		
+		    		
+		    		try {
+		    			subprocess.getBusinessSteps().forEach(item-> listStep.add(item));
+					} catch (Exception e) {
+						
+					}
+		    		
+		    		
+		    		if (!listStep.contains(step)) {
+		    			listStep.add(step);
+		    		};
+		    		subprocess.setBusinessSteps(listStep);
+		    		businessProcessService.updateBProcess(subprocess);
+		    		
+		    		try {
+		    			step.getBusinessProcesses().forEach(item-> listSubProcess.add(item));
+					} catch (Exception e) {
+						
+					}
+		    		
+		    		if (!listSubProcess.contains(subprocess)) {
+		    			listSubProcess.add(subprocess);
+		    		};
+		    		
+		    		step.setBusinessProcesses(listSubProcess);
+		    		processStepService.save(step);
 		    		
 		    		messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale());
 		    		
