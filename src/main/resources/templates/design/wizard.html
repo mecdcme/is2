@@ -81,27 +81,27 @@
 				    <div class="row justify-content-center mt-0">
 				        <div class="col-11 col-sm-9 col-md-7 col-lg-9 text-center p-0 mt-3 mb-2">
 				            <div class="card px-0 pt-5 pb-0 mt-3 mb-3">
-				                <h2><strong>Process design wizard</strong></h2>
-				                <p>Fill all form field to go to next step</p>
+				                <h2><strong th:text="#{generic.processDesignWizard}">Process design wizard</strong></h2>
+				                <p th:text="#{generic.fillAllTheForm}">Fill all form field to go to next step</p>
 				                <div class="row">
 				                    <div class="col-md-12 mx-0">
 				                        <form id="msform">
 				                            <!-- progressbar -->
 				                            <ul id="progressbar">
-				                                <li class="active" id="function"><strong>Function</strong></li>
-				                                <li id="process"><strong>Process</strong></li>
-				                                <li id="subprocess"><strong>Subprocess</strong></li>
-				                                <li id="steps"><strong>Steps</strong></li>
-				                                <li id="confirm"><strong>Finish</strong></li>
+				                                <li class="active" id="function" th:text="#{generic.Function}"><strong>Function</strong></li>
+				                                <li id="process" th:text="#{generic.Process}"><strong>Process</strong></li>
+				                                <li id="subprocess" th:text="#{generic.Subprocess}"><strong>Subprocess</strong></li>
+				                                <li id="steps" th:text="#{generic.Step}"><strong>Step</strong></li>
+				                                <li id="confirm" th:text="#{generic.Finish}"><strong>Finish!</strong></li>
 				                            </ul> 
 				                            <fieldset name="function">
 				                                <div class="form-card" >
 				                                   
 				                                    		<div class="row">
 				                                    			<div class="col-lg-6">
-				                                    					<h2 class="fs-title">Function</h2> 	
+				                                    					<h2 class="fs-title" th:text="#{generic.Function}">Function</h2> 	
 				                                    			</div>
-				                                    			<label class="col-lg-2" for="functionList" >Function list:</label> 
+				                                    			<label class="col-lg-2" for="functionList" th:text="#{generic.FunctionList}">Function list:</label> 
 				                                    			<select  id="functionList">
 				                                    				<option value="0" th:text="#{generic.selectBusinessFunction}">Select business function..</option>
 									   								<option th:each="fun: ${listaFunzioni}" th:text="${fun.name}"  th:value="${fun.id}"></option>
@@ -122,9 +122,9 @@
 				                                    
 				                                    		<div class="row">
 				                                    			<div class="col-lg-6">
-				                                    					<h2 class="fs-title">Process</h2> 
+				                                    					<h2 class="fs-title"  th:text="#{generic.Process}">Process</h2> 
 				                                    			</div>
-				                                    			<label class="col-lg-2" for="processList" >Process list:</label> 
+				                                    			<label class="col-lg-2" for="processList" th:text="#{generic.ProcessList}">Process list:</label> 
 				                                    			<select  id="processList">
 				                                    				<option value="0" th:text="#{generic.selectBusinessProcess}">Select business process..</option>
 									   								<option th:each="proc: ${listaAllBp}" th:text="${proc.name}"  th:value="${proc.id}"></option>
@@ -145,9 +145,9 @@
 				                                   
 				                                    		<div class="row">
 				                                    			<div class="col-lg-6">
-				                                    					 <h2 class="fs-title">Subprocess</h2> 
+				                                    					 <h2 class="fs-title" th:text="#{generic.Subprocess}">Subprocess</h2> 
 				                                    			</div>
-				                                    			<label class="col-lg-2" for="subprocessList" >Subprocess list:</label> 
+				                                    			<label class="col-lg-2" for="subprocessList"  th:text="#{generic.SubprocessList}">Subprocess list:</label> 
 				                                    			<select  id="subprocessList">
 				                                    				<option value="0" th:text="#{generic.selectBusinessSubprocess}">Select business subprocess..</option>
 									   								<option th:each="proc: ${listaAllSubBp}" th:text="${proc.name}"  th:value="${proc.id}"></option>
@@ -165,7 +165,7 @@
 				                            </fieldset>
 				                            <fieldset name="step">
 				                                <div class="form-card">
-				                                    <h2 class="fs-title">Step</h2>
+				                                    <h2 class="fs-title" th:text="#{generic.Step}">Step</h2>
 <!-- 															<input id="idst" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/>  -->
 															<label for="namest" th:text="#{generic.name}">Name:</label> 
 															<input id="namest" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control step" value="" /> 
@@ -191,13 +191,13 @@
 				                            </fieldset>
 				                            <fieldset name="">
 				                                <div class="form-card">
-				                                    <h2 class="fs-title text-center">Success !</h2> <br><br>
+				                                    <h2 class="fs-title text-center" th:text="#{generic.Success}">Success !</h2> <br><br>
 				                                    <div class="row justify-content-center">
-				                                        <div class="col-3"> <img src="https://img.icons8.com/color/96/000000/ok--v2.png" class="fit-image"> </div>
+				                                        <div class="col-3"> <img src="img/ok--v2.png" class="fit-image"> </div>
 				                                    </div> <br><br>
 				                                    <div class="row justify-content-center">
 				                                        <div class="col-7 text-center">
-				                                            <h5>You Have Successfully Signed Up</h5>
+				                                            <a th:href="@{/drivensettings}">You Have Successfully designed your process! click here to continue wizard design</a>
 				                                        </div>
 				                                    </div>
 				                                </div>
@@ -212,193 +212,7 @@
 			
 
 			</main>
-			<div class="modal fade" id="Update-Dialog" tabindex="-1"
-				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">
-								<i class="fa fa-edit"></i>&nbsp; <span
-									th:text="#{generic.update}" id="modTitle">Update</span>
-							</h5>
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<form id="dialog" th:action="@{'/playaction'}" method="post">
-								<input id="action" type="text" name="fieldAction" hidden=true /> 
-								<input id="currentTab" type="text" name="selectedTab" hidden=true /> 
-								
-								<label id="fatherLabel" for="fieldFather" th:text="#{generic.fatherProcess}">Processo Padre:</label>
-								<div class="form-group blu-margin">
-									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
-									<select class="form-control" id="fatherProcess" name="fieldFatherId">
-										<option value="0" th:text="#{generic.selectFatherProcess}">Select father process..</option>
-										<option th:each="bp : ${listaAllBp}" th:value="${bp.id}"
-											th:text="${bp.Name}"></option>
-									</select>
-								</div>
-
-
-<!-- 								<label id="idlab" for="id" th:text="#{generic.id}">Id:</label> -->
-								<input id="id" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/> 
-								<label for="name" th:text="#{generic.name}">Name:</label> 
-								<input id="name" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control" value="" /> 
-								<label for="description" th:text="#{generic.description}">Description:</label> 
-								<input id="description" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off"  class="form-control" value="" /> 
-								<label for="label" id="lab" th:text="#{generic.label}">Label:</label> 
-								<input id="label" type="text" name="fieldLabel"th:placeholder="#{generic.label}" autocomplete="off"  class="form-control" value="" />
-								<label id="processLabel" for="businessProcess" th:text="#{generic.businessProcess}">Process:</label>
-								<div class="form-group blu-margin">
-									<!-- 								    <select class="form-control" th:field="${operator.opeId"  id="dropOperator"> -->
-									<select class="form-control" id="businessProcess" name="fieldBusinessProcessId">
-										<option value="0" th:text="#{generic.selectBusinessProcess}">Select business process..</option>
-										<option th:each="bp : ${listaAllBusinessService}" th:value="${bp.id}"
-											th:text="${bp.Name}"></option>
-									</select>
-								</div>
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-light" data-dismiss="modal">
-								<span th:title="#{generic.title.close.button}"
-									th:text="#{Layout.Close}">Annulla</span>
-							</button>
-							<button type="button" id="btn-invia-table"
-								class="btn btn-primary " onclick="playAction();"
-								th:title="#{submit.button.title}" th:text="#{submit.button}"
-								data-dismiss="modal">Invia</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal fade" id="binding-Functions" tabindex="-1"
-				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">
-								<i class="fa fa-edit"></i>&nbsp; <span
-									th:text="#{generic.bindingFunctions}" id="bindingTitleFunctions">Update</span>
-							</h5>
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<form id="bindingFunctionsForm" th:action="@{'/bindingFunctions'}" method="post">
-								<input id="currentTabFunctionBinding" type="text" name="selectedTab" hidden=true /> 
-								
-<!-- 								<label id="idlabf" for="idf" th:text="#{generic.id}">Id:</label> -->
-								<input id="idf" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required class="form-control" value="" hidden=true/> 
-								<label for="namef" th:text="#{generic.name}">Name:</label> 
-								<input id="namef" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off" required class="form-control" value="" /> 
-								<label for="descriptionf" th:text="#{generic.description}">Description:</label> 
-								<input id="descriptionf" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required class="form-control" value="" /> 
-								
-								
-								<label th:text="#{generic.processList}">Id:</label>
-								
-								
-								<div class="col-lg-10">
-									<div class="row">
-									
-									
-									 <select  id="functionsList" multiple="multiple" name="duallistbox_demo[]"  class="demo" title="duallistbox_demo[]">
-									    <option th:each="stepP: ${listaFunzioni}" th:text="${stepP.name}"  th:value="${stepP.id}"></option>
-								
-									  </select>
-									
-									
-
- 									</div>
- 								</div>
-								
-								
-								 
-
-								
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-light" data-dismiss="modal">
-								<span th:title="#{generic.title.close.button}"
-									th:text="#{Layout.Close}">Annulla</span>
-							</button>
-							<button type="button" id="btn-invia-table"
-								class="btn btn-primary" onclick="playBindingFunctions();"
-								th:title="#{submit.button.title}" th:text="#{submit.button}"
-								data-dismiss="modal">Invia</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal fade" id="binding-Processes" tabindex="-1"
-				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">
-								<i class="fa fa-edit"></i>&nbsp; <span
-									th:text="#{generic.bindingSubProcesses}" id="bindingTitleSteps">Update</span>
-							</h5>
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<form id="bindingProcessesForm" th:action="@{'/bindingProcesses'}" method="post">
-								
-								<input id="currentTabProcessBinding" type="text" name="selectedTab" hidden=true /> 
-<!-- 								<label id="idlabp" for="idp" th:text="#{generic.id}">Id:</label> -->
-								<input id="idp" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off" required class="form-control" value="" hidden=true/> 
-								<label for="namep" th:text="#{generic.name}">Name:</label> 
-								<input id="namep" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off" required class="form-control" value="" /> 
-								<label for="descriptionp" th:text="#{generic.description}">Description:</label> 
-								<input id="descriptionp" type="text" name="fieldDescription" th:placeholder="#{generic.description}" autocomplete="off" required class="form-control" value="" /> 
-								
-								
-								
-								<label th:text="#{generic.stepList}">Id:</label>
-								
-								<div class="col-lg-10">
-									<div class="row">
-									
-									
-									 <select id="processesList" multiple="multiple" name="duallistbox_demo1[]"  class="demo1" title="duallistbox_demo1[]">
-									    <option th:each="stepP: ${listaAllSubBp}" th:text="${stepP.name}"  th:value="${stepP.id}"></option>
-								
-									  </select>
-									
-									
-
- 									</div>
- 								</div>
-								
-								
-								 
-
-								
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-light" data-dismiss="modal">
-								<span th:title="#{generic.title.close.button}"
-									th:text="#{Layout.Close}">Annulla</span>
-							</button>
-							<button type="button" id="btn-invia-table"
-								class="btn btn-primary" onclick="playBindingProcesses();"
-								th:title="#{submit.button.title}" th:text="#{submit.button}"
-								data-dismiss="modal">Invia</button>
-						</div>
-					</div>
-				</div>
-			</div>
-
+			
 		</div>
 		<footer th:replace="layout :: site-footer"></footer>
 	</div>
