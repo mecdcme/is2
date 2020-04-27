@@ -36,7 +36,10 @@
 
 <script th:inline="javascript"> 
 
-	
+    var _alertFunction = [[#{generic.Function.alert}]];
+    var _alertProcess = [[#{generic.Process.alert}]];
+    var _alertSubprocess = [[#{generic.Subprocess.alert}]];
+    var _alertFillAllFields = [[#{generic.fillAllFilelds.alert}]];
 	var _functions = [[${listaFunzioni}]];
 	var _processes = [[${listaAllBp}]];
 	var _subprocesses = [[${listaAllSubBp}]];

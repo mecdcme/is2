@@ -130,7 +130,7 @@ try {
 						
 						_functions.forEach(function(item, index){ 
 							if(item.name==$('#namef').val()){
-								alert("Function with this name already exist, please select the function fron the list or choose a different name");
+								alert(_alertFunction);
 //								$('#idf').val("");
 								$('#namef').val("");
 								$('#descriptionf').val("");
@@ -146,7 +146,7 @@ try {
 						
 						
 					}else{
-						alert("fill all fields to proceed!")
+						alert(_alertFillAllFields)
 						throw "exit";
 					}
 					
@@ -161,7 +161,7 @@ try {
 						
 						_processes.forEach(function(item, index){ 
 							if(item.name==$('#namep').val()){
-								alert("Process with this name already exist, please select the process fron the list or choose a different name");
+								alert(_alertProcess);
 //								$('#idp').val("");
 								$('#namep').val("");
 								$('#descriptionp').val("");
@@ -174,7 +174,7 @@ try {
 						
 						
 					}else{
-						alert("fill all fields to proceed!")
+						alert(_alertFillAllFields)
 						throw "exit";
 					}
 					
@@ -188,7 +188,7 @@ try {
 						
 						_subprocesses.forEach(function(item, index){ 
 							if(item.name==$('#names').val()){
-								alert("Subprocess with this name already exist, please select the subprocess fron the list or choose a different name");
+								alert(_alertSubprocess);
 //								$('#ids').val("");
 								$('#names').val("");
 								$('#descriptions').val("");
@@ -203,7 +203,7 @@ try {
 						
 						
 					}else{
-						alert("fill all fields to proceed!")
+						alert(_alertFillAllFields)
 						throw "exit";
 					}
 				
@@ -230,7 +230,7 @@ try {
 						
 						
 					}else{
-						alert("fill all fields to proceed!")
+						alert(_alertFillAllFields)
 						throw "exit";
 					}
 
