@@ -105,7 +105,7 @@
 											<div class="card-header-actions">
 
 												<a class="card-header-action" href="javascript:void(0)"
-													onclick="javascript:openNewBServiceDialog();"
+													onclick="javascript:open_business_edit();"
 													th:title="#{bs.label.create.new}"> <i
 													class="fa fa-plus-square-o"></i> <span
 													th:text="#{bs.label.create.new}">New Business
@@ -135,7 +135,7 @@
 
 														<td><a href="javascript:void(0)" role="button"
 															th:title="#{link.title.upd.bs}"
-															th:attr="onclick='javascript:updateBusinessService(' + ${bservice.id} + ', \'' + ${bservice.name} + '\',\'' + ${bservice.descr} + '\', \''  + ${bservice.gsbpmProcess.id} +'\')'">
+															th:attr="onclick='javascript:check_and_send_req(' + ${bservice.id} + '\')'">
 																<i class="fa fa-pencil"></i>
 														</a></td>
 

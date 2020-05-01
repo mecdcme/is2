@@ -60,7 +60,7 @@ public class BusinessDesignController {
 	@Autowired
 	private MessageSource messages;
 	@Autowired
-    private GsbpmProcessService gsbpmProcessService;
+	private GsbpmProcessService gsbpmProcessService;
 
 	@GetMapping("/busservlist")
 	public String serviceList(HttpSession session, Model model, @ModelAttribute("selectedTab") String selectedTab) {
@@ -68,10 +68,10 @@ public class BusinessDesignController {
 		List<BusinessService> listaBService = businessServiceService.findBusinessServices();
 		List<AppService> listaAppService = appServiceService.findAllAppService();
 		List<StepInstance> listaStepInstance = stepInstanceService.findAllStepInstance();
-		List<GsbpmProcess> listaGsbpmParentProcess = gsbpmProcessService.findAllProcesses();	
+		List<GsbpmProcess> listaGsbpmParentProcess = gsbpmProcessService.findAllProcesses();
 		List<GsbpmProcess> listaGsbpmSubProcess = gsbpmProcessService.findAllSubProcesses();
-		
-		ArrayList<GsbpmProcess>listaAllGsbpmProcess = new ArrayList<GsbpmProcess>();
+
+		ArrayList<GsbpmProcess> listaAllGsbpmProcess = new ArrayList<GsbpmProcess>();
 		listaAllGsbpmProcess.addAll(listaGsbpmParentProcess);
 		listaAllGsbpmProcess.addAll(listaGsbpmSubProcess);
 		model.addAttribute("listaAllGsbpmProcess", listaAllGsbpmProcess);
@@ -84,12 +84,13 @@ public class BusinessDesignController {
 	}
 
 	@PostMapping(value = "/updatebservice")
-	public String updateBService(HttpSession session, Model model, @RequestParam("bserviceid") Integer bserviceid, @RequestParam("name") String name, @RequestParam("description") String description,
+	public String updateBService(HttpSession session, Model model, @RequestParam("bserviceid") Integer bserviceid,
+			@RequestParam("name") String name, @RequestParam("description") String description,
 			@RequestParam("gsbpmid") Long gsbpmid) {
 		notificationService.removeAllMessages();
 
 		BusinessService businessService = businessServiceService.findBusinessServiceById(bserviceid);
-		
+
 		businessService.setName(name);
 		businessService.setDescr(description);
 		GsbpmProcess gsbpmProcess = gsbpmProcessService.findById(gsbpmid);
@@ -107,10 +108,30 @@ public class BusinessDesignController {
 
 		return "redirect:/busservlist";
 	}
-	
+
+	@GetMapping(value = "/businessedit")
+	public String bServiceEdit(HttpSession session, Model model, RedirectAttributes ra) {
+		notificationService.removeAllMessages();
+
+		List<GsbpmProcess> listaGsbpmParentProcess = gsbpmProcessService.findAllProcesses();
+		GsbpmProcess gsbpmProcess = listaGsbpmParentProcess.get(0);
+
+		List<GsbpmProcess> listaGsbpmSubProcess = gsbpmProcessService
+				.findSubProcessesByGsbpmParentProcess(gsbpmProcess);
+
+		ArrayList<GsbpmProcess> listaAllGsbpmProcess = new ArrayList<GsbpmProcess>();
+		listaAllGsbpmProcess.addAll(listaGsbpmParentProcess);
+		listaAllGsbpmProcess.addAll(listaGsbpmSubProcess);
+
+		model.addAttribute("listaGsbpmParentProcess", listaGsbpmParentProcess);
+
+		model.addAttribute("listaGsbpmSubProcess", listaGsbpmSubProcess);
+		return "businessdesign/businessedit";
+	}
+
 	@PostMapping(value = "/newbservice")
-	public String createNewBService(HttpSession session, Model model, @RequestParam("name") String name, @RequestParam("description") String description, 
-			@RequestParam("gsbpmid") Long gsbpmid) {
+	public String createNewBService(HttpSession session, Model model, @RequestParam("name") String name,
+			@RequestParam("description") String description, @RequestParam("gsbpmid") Long gsbpmid) {
 		notificationService.removeAllMessages();
 
 		BusinessService businessService = new BusinessService();
@@ -134,12 +155,12 @@ public class BusinessDesignController {
 	}
 
 	@PostMapping(value = "/newappservice")
-	public String createNewAppService(HttpSession session, Model model,
-			@RequestParam("name") String name, @RequestParam("description") String description,
-			@RequestParam("language") String language, @RequestParam("engine") String engine,
-			@RequestParam("sourcepath") String sourcepath, @RequestParam("sourcecode") String sourcecode,
-			@RequestParam("author") String author, @RequestParam("licence") String licence,
-			@RequestParam("contact") String contact, @RequestParam("idbservice") String idbservice) {
+	public String createNewAppService(HttpSession session, Model model, @RequestParam("name") String name,
+			@RequestParam("description") String description, @RequestParam("language") String language,
+			@RequestParam("engine") String engine, @RequestParam("sourcepath") String sourcepath,
+			@RequestParam("sourcecode") String sourcecode, @RequestParam("author") String author,
+			@RequestParam("licence") String licence, @RequestParam("contact") String contact,
+			@RequestParam("idbservice") String idbservice) {
 		notificationService.removeAllMessages();
 
 		AppService appService = new AppService();
@@ -152,11 +173,11 @@ public class BusinessDesignController {
 		appService.setAuthor(author);
 		appService.setLicence(licence);
 		appService.setContact(contact);
-		
+
 		Integer idbs = Integer.parseInt(idbservice);
-		BusinessService businessService = businessServiceService.findBusinessServiceById(idbs);		
+		BusinessService businessService = businessServiceService.findBusinessServiceById(idbs);
 		appService.setBusinessService(businessService);
-		
+
 		try {
 			appServiceService.save(appService);
 			notificationService.addInfoMessage(
@@ -169,6 +190,7 @@ public class BusinessDesignController {
 
 		return "redirect:/busservlist";
 	}
+
 	@PostMapping(value = "/updateappservice")
 	public String updateAppService(HttpSession session, Model model, @RequestParam("appserviceupdateid") Long id,
 			@RequestParam("name") String name, @RequestParam("description") String description,
@@ -188,11 +210,11 @@ public class BusinessDesignController {
 		appService.setAuthor(author);
 		appService.setLicence(licence);
 		appService.setContact(contact);
-		
+
 		Integer idbs = Integer.parseInt(idbservice);
-		BusinessService businessService = businessServiceService.findBusinessServiceById(idbs);		
+		BusinessService businessService = businessServiceService.findBusinessServiceById(idbs);
 		appService.setBusinessService(businessService);
-		
+
 		try {
 			appServiceService.save(appService);
 			notificationService.addInfoMessage(
@@ -205,23 +227,23 @@ public class BusinessDesignController {
 
 		return "redirect:/busservlist";
 	}
+
 	@PostMapping(value = "/newstepinstance")
-	public String createNewStepInstance(HttpSession session, Model model,
-			@RequestParam("method") String method, @RequestParam("description") String description,
-			@RequestParam("label") String label, @RequestParam("idappservice") Long idappservice) {
+	public String createNewStepInstance(HttpSession session, Model model, @RequestParam("method") String method,
+			@RequestParam("description") String description, @RequestParam("label") String label,
+			@RequestParam("idappservice") Long idappservice) {
 		notificationService.removeAllMessages();
 
 		StepInstance stepInstance = new StepInstance();
 		stepInstance.setMethod(method);
-		stepInstance.setDescr(description);				
+		stepInstance.setDescr(description);
 		stepInstance.setLabel(label);
-		
+
 		AppService appService = appServiceService.findAppServiceById(idappservice);
-		stepInstance.setAppService(appService);		
-		
-		
+		stepInstance.setAppService(appService);
+
 		try {
-			stepInstanceService.save(stepInstance);			
+			stepInstanceService.save(stepInstance);
 			notificationService.addInfoMessage(
 					messages.getMessage("generic.successfull.saved.message", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
@@ -232,24 +254,24 @@ public class BusinessDesignController {
 
 		return "redirect:/busservlist";
 	}
-	
+
 	@PostMapping(value = "/updatestepinstance")
 	public String updateStepInstance(HttpSession session, Model model,
-			@RequestParam("idstepinstance") Long idstepinstance, @RequestParam("method") String method, @RequestParam("description") String description,
-			@RequestParam("label") String label, @RequestParam("idappservice") Long idappservice) {
+			@RequestParam("idstepinstance") Long idstepinstance, @RequestParam("method") String method,
+			@RequestParam("description") String description, @RequestParam("label") String label,
+			@RequestParam("idappservice") Long idappservice) {
 		notificationService.removeAllMessages();
-		 
+
 		StepInstance stepInstance = stepInstanceService.findStepInstanceById(idstepinstance);
 		stepInstance.setMethod(method);
-		stepInstance.setDescr(description);				
+		stepInstance.setDescr(description);
 		stepInstance.setLabel(label);
-		
+
 		AppService appService = appServiceService.findAppServiceById(idappservice);
-		stepInstance.setAppService(appService);		
-		
-		
+		stepInstance.setAppService(appService);
+
 		try {
-			stepInstanceService.save(stepInstance);			
+			stepInstanceService.save(stepInstance);
 			notificationService.addInfoMessage(
 					messages.getMessage("generic.successfull.updated.message", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
@@ -277,6 +299,7 @@ public class BusinessDesignController {
 		}
 		return "redirect:/busservlist";
 	}
+
 	@GetMapping(value = "/deleteappservice/{idappservice}")
 	public String deleteAppService(HttpSession session, Model model, RedirectAttributes ra,
 			@PathVariable("idappservice") Long idappservice) {
@@ -293,16 +316,17 @@ public class BusinessDesignController {
 		}
 		return "redirect:/busservlist";
 	}
+
 	@GetMapping(value = "/deletestepinstance/{idstepinstance}")
 	public String deleteStepInstance(HttpSession session, Model model, RedirectAttributes ra,
 			@PathVariable("idstepinstance") String idstepinstance) {
 		notificationService.removeAllMessages();
-		
+
 		Long idStepInstance = Long.parseLong(idstepinstance);
-		
+
 		StepInstance stepInstance = stepInstanceService.findStepInstanceById(idStepInstance);
 		try {
-			stepInstanceService.deleteStepInstance(idStepInstance);	
+			stepInstanceService.deleteStepInstance(idStepInstance);
 			notificationService.addInfoMessage(messages.getMessage("si.removed.success.message",
 					new Object[] { stepInstance.getMethod() }, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {

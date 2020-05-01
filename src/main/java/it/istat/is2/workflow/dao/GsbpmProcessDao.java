@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import it.istat.is2.workflow.domain.GsbpmProcess;
@@ -40,6 +41,9 @@ public interface GsbpmProcessDao extends CrudRepository<GsbpmProcess, Long> {
     @Query("SELECT gp FROM GsbpmProcess gp WHERE gp.gsbpmProcessParent IS NOT NULL and gp.active = 1 ORDER BY gp.gsbpmProcessParent, gp.orderCode ASC")
     List<GsbpmProcess> findAllSubProcesses();
     
+    @Query("SELECT gp FROM GsbpmProcess gp WHERE gp.gsbpmProcessParent=:gsbpmProcess and gp.active = 1 ORDER BY gp.gsbpmProcessParent, gp.orderCode ASC")
+    List<GsbpmProcess> findSubProcessesByGsbpmParentProcess(@Param("gsbpmProcess") GsbpmProcess gsbpmProcess);
+        
     @Query("SELECT max(gp.orderCode) FROM GsbpmProcess gp")
     Integer getGsbpmRows();
     

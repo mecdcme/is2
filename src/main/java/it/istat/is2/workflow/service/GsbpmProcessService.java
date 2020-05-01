@@ -50,6 +50,10 @@ public class GsbpmProcessService {
     public List<GsbpmProcess> findAllSubProcesses() {
         return gsbpmProcessDao.findAllSubProcesses();
     }
+    
+    public List<GsbpmProcess> findSubProcessesByGsbpmParentProcess(GsbpmProcess gsbpmProcess) {
+        return gsbpmProcessDao.findSubProcessesByGsbpmParentProcess(gsbpmProcess);
+    }
 
     public Integer getGsbpmRows(){
         return gsbpmProcessDao.getGsbpmRows();

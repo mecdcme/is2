@@ -1,0 +1,156 @@
+<!-- 
+ Copyright 2019 ISTAT
+
+ Licensed under the EUPL, Version 1.1 or � as soon they will be approved by
+ the European Commission - subsequent versions of the EUPL (the "Licence");
+ You may not use this work except in compliance with the Licence. You may
+ obtain a copy of the Licence at:
+
+ http://ec.europa.eu/idabc/eupl5
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ Licence for the specific language governing permissions and limitations under
+ the Licence.
+
+ @author Francesco Amato <framato @ istat.it>
+ @author Mauro Bruno <mbruno @ istat.it>
+ @author Paolo Francescangeli  <pafrance @ istat.it>
+ @author Renzo Iannacone <iannacone @ istat.it>
+ @author Stefano Macone <macone @ istat.it>
+ @version 1.0
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<head th:include="layout :: site-head" th:remove="tag" />
+<script th:inline="javascript">
+	var _remove_bs_msg_dialog = [[#{dialog.elimination.bs.message}]];
+	var _mandatory_name_field = [[#{as.field.name.mandatory}]];
+	var _mandatory_method_field = [[#{si.field.method.mandatory}]];
+	var _remove_as_msg_dialog = [[#{dialog.elimination.as.message}]];
+	var _remove_si_msg_dialog = [[#{dialog.elimination.si.message}]];
+	var _selectedTab = [[${selectedTab}]];
+</script>
+<script th:src="@{/js/vendors/table/datatables.min.js}"></script>
+<script th:src="@{/js/user/usersList.js}"></script>
+<script th:src="@{/js/servicedesign/newbdesign.js}"></script>
+<link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet" />
+</head>
+<body class="c-app">
+	<div th:replace="layout :: site-aside"></div>
+	<div th:replace="layout :: site-modals"></div>
+
+	<div class="c-wrapper">
+		<header
+			class="c-header c-header-light c-header-fixed c-header-with-subheader">
+			<div th:include="layout :: site-header" th:remove="tag"></div>
+			<div class="c-subheader justify-content-between px-3">
+				<!-- Breadcrumb-->
+				<ol class="breadcrumb border-0 m-0">
+					<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+					<li class="breadcrumb-item"><span th:text="#{bs.home.link}">Business
+							service edit</span></li>
+				</ol>
+				<!-- Right navigation menu -->
+				<div class="c-header-nav d-md-down-none mfe-2">
+					<a class="c-header-nav-link" th:title="#{session.button.close}"
+						th:href="@{'/'}"> <i class="fa fa-close"></i>&nbsp;<span
+						th:text="#{Layout.Close}"></span>
+					</a>
+				</div>
+			</div>
+		</header>
+
+		<div class="c-body">
+			<main class="c-main">
+				<div class="container-fluid">
+					<div class="row justify-start">
+
+						<div class="col-lg-8">
+
+							<div class="row">
+
+								<!-- Business Service list -->
+
+
+								<div class="card">
+									<div class="card-header">
+										<span th:text="#{bs.label.create.new}">New Business
+											Service</span>
+
+									</div>
+									<div class="card-body">
+
+										<!-- TEST NEW BUSINESS SERVICE PAGE -->
+
+
+										<form th:action="@{/newbservice}" id="bs-form"
+											class="form-horizontal" method="post">
+
+
+											<div class="form-group">
+												<label class="control-label"
+													th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
+												<input name="name" id="bs-name"
+													th:title="#{generic.label.name}" class="form-control"
+													type="text" /> <span class="help-block"> <small
+													class="text-danger" id="bs-name-error"></small>
+												</span>
+											</div>
+											<div class="form-group">
+												<label class="control-label"
+													th:text="#{nuova.sessione.descr}"> <span>Descrizione</span>
+												</label> <input name="description"
+													th:title="#{generic.label.description}"
+													class="form-control" type="text" /> <span
+													class="help-block"></span>
+											</div>
+											<div class="form-group" id="select-gsbpm-1-div">
+												<label class="control-label" th:text="#{bs.gsbpm.label}"><span>Processo
+														Gsbpm padre</span> </label> <select name="gsbpmid" id="select-gsbpm-1"
+													th:title="#{bs.gsbpm.label}" class="form-control">
+													<option th:each="gsbpm : ${listaGsbpmParentProcess}"
+														th:value="${gsbpm.id}" th:text="${gsbpm.name}" />
+												</select><span class="help-block"></span>
+
+											</div>
+											<div id="preparing-select-js">
+												<div class="form-group" id="select-gsbpm-2-div">
+													<label class="control-label" th:text="#{bs.gsbpm.label}"><span>Processo
+															Gsbpm figlio</span> </label> <select name="gsbpmid" id="select-gsbpm-2"
+														th:title="#{bs.gsbpm.label}" class="form-control">
+														<option th:each="gsbpm : ${listaGsbpmSubProcess}"
+															th:value="${gsbpm.id}" th:text="${gsbpm.name}" />
+													</select><span class="help-block"></span>
+
+												</div>
+											</div>
+
+										</form>
+										<div class="modal-footer">
+											<button type="button" id="btn-submit-bs"
+												class=" btn btn-primary">
+												<span th:title="#{session.button.save}"
+													th:text="#{session.button.save}">Salva</span>
+											</button>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+		<!-- End body -->
+		<footer th:replace="layout :: site-footer"></footer>
+
+
+	</div>
+</body>
+</html>
+
