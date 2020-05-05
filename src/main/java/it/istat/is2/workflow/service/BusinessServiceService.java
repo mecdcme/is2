@@ -96,7 +96,10 @@ public class BusinessServiceService {
         }
         return appServiceList;
     }
-    public void deleteBusinessService(Integer idbs){
-    	businessServiceDao.deleteById(idbs);
+    public void deleteBusinessServiceById(Integer idbs){
+    	businessServiceDao.deleteById(idbs);    	
+    }
+    public void deleteBusinessService(BusinessService bs){    	
+    	businessServiceDao.delete(bs);
     }
 }

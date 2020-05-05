@@ -289,8 +289,8 @@ public class BusinessDesignController {
 		notificationService.removeAllMessages();
 
 		BusinessService businessService = businessServiceService.findBusinessServiceById(idbservice);
-		try {
-			businessServiceService.deleteBusinessService(idbservice);
+		try {			
+			businessServiceService.deleteBusinessService(businessService);
 			notificationService.addInfoMessage(messages.getMessage("bs.removed.success.message",
 					new Object[] { businessService.getName() }, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
