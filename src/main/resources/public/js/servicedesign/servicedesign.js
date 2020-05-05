@@ -26,11 +26,7 @@ var _ctx = $("meta[name='ctx']").attr("content");
 $(document).ready(function() {
 
 	$("#select-gsbpm-2").hide();
-	$("#new-bservice-modal").keydown(function(event) {
-		if (event.which == 13) {
-			check_and_send_req();
-		}
-	});
+	
 	$("#update-bservice-modal").keydown(function(event) {
 		if (event.which == 13) {
 			check_and_send_upd_bs_req();
@@ -71,9 +67,7 @@ $(document).ready(function() {
 			delete_stepinstance();
 		}
 	});
-	$("#btn-submit-bs").click(function() {
-		check_and_send_req();
-	});
+	
 	$("#btn-submit-upd-bs").click(function() {
 		check_and_send_upd_bs_req();
 	});
@@ -144,11 +138,7 @@ function setTab(selectedTab) {
 
 }
 
-function openNewBServiceDialog() {
-	$("#bs-name-error").text('');
-	check_and_send_req();
-	//$('#new-bservice-modal').modal('show');
-}
+
 function openNewAppServiceDialog() {
 	$("#as-name-error").text('');
 	$('#new-app-service-modal').modal('show');
@@ -196,13 +186,7 @@ function open_business_edit() {
 	window.location = _ctx + '/businessedit/';
 	
 }
-function check_and_send_req() {
-	var bsname = $('#bs-name').val();
-	
-	window.location = _ctx + '/businessedit/' + idbs;
-	//$("#bs-form").submit();
-	
-}
+
 function check_and_send_as_req() {
 	var asname = $('#as-name').val();
 	if (asname.length < 1) {

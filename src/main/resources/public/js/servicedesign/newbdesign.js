@@ -29,9 +29,19 @@ $(document).ready(function() {
 		var sel_process = $("#select-gsbpm-1 :selected").val();
 		loadSubGsbpmProcess();
 	});
-
+	$("#btn-submit-bs").click(function() {
+		check_and_send_req();
+	});
+	$("#btn-submit-bs").keydown(function(event) {
+		if (event.which == 13) {
+			check_and_send_req();
+		}
+	});
 });
 
+function check_and_send_req() {		
+	$("#bs-form").submit();
+}
 function loadSubGsbpmProcess() {
 	var id_process = $("#select-gsbpm-1 :selected").val();
 	$
