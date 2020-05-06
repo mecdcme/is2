@@ -177,12 +177,12 @@ public class DesignControllerRest {
 		    		step.setBusinessProcesses(listSubProcess);
 		    		processStepService.save(step);
 		    		
-		    		messages.getMessage("design.update.success", null, LocaleContextHolder.getLocale());
+		    		messages.getMessage("design.wizard.success", null, LocaleContextHolder.getLocale());
 		    		
 					
 				} catch (Exception e) {
 					// TODO: handle exception
-					notificationService.addErrorMessage(messages.getMessage("design.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
+					notificationService.addErrorMessage(messages.getMessage("design.wizard.error", null, LocaleContextHolder.getLocale()) +": " + e.getMessage());
 					
 					
 				}
