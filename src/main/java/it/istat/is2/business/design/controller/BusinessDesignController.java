@@ -109,23 +109,50 @@ public class BusinessDesignController {
 		return "redirect:/busservlist";
 	}
 
-	@GetMapping(value = "/businessedit")
-	public String bServiceEdit(HttpSession session, Model model, RedirectAttributes ra) {
+	@GetMapping(value = "/businessedit/{idservice}")
+	public String bServiceEdit(HttpSession session, Model model, RedirectAttributes ra, @PathVariable("idservice") String idservice) {
 		notificationService.removeAllMessages();
 
-		List<GsbpmProcess> listaGsbpmParentProcess = gsbpmProcessService.findAllProcesses();
-		GsbpmProcess gsbpmProcess = listaGsbpmParentProcess.get(0);
+		if(idservice.equals("null")) {
+			List<GsbpmProcess> listaGsbpmParentProcess = gsbpmProcessService.findAllProcesses();
+			GsbpmProcess gsbpmProcess = listaGsbpmParentProcess.get(0);
 
-		List<GsbpmProcess> listaGsbpmSubProcess = gsbpmProcessService
-				.findSubProcessesByGsbpmParentProcess(gsbpmProcess);
+			List<GsbpmProcess> listaGsbpmSubProcess = gsbpmProcessService
+					.findSubProcessesByGsbpmParentProcess(gsbpmProcess);
 
-		ArrayList<GsbpmProcess> listaAllGsbpmProcess = new ArrayList<GsbpmProcess>();
-		listaAllGsbpmProcess.addAll(listaGsbpmParentProcess);
-		listaAllGsbpmProcess.addAll(listaGsbpmSubProcess);
+			ArrayList<GsbpmProcess> listaAllGsbpmProcess = new ArrayList<GsbpmProcess>();
+			listaAllGsbpmProcess.addAll(listaGsbpmParentProcess);
+			listaAllGsbpmProcess.addAll(listaGsbpmSubProcess);
 
-		model.addAttribute("listaGsbpmParentProcess", listaGsbpmParentProcess);
+			model.addAttribute("listaGsbpmParentProcess", listaGsbpmParentProcess);
 
-		model.addAttribute("listaGsbpmSubProcess", listaGsbpmSubProcess);
+			model.addAttribute("listaGsbpmSubProcess", listaGsbpmSubProcess);
+			model.addAttribute("businessService", "null");
+		}else {
+			Long ids = Long.parseLong(idservice);
+			BusinessService bs = businessServiceService.findBusinessServiceById(ids);
+			GsbpmProcess gsbpmpSub = bs.getGsbpmProcess();
+		
+			
+			//GsbpmProcess gsbpmpParent = gsbpmpSub.getGsbpmProcessParent();
+			List<GsbpmProcess> listaGsbpmParentProcess = gsbpmProcessService.findAllProcesses();
+			
+
+			List<GsbpmProcess> listaGsbpmSubProcess = gsbpmProcessService
+					.findSubProcessesByGsbpmParentProcess(gsbpmpSub.getGsbpmProcessParent());
+
+			ArrayList<GsbpmProcess> listaAllGsbpmProcess = new ArrayList<GsbpmProcess>();
+			listaAllGsbpmProcess.addAll(listaGsbpmParentProcess);
+			listaAllGsbpmProcess.addAll(listaGsbpmSubProcess);
+
+			model.addAttribute("listaGsbpmParentProcess", listaGsbpmParentProcess);
+
+			model.addAttribute("listaGsbpmSubProcess", listaGsbpmSubProcess);
+			model.addAttribute("businessService", bs);
+			bs.getGsbpmProcess().getGsbpmProcessParent().getId();
+			bs.getGsbpmProcess().getId();
+		}
+		
 		return "businessdesign/businessedit";
 	}
 

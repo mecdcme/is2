@@ -182,9 +182,8 @@ function updateStepInstanceDialog(id, method, description, label, appserviceid) 
 	$("#select-si-upd-appservice").val(appserviceid);
 	$('#update-step-instance-modal').modal('show');
 }
-function open_business_edit() {	
-	window.location = _ctx + '/businessedit/';
-	
+function open_business_edit(idservice) {
+	window.location = _ctx + '/businessedit/'+idservice;	
 }
 
 function check_and_send_as_req() {
