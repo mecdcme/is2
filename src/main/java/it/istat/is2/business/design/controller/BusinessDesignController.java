@@ -149,8 +149,7 @@ public class BusinessDesignController {
 
 			model.addAttribute("listaGsbpmSubProcess", listaGsbpmSubProcess);
 			model.addAttribute("businessService", bs);
-			bs.getGsbpmProcess().getGsbpmProcessParent().getId();
-			bs.getGsbpmProcess().getId();
+			
 		}
 		
 		return "businessdesign/businessedit";

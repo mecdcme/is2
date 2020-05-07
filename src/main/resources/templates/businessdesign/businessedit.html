@@ -110,7 +110,7 @@
 											</div>
 											<div class="form-group" id="select-gsbpm-1-div">
 												<label class="control-label" th:text="#{bs.gsbpm.label}"><span>Processo
-														Gsbpm padre</span> </label> <select name="gsbpmid" id="select-gsbpm-1"
+														Gsbpm padre</span> </label> <select name="gsbpmidparent" id="select-gsbpm-1"
 													th:title="#{bs.gsbpm.label}" class="form-control">
 													<option th:each="gsbpm : ${listaGsbpmParentProcess}"
 														th:value="${gsbpm.id}" th:text="${gsbpm.name}"/>
