@@ -110,7 +110,42 @@ $("#subprocessList").on('change', function(e) {
 });
 
 
-
+$("#stepList").on('change', function(e) {
+	if( $(this).val()!="0"){
+		$.ajax({
+			type : "GET",
+			contentType : "application/json",
+			url : _ctx + "/rest/design/getStep/" +  $(this).val(),
+			dataType : 'json',
+			cache : true,
+			success : function(data) {
+//				$('#ids').val(data.id);
+				$('#namest').val(data.name);
+				$('#descriptionst').val(data.descr);
+				$('#labelst').val(data.label);
+				$('#businessService').val(data.businessService.id);
+				$("#businessService").attr("disabled", true);
+				$('.step').attr("readonly", "readonly");
+			},
+			error : function(e) {
+	
+				console.log("ERROR : ", e);
+			},
+			complete : function() {
+	
+			}
+		});
+	}else{
+//		$('#ids').val("");
+		$('#namest').val("");
+		$('#descriptionst').val("");
+		$('#labelst').val("");
+		$('#stepList').val()=="0"
+		$("#businessService").attr("disabled", false);
+		$('.step').removeAttr("readonly", "readonly");
+	};
+	
+});
 
 $(".next").click(function(){
 
@@ -239,7 +274,7 @@ try {
 						contentType : "application/json",
 						async: false,
 						url : _ctx + "/rest/design/savewizard/" +$('#functionList').val() + "/" + $('#namef').val() + "/" + $('#descriptionf').val() + "/" + $('#labelf').val() + "/" + $('#processList').val() + "/" + $('#namep').val() + "/" + $('#descriptionp').val() + "/" + $('#labelp').val() + "/" + $('#subprocessList').val() + 
-						"/" + $('#names').val() + "/" + $('#descriptions').val() + "/" + $('#labels').val() + "/" + $('#namest').val() + "/" +  $('#descriptionst').val() + "/" + $('#labelst').val() + "/" + $('#businessService').val(),
+						"/" + $('#names').val() + "/" + $('#descriptions').val() + "/" + $('#labels').val() + "/" + $('#stepList').val() + "/" + $('#namest').val() + "/" +  $('#descriptionst').val() + "/" + $('#labelst').val() + "/" + $('#businessService').val(),
 						cache : true,
 						
 						success : function(data) {

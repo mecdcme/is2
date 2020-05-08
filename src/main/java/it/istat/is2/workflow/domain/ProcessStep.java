@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import it.istat.is2.workflow.domain.common.AbstractDomainObject;
 
@@ -46,7 +47,7 @@ public class ProcessStep extends AbstractDomainObject implements Serializable {
 
     @Column(name="LABEL")
     private String label;
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "BUSINESS_SERVICE_ID")
     private BusinessService businessService;

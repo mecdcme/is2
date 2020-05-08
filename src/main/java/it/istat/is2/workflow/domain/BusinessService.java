@@ -35,6 +35,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import it.istat.is2.workflow.domain.common.AbstractDomainObject;
@@ -61,9 +62,11 @@ public class BusinessService extends AbstractDomainObject implements Serializabl
 	private List<AppRole> appRoles;
 
 	@OneToMany(mappedBy = "businessService")
+	@JsonBackReference
 	private List<AppService> appServices;
 
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name = "GSBPM_PROCESS_ID")
 	private GsbpmProcess gsbpmProcess;
 

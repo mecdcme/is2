@@ -48,7 +48,7 @@ public class DesignControllerRest {
 		@Autowired
 		private BusinessServiceService businessService;
 		 
-		@PostMapping(value = "/rest/design/savewizard/{idf}/{namef}/{descriptionf}/{labelf}/{idp}/{namep}/{descriptionp}/{labelp}/{ids}/{names}/{descriptions}/{labels}/{namest}/{descriptionst}/{labelst}/{businessServiceId}")
+		@PostMapping(value = "/rest/design/savewizard/{idf}/{namef}/{descriptionf}/{labelf}/{idp}/{namep}/{descriptionp}/{labelp}/{ids}/{names}/{descriptions}/{labels}/{idst}/{namest}/{descriptionst}/{labelst}/{businessServiceId}")
 	 	public  ProcessStep saveWizard(HttpServletRequest request, 
 	 			@PathVariable("idf")  String idf,
 	 			@PathVariable("namef")  String namef,
@@ -62,6 +62,7 @@ public class DesignControllerRest {
 	 			@PathVariable("names")  String names,
 	 			@PathVariable("descriptions")  String descriptions,
 	 			@PathVariable("labels")  String labels,
+	 			@PathVariable("idst")  String idst,
 	 			@PathVariable("namest")  String namest,
 	 			@PathVariable("descriptionst")  String descriptionst,
 	 			@PathVariable("labelst")  String labelst,
@@ -79,13 +80,7 @@ public class DesignControllerRest {
 		    	try {
 		    		
 		    		
-		    		BusinessService newBusinessService = businessService
-							.findBusinessServiceById(Integer.parseInt(businessServiceId));
-		    		step.setName(namest);
-					step.setDescr(descriptionst);
-					step.setLabel(labelst);
-					step.setBusinessService(newBusinessService);
-					step=processStepService.save(step);
+		    		
 		    		
 		    		
 		    		if(idp.equals("0")) {
@@ -116,6 +111,18 @@ public class DesignControllerRest {
 						function=businessFunctionService.updateBFunction(function);
 		    		}else {
 		    			function= businessFunctionService.findBFunctionById(Long.parseLong(idf));
+		    		}
+		    		
+		    		if(idst.equals("0")) {
+		    			BusinessService newBusinessService = businessService
+								.findBusinessServiceById(Integer.parseInt(businessServiceId));
+			    		step.setName(namest);
+						step.setDescr(descriptionst);
+						step.setLabel(labelst);
+						step.setBusinessService(newBusinessService);
+						step=processStepService.save(step);
+		    		}else {
+		    			step= processStepService.findProcessStepById(Long.parseLong(idst));
 		    		}
 		    		
 		    		List<BusinessFunction> listFunction = new ArrayList<>();

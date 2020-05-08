@@ -168,8 +168,22 @@
 				                            </fieldset>
 				                            <fieldset name="step">
 				                                <div class="form-card">
-				                                    <h2 class="fs-title" th:text="#{generic.Step}">Step</h2>
+<!-- 				                                    <h2 class="fs-title" th:text="#{generic.Step}">Step</h2> -->
 <!-- 															<input id="idst" type="text" name="fieldId" th:placeholder="#{generic.id}" autocomplete="off"  class="form-control" value="" hidden=true/>  -->
+															<div class="row">
+				                                    			<div class="col-lg-6">
+				                                    					 <h2 class="fs-title" th:text="#{generic.Step}">Step</h2> 
+				                                    			</div>
+				                                    			<label class="col-lg-2" for="stepList"  th:text="#{generic.StepList}">Step list:</label> 
+				                                    			<select  id="stepList" >
+				                                    				<option value="0" th:text="#{generic.selectStep}">Select process step..</option>
+									   								<option th:each="proc: ${listaBusinessStep}" th:text="${proc.name}"  th:value="${proc.id}"></option>
+								
+															  </select>
+															</div>	 
+															
+															
+															
 															<label for="namest" th:text="#{generic.name}">Name:</label> 
 															<input id="namest" type="text" name="fieldName" th:placeholder="#{generic.name}" autocomplete="off"  class="form-control step" value="" /> 
 															<label for="descriptionst" th:text="#{generic.description}">Description:</label> 
@@ -183,7 +197,7 @@
 				                                			<label id="processLabel" for="businessProcedure" th:text="#{generic.businessService}">Service:</label>
 				                                			
 				                                			
-				                                			<select class="form-control" id="businessService" name="fieldBusinessServiceId">
+				                                			<select class="form-control step" id="businessService" name="fieldBusinessServiceId">
 																<option value="0" th:text="#{generic.selectBusinessService}">Select service..</option>
 																<option th:each="bp : ${listaAllBusinessService}" th:value="${bp.id}"
 																	th:text="${bp.Name}"></option>
