@@ -246,29 +246,30 @@ try {
 				break;
 			case "step":
 				
+					if($('#stepList').val()=="0"){
 					
-					if($('#namest').val().length!=0  &&  $('#descriptionst').val().length!=0  &&  $('#labelst').val().length!=0 &&  $('#businessService').val()!="0"){
-						
-						
-						_steps.forEach(function(item, index){ 
-							if(item.name==$('#namest').val()){
-								alert("Step with this name already exist, please choose a different name");
-//								$('#idst').val("");
-								$('#namest').val("");
-								$('#descriptionst').val("");
-								
-								
-									throw "exit";
-							}
-						});
-						
-						
-						
-					}else{
-						alert(_alertFillAllFields)
-						throw "exit";
+						if($('#namest').val().length!=0  &&  $('#descriptionst').val().length!=0  &&  $('#labelst').val().length!=0 &&  $('#businessService').val()!="0"){
+							
+							
+							_steps.forEach(function(item, index){ 
+								if(item.name==$('#namest').val()){
+									alert(_alertStep);
+	//								$('#idst').val("");
+									$('#namest').val("");
+									$('#descriptionst').val("");
+									$('#labelst').val("");
+									$('#stepList').val()=="0"
+										throw "exit";
+								}
+							});
+							
+							
+							
+						}else{
+							alert(_alertFillAllFields)
+							throw "exit";
+						}
 					}
-
 					$.ajax({
 						type : "POST",
 						contentType : "application/json",
