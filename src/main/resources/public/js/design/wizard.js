@@ -19,6 +19,7 @@ $("#functionList").on('change', function(e) {
 				$('#descriptionf').val(data.descr);
 				$('#labelf').val(data.label);
 				$('.function').attr("readonly", "readonly");
+				
 			},
 			error : function(e) {
 	
