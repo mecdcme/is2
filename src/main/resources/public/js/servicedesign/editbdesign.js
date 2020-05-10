@@ -40,7 +40,12 @@ $(document).ready(function() {
 });
 
 function check_and_send_req() {		
-	$("#bs-form").submit();
+	var bsname = $('#bs-name').val();
+	if (bsname.length < 1) {
+		$("#bs-name-error").text(_mandatory_name_field);
+	} else {
+		$("#bs-form").submit();
+	}
 }
 function loadSubGsbpmProcess() {
 	var id_process = $("#select-gsbpm-1 :selected").val();

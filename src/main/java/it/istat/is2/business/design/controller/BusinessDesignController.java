@@ -154,6 +154,27 @@ public class BusinessDesignController {
 		
 		return "businessdesign/businessedit";
 	}
+	
+	@GetMapping(value = "/applicationedit/{appserviceid}")
+	public String appServiceEdit(HttpSession session, Model model, RedirectAttributes ra, @PathVariable("appserviceid") String appserviceid) {
+		notificationService.removeAllMessages();
+		List<BusinessService> listaBService = businessServiceService.findBusinessServices();
+		if(appserviceid.equals("null")) {
+			
+
+			model.addAttribute("applicationService", "null");
+		}else {
+			Long idapp = Long.parseLong(appserviceid);
+			AppService appService = appServiceService.findAppServiceById(idapp);	
+			
+			
+			model.addAttribute("applicationService", appService);
+			
+		}
+		model.addAttribute("listaBService", listaBService);
+		
+		return "businessdesign/applicationedit";
+	}
 
 	@PostMapping(value = "/newbservice")
 	public String createNewBService(HttpSession session, Model model, @RequestParam("name") String name,

@@ -32,11 +32,7 @@ $(document).ready(function() {
 			check_and_send_upd_bs_req();
 		}
 	});
-	$("#new-app-service-modal").keydown(function(event) {
-		if (event.which == 13) {
-			check_and_send_as_req();
-		}
-	});
+	
 	$("#update-app-service-modal").keydown(function(event) {
 		if (event.which == 13) {
 			check_and_send_upd_as_req();
@@ -71,9 +67,7 @@ $(document).ready(function() {
 	$("#btn-submit-upd-bs").click(function() {
 		check_and_send_upd_bs_req();
 	});
-	$("#btn-submit-as").click(function() {
-		check_and_send_as_req();
-	});
+	
 	$("#btn-submit-as-upd").click(function() {
 		check_and_send_upd_as_req();
 	});
@@ -139,9 +133,8 @@ function setTab(selectedTab) {
 }
 
 
-function openNewAppServiceDialog() {
-	$("#as-name-error").text('');
-	$('#new-app-service-modal').modal('show');
+function openAppServiceEditPage(idappservice) {	
+	window.location = _ctx + '/applicationedit/'+idappservice;
 }
 function openNewStepInstanceDialog() {
 	$("#si-name-error").text('');
@@ -155,24 +148,7 @@ function updateBusinessService(id, name, description, gsbpmid) {
 	$("#up-bs-gsbpm").val(gsbpmid);
 	$('#update-bservice-modal').modal('show');
 }
-function updateAppServiceDialog(identifier) {
-	$("#upd-as-name-error").text("");
-	$("#upd-as-id").val($(identifier).data('id-app-service'));
 
-	$("#upd-as-name").val($(identifier).data('name'));
-	$("#upd-as-description").val($(identifier).data('descr'));
-
-	$("#upd-as-language").val($(identifier).data('language'));
-	$("#upd-as-engine").val($(identifier).data('engine'));
-	$("#upd-as-sourcepath").val($(identifier).data('source-path'));
-	$("#upd-as-sourcecode").val($(identifier).data('source-code'));
-
-	$("#upd-as-author").val($(identifier).data('author'));
-	$("#upd-as-licence").val($(identifier).data('licence'));
-	$("#upd-as-contact").val($(identifier).data('contact'));
-	$("#upd-as-select").val($(identifier).data('bservice-id'));
-	$('#update-app-service-modal').modal('show');
-}
 function updateStepInstanceDialog(id, method, description, label, appserviceid) {
 	$("#upd-si-method-error").text('');
 	$("#id-upd-step-instance").val(id);
@@ -186,14 +162,7 @@ function open_business_edit(idservice) {
 	window.location = _ctx + '/businessedit/'+idservice;	
 }
 
-function check_and_send_as_req() {
-	var asname = $('#as-name').val();
-	if (asname.length < 1) {
-		$("#as-name-error").text(_mandatory_name_field);
-	} else {
-		$("#as-form").submit();
-	}
-}
+
 function check_and_send_upd_bs_req() {
 	var upbsname = $('#up-bs-name').val();
 	if (upbsname.length < 1) {

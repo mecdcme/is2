@@ -161,7 +161,7 @@
 											<div class="card-header-actions">
 
 												<a class="card-header-action" href="javascript:void(0)"
-													onclick="javascript:openNewAppServiceDialog();"
+													onclick="javascript:openAppServiceEditPage('null');"
 													th:title="#{as.label.create.new}"> <i
 													class="fa fa-plus-square-o"></i> <span
 													th:text="#{as.label.create.new}">New Application
@@ -197,9 +197,7 @@
 
 														<td><a href="javascript:void(0)" role="button"
 															th:title="#{link.title.upd.as}"
-															th:attr="data-id-app-service=${appservice.id},data-name=${appservice.name},data-descr=${appservice.descr},data-language=${appservice.language},data-engine=${appservice.engineType},
-														data-source-path=${appservice.source},data-source-code=${appservice.sourceCode},data-author=${appservice.author},data-licence=${appservice.licence},
-														data-contact=${appservice.contact},data-bservice-id=${appservice.businessService.id},onclick='javascript:updateAppServiceDialog(this);'">
+															th:attr="onclick='javascript:openAppServiceEditPage(' + ${appservice.id} + ')'">
 																<i class="fa fa-pencil"></i>
 														</a></td>
 
@@ -411,67 +409,7 @@
 							</button>
 						</div>
 						<div class="modal-body form">
-							<div class="form-group">
-								<label class="control-label" th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
-								<input name="name" id="as-name" th:title="#{generic.label.name}"
-									class="form-control" type="text" /> <span class="help-block">
-									<small class="text-danger" id="as-name-error"></small>
-								</span>
-							</div>
-							<div class="form-group">
-								<label class="control-label" th:text="#{nuova.sessione.descr}">
-									<span>Descrizione</span>
-								</label> <input name="description"
-									th:title="#{generic.label.description}" class="form-control"
-									type="text" /> <span class="help-block"></span>
-							</div>
-							<div class="form-group">
-								<label class="control-label" th:text="#{as.impl.language.label}"><span>Impl.
-										language</span> </label> <input name="language"
-									th:title="#{as.impl.language.label}" class="form-control"
-									type="text" /> <span class="help-block"></span>
-							</div>
-							<div class="form-group">
-								<label class="control-label" th:text="#{as.engine.label}"><span>Motore</span>
-								</label> <input name="engine" th:title="#{as.engine.label}"
-									class="form-control" type="text" /> <span class="help-block"></span>
-							</div>
-							<div class="form-group">
-								<label class="control-label" th:text="#{as.source.path.label}"><span>Percorso</span>
-								</label> <input name="sourcepath" th:title="#{as.source.path.label}"
-									class="form-control" type="text" /> <span class="help-block"></span>
-							</div>
-							<div class="form-group">
-								<label class="control-label" th:text="#{as.source.code.label}"><span>Codice</span>
-								</label> <input name="sourcecode" th:title="#{as.source.code.label}"
-									class="form-control" type="text" /> <span class="help-block"></span>
-							</div>
-							<div class="form-group">
-								<label class="control-label" th:text="#{as.author.label}"><span>Autore</span>
-								</label> <input name="author" th:title="#{as.author.label}"
-									class="form-control" type="text" /> <span class="help-block"></span>
-							</div>
-							<div class="form-group">
-								<label class="control-label" th:text="#{as.licence.label}"><span>Licenza</span>
-								</label> <input name="licence" th:title="#{as.licence.label}"
-									class="form-control" type="text" /> <span class="help-block"></span>
-							</div>
-							<div class="form-group">
-								<label class="control-label" th:text="#{as.contact.label}"><span>Contatto</span>
-								</label> <input name="contact" th:title="#{as.contact.label}"
-									class="form-control" type="text" /> <span class="help-block"></span>
-							</div>
-							<div class="form-group">
-								<label class="control-label"
-									th:text="#{as.busines.service.link.label}"><span>Collega
-										Business Service</span> </label> <select name="idbservice"
-									th:title="#{as.busines.service.link.label}"
-									class="form-control">
-									<option th:each="bService : ${listaBService}"
-										th:value="${bService.id}" th:text="${bService.name}" />
-								</select><span class="help-block"></span>
-
-							</div>
+							
 						</div>
 					</form>
 					<div class="modal-footer">
