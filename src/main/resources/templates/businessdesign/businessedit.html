@@ -84,8 +84,7 @@
 									</div>
 									<div class="card-body" >
 
-										<!-- TEST NEW BUSINESS SERVICE PAGE -->
-
+										<!-- CREATE new Business Service -->
 
 										<form th:action="@{/newbservice}" id="bs-form" th:if="${businessService == 'null'}"
 											class="form-horizontal" method="post">
@@ -130,10 +129,12 @@
 											</div>
 
 										</form>
-										<form th:action="@{/newbservice}" id="bs-form" th:unless="${businessService == 'null'}"
+										
+										<!-- UPDATE BusinessService -->
+										<form th:action="@{/updatebservice}" id="bs-form" th:unless="${businessService == 'null'}"
 											class="form-horizontal" method="post">
-
-
+											<input type="hidden" name="bserviceid" th:value="${businessService.id}"/>
+											
 											<div class="form-group">
 												<label class="control-label"
 													th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
