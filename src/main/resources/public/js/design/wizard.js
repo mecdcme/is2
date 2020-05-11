@@ -18,6 +18,8 @@ $("#functionList").on('change', function(e) {
 				$('#namef').val(data.name);
 				$('#descriptionf').val(data.descr);
 				$('#labelf').val(data.label);
+				$('.functionList').empty();
+				$('.functionList').append('<li class="treeview-animated-items" > <a class="open closed"><span>' + "Function: "+ data.name + '</span></a></li><ul class="nested processList">');
 				$('.function').attr("readonly", "readonly");
 				
 			},
@@ -54,6 +56,8 @@ $("#processList").on('change', function(e) {
 				$('#namep').val(data.name);
 				$('#descriptionp').val(data.descr);
 				$('#labelp').val(data.label);
+				$('.processList').empty();
+				$('.processList').append('<li class="treeview-animated-items" > <a class="open closed"><span>' + "Process: "+ data.name + '</span></a></li></ul><ul class="nested subprocessList">');
 				$('.process').attr("readonly", "readonly");
 			},
 			error : function(e) {
@@ -89,6 +93,8 @@ $("#subprocessList").on('change', function(e) {
 				$('#names').val(data.name);
 				$('#descriptions').val(data.descr);
 				$('#labels').val(data.label);
+				$('.subprocessList').empty();
+				$('.subprocessList').append('<ul class="nested" ><li class="treeview-animated-items" > <a class="open closed"><span>' + "Subrocess: "+ data.name + '</span></a></li></ul><ul class="nested stepList">');
 				$('.subprocess').attr("readonly", "readonly");
 			},
 			error : function(e) {
@@ -126,6 +132,8 @@ $("#stepList").on('change', function(e) {
 				$('#labelst').val(data.label);
 				$('#businessService').val(data.businessService.id);
 				$("#businessService").attr("disabled", true);
+				$('.stepList').empty();
+				$('.stepList').append('<ul class="nested" ><li class="treeview-animated-items" > <a class="open closed"><span>' + "Step: "+ data.name + '</span></a></li></ul>');
 				$('.step').attr("readonly", "readonly");
 			},
 			error : function(e) {

@@ -44,16 +44,16 @@
 	var _functions = [[${listaFunzioni}]];
 	var _processes = [[${listaAllBp}]];
 	var _subprocesses = [[${listaAllSubBp}]];
-// 	var _subprocesses = [[${listaAllSubBp}]];
 	var _steps = [[${listaBusinessStep}]];
+	
 </script>
 
-
+<link th:href="@{/css/design/wizard.css}" rel="stylesheet" />
 
 
 <script th:src="@{/js/design/wizard.js}" type="text/javascript"></script>
 
-<link th:href="@{/css/design/wizard.css}" rel="stylesheet" />
+
 
 <body class="c-app">
 	<div th:replace="layout :: site-aside"></div>
@@ -89,37 +89,41 @@
 				                <p th:text="#{generic.fillAllTheForm}">Fill all form field to go to next step</p>
 				                <div class="row">
 				                
-				                	<div class="col-lg-4"> 								
+				                	<div class="col-lg-4"> 	
+				                	    						
 									
 											<div class="treeview-animated w-20 border mx-4">
+											 		
 					
 													<h6 class="pt-3 pl-3"th:text="#{generic.design}">Global design</h6>
 													<hr>
-														<ul class="treeview-animated-list mb-3" >
-														 
-<!-- 														<li th:each="alb: ${albero}" class="treeview-animated-items" > -->
-<!-- 															 <a class="open closed"><i class="fa fa-plus-circle"></i><span th:text="${alb.getData()}"></span></a> -->
-<!-- 																<ul class="nested" > -->
-<!-- 																	<li th:each="foglio: ${alb.getChildren()}" class="treeview-animated-items"> -->
-<!-- 																	<a class="open closed"><i class="fa fa-plus-circle"></i><span th:text="${foglio.getData()}"></span></a> -->
-<!-- 																		<ul class="nested"> -->
-<!-- 																			<li th:each="foglio2: ${foglio.getChildren()}" class="treeview-animated-items"> -->
-<!-- 						     								 		  		  <a class="open closed"><i class="fa fa-plus-circle"></i ><span th:text="${foglio2.getData()}"></span></a> -->
-<!-- 																				<ul class="nested"> -->
-<!-- 																					<li th:each="foglio3: ${foglio2.getChildren()}" class="treeview-animated-items"> -->
-<!-- 						     								 		  		  		 <div th:text="${foglio3.getData()}" ></div> -->
-					
-<!-- 																					</li> -->
-<!-- 																			 	</ul> -->
-<!-- 																			</li> -->
-<!-- 																		</ul> -->
-<!-- 																	</li> -->
-<!-- 					 										  </ul> -->
-<!-- 					 									  </li>  -->
-													  	</ul>
+														
+															<ul class="treeview-animated-list functionList" >
+															 
+	<!-- 														<li th:each="alb: ${albero}" class="treeview-animated-items" > -->
+	<!-- 															 <a class="open closed"><i class="fa fa-plus-circle"></i><span th:text="${alb.getData()}"></span></a> -->
+	<!-- 																<ul class="nested" > -->
+	<!-- 																	<li th:each="foglio: ${alb.getChildren()}" class="treeview-animated-items"> -->
+	<!-- 																	<a class="open closed"><i class="fa fa-plus-circle"></i><span th:text="${foglio.getData()}"></span></a> -->
+	<!-- 																		<ul class="nested"> -->
+	<!-- 																			<li th:each="foglio2: ${foglio.getChildren()}" class="treeview-animated-items"> -->
+	<!-- 						     								 		  		  <a class="open closed"><i class="fa fa-plus-circle"></i ><span th:text="${foglio2.getData()}"></span></a> -->
+	<!-- 																				<ul class="nested"> -->
+	<!-- 																					<li th:each="foglio3: ${foglio2.getChildren()}" class="treeview-animated-items"> -->
+	<!-- 						     								 		  		  		 <div th:text="${foglio3.getData()}" ></div> -->
+						
+	<!-- 																					</li> -->
+	<!-- 																			 	</ul> -->
+	<!-- 																			</li> -->
+	<!-- 																		</ul> -->
+	<!-- 																	</li> -->
+	<!-- 					 										  </ul> -->
+	<!-- 					 									  </li>  -->
+														  	</ul>
+														
 												
 											</div>
-				
+										
 										
 									</div>
 				                
