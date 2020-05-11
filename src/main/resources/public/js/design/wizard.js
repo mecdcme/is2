@@ -179,15 +179,15 @@ try {
 								$('#namef').val("");
 								$('#descriptionf').val("");
 								$('#labelf').val("");
-								$('#functionList').val()=="0"
+								$('#functionList').val("0");
 								
 								
 								
 									throw "exit";
 							}
 						});
-						
-						
+						$('.functionList').empty();
+						$('.functionList').append('<li class="treeview-animated-items" > <a class="open closed"><span>' + "Function: "+ $('#namef').val() + '</span></a></li><ul class="nested processList">');
 						
 					}else{
 						alert(_alertFillAllFields)
@@ -210,13 +210,13 @@ try {
 								$('#namep').val("");
 								$('#descriptionp').val("");
 								$('#labelp').val("");
-								$('processList').val()=="0"
+								$('#processList').val("0");
 								
 									throw "exit";
 							}
 						});
-						
-						
+						$('.processList').empty();
+						$('.processList').append('<li class="treeview-animated-items" > <a class="open closed"><span>' + "Process: "+ $('#namep').val() + '</span></a></li></ul><ul class="nested subprocessList">');
 					}else{
 						alert(_alertFillAllFields)
 						throw "exit";
@@ -237,14 +237,14 @@ try {
 								$('#names').val("");
 								$('#descriptions').val("");
 								$('#labels').val("");
-								$('#subprocessList').val()=="0"
+								$('#subprocessList').val("0");
 								
 								
 									throw "exit";
 							}
 						});
-						
-						
+						$('.subprocessList').empty();
+						$('.subprocessList').append('<ul class="nested" ><li class="treeview-animated-items" > <a class="open closed"><span>' + "Subrocess: "+ $('#names').val() + '</span></a></li></ul><ul class="nested stepList">');
 						
 					}else{
 						alert(_alertFillAllFields)
@@ -267,12 +267,13 @@ try {
 									$('#namest').val("");
 									$('#descriptionst').val("");
 									$('#labelst').val("");
-									$('#stepList').val()=="0"
+									$('#stepList').val("0");
+									
 										throw "exit";
 								}
 							});
-							
-							
+							$('.stepList').empty();
+							$('.stepList').append('<ul class="nested" ><li class="treeview-animated-items" > <a class="open closed"><span>' + "Step: "+ $('#namest').val() + '</span></a></li></ul>');
 							
 						}else{
 							alert(_alertFillAllFields)
@@ -348,29 +349,70 @@ try {
 
 $(".previous").click(function(){
 
-current_fs = $(this).parent();
-previous_fs = $(this).parent().prev();
-
-//Remove class active
-$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-
-//show the previous fieldset
-previous_fs.show();
-
-//hide the current fieldset with style
-current_fs.animate({opacity: 0}, {
-step: function(now) {
-// for making fielset appear animation
-opacity = 1 - now;
-
-current_fs.css({
-'display': 'none',
-'position': 'relative'
-});
-previous_fs.css({'opacity': opacity});
-},
-duration: 600
-});
+	current_fs = $(this).parent();
+	previous_fs = $(this).parent().prev();
+	
+	//Remove class active
+	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+	
+	//show the previous fieldset
+	previous_fs.show();
+	
+	
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+	step: function(now) {
+	// for making fielset appear animation
+	opacity = 1 - now;
+	
+	current_fs.css({
+	'display': 'none',
+	'position': 'relative'
+	});
+	previous_fs.css({'opacity': opacity});
+	},
+	duration: 600
+	});
+	
+	
+	switch (previous_fs[0].attributes.name.nodeValue) {
+		case "function":
+			
+			$('#namep').val("");
+			$('#descriptionp').val("");
+			$('#labelp').val("");
+			$('processList').val("0");
+			$('.processList').empty();
+			$('.process').removeAttr("readonly", "readonly");
+			break;
+		case "process":
+			$('#names').val("");
+			$('#descriptions').val("");
+			$('#labels').val("");
+			$('#subprocessList').val("0");
+			$('.subprocessList').empty();
+			$('.subprocess').removeAttr("readonly", "readonly");
+			
+			break;
+		case "subprocess":
+			$('#namest').val("");
+			$('#descriptionst').val("");
+			$('#labelst').val("");
+			$('#stepList').val("0");
+			$('.stepList').empty();
+			$('#businessService').val("0");
+			$("#businessService").attr("disabled", false);
+			$('.step').removeAttr("readonly", "readonly");
+			break;
+			
+		default:
+			break;
+	
+	}
+	
+	
+	
+	
 });
 
 $('.radio-group .radio').click(function(){
