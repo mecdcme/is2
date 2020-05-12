@@ -34,14 +34,25 @@ $(document).ready(function() {
 	$("#btn-submit-as").click(function() {
 		check_and_send_as_req();
 	});
+	
+	$("#btn-submit-as-upd").click(function() {
+		check_and_send_upd_as_req();
+	});
 });
 
-function check_and_send_as_req() {
-	alert("Ciao!");
+function check_and_send_as_req() {	
 	var asname = $('#as-name').val();
 	if (asname.length < 1) {
 		$("#as-name-error").text(_mandatory_name_field);
 	} else {
 		$("#as-form").submit();
+	}
+}
+function check_and_send_upd_as_req() {
+	var updasname = $('#upd-as-name').val().length;
+	if (updasname.length < 1) {
+		$("#upd-as-method-error").text(_mandatory_name_field);
+	} else {
+		$("#upd-as-form").submit();
 	}
 }

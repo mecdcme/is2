@@ -33,11 +33,7 @@ $(document).ready(function() {
 		}
 	});
 	
-	$("#update-app-service-modal").keydown(function(event) {
-		if (event.which == 13) {
-			check_and_send_upd_as_req();
-		}
-	});
+	
 	$("#new-step-instance-modal").keydown(function(event) {
 		if (event.which == 13) {
 			check_and_send_si_req();
@@ -68,9 +64,7 @@ $(document).ready(function() {
 		check_and_send_upd_bs_req();
 	});
 	
-	$("#btn-submit-as-upd").click(function() {
-		check_and_send_upd_as_req();
-	});
+	
 	$("#btn-submit-si").click(function() {
 		check_and_send_si_req();
 	});
@@ -171,14 +165,7 @@ function check_and_send_upd_bs_req() {
 		$("#upd-bs-form").submit();
 	}
 }
-function check_and_send_upd_as_req() {
-	var updasname = $('#upd-as-name').val().length;
-	if (updasname.length < 1) {
-		$("#upd-as-method-error").text(_mandatory_name_field);
-	} else {
-		$("#upd-as-form").submit();
-	}
-}
+
 function check_and_send_si_req() {
 	var method = $('#si-method').val().length;
 	if (method.length < 1) {

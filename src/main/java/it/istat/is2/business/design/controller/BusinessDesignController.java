@@ -239,8 +239,8 @@ public class BusinessDesignController {
 	}
 
 	@PostMapping(value = "/updateappservice")
-	public String updateAppService(HttpSession session, Model model, @RequestParam("appserviceupdateid") Long id,
-			@RequestParam("name") String name, @RequestParam("description") String description,
+	public String updateAppService(HttpSession session, Model model, @RequestParam("appserviceid") Long id,
+			@RequestParam("name") String name, @RequestParam("descr") String descr,
 			@RequestParam("language") String language, @RequestParam("engine") String engine,
 			@RequestParam("sourcepath") String sourcepath, @RequestParam("sourcecode") String sourcecode,
 			@RequestParam("author") String author, @RequestParam("licence") String licence,
@@ -249,7 +249,7 @@ public class BusinessDesignController {
 
 		AppService appService = appServiceService.findAppServiceById(id);
 		appService.setName(name);
-		appService.setDescr(description);
+		appService.setDescr(descr);
 		appService.setLanguage(language);
 		appService.setEngineType(engine);
 		appService.setSource(sourcepath);
