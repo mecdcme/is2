@@ -153,7 +153,7 @@
 											<div class="form-group">
 												<label class="control-label" th:text="#{si.label.label}">
 													<span>Label</span>
-												</label> <input name="label" th:title="#{si.label.label}"
+												</label> <input name="label" th:title="#{si.label.label}" th:value="${stepInstance.label}"
 													class="form-control" type="text" /> <span
 													class="help-block"></span>
 											</div>
@@ -163,7 +163,7 @@
 														App. Service</span> </label> <select name="appserviceid"
 													th:title="#{si.appservice.link.label}" class="form-control">
 													<option th:each="appService : ${listaAppService}"
-														th:value="${appService.id}" th:text="${appService.name}" />
+														th:value="${appService.id}" th:text="${appService.name}" th:selected="${stepInstance.appService.id == appService.id}"/>
 												</select><span class="help-block"></span>
 
 											</div>

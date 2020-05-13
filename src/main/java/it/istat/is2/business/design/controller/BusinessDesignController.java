@@ -325,12 +325,12 @@ public class BusinessDesignController {
 
 	@PostMapping(value = "/updatestepinstance")
 	public String updateStepInstance(HttpSession session, Model model,
-			@RequestParam("idstepinstance") Long idstepinstance, @RequestParam("method") String method,
+			@RequestParam("stepinstanceid") Long stepinstanceid, @RequestParam("method") String method,
 			@RequestParam("description") String description, @RequestParam("label") String label,
 			@RequestParam("appserviceid") Long appserviceid) {
 		notificationService.removeAllMessages();
 
-		StepInstance stepInstance = stepInstanceService.findStepInstanceById(idstepinstance);
+		StepInstance stepInstance = stepInstanceService.findStepInstanceById(stepinstanceid);
 		stepInstance.setMethod(method);
 		stepInstance.setDescr(description);
 		stepInstance.setLabel(label);

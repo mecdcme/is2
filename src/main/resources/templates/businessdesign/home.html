@@ -252,8 +252,7 @@
 
 														<td><a href="javascript:void(0)" role="button"
 															th:title="#{link.title.upd.si}"
-															th:attr="onclick='javascript:updateStepInstanceDialog(' + ${stepInstance.id} + ', \'' + ${stepInstance.method} + '\',\'' +
-															 ${stepInstance.descr} + '\', \''  + ${stepInstance.label} + '\',\'' + ${stepInstance.appService.id} + '\')'">
+															th:attr="onclick='javascript:openStepInstanceEditPage(' + ${stepInstance.id} + ')'">
 																<i class="fa fa-pencil"></i>
 														</a></td>
 
