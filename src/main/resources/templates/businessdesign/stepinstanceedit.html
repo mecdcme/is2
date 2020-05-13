@@ -36,7 +36,7 @@
 </script>
 <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
 <script th:src="@{/js/user/usersList.js}"></script>
-<script th:src="@{/js/servicedesign/editappsdesign.js}"></script>
+<script th:src="@{/js/servicedesign/editstepdesign.js}"></script>
 <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet" />
 </head>
 <body class="c-app">
@@ -83,7 +83,7 @@
 
 										<!-- CREATE new StepInstance -->
 
-										<form th:action="@{/newstepinstance}" id="as-form"
+										<form th:action="@{/newstepinstance}" id="si-form"
 											th:if="${stepInstance == 'null'}"
 											class="form-horizontal" method="post">
 
@@ -127,7 +127,7 @@
 
 										<!-- UPDATE StepInstance -->
 										
-										<form th:action="@{/updatestepinstance}" id="as-form"
+										<form th:action="@{/updatestepinstance}" id="si-form"
 											th:unless="${stepInstance == 'null'}"
 											class="form-horizontal" method="post">
 											<input type="hidden" name="stepinstanceid"
@@ -170,7 +170,7 @@
 
 										</form>
 										<div class="modal-footer">
-											<button type="button" id="btn-submit-as"
+											<button type="button" id="btn-submit-si"
 												class=" btn btn-primary">
 												<span th:title="#{session.button.save}"
 													th:text="#{session.button.save}">Salva</span>

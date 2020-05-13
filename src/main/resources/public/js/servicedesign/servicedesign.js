@@ -34,11 +34,7 @@ $(document).ready(function() {
 	});
 	
 	
-	$("#new-step-instance-modal").keydown(function(event) {
-		if (event.which == 13) {
-			check_and_send_si_req();
-		}
-	});
+	
 	$("#update-step-instance-modal").keydown(function(event) {
 		if (event.which == 13) {
 			check_and_send_upd_si_req();
@@ -65,9 +61,7 @@ $(document).ready(function() {
 	});
 	
 	
-	$("#btn-submit-si").click(function() {
-		check_and_send_si_req();
-	});
+	
 	$("#btn-submit-upd-si").click(function() {
 		check_and_send_upd_si_req();
 	});
@@ -130,7 +124,7 @@ function setTab(selectedTab) {
 function openAppServiceEditPage(idappservice) {	
 	window.location = _ctx + '/applicationedit/'+idappservice;
 }
-function openStepInstancePage(stepid) {
+function openStepInstanceEditPage(stepid) {
 	window.location = _ctx + '/stepinstanceedit/'+stepid;	
 }
 function updateBusinessService(id, name, description, gsbpmid) {
@@ -165,14 +159,6 @@ function check_and_send_upd_bs_req() {
 	}
 }
 
-function check_and_send_si_req() {
-	var method = $('#si-method').val().length;
-	if (method.length < 1) {
-		$("#si-method-error").text(_mandatory_method_field);
-	} else {
-		$("#si-form").submit();
-	}
-}
 function check_and_send_upd_si_req() {
 	var method = $('#upd-si-method').val().length;
 	if (method.length < 1) {

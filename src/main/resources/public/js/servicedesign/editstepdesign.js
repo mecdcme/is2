@@ -26,16 +26,22 @@ var _ctx = $("meta[name='ctx']").attr("content");
 $(document).ready(function() {
 	
 	
-	$("#btn-submit-as").keydown(function(event) {
+	$("#btn-submit-si").keydown(function(event) {
 		if (event.which == 13) {
-			check_and_send_as_req();
+			check_and_send_si_req();
 		}
 	});
-	$("#btn-submit-as").click(function() {
-		check_and_send_as_req();
-	});
 	
-	$("#btn-submit-as-upd").click(function() {
-		check_and_send_upd_as_req();
+	$("#btn-submit-si").click(function() {
+		check_and_send_si_req();
 	});
 });
+
+function check_and_send_si_req() {
+	var method = $('#si-method').val().length;
+	if (method.length < 1) {
+		$("#si-method-error").text(_mandatory_method_field);
+	} else {
+		$("#si-form").submit();
+	}
+}
