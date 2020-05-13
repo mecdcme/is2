@@ -130,9 +130,8 @@ function setTab(selectedTab) {
 function openAppServiceEditPage(idappservice) {	
 	window.location = _ctx + '/applicationedit/'+idappservice;
 }
-function openNewStepInstanceDialog() {
-	$("#si-name-error").text('');
-	$('#new-step-instance-modal').modal('show');
+function openStepInstancePage(stepid) {
+	window.location = _ctx + '/stepinstanceedit/'+stepid;	
 }
 function updateBusinessService(id, name, description, gsbpmid) {
 	$("#up-bs-name-error").text('');

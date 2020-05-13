@@ -155,6 +155,27 @@ public class BusinessDesignController {
 		return "businessdesign/businessedit";
 	}
 	
+	@GetMapping(value = "/stepinstanceedit/{stepid}")
+	public String StepInstanceEdit(HttpSession session, Model model, RedirectAttributes ra, @PathVariable("stepid") String stepid) {
+		notificationService.removeAllMessages();
+		List<AppService> listaAppService = appServiceService.findAllAppService();
+		if(stepid.equals("null")) {
+			
+
+			model.addAttribute("stepInstance", "null");
+		}else {
+			Long ids = Long.parseLong(stepid);
+			StepInstance stepInstance = stepInstanceService.findStepInstanceById(ids);
+			
+			
+			model.addAttribute("stepInstance", stepInstance);
+			
+		}
+		model.addAttribute("listaAppService", listaAppService);
+		
+		return "businessdesign/stepinstanceedit";
+	}
+	
 	@GetMapping(value = "/applicationedit/{appserviceid}")
 	public String appServiceEdit(HttpSession session, Model model, RedirectAttributes ra, @PathVariable("appserviceid") String appserviceid) {
 		notificationService.removeAllMessages();
@@ -278,7 +299,7 @@ public class BusinessDesignController {
 	@PostMapping(value = "/newstepinstance")
 	public String createNewStepInstance(HttpSession session, Model model, @RequestParam("method") String method,
 			@RequestParam("description") String description, @RequestParam("label") String label,
-			@RequestParam("idappservice") Long idappservice) {
+			@RequestParam("appserviceid") Long appserviceid) {
 		notificationService.removeAllMessages();
 
 		StepInstance stepInstance = new StepInstance();
@@ -286,7 +307,7 @@ public class BusinessDesignController {
 		stepInstance.setDescr(description);
 		stepInstance.setLabel(label);
 
-		AppService appService = appServiceService.findAppServiceById(idappservice);
+		AppService appService = appServiceService.findAppServiceById(appserviceid);
 		stepInstance.setAppService(appService);
 
 		try {
@@ -306,7 +327,7 @@ public class BusinessDesignController {
 	public String updateStepInstance(HttpSession session, Model model,
 			@RequestParam("idstepinstance") Long idstepinstance, @RequestParam("method") String method,
 			@RequestParam("description") String description, @RequestParam("label") String label,
-			@RequestParam("idappservice") Long idappservice) {
+			@RequestParam("appserviceid") Long appserviceid) {
 		notificationService.removeAllMessages();
 
 		StepInstance stepInstance = stepInstanceService.findStepInstanceById(idstepinstance);
@@ -314,7 +335,7 @@ public class BusinessDesignController {
 		stepInstance.setDescr(description);
 		stepInstance.setLabel(label);
 
-		AppService appService = appServiceService.findAppServiceById(idappservice);
+		AppService appService = appServiceService.findAppServiceById(appserviceid);
 		stepInstance.setAppService(appService);
 
 		try {
