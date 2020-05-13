@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/mecdcme/is2.svg?branch=master)](https://travis-ci.org/mecdcme/is2) 
-[![Docker hub](https://img.shields.io/docker/cloud/automated/i3sessnet/is2.svg?label=is2%20docker)](https://cloud.docker.com/u/mecdcme/repository/docker/runejo/is2) 
-[![Docker hub](https://img.shields.io/docker/cloud/automated/i3sessnet/is2-postgres.svg?label=is2-postgres%20docker)](https://cloud.docker.com/u/mecdcme/repository/docker/runejo/is2-postgres)
+[![Docker hub](https://img.shields.io/docker/cloud/automated/mecdcme/is2.svg?label=is2%20docker)](https://cloud.docker.com/u/mecdcme/repository/docker/mecdcme/is2) 
+[![Docker hub](https://img.shields.io/docker/cloud/automated/mecdcme/is2-postgres.svg?label=is2-postgres%20docker)](https://cloud.docker.com/u/mecdcme/repository/docker/mecdcme/is2-postgres)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mecdcme_is2&metric=alert_status)](https://sonarcloud.io/dashboard?id=mecdcme_is2)
 # IS2
 A runtime environment to execute statistical services. IS2 is a workbench that offers a set of tools for data analysis and processing. 
