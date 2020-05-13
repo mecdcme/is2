@@ -32,7 +32,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,8 +61,8 @@ public class BusinessDesignController {
 	@Autowired
 	private GsbpmProcessService gsbpmProcessService;
 
-	@GetMapping("/busservlist")
-	public String serviceList(HttpSession session, Model model, @ModelAttribute("selectedTab") String selectedTab) {
+	@GetMapping("/busservlist{param}")
+	public String serviceList(HttpSession session, Model model, @RequestParam("param") Integer param) {
 
 		List<BusinessService> listaBService = businessServiceService.findBusinessServices();
 		List<AppService> listaAppService = appServiceService.findAllAppService();
@@ -78,13 +77,27 @@ public class BusinessDesignController {
 		model.addAttribute("listaBService", listaBService);
 		model.addAttribute("listaAppService", listaAppService);
 		model.addAttribute("listaStepInstance", listaStepInstance);
+		String selectedTab = null;
+		switch (param) {
+			case 1:
+				selectedTab = "business";
+				break;
+			case 2:
+				selectedTab = "application";
+				break;
+			case 3:
+				selectedTab = "step";
+				break;
+		}
+		
+		
 		model.addAttribute("selectedTab", selectedTab);
 		return "businessdesign/home.html";
 
 	}
 
 	@PostMapping(value = "/updatebservice")
-	public String updateBService(HttpSession session, Model model, @RequestParam("bserviceid") Integer bserviceid,
+	public String updateBService(RedirectAttributes redirectAttributes, HttpSession session, Model model, @RequestParam("bserviceid") Integer bserviceid,
 			@RequestParam("name") String name, @RequestParam("description") String description,
 			@RequestParam("gsbpmid") Long gsbpmid) {
 		notificationService.removeAllMessages();
@@ -105,7 +118,7 @@ public class BusinessDesignController {
 					messages.getMessage("generic.saving.error.message", null, LocaleContextHolder.getLocale()) + ": "
 							+ e.getMessage());
 		}
-
+		redirectAttributes.addAttribute("param", 1);
 		return "redirect:/busservlist";
 	}
 
@@ -198,7 +211,7 @@ public class BusinessDesignController {
 	}
 
 	@PostMapping(value = "/newbservice")
-	public String createNewBService(HttpSession session, Model model, @RequestParam("name") String name,
+	public String createNewBService(RedirectAttributes redirectAttributes, HttpSession session, Model model, @RequestParam("name") String name,
 			@RequestParam("description") String description, @RequestParam("gsbpmid") Long gsbpmid) {
 		notificationService.removeAllMessages();
 
@@ -218,12 +231,12 @@ public class BusinessDesignController {
 					messages.getMessage("generic.saving.error.message", null, LocaleContextHolder.getLocale()) + ": "
 							+ e.getMessage());
 		}
-
+		redirectAttributes.addAttribute("param", 1);
 		return "redirect:/busservlist";
 	}
 
 	@PostMapping(value = "/newappservice")
-	public String createNewAppService(HttpSession session, Model model, @RequestParam("name") String name,
+	public String createNewAppService(RedirectAttributes redirectAttributes, HttpSession session, Model model, @RequestParam("name") String name,
 			@RequestParam("description") String description, @RequestParam("language") String language,
 			@RequestParam("engine") String engine, @RequestParam("sourcepath") String sourcepath,
 			@RequestParam("sourcecode") String sourcecode, @RequestParam("author") String author,
@@ -255,12 +268,12 @@ public class BusinessDesignController {
 					messages.getMessage("generic.saving.error.message", null, LocaleContextHolder.getLocale()) + ": "
 							+ e.getMessage());
 		}
-
+		redirectAttributes.addAttribute("param", 2);
 		return "redirect:/busservlist";
 	}
 
 	@PostMapping(value = "/updateappservice")
-	public String updateAppService(HttpSession session, Model model, @RequestParam("appserviceid") Long id,
+	public String updateAppService(RedirectAttributes redirectAttributes, HttpSession session, Model model, @RequestParam("appserviceid") Long id,
 			@RequestParam("name") String name, @RequestParam("descr") String descr,
 			@RequestParam("language") String language, @RequestParam("engine") String engine,
 			@RequestParam("sourcepath") String sourcepath, @RequestParam("sourcecode") String sourcecode,
@@ -293,11 +306,12 @@ public class BusinessDesignController {
 							+ e.getMessage());
 		}
 
+		redirectAttributes.addAttribute("param", 2);
 		return "redirect:/busservlist";
 	}
 
 	@PostMapping(value = "/newstepinstance")
-	public String createNewStepInstance(HttpSession session, Model model, @RequestParam("method") String method,
+	public String createNewStepInstance(RedirectAttributes redirectAttributes, HttpSession session, Model model, @RequestParam("method") String method,
 			@RequestParam("description") String description, @RequestParam("label") String label,
 			@RequestParam("appserviceid") Long appserviceid) {
 		notificationService.removeAllMessages();
@@ -320,11 +334,12 @@ public class BusinessDesignController {
 							+ e.getMessage());
 		}
 
+		redirectAttributes.addAttribute("param", 3);
 		return "redirect:/busservlist";
 	}
 
 	@PostMapping(value = "/updatestepinstance")
-	public String updateStepInstance(HttpSession session, Model model,
+	public String updateStepInstance(RedirectAttributes redirectAttributes, HttpSession session, Model model,
 			@RequestParam("stepinstanceid") Long stepinstanceid, @RequestParam("method") String method,
 			@RequestParam("description") String description, @RequestParam("label") String label,
 			@RequestParam("appserviceid") Long appserviceid) {
@@ -348,11 +363,12 @@ public class BusinessDesignController {
 							+ e.getMessage());
 		}
 
+		redirectAttributes.addAttribute("param", 3);
 		return "redirect:/busservlist";
 	}
 
 	@GetMapping(value = "/deletebservice/{idbservice}")
-	public String deleteBService(HttpSession session, Model model, RedirectAttributes ra,
+	public String deleteBService(HttpSession session, Model model, RedirectAttributes redirectAttributes, 
 			@PathVariable("idbservice") Integer idbservice) {
 		notificationService.removeAllMessages();
 
@@ -365,11 +381,12 @@ public class BusinessDesignController {
 			notificationService.addErrorMessage(
 					messages.getMessage("bs.remove.error.message", null, LocaleContextHolder.getLocale()));
 		}
+		redirectAttributes.addAttribute("param", 1);
 		return "redirect:/busservlist";
 	}
 
 	@GetMapping(value = "/deleteappservice/{idappservice}")
-	public String deleteAppService(HttpSession session, Model model, RedirectAttributes ra,
+	public String deleteAppService(HttpSession session, Model model, RedirectAttributes redirectAttributes, 
 			@PathVariable("idappservice") Long idappservice) {
 		notificationService.removeAllMessages();
 
@@ -382,11 +399,12 @@ public class BusinessDesignController {
 			notificationService.addErrorMessage(
 					messages.getMessage("as.remove.error.message", null, LocaleContextHolder.getLocale()));
 		}
+		redirectAttributes.addAttribute("param", 2);
 		return "redirect:/busservlist";
 	}
 
 	@GetMapping(value = "/deletestepinstance/{idstepinstance}")
-	public String deleteStepInstance(HttpSession session, Model model, RedirectAttributes ra,
+	public String deleteStepInstance(HttpSession session, Model model, RedirectAttributes redirectAttributes, 
 			@PathVariable("idstepinstance") String idstepinstance) {
 		notificationService.removeAllMessages();
 
@@ -401,6 +419,7 @@ public class BusinessDesignController {
 			notificationService.addErrorMessage(
 					messages.getMessage("si.remove.error.message", null, LocaleContextHolder.getLocale()));
 		}
+		redirectAttributes.addAttribute("param", 3);
 		return "redirect:/busservlist";
 	}
 }

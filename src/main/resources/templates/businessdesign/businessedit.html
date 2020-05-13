@@ -57,7 +57,7 @@
 				<!-- Right navigation menu -->
 				<div class="c-header-nav d-md-down-none mfe-2">
 					<a class="c-header-nav-link" th:title="#{session.button.close}"
-						th:href="@{'/busservlist'}"> <i class="fa fa-close"></i>&nbsp;<span
+						th:href="@{'/busservlist?param=1'}"> <i class="fa fa-close"></i>&nbsp;<span
 						th:text="#{Layout.Close}"></span>
 					</a>
 				</div>
@@ -154,7 +154,7 @@
 											</div>
 											<div class="form-group" id="select-gsbpm-1-div">
 												<label class="control-label" th:text="#{bs.gsbpm.label}"><span>Processo
-														Gsbpm padre</span> </label> <select name="gsbpmid" id="select-gsbpm-1"
+														Gsbpm padre</span> </label> <select name="gsbpmidparent" id="select-gsbpm-1"
 													th:title="#{bs.gsbpm.label}" class="form-control">
 													<option th:each="gsbpm : ${listaGsbpmParentProcess}"
 														th:value="${gsbpm.id}" th:text="${gsbpm.name}" th:selected="${businessService.gsbpmProcess.gsbpmProcessParent.id == gsbpm.id}" />
