@@ -49,7 +49,8 @@ public class PostgreSQLSqlGenericDao extends SqlGenericDao {
 				+ " ) ," + " ss_pivot as (  SELECT  ss_model.idx,   ss_model.idx idwscol, ";
 
 		for (Object[] field : resulFieldstList) {
-			query += " MAX( CASE WHEN (ss_model.idwscol = " + field[0] + ") THEN ss_model.v ELSE  NULL END) AS \"" + field[1] + "\",";
+			query += " MAX( CASE WHEN (ss_model.idwscol = " + field[0] + ") THEN ss_model.v ELSE  NULL END) AS \""
+					+ field[1] + "\",";
 		}
 
 		query = query.substring(0, query.length() - 1);
@@ -68,6 +69,9 @@ public class PostgreSQLSqlGenericDao extends SqlGenericDao {
 		// SORT
 		if (nameColumnToOrder != null && !"".equals(nameColumnToOrder))
 			query += " ORDER BY tabres." + nameColumnToOrder + " " + dirColumnOrder;
+		else {
+			query += " ORDER BY tabres.idx  ASC";
+		}
 		query += " OFFSET " + rigaInf + " LIMIT " + length;
 
 		Query q = em.createNativeQuery(query);
@@ -94,7 +98,7 @@ public class PostgreSQLSqlGenericDao extends SqlGenericDao {
 				+ "        ss.order_code,    t.idx, trim(both '\"' from cast(t.v as text)) as v   FROM   "
 				+ "        IS2_DATASET_COLUMN ss, jsonb_array_elements(cast(ss.content as jsonb)) WITH ORDINALITY AS t(v,idx) "
 				+ " WHERE     ss.dataset_file_id=:dFile order by t.idx),  ss_pivot as (  SELECT "
-				+ "        ss_model.idx,  ss_model.idx AS idx2 ," ;
+				+ "        ss_model.idx,  ss_model.idx AS idx2 ,";
 
 		for (Object[] field : resulFieldstList) {
 			query += " MAX(CASE WHEN ss_model.iddscol = " + field[0] + " THEN ss_model.v END) AS " + field[1] + ",";
@@ -116,6 +120,10 @@ public class PostgreSQLSqlGenericDao extends SqlGenericDao {
 		// SORT
 		if (nameColumnToOrder != null && !"".equals(nameColumnToOrder))
 			query += " ORDER BY tabres." + nameColumnToOrder + " " + dirColumnOrder;
+
+		else {
+			query += " ORDER BY tabres.idx  ASC";
+		}
 		query += " OFFSET " + rigaInf + " LIMIT " + length;
 
 		Query q = em.createNativeQuery(query);

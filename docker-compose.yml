@@ -12,6 +12,7 @@ services:
       - SPRING_DATASOURCE_PLATFORM=postgresql
     depends_on:
       - db
+    restart: always
   db:
     image: mecdcme/is2-postgres:latest
     environment:
