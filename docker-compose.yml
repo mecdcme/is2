@@ -5,7 +5,7 @@ services:
     ports:
       - 8080:8080
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres?currentSchema=is2
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_DATASOURCE_DRIVERCLASSNAME=org.postgresql.Driver
@@ -14,6 +14,8 @@ services:
       - db
   db:
     image: mecdcme/is2-postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=postgres
   adminer:
     image: adminer
     restart: always

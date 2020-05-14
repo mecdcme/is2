@@ -1,6 +1,7 @@
 FROM maven:3.6-jdk-11 AS build
 
 COPY src /usr/src/app/src
+COPY RScripts /usr/is2/RScripts
 COPY pom.xml /usr/src/app
 RUN mvn -f /usr/src/app/pom.xml clean package
 

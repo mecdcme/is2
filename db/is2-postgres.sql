@@ -851,6 +851,7 @@ ALTER SEQUENCE is2.is2_parameter_id_seq OWNED BY is2.is2_parameter.id;
 CREATE TABLE is2.is2_process_step (
     id integer NOT NULL,
     name character varying(100),
+	label text,
     descr text,
     business_service_id integer NOT NULL
 );
@@ -1923,15 +1924,15 @@ INSERT INTO is2.is2_parameter VALUES (950, 'MAPPING_PARAMETERS', 'MAPPING_PARAME
 -- Data for Name: is2_process_step; Type: TABLE DATA; Schema: is2; Owner: -
 --
 
-INSERT INTO is2.is2_process_step VALUES (4, 'Data validation Van der Loo', 'Data validation Van der Loo', 300);
-INSERT INTO is2.is2_process_step VALUES (70, 'Contingency Table', 'Calculate contingency table', 200);
-INSERT INTO is2.is2_process_step VALUES (71, 'Fellegi Sunter', 'Fellegi Sunter algorithm', 200);
-INSERT INTO is2.is2_process_step VALUES (72, 'Matching Table', 'Matching records', 200);
-INSERT INTO is2.is2_process_step VALUES (91, 'LOAD', 'LOAD ', 91);
-INSERT INTO is2.is2_process_step VALUES (92, 'STRUCTURIZE', 'STRUCTURIZE ', 91);
-INSERT INTO is2.is2_process_step VALUES (93, 'CONTROL', 'CONTROL ', 91);
-INSERT INTO is2.is2_process_step VALUES (94, 'FILTER', 'FILTER ', 91);
-INSERT INTO is2.is2_process_step VALUES (95, 'MAP', 'MAP ', 91);
+INSERT INTO is2.is2_process_step VALUES (4, 'Data validation Van der Loo','VALIDATE', 'Data validation Van der Loo', 300);
+INSERT INTO is2.is2_process_step VALUES (70, 'Contingency Table', 'CONTINGENCY_TABLE','Calculate contingency table', 200);
+INSERT INTO is2.is2_process_step VALUES (71, 'Fellegi Sunter', 'FELLEGI_SUNTER','Fellegi Sunter algorithm', 200);
+INSERT INTO is2.is2_process_step VALUES (72, 'Matching Table','MATCHING_TABLE', 'Matching records', 200);
+INSERT INTO is2.is2_process_step VALUES (91, 'LOAD','LOAD', 'LOAD ', 91);
+INSERT INTO is2.is2_process_step VALUES (92, 'STRUCTURIZE','STRUCTURIZE', 'STRUCTURIZE ', 91);
+INSERT INTO is2.is2_process_step VALUES (93, 'CONTROL','CONTROL', 'CONTROL ', 91);
+INSERT INTO is2.is2_process_step VALUES (94, 'FILTER','FILTER', 'FILTER ', 91);
+INSERT INTO is2.is2_process_step VALUES (95, 'MAP','MAP', 'MAP ', 91);
 
 
 --
