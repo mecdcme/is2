@@ -379,7 +379,7 @@ public class WorkflowController {
 
     @GetMapping(value = {"/dataview/{idelab}/{tipoIO}/{outRole}", "/dataview/{idelab}/{tipoIO}"})
     public String viewDataOut(HttpSession session, Model model, @PathVariable("idelab") Long dataProcessingId,
-            @PathVariable("tipoIO") Short tipoIO, @PathVariable("outRole") Optional<Integer> outRole) {
+            @PathVariable("tipoIO") Short tipoIO, @PathVariable("outRole") Optional<Long> outRole) {
         notificationService.removeAllMessages();
 
         List<StepRuntime> stepRList = new ArrayList<>();

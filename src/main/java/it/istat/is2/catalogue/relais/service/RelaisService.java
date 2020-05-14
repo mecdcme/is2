@@ -34,6 +34,7 @@ import org.springframework.stereotype.Component;
 
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.util.IS2Const;
+import it.istat.is2.app.util.Utility;
 
 
 /**
@@ -66,8 +67,8 @@ public class RelaisService {
     @Autowired
     private ContingencyService contingencyService;
 
-    public Map<?, ?> contingencyTable(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
-            Map<String, ArrayList<String>> worksetVariabili, Map<String, String> parametriMap) throws Exception {
+    public Map<?, ?> contingencyTable(Long idelaborazione, Map<String, List<String>> ruoliVariabileNome,
+            Map<String, List<String>> worksetVariabili, Map<String, String> parametriMap) throws Exception {
 
         Map<String, Map<?, ?>> returnOut = new HashMap<>();
         Map<String, Map<?, ?>> worksetOut = new HashMap<>();
@@ -112,6 +113,7 @@ public class RelaisService {
         });
 
         Map<String, Integer> contengencyTable = contingencyService.getEmptyContengencyTable();
+       
 
         for (int iA = 0; iA < sizeA; iA++) {
             Map<String, String> valuesI = new HashMap<>();

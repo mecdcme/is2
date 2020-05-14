@@ -626,4 +626,20 @@ public class Utility {
 		return true;
 	}
 
+	public static Map<String, List<String>> getSortedMapValues(final Map<String, List<String>> mapUnsorted,
+			final String fieldSort, final String sortAsc) {
+		// TODO Auto-generated method stub
+		final  Map<String, List<String>> mapOrdered = new LinkedHashMap<>();
+		int[] indexArraySorted=new int[mapUnsorted.get(fieldSort).size()];
+		int current=0;
+		final List<Integer> indexArraySortedList=new ArrayList<>();
+		mapUnsorted.get(fieldSort).stream().forEachOrdered(s-> indexArraySortedList.add(mapUnsorted.get(fieldSort).indexOf(s)));
+		mapUnsorted.forEach((key,values) ->{ 
+			final List<String> valuesOrdered=new ArrayList<>();
+			indexArraySortedList.forEach(index->  valuesOrdered.add(values.get(index)));
+			mapOrdered.put(key, valuesOrdered);
+		});
+		return mapOrdered;
+	}
+
 }

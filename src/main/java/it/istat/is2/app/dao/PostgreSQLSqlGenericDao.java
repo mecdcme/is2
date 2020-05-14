@@ -42,14 +42,14 @@ public class PostgreSQLSqlGenericDao extends SqlGenericDao {
 		String query = "with ss_model as (" + " SELECT " + "        ss.id AS idwscol, " + "        ss.name AS name, "
 				+ "        ss.order_code," + "		   ss.CLS_DATA_TYPE_ID as CLS_DATA_TYPE_ID,"
 				+ "        ss.value_parameter as value_parameter," + "		   ss.content_size, "
-				+ "        t.idx, cast(t.v as text) " + " FROM   "
+				+ "        t.idx, trim(both '\"' from cast(t.v as text)) as v " + " FROM   "
 				+ "      IS2_WORKSET ss,  IS2_STEP_RUNTIME sv, jsonb_array_elements(cast(ss.content as jsonb)) WITH ORDINALITY AS t(v,idx)	 "
 				+ " WHERE  "
-				+ "        sv.data_processing_id=:idDataProcessing and (:groupRole is null ||sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id and ss.CLS_DATA_TYPE_ID=1 "
-				+ " ) ," + " ss_pivot as (" + "  SELECT " + "        ss_model.idx," + "        ss_model.idwscol, ";
+				+ "        sv.data_processing_id=:idDataProcessing and (:groupRole is null OR sv.ROLE_GROUP=:groupRole) and sv.CLS_TYPE_IO_ID=:typeIO and sv.WORKSET_ID=ss.id and ss.CLS_DATA_TYPE_ID=1 "
+				+ " ) ," + " ss_pivot as (  SELECT  ss_model.idx,   ss_model.idx idwscol, ";
 
 		for (Object[] field : resulFieldstList) {
-			query += " MAX(IF(ss_model.idwscol = " + field[0] + ", ss_model.v, NULL )) AS `" + field[1] + "`,";
+			query += " MAX( CASE WHEN (ss_model.idwscol = " + field[0] + ") THEN ss_model.v ELSE  NULL END) AS \"" + field[1] + "\",";
 		}
 
 		query = query.substring(0, query.length() - 1);
@@ -68,7 +68,7 @@ public class PostgreSQLSqlGenericDao extends SqlGenericDao {
 		// SORT
 		if (nameColumnToOrder != null && !"".equals(nameColumnToOrder))
 			query += " ORDER BY tabres." + nameColumnToOrder + " " + dirColumnOrder;
-		query += " LIMIT " + rigaInf + ", " + length;
+		query += " OFFSET " + rigaInf + " LIMIT " + length;
 
 		Query q = em.createNativeQuery(query);
 		q.setParameter("idDataProcessing", idDataProcessing);
@@ -90,19 +90,19 @@ public class PostgreSQLSqlGenericDao extends SqlGenericDao {
 	public List<Object[]> findDatasetDataViewParamsbyQuery(List<Object[]> resulFieldstList, Long dFile, Integer rigaInf,
 			Integer length, Map<String, String> paramsFilter, String nameColumnToOrder, String dirColumnOrder) {
 
-		String query = "with ss_model as (" + " SELECT " + "        ss.id AS iddscol, " + "        ss.name AS name, "
-				+ "        ss.order_code, " + "        t.idx, cast(t.v as text)" + " FROM   "
+		String query = "with ss_model as (  SELECT   ss.id AS iddscol,    ss.name AS name, "
+				+ "        ss.order_code,    t.idx, trim(both '\"' from cast(t.v as text)) as v   FROM   "
 				+ "        IS2_DATASET_COLUMN ss, jsonb_array_elements(cast(ss.content as jsonb)) WITH ORDINALITY AS t(v,idx) "
-				+ " WHERE  " + "        ss.dataset_file_id=:dFile)," + " ss_pivot as (" + "  SELECT "
-				+ "        ss_model.idx," + "        ss_model.iddscol, ";
+				+ " WHERE     ss.dataset_file_id=:dFile order by t.idx),  ss_pivot as (  SELECT "
+				+ "        ss_model.idx,  ss_model.idx AS idx2 ," ;
 
 		for (Object[] field : resulFieldstList) {
-			query += " MAX(CASE WHEN ss_model.id = " + field[0] + " THEN ss_model.v END) AS " + field[1] + ",";
+			query += " MAX(CASE WHEN ss_model.iddscol = " + field[0] + " THEN ss_model.v END) AS " + field[1] + ",";
 		}
 
 		query = query.substring(0, query.length() - 1);
 
-		query += " FROM ss_model GROUP BY ss_model.idx) "
+		query += " FROM ss_model GROUP BY ss_model.idx  ) "
 				+ " SELECT tabres.*, COUNT(*) OVER() AS total_rows from ss_pivot tabres";
 
 		if (paramsFilter != null) {
@@ -116,7 +116,7 @@ public class PostgreSQLSqlGenericDao extends SqlGenericDao {
 		// SORT
 		if (nameColumnToOrder != null && !"".equals(nameColumnToOrder))
 			query += " ORDER BY tabres." + nameColumnToOrder + " " + dirColumnOrder;
-		query += " LIMIT " + rigaInf + "," + length;
+		query += " OFFSET " + rigaInf + " LIMIT " + length;
 
 		Query q = em.createNativeQuery(query);
 		q.setParameter("dFile", dFile);

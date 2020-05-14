@@ -120,7 +120,7 @@ public class WorkflowRestController {
 
     @RequestMapping(value = "/download/workset/{tipoFile}/{idelab}/{groupRole}", method = RequestMethod.GET)
     public void downloadWorkset(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("tipoFile") String tipoFile, @PathVariable("idelab") Long idelab,@PathVariable("groupRole") Integer groupRole) throws Exception {
+            @PathVariable("tipoFile") String tipoFile, @PathVariable("idelab") Long idelab,@PathVariable("groupRole") Long groupRole) throws Exception {
 
 
         String fileName = "";

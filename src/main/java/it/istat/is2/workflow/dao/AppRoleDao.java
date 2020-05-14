@@ -35,7 +35,7 @@ import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.BusinessService;
 
 @Repository
-public interface AppRoleDao extends CrudRepository<AppRole, Integer> {
+public interface AppRoleDao extends CrudRepository<AppRole, Long> {
 
     List<AppRole> findAll();
     

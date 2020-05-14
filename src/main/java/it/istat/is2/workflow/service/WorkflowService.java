@@ -175,7 +175,7 @@ public class WorkflowService {
 	}
 
 	public Map<String, List<String>> loadWorkSetValoriByDataProcessingRoleGroupMap(Long idDataProcessing,
-			Integer groupRole) {
+			Long groupRole) {
 		Map<String, List<String>> ret = new LinkedHashMap<>();
 		DataProcessing el = findDataProcessing(idDataProcessing);
 		AppRole groupAppRole =appRoleDao.findById(groupRole).orElse(null);
@@ -618,7 +618,7 @@ public class WorkflowService {
 		stepRuntimeDao.save(stepRuntime);
 	}
 
-	public String getAppRoleNameById(Integer groupRole) {
+	public String getAppRoleNameById(Long groupRole) {
 		
 		AppRole role= appRoleDao.findById(groupRole).orElse(new AppRole());
 		return role.getName();

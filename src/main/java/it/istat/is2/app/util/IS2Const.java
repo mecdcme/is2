@@ -67,5 +67,6 @@ public interface IS2Const {
     public static final String VIEW_DATATYPE_RULESET = "RULESET";
 
     public static final String ROLE_NAME_RULESET = "RULESET";
+	public static final String SORT_ASC = "ASC";
 
 }
