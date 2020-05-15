@@ -3,7 +3,109 @@ $(document).ready(function(){
 var current_fs, next_fs, previous_fs, test_fs; //fieldsets
 var opacity;
 
+var getTree = function drawTree(level, treeNodeName) {
+    var retval;
+	
+	switch (level) {
+	case "function":
+		
+		retval= '<li class="treeview-animated-items" > <a class="open closed"><span>' + "Function: "+ treeNodeName + '</span></a></li><ul class="nested processList"></ul>'
+		
+		for (var i = 0; i <_albero.length; i++) {
+			if (_albero[i].data != treeNodeName){
+				retval += '<li class="treeview-animated-items" ><span>' + _albero[i].data + '</span></li>'
+			}
+			
+				
+		}
+		
+		break;
+	case "process":
+		retval= '<li class="treeview-animated-items" > <a class="open closed"><span>' + "Process: " +treeNodeName + '</span></a></li><ul class="nested subprocessList"></ul>'
+		for (var i = 0; i <_albero.length; i++) {
 
+				for (var j = 0; j <_albero[i].children.length; j++) {
+					if ((_albero[i].children[j].data != treeNodeName) && (_albero[i].data == $('#namef').val())){
+						
+						retval += '<li class="treeview-animated-items" ><span>' + _albero[i].children[j].data + '</span></li>'
+						
+					}	
+						
+				}
+
+		}
+		break;
+	case "subprocess":
+		retval= '<li class="treeview-animated-items" > <a class="open closed"><span>' + "Subrocess: "+treeNodeName + '</span></a></li></ul><ul class="nested stepList"></ul>'
+		
+		for (var i = 0; i <_albero.length; i++) {
+
+				for (var j = 0; j <_albero[i].children.length; j++) {
+						
+						for (var k = 0; k <_albero[i].children[j].children.length; k++) {
+							if ((_albero[i].children[j].children[k].data != treeNodeName) && (_albero[i].data == $('#namef').val()) && (_albero[i].children[j].data ==  $('#namep').val())){
+								
+								retval += '<li class="treeview-animated-items" > <a class="open closed"><span>' +_albero[i].children[j].children[k].data + '</span></a></li>'
+								
+							}	
+								
+						}
+						
+						
+
+						
+				}
+
+		}
+		
+		
+		
+		break;
+	case "step":
+		
+		retval= '<li class="treeview-animated-items" > <a class="open closed"><span>' + "Step: "+ treeNodeName + '</span></a></li>'
+		
+		
+		for (var i = 0; i <_albero.length; i++) {
+
+				for (var j = 0; j <_albero[i].children.length; j++) {
+
+						
+						for (var k = 0; k <_albero[i].children[j].children.length; k++) {
+
+								
+								for (var m = 0; m <_albero[i].children[j].children[k].children.length; m++) {
+									if ((_albero[i].children[j].children[k].children[m].data != treeNodeName) && (_albero[i].data == $('#namef').val())  && (_albero[i].children[j].data ==  $('#namep').val())  && (_albero[i].children[j].children[k].data == $('#names').val()) ){
+										
+										retval += '<li class="treeview-animated-items" > <a class="open closed"><span>' + _albero[i].children[j].children[k].children[m].data + '</span></a></li>' 
+										
+									}	
+										
+								}
+							
+							
+							
+
+								
+						}
+						
+						
+
+						
+				}
+
+		}
+		
+	
+		break;
+	
+	default:
+		break;
+
+	}
+	
+	return retval;
+};
 
 $("#functionList").on('change', function(e) {
 	if( $(this).val()!="0"){
@@ -19,7 +121,7 @@ $("#functionList").on('change', function(e) {
 				$('#descriptionf').val(data.descr);
 				$('#labelf').val(data.label);
 				$('.functionList').empty();
-				$('.functionList').append('<li class="treeview-animated-items" > <a class="open closed"><span>' + "Function: "+ data.name + '</span></a></li><ul class="nested processList">');
+				$('.functionList').append(getTree("function", data.name));
 				$('.function').attr("readonly", "readonly");
 				
 			},
@@ -57,7 +159,7 @@ $("#processList").on('change', function(e) {
 				$('#descriptionp').val(data.descr);
 				$('#labelp').val(data.label);
 				$('.processList').empty();
-				$('.processList').append('<li class="treeview-animated-items" > <a class="open closed"><span>' + "Process: "+ data.name + '</span></a></li></ul><ul class="nested subprocessList">');
+				$('.processList').append(getTree("process",data.name));
 				$('.process').attr("readonly", "readonly");
 			},
 			error : function(e) {
@@ -94,7 +196,7 @@ $("#subprocessList").on('change', function(e) {
 				$('#descriptions').val(data.descr);
 				$('#labels').val(data.label);
 				$('.subprocessList').empty();
-				$('.subprocessList').append('<ul class="nested" ><li class="treeview-animated-items" > <a class="open closed"><span>' + "Subrocess: "+ data.name + '</span></a></li></ul><ul class="nested stepList">');
+				$('.subprocessList').append(getTree("subprocess",data.name));
 				$('.subprocess').attr("readonly", "readonly");
 			},
 			error : function(e) {
@@ -133,7 +235,7 @@ $("#stepList").on('change', function(e) {
 				$('#businessService').val(data.businessService.id);
 				$("#businessService").attr("disabled", true);
 				$('.stepList').empty();
-				$('.stepList').append('<ul class="nested" ><li class="treeview-animated-items" > <a class="open closed"><span>' + "Step: "+ data.name + '</span></a></li></ul>');
+				$('.stepList').append(getTree("step", data.name));
 				$('.step').attr("readonly", "readonly");
 			},
 			error : function(e) {
@@ -187,7 +289,7 @@ try {
 							}
 						});
 						$('.functionList').empty();
-						$('.functionList').append('<li class="treeview-animated-items" > <a class="open closed"><span>' + "Function: "+ $('#namef').val() + '</span></a></li><ul class="nested processList">');
+						$('.functionList').append(getTree("function", $('#namef').val()));
 						
 					}else{
 						alert(_alertFillAllFields)
@@ -206,7 +308,6 @@ try {
 						_processes.forEach(function(item, index){ 
 							if(item.name==$('#namep').val()){
 								alert(_alertProcess);
-//								$('#idp').val("");
 								$('#namep').val("");
 								$('#descriptionp').val("");
 								$('#labelp').val("");
@@ -216,7 +317,7 @@ try {
 							}
 						});
 						$('.processList').empty();
-						$('.processList').append('<li class="treeview-animated-items" > <a class="open closed"><span>' + "Process: "+ $('#namep').val() + '</span></a></li></ul><ul class="nested subprocessList">');
+						$('.processList').append(getTree("process", $('#namep').val()));
 					}else{
 						alert(_alertFillAllFields)
 						throw "exit";
@@ -244,7 +345,7 @@ try {
 							}
 						});
 						$('.subprocessList').empty();
-						$('.subprocessList').append('<ul class="nested" ><li class="treeview-animated-items" > <a class="open closed"><span>' + "Subrocess: "+ $('#names').val() + '</span></a></li></ul><ul class="nested stepList">');
+						$('.subprocessList').append(getTree("subprocess", $('#names').val()));
 						
 					}else{
 						alert(_alertFillAllFields)
@@ -273,7 +374,7 @@ try {
 								}
 							});
 							$('.stepList').empty();
-							$('.stepList').append('<ul class="nested" ><li class="treeview-animated-items" > <a class="open closed"><span>' + "Step: "+ $('#namest').val() + '</span></a></li></ul>');
+							$('.stepList').append(getTree("step", $('#namest').val()));
 							
 						}else{
 							alert(_alertFillAllFields)
@@ -381,7 +482,7 @@ $(".previous").click(function(){
 			$('#namep').val("");
 			$('#descriptionp').val("");
 			$('#labelp').val("");
-			$('processList').val("0");
+			$('#processList').val("0");
 			$('.processList').empty();
 			$('.process').removeAttr("readonly", "readonly");
 			break;

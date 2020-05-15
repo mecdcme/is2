@@ -121,7 +121,33 @@ public class DesignController {
 		List<BusinessFunction> listaFunzioni = businessFunctionService.findBFunctions();
 		List<ProcessStep> listaBs = processStepService.findAll();
 		List<BusinessService> listaAllBusinessServices = businessService.findBusinessServices();
+		List<BusinessProcess> listaBp = businessProcessService.findAll();
+		
+		List<TreeNode> albero = new ArrayList<>();
 
+		listaFunzioni.forEach((n) -> {
+			albero.add(new TreeNode<>(n.getName()));
+			n.getBusinessProcesses().forEach((m) -> {
+				if (m.getBusinessProcessParent() == null) {
+					albero.get(albero.size() - 1).addChild(m.getName());
+					listaBp.forEach((s) -> {
+						if (s.getBusinessProcessParent() != null
+								&& s.getBusinessProcessParent().getId().equals(m.getId())) {
+							TreeNode<String> tempNode = ((TreeNode<String>) albero.get(albero.size() - 1).getChildren()
+									.get(albero.get(albero.size() - 1).getChildren().size() - 1)).addChild(s.getName());
+							listaBs.forEach((p) -> {
+								p.getBusinessProcesses().forEach((k) -> {
+									if (k.getId().equals(s.getId())) {
+										tempNode.addChild(p.getName());
+									}
+								});
+							});
+						}
+					});
+				}
+			});
+		});
+		model.addAttribute("albero", albero);
 		model.addAttribute("listaAllBp", listaAllBp);
 		model.addAttribute("listaAllSubBp", listaAllSubBp);
 		model.addAttribute("listaFunzioni", listaFunzioni);
