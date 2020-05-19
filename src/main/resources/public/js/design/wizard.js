@@ -25,7 +25,7 @@ var getTree = function drawTree(level, treeNodeName) {
 		for (var i = 0; i <_albero.length; i++) {
 
 				for (var j = 0; j <_albero[i].children.length; j++) {
-					if ((_albero[i].children[j].data != treeNodeName) && (_albero[i].data == $('#namef').val())){
+					if ((_albero[i].children[j].data != treeNodeName) && (_albero[i].data == $('#namef').val() ^ $('#functionList').val()=="0")){
 						
 						retval += '<li class="treeview-animated-items" ><span>' + _albero[i].children[j].data + '</span></li>'
 						
@@ -43,7 +43,7 @@ var getTree = function drawTree(level, treeNodeName) {
 				for (var j = 0; j <_albero[i].children.length; j++) {
 						
 						for (var k = 0; k <_albero[i].children[j].children.length; k++) {
-							if ((_albero[i].children[j].children[k].data != treeNodeName) && (_albero[i].data == $('#namef').val()) && (_albero[i].children[j].data ==  $('#namep').val())){
+							if ((_albero[i].children[j].children[k].data != treeNodeName) && (_albero[i].data == $('#namef').val() ^ $('#functionList').val()=="0") && (_albero[i].children[j].data ==  $('#namep').val() ^ $('#processList').val()=="0")){
 								
 								retval += '<li class="treeview-animated-items" > <a class="open closed"><span>' +_albero[i].children[j].children[k].data + '</span></a></li>'
 								
@@ -63,7 +63,7 @@ var getTree = function drawTree(level, treeNodeName) {
 		break;
 	case "step":
 		
-		retval= '<li class="treeview-animated-items" > <a class="open closed"><span>' + "Step: "+ treeNodeName + '</span></a></li>'
+		retval= '<li class="treeview-animated-items"> <a class="open closed"><span>' + "Step: "+ treeNodeName + '</span></a></li>'
 		
 		
 		for (var i = 0; i <_albero.length; i++) {
@@ -75,9 +75,9 @@ var getTree = function drawTree(level, treeNodeName) {
 
 								
 								for (var m = 0; m <_albero[i].children[j].children[k].children.length; m++) {
-									if ((_albero[i].children[j].children[k].children[m].data != treeNodeName) && (_albero[i].data == $('#namef').val())  && (_albero[i].children[j].data ==  $('#namep').val())  && (_albero[i].children[j].children[k].data == $('#names').val()) ){
+									if ((_albero[i].children[j].children[k].children[m].data != treeNodeName) && (_albero[i].data == $('#namef').val() ^ $('#functionList').val()=="0")  && (_albero[i].children[j].data ==  $('#namep').val() ^ $('#processList').val()=="0")  && (_albero[i].children[j].children[k].data == $('#names').val() ^ $('#subprocessList').val()=="0") ){
 										
-										retval += '<li class="treeview-animated-items" > <a class="open closed"><span>' + _albero[i].children[j].children[k].children[m].data + '</span></a></li>' 
+										retval += '<li class="treeview-animated-items"><a class="open closed"><span>' + _albero[i].children[j].children[k].children[m].data + '</span></a></li>' 
 										
 									}	
 										
@@ -138,7 +138,7 @@ $("#functionList").on('change', function(e) {
 		$('#namef').val("");
 		$('#descriptionf').val("");
 		$('#labelf').val("");
-		$('#functionList').val()=="0"
+		$('#functionList').val("0")
 		$('.function').removeAttr("readonly", "readonly");
 	};
 	
@@ -175,7 +175,7 @@ $("#processList").on('change', function(e) {
 		$('#namep').val("");
 		$('#descriptionp').val("");
 		$('#labelp').val("");
-		$('#processList').val()=="0"
+		$('#processList').val("0")
 		$('.process').removeAttr("readonly", "readonly");
 	};
 		
@@ -212,7 +212,7 @@ $("#subprocessList").on('change', function(e) {
 		$('#names').val("");
 		$('#descriptions').val("");
 		$('#labels').val("");
-		$('#subprocessList').val()=="0"
+		$('#subprocessList').val("0")
 		$('.subprocess').removeAttr("readonly", "readonly");
 	};
 	
@@ -251,7 +251,7 @@ $("#stepList").on('change', function(e) {
 		$('#namest').val("");
 		$('#descriptionst').val("");
 		$('#labelst').val("");
-		$('#stepList').val()=="0"
+		$('#stepList').val("0")
 		$("#businessService").attr("disabled", false);
 		$('.step').removeAttr("readonly", "readonly");
 	};
@@ -277,7 +277,6 @@ try {
 						_functions.forEach(function(item, index){ 
 							if(item.name==$('#namef').val()){
 								alert(_alertFunction);
-//								$('#idf').val("");
 								$('#namef').val("");
 								$('#descriptionf').val("");
 								$('#labelf').val("");
@@ -334,7 +333,6 @@ try {
 						_subprocesses.forEach(function(item, index){ 
 							if(item.name==$('#names').val()){
 								alert(_alertSubprocess);
-//								$('#ids').val("");
 								$('#names').val("");
 								$('#descriptions').val("");
 								$('#labels').val("");
@@ -364,7 +362,6 @@ try {
 							_steps.forEach(function(item, index){ 
 								if(item.name==$('#namest').val()){
 									alert(_alertStep);
-	//								$('#idst').val("");
 									$('#namest').val("");
 									$('#descriptionst').val("");
 									$('#labelst').val("");
@@ -384,7 +381,7 @@ try {
 					$.ajax({
 						type : "POST",
 						contentType : "application/json",
-						async: false,
+						async: true,
 						url : _ctx + "/rest/design/savewizard/" +$('#functionList').val() + "/" + $('#namef').val() + "/" + $('#descriptionf').val() + "/" + $('#labelf').val() + "/" + $('#processList').val() + "/" + $('#namep').val() + "/" + $('#descriptionp').val() + "/" + $('#labelp').val() + "/" + $('#subprocessList').val() + 
 						"/" + $('#names').val() + "/" + $('#descriptions').val() + "/" + $('#labels').val() + "/" + $('#stepList').val() + "/" + $('#namest').val() + "/" +  $('#descriptionst').val() + "/" + $('#labelst').val() + "/" + $('#businessService').val(),
 						cache : true,
