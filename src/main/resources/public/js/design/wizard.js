@@ -25,7 +25,7 @@ var getTree = function drawTree(level, treeNodeName) {
 		for (var i = 0; i <_albero.length; i++) {
 
 				for (var j = 0; j <_albero[i].children.length; j++) {
-					if ((_albero[i].children[j].data != treeNodeName) && (_albero[i].data == $('#namef').val() ^ $('#functionList').val()=="0")){
+					if ((_albero[i].children[j].data != treeNodeName) && (_albero[i].data == $('#namef').val() ^ $('#functionList').val()=="0") && ($('#functionList').val()!="0")){
 						
 						retval += '<li class="treeview-animated-items" ><span>' + _albero[i].children[j].data + '</span></li>'
 						
@@ -43,7 +43,7 @@ var getTree = function drawTree(level, treeNodeName) {
 				for (var j = 0; j <_albero[i].children.length; j++) {
 						
 						for (var k = 0; k <_albero[i].children[j].children.length; k++) {
-							if ((_albero[i].children[j].children[k].data != treeNodeName) && (_albero[i].data == $('#namef').val() ^ $('#functionList').val()=="0") && (_albero[i].children[j].data ==  $('#namep').val() ^ $('#processList').val()=="0")){
+							if ((_albero[i].children[j].children[k].data != treeNodeName) && (_albero[i].data == $('#namef').val() ^ $('#functionList').val()=="0") && (_albero[i].children[j].data ==  $('#namep').val() ^ $('#processList').val()=="0") && ($('#processList').val()!="0")){
 								
 								retval += '<li class="treeview-animated-items" > <a class="open closed"><span>' +_albero[i].children[j].children[k].data + '</span></a></li>'
 								
@@ -75,7 +75,7 @@ var getTree = function drawTree(level, treeNodeName) {
 
 								
 								for (var m = 0; m <_albero[i].children[j].children[k].children.length; m++) {
-									if ((_albero[i].children[j].children[k].children[m].data != treeNodeName) && (_albero[i].data == $('#namef').val() ^ $('#functionList').val()=="0")  && (_albero[i].children[j].data ==  $('#namep').val() ^ $('#processList').val()=="0")  && (_albero[i].children[j].children[k].data == $('#names').val() ^ $('#subprocessList').val()=="0") ){
+									if ((_albero[i].children[j].children[k].children[m].data != treeNodeName) && (_albero[i].data == $('#namef').val() ^ $('#functionList').val()=="0")  && (_albero[i].children[j].data ==  $('#namep').val() ^ $('#processList').val()=="0")  && (_albero[i].children[j].children[k].data == $('#names').val() ^ $('#subprocessList').val()=="0") && ($('#subprocessList').val()!="0") ){
 										
 										retval += '<li class="treeview-animated-items"><a class="open closed"><span>' + _albero[i].children[j].children[k].children[m].data + '</span></a></li>' 
 										
@@ -139,6 +139,7 @@ $("#functionList").on('change', function(e) {
 		$('#descriptionf').val("");
 		$('#labelf').val("");
 		$('#functionList').val("0")
+		$('.functionList').empty();
 		$('.function').removeAttr("readonly", "readonly");
 	};
 	
@@ -171,11 +172,11 @@ $("#processList").on('change', function(e) {
 			}
 		});
 	}else{
-//		$('#idp').val("");
 		$('#namep').val("");
 		$('#descriptionp').val("");
 		$('#labelp').val("");
-		$('#processList').val("0")
+		$('#processList').val("0");
+		$('.processList').empty();
 		$('.process').removeAttr("readonly", "readonly");
 	};
 		
@@ -208,11 +209,11 @@ $("#subprocessList").on('change', function(e) {
 			}
 		});
 	}else{
-//		$('#ids').val("");
 		$('#names').val("");
 		$('#descriptions').val("");
 		$('#labels').val("");
 		$('#subprocessList').val("0")
+		$('.subprocessList').empty();
 		$('.subprocess').removeAttr("readonly", "readonly");
 	};
 	
@@ -228,7 +229,6 @@ $("#stepList").on('change', function(e) {
 			dataType : 'json',
 			cache : true,
 			success : function(data) {
-//				$('#ids').val(data.id);
 				$('#namest').val(data.name);
 				$('#descriptionst').val(data.descr);
 				$('#labelst').val(data.label);
@@ -247,11 +247,11 @@ $("#stepList").on('change', function(e) {
 			}
 		});
 	}else{
-//		$('#ids').val("");
 		$('#namest').val("");
 		$('#descriptionst').val("");
 		$('#labelst').val("");
 		$('#stepList').val("0")
+		$('.stepList').empty();
 		$("#businessService").attr("disabled", false);
 		$('.step').removeAttr("readonly", "readonly");
 	};
