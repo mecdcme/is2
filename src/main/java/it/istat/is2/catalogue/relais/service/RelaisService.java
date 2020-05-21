@@ -31,6 +31,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -60,6 +62,7 @@ public class RelaisService {
 	final String params_MatchingVariables = "MATCHING_VARIABLES";
 	final String params_ThresholdMatching = "THRESHOLD_MATCHING";
 	final String params_ThresholdUnMatching = "THRESHOLD_UNMATCHING";
+	final String params_BlockingVariables = "BLOCKING_VARIABLES";
 	final String params_BlockingVariablesA = "BLOCKING_A";
 	final String params_BlockingVariablesB = "BLOCKING_B";
 
@@ -69,7 +72,7 @@ public class RelaisService {
 	@Autowired
 	private ContingencyService contingencyService;
 
-	public Map<?, ?> contingencyTable_ori(Long idelaborazione, Map<String, List<String>> ruoliVariabileNome,
+	public Map<?, ?> contingencyTable(Long idelaborazione, Map<String, List<String>> ruoliVariabileNome,
 			Map<String, List<String>> worksetVariabili, Map<String, String> parametriMap) throws Exception {
 
 		Map<String, Map<?, ?>> returnOut = new HashMap<>();
@@ -116,14 +119,14 @@ public class RelaisService {
 
 		Map<String, Integer> contengencyTable = contingencyService.getEmptyContengencyTable();
 
-		final String sortFieldA = variabileNomeListMA.get(0);
+/*		final String sortFieldA = variabileNomeListMA.get(0);
 		final String sortFieldB = variabileNomeListMB.get(0);
 		Utility.printNElementsInMapValues(worksetVariabili, 5);
 		Utility.sortDatasetInMapValues(worksetVariabili, variabileNomeListMA, sortFieldA, IS2Const.SORT_ASC);
 		Utility.printNElementsInMapValues(worksetVariabili, 5);
 		Utility.sortDatasetInMapValues(worksetVariabili, variabileNomeListMB, sortFieldB, IS2Const.SORT_ASC);
 		Utility.printNElementsInMapValues(worksetVariabili, 5);
-
+*/
 		for (int iA = 0; iA < sizeA; iA++) {
 			Map<String, String> valuesI = new HashMap<>();
 			final Integer innerIA = Integer.valueOf(iA);
@@ -168,7 +171,7 @@ public class RelaisService {
 	}
 
 	//versione parallel blocking
-	public Map<?, ?> contingencyTable(Long idelaborazione, Map<String, List<String>> ruoliVariabileNome,
+	public Map<?, ?> contingencyTableBlocking(Long idelaborazione, Map<String, List<String>> ruoliVariabileNome,
 			Map<String, List<String>> worksetVariabili, Map<String, String> parametriMap) throws Exception {
 	    Instant start = Instant.now();
 		Map<String, Map<?, ?>> returnOut = new HashMap<>();
@@ -210,10 +213,10 @@ public class RelaisService {
 
 		Map<String, Integer> contengencyTable = contingencyService.getEmptyContengencyTable();
 
-		//final String blockingVariableA = parametriMap.get(params_BlockingVariablesA);
-		//final String blockingVariableB = parametriMap.get(params_BlockingVariablesB);
-		final String blockingVariableA ="DS1_STREET";
-		final String blockingVariableB = "DS2_STREET";
+		final String blockingVariableA = getFieldInParams(parametriMap.get(params_BlockingVariables),params_BlockingVariablesA);
+		final String blockingVariableB = getFieldInParams(parametriMap.get(params_BlockingVariables),params_BlockingVariablesB);
+		
+		
 		Map<String, List<Integer>> indexesBlockingVariableA = Utility.blockVariablesIndexMapValues(worksetVariabili,
 				variabileNomeListMA, blockingVariableA);
 		Map<String, List<Integer>> indexesBlockingVariableB = Utility.blockVariablesIndexMapValues(worksetVariabili,
@@ -273,7 +276,21 @@ public class RelaisService {
 		return returnOut;
 	}
 
-	public Map<?, ?> resultTables(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+	private String getFieldInParams(String jsonString, String fieldName) throws Exception {
+		String ret=null;
+		try {
+			JSONObject jSONObject = new JSONObject(jsonString) ;
+			ret=jSONObject.getString(fieldName);
+		} catch (Exception e) {
+			logService.save("Error parsing " + params_BlockingVariables);
+			throw new Exception("Error parsing " + params_BlockingVariables);
+		}
+		if(ret==null) throw new Exception("Error parsing " + params_BlockingVariables);
+		return ret;
+		
+	}
+
+	public Map<?, ?> resultTablesBlocking(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
 			Map<String, List<String>> worksetIn, Map<String, String> parametriMap) throws Exception {
 
 		Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
@@ -350,11 +367,10 @@ public class RelaisService {
 			possibleMatchingTable.put(varname, new ArrayList<>());
 		});
 
-	 
-		//final String blockingVariableA = parametriMap.get(params_BlockingVariablesA);
-		//final String blockingVariableB = parametriMap.get(params_BlockingVariablesB);
-		final String blockingVariableA ="DS1_STREET";
-		final String blockingVariableB = "DS2_STREET";
+
+		final String blockingVariableA = getFieldInParams(parametriMap.get(params_BlockingVariables),params_BlockingVariablesA);
+		final String blockingVariableB = getFieldInParams(parametriMap.get(params_BlockingVariables),params_BlockingVariablesB);
+	
 		Map<String, List<Integer>> indexesBlockingVariableA = Utility.blockVariablesIndexMapValues(worksetIn,
 				variabileNomeListMA, blockingVariableA);
 		Map<String, List<Integer>> indexesBlockingVariableB = Utility.blockVariablesIndexMapValues(worksetIn,

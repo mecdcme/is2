@@ -1588,7 +1588,7 @@ INSERT INTO is2.is2_app_role VALUES (2, 'X1', 'MATCHING A', 'MATCHING VARIABLE I
 INSERT INTO is2.is2_app_role VALUES (3, 'X2', 'MATCHING B', 'MATCHING VARIABLE IN DATASET B', 3, 1, NULL);
 INSERT INTO is2.is2_app_role VALUES (4, 'CT', 'CONTENGENCY TABLE', 'CONTENGENCY TABLE', 4, 1, NULL);
 INSERT INTO is2.is2_app_role VALUES (5, 'FS', 'FELLEGI-SUNTER', 'FELLEGI-SUNTER', 14, 1, NULL);
-INSERT INTO is2.is2_app_role VALUES (6, 'B', 'BLOCKING', 'SLICING DEL DATASET', 7, 1, NULL);
+INSERT INTO is2.is2_app_role VALUES (6, 'B', 'BLOCKING', 'SLICING DEL DATASET', 7, 2, 5);
 INSERT INTO is2.is2_app_role VALUES (7, 'MT', 'MATCHING TABLE', 'MATCHING TABLE', 8, 1, NULL);
 INSERT INTO is2.is2_app_role VALUES (8, 'TH', 'THRESHOLD MATCHING', 'THRESHOLD MATCHING', 9, 2, 2);
 INSERT INTO is2.is2_app_role VALUES (9, 'TU', 'THRESHOLD UNMATCHING', 'THRESHOLD UNMATCHING', 10, 2, 3);
@@ -1651,7 +1651,10 @@ INSERT INTO is2.is2_business_process VALUES (94, 'FILTER', 'FILTER ', 'PARC-04',
 INSERT INTO is2.is2_business_process VALUES (91, 'LOAD', 'LOAD ', 'PARC-01', 2, 9);
 INSERT INTO is2.is2_business_process VALUES (95, 'MAP', 'MAP ', 'PARC-05', 6, 9);
 
-
+INSERT INTO is2.is2_business_process VALUES (5, 'Probabilistic Record Linkage Blocking', 'Probabilistic Record Linkage Blocking', 'PRLB', 1, NULL);
+INSERT INTO is2.is2_business_process VALUES (73, 'Contingency Table Blocking', 'Calculate contingency table', 'CrossTable', 1, 5);
+INSERT INTO is2.is2_business_process VALUES (74, 'Fellegi Sunter', 'Fellegi Sunter algorithm', 'FellegiSunter', 2, 5);
+INSERT INTO is2.is2_business_process VALUES (75, 'Matching Table Blocking', 'Matching records', 'MatchingTable', 3, 5);
 --
 -- TOC entry 4913 (class 0 OID 25174)
 -- Dependencies: 234
@@ -1890,6 +1893,10 @@ INSERT INTO is2.is2_link_process_step VALUES (72, 72);
 INSERT INTO is2.is2_link_process_step VALUES (91, 91);
 INSERT INTO is2.is2_link_process_step VALUES (95, 95);
 
+INSERT INTO is2.is2_link_process_step VALUES (73, 70);
+INSERT INTO is2.is2_link_process_step VALUES (74, 71);
+INSERT INTO is2.is2_link_process_step VALUES (75, 72);
+
 
 --
 -- TOC entry 4935 (class 0 OID 25249)
@@ -1904,6 +1911,9 @@ INSERT INTO is2.is2_link_step_instance VALUES (4, 14);
 INSERT INTO is2.is2_link_step_instance VALUES (91, 91);
 INSERT INTO is2.is2_link_step_instance VALUES (95, 95);
 
+INSERT INTO is2.is2_link_step_instance VALUES (73, 15);
+INSERT INTO is2.is2_link_step_instance VALUES (75, 16);
+
 
 
 -- TOC entry 4938 (class 0 OID 25260)
@@ -1916,6 +1926,8 @@ INSERT INTO is2.is2_parameter VALUES (2, 'THRESHOLD MATCHING', 'THRESHOLD MATCHI
 INSERT INTO is2.is2_parameter VALUES (3, 'THRESHOLD UNMATCHING', 'THRESHOLD UNMATCHING', '1', '{"data":[],"schema":{"name":"THRESHOLD UNMATCHING","type":"number", "minimum": 0.01,"maximum": 1}}');
 INSERT INTO is2.is2_parameter VALUES (910, 'LOADER_PARAMETERS', 'LOADER_PARAMETERS', NULL, '{ "data":[],"schema":{"items":{  "properties":{  "FileType":{  "enum":["xml","clef-valeur","plat" ], "required":true, "title":"Type of file" } ,"Delimiter":{  "maxLength":50, "required":true, "title":"Delimiter", "type":"string" } ,"Format":{  "maxLength":1000000, "required":true, "title":"Format", "type":"string" } ,"Comments":{  "maxLength":1000000, "required":true, "title":"Comments", "type":"string" } }, "type":"object" }, "type":"array" } ,"options":{  "type":"table", "showActionsColumn":true, "hideAddItemsBtn":false, "items":{  "fields":{  "FileType":{  "type":"select", "noneLabel":"", "removeDefaultNone":false } } }, "form":{  "buttons":{  "addRow":"addRow" } }, "view":{  "templates":{  "container-array-toolbar":"#addItemsBtn" } } }}');
 INSERT INTO is2.is2_parameter VALUES (950, 'MAPPING_PARAMETERS', 'MAPPING_PARAMETERS', NULL, '{ "data":[], "schema":{  "items":{  "properties":{  "VariableName":{  "maxLength":50, "required":true, "title":"Variable Name", "type":"string" } ,"VariableType":{  "enum":["bigint","bigint[]","boolean","date","date[]","float","float[]","interval","text","text[]","timestamp without time zone" ], "required":true, "title":"Variable Type" } ,"Expression":{  "maxLength":100000, "required":true, "title":"Expression", "type":"string" } ,"TargetTables":{  "maxLength":100000, "required":true, "title":"Target tables", "type":"string" } }, "type":"object" }, "type":"array" }, "options":{  "type":"table", "showActionsColumn":true, "hideAddItemsBtn":false, "items":{  "fields":{  "VariableType":{  "type":"select", "noneLabel":"", "removeDefaultNone":false } } }, "form":{  "buttons":{  "addRow":"addRow" } }, "view":{  "templates":{  "container-array-toolbar":"#addItemsBtn" } } }}');
+
+INSERT INTO is2.is2_parameter VALUES (5, 'BlOCKING VARIABLES', 'BLOCKING VARIABLES', NULL, '{"data":[],"schema":{"type":"object", "properties": { "BLOCKING_A": { "type":"string", "title":"BLOCKING A" }, "BLOCKING_B": { "type":"string", "title":"BLOCKING B" } }}, "options": {"fields":{"BLOCKING_A":{"type":"select","noneLabel":"","dataSource":"matchedVariables"},"BLOCKING_B":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}}}}');
 
 
 --
@@ -1934,6 +1946,9 @@ INSERT INTO is2.is2_process_step VALUES (93, 'CONTROL','CONTROL', 'CONTROL ', 91
 INSERT INTO is2.is2_process_step VALUES (94, 'FILTER','FILTER', 'FILTER ', 91);
 INSERT INTO is2.is2_process_step VALUES (95, 'MAP','MAP', 'MAP ', 91);
 
+
+INSERT INTO is2.is2_process_step VALUES (73, 'Contingency Table Blocking', 'CONTINGENCY_TABLE_BLOCKING','Calculate contingency table Blocking', 200);
+INSERT INTO is2.is2_process_step VALUES (75, 'Matching Table Blocking','MATCHING_TABLE_BLOCKING', 'Matching records Blocking', 200);
 
 --
 -- TOC entry 4965 (class 0 OID 32774)
@@ -1981,6 +1996,8 @@ INSERT INTO is2.is2_step_instance VALUES (14, 'is2_validate_confront', 'This fun
 INSERT INTO is2.is2_step_instance VALUES (91, 'arcLoader', 'Raw file data loader', 'arcLoader', 91);
 INSERT INTO is2.is2_step_instance VALUES (95, 'arcMapping', 'ARC Mapping service', 'arcMapping', 95);
 
+INSERT INTO is2.is2_step_instance VALUES (15, 'contingencyTableBlocking', 'This function calculates the contingency Table with Blocking variable', 'ContingencyTableBlocking', 250);
+INSERT INTO is2.is2_step_instance VALUES (16, 'resultTablesBlocking', 'This function calculates the Matching Table with Blocking variable', 'MatchingTableBlocking', 250);
 
 --
 -- TOC entry 4948 (class 0 OID 25302)
@@ -2007,6 +2024,23 @@ INSERT INTO is2.is2_step_instance_signature VALUES (179, 1, 16, 14, 1);
 INSERT INTO is2.is2_step_instance_signature VALUES (910, 1, 910, 91, 1);
 INSERT INTO is2.is2_step_instance_signature VALUES (950, 1, 950, 95, 1);
 
+
+
+INSERT INTO is2.is2_step_instance_signature VALUES (180, 1, 1, 15, 1);
+INSERT INTO is2.is2_step_instance_signature VALUES (181, 1, 2, 15, 1);
+INSERT INTO is2.is2_step_instance_signature VALUES (182, 1, 3, 15, 1);
+INSERT INTO is2.is2_step_instance_signature VALUES (183, 0, 7, 15, 2);
+INSERT INTO is2.is2_step_instance_signature VALUES (184, NULL, 11, 15, 2);
+INSERT INTO is2.is2_step_instance_signature VALUES (192, 1, 6, 15, 1);
+
+INSERT INTO is2.is2_step_instance_signature VALUES (185, 1, 2, 16, 1);
+INSERT INTO is2.is2_step_instance_signature VALUES (186, 1, 3, 16, 1);
+INSERT INTO is2.is2_step_instance_signature VALUES (187, 1, 5, 16, 1);
+INSERT INTO is2.is2_step_instance_signature VALUES (188, 0, 4, 16, 1);
+INSERT INTO is2.is2_step_instance_signature VALUES (189, NULL, 7, 16, 2);
+INSERT INTO is2.is2_step_instance_signature VALUES (190, 1, 8, 16, 1);
+INSERT INTO is2.is2_step_instance_signature VALUES (191, 1, 9, 16, 1);
+INSERT INTO is2.is2_step_instance_signature VALUES (193, 1, 6, 16, 1);
 
 
 -- TOC entry 4952 (class 0 OID 25312)
