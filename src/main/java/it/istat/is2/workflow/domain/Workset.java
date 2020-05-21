@@ -61,7 +61,7 @@ public class Workset implements Serializable {
     @JoinColumn(name = "CLS_DATA_TYPE_ID")
     private DataTypeCls dataType;
 
-    @OneToMany(mappedBy = "workset",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "workset",cascade = CascadeType.ALL)
     private List<StepRuntime> stepRuntimes;
     
     @Column(name = "DATASET_COLUMN")

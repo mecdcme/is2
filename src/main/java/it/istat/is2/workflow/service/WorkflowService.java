@@ -38,6 +38,8 @@ import javax.transaction.Transactional;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,6 +79,8 @@ import it.istat.is2.worksession.domain.WorkSession;
 @Service
 public class WorkflowService {
 
+	private static Logger LOG = LoggerFactory.getLogger(WorkflowService.class);
+	
 	private final String PATTERNNAME = "\\.|\\s";
 	@Autowired
 	private WorkSessionDao workSessionDao;
@@ -144,13 +148,13 @@ public class WorkflowService {
 	}
 
 	public String loadWorkSetValoriByDataProcessing(Long idDataProcessing, Integer typeIO, Integer groupRole,
-			Integer length, Integer start, Integer draw, Map<String, String> paramsFilter)  {
+			Integer length, Integer start, Integer draw, Map<String, String> paramsFilter) {
 
 		int offset = 2;
 		List<Object[]> resulFieldstList = sqlGenericDao.findWorsetIdColAndName(idDataProcessing, typeIO, groupRole);
 		List<Object[]> dataList = sqlGenericDao.findWorKSetDataViewParamsbyQuery(resulFieldstList, idDataProcessing,
 				typeIO, groupRole, start, length, paramsFilter, null, null);
-		
+
 		Integer numRighe = 0;
 
 		JSONObject obj = new JSONObject();
@@ -178,14 +182,14 @@ public class WorkflowService {
 			Long groupRole) {
 		Map<String, List<String>> ret = new LinkedHashMap<>();
 		DataProcessing el = findDataProcessing(idDataProcessing);
-		AppRole groupAppRole =appRoleDao.findById(groupRole).orElse(null);
-		if(groupAppRole!=null) {
-		for (Iterator<?> iterator = el.getStepRuntimes().iterator(); iterator.hasNext();) {
-			StepRuntime stepRuntime = (StepRuntime) iterator.next();
-			if (groupAppRole.equals(stepRuntime.getRoleGroup())) {
-				ret.put(stepRuntime.getWorkset().getName(), stepRuntime.getWorkset().getContents());
+		AppRole groupAppRole = appRoleDao.findById(groupRole).orElse(null);
+		if (groupAppRole != null) {
+			for (Iterator<?> iterator = el.getStepRuntimes().iterator(); iterator.hasNext();) {
+				StepRuntime stepRuntime = (StepRuntime) iterator.next();
+				if (groupAppRole.equals(stepRuntime.getRoleGroup())) {
+					ret.put(stepRuntime.getWorkset().getName(), stepRuntime.getWorkset().getContents());
+				}
 			}
-		}
 		}
 		return ret;
 	}
@@ -217,7 +221,8 @@ public class WorkflowService {
 
 			if (workset == null) {
 				workset = new Workset();
-				DatasetColumn dscolumn = datasetColumnDao.findById((Long.parseLong(form.getVariable()[i]))).orElse(new DatasetColumn());
+				DatasetColumn dscolumn = datasetColumnDao.findById((Long.parseLong(form.getVariable()[i])))
+						.orElse(new DatasetColumn());
 				workset.setName(dscolumn.getDatasetFile().getFileLabel() + "_"
 						+ dscolumn.getName().replaceAll(PATTERNNAME, "_"));
 				workset.setContents(dscolumn.getContents());
@@ -251,7 +256,7 @@ public class WorkflowService {
 		String nomeVar = form.getValue()[0];
 		String nomeOld = form.getValueOld();
 		AppRole sxruolo = appRolesAllMap.get(Long.valueOf(idr));
-		
+
 		for (int y = 0; y < varList.size(); y++) {
 			if (varList.get(y).getWorkset() != null && nomeOld.equals(varList.get(y).getWorkset().getName())) {
 				workset = varList.get(y).getWorkset();
@@ -277,7 +282,6 @@ public class WorkflowService {
 
 		stepRuntimeDao.save(stepRuntime);
 	}
-
 
 	public List<StepRuntime> getStepRuntimesNoValues(Long idDataProcessing, DataTypeCls dataType) {
 		return stepRuntimeDao.findByDataProcessingNoValues(new DataProcessing(idDataProcessing), dataType);
@@ -365,7 +369,7 @@ public class WorkflowService {
 			StepInstance stepInstance = iterator.next();
 			List<StepInstanceSignature> stepSignatures = stepInstance.getStepInstanceSignatures();
 			for (Iterator<StepInstanceSignature> iterator2 = stepSignatures.iterator(); iterator2.hasNext();) {
-				StepInstanceSignature stepSignature =iterator2.next();
+				StepInstanceSignature stepSignature = iterator2.next();
 				if (flagIO == 0) {// flagIO All
 					if ((stepSignature.getTypeIO().equals(new TypeIO(IS2Const.TYPE_IO_INPUT))
 							&& stepSignature.getAppRole().getDataType().equals(dataType))) {
@@ -385,7 +389,7 @@ public class WorkflowService {
 		}
 		// Rimuovo i appRoles duplicati nel caso si disponga di più variabili per
 		// processo
-		
+
 		for (int i = 0; i < ret.size(); i++) {
 			sxappRoles = ret.get(i);
 			if (!ret2.contains(sxappRoles)) {
@@ -409,7 +413,7 @@ public class WorkflowService {
 		List<StepInstanceSignature> ret = new ArrayList<>();
 		List<StepInstance> instanceBF = findAllStepInstanceByProcess(businessProcess);
 		for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
-			StepInstance stepInstance =iterator.next();
+			StepInstance stepInstance = iterator.next();
 			List<StepInstanceSignature> sxsetpppList = stepInstanceSignatureDao.findAllStepSignaturesByStepAndTypeIO(
 					stepInstance, new TypeIO(IS2Const.TYPE_IO_INPUT),
 					new DataTypeCls(Long.valueOf(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETRO
@@ -423,14 +427,15 @@ public class WorkflowService {
 
 		Map<Long, List<StepInstanceSignature>> ret = new HashMap<>();
 
-		for (Iterator<BusinessProcess> iteratorb = businessProcess.getBusinessSubProcesses().iterator(); iteratorb.hasNext();) {
-			BusinessProcess suBusinessProcess =iteratorb.next();
+		for (Iterator<BusinessProcess> iteratorb = businessProcess.getBusinessSubProcesses().iterator(); iteratorb
+				.hasNext();) {
+			BusinessProcess suBusinessProcess = iteratorb.next();
 
 			List<StepInstanceSignature> paramsList = new ArrayList<>();
 			List<StepInstance> instanceBF = findAllStepInstanceBySubBProcess(suBusinessProcess);
 
 			for (Iterator<StepInstance> iterator = instanceBF.iterator(); iterator.hasNext();) {
-				StepInstance stepInstance =iterator.next();
+				StepInstance stepInstance = iterator.next();
 				List<StepInstanceSignature> sxsetpppList = stepInstanceSignatureDao
 						.findAllStepSignaturesByStepAndTypeIO(stepInstance, new TypeIO(IS2Const.TYPE_IO_INPUT),
 								new DataTypeCls(Long.valueOf(IS2Const.DATA_TYPE_PARAMETER))); // INPUT 1; 1 PARAMETER
@@ -469,8 +474,9 @@ public class WorkflowService {
 			stepRuntimesRoles.add(stepRuntime.getAppRole());
 		}
 
-		for (Iterator<BusinessProcess> iteratorb = dataProcessing.getBusinessProcess().getBusinessSubProcesses().iterator(); iteratorb.hasNext();) {
-			BusinessProcess suBusinessProcess =iteratorb.next();
+		for (Iterator<BusinessProcess> iteratorb = dataProcessing.getBusinessProcess().getBusinessSubProcesses()
+				.iterator(); iteratorb.hasNext();) {
+			BusinessProcess suBusinessProcess = iteratorb.next();
 
 			Set<String> roleNameSet = new HashSet<>();
 			List<StepInstance> instanceBF = findAllStepInstanceBySubBProcess(suBusinessProcess);
@@ -490,7 +496,7 @@ public class WorkflowService {
 						}
 					}
 				}
-				
+
 				firstStepInInstance = false;
 			}
 			ret.put(suBusinessProcess.getId(), new ArrayList<>(roleNameSet));
@@ -498,8 +504,6 @@ public class WorkflowService {
 
 		return ret;
 	}
-
-
 
 	@Transactional
 	public void creaAssociazionVarRole(DataProcessing dataProcessing,
@@ -518,7 +522,7 @@ public class WorkflowService {
 				Workset workset = null;
 				StepRuntime stepRuntime = new StepRuntime();
 				stepRuntime.setDataProcessing(dataProcessing);
-				AppRole appRole = appRolesAllMap.get( ruolo.getIdRole());
+				AppRole appRole = appRolesAllMap.get(ruolo.getIdRole());
 
 				for (int i = 0; i < varList.size(); i++) {
 					if (varList.get(i).getWorkset() != null
@@ -556,25 +560,49 @@ public class WorkflowService {
 	@Transactional
 	public void cleanAllWorkset(Long idDataProcessing, Short flagIO) {
 
+		try {
 		List<StepRuntime> list = getStepRuntimes(idDataProcessing);
 		for (StepRuntime step : list) {
-			if (flagIO.equals( Short.valueOf("0")) || step.getTypeIO().equals(new TypeIO(flagIO))) {
-				stepRuntimeDao.deleteById(step.getId());
+			if (flagIO.equals(Short.valueOf("0")) || step.getTypeIO().equals(new TypeIO(flagIO))) {
+				stepRuntimeDao.findById(step.getId()).ifPresent(sr -> {
+					System.out.println(sr.getWorkset().getStepRuntimes().size());
+
+					Workset workset = sr.getWorkset();
+					workset.getStepRuntimes().remove(sr);
+					stepRuntimeDao.delete(sr);
+					System.out.println(workset.getStepRuntimes().size());
+					if (workset.getStepRuntimes().size() == 0)
+						workSetDao.delete(sr.getWorkset());
+					else
+						workSetDao.save(sr.getWorkset());
+
+					System.out.println(sr.getWorkset().getStepRuntimes().size());
+				});
+
 			}
 		}
 
-		List<Long> jobInstanceIds = workFlowBatchDao.findJobInstanceIdByElabId(idDataProcessing);
-		if (jobInstanceIds != null && !jobInstanceIds.isEmpty()) {
-			for (int i = 0; i < jobInstanceIds.size(); i++) {
-
-		 		workFlowBatchDao.deleteJobInstanceById(jobInstanceIds.get(i));
-			}
+		workFlowBatchDao.findJobInstanceIdByElabId(idDataProcessing).forEach(jobInstance -> {
+			workFlowBatchDao.deleteBatchJobExecutionContextById(jobInstance.getJobInstanceId());
+			workFlowBatchDao.deleteBatchJobExecutionParamsById(jobInstance.getJobInstanceId());
+			
+	
+			
+			workFlowBatchDao.deleteBaatchStepExecutionContextById(jobInstance.getJobExecutionId());
+			workFlowBatchDao.deleteBatchStepExecutionById(jobInstance.getJobExecutionId());
+			workFlowBatchDao.deleteBatchJobExecutionById(jobInstance.getJobInstanceId());
+			workFlowBatchDao.deleteJobInstanceById(jobInstance.getJobInstanceId());
+		
+		});
+		}
+		catch(Exception e) {
+		LOG.error(e.getLocalizedMessage());
 		}
 
 	}
 
 	public void setRuleset(DataProcessing dataProcessing, Integer idResultset)
-			throws NoSuchFieldException,  IllegalAccessException {
+			throws NoSuchFieldException, IllegalAccessException {
 
 		Ruleset ruleset = rulesetDao.findById(idResultset).orElse(new Ruleset());
 		AppRole appRole = appRoleDao.findByName(IS2Const.ROLE_NAME_RULESET);
@@ -619,8 +647,8 @@ public class WorkflowService {
 	}
 
 	public String getAppRoleNameById(Long groupRole) {
-		
-		AppRole role= appRoleDao.findById(groupRole).orElse(new AppRole());
+
+		AppRole role = appRoleDao.findById(groupRole).orElse(new AppRole());
 		return role.getName();
 	}
 

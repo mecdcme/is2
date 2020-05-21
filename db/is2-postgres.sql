@@ -80,7 +80,7 @@ CREATE TABLE is2.batch_job_execution_params (
 --
 
 CREATE SEQUENCE is2.batch_job_execution_seq
-    START WITH 1
+    START WITH 1000000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -106,7 +106,7 @@ CREATE TABLE is2.batch_job_instance (
 --
 
 CREATE SEQUENCE is2.batch_job_seq
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -158,7 +158,7 @@ CREATE TABLE is2.batch_step_execution_context (
 --
 
 CREATE SEQUENCE is2.batch_step_execution_seq
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -188,7 +188,7 @@ CREATE TABLE is2.is2_app_role (
 
 CREATE SEQUENCE is2.is2_app_role_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -232,7 +232,7 @@ CREATE TABLE is2.is2_app_service (
 
 CREATE sequence IF NOT EXISTS  is2.is2_app_service_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -269,7 +269,7 @@ CREATE TABLE is2.is2_gsbpm_process (
 
 CREATE SEQUENCE is2.is2_gsbpm_process_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -301,7 +301,7 @@ CREATE TABLE is2.is2_business_function (
 
 CREATE SEQUENCE is2.is2_business_function_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -339,7 +339,7 @@ CREATE TABLE is2.is2_business_process (
 
 CREATE SEQUENCE is2.is2_business_process_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -375,7 +375,7 @@ CREATE TABLE is2.is2_business_service (
 
 CREATE SEQUENCE is2.is2_business_service_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -422,7 +422,7 @@ CREATE TABLE is2.is2_cls_data_type (
 
 CREATE SEQUENCE is2.is2_cls_data_type_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -458,7 +458,7 @@ CREATE TABLE is2.is2_cls_rule (
 
 CREATE SEQUENCE is2.is2_cls_rule_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -497,7 +497,7 @@ CREATE TABLE is2.is2_cls_statistical_variable (
 
 CREATE SEQUENCE is2.is2_cls_statistical_variable_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -531,7 +531,7 @@ CREATE TABLE is2.is2_cls_type_io (
 
 CREATE SEQUENCE is2.is2_cls_type_io_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -569,7 +569,7 @@ CREATE TABLE is2.is2_data_bridge (
 
 CREATE SEQUENCE is2.is2_data_bridge_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -607,7 +607,7 @@ CREATE TABLE is2.is2_data_processing (
 
 CREATE SEQUENCE is2.is2_data_processing_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -646,7 +646,7 @@ CREATE TABLE is2.is2_dataset_column (
 
 CREATE SEQUENCE is2.is2_dataset_column_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -687,7 +687,7 @@ CREATE TABLE is2.is2_dataset_file (
 
 CREATE SEQUENCE is2.is2_dataset_file_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -790,7 +790,7 @@ CREATE TABLE is2.is2_log (
 
 CREATE SEQUENCE is2.is2_log_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -827,7 +827,7 @@ CREATE TABLE is2.is2_parameter (
 
 CREATE SEQUENCE is2.is2_parameter_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -864,7 +864,7 @@ CREATE TABLE is2.is2_process_step (
 
 CREATE SEQUENCE is2.is2_process_step_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -920,7 +920,7 @@ CREATE TABLE is2.is2_rule (
 
 CREATE SEQUENCE is2.is2_rule_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -960,7 +960,7 @@ CREATE TABLE is2.is2_ruleset (
 
 CREATE SEQUENCE is2.is2_ruleset_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -997,7 +997,7 @@ CREATE TABLE is2.is2_step_instance (
 
 CREATE SEQUENCE is2.is2_step_instance_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -1034,7 +1034,7 @@ CREATE TABLE is2.is2_step_instance_signature (
 
 CREATE SEQUENCE is2.is2_step_instance_signature_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -1075,7 +1075,7 @@ CREATE TABLE is2.is2_step_runtime (
 
 CREATE SEQUENCE is2.is2_step_runtime_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -1109,7 +1109,7 @@ CREATE TABLE is2.is2_user_roles (
 
 CREATE SEQUENCE is2.is2_user_roles_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -1147,7 +1147,7 @@ CREATE TABLE is2.is2_users (
 
 CREATE SEQUENCE is2.is2_users_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -1182,7 +1182,7 @@ CREATE TABLE is2.is2_view_data_type (
 
 CREATE SEQUENCE is2.is2_view_data_type_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -1220,7 +1220,7 @@ CREATE TABLE is2.is2_work_session (
 
 CREATE SEQUENCE is2.is2_work_session_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -1257,7 +1257,7 @@ CREATE TABLE is2.is2_workflow (
 
 CREATE SEQUENCE is2.is2_workflow_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -1297,7 +1297,7 @@ CREATE TABLE is2.is2_workset (
 
 CREATE SEQUENCE is2.is2_workset_id_seq
     AS integer
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE

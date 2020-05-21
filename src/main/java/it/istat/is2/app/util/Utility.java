@@ -29,6 +29,7 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -49,10 +50,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.renjin.sexp.Vector;
 
+import it.istat.is2.catalogue.relais.bean.OrderBean;
+import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.BusinessProcess;
 import it.istat.is2.workflow.domain.DataTypeCls;
 import it.istat.is2.workflow.domain.StepRuntime;
-import it.istat.is2.workflow.domain.AppRole;
 
 public class Utility {
 
@@ -626,20 +628,68 @@ public class Utility {
 		return true;
 	}
 
-	public static Map<String, List<String>> getSortedMapValues(final Map<String, List<String>> mapUnsorted,
-			final String fieldSort, final String sortAsc) {
-		// TODO Auto-generated method stub
-		final  Map<String, List<String>> mapOrdered = new LinkedHashMap<>();
-		int[] indexArraySorted=new int[mapUnsorted.get(fieldSort).size()];
-		int current=0;
-		final List<Integer> indexArraySortedList=new ArrayList<>();
-		mapUnsorted.get(fieldSort).stream().forEachOrdered(s-> indexArraySortedList.add(mapUnsorted.get(fieldSort).indexOf(s)));
-		mapUnsorted.forEach((key,values) ->{ 
-			final List<String> valuesOrdered=new ArrayList<>();
-			indexArraySortedList.forEach(index->  valuesOrdered.add(values.get(index)));
-			mapOrdered.put(key, valuesOrdered);
+	public static Map<String, List<String>> sortDatasetInMapValues(final Map<String, List<String>> mapValues,
+			final List<String> datasetFields, final String fieldSort, final String sortAsc) {
+
+		List<OrderBean> valuesElements = new ArrayList<>();
+		for (int i = 0; i < mapValues.get(fieldSort).size(); i++) {
+			valuesElements.add(new OrderBean(i, mapValues.get(fieldSort).get(i)));
+		}
+
+		Collections.sort(valuesElements);
+		System.out.println(valuesElements.size());
+		datasetFields.stream().forEach(fields -> {
+			final List<String> valuesOrdered = new ArrayList<>();
+			// indexArraySortedList.forEach(index ->
+			// valuesOrdered.add(mapValues.get(fields).get(index)));
+			for (OrderBean indexElement : valuesElements) {
+				valuesOrdered.add(mapValues.get(fields).get(indexElement.getIndex()));
+			}
+			mapValues.replace(fields, valuesOrdered);
+
 		});
-		return mapOrdered;
+		valuesElements.clear();
+		return mapValues;
 	}
 
+	 
+	public static void printNElementsInMapValues(final Map<String, List<String>> mapValues, int nValues) {
+
+		List<String> keys = new ArrayList<>(mapValues.keySet());
+		keys.forEach(key -> {
+			System.out.print(key + ";");
+
+		});
+		System.out.println();
+		int[] position = new int[] { 0 };
+		while (position[0] < nValues) {
+
+			keys.forEach(key -> {
+				System.out.print(mapValues.get(key).get(position[0]) + ";");
+
+			});
+			position[0]++;
+			System.out.println();
+		}
+	}
+
+	
+	public static Map<String, List<Integer>> blockVariablesIndexMapValues(final Map<String, List<String>> mapValues,
+			final List<String> datasetFields, final String fieldBlock) {
+
+	  	final Map<String, List<Integer>> ret=new LinkedHashMap<>();
+ 
+		for (int i = 0; i < mapValues.get(fieldBlock).size(); i++) {
+			String value= mapValues.get(fieldBlock).get(i);
+			 List<Integer> values=ret.get(value);
+			if(values==null) values=new ArrayList<>();
+			 values.add(i);
+			 ret.put(value, values);
+	 
+		}
+ 
+		return ret;
+	}
+
+	
 }
