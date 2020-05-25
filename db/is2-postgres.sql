@@ -1867,6 +1867,8 @@ INSERT INTO is2.is2_link_function_process VALUES (1, 2);
 INSERT INTO is2.is2_link_function_process VALUES (3, 3);
 INSERT INTO is2.is2_link_function_process VALUES (4, 9);
 
+INSERT INTO is2.is2_link_function_process VALUES (1, 5);
+
 
 --
 -- TOC entry 4933 (class 0 OID 25243)
@@ -1893,9 +1895,9 @@ INSERT INTO is2.is2_link_process_step VALUES (72, 72);
 INSERT INTO is2.is2_link_process_step VALUES (91, 91);
 INSERT INTO is2.is2_link_process_step VALUES (95, 95);
 
-INSERT INTO is2.is2_link_process_step VALUES (73, 70);
+INSERT INTO is2.is2_link_process_step VALUES (73, 73);
 INSERT INTO is2.is2_link_process_step VALUES (74, 71);
-INSERT INTO is2.is2_link_process_step VALUES (75, 72);
+INSERT INTO is2.is2_link_process_step VALUES (75, 75);
 
 
 --
