@@ -424,7 +424,7 @@ public class RelaisService {
 		return returnOut;
 	}
 	
-	public Map<?, ?> resultTablesProductNM(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+	public Map<?, ?> resultTables(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
 			Map<String, ArrayList<String>> worksetIn, Map<String, String> parametriMap) throws Exception {
 
 		Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();

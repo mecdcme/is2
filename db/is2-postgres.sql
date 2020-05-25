@@ -1652,9 +1652,9 @@ INSERT INTO is2.is2_business_process VALUES (91, 'LOAD', 'LOAD ', 'PARC-01', 2, 
 INSERT INTO is2.is2_business_process VALUES (95, 'MAP', 'MAP ', 'PARC-05', 6, 9);
 
 INSERT INTO is2.is2_business_process VALUES (5, 'Probabilistic Record Linkage Blocking', 'Probabilistic Record Linkage Blocking', 'PRLB', 1, NULL);
-INSERT INTO is2.is2_business_process VALUES (73, 'Contingency Table Blocking', 'Calculate contingency table', 'CrossTable', 1, 5);
+INSERT INTO is2.is2_business_process VALUES (73, 'Contingency Table Blocking', 'Calculate contingency table Blocking', 'CrossTableBlocking', 1, 5);
 INSERT INTO is2.is2_business_process VALUES (74, 'Fellegi Sunter', 'Fellegi Sunter algorithm', 'FellegiSunter', 2, 5);
-INSERT INTO is2.is2_business_process VALUES (75, 'Matching Table Blocking', 'Matching records', 'MatchingTable', 3, 5);
+INSERT INTO is2.is2_business_process VALUES (75, 'Matching Table Blocking', 'Matching records Blocking', 'MatchingTableBlocking', 3, 5);
 --
 -- TOC entry 4913 (class 0 OID 25174)
 -- Dependencies: 234
@@ -1929,7 +1929,7 @@ INSERT INTO is2.is2_parameter VALUES (3, 'THRESHOLD UNMATCHING', 'THRESHOLD UNMA
 INSERT INTO is2.is2_parameter VALUES (910, 'LOADER_PARAMETERS', 'LOADER_PARAMETERS', NULL, '{ "data":[],"schema":{"items":{  "properties":{  "FileType":{  "enum":["xml","clef-valeur","plat" ], "required":true, "title":"Type of file" } ,"Delimiter":{  "maxLength":50, "required":true, "title":"Delimiter", "type":"string" } ,"Format":{  "maxLength":1000000, "required":true, "title":"Format", "type":"string" } ,"Comments":{  "maxLength":1000000, "required":true, "title":"Comments", "type":"string" } }, "type":"object" }, "type":"array" } ,"options":{  "type":"table", "showActionsColumn":true, "hideAddItemsBtn":false, "items":{  "fields":{  "FileType":{  "type":"select", "noneLabel":"", "removeDefaultNone":false } } }, "form":{  "buttons":{  "addRow":"addRow" } }, "view":{  "templates":{  "container-array-toolbar":"#addItemsBtn" } } }}');
 INSERT INTO is2.is2_parameter VALUES (950, 'MAPPING_PARAMETERS', 'MAPPING_PARAMETERS', NULL, '{ "data":[], "schema":{  "items":{  "properties":{  "VariableName":{  "maxLength":50, "required":true, "title":"Variable Name", "type":"string" } ,"VariableType":{  "enum":["bigint","bigint[]","boolean","date","date[]","float","float[]","interval","text","text[]","timestamp without time zone" ], "required":true, "title":"Variable Type" } ,"Expression":{  "maxLength":100000, "required":true, "title":"Expression", "type":"string" } ,"TargetTables":{  "maxLength":100000, "required":true, "title":"Target tables", "type":"string" } }, "type":"object" }, "type":"array" }, "options":{  "type":"table", "showActionsColumn":true, "hideAddItemsBtn":false, "items":{  "fields":{  "VariableType":{  "type":"select", "noneLabel":"", "removeDefaultNone":false } } }, "form":{  "buttons":{  "addRow":"addRow" } }, "view":{  "templates":{  "container-array-toolbar":"#addItemsBtn" } } }}');
 
-INSERT INTO is2.is2_parameter VALUES (5, 'BlOCKING VARIABLES', 'BLOCKING VARIABLES', NULL, '{"data":[],"schema":{"type":"object", "properties": { "BLOCKING_A": { "type":"string", "title":"BLOCKING A" }, "BLOCKING_B": { "type":"string", "title":"BLOCKING B" } }}, "options": {"fields":{"BLOCKING_A":{"type":"select","noneLabel":"","dataSource":"matchedVariables"},"BLOCKING_B":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}}}}');
+INSERT INTO is2.is2_parameter VALUES (5, 'BLOCKING VARIABLES', 'BLOCKING VARIABLES', NULL, '{"data":[],"schema":{"type":"object", "properties": { "BLOCKING_A": { "type":"string", "title":"BLOCKING A" }, "BLOCKING_B": { "type":"string", "title":"BLOCKING B" } }}, "options": {"fields":{"BLOCKING_A":{"type":"select","noneLabel":"","dataSource":"matchedVariables"},"BLOCKING_B":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}}}}');
 
 
 --
