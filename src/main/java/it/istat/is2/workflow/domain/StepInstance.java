@@ -60,12 +60,15 @@ public class StepInstance implements Serializable {
     private AppService appService;
     
     // bi-directional many-to-one association to StepInstanceSignature
-    @OneToMany(mappedBy = "stepInstance")
+    @OneToMany(mappedBy = "stepInstance",fetch = FetchType.EAGER)
     @JsonBackReference
     private List<StepInstanceSignature> stepInstanceSignatures;
 
     public StepInstance() {
     }
 
-	
+    public StepInstance(Long id) {
+    	this.id=id;
+    }
+
 }

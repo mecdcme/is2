@@ -97,7 +97,7 @@ public class BusinessDesignController {
 	}
 
 	@PostMapping(value = "/updatebservice")
-	public String updateBService(RedirectAttributes redirectAttributes, HttpSession session, Model model, @RequestParam("bserviceid") Integer bserviceid,
+	public String updateBService(RedirectAttributes redirectAttributes, HttpSession session, Model model, @RequestParam("bserviceid") Long bserviceid,
 			@RequestParam("name") String name, @RequestParam("description") String description,
 			@RequestParam("gsbpmid") Long gsbpmid) {
 		notificationService.removeAllMessages();
@@ -255,7 +255,7 @@ public class BusinessDesignController {
 		appService.setLicence(licence);
 		appService.setContact(contact);
 
-		Integer idbs = Integer.parseInt(idbservice);
+		Long idbs = Long.parseLong(idbservice);
 		BusinessService businessService = businessServiceService.findBusinessServiceById(idbs);
 		appService.setBusinessService(businessService);
 
@@ -292,7 +292,7 @@ public class BusinessDesignController {
 		appService.setLicence(licence);
 		appService.setContact(contact);
 
-		Integer idbs = Integer.parseInt(idbservice);
+		Long idbs = Long.parseLong(idbservice);
 		BusinessService businessService = businessServiceService.findBusinessServiceById(idbs);
 		appService.setBusinessService(businessService);
 
@@ -369,7 +369,7 @@ public class BusinessDesignController {
 
 	@GetMapping(value = "/deletebservice/{idbservice}")
 	public String deleteBService(HttpSession session, Model model, RedirectAttributes redirectAttributes, 
-			@PathVariable("idbservice") Integer idbservice) {
+			@PathVariable("idbservice") Long idbservice) {
 		notificationService.removeAllMessages();
 
 		BusinessService businessService = businessServiceService.findBusinessServiceById(idbservice);

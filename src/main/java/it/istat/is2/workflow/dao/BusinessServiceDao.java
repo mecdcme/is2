@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BusinessServiceDao extends CrudRepository<BusinessService, Integer> {
+public interface BusinessServiceDao extends CrudRepository<BusinessService, Long> {
 
 //    @Override
 //    List<BusinessService> findAll();

@@ -48,6 +48,7 @@ import it.istat.is2.app.bean.MappingVarsFormBean;
 import it.istat.is2.app.bean.Ruolo;
 import it.istat.is2.app.bean.Variable;
 import it.istat.is2.app.dao.SqlGenericDao;
+import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.dao.DatasetColumnDao;
@@ -73,6 +74,8 @@ import it.istat.is2.workflow.domain.StepInstanceSignature;
 import it.istat.is2.workflow.domain.StepRuntime;
 import it.istat.is2.workflow.domain.TypeIO;
 import it.istat.is2.workflow.domain.Workset;
+import it.istat.is2.workflow.engine.EngineFactory;
+import it.istat.is2.workflow.engine.EngineService;
 import it.istat.is2.worksession.dao.WorkSessionDao;
 import it.istat.is2.worksession.domain.WorkSession;
 
@@ -80,7 +83,7 @@ import it.istat.is2.worksession.domain.WorkSession;
 public class WorkflowService {
 
 	private static Logger LOG = LoggerFactory.getLogger(WorkflowService.class);
-	
+
 	private final String PATTERNNAME = "\\.|\\s";
 	@Autowired
 	private WorkSessionDao workSessionDao;
@@ -108,6 +111,12 @@ public class WorkflowService {
 	private SqlGenericDao sqlGenericDao;
 	@Autowired
 	private WorkFlowBatchDao workFlowBatchDao;
+
+	@Autowired
+	EngineFactory engineFactory;
+
+	@Autowired
+	private NotificationService notificationService;
 
 	public WorkSession findWorkSession(Long id) {
 		return workSessionDao.findById(id).orElse(null);
@@ -561,42 +570,39 @@ public class WorkflowService {
 	public void cleanAllWorkset(Long idDataProcessing, Short flagIO) {
 
 		try {
-		List<StepRuntime> list = getStepRuntimes(idDataProcessing);
-		for (StepRuntime step : list) {
-			if (flagIO.equals(Short.valueOf("0")) || step.getTypeIO().equals(new TypeIO(flagIO))) {
-				stepRuntimeDao.findById(step.getId()).ifPresent(sr -> {
-					System.out.println(sr.getWorkset().getStepRuntimes().size());
+			List<StepRuntime> list = getStepRuntimes(idDataProcessing);
+			for (StepRuntime step : list) {
+				if (flagIO.equals(Short.valueOf("0")) || step.getTypeIO().equals(new TypeIO(flagIO))) {
+					stepRuntimeDao.findById(step.getId()).ifPresent(sr -> {
+						System.out.println(sr.getWorkset().getStepRuntimes().size());
 
-					Workset workset = sr.getWorkset();
-					workset.getStepRuntimes().remove(sr);
-					stepRuntimeDao.delete(sr);
-					System.out.println(workset.getStepRuntimes().size());
-					if (workset.getStepRuntimes().size() == 0)
-						workSetDao.delete(sr.getWorkset());
-					else
-						workSetDao.save(sr.getWorkset());
+						Workset workset = sr.getWorkset();
+						workset.getStepRuntimes().remove(sr);
+						stepRuntimeDao.delete(sr);
+						System.out.println(workset.getStepRuntimes().size());
+						if (workset.getStepRuntimes().size() == 0)
+							workSetDao.delete(sr.getWorkset());
+						else
+							workSetDao.save(sr.getWorkset());
 
-					System.out.println(sr.getWorkset().getStepRuntimes().size());
-				});
+						System.out.println(sr.getWorkset().getStepRuntimes().size());
+					});
 
+				}
 			}
-		}
 
-		workFlowBatchDao.findJobInstanceIdByElabId(idDataProcessing).forEach(jobInstance -> {
-			workFlowBatchDao.deleteBatchJobExecutionContextById(jobInstance.getJobInstanceId());
-			workFlowBatchDao.deleteBatchJobExecutionParamsById(jobInstance.getJobInstanceId());
-			
-	
-			
-			workFlowBatchDao.deleteBaatchStepExecutionContextById(jobInstance.getJobExecutionId());
-			workFlowBatchDao.deleteBatchStepExecutionById(jobInstance.getJobExecutionId());
-			workFlowBatchDao.deleteBatchJobExecutionById(jobInstance.getJobInstanceId());
-			workFlowBatchDao.deleteJobInstanceById(jobInstance.getJobInstanceId());
-		
-		});
-		}
-		catch(Exception e) {
-		LOG.error(e.getLocalizedMessage());
+			workFlowBatchDao.findJobInstanceIdByElabId(idDataProcessing).forEach(jobInstance -> {
+				workFlowBatchDao.deleteBatchJobExecutionContextById(jobInstance.getJobInstanceId());
+				workFlowBatchDao.deleteBatchJobExecutionParamsById(jobInstance.getJobInstanceId());
+
+				workFlowBatchDao.deleteBaatchStepExecutionContextById(jobInstance.getJobExecutionId());
+				workFlowBatchDao.deleteBatchStepExecutionById(jobInstance.getJobExecutionId());
+				workFlowBatchDao.deleteBatchJobExecutionById(jobInstance.getJobInstanceId());
+				workFlowBatchDao.deleteJobInstanceById(jobInstance.getJobInstanceId());
+
+			});
+		} catch (Exception e) {
+			LOG.error(e.getLocalizedMessage());
 		}
 
 	}
@@ -652,4 +658,21 @@ public class WorkflowService {
 		return role.getName();
 	}
 
+	public DataProcessing doStep(DataProcessing elaborazione, StepInstance stepInstance) throws Exception {
+		EngineService engine = engineFactory.getEngine(stepInstance.getAppService().getEngineType());
+
+		try {
+			engine.init(elaborazione, stepInstance);
+			engine.doAction();
+			engine.processOutput();
+		} catch (Exception e) {
+			LOG.error(e.getMessage());
+			notificationService.addErrorMessage("Error: " + e.getMessage());
+			throw (e);
+		} finally {
+			engine.destroy();
+		}
+
+		return elaborazione;
+	}
 }

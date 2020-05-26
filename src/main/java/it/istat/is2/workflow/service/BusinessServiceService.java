@@ -57,7 +57,7 @@ public class BusinessServiceService {
         return (List<BusinessService>) businessServiceDao.findAll();
     }
 
-    public BusinessService findBusinessServiceById(long l) {
+    public BusinessService findBusinessServiceById(Long l) {
         return businessServiceDao.findById(l).orElse(null);
     }
     public void save(BusinessService businessService) {
@@ -73,7 +73,7 @@ public class BusinessServiceService {
         return businessServices;
     }
 
-    public List<StepInstance> findStepInstances(Integer idBusinessService) {
+    public List<StepInstance> findStepInstances(Long idBusinessService) {
 
         List<StepInstance> stepInstances = new ArrayList<>();
 
@@ -88,7 +88,7 @@ public class BusinessServiceService {
          return stepInstances;
     }
 
-    public List<AppService> findAppServices(Integer idBusinessService) {
+    public List<AppService> findAppServices(Long idBusinessService) {
         List<AppService> appServiceList = new ArrayList<>();
         BusinessService businessService = businessServiceDao.findById(idBusinessService).orElse(null);
         if (businessService != null) {
@@ -96,7 +96,7 @@ public class BusinessServiceService {
         }
         return appServiceList;
     }
-    public void deleteBusinessServiceById(Integer idbs){
+    public void deleteBusinessServiceById(Long  idbs){
     	businessServiceDao.deleteById(idbs);    	
     }
     public void deleteBusinessService(BusinessService bs){    	

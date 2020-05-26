@@ -117,7 +117,7 @@ public class HomeController {
 	}
 
 	@GetMapping(value = "/service/{idService}")
-	public String getService(HttpSession session, Model model, @PathVariable("idService") Integer idBusinessService) {
+	public String getService(HttpSession session, Model model, @PathVariable("idService") Long idBusinessService) {
 		notificationService.removeAllMessages();
 		BusinessService businessService = businessServiceService.findBusinessServiceById(idBusinessService);
 		List<AppService> appServices = businessServiceService.findAppServices(idBusinessService);

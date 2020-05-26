@@ -231,7 +231,7 @@ public class DesignController {
 
 				ProcessStep step = processStepService.findProcessStepById(fieldId);
 				BusinessService newBusinessService = businessService
-						.findBusinessServiceById(Integer.parseInt(fieldBusinessProcessId));
+						.findBusinessServiceById(Long.parseLong(fieldBusinessProcessId));
 				step.setName(fieldName);
 				step.setDescr(fieldDescr);
 				step.setLabel(fieldLabel);

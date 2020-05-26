@@ -115,7 +115,7 @@ public class DesignControllerRest {
 		    		
 		    		if(idst.equals("0")) {
 		    			BusinessService newBusinessService = businessService
-								.findBusinessServiceById(Integer.parseInt(businessServiceId));
+								.findBusinessServiceById(Long.parseLong(businessServiceId));
 			    		step.setName(namest);
 						step.setDescr(descriptionst);
 						step.setLabel(labelst);
