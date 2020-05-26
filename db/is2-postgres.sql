@@ -630,7 +630,7 @@ ALTER SEQUENCE is2.is2_data_processing_id_seq OWNED BY is2.is2_data_processing.i
 
 CREATE TABLE is2.is2_dataset_column (
     id integer NOT NULL,
-    name character varying(100),
+    name character varying(100) NOT_NULL,
     order_code integer,
     content text,
     content_size integer,

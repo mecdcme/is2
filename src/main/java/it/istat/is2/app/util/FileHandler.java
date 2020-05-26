@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import it.istat.is2.app.bean.ColonnaJson;
 import it.istat.is2.app.bean.DatoJson;
 
@@ -152,7 +153,9 @@ public class FileHandler {
 				rec.size();
 				while (rec.iterator().hasNext() && j < rec.size()) {
 					String field = rec.get(j);
+					if(field!=null&&!field.isEmpty())
 					campiHeader.put(j, field.toUpperCase());
+					else throw new Exception("ERROR HEADER FILE!");
 					j++;
 				}
 				i++;
