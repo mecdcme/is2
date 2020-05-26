@@ -1280,7 +1280,7 @@ ALTER SEQUENCE is2.is2_workflow_id_seq OWNED BY is2.is2_workflow.id;
 
 CREATE TABLE is2.is2_workset (
     id integer NOT NULL,
-    name character varying(100),
+    name character varying(100)  NOT NULL,
     order_code integer,
     content text,
     content_size integer,
