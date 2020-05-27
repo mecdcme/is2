@@ -23,17 +23,18 @@
  */
 package it.istat.is2.workflow.engine;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.script.ScriptException;
 
 import org.apache.log4j.Logger;
-
 
 import org.springframework.stereotype.Service;
 
@@ -56,432 +57,443 @@ import org.renjin.sexp.*;
 @Service
 public class EngineREnjin extends EngineR implements EngineService {
 
- 
+	RenjinScriptEngine engine;
 
-    RenjinScriptEngine  engine;
+	final StringWriter logWriter = new StringWriter();
 
+	public EngineREnjin(String pathR, String fileScriptR) {
+		super();
+		this.pathR = pathR;
+		this.fileScriptR = fileScriptR;
+		command = "";
+	}
 
- 
+	public EngineREnjin() {
+		super();
+		command = "";
+	}
 
-    public EngineREnjin(String pathR, String fileScriptR) {
-        super();
-        this.pathR = pathR;
-        this.fileScriptR = fileScriptR;
-        command = "";
-    }
+	@Override
+	public void init(DataProcessing dataProcessing, StepInstance stepInstance) throws Exception {
+		// Create a connection to Rserve instance running on default port 6311
+		this.dataProcessing = dataProcessing;
+		this.stepInstance = stepInstance;
+		this.fileScriptR = stepInstance.getAppService().getSource();
 
-    public EngineREnjin() {
-        super();
-        command = "";
-    }
+		prepareEnv();
+		createConnection();
+		bindInputColumns(worksetVariables, WORKSET_IN);
+		bindInputColumnsParams(parametersMap, PARAMETERS_IN);
+		bindInputColumns(rulesetMap, RULESET);
+		setRoles(variablesRolesMap);
 
-    @Override
-    public void init(DataProcessing dataProcessing, StepInstance stepInstance) throws Exception {
-        // Create a connection to Rserve instance running on default port 6311
-        this.dataProcessing = dataProcessing;
-        this.stepInstance = stepInstance;
-        this.fileScriptR = stepInstance.getAppService().getSource();
+	}
 
-        prepareEnv();
-        createConnection();
-        bindInputColumns(worksetVariables, WORKSET_IN);
-        bindInputColumnsParams(parametersMap, PARAMETERS_IN);
-        bindInputColumns(rulesetMap, RULESET);
-        setRoles(variablesRolesMap);
+	private void createConnection() throws ScriptException {
+		// Create a script engine manager:
+		RenjinScriptEngineFactory factory = new RenjinScriptEngineFactory();
+		// Create a Renjin engine:
+		engine = factory.getScriptEngine();
+		// set log
 
-    }
+		engine.getContext().setWriter(logWriter);
+		engine.eval("setwd('" + pathR + "')");
+		// engine.eval("source('libraries.R')");
+		engine.eval("source('" + fileScriptR + "')");
 
-    private void createConnection() throws ScriptException  {
-        // Create a script engine manager:
-        RenjinScriptEngineFactory factory = new RenjinScriptEngineFactory();
-        // Create a Renjin engine:
-        engine = factory.getScriptEngine();
+		Logger.getRootLogger().debug("Script Loaded");
+	}
 
-        engine.eval("setwd('" + pathR + "')");
-       // engine.eval("source('libraries.R')");
-        engine.eval("source('" + fileScriptR + "')");
-        Logger.getRootLogger().debug("Script Loaded");
-    }
+	public void closeConnection() {
+		// Do nothing
+	}
 
-    public void closeConnection() {
-        //Do nothing
-    }
+	public void bindInputColumns(LinkedHashMap<String, ArrayList<String>> workset, String varR) throws ScriptException {
 
-    public void bindInputColumns(LinkedHashMap<String, ArrayList<String>> workset, String varR) throws ScriptException {
+		if (!workset.isEmpty()) {
+			List<String> keys = new ArrayList<>(workset.keySet());
+			StringBuilder listaCampi = new StringBuilder();
+			int size = keys.size();
+			String key;
 
-        if (!workset.isEmpty()) {
-            List<String> keys = new ArrayList<>(workset.keySet());
-            StringBuilder listaCampi =new StringBuilder();
-            int size = keys.size();
-            String key;
+			for (int i = 0; i < size; i++) {
+				key = keys.get(i);
 
-            for (int i = 0; i < size; i++) { 
-                key = keys.get(i);
+				String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
+				listaCampi.append(key + ",");
+				engine.put(key, arrX); // Create a string vector
+				try {
+					if (Utility.isNumericR(arrX)) {
+						engine.eval(key + " <- as.numeric(" + key + ")");
+					}
+				} catch (Exception e) {
+					Logger.getRootLogger().error(e.getMessage());
+				}
 
-                String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
-                listaCampi.append(key + ",");
-                engine.put(key, arrX); // Create a string vector 
-                try {
-                    if (Utility.isNumericR(arrX)) {
-                        engine.eval(key + " <- as.numeric(" + key + ")");
-                    }
-                } catch (Exception e) {
-                    Logger.getRootLogger().error(e.getMessage());
-                }
+			}
 
-            }
-          
-            engine.eval(varR + " <- data.frame(" + listaCampi.substring(0,listaCampi.length()-1) + ")"); // Create a data frame
-        }
-    }
+			engine.eval(varR + " <- data.frame(" + listaCampi.substring(0, listaCampi.length() - 1) + ")"); // Create a
+																											// data
+																											// frame
+		}
+	}
 
-    public void bindInputColumnsParams(LinkedHashMap<String, ArrayList<String>> workset, String varR) throws ScriptException {
+	public void bindInputColumnsParams(LinkedHashMap<String, ArrayList<String>> workset, String varR)
+			throws ScriptException {
 
-        if (!workset.isEmpty()) {
-            List<String> keys = new ArrayList<>(workset.keySet());
-            StringBuilder listaCampi =new StringBuilder();
-            int size = keys.size();
-            String key;
-            for (int i = 0; i < size; i++) {
-                key = keys.get(i);
-                String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
-                listaCampi.append( key + ",");
-                engine.put(key, arrX);
-            }
-             
-            engine.eval(varR + " <- list(" + listaCampi.substring(0,listaCampi.length()-1) + ")");
+		if (!workset.isEmpty()) {
+			List<String> keys = new ArrayList<>(workset.keySet());
+			StringBuilder listaCampi = new StringBuilder();
+			int size = keys.size();
+			String key;
+			for (int i = 0; i < size; i++) {
+				key = keys.get(i);
+				String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
+				listaCampi.append(key + ",");
+				engine.put(key, arrX);
+			}
 
-        }
-    }
+			engine.eval(varR + " <- list(" + listaCampi.substring(0, listaCampi.length() - 1) + ")");
 
-  
-    @Override
-    public void doAction() throws ScriptException {
+		}
+	}
 
-        String fname = stepInstance.getMethod();
-        // Aggiunto il workset e params nella lista degli argomenti della funzione (by paolinux)
-        command = RESULTSET + "  <- " + fname + "( " + WORKSET_IN + "," + ROLES_IN + ",";
-        if (!parametersMap.isEmpty()) {
-            command += PARAMETERS_IN + ",";
-        }
-        if (!rulesetMap.isEmpty()) {
-            command += RULESET + ",";
-        }
+	@Override
+	public void doAction() throws ScriptException {
 
-        command = command.substring(0, command.length() - 1);
-        command += ")";
-        Logger.getRootLogger().debug("Eseguo " + command);
+		String fname = stepInstance.getMethod();
+		// Aggiunto il workset e params nella lista degli argomenti della funzione (by
+		// paolinux)
+		command = RESULTSET + "  <- " + fname + "( " + WORKSET_IN + "," + ROLES_IN + ",";
+		if (!parametersMap.isEmpty()) {
+			command += PARAMETERS_IN + ",";
+		}
+		if (!rulesetMap.isEmpty()) {
+			command += RULESET + ",";
+		}
 
-        engine.eval(command);
-    }
+		command = command.substring(0, command.length() - 1);
+		command += ")";
+		Logger.getRootLogger().debug("Eseguo " + command);
 
-    // Assegna il ruolo selemix alle variabili del workset
-    public void setRoles(LinkedHashMap<String, ArrayList<String>> ruoliVariabileNome) throws ScriptException {
-        String rolesList = "";
-        Logger.getRootLogger().debug("Eseguo SetRuoli>");
-        for (Map.Entry<String, ArrayList<String>> entry : ruoliVariabileNome.entrySet()) {
-            String roleCode = entry.getKey();
-            ArrayList<String> nomeVariabiliList = entry.getValue();
-            rolesList += "'" + roleCode + "' = " + Utility.combineList2String4R(nomeVariabiliList) + ",";
-        }
-        rolesList = rolesList.substring(0, rolesList.length() - 1);
+		engine.eval(command);
+	}
 
-        engine.eval(ROLES_IN + " <-list(" + rolesList + ")");
-    }
+	// Assegna il ruolo selemix alle variabili del workset
+	public void setRoles(LinkedHashMap<String, ArrayList<String>> ruoliVariabileNome) throws ScriptException {
+		String rolesList = "";
+		Logger.getRootLogger().debug("Eseguo SetRuoli>");
+		for (Map.Entry<String, ArrayList<String>> entry : ruoliVariabileNome.entrySet()) {
+			String roleCode = entry.getKey();
+			ArrayList<String> nomeVariabiliList = entry.getValue();
+			rolesList += "'" + roleCode + "' = " + Utility.combineList2String4R(nomeVariabiliList) + ",";
+		}
+		rolesList = rolesList.substring(0, rolesList.length() - 1);
 
-    public void getGenericOutput(LinkedHashMap<String, ArrayList<String>> genericHashMap, String varR,
-            String tipoOutput) throws ScriptException {
-        Logger.getRootLogger().debug("Eseguo Get " + tipoOutput);
-        try {
-            ListVector listR = (ListVector) engine.eval(varR + "$" + tipoOutput);
-        //    StringVector names = (StringVector) engine.eval("names(" + varR + "$" + tipoOutput + ")");
-            if (listR != null && listR.length() > 0) {
-             //   getRecursiveOutput(genericHashMap, listR, names);
-                getRecursiveOutput(genericHashMap, listR);
-                Logger.getRootLogger()
-                        .debug("Impostati campi di " + tipoOutput + "= " + genericHashMap.values().toString());
-            }
-        } catch (Exception e) {
-            Logger.getRootLogger().info("No such list:" + tipoOutput);
-            Logger.getRootLogger().debug(engine.eval("print(str(" + varR + "$" + tipoOutput + "))").toString());
-        }
-    }
+		engine.eval(ROLES_IN + " <-list(" + rolesList + ")");
+	}
 
-    public void getGenericParamterOutput(LinkedHashMap<String, String> genericHashMap, String varR, String tipoOutput)
-            throws ScriptException {
-        Logger.getRootLogger().debug("Eseguo Get " + tipoOutput);
-        try {
-            ListVector listR = (ListVector) engine.eval(varR + "$" + tipoOutput);
-            StringVector names = (StringVector) engine.eval("names(" + varR + "$" + tipoOutput + ")");
-            String name;
-            String value;
-            if (listR != null && listR.length() > 0) {
-                for (int i = 0; i < listR.length(); i++) {
-                    name = names.getElementAsString(i);
-                    value = listR.getElementAsString(i);
-                    genericHashMap.put(name, value);
-                }
+	public void getGenericOutput(LinkedHashMap<String, ArrayList<String>> genericHashMap, String varR,
+			String tipoOutput) throws ScriptException {
+		Logger.getRootLogger().debug("Eseguo Get " + tipoOutput);
+		try {
+			ListVector listR = (ListVector) engine.eval(varR + "$" + tipoOutput);
+			// StringVector names = (StringVector) engine.eval("names(" + varR + "$" +
+			// tipoOutput + ")");
+			if (listR != null && listR.length() > 0) {
+				// getRecursiveOutput(genericHashMap, listR, names);
+				getRecursiveOutput(genericHashMap, listR);
+				Logger.getRootLogger()
+						.debug("Impostati campi di " + tipoOutput + "= " + genericHashMap.values().toString());
+			}
+		} catch (Exception e) {
+			Logger.getRootLogger().info("No such list:" + tipoOutput);
+			Logger.getRootLogger().debug(engine.eval("print(str(" + varR + "$" + tipoOutput + "))").toString());
+		}
+	}
 
-                Logger.getRootLogger().debug("Impostati campi di " + tipoOutput + "= " + genericHashMap.values().toString());
-            }
-        } catch (Exception e) {
-            Logger.getRootLogger().info("No such list:" + tipoOutput);
-            Logger.getRootLogger().debug(engine.eval("print(str(" + varR + "$" + tipoOutput + "))").toString());
-        }
-    }
+	public void getGenericParamterOutput(LinkedHashMap<String, String> genericHashMap, String varR, String tipoOutput)
+			throws ScriptException {
+		Logger.getRootLogger().debug("Eseguo Get " + tipoOutput);
+		try {
+			ListVector listR = (ListVector) engine.eval(varR + "$" + tipoOutput);
+			StringVector names = (StringVector) engine.eval("names(" + varR + "$" + tipoOutput + ")");
+			String name;
+			String value;
+			if (listR != null && listR.length() > 0) {
+				for (int i = 0; i < listR.length(); i++) {
+					name = names.getElementAsString(i);
+					value = listR.getElementAsString(i);
+					genericHashMap.put(name, value);
+				}
 
-    public void getRolesGroup(LinkedHashMap<String, String> genericHashMap, String varR, String tipoOutput)
-            throws ScriptException {
-        Logger.getRootLogger().debug("Eseguo Get " + tipoOutput);
-        try {
-            ListVector listR = (ListVector) engine.eval(varR + "$" + tipoOutput);
-            StringVector names = (StringVector) engine.eval("names(" + varR + "$" + tipoOutput + ")");
-            String name;
-            for (int i = 0; i < listR.length(); i++) {
-                name = names.getElementAsString(i);
-                StringVector vectorR = (StringVector) listR.getElementAsSEXP(i);
-                for (int j = 0; j < vectorR.length(); j++) {
-                    genericHashMap.put(vectorR.getElementAsString(j), name);
-                }
-            }
-        } catch (Exception e) {
-            Logger.getRootLogger().info("No such list:" + tipoOutput);
-            Logger.getRootLogger().debug(engine.eval("print(str(" + varR + "$" + tipoOutput + "))").toString());
-        }
-    }
+				Logger.getRootLogger()
+						.debug("Impostati campi di " + tipoOutput + "= " + genericHashMap.values().toString());
+			}
+		} catch (Exception e) {
+			Logger.getRootLogger().info("No such list:" + tipoOutput);
+			Logger.getRootLogger().debug(engine.eval("print(str(" + varR + "$" + tipoOutput + "))").toString());
+		}
+	}
 
-    public void writeLogScriptR() throws ScriptException {
-        Logger.getRootLogger().debug("Eseguo getLogScriptR ");
-        StringVector rlog;
-        rlog = (StringVector)engine.eval(RESULTSET + "$log") ;
-        for (int i = 0; i < rlog.length(); i++) {
-            logService.save(rlog.getElementAsString(i), IS2Const.OUTPUT_R);
-        }
-        logService.save("Script completed!");
-    }
+	public void getRolesGroup(LinkedHashMap<String, String> genericHashMap, String varR, String tipoOutput)
+			throws ScriptException {
+		Logger.getRootLogger().debug("Eseguo Get " + tipoOutput);
+		try {
+			ListVector listR = (ListVector) engine.eval(varR + "$" + tipoOutput);
+			StringVector names = (StringVector) engine.eval("names(" + varR + "$" + tipoOutput + ")");
+			String name;
+			for (int i = 0; i < listR.length(); i++) {
+				name = names.getElementAsString(i);
+				StringVector vectorR = (StringVector) listR.getElementAsSEXP(i);
+				for (int j = 0; j < vectorR.length(); j++) {
+					genericHashMap.put(vectorR.getElementAsString(j), name);
+				}
+			}
+		} catch (Exception e) {
+			Logger.getRootLogger().info("No such list:" + tipoOutput);
+			Logger.getRootLogger().debug(engine.eval("print(str(" + varR + "$" + tipoOutput + "))").toString());
+		}
+	}
 
-    public void getRecursiveOutput(LinkedHashMap<String, ArrayList<String>> genericHashMap, ListVector listR)
-            throws ScriptException {
-        String name = "";
-        if (listR != null) {
-        //    Logger.getRootLogger().info("Campi:> " + names.asString() + " Size(" + listR.length() + ")");
-            for (int i = 0; i < listR.length(); i++) {
-                if (listR.get(i) instanceof  ListVector) {
-              //      getRecursiveOutput(genericHashMap, (ListVector) listR.get(i), (StringVector) listR.get(i).getNames());
-                	  getRecursiveOutput(genericHashMap, (ListVector) listR.get(i));
-                } else {
-                	Vector values =(Vector) listR.get(i);
-                    name = listR.getName(i);
-                    genericHashMap.put(name, Utility.toArrayListofString(values));
-                    Logger.getRootLogger().info(name + " (" + values.length() + "/" + genericHashMap.get(name).size() + "): "
-                            + genericHashMap.get(name).toString());
-                }
-            }
-        }
-    }
+	public void writeLogScriptR() throws ScriptException {
+		Logger.getRootLogger().debug("Eseguo getLogScriptR ");
 
-    public void bindInputParams(HashMap<String, ArrayList<String>> parametriMap) throws ScriptException {
-        for (Map.Entry<String, ArrayList<String>> entry : parametriMap.entrySet()) {
-            String nomep = entry.getKey();
-            ArrayList<String> valore = entry.getValue();
-            // X <- c('X1','X2');
-            String comando = nomep + " <- " + Utility.combineList2String4R(valore);
-            Logger.getRootLogger().info("Comando: " + comando);
-            engine.eval(comando);
-        }
-    }
+		String output = logWriter.toString();
+		StringTokenizer multiTokenizer = new StringTokenizer(output, "\n");
 
-    public void prepareEnv() {
-    	
-        // Get all roles
-        rolesMap = ruoloDao.findByServiceAsCodMap(stepInstance.getAppService().getBusinessService());
+		while (multiTokenizer.hasMoreTokens()) {
+			System.out.println(multiTokenizer.nextToken());
+			logService.save(multiTokenizer.nextToken(), IS2Const.OUTPUT_R);
+		}
 
-        // Recupero dei ruoli di INPUT e OUTUPT e dalle istanze
-        // {S=[S], X=[X], Y=[Y], Z=[Z]}
-        HashMap<String, ArrayList<String>> ruoliInputStep = new HashMap<>();
-        // {P=[P], M=[M], O=[O]}
-        rolesOut = new LinkedHashMap<>();
-        rolesGroupOut = new LinkedHashMap<>();
+		logService.save("Script completed!");
+	}
 
-        for (Iterator<?> iterator = stepInstance.getStepInstanceSignatures().iterator(); iterator.hasNext();) {
-            StepInstanceSignature stepInstanceSignature = (StepInstanceSignature) iterator.next();
-            if (stepInstanceSignature.getTypeIO().getId().intValue() == IS2Const.TYPE_IO_INPUT) {
-                ArrayList<String> listv = ruoliInputStep.get(stepInstanceSignature.getAppRole().getCode());
-                if (listv == null) {
-                    listv = new ArrayList<>();
-                }
-                listv.add(stepInstanceSignature.getAppRole().getCode());
-                ruoliInputStep.put(stepInstanceSignature.getAppRole().getCode(), listv);
-            } else if (stepInstanceSignature.getTypeIO().getId().intValue() == IS2Const.TYPE_IO_OUTPUT) {
-                ArrayList<String> listv = rolesOut.get(stepInstanceSignature.getAppRole().getCode());
-                if (listv == null) {
-                    listv = new ArrayList<>();
-                }
-                listv.add(stepInstanceSignature.getAppRole().getCode());
-                rolesOut.put(stepInstanceSignature.getAppRole().getCode(), listv);
-            }
-        }
+	public void getRecursiveOutput(LinkedHashMap<String, ArrayList<String>> genericHashMap, ListVector listR)
+			throws ScriptException {
+		String name = "";
+		if (listR != null) {
+			// Logger.getRootLogger().info("Campi:> " + names.asString() + " Size(" +
+			// listR.length() + ")");
+			for (int i = 0; i < listR.length(); i++) {
+				if (listR.get(i) instanceof ListVector) {
+					// getRecursiveOutput(genericHashMap, (ListVector) listR.get(i), (StringVector)
+					// listR.get(i).getNames());
+					getRecursiveOutput(genericHashMap, (ListVector) listR.get(i));
+				} else {
+					Vector values = (Vector) listR.get(i);
+					name = listR.getName(i);
+					genericHashMap.put(name, Utility.toArrayListofString(values));
+					Logger.getRootLogger().info(name + " (" + values.length() + "/" + genericHashMap.get(name).size()
+							+ "): " + genericHashMap.get(name).toString());
+				}
+			}
+		}
+	}
 
-        // Get input workset
-        List<StepRuntime> dataList = stepRuntimeDao.findByDataProcessing(dataProcessing);
-        // mappa delle colonne workset <nome campo, oggetto stepv>
-        dataMap = Utility.getMapNameWorkSetStep(dataList);
-        // mappa delle colonne workset <nome campo, oggetto stepv>
-        Map<String, ArrayList<StepRuntime>> dataRuoliStepVarMap = Utility.getMapCodiceRuoloStepVariabili(dataList);
-        // List<AppRole> ruoliAll = ruoloDao.findAll();
-        // Utility.getMapRuoliByCod(ruoliAll)
+	public void bindInputParams(HashMap<String, ArrayList<String>> parametriMap) throws ScriptException {
+		for (Map.Entry<String, ArrayList<String>> entry : parametriMap.entrySet()) {
+			String nomep = entry.getKey();
+			ArrayList<String> valore = entry.getValue();
+			// X <- c('X1','X2');
+			String comando = nomep + " <- " + Utility.combineList2String4R(valore);
+			Logger.getRootLogger().info("Comando: " + comando);
+			engine.eval(comando);
+		}
+	}
 
-        // mappa delle colonne workset <nome,lista valori>
-        worksetVariables = Utility.getMapWorkSetValuesInRoles(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE),
-                ruoliInputStep.keySet());
+	public void prepareEnv() {
 
-        // Parameters
-        parametersMap = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
-        rulesetMap = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
-        worksetOut = new LinkedHashMap<>();
+		// Get all roles
+		rolesMap = ruoloDao.findByServiceAsCodMap(stepInstance.getAppService().getBusinessService());
 
-        // associo il codice ruolo alla variabile
-        // codiceRuolo, lista nome variabili {X=[X1], Y=[Y1]}
-        variablesRolesMap = new LinkedHashMap<>();
-        LinkedHashMap<String, String>  rolesVariablesMap = new LinkedHashMap<>();
-        parameterOut = new LinkedHashMap<>();
+		// Recupero dei ruoli di INPUT e OUTUPT e dalle istanze
+		// {S=[S], X=[X], Y=[Y], Z=[Z]}
+		HashMap<String, ArrayList<String>> ruoliInputStep = new HashMap<>();
+		// {P=[P], M=[M], O=[O]}
+		rolesOut = new LinkedHashMap<>();
+		rolesGroupOut = new LinkedHashMap<>();
 
-        for (Map.Entry<String, ArrayList<StepRuntime>> entry : dataRuoliStepVarMap.entrySet()) {
-            String codR = entry.getKey();
-            ArrayList<StepRuntime> listSVariable = entry.getValue();
-            for (Iterator<StepRuntime> iterator = listSVariable.iterator(); iterator.hasNext();) {
-                StepRuntime stepRuntime = iterator.next();
+		for (Iterator<?> iterator = stepInstance.getStepInstanceSignatures().iterator(); iterator.hasNext();) {
+			StepInstanceSignature stepInstanceSignature = (StepInstanceSignature) iterator.next();
+			if (stepInstanceSignature.getTypeIO().getId().intValue() == IS2Const.TYPE_IO_INPUT) {
+				ArrayList<String> listv = ruoliInputStep.get(stepInstanceSignature.getAppRole().getCode());
+				if (listv == null) {
+					listv = new ArrayList<>();
+				}
+				listv.add(stepInstanceSignature.getAppRole().getCode());
+				ruoliInputStep.put(stepInstanceSignature.getAppRole().getCode(), listv);
+			} else if (stepInstanceSignature.getTypeIO().getId().intValue() == IS2Const.TYPE_IO_OUTPUT) {
+				ArrayList<String> listv = rolesOut.get(stepInstanceSignature.getAppRole().getCode());
+				if (listv == null) {
+					listv = new ArrayList<>();
+				}
+				listv.add(stepInstanceSignature.getAppRole().getCode());
+				rolesOut.put(stepInstanceSignature.getAppRole().getCode(), listv);
+			}
+		}
 
-                rolesVariablesMap.put(stepRuntime.getWorkset().getName(), codR);
+		// Get input workset
+		List<StepRuntime> dataList = stepRuntimeDao.findByDataProcessing(dataProcessing);
+		// mappa delle colonne workset <nome campo, oggetto stepv>
+		dataMap = Utility.getMapNameWorkSetStep(dataList);
+		// mappa delle colonne workset <nome campo, oggetto stepv>
+		Map<String, ArrayList<StepRuntime>> dataRuoliStepVarMap = Utility.getMapCodiceRuoloStepVariabili(dataList);
+		// List<AppRole> ruoliAll = ruoloDao.findAll();
+		// Utility.getMapRuoliByCod(ruoliAll)
 
-                ArrayList<String> listv = variablesRolesMap.get(codR);
-                if (listv == null) {
-                    listv = new ArrayList<>();
-                }
-                listv.add(stepRuntime.getWorkset().getName());
-                variablesRolesMap.put(codR, listv);
-            }
-        }
+		// mappa delle colonne workset <nome,lista valori>
+		worksetVariables = Utility.getMapWorkSetValuesInRoles(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE),
+				ruoliInputStep.keySet());
 
-    }
+		// Parameters
+		parametersMap = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
+		rulesetMap = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
+		worksetOut = new LinkedHashMap<>();
 
-    @Override
-    public void processOutput() throws Exception {
-        getGenericOutput(worksetOut, RESULTSET, WORKSET_OUT);
-        getGenericOutput(rolesOut, RESULTSET, ROLES_OUT);
-        getGenericParamterOutput(parameterOut, RESULTSET, PARAMETERS_OUT);
-        getGenericParamterOutput(parameterOut, RESULTSET, REPORT_OUT);
-        
-        getRolesGroup(rolesGroupOut, RESULTSET, ROLES_GROUP_OUT);
-        writeLogScriptR();
-        saveOutputDB();
+		// associo il codice ruolo alla variabile
+		// codiceRuolo, lista nome variabili {X=[X1], Y=[Y1]}
+		variablesRolesMap = new LinkedHashMap<>();
+		LinkedHashMap<String, String> rolesVariablesMap = new LinkedHashMap<>();
+		parameterOut = new LinkedHashMap<>();
 
-    }
+		for (Map.Entry<String, ArrayList<StepRuntime>> entry : dataRuoliStepVarMap.entrySet()) {
+			String codR = entry.getKey();
+			ArrayList<StepRuntime> listSVariable = entry.getValue();
+			for (Iterator<StepRuntime> iterator = listSVariable.iterator(); iterator.hasNext();) {
+				StepRuntime stepRuntime = iterator.next();
 
-    private void saveOutputDB() {
-        HashMap<String, String> ruoliOutputStepInversa = new HashMap<>();
-        for (Map.Entry<String, ArrayList<String>> entry : rolesOut.entrySet()) {
-            String nomeR = entry.getKey();
-            ArrayList<String> value = entry.getValue();
-            value.forEach(nomevar -> ruoliOutputStepInversa.put(nomevar, nomeR));
-        }
+				rolesVariablesMap.put(stepRuntime.getWorkset().getName(), codR);
 
-        // salva output su DB
-        for (Map.Entry<String, ArrayList<String>> entry : worksetOut.entrySet()) {
-            String nomeW = entry.getKey();
-            ArrayList<String> value = entry.getValue();
-            StepRuntime stepRuntime;
-            String ruolo = ruoliOutputStepInversa.get(nomeW);
-            String ruoloGruppo = rolesGroupOut.get(ruolo);
-            if (ruolo == null) {
-                ruolo = ROLE_DEFAULT;
-            }
-            if (ruoloGruppo == null) {
-                ruoloGruppo = ROLE_DEFAULT;
-            }
-            AppRole sxRuolo = rolesMap.get(ruolo);
-            AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
+				ArrayList<String> listv = variablesRolesMap.get(codR);
+				if (listv == null) {
+					listv = new ArrayList<>();
+				}
+				listv.add(stepRuntime.getWorkset().getName());
+				variablesRolesMap.put(codR, listv);
+			}
+		}
 
-            stepRuntime = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
+	}
 
-            if (stepRuntime != null) { // update
-                stepRuntime.getWorkset().setContents(value);
-                stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
-            } else {
-                stepRuntime = new StepRuntime();
-                stepRuntime.setDataProcessing(dataProcessing);
-                stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
-                stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
-                stepRuntime.setAppRole(sxRuolo);
-                stepRuntime.setRoleGroup(sxRuoloGruppo);
-                stepRuntime.setOrderCode(sxRuolo.getOrder());
-                Workset workset = new Workset();
-                workset.setName(nomeW.replaceAll("\\.", "_"));
-                workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
-                ArrayList<StepRuntime> l = new ArrayList<>();
-                l.add(stepRuntime);
-                workset.setStepRuntimes(l);
-                workset.setContents(value);
-                workset.setContentSize(workset.getContents().size());
-                stepRuntime.setWorkset(workset);
-            }
+	@Override
+	public void processOutput() throws Exception {
+		getGenericOutput(worksetOut, RESULTSET, WORKSET_OUT);
+		getGenericOutput(rolesOut, RESULTSET, ROLES_OUT);
+		getGenericParamterOutput(parameterOut, RESULTSET, PARAMETERS_OUT);
+		getGenericParamterOutput(parameterOut, RESULTSET, REPORT_OUT);
 
-            stepRuntimeDao.save(stepRuntime);
-        }
+		getRolesGroup(rolesGroupOut, RESULTSET, ROLES_GROUP_OUT);
+		writeLogScriptR();
+		saveOutputDB();
 
-        // save output Parameter DB
-        for (Map.Entry<String, String> entry : parameterOut.entrySet()) {
-            String nomeW = entry.getKey();
-            String value = entry.getValue();
-            StepRuntime stepRuntime;
-            String ruolo = ruoliOutputStepInversa.get(nomeW);
-            String ruoloGruppo = rolesGroupOut.get(ruolo);
-            if (ruolo == null) {
-                ruolo = ROLE_DEFAULT;
-            }
-            if (ruoloGruppo == null) {
-                ruoloGruppo = ROLE_DEFAULT;
-            }
-            AppRole sxRuolo = rolesMap.get(ruolo);
-            AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
+	}
 
-            stepRuntime = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
+	private void saveOutputDB() {
+		HashMap<String, String> ruoliOutputStepInversa = new HashMap<>();
+		for (Map.Entry<String, ArrayList<String>> entry : rolesOut.entrySet()) {
+			String nomeR = entry.getKey();
+			ArrayList<String> value = entry.getValue();
+			value.forEach(nomevar -> ruoliOutputStepInversa.put(nomevar, nomeR));
+		}
 
-            if (stepRuntime != null) { // update
-                stepRuntime.getWorkset().setParamValue(value);
-                stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
-            } else {
-                stepRuntime = new StepRuntime();
-                stepRuntime.setDataProcessing(dataProcessing);
-                stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
-                stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
-                stepRuntime.setAppRole(sxRuolo);
-                stepRuntime.setRoleGroup(sxRuoloGruppo);
-                stepRuntime.setOrderCode(sxRuolo.getOrder());
-                Workset workset = new Workset();
-                workset.setName(nomeW.replaceAll("\\.", "_"));
+		// salva output su DB
+		for (Map.Entry<String, ArrayList<String>> entry : worksetOut.entrySet()) {
+			String nomeW = entry.getKey();
+			ArrayList<String> value = entry.getValue();
+			StepRuntime stepRuntime;
+			String ruolo = ruoliOutputStepInversa.get(nomeW);
+			String ruoloGruppo = rolesGroupOut.get(ruolo);
+			if (ruolo == null) {
+				ruolo = ROLE_DEFAULT;
+			}
+			if (ruoloGruppo == null) {
+				ruoloGruppo = ROLE_DEFAULT;
+			}
+			AppRole sxRuolo = rolesMap.get(ruolo);
+			AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
 
-                ArrayList<StepRuntime> l = new ArrayList<>();
-                l.add(stepRuntime);
-                workset.setStepRuntimes(l);
-                workset.setParamValue(value);
-                workset.setContentSize(1);
-                workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
-                stepRuntime.setWorkset(workset);
-            }
-            stepRuntimeDao.save(stepRuntime);
-        }
+			stepRuntime = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
 
-    }
+			if (stepRuntime != null) { // update
+				stepRuntime.getWorkset().setContents(value);
+				stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+			} else {
+				stepRuntime = new StepRuntime();
+				stepRuntime.setDataProcessing(dataProcessing);
+				stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+				stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
+				stepRuntime.setAppRole(sxRuolo);
+				stepRuntime.setRoleGroup(sxRuoloGruppo);
+				stepRuntime.setOrderCode(sxRuolo.getOrder());
+				Workset workset = new Workset();
+				workset.setName(nomeW.replaceAll("\\.", "_"));
+				workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
+				ArrayList<StepRuntime> l = new ArrayList<>();
+				l.add(stepRuntime);
+				workset.setStepRuntimes(l);
+				workset.setContents(value);
+				workset.setContentSize(workset.getContents().size());
+				stepRuntime.setWorkset(workset);
+			}
 
-    @Override
-    public void destroy() {
-        closeConnection();
+			stepRuntimeDao.save(stepRuntime);
+		}
 
-    }
+		// save output Parameter DB
+		for (Map.Entry<String, String> entry : parameterOut.entrySet()) {
+			String nomeW = entry.getKey();
+			String value = entry.getValue();
+			StepRuntime stepRuntime;
+			String ruolo = ruoliOutputStepInversa.get(nomeW);
+			String ruoloGruppo = rolesGroupOut.get(ruolo);
+			if (ruolo == null) {
+				ruolo = ROLE_DEFAULT;
+			}
+			if (ruoloGruppo == null) {
+				ruoloGruppo = ROLE_DEFAULT;
+			}
+			AppRole sxRuolo = rolesMap.get(ruolo);
+			AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
 
-    @Override
-    public void init() throws Exception {
-        // Do nothing
-    }
+			stepRuntime = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
+
+			if (stepRuntime != null) { // update
+				stepRuntime.getWorkset().setParamValue(value);
+				stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+			} else {
+				stepRuntime = new StepRuntime();
+				stepRuntime.setDataProcessing(dataProcessing);
+				stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+				stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
+				stepRuntime.setAppRole(sxRuolo);
+				stepRuntime.setRoleGroup(sxRuoloGruppo);
+				stepRuntime.setOrderCode(sxRuolo.getOrder());
+				Workset workset = new Workset();
+				workset.setName(nomeW.replaceAll("\\.", "_"));
+
+				ArrayList<StepRuntime> l = new ArrayList<>();
+				l.add(stepRuntime);
+				workset.setStepRuntimes(l);
+				workset.setParamValue(value);
+				workset.setContentSize(1);
+				workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
+				stepRuntime.setWorkset(workset);
+			}
+			stepRuntimeDao.save(stepRuntime);
+		}
+
+	}
+
+	@Override
+	public void destroy() {
+		closeConnection();
+
+	}
+
+	@Override
+	public void init() throws Exception {
+		// Do nothing
+	}
 }

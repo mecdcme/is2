@@ -15,12 +15,11 @@ rm(list=ls())
 #percorso_allert="FSAllert.Rout"
 
 fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
- stdout <- vector('character')
- con <- textConnection('stdout', 'wr', local = TRUE)
- sink(con)
+
+  
 
  ct <- roles$CT
- print(ct)
+
  nvar=length(ct)-1
  #yy <-  as.data.frame(matrix(as.numeric(workset[,ct]),ncol=length(ct),nrow=nrow(workset)))
  yy <- workset
@@ -30,7 +29,9 @@ fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 	muTableName="muTable"
 	varmuTableName="varmuTable"
 	r_out <- vector()
-	
+	var_est<-c()
+	result<-c()
+ 
 	eps=0.0000001
 	iter=1500
 	interazioni=vector("list", nvar)
@@ -47,7 +48,7 @@ fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 	#print(variabili)
 	
 	nomimatvar = names(yy)[1:nvar]
-	print( names(yy))
+	
 	 
 	#aggiorno i valori di frequency a o
 	if(nrow(yy[yy$FREQUENCY==0,])>0)
@@ -101,7 +102,7 @@ fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 	
 	#1 check su stime v1-vn e var latente x (vedi blocco laura)
 	check = 0;
-	print(nvar)
+	
 	for(i in 1:nvar){
 	if((l[[i]][1,1]>=l[[i]][2,1] && l[[i]][1,2]>=l[[i]][2,2]) || (l[[i]][1,1]<l[[i]][2,1] && l[[i]][1,2]<l[[i]][2,2]))
 	 check = 1;
@@ -111,10 +112,11 @@ fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 		# msg = "WARNING: one or more variables give inconsistent estimates."
 		#Messaggio di errore blocante
 		 msg = "ERROR: one or more variables give inconsistent estimates. Please, check the variables in the model or try to reduce the search space.";
-		 #msg2 = paste("See table ",varmuTableName," for more details."); 
-		 print(msg);
-		 #print(msg2);
-		 print(l);
+		 msg2 = paste("See table ",varmuTableName," for more details."); 
+		 
+		  print(msg)
+		 print(msg2)
+		 print(l)
 		 #write.table(l, file = percorso_fail,row.names=FALSE,sep=":",quote=F)
 		 #default value to p for the marginal prob table
 		 p <- 0
@@ -173,19 +175,23 @@ fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 		# inserisco i nomi delle matvar per creare la tabella
 		names(r_out)[1:nvar]=nomimatvar
 		
+		
 	}
+
+
 	
-	# creo la tabella delle marginali
+			# creo la tabella delle marginali
 	var_est <- data.frame(rep(nomimatvar, rep(2,length(nomimatvar))),rep(c("1","0"),length(nomimatvar)),mvar,uvar,rep(p,2*length(nomimatvar)),stringsAsFactors=FALSE)
 	names(var_est)=c("variable","comparison","m","u","p")
+	
 	
  roles <- list (FS=names(r_out))
  rolesgroup <- list (FS= c("FS"))
 
+
  result <-list( workset_out=r_out, roles_out= roles,rolesgroup_out= rolesgroup, var_est = var_est, log = stdout)
- 
- sink()
- close(con)
+
+
  return(result)
  
 }
