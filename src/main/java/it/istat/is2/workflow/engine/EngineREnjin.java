@@ -263,7 +263,7 @@ public class EngineREnjin extends EngineR implements EngineService {
 		StringTokenizer multiTokenizer = new StringTokenizer(output, "\n");
 
 		while (multiTokenizer.hasMoreTokens()) {
-			System.out.println(multiTokenizer.nextToken());
+			
 			logService.save(multiTokenizer.nextToken(), IS2Const.OUTPUT_R);
 		}
 
