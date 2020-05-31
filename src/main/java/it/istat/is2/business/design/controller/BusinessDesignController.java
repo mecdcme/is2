@@ -99,6 +99,21 @@ public class BusinessDesignController {
 	@GetMapping("/busservwizard")
 	public String serviceWizard(HttpSession session, Model model) {
 
+		List<GsbpmProcess> listaGsbpmParentProcess = gsbpmProcessService.findAllProcesses();
+		GsbpmProcess gsbpmProcess = listaGsbpmParentProcess.get(0);
+
+		List<GsbpmProcess> listaGsbpmSubProcess = gsbpmProcessService
+				.findSubProcessesByGsbpmParentProcess(gsbpmProcess);
+
+		ArrayList<GsbpmProcess> listaAllGsbpmProcess = new ArrayList<GsbpmProcess>();
+		listaAllGsbpmProcess.addAll(listaGsbpmParentProcess);
+		listaAllGsbpmProcess.addAll(listaGsbpmSubProcess);
+
+		model.addAttribute("listaGsbpmParentProcess", listaGsbpmParentProcess);
+
+		model.addAttribute("listaGsbpmSubProcess", listaGsbpmSubProcess);
+		model.addAttribute("businessService", "null");
+		
 		
 		return "businessdesign/homewizard.html";
 

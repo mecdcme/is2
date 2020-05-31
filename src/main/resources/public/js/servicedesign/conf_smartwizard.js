@@ -39,16 +39,20 @@ $(document).ready(function() {
 
 		    // Ajax call to fetch your content
 		    $.ajax({
+		    	url : _ctx + "/loadGsbpmSubProcess/" + id_process,
 		        method  : "GET",
-		        url     : ajaxURL,
+		        //url     : ajaxURL,
+		        dataType : "JSON",
 		        beforeSend: function( xhr ) {
 		            // Show the loader
 		            $('#smartwizard').smartWizard("loader", "show");
 		        }
+		    // done
 		    }).done(function( res ) {
 		        // console.log(res);
 
-		        var html = '<h2>Ajax data about ' + repo + ' loaded from GitHub</h2>';
+		    	var html = "Ciao";
+		        var html2 = '<h2>Ajax data about ' + repo + ' loaded from GitHub</h2>';
 		        html += '<br>URL: <strong>' + ajaxURL + '</strong>';
 		        html += '<br>Name: <strong>' + res.collected.metadata.name + '</strong>';
 		        html += '<br>Description: ' + res.collected.metadata.description;

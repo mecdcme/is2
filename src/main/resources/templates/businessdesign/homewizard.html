@@ -28,8 +28,7 @@
 <head th:include="layout :: site-head" th:remove="tag" />
 
 <script th:src="@{/js/vendors/table/datatables.min.js}"></script>
-<script th:src="@{/js/user/usersList.js}"></script>
-<script th:src="@{/js/servicedesign/servicedesign.js}"></script>
+<script th:src="@{/js/servicedesign/editbdesign.js}"></script>
 <script th:src="@{/js/vendors/smartwizard/jquery.smartWizard.min.js}"></script>
 <script th:src="@{/js/servicedesign/conf_smartwizard.js}"></script>
 
@@ -97,7 +96,51 @@
 								
 								<div class="tab-content">
 								   <div id="step-1" class="tab-pane" role="tabpanel">
-								      Step 1
+								      <!-- CREATE new Business Service -->
+
+										<form th:action="@{/newbservice}" id="bs-form"
+											class="form-horizontal" method="post">
+
+
+											<div class="form-group">
+												<label class="control-label"
+													th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
+												<input name="name" id="bs-name"
+													th:title="#{generic.label.name}" class="form-control"
+													type="text" /> <span class="help-block"> <small
+													class="text-danger" id="bs-name-error"></small>
+												</span>
+											</div>
+											<div class="form-group">
+												<label class="control-label"
+													th:text="#{nuova.sessione.descr}"> <span>Descrizione</span>
+												</label> <input name="description"
+													th:title="#{generic.label.description}"
+													class="form-control" type="text" /> <span
+													class="help-block"></span>
+											</div>
+											<div class="form-group" id="select-gsbpm-1-div">
+												<label class="control-label" th:text="#{bs.gsbpm.label}"><span>Processo
+														Gsbpm padre</span> </label> <select name="gsbpmidparent" id="select-gsbpm-1"
+													th:title="#{bs.gsbpm.label}" class="form-control">
+													<option th:each="gsbpm : ${listaGsbpmParentProcess}"
+														th:value="${gsbpm.id}" th:text="${gsbpm.name}"/>
+												</select><span class="help-block"></span>
+
+											</div>
+											<div id="preparing-select-js">
+												<div class="form-group" id="select-gsbpm-2-div">
+													<label class="control-label" th:text="#{bs.gsbpm.label}"><span>Processo
+															Gsbpm figlio</span> </label> <select name="gsbpmid" id="select-gsbpm-2"
+														th:title="#{bs.gsbpm.label}" class="form-control">
+														<option th:each="gsbpm : ${listaGsbpmSubProcess}"
+															th:value="${gsbpm.id}" th:text="${gsbpm.name}"/>
+													</select><span class="help-block"></span>
+
+												</div>
+											</div>
+
+										</form>
 								   </div>
 								   <div id="step-2" class="tab-pane" role="tabpanel">
 								      Step 2
