@@ -95,6 +95,14 @@ public class BusinessDesignController {
 		return "businessdesign/home.html";
 
 	}
+	
+	@GetMapping("/busservwizard")
+	public String serviceWizard(HttpSession session, Model model) {
+
+		
+		return "businessdesign/homewizard.html";
+
+	}
 
 	@PostMapping(value = "/updatebservice")
 	public String updateBService(RedirectAttributes redirectAttributes, HttpSession session, Model model, @RequestParam("bserviceid") Long bserviceid,
