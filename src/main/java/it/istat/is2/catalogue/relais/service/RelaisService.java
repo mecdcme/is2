@@ -26,12 +26,13 @@ package it.istat.is2.catalogue.relais.service;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -74,7 +75,119 @@ public class RelaisService {
 
 	public Map<?, ?> contingencyTable(Long idelaborazione, Map<String, List<String>> ruoliVariabileNome,
 			Map<String, List<String>> worksetVariabili, Map<String, String> parametriMap) throws Exception {
+		
+		Map<String, Map<?, ?>> returnOut = new HashMap<>();
+		Map<String, Map<?, ?>> worksetOut = new HashMap<>();
+		Map<String, ArrayList<String>> contengencyTableOut = new LinkedHashMap<>();
+		Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
+		Map<String, String> rolesGroupOut = new HashMap<>();
 
+		// <codRuolo,[namevar1,namevar2..]
+
+		ArrayList<String> variabileNomeListMA = new ArrayList<>();
+		ArrayList<String> variabileNomeListMB = new ArrayList<>();
+
+		ArrayList<String> variabileNomeListOut = new ArrayList<>();
+
+		ruoliVariabileNome.get(codeMatchingA).forEach((varname) -> {
+			variabileNomeListMA.add(varname);
+		});
+		ruoliVariabileNome.get(codeMatchingB).forEach((varname) -> {
+			variabileNomeListMB.add(varname);
+		});
+
+		ruoliVariabileNome.values().forEach((list) -> {
+			variabileNomeListOut.addAll(list);
+		});
+
+		String firstFiledMA = ruoliVariabileNome.get(codeMatchingA).get(0);
+		String firstFiledMB = ruoliVariabileNome.get(codeMatchingB).get(0);
+		int sizeA = worksetVariabili.get(firstFiledMA).size();
+		int sizeB = worksetVariabili.get(firstFiledMB).size();
+
+		try {
+			contingencyService.init(parametriMap.get(params_MatchingVariables));
+		} catch (Exception e) {
+			logService.save("Error parsing " + params_MatchingVariables);
+			throw new Exception("Error parsing " + params_MatchingVariables);
+		}
+		List<String> nameMatchingVariables = new ArrayList<>();
+
+		contingencyService.getMetricMatchingVariableVector().forEach(metricsm -> {
+			contengencyTableOut.put(metricsm.getMatchingVariable(), new ArrayList<>());
+			nameMatchingVariables.add(metricsm.getMatchingVariable());
+		});
+
+		final Map<String, Integer> contengencyTable = Collections
+				.synchronizedMap(contingencyService.getEmptyContengencyTable());
+
+		/*
+		 * final String sortFieldA = variabileNomeListMA.get(0); final String sortFieldB
+		 * = variabileNomeListMB.get(0);
+		 * Utility.printNElementsInMapValues(worksetVariabili, 5);
+		 * Utility.sortDatasetInMapValues(worksetVariabili, variabileNomeListMA,
+		 * sortFieldA, IS2Const.SORT_ASC);
+		 * Utility.printNElementsInMapValues(worksetVariabili, 5);
+		 * Utility.sortDatasetInMapValues(worksetVariabili, variabileNomeListMB,
+		 * sortFieldB, IS2Const.SORT_ASC);
+		 * Utility.printNElementsInMapValues(worksetVariabili, 5);
+		 */
+		IntStream.range(0, sizeA).parallel().forEach(innerIA -> {
+
+			final Map<String, String> valuesI = new HashMap<>();
+			final Map<String, Integer> contengencyTableIA = contingencyService.getEmptyContengencyTable();
+
+			variabileNomeListMA.forEach(varnameMA -> {
+				valuesI.put(varnameMA, worksetVariabili.get(varnameMA).get(innerIA));
+			});
+
+			IntStream.range(0, sizeB).forEach(innerIB -> {
+				variabileNomeListMB.forEach(varnameMB -> {
+					valuesI.put(varnameMB, worksetVariabili.get(varnameMB).get(innerIB));
+				});
+
+				String pattern = contingencyService.getPattern(valuesI);
+				// System.out.println(innerIA+" - "+ innerIB );
+
+				contengencyTableIA.put(pattern, contengencyTableIA.get(pattern) + 1);
+
+			});
+			synchronized (contengencyTable) {
+				contengencyTableIA.entrySet().stream().forEach(e -> contengencyTable.put(e.getKey(),
+						contengencyTable.get(e.getKey()) + contengencyTableIA.get(e.getKey())));
+			}
+
+		});
+		contengencyTableOut.put("FREQUENCY", new ArrayList<>());
+		// write to worksetout
+		contengencyTable.forEach((key, value) -> {
+			int idx = 0;
+			for (String nameMatchingVariable : nameMatchingVariables) {
+				contengencyTableOut.get(nameMatchingVariable).add(String.valueOf(key.charAt(idx++)));
+			}
+			contengencyTableOut.get("FREQUENCY").add(value.toString());
+		});
+
+		rolesOut.put(codContengencyTable, new ArrayList<>(contengencyTableOut.keySet()));
+		returnOut.put(IS2Const.WF_OUTPUT_ROLES, rolesOut);
+
+		rolesOut.keySet().forEach(code -> {
+			rolesGroupOut.put(code, codContengencyTable);
+		});
+		returnOut.put(IS2Const.WF_OUTPUT_ROLES_GROUP, rolesGroupOut);
+
+		worksetOut.put(codContengencyTable, contengencyTableOut);
+		returnOut.put(IS2Const.WF_OUTPUT_WORKSET, worksetOut);
+
+
+		return returnOut;
+	}
+
+	public Map<?, ?> contingencyTableNP(Long idelaborazione, Map<String, List<String>> ruoliVariabileNome,
+			Map<String, List<String>> worksetVariabili, Map<String, String> parametriMap) throws Exception {
+		System.out.println("contingencyTableNoParalel");
+
+		Instant start = Instant.now();
 		Map<String, Map<?, ?>> returnOut = new HashMap<>();
 		Map<String, Map<?, ?>> worksetOut = new HashMap<>();
 		Map<String, ArrayList<String>> contengencyTableOut = new LinkedHashMap<>();
@@ -119,14 +232,17 @@ public class RelaisService {
 
 		Map<String, Integer> contengencyTable = contingencyService.getEmptyContengencyTable();
 
-/*		final String sortFieldA = variabileNomeListMA.get(0);
-		final String sortFieldB = variabileNomeListMB.get(0);
-		Utility.printNElementsInMapValues(worksetVariabili, 5);
-		Utility.sortDatasetInMapValues(worksetVariabili, variabileNomeListMA, sortFieldA, IS2Const.SORT_ASC);
-		Utility.printNElementsInMapValues(worksetVariabili, 5);
-		Utility.sortDatasetInMapValues(worksetVariabili, variabileNomeListMB, sortFieldB, IS2Const.SORT_ASC);
-		Utility.printNElementsInMapValues(worksetVariabili, 5);
-*/
+		/*
+		 * final String sortFieldA = variabileNomeListMA.get(0); final String sortFieldB
+		 * = variabileNomeListMB.get(0);
+		 * Utility.printNElementsInMapValues(worksetVariabili, 5);
+		 * Utility.sortDatasetInMapValues(worksetVariabili, variabileNomeListMA,
+		 * sortFieldA, IS2Const.SORT_ASC);
+		 * Utility.printNElementsInMapValues(worksetVariabili, 5);
+		 * Utility.sortDatasetInMapValues(worksetVariabili, variabileNomeListMB,
+		 * sortFieldB, IS2Const.SORT_ASC);
+		 * Utility.printNElementsInMapValues(worksetVariabili, 5);
+		 */
 		for (int iA = 0; iA < sizeA; iA++) {
 			Map<String, String> valuesI = new HashMap<>();
 			final Integer innerIA = Integer.valueOf(iA);
@@ -167,13 +283,18 @@ public class RelaisService {
 
 		worksetOut.put(codContengencyTable, contengencyTableOut);
 		returnOut.put(IS2Const.WF_OUTPUT_WORKSET, worksetOut);
+
+		Instant finish = Instant.now();
+		System.out
+				.println(" contingencyTableNoParalel Durata in millis: " + Duration.between(start, finish).toMillis());
+
 		return returnOut;
 	}
 
-	//versione parallel blocking
+	//  parallel blocking
 	public Map<?, ?> contingencyTableBlocking(Long idelaborazione, Map<String, List<String>> ruoliVariabileNome,
 			Map<String, List<String>> worksetVariabili, Map<String, String> parametriMap) throws Exception {
-	    Instant start = Instant.now();
+	 
 		Map<String, Map<?, ?>> returnOut = new HashMap<>();
 		Map<String, Map<?, ?>> worksetOut = new HashMap<>();
 		Map<String, ArrayList<String>> contengencyTableOut = new LinkedHashMap<>();
@@ -197,7 +318,7 @@ public class RelaisService {
 		ruoliVariabileNome.values().forEach((list) -> {
 			variabileNomeListOut.addAll(list);
 		});
-	
+
 		try {
 			contingencyService.init(parametriMap.get(params_MatchingVariables));
 		} catch (Exception e) {
@@ -211,41 +332,50 @@ public class RelaisService {
 			nameMatchingVariables.add(metricsm.getMatchingVariable());
 		});
 
-		Map<String, Integer> contengencyTable = contingencyService.getEmptyContengencyTable();
+		final String blockingVariableA = getFieldInParams(parametriMap.get(params_BlockingVariables),
+				params_BlockingVariablesA);
+		final String blockingVariableB = getFieldInParams(parametriMap.get(params_BlockingVariables),
+				params_BlockingVariablesB);
 
-		final String blockingVariableA = getFieldInParams(parametriMap.get(params_BlockingVariables),params_BlockingVariablesA);
-		final String blockingVariableB = getFieldInParams(parametriMap.get(params_BlockingVariables),params_BlockingVariablesB);
-		
-		
 		Map<String, List<Integer>> indexesBlockingVariableA = Utility.blockVariablesIndexMapValues(worksetVariabili,
 				variabileNomeListMA, blockingVariableA);
 		Map<String, List<Integer>> indexesBlockingVariableB = Utility.blockVariablesIndexMapValues(worksetVariabili,
 				variabileNomeListMB, blockingVariableB);
 
+		final Map<String, Integer> contengencyTable = Collections
+				.synchronizedMap(contingencyService.getEmptyContengencyTable());
+
 		indexesBlockingVariableA.entrySet().parallelStream().forEach(entry -> {
 			String keyBlock = entry.getKey();
 
+			final Map<String, Integer> contengencyTableIA = contingencyService.getEmptyContengencyTable();
 			// Dataset A
 			entry.getValue().forEach(innerIA -> {
 
-				Map<String, String> valuesI = new HashMap<>();
+				final Map<String, String> valuesI = new HashMap<>();
 
 				variabileNomeListMA.forEach(varnameMA -> {
 					valuesI.put(varnameMA, worksetVariabili.get(varnameMA).get(innerIA));
 				});
-               if(indexesBlockingVariableB.get(keyBlock)!=null)
-				indexesBlockingVariableB.get(keyBlock).forEach(innerIB -> {
+				if (indexesBlockingVariableB.get(keyBlock) != null)
+					indexesBlockingVariableB.get(keyBlock).forEach(innerIB -> {
 
-					variabileNomeListMB.forEach(varnameMB -> {
-						valuesI.put(varnameMB, worksetVariabili.get(varnameMB).get(innerIB));
+						variabileNomeListMB.forEach(varnameMB -> {
+							valuesI.put(varnameMB, worksetVariabili.get(varnameMB).get(innerIB));
+						});
+
+						String pattern = contingencyService.getPattern(valuesI);
+						contengencyTableIA.put(pattern, contengencyTableIA.get(pattern) + 1);
+
 					});
 
-					String pattern = contingencyService.getPattern(valuesI);
-					contengencyTable.put(pattern, contengencyTable.get(pattern) + 1);
-
-				});
-
 			});
+
+			synchronized (contengencyTable) {
+				contengencyTableIA.entrySet().stream().forEach(e -> contengencyTable.put(e.getKey(),
+			    contengencyTable.get(e.getKey()) + contengencyTableIA.get(e.getKey())));
+			}
+
 		});
 		contengencyTableOut.put("FREQUENCY", new ArrayList<>());
 
@@ -268,39 +398,35 @@ public class RelaisService {
 
 		worksetOut.put(codContengencyTable, contengencyTableOut);
 		returnOut.put(IS2Const.WF_OUTPUT_WORKSET, worksetOut);
-		
-		  Instant finish = Instant.now();
-		  
-	
-		System.out.println("Durata in millis: "+ Duration.between(start, finish).toMillis());
-		return returnOut;
+ 		return returnOut;
 	}
 
 	private String getFieldInParams(String jsonString, String fieldName) throws Exception {
-		String ret=null;
+		String ret = null;
 		try {
-			JSONObject jSONObject = new JSONObject(jsonString) ;
-			ret=jSONObject.getString(fieldName);
+			JSONObject jSONObject = new JSONObject(jsonString);
+			ret = jSONObject.getString(fieldName);
 		} catch (Exception e) {
 			logService.save("Error parsing " + params_BlockingVariables);
 			throw new Exception("Error parsing " + params_BlockingVariables);
 		}
-		if(ret==null) throw new Exception("Error parsing " + params_BlockingVariables);
+		if (ret == null)
+			throw new Exception("Error parsing " + params_BlockingVariables);
 		return ret;
-		
+
 	}
 
 	public Map<?, ?> resultTablesBlocking(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
 			Map<String, List<String>> worksetIn, Map<String, String> parametriMap) throws Exception {
 
-		Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
-		Map<String, Map<?, ?>> worksetOut = new LinkedHashMap<>();
-		Map<String, ArrayList<String>> matchingTable = new LinkedHashMap<>();
-		Map<String, ArrayList<String>> possibleMatchingTable = new LinkedHashMap<>();
-		Map<String, ArrayList<String>> residualATable = new LinkedHashMap<>();
-		Map<String, ArrayList<String>> residualBTable = new LinkedHashMap<>();
-		Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
-		Map<String, String> rolesGroupOut = new HashMap<>();
+		final Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
+		final Map<String, Map<?, ?>> worksetOut = new LinkedHashMap<>();
+		final Map<String, ArrayList<String>> matchingTable =Collections.synchronizedMap(new LinkedHashMap<>());
+		final Map<String, ArrayList<String>> possibleMatchingTable = Collections.synchronizedMap(new LinkedHashMap<>());
+		final Map<String, ArrayList<String>> residualATable = new LinkedHashMap<>();
+		final Map<String, ArrayList<String>> residualBTable = new LinkedHashMap<>();
+		final Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
+		final Map<String, String> rolesGroupOut = new HashMap<>();
 
 		// <codRuolo,[namevar1,namevar2..]
 		int indexItems = 0;
@@ -360,17 +486,18 @@ public class RelaisService {
 		rolesOut.put(codPossibleMachingTable, variabileNomeListOut);
 		rolesOut.put(codResidualA, variabileNomeListMA);
 		rolesOut.put(codResidualB, variabileNomeListMB);
- 
+
 		contingencyService.init(parametriMap.get(params_MatchingVariables));
 		variabileNomeListOut.forEach(varname -> {
 			matchingTable.put(varname, new ArrayList<>());
 			possibleMatchingTable.put(varname, new ArrayList<>());
 		});
 
+		final String blockingVariableA = getFieldInParams(parametriMap.get(params_BlockingVariables),
+				params_BlockingVariablesA);
+		final String blockingVariableB = getFieldInParams(parametriMap.get(params_BlockingVariables),
+				params_BlockingVariablesB);
 
-		final String blockingVariableA = getFieldInParams(parametriMap.get(params_BlockingVariables),params_BlockingVariablesA);
-		final String blockingVariableB = getFieldInParams(parametriMap.get(params_BlockingVariables),params_BlockingVariablesB);
-	
 		Map<String, List<Integer>> indexesBlockingVariableA = Utility.blockVariablesIndexMapValues(worksetIn,
 				variabileNomeListMA, blockingVariableA);
 		Map<String, List<Integer>> indexesBlockingVariableB = Utility.blockVariablesIndexMapValues(worksetIn,
@@ -378,37 +505,54 @@ public class RelaisService {
 
 		indexesBlockingVariableA.entrySet().parallelStream().forEach(entry -> {
 			String keyBlock = entry.getKey();
-
+			final Map<String, ArrayList<String>> matchingTableIA =new LinkedHashMap<>();
+			final Map<String, ArrayList<String>> possibleMatchingTableIA = new LinkedHashMap<>();
+			
+			variabileNomeListOut.forEach(varname -> {
+				matchingTableIA.put(varname, new ArrayList<>());
+				possibleMatchingTableIA.put(varname, new ArrayList<>());
+			});
+			
+			
 			// Dataset A
 			entry.getValue().forEach(innerIA -> {
 
-			Map<String, String> valuesI = new HashMap<>();
-			 
-			variabileNomeListMA.forEach(varnameMA -> {
-				valuesI.put(varnameMA, worksetIn.get(varnameMA).get(innerIA));
-			});
+				Map<String, String> valuesI = new HashMap<>();
 
-			if(indexesBlockingVariableB.get(keyBlock)!=null)
-				indexesBlockingVariableB.get(keyBlock).forEach(innerIB -> {
-				 
-				variabileNomeListMB.forEach(varnameMB -> {
-					valuesI.put(varnameMB, worksetIn.get(varnameMB).get(innerIB));
+				variabileNomeListMA.forEach(varnameMA -> {
+					valuesI.put(varnameMA, worksetIn.get(varnameMA).get(innerIA));
 				});
-				String pattern = contingencyService.getPattern(valuesI);
-				if (patternMatching.contains(pattern)) {
-					valuesI.forEach((k, v) -> {
-						matchingTable.get(k).add(v);
+
+				if (indexesBlockingVariableB.get(keyBlock) != null)
+					indexesBlockingVariableB.get(keyBlock).forEach(innerIB -> {
+
+						variabileNomeListMB.forEach(varnameMB -> {
+							valuesI.put(varnameMB, worksetIn.get(varnameMB).get(innerIB));
+						});
+						String pattern = contingencyService.getPattern(valuesI);
+						if (patternMatching.contains(pattern)) {
+							valuesI.forEach((k, v) -> {
+								matchingTableIA.get(k).add(v);
+							});
+							matchingTableIA.get(codeP_POST).add(patternPPostValues.get(pattern));
+						} else if (patternPossibleMatching.contains(pattern)) {
+							valuesI.forEach((k, v) -> {
+								possibleMatchingTableIA.get(k).add(v);
+							});
+							possibleMatchingTableIA.get(codeP_POST).add(patternPPostValues.get(pattern));
+						}
+
 					});
-					matchingTable.get(codeP_POST).add(patternPPostValues.get(pattern));
-				} else if (patternPossibleMatching.contains(pattern)) {
-					valuesI.forEach((k, v) -> {
-						possibleMatchingTable.get(k).add(v);
-					});
-					possibleMatchingTable.get(codeP_POST).add(patternPPostValues.get(pattern));
-				}
-				 
 			});
-		});
+			
+			synchronized (matchingTable) {
+				matchingTableIA.entrySet().stream().forEach(e ->  matchingTable.get(e.getKey()).addAll( matchingTableIA.get(e.getKey())));
+			}
+			
+			synchronized (possibleMatchingTable) {
+				possibleMatchingTableIA.entrySet().stream().forEach(e ->  possibleMatchingTable.get(e.getKey()).addAll( possibleMatchingTableIA.get(e.getKey())));
+			}
+			
 		});
 		returnOut.put(IS2Const.WF_OUTPUT_ROLES, rolesOut);
 		rolesOut.keySet().forEach(code -> {
@@ -423,14 +567,14 @@ public class RelaisService {
 		returnOut.put(IS2Const.WF_OUTPUT_WORKSET, worksetOut);
 		return returnOut;
 	}
-	
+
 	public Map<?, ?> resultTables(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
 			Map<String, ArrayList<String>> worksetIn, Map<String, String> parametriMap) throws Exception {
 
 		Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
 		Map<String, Map<?, ?>> worksetOut = new LinkedHashMap<>();
-		Map<String, ArrayList<String>> matchingTable = new LinkedHashMap<>();
-		Map<String, ArrayList<String>> possibleMatchingTable = new LinkedHashMap<>();
+		Map<String, ArrayList<String>> matchingTable = Collections.synchronizedMap(new LinkedHashMap<>());
+		Map<String, ArrayList<String>> possibleMatchingTable = Collections.synchronizedMap(new LinkedHashMap<>());
 		Map<String, ArrayList<String>> residualATable = new LinkedHashMap<>();
 		Map<String, ArrayList<String>> residualBTable = new LinkedHashMap<>();
 		Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
@@ -507,33 +651,51 @@ public class RelaisService {
 		});
 
 		indexItems = 0;
-		for (int iA = 0; iA < sizeA; iA++) {
-			Map<String, String> valuesI = new HashMap<>();
-			final Integer innerIA = Integer.valueOf(iA);
+		IntStream.range(0, sizeA).parallel().forEach(innerIA -> {
+
+			final Map<String, String> valuesI = new HashMap<>();
+			final Map<String, ArrayList<String>> matchingTableIA = new HashMap<>();
+			final Map<String, ArrayList<String>> possibleMatchingTableIA = new HashMap<>();
+
+			variabileNomeListOut.forEach(varname -> {
+				matchingTableIA.put(varname, new ArrayList<>());
+				possibleMatchingTableIA.put(varname, new ArrayList<>());
+			});
+
 			variabileNomeListMA.forEach(varnameMA -> {
 				valuesI.put(varnameMA, worksetIn.get(varnameMA).get(innerIA));
 			});
 
-			for (int iB = 0; iB < sizeB; iB++) {
-				final Integer innerIB = Integer.valueOf(iB);
+			IntStream.range(0, sizeB).forEach(innerIB -> {
 				variabileNomeListMB.forEach(varnameMB -> {
 					valuesI.put(varnameMB, worksetIn.get(varnameMB).get(innerIB));
 				});
 				String pattern = contingencyService.getPattern(valuesI);
 				if (patternMatching.contains(pattern)) {
 					valuesI.forEach((k, v) -> {
-						matchingTable.get(k).add(v);
+						matchingTableIA.get(k).add(v);
 					});
-					matchingTable.get(codeP_POST).add(patternPPostValues.get(pattern));
+					matchingTableIA.get(codeP_POST).add(patternPPostValues.get(pattern));
 				} else if (patternPossibleMatching.contains(pattern)) {
 					valuesI.forEach((k, v) -> {
-						possibleMatchingTable.get(k).add(v);
+						possibleMatchingTableIA.get(k).add(v);
 					});
-					possibleMatchingTable.get(codeP_POST).add(patternPPostValues.get(pattern));
+					possibleMatchingTableIA.get(codeP_POST).add(patternPPostValues.get(pattern));
 				}
-				indexItems++;
+
+			});
+
+			synchronized (matchingTable) {
+				matchingTableIA.entrySet().stream()
+						.forEach(e -> matchingTable.get(e.getKey()).addAll(matchingTableIA.get(e.getKey())));
 			}
-		}
+
+			synchronized (possibleMatchingTable) {
+				possibleMatchingTableIA.entrySet().stream().forEach(
+						e -> possibleMatchingTable.get(e.getKey()).addAll(possibleMatchingTableIA.get(e.getKey())));
+			}
+
+		});
 
 		returnOut.put(IS2Const.WF_OUTPUT_ROLES, rolesOut);
 		rolesOut.keySet().forEach(code -> {
@@ -548,7 +710,6 @@ public class RelaisService {
 		returnOut.put(IS2Const.WF_OUTPUT_WORKSET, worksetOut);
 		return returnOut;
 	}
-
 
 	private void checkThresholds(String paramTM, String paramTU) throws Exception {
 		try {

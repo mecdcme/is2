@@ -24,6 +24,7 @@
 package it.istat.is2.catalogue.relais.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -111,7 +112,7 @@ public class ContingencyService {
 
 
 	public ArrayList<String> getNameMatchingVariables() {
-		// TODO Auto-generated method stub
+		 
 		ArrayList<String> ret = new ArrayList<>();
 		metricMatchingVariableVector.forEach(item -> {
 			ret.add(item.getMatchingVariable());
@@ -121,7 +122,7 @@ public class ContingencyService {
 
 
 	public String getPattern(Map<String, String> valuesI) {
-		// TODO Auto-generated method stub
+		 
 		String pattern = "";
 
 		/* evaluation of patternd */
@@ -157,8 +158,8 @@ public class ContingencyService {
 	}
 	
 	public Map<String, Integer> getEmptyContengencyTable() {
-		// TODO Auto-generated method stub
-		Map<String, Integer> contengencyTable = new LinkedHashMap<String, Integer>();
+		 
+		Map<String, Integer> contengencyTable = new LinkedHashMap<String, Integer>() ;
 		int mask1 = (int) Math.pow(2, numVar);
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < mask1; i++) {
