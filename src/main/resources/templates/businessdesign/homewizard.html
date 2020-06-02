@@ -27,13 +27,12 @@
 <head>
 <head th:include="layout :: site-head" th:remove="tag" />
 
-<script th:src="@{/js/vendors/table/datatables.min.js}"></script>
-<script th:src="@{/js/servicedesign/editbdesign.js}"></script>
-<script th:src="@{/js/vendors/smartwizard/jquery.smartWizard.min.js}"></script>
+
+
+<link th:href="@{/css/businessdesign/wizard.css}" rel="stylesheet" />
 <script th:src="@{/js/servicedesign/conf_smartwizard.js}"></script>
 
-<link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet" />
-<link th:href="@{/css/vendors/smartwizard/smart_wizard_all.min.css}" rel="stylesheet" />
+
 </head>
 <body class="c-app">
 	<div th:replace="layout :: site-aside"></div>
@@ -47,7 +46,8 @@
 				<!-- Breadcrumb-->
 				<ol class="breadcrumb border-0 m-0">
 					<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-					<li class="breadcrumb-item"><span th:text="#{sd.home.link}">Services design</span></li>
+					<li class="breadcrumb-item"><span th:text="#{sd.home.link}">Services
+							design</span></li>
 				</ol>
 				<!-- Right navigation menu -->
 				<div class="c-header-nav d-md-down-none mfe-2">
@@ -65,114 +65,200 @@
 					<div class="row justify-start">
 
 						<div class="col-lg-8">
+
+
+
+
+							<!-- TEST WIZARD -->
+
+							<!-- MultiStep Form -->
+
+
+							<!-- MultiStep Form -->
+							<div class="container-fluid" id="grad1">
+								<div class="row justify-content-center mt-0">
+									<div
+										class="col-11 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-3 mb-2">
+										<div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+											<h2>
+												<strong>Procedura guidata per la creazione di nuovi servizi</strong>
+											</h2>
+											<p>Fill all form field to go to next step</p>
+											<div class="row">
+												<div class="col-md-12 mx-0">
+													<form id="msform">
+														<!-- progressbar -->
+														<ul id="progressbar">
+															<li class="active" id="account">Business Service</li>
+															<li id="personal">Application Service</li>
+															<li id="payment">Step Instance</li>
+															<li id="confirm"><strong>Finish</strong></li>
+														</ul>
+														<!-- fieldsets -->
+														<fieldset>
+															<div class="form-card">
+																<h2 class="fs-title">Business Service</h2>
+																	<!-- form th:action="@{/newbservice}" id="bs-form"
+																	class="form-horizontal" method="post"-->
+						
+						
+																	<div class="form-group">
+																		<label class="control-label"
+																			th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
+																		<input name="name" id="bs-name"
+																			th:title="#{generic.label.name}" class="form-control"
+																			type="text" /> <span class="help-block"> <small
+																			class="text-danger" id="bs-name-error"></small>
+																		</span>
+																	</div>
+																	<div class="form-group">
+																		<label class="control-label"
+																			th:text="#{nuova.sessione.descr}"> <span>Descrizione</span>
+																		</label> <input name="description"
+																			th:title="#{generic.label.description}"
+																			class="form-control" type="text" /> <span
+																			class="help-block"></span>
+																	</div>
+																	<div id="preparing-select-js-parent">
+																		<div class="form-group" id="select-gsbpm-1-div">
+																			<label class="control-label" th:text="#{bs.gsbpm.label}"><span>Processo
+																					Gsbpm padre</span> </label> <select name="gsbpmidparent" id="select-gsbpm-1"
+																				th:title="#{bs.gsbpm.label}" class="form-control">
+																				<option th:each="gsbpm : ${listaGsbpmParentProcess}"
+																					th:value="${gsbpm.id}" th:text="${gsbpm.name}"/>
+																			</select><span class="help-block"></span>
 							
-
-							
-
-							<!-- TEST SMART WIZARD -->
-							<div id="smartwizard">
-								<ul class="nav">
-								  <li class="nav-item">
-								    <a class="nav-link" href="#step-1" data-repo="jquery-smarttab">
-								      <strong>Business Service</strong><br />Create a new business service
-								    </a>
-								  </li>
-								  <li class="nav-item">
-								    <a class="nav-link" href="#step-2" data-repo="smartwizard">
-								      <strong>Application Service</strong><br />Create and associate a new application service
-								    </a>
-								  </li>
-								  <li class="nav-item">
-								    <a class="nav-link" href="#step-3" data-repo="jquery-smartcart">
-								      <strong>Step Instance</strong><br />Create and associate a new step instance
-								    </a>
-								  </li>
-								  <li class="nav-item">
-								    <a class="nav-link" href="#step-4" data-repo="jquery-smartcart">
-								      <strong>Prova</strong><br />repository details from GitHub
-								    </a>
-								  </li>
-								</ul>
-								
-								<div class="tab-content">
-								   <div id="step-1" class="tab-pane" role="tabpanel">
-								      <!-- CREATE new Business Service -->
-
-										<form th:action="@{/newbservice}" id="bs-form"
-											class="form-horizontal" method="post">
-
-
-											<div class="form-group">
-												<label class="control-label"
-													th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
-												<input name="name" id="bs-name"
-													th:title="#{generic.label.name}" class="form-control"
-													type="text" /> <span class="help-block"> <small
-													class="text-danger" id="bs-name-error"></small>
-												</span>
-											</div>
-											<div class="form-group">
-												<label class="control-label"
-													th:text="#{nuova.sessione.descr}"> <span>Descrizione</span>
-												</label> <input name="description"
-													th:title="#{generic.label.description}"
-													class="form-control" type="text" /> <span
-													class="help-block"></span>
-											</div>
-											<div class="form-group" id="select-gsbpm-1-div">
-												<label class="control-label" th:text="#{bs.gsbpm.label}"><span>Processo
-														Gsbpm padre</span> </label> <select name="gsbpmidparent" id="select-gsbpm-1"
-													th:title="#{bs.gsbpm.label}" class="form-control">
-													<option th:each="gsbpm : ${listaGsbpmParentProcess}"
-														th:value="${gsbpm.id}" th:text="${gsbpm.name}"/>
-												</select><span class="help-block"></span>
-
-											</div>
-											<div id="preparing-select-js">
-												<div class="form-group" id="select-gsbpm-2-div">
-													<label class="control-label" th:text="#{bs.gsbpm.label}"><span>Processo
-															Gsbpm figlio</span> </label> <select name="gsbpmid" id="select-gsbpm-2"
-														th:title="#{bs.gsbpm.label}" class="form-control">
-														<option th:each="gsbpm : ${listaGsbpmSubProcess}"
-															th:value="${gsbpm.id}" th:text="${gsbpm.name}"/>
-													</select><span class="help-block"></span>
-
+																		</div>
+																	</div>
+																	<div id="preparing-select-js">
+																		<div class="form-group" id="select-gsbpm-2-div">
+																			<label class="control-label" th:text="#{bs.gsbpm.label}"><span>Processo
+																					Gsbpm figlio</span> </label> <select name="gsbpmid" id="select-gsbpm-2"
+																				th:title="#{bs.gsbpm.label}" class="form-control">
+																				<option th:each="gsbpm : ${listaGsbpmSubProcess}"
+																					th:value="${gsbpm.id}" th:text="${gsbpm.name}"/>
+																			</select><span class="help-block"></span>
+						
+																		</div>
+																	</div>
+						
+																<!-- /form-->
+															</div>
+															<input type="button" name="next"
+																class="next action-button" value="Next Step" />
+														</fieldset>
+														<fieldset>
+															<div class="form-card">
+																<h2 class="fs-title">Personal Information</h2>
+																<input type="text" name="fname" placeholder="First Name" />
+																<input type="text" name="lname" placeholder="Last Name" />
+																<input type="text" name="phno" placeholder="Contact No." />
+																<input type="text" name="phno_2"
+																	placeholder="Alternate Contact No." />
+															</div>
+															<input type="button" name="previous"
+																class="previous action-button-previous" value="Previous" />
+															<input type="button" name="next"
+																class="next action-button" value="Next Step" />
+														</fieldset>
+														<fieldset>
+															<div class="form-card">
+																<h2 class="fs-title">Payment Information</h2>
+																<div class="radio-group">
+																	<div class='radio' data-value="credit">
+																		<img src="https://i.imgur.com/XzOzVHZ.jpg"
+																			width="200px" height="100px">
+																	</div>
+																	<div class='radio' data-value="paypal">
+																		<img src="https://i.imgur.com/jXjwZlj.jpg"
+																			width="200px" height="100px">
+																	</div>
+																	<br>
+																</div>
+																<label class="pay">Card Holder Name*</label> <input
+																	type="text" name="holdername" placeholder="" />
+																<div class="row">
+																	<div class="col-9">
+																		<label class="pay">Card Number*</label> <input
+																			type="text" name="cardno" placeholder="" />
+																	</div>
+																	<div class="col-3">
+																		<label class="pay">CVC*</label> <input type="password"
+																			name="cvcpwd" placeholder="***" />
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-3">
+																		<label class="pay">Expiry Date*</label>
+																	</div>
+																	<div class="col-9">
+																		<select class="list-dt" id="month" name="expmonth">
+																			<option selected>Month</option>
+																			<option>January</option>
+																			<option>February</option>
+																			<option>March</option>
+																			<option>April</option>
+																			<option>May</option>
+																			<option>June</option>
+																			<option>July</option>
+																			<option>August</option>
+																			<option>September</option>
+																			<option>October</option>
+																			<option>November</option>
+																			<option>December</option>
+																		</select> <select class="list-dt" id="year" name="expyear">
+																			<option selected>Year</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+															<input type="button" name="previous"
+																class="previous action-button-previous" value="Previous" />
+															<input type="button" name="make_payment"
+																class="next action-button" value="Confirm" />
+														</fieldset>
+														<fieldset>
+															<div class="form-card">
+																<h2 class="fs-title text-center">Success !</h2>
+																<br>
+																<br>
+																<div class="row justify-content-center">
+																	<div class="col-3">
+																		<img
+																			src="https://img.icons8.com/color/96/000000/ok--v2.png"
+																			class="fit-image">
+																	</div>
+																</div>
+																<br>
+																<br>
+																<div class="row justify-content-center">
+																	<div class="col-7 text-center">
+																		<h5>You Have Successfully Signed Up</h5>
+																	</div>
+																</div>
+															</div>
+														</fieldset>
+													</form>
 												</div>
 											</div>
-
-										</form>
-								   </div>
-								   <div id="step-2" class="tab-pane" role="tabpanel">
-								      Step 2
-								   </div>
-								   <div id="step-3" class="tab-pane" role="tabpanel">
-								      Step 3
-								   </div>
-								   <div id="step-4" class="tab-pane" role="tabpanel">
-								      Step 4
-								   </div>
-								   
-				  				</div>									
-								
+										</div>
+									</div>
+								</div>
 							</div>
-							<!-- Fine test -->
 
-
-							
 
 						</div>
 					</div>
-				</div>
 			</main>
-			
-			
-			
+
+
+
 		</div>
 		<!-- End body -->
 		<footer th:replace="layout :: site-footer"></footer>
 
-		
-		
+
+
 	</div>
 </body>
 </html>

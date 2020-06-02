@@ -26,194 +26,179 @@ var _ctx = $("meta[name='ctx']").attr("content");
 $(document).ready(function() {
 
 	
-	// SMART WIZARD
+	showWizard();
+	  
+	  
+	  
+	  
+	  // Carica le combo gsbpm
+	/*loadParentGsbpmProcess();
+	$("#preparing-select-js-parent").change(function() {
+		var sel_process = $("#select-gsbpm-1 :selected").val();
+		loadSubGsbpmProcess();
+	});*/
 	
-	$('#smartwizard').smartWizard();
 	
-	$("#smartwizard").on("stepContent", function(e, anchorObject, stepIndex, stepDirection) {
-
-		  var repo    = anchorObject.data('repo');
-		  var ajaxURL = "https://api.npms.io/v2/package/" + repo;
-		  // Return a promise object
-		  return new Promise((resolve, reject) => {
-
-		    // Ajax call to fetch your content
-		    $.ajax({
-		    	url : _ctx + "/loadGsbpmSubProcess/" + id_process,
-		        method  : "GET",
-		        //url     : ajaxURL,
-		        dataType : "JSON",
-		        beforeSend: function( xhr ) {
-		            // Show the loader
-		            $('#smartwizard').smartWizard("loader", "show");
-		        }
-		    // done
-		    }).done(function( res ) {
-		        // console.log(res);
-
-		    	var html = "Ciao";
-		        var html2 = '<h2>Ajax data about ' + repo + ' loaded from GitHub</h2>';
-		        html += '<br>URL: <strong>' + ajaxURL + '</strong>';
-		        html += '<br>Name: <strong>' + res.collected.metadata.name + '</strong>';
-		        html += '<br>Description: ' + res.collected.metadata.description;
-		        html += '<br>Homepage: <a href="' + res.collected.github.homepage + '" >'+ res.collected.github.homepage +'</a>';
-		        html += '<br>Keywords: ' + res.collected.metadata.keywords.join(', ');
-
-		        // html += '<br>Clone URL: ' + res.clone_url;
-		        html += '<br>Stars: ' + res.collected.github.starsCount;
-		        html += '<br>Forks: ' + res.collected.github.forksCount;
-		        html += '<br>Watchers: ' + res.collected.github.subscribersCount;
-		        html += '<br>Open Issues: ' + res.collected.github.issues.openCount + '/' + res.collected.github.issues.count;
-
-		        html += '<br><br>Popularity: ' + parseInt(res.score.detail.popularity * 100);
-		        html += '<br>Quality: ' + parseInt(res.score.detail.quality * 100);
-		        html += '<br>Maintenance: ' + parseInt(res.score.detail.maintenance * 100);
-
-		        // Resolve the Promise with the tab content
-		        resolve(html);
-
-		        // Hide the loader
-		        $('#smartwizard').smartWizard("loader", "hide");
-		    }).fail(function(err) {
-
-		        // Reject the Promise with error message to show as tab content
-		        reject( "An error loading the resource" );
-
-		        // Hide the loader
-		        $('#smartwizard').smartWizard("loader", "hide");
-		    });
-
-		  });
-		});
 	
-	customizeSW();
-	inizializeSW();
-	createControlsSW();
+	
+	
+	
+	
+	
 });
-function createControlsSW(){
-	// goto a specific step
-	$('#smartwizard').smartWizard('goToStep', stepIndex);
+function showWizard(){
+	
+	var current_fs, next_fs, previous_fs; //fieldsets
+	var opacity;
 
-	// up<a href="https://www.jqueryscript.net/time-clock/">date</a> options
-	$('#smartwizard').smartWizard('setOptions', stepIndex);
+	$(".next").click(function(){
 
-	// goto the next step
-	$('#smartwizard').smartWizard('next');
+	current_fs = $(this).parent();
+	next_fs = $(this).parent().next();
 
-	// goto the prev step
-	$('#smartwizard').smartWizard('prev');
+	//Add Class Active
+	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
-	// reset the wizard
-	$('#smartwizard').smartWizard('reset');
+	//show the next fieldset
+	next_fs.show();
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+	step: function(now) {
+	// for making fielset appear animation
+	opacity = 1 - now;
 
-	// change the state of step(s)
-	$('#smartwizard').smartWizard("stepState", [1,3], "disable");
-	$('#smartwizard').smartWizard("stepState", [2], "hide");
-
-	// get the current 
-	var stepIndex = $('#smartwizard').smartWizard("getStepIndex");
-
-	// show/hide content loader
-	$('#smartwizard').smartWizard("loader", "show");
-	$('#smartwizard').smartWizard("loader", "hide");
-}
-function inizializeSW(){
-	// Initialize the leaveStep event
-	$("#smartwizard").on("leaveStep", function(e, anchorObject, stepIndex, stepDirection) {
-	  // do something
+	current_fs.css({
+	'display': 'none',
+	'position': 'relative'
+	});
+	next_fs.css({'opacity': opacity});
+	},
+	duration: 600
+	});
 	});
 
-	// Initialize the showStep event
-	$("#smartwizard").on("showStep", function(e, anchorObject, stepIndex, stepDirection, stepPosition) {
-	  // do something
+	$(".previous").click(function(){
+
+	current_fs = $(this).parent();
+	previous_fs = $(this).parent().prev();
+
+	//Remove class active
+	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+	//show the previous fieldset
+	previous_fs.show();
+
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+	step: function(now) {
+	// for making fielset appear animation
+	opacity = 1 - now;
+
+	current_fs.css({
+	'display': 'none',
+	'position': 'relative'
+	});
+	previous_fs.css({'opacity': opacity});
+	},
+	duration: 600
+	});
 	});
 
-	// Initialize the beginReset event
-	$("#smartwizard").on("stepContent", function(e, anchorObject, stepIndex, stepDirection) {
-	  // do something
+	$('.radio-group .radio').click(function(){
+	$(this).parent().find('.radio').removeClass('selected');
+	$(this).addClass('selected');
 	});
+
+	$(".submit").click(function(){
+	return false;
+	})
 }
-function customizeSW(){
-	$('#smartwizard').smartWizard({
 
-		  // Initial selected step, 0 = first step 
-		  selected: 0,  
+function loadParentGsbpmProcess() {	
+	$
+			.ajax({
+				url : _ctx + "/loadGsbpmParentProcess",
+				type : "GET",
+				dataType : "JSON",
+				success : function(data) {
+					var content = "<div class='form-group' id='select-gsbpm-1-div'>"
+							+ "<label class='control-label'>Processo gsbpm</label> "
+							+ "<select name='gsbpmid' id='select-gsbpm-1' title='Processo gsbpm' class='form-control'>";
 
-		  // Theme: default, arrows, circles
-		  theme: 'default',
+					"<div class='col-lg-4'><label class='control-label'>"
+							+ "<span id='step'>Business Steps:</span></label></div><div class='col-lg-8'>"
+							+ "<select id='sel_step' name='step' class='form-control'>";
 
-		  // Nav menu justification. true/false
-		  justified: true,
+					$(jQuery.parseJSON(JSON.stringify(data))).each(
+							function() {
 
-		  // Automatically adjust content height
-		  autoAdjustHeight:true, 
+								var id = this.id;
+								var name = this.name;
+								content += "<option value='" + id + "'>" + name
+										+ "</option>";
+							});
 
-		  // Allow to cycle the navigation of steps
-		  cycleSteps: false, 
+					content += "</select><span class='help-block'></span></div>";
+					$("#preparing-select-js-parent").html(content);
+					loadSubGsbpmProcess();
 
-		  // Enable the back button support
-		  backButtonSupport: true, 
-
-		  // Enable selection of the step based on url hash
-		  useURLhash: true, 
-
-		  // Show url hash based on step 
-		  enableURLhash: true, 
-
-		  // Config transitions
-		  transition: {
-
-		    // none/fade/slide-horizontal/slide-vertical/slide-swing
-		    animation: 'none',
-
-		    // transition speed
-		    speed: '400',
-
-		    // easing function
-		    easing: ''
-
-		  },
-
-		  // Enable keyboard navigation
-		  keyboardSettings: {
-		    key: true,
-		    keyLeft: [37],
-		    keyRight: [39]
-		  },
-
-		  // Language variables
-		  lang: {  
-		    next: 'Next', 
-		    previous: 'Previous'
-		  },
-
-		  // step bar options
-		  toolbarSettings: {
-		    toolbarPosition: 'bottom', // none, top, bottom, both
-		    toolbarButtonPosition: 'right', // left, right
-		    showNextButton: true, // show/hide a Next button
-		    showPreviousButton: true, // show/hide a Previous button
-		    toolbarExtraButtons: []
-		  }, 
-
-		  // anchor options
-		  anchorSettings: {
-		    anchorClickable: true, // Enable/Disable anchor navigation
-		    enableAllAnchors: false, // Activates all anchors clickable all times
-		    markDoneStep: true, // add done css
-		    markAllPreviousStepsAsDone: true, // When a step selected by url hash, all previous steps are marked done
-		    removeDoneStepOnNavigateBack: false, // While navigate back done step after active step will be cleared
-		    enableAnchorOnDoneStep: true // Enable/Disable the done steps navigation
-		  },     
-
-		  // Array of disabled Steps
-		  disabledSteps: [],    
-
-		  // Highlight step with errors
-		  errorSteps: [],    
-
-		  // Hidden steps
-		  hiddenSteps: []
-		  
-		});
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alert('Error loading data');
+				}
+			});
 }
+function loadSubGsbpmProcess() {
+	var id_process = $("#select-gsbpm-1 :selected").val();
+	$
+			.ajax({
+				url : _ctx + "/loadGsbpmSubProcess/" + id_process,
+				type : "GET",
+				dataType : "JSON",
+				success : function(data) {
+					var content = "<div class='form-group' id='select-gsbpm-2-div'>"
+							+ "<label class='control-label'>Processo gsbpm</label> "
+							+ "<select name='gsbpmid' id='select-gsbpm-2' title='Processo gsbpm' class='form-control'>";
+
+					"<div class='col-lg-4'><label class='control-label'>"
+							+ "<span id='step'>Business Steps:</span></label></div><div class='col-lg-8'>"
+							+ "<select id='sel_step' name='step' class='form-control'>";
+
+					$(jQuery.parseJSON(JSON.stringify(data))).each(
+							function() {
+
+								var id = this.id;
+								var name = this.name;
+								content += "<option value='" + id + "'>" + name
+										+ "</option>";
+							});
+
+					content += "</select><span class='help-block'></span></div>";
+					$("#preparing-select-js").html(content);
+
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alert('Error loading data');
+				}
+			});
+}
+function execute_switch(stepIndex){
+	switch (stepIndex) {
+		case 1:
+			
+			alert("tab 1");
+		
+		break;
+		case 2:
+			
+			alert("tab 2");
+		
+		break;
+		case 3:
+			
+			alert("tab 3");
+		
+		break;
+	}
+}
+
