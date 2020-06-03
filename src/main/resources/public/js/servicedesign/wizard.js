@@ -28,10 +28,17 @@ $(document).ready(function() {
 	showWizard();	
 	 // Carica le combo gsbpm
 	loadParentGsbpmProcess();
+	loadBusinessServices();
 	$("#preparing-select-js-parent").change(function() {
 		var sel_process = $("#select-gsbpm-1 :selected").val();
 		loadSubGsbpmProcess();
 	});
+	
+	/*$(".next").click(function(){
+
+		current_fs = $(this).parent();
+		current_fs.show();
+	});*/
 });
 
 function showWizard(){
@@ -162,6 +169,39 @@ function loadSubGsbpmProcess() {
 
 					content += "</select><span class='help-block'></span></div>";
 					$("#preparing-select-js").html(content);
+
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alert('Error loading data');
+				}
+			});
+}
+function loadBusinessServices() {	
+	$
+			.ajax({
+				url : _ctx + "/loadbusinessservices",
+				type : "GET",
+				dataType : "JSON",
+				success : function(data) {
+					var content = "<div class='form-group' id='select-bservice-divv'>"
+							+ "<label class='control-label'>Associa Business Service</label> "
+							+ "<select name='bsid' id='select-bserv' title='Business service' class='form-control'>";
+
+					"<div class='col-lg-4'><label class='control-label'>"
+							+ "<span id='bserv'>Business Service:</span></label></div><div class='col-lg-8'>"
+							+ "<select id='sel_bserv' name='bserv' class='form-control'>";
+
+					$(jQuery.parseJSON(JSON.stringify(data))).each(
+							function() {
+
+								var id = this.id;
+								var name = this.name;
+								content += "<option value='" + id + "'>" + name
+										+ "</option>";
+							});
+
+					content += "</select><span class='help-block'></span></div>";
+					$("#select-bservice-div").html(content);					
 
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
