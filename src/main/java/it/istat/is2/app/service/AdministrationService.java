@@ -39,7 +39,7 @@ public class AdministrationService {
 	private String startRServe;
 
 	public Long startR() throws IOException {
- 	 		Process process = Runtime.getRuntime().exec("cmd /c "+startRServe, null, new File(pathR));
-	 return process.pid();
+ 	 		 Runtime.getRuntime().exec("cmd /c "+startRServe, null, new File(pathR));
+	 return 1L;
 	}
 }
