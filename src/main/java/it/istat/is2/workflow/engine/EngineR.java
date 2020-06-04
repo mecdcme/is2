@@ -40,8 +40,8 @@ public class EngineR {
 
     protected LinkedHashMap<String, ArrayList<String>> variablesRolesMap;
 
-    protected LinkedHashMap<String, ArrayList<String>> worksetOut;
+
     protected LinkedHashMap<String, String> parameterOut;
-    protected LinkedHashMap<String, ArrayList<String>> rolesOut;
+   
     protected LinkedHashMap<String, String> rolesGroupOut;
 }

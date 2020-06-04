@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
 import javax.script.ScriptException;
@@ -60,17 +61,23 @@ public class EngineREnjin extends EngineR implements EngineService {
 	RenjinScriptEngine engine;
 
 	final StringWriter logWriter = new StringWriter();
+	private final Map<String, Object> worksetOut;
+	private final Map<String, Object> rolesOut;
 
 	public EngineREnjin(String pathR, String fileScriptR) {
 		super();
 		this.pathR = pathR;
 		this.fileScriptR = fileScriptR;
 		command = "";
+		this.worksetOut = new LinkedHashMap<>();
+		this.rolesOut = new LinkedHashMap<>();
 	}
 
 	public EngineREnjin() {
 		super();
 		command = "";
+		this.worksetOut = new LinkedHashMap<>();
+		this.rolesOut = new LinkedHashMap<>();
 	}
 
 	@Override
@@ -193,8 +200,8 @@ public class EngineREnjin extends EngineR implements EngineService {
 		engine.eval(ROLES_IN + " <-list(" + rolesList + ")");
 	}
 
-	public void getGenericOutput(LinkedHashMap<String, ArrayList<String>> genericHashMap, String varR,
-			String tipoOutput) throws ScriptException {
+	public void getGenericOutput(Map<String, Object> genericHashMap, String varR, String tipoOutput)
+			throws ScriptException {
 		Logger.getRootLogger().debug("Eseguo Get " + tipoOutput);
 		try {
 			ListVector listR = (ListVector) engine.eval(varR + "$" + tipoOutput);
@@ -212,7 +219,7 @@ public class EngineREnjin extends EngineR implements EngineService {
 		}
 	}
 
-	public void getGenericParamterOutput(LinkedHashMap<String, String> genericHashMap, String varR, String tipoOutput)
+	public void getGenericParamterOutput(Map<String, String> genericHashMap, String varR, String tipoOutput)
 			throws ScriptException {
 		Logger.getRootLogger().debug("Eseguo Get " + tipoOutput);
 		try {
@@ -263,15 +270,14 @@ public class EngineREnjin extends EngineR implements EngineService {
 		StringTokenizer multiTokenizer = new StringTokenizer(output, "\n");
 
 		while (multiTokenizer.hasMoreTokens()) {
-			
+
 			logService.save(multiTokenizer.nextToken(), IS2Const.OUTPUT_R);
 		}
 
 		logService.save("Script completed!");
 	}
 
-	public void getRecursiveOutput(LinkedHashMap<String, ArrayList<String>> genericHashMap, ListVector listR)
-			throws ScriptException {
+	public void getRecursiveOutput(Map<String, Object> genericHashMap, ListVector listR) throws ScriptException {
 		String name = "";
 		if (listR != null) {
 			// Logger.getRootLogger().info("Campi:> " + names.asString() + " Size(" +
@@ -279,14 +285,17 @@ public class EngineREnjin extends EngineR implements EngineService {
 			for (int i = 0; i < listR.length(); i++) {
 				if (listR.get(i) instanceof ListVector) {
 					// getRecursiveOutput(genericHashMap, (ListVector) listR.get(i), (StringVector)
-					// listR.get(i).getNames());
-					getRecursiveOutput(genericHashMap, (ListVector) listR.get(i));
+					name = listR.getName(i);
+					Map<String, Object> mapOutput = new LinkedHashMap<>();
+
+					getRecursiveOutput(mapOutput, (ListVector) listR.get(i));
+					genericHashMap.put(name, mapOutput);
 				} else {
 					Vector values = (Vector) listR.get(i);
 					name = listR.getName(i);
 					genericHashMap.put(name, Utility.toArrayListofString(values));
-					Logger.getRootLogger().info(name + " (" + values.length() + "/" + genericHashMap.get(name).size()
-							+ "): " + genericHashMap.get(name).toString());
+					Logger.getRootLogger()
+							.info(name + " (" + values.length() + "): " + genericHashMap.get(name).toString());
 				}
 			}
 		}
@@ -303,6 +312,7 @@ public class EngineREnjin extends EngineR implements EngineService {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void prepareEnv() {
 
 		// Get all roles
@@ -312,7 +322,6 @@ public class EngineREnjin extends EngineR implements EngineService {
 		// {S=[S], X=[X], Y=[Y], Z=[Z]}
 		HashMap<String, ArrayList<String>> ruoliInputStep = new HashMap<>();
 		// {P=[P], M=[M], O=[O]}
-		rolesOut = new LinkedHashMap<>();
 		rolesGroupOut = new LinkedHashMap<>();
 
 		for (Iterator<?> iterator = stepInstance.getStepInstanceSignatures().iterator(); iterator.hasNext();) {
@@ -325,7 +334,8 @@ public class EngineREnjin extends EngineR implements EngineService {
 				listv.add(stepInstanceSignature.getAppRole().getCode());
 				ruoliInputStep.put(stepInstanceSignature.getAppRole().getCode(), listv);
 			} else if (stepInstanceSignature.getTypeIO().getId().intValue() == IS2Const.TYPE_IO_OUTPUT) {
-				ArrayList<String> listv = rolesOut.get(stepInstanceSignature.getAppRole().getCode());
+				ArrayList<String> listv = (ArrayList<String>) rolesOut
+						.get(stepInstanceSignature.getAppRole().getCode());
 				if (listv == null) {
 					listv = new ArrayList<>();
 				}
@@ -350,7 +360,6 @@ public class EngineREnjin extends EngineR implements EngineService {
 		// Parameters
 		parametersMap = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
 		rulesetMap = Utility.getMapWorkSetValues(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
-		worksetOut = new LinkedHashMap<>();
 
 		// associo il codice ruolo alla variabile
 		// codiceRuolo, lista nome variabili {X=[X1], Y=[Y1]}
@@ -391,17 +400,123 @@ public class EngineREnjin extends EngineR implements EngineService {
 	}
 
 	private void saveOutputDB() {
+		// salva output su DB
+		for (Map.Entry<String, ?> entry : worksetOut.entrySet()) {
+			String nameOut = entry.getKey();
+			@SuppressWarnings("unchecked")
+			Map<String, ArrayList<String>> outContent = (Map<String, ArrayList<String>>) entry.getValue();
+
+			for (Map.Entry<String, ArrayList<String>> entryWS : outContent.entrySet()) {
+				String nomeW = entryWS.getKey();
+				ArrayList<String> value = entryWS.getValue();
+				StepRuntime stepVariable;
+				// String ruolo = ruoliOutputStepInversa.get(nomeW);
+				String ruolo = nameOut;
+				String ruoloGruppo = rolesGroupOut.get(ruolo);
+				if (ruolo == null) {
+					ruolo = ROLE_DEFAULT;
+				}
+				if (ruoloGruppo == null) {
+					ruoloGruppo = ROLE_DEFAULT;
+				}
+				AppRole sxRuolo = rolesMap.get(ruolo);
+				AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
+
+				stepVariable = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
+
+				if (stepVariable != null) { // update
+
+					stepVariable.getWorkset().setContents(value);
+					stepVariable.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+				} else {
+					stepVariable = new StepRuntime();
+					stepVariable.setDataProcessing(dataProcessing);
+					stepVariable.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+
+					stepVariable.setAppRole(sxRuolo);
+					stepVariable.setDataType(sxRuolo.getDataType());
+					stepVariable.setRoleGroup(sxRuoloGruppo);
+					stepVariable.setOrderCode(sxRuolo.getOrder());
+					Workset workset = new Workset();
+					workset.setName(nomeW.replaceAll("\\.", "_"));
+					workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
+					ArrayList<StepRuntime> l = new ArrayList<>();
+					l.add(stepVariable);
+					workset.setStepRuntimes(l);
+					workset.setContents(value);
+					workset.setContentSize(workset.getContents().size());
+					stepVariable.setWorkset(workset);
+				}
+
+				stepRuntimeDao.save(stepVariable);
+			}
+		}
+
+		// save output Parameter DB
+		if (parameterOut.size() > 0) {
+			HashMap<String, String> ruoliOutputStepInversa = new HashMap<>();
+			for (Entry<String, Object> entry : rolesOut.entrySet()) {
+				String nomeR = entry.getKey();
+				ArrayList<String> value = (ArrayList<String>) entry.getValue();
+				value.forEach(nomevar -> ruoliOutputStepInversa.put(nomevar, nomeR));
+			}
+
+			for (Map.Entry<String, String> entry : parameterOut.entrySet()) {
+				String nomeW = entry.getKey();
+				String value = entry.getValue();
+				StepRuntime stepRuntime;
+				String ruolo = ruoliOutputStepInversa.get(nomeW);
+				String ruoloGruppo = rolesGroupOut.get(ruolo);
+				if (ruolo == null) {
+					ruolo = ROLE_DEFAULT;
+				}
+				if (ruoloGruppo == null) {
+					ruoloGruppo = ROLE_DEFAULT;
+				}
+				AppRole sxRuolo = rolesMap.get(ruolo);
+				AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
+
+				stepRuntime = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
+
+				if (stepRuntime != null) { // update
+					stepRuntime.getWorkset().setParamValue(value);
+					stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+				} else {
+					stepRuntime = new StepRuntime();
+					stepRuntime.setDataProcessing(dataProcessing);
+					stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+					stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
+					stepRuntime.setAppRole(sxRuolo);
+					stepRuntime.setRoleGroup(sxRuoloGruppo);
+					stepRuntime.setOrderCode(sxRuolo.getOrder());
+					Workset workset = new Workset();
+					workset.setName(nomeW.replaceAll("\\.", "_"));
+
+					ArrayList<StepRuntime> l = new ArrayList<>();
+					l.add(stepRuntime);
+					workset.setStepRuntimes(l);
+					workset.setParamValue(value);
+					workset.setContentSize(1);
+					workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
+					stepRuntime.setWorkset(workset);
+				}
+				stepRuntimeDao.save(stepRuntime);
+			}
+		}
+	}
+
+	private void saveOutputDB_old() {
 		HashMap<String, String> ruoliOutputStepInversa = new HashMap<>();
-		for (Map.Entry<String, ArrayList<String>> entry : rolesOut.entrySet()) {
+		for (Entry<String, Object> entry : rolesOut.entrySet()) {
 			String nomeR = entry.getKey();
-			ArrayList<String> value = entry.getValue();
+			ArrayList<String> value = (ArrayList<String>) entry.getValue();
 			value.forEach(nomevar -> ruoliOutputStepInversa.put(nomevar, nomeR));
 		}
 
 		// salva output su DB
-		for (Map.Entry<String, ArrayList<String>> entry : worksetOut.entrySet()) {
+		for (Entry<String, Object> entry : worksetOut.entrySet()) {
 			String nomeW = entry.getKey();
-			ArrayList<String> value = entry.getValue();
+			ArrayList<String> value = (ArrayList<String>) entry.getValue();
 			StepRuntime stepRuntime;
 			String ruolo = ruoliOutputStepInversa.get(nomeW);
 			String ruoloGruppo = rolesGroupOut.get(ruolo);

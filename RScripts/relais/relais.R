@@ -108,30 +108,25 @@ fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 	 check = 1;
 	}
 	if(check==1){
-		#Messaggio di warning non blocante
-		# msg = "WARNING: one or more variables give inconsistent estimates."
-		#Messaggio di errore blocante
+
+		#Error message and stop elab
 		 msg = "ERROR: one or more variables give inconsistent estimates. Please, check the variables in the model or try to reduce the search space.";
-		 msg2 = paste("See table ",varmuTableName," for more details."); 
+		 msg2 = paste("See MARGINAL_PROBABILITIES output for more details."); 
 		 
-		  print(msg)
+		 print(msg)
 		 print(msg2)
-		 print(l)
-		 #write.table(l, file = percorso_fail,row.names=FALSE,sep=":",quote=F)
+		 
 		 #default value to p for the marginal prob table
 		 p <- 0
 	}else{
-		#2 check su stime sulla frontiera
-		#Messaggio di warning non blocante
 		
 		vett_cond=vett[vett>0.99999]
 		if (length(vett_cond)>=1)
 		{
-		# messaggio di warning non bloccante, si salvano i parametri nella tabella, e si va avanti con la mutable
-			msg3 = paste("WARNING: one or more nearly boundary parameters. See ",percorso_allert," for more details.");
-			print(msg3);
-			print(l);
-		   #  write.table(l, file = percorso_allert,row.names=FALSE,sep=":",quote=F)
+		# warning message continue elab
+			msg = paste("WARNING: one or more nearly boundary parameters.");
+			msg2 = paste("See MARGINAL_PROBABILITIES output for more details.");
+			print(msg);
 		}
 		#produce la matrice in output
 		#per la stima di m e u utilizziamo le frequenze attese dal modello
@@ -184,14 +179,12 @@ fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 	var_est <- data.frame(rep(nomimatvar, rep(2,length(nomimatvar))),rep(c("1","0"),length(nomimatvar)),mvar,uvar,rep(p,2*length(nomimatvar)),stringsAsFactors=FALSE)
 	names(var_est)=c("variable","comparison","m","u","p")
 	
-	
- roles <- list (FS=names(r_out))
- rolesgroup <- list (FS= c("FS"))
+print(var_est)	
+ roles <- list (FS=names(r_out),MP=names(var_est))
+ rolesgroup <- list (FS= c("FS"), MP= c("MP"))
+ 
+ fs_out<-list(FS=r_out,MP = var_est)
 
-
- result <-list( workset_out=r_out, roles_out= roles,rolesgroup_out= rolesgroup, var_est = var_est, log = stdout)
-
-
- return(result)
+ result <-list( workset_out=fs_out, roles_out= roles, rolesgroup_out= rolesgroup,  log = stdout)
  
 }

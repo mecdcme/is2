@@ -152,7 +152,7 @@ public class EngineJava implements EngineService {
 
         // PARAMETRI
         parametriMap = Utility.getMapWorkSetValuesParams(dataMap, new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
-        worksetOut = new HashMap<>();
+        
 
         // associo il codice ruolo alla variabile
         // codiceRuolo, lista nome variabili {X=[X1], Y=[Y1]}
@@ -183,7 +183,8 @@ public class EngineJava implements EngineService {
         // salva output su DB
         for (Map.Entry<String, ?> entry : worksetOut.entrySet()) {
             String nameOut = entry.getKey();
-            Map<String, ArrayList<String>> outContent = (Map<String, ArrayList<String>>) entry.getValue();
+            @SuppressWarnings("unchecked")
+			Map<String, ArrayList<String>> outContent = (Map<String, ArrayList<String>>) entry.getValue();
 
             for (Map.Entry<String, ArrayList<String>> entryWS : outContent.entrySet()) {
                 String nomeW = entryWS.getKey();

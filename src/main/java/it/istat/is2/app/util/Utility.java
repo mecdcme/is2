@@ -28,7 +28,9 @@ import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,6 +41,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.stream.IntStream;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -57,6 +60,8 @@ import it.istat.is2.workflow.domain.DataTypeCls;
 import it.istat.is2.workflow.domain.StepRuntime;
 
 public class Utility {
+
+	private static final String KEY_SEPARATOR = "@_@";
 
 	@SuppressWarnings("rawtypes")
 	public static String printJsonToHtml(String jsonString) {
@@ -652,7 +657,6 @@ public class Utility {
 		return mapValues;
 	}
 
-	 
 	public static void printNElementsInMapValues(final Map<String, List<String>> mapValues, int nValues) {
 
 		List<String> keys = new ArrayList<>(mapValues.keySet());
@@ -673,23 +677,57 @@ public class Utility {
 		}
 	}
 
-	
 	public static Map<String, List<Integer>> blockVariablesIndexMapValues(final Map<String, List<String>> mapValues,
-			final List<String> datasetFields, final String fieldBlock) {
+			final List<String> fieldsBlock) {
 
-	  	final Map<String, List<Integer>> ret=new LinkedHashMap<>();
- 
-		for (int i = 0; i < mapValues.get(fieldBlock).size(); i++) {
-			String value= mapValues.get(fieldBlock).get(i);
-			 List<Integer> values=ret.get(value);
-			if(values==null) values=new ArrayList<>();
-			 values.add(i);
-			 ret.put(value, values);
-	 
-		}
- 
-		return ret;
+		final int CHUNK_SIZE = 100;
+
+		final Map<String, List<Integer>> mapIndex = Collections.synchronizedMap(new HashMap<>());
+		String fieldBlock = fieldsBlock.get(0);
+		int sizeList = mapValues.get(fieldBlock).size();
+		int partitionSize = (sizeList / CHUNK_SIZE) + ((sizeList % CHUNK_SIZE) == 0 ? 0 : 1);
+
+		IntStream.range(0, partitionSize).parallel().forEach(chunkIndex -> {
+			 
+			int inf = (chunkIndex * CHUNK_SIZE);
+			int sup = (chunkIndex == partitionSize - 1) ? sizeList - 1 : (inf + CHUNK_SIZE - 1);
+
+			final Map<String, List<Integer>> mapValueIndexesI = new HashMap<>();
+			IntStream.rangeClosed(inf, sup).forEach(innerIndex -> {
+			 	String keyValues = getKeyValues(innerIndex, mapValues, fieldsBlock);
+				mapValueIndexesI.computeIfAbsent(keyValues, v -> new ArrayList<>()).add(innerIndex);
+
+			});
+
+			synchronized (mapIndex) {
+				mapValueIndexesI.forEach((k, values) -> {
+					mapIndex.computeIfAbsent(k, v -> new ArrayList<>()).addAll(values);
+
+				});
+
+			}
+
+		});
+
+		return mapIndex;
 	}
 
-	
+	public static String getKeyValues(final Integer index, final Map<String, List<String>> mapValues,
+			final List<String> fieldsBlock) {
+		final StringBuffer keyValues = new StringBuffer();
+		
+		fieldsBlock.forEach(field -> keyValues.append(mapValues.get(field).get(index)).append(KEY_SEPARATOR));
+		
+		keyValues.delete(keyValues.length() - KEY_SEPARATOR.length(), keyValues.length());
+		return keyValues.toString();
+	}
+
+	public static boolean isNullOrEmpty(final Collection<?> c) {
+		return c == null || c.isEmpty();
+	}
+
+	public static boolean isNullOrEmpty(final Map<?, ?> m) {
+		return m == null || m.isEmpty();
+	}
+
 }

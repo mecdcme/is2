@@ -1602,6 +1602,7 @@ INSERT INTO is2.is2_app_role VALUES (16, 'RS', 'RULESET', 'RULESET', 2, 4, NULL)
 INSERT INTO is2.is2_app_role VALUES (910, 'LP', 'LOADER PARAMETERS', 'LOADER PARAMETERS', 1, 2, 910);
 INSERT INTO is2.is2_app_role VALUES (950, 'MP', 'MAPPING PARAMETERS', 'MAPPING PARAMETERS', 5, 2, 950);
 
+INSERT INTO is2.is2_app_role VALUES (17, 'MP', 'MARGINAL PROBABILITIES', 'MARGINAL PROBABILITIES', 17, 1, NULL);
 
 --
 -- TOC entry 4907 (class 0 OID 25150)
@@ -1829,6 +1830,10 @@ INSERT INTO is2.is2_link_business_service_app_role VALUES (300, 16);
 INSERT INTO is2.is2_link_business_service_app_role VALUES (91, 910);
 INSERT INTO is2.is2_link_business_service_app_role VALUES (91, 950);
 
+INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 17);
+
+
+
 
 --
 -- TOC entry 4966 (class 0 OID 32783)
@@ -1929,7 +1934,7 @@ INSERT INTO is2.is2_parameter VALUES (3, 'THRESHOLD UNMATCHING', 'THRESHOLD UNMA
 INSERT INTO is2.is2_parameter VALUES (910, 'LOADER_PARAMETERS', 'LOADER_PARAMETERS', NULL, '{ "data":[],"schema":{"items":{  "properties":{  "FileType":{  "enum":["xml","clef-valeur","plat" ], "required":true, "title":"Type of file" } ,"Delimiter":{  "maxLength":50, "required":true, "title":"Delimiter", "type":"string" } ,"Format":{  "maxLength":1000000, "required":true, "title":"Format", "type":"string" } ,"Comments":{  "maxLength":1000000, "required":true, "title":"Comments", "type":"string" } }, "type":"object" }, "type":"array" } ,"options":{  "type":"table", "showActionsColumn":true, "hideAddItemsBtn":false, "items":{  "fields":{  "FileType":{  "type":"select", "noneLabel":"", "removeDefaultNone":false } } }, "form":{  "buttons":{  "addRow":"addRow" } }, "view":{  "templates":{  "container-array-toolbar":"#addItemsBtn" } } }}');
 INSERT INTO is2.is2_parameter VALUES (950, 'MAPPING_PARAMETERS', 'MAPPING_PARAMETERS', NULL, '{ "data":[], "schema":{  "items":{  "properties":{  "VariableName":{  "maxLength":50, "required":true, "title":"Variable Name", "type":"string" } ,"VariableType":{  "enum":["bigint","bigint[]","boolean","date","date[]","float","float[]","interval","text","text[]","timestamp without time zone" ], "required":true, "title":"Variable Type" } ,"Expression":{  "maxLength":100000, "required":true, "title":"Expression", "type":"string" } ,"TargetTables":{  "maxLength":100000, "required":true, "title":"Target tables", "type":"string" } }, "type":"object" }, "type":"array" }, "options":{  "type":"table", "showActionsColumn":true, "hideAddItemsBtn":false, "items":{  "fields":{  "VariableType":{  "type":"select", "noneLabel":"", "removeDefaultNone":false } } }, "form":{  "buttons":{  "addRow":"addRow" } }, "view":{  "templates":{  "container-array-toolbar":"#addItemsBtn" } } }}');
 
-INSERT INTO is2.is2_parameter VALUES (5, 'BLOCKING VARIABLES', 'BLOCKING VARIABLES', NULL, '{"data":[],"schema":{"type":"object", "properties": { "BLOCKING_A": { "type":"string", "title":"BLOCKING A" }, "BLOCKING_B": { "type":"string", "title":"BLOCKING B" } }}, "options": {"fields":{"BLOCKING_A":{"type":"select","noneLabel":"","dataSource":"matchedVariables"},"BLOCKING_B":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}}}}');
+INSERT INTO is2.is2_parameter VALUES (5, 'BLOCKING VARIABLES', 'BLOCKING VARIABLES', NULL, '{"data":[],"schema":{"type":"object", "properties": { "BLOCKING_A": { "type":"array", "title":"BLOCKING A","items": {"type": "string"} }, "BLOCKING_B": { "type":"array", "title":"BLOCKING B" ,"items": {"type": "string"}} }}, "options": {"fields":{"BLOCKING_A":{"type":"array",    "toolbarSticky": true,"items":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}},"BLOCKING_B":{"type":"array",   "toolbarSticky": true, "items":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}}}}}');
 
 
 --
@@ -2044,6 +2049,8 @@ INSERT INTO is2.is2_step_instance_signature VALUES (190, 1, 8, 16, 1);
 INSERT INTO is2.is2_step_instance_signature VALUES (191, 1, 9, 16, 1);
 INSERT INTO is2.is2_step_instance_signature VALUES (193, 1, 6, 16, 1);
 
+
+INSERT INTO is2.is2_step_instance_signature VALUES (194, NULL, 17, 12, 2);
 
 -- TOC entry 4952 (class 0 OID 25312)
 -- Dependencies: 273
