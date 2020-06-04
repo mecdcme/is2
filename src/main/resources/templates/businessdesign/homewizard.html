@@ -242,53 +242,52 @@
 														<fieldset>
 															<div class="form-card">
 																<h2 class="fs-title">Step Instance</h2>
-																<div class="radio-group">
-																	<div class='radio' data-value="credit">
-																		<img src="https://i.imgur.com/XzOzVHZ.jpg"
-																			width="200px" height="100px">
+																
+																
+																<!-- CREATE new StepInstance -->
+
+																<!-- form th:action="@{/newstepinstance}" id="si-form"
+																	th:if="${stepInstance == 'null'}"
+																	class="form-horizontal" method="post"-->
+						
+						
+																	<div class="form-group">
+																		<label class="control-label"
+																			th:text="#{si.method.label}+'*'"><span>Method</span></label>
+																		<input name="method" id="si-method"
+																			th:title="#{si.method.label}" class="form-control"
+																			type="text" /> <span class="help-block"> <small
+																			class="text-danger" id="si-method-error"></small>
+																		</span>
 																	</div>
-																	<div class='radio' data-value="paypal">
-																		<img src="https://i.imgur.com/jXjwZlj.jpg"
-																			width="200px" height="100px">
+																	<div class="form-group">
+																		<label class="control-label"
+																			th:text="#{generic.label.description}"> <span>Descrizione</span>
+																		</label> <input name="description"
+																			th:title="#{generic.label.description}"
+																			class="form-control" type="text" /> <span
+																			class="help-block"></span>
 																	</div>
-																	<br>
-																</div>
-																<label class="pay">Card Holder Name*</label> <input
-																	type="text" name="holdername" placeholder="" />
-																<div class="row">
-																	<div class="col-9">
-																		<label class="pay">Card Number*</label> <input
-																			type="text" name="cardno" placeholder="" />
+																	<div class="form-group">
+																		<label class="control-label" th:text="#{si.label.label}">
+																			<span>Label</span>
+																		</label> <input name="label" th:title="#{si.label.label}"
+																			class="form-control" type="text" /> <span
+																			class="help-block"></span>
 																	</div>
-																	<div class="col-3">
-																		<label class="pay">CVC*</label> <input type="password"
-																			name="cvcpwd" placeholder="***" />
+																	<div class="form-group">
+																		<div id="select-appservice-div">
+																			<label class="control-label"
+																				th:text="#{si.appservice.link.label}"><span>Collega
+																					App. Service</span> </label> <select name="appserviceid"
+																				th:title="#{si.appservice.link.label}" class="form-control">
+																				<option th:each="appService : ${listaAppService}"
+																					th:value="${appService.id}" th:text="${appService.name}" />
+																			</select><span class="help-block"></span>
+																		</div>
 																	</div>
-																</div>
-																<div class="row">
-																	<div class="col-3">
-																		<label class="pay">Expiry Date*</label>
-																	</div>
-																	<div class="col-9">
-																		<select class="list-dt" id="month" name="expmonth">
-																			<option selected>Month</option>
-																			<option>January</option>
-																			<option>February</option>
-																			<option>March</option>
-																			<option>April</option>
-																			<option>May</option>
-																			<option>June</option>
-																			<option>July</option>
-																			<option>August</option>
-																			<option>September</option>
-																			<option>October</option>
-																			<option>November</option>
-																			<option>December</option>
-																		</select> <select class="list-dt" id="year" name="expyear">
-																			<option selected>Year</option>
-																		</select>
-																	</div>
-																</div>
+						
+																<!-- /form-->
 															</div>
 															<input type="button" name="previous"
 																class="previous action-button-previous" value="Previous" />

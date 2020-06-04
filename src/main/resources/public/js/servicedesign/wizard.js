@@ -26,9 +26,10 @@ var _ctx = $("meta[name='ctx']").attr("content");
 $(document).ready(function() {
 	
 	showWizard();	
-	 // Carica le combo gsbpm
+	 // Carica le combo
 	loadParentGsbpmProcess();
 	loadBusinessServices();
+	loadAppServices();
 	$("#preparing-select-js-parent").change(function() {
 		var sel_process = $("#select-gsbpm-1 :selected").val();
 		loadSubGsbpmProcess();
@@ -183,7 +184,7 @@ function loadBusinessServices() {
 				type : "GET",
 				dataType : "JSON",
 				success : function(data) {
-					var content = "<div class='form-group' id='select-bservice-divv'>"
+					var content = "<div class='form-group' id='select-bservice-div'>"
 							+ "<label class='control-label'>Associa Business Service</label> "
 							+ "<select name='bsid' id='select-bserv' title='Business service' class='form-control'>";
 
@@ -202,6 +203,39 @@ function loadBusinessServices() {
 
 					content += "</select><span class='help-block'></span></div>";
 					$("#select-bservice-div").html(content);					
+
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alert('Error loading data');
+				}
+			});
+}
+function loadAppServices() {	
+	$
+			.ajax({
+				url : _ctx + "/loadapplicationservices",
+				type : "GET",
+				dataType : "JSON",
+				success : function(data) {
+					var content = "<div class='form-group' id='select-appservice-div'>"
+							+ "<label class='control-label'>Associa Application Service</label> "
+							+ "<select name='appid' id='select-appserv' title='Application service' class='form-control'>";
+
+					"<div class='col-lg-4'><label class='control-label'>"
+							+ "<span id='bserv'>Application Service:</span></label></div><div class='col-lg-8'>"
+							+ "<select id='sel_appserv' name='appserv' class='form-control'>";
+
+					$(jQuery.parseJSON(JSON.stringify(data))).each(
+							function() {
+
+								var id = this.id;
+								var name = this.name;
+								content += "<option value='" + id + "'>" + name
+										+ "</option>";
+							});
+
+					content += "</select><span class='help-block'></span></div>";
+					$("#select-appservice-div").html(content);					
 
 				},
 				error : function(jqXHR, textStatus, errorThrown) {

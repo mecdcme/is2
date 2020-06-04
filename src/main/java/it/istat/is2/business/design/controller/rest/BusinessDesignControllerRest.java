@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import it.istat.is2.business.design.dto.ApplicationServiceDto;
 import it.istat.is2.business.design.dto.BusinessServiceDto;
 import it.istat.is2.business.design.dto.GsbpmProcessDto;
 import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
 import it.istat.is2.workflow.domain.GsbpmProcess;
+import it.istat.is2.workflow.service.AppServiceService;
 import it.istat.is2.workflow.service.BusinessServiceService;
 import it.istat.is2.workflow.service.GsbpmProcessService;
 
@@ -33,6 +34,8 @@ public class BusinessDesignControllerRest {
     private GsbpmProcessService gsbpmProcessService;
 	@Autowired
     private BusinessServiceService businessServiceService;
+	@Autowired
+	private AppServiceService appServiceService;
 	
 	@RequestMapping(value = "/loadGsbpmSubProcess/{idprocess}", method = RequestMethod.GET)
     public List<GsbpmProcessDto> loadGsbpmSubProcess(HttpServletRequest request, Model model,
@@ -118,6 +121,28 @@ public class BusinessDesignControllerRest {
 		
 		redirectAttributes.addAttribute("param", 2);
 		return businessDtoList;  
+	}
+	@RequestMapping(value = "/loadapplicationservices", method = RequestMethod.GET)	
+	public ArrayList<ApplicationServiceDto> loadApplicationServices(RedirectAttributes redirectAttributes, HttpSession session, Model model) {
+		
+		List<AppService> listaAppService = appServiceService.findAllAppService();
+		AppService appservice = new AppService();
+		ApplicationServiceDto applicationServiceDto;
+		ArrayList<ApplicationServiceDto> applicationDtoList = new ArrayList<ApplicationServiceDto>();
+		
+		Iterator<AppService> iterator = listaAppService.iterator();
+		while(iterator.hasNext()) {
+			appservice = iterator.next();
+			applicationServiceDto = new ApplicationServiceDto();
+			applicationServiceDto.setId(appservice.getId().toString());
+			applicationServiceDto.setName(appservice.getName());
+			applicationServiceDto.setDescr(appservice.getDescr());
+			applicationDtoList.add(applicationServiceDto);
+		}		
+
+		
+		redirectAttributes.addAttribute("param", 3);
+		return applicationDtoList;  
 	}
 
 }
