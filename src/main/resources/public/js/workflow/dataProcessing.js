@@ -25,7 +25,7 @@ var _ctx = $("meta[name='ctx']").attr("content");
 var toggle = true;
 var associazioneVarRoleBean = [];
 var tmpVarSel = {};
-var checkedPrefix = true;
+var checkedPrefix = false;
 var tabTemplate = "<li><a href='#{href}'><span class='prefix' style='#{prefixStyle}'>#{prefixTab}</span>#{label} @ <span title='#{roleName}'>#{roleCode}</span></a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
 
 $(document).ready(function () {
@@ -132,7 +132,7 @@ $(document).ready(function () {
         tabs.tabs("refresh");
     });
 
-   checkedPrefix = $(this).prop('checked');
+   checkedPrefix =  $('#check-prefix-dataset').prop('checked');
    $(".prefix").toggle(checkedPrefix); 
     
 });
