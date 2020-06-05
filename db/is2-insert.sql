@@ -160,6 +160,13 @@ INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `PARENT`, `O
 INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER_CODE`) VALUES ('5', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS', '3');
 INSERT INTO `is2_business_process` (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER_CODE`, `PARENT`) VALUES ('6', 'Probabilistic Record Linkage MultiStep', 'Probabilistic Record Linkage MultiStep', 'PRL-MS1', '4', '5');
 
+-- add PRL BLOCKING 
+INSERT INTO  is2.is2_business_process  (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER_CODE`, `PARENT`) VALUES (7, 'Probabilistic Record Linkage Blocking', 'Probabilistic Record Linkage Blocking', 'PRLB', 1, NULL);
+INSERT INTO  is2.is2_business_process  (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER_CODE`, `PARENT`) VALUES (73, 'Contingency Table Blocking', 'Calculate contingency table Blocking', 'CrossTableBlocking', 1, 7);
+INSERT INTO  is2.is2_business_process  (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER_CODE`, `PARENT`) VALUES (74, 'Fellegi Sunter', 'Fellegi Sunter algorithm', 'FellegiSunter', 2, 7);
+INSERT INTO  is2.is2_business_process  (`ID`, `NAME`, `DESCR`, `LABEL`, `ORDER_CODE`, `PARENT`) VALUES (75, 'Matching Table Blocking', 'Matching records Blocking', 'MatchingTableBlocking', 3, 7);
+--
+
 
 -- 
 -- CATALOGUE OF BUSINESS SERVICES
@@ -180,6 +187,12 @@ INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`,`LABEL`,`BUSINESS_SERVICE_
 		(72,'MATCHING_TABLE','Create result matching table','MATCHING_TABLE',200);
 
 
+    
+-- add PRL BLOCKING
+INSERT INTO is2.is2_process_step (`ID`, `NAME`,`LABEL`, `DESCR`,`BUSINESS_SERVICE_ID`)  VALUES (73, 'Contingency Table Blocking', 'CONTINGENCY_TABLE_BLOCKING','Calculate contingency table Blocking', 200);
+INSERT INTO is2.is2_process_step (`ID`, `NAME`,`LABEL`, `DESCR`,`BUSINESS_SERVICE_ID`)  VALUES (75, 'Matching Table Blocking','MATCHING_TABLE_BLOCKING', 'Matching records Blocking', 200);
+
+
 -- 
 -- MANY TO MANY RELATION -> BUSINESS_FUNCTION - BUSINESS_PROCESS
 -- 
@@ -188,11 +201,23 @@ INSERT INTO `is2_link_function_process` (`BUSINESS_FUNCTION_ID`, `BUSINESS_PROCE
 -- add multi-step process
 INSERT INTO `is2_link_function_process` (`BUSINESS_FUNCTION_ID`, `BUSINESS_PROCESS_ID`) VALUES (1,5);
 
+    
+-- add PRL BLOCKING
+INSERT INTO `is2_link_function_process` (`BUSINESS_FUNCTION_ID`, `BUSINESS_PROCESS_ID`) VALUES (1,7);
+
+
 -- 
 -- MANY TO MANY RELATION -> BUSINESS_PROCESS - PROCESS_STEP
 -- 
 INSERT INTO `is2_link_process_step` (`BUSINESS_PROCESS_ID`, `PROCESS_STEP_ID`) 
 	VALUES (4,4),(6,70),(6,71),(6,72),(70,70),(71,71),(72,72);
+
+-- add PRL BLOCKING
+INSERT INTO is2.is2_link_process_step VALUES (73, 73);
+INSERT INTO is2.is2_link_process_step VALUES (74, 71);
+INSERT INTO is2.is2_link_process_step VALUES (75, 75);
+
+
 
 -- 
 -- MANY TO MANY RELATION -> BUSINESS_FUNCTION - VIEW_DATA_TYPE
@@ -224,6 +249,10 @@ INSERT INTO `is2_step_instance` (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_
 		(13,'resultTables','This function calculates the Matching Table','MATCHING_TABLE',250),
 		(14,'is2_validate_confront','This function runs the confront algoritm implemented by Van Der Loo','Confront',300);
 
+-- add PRL BLOCKING 
+INSERT INTO is2.is2_step_instance (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (15, 'contingencyTableBlocking', 'This function calculates the contingency Table with Blocking variable', 'ContingencyTableBlocking', 250);
+INSERT INTO is2.is2_step_instance (`ID`, `METHOD`, `DESCR`, `LABEL`, `APP_SERVICE_ID`) VALUES (16, 'resultTablesBlocking', 'This function calculates the Matching Table with Blocking variable', 'MatchingTableBlocking', 250);
+
 -- 
 -- PARAMETER
 -- 
@@ -232,6 +261,9 @@ INSERT INTO `is2_parameter` (`ID`, `NAME`, `DESCR`, `DEFAULT_VAL`, `JSON_TEMPLAT
 		('1', 'MATCHING VARIABLES', 'MATCHING VARIABLES', NULL, '{ "data": [], "schema": { "items": { "properties": { "MatchingVariable": { "maxLength": 50, "required": true, "title": "MatchingVariable", "type": "string" }, "MatchingVariableA": { "maxLength": 50, "required": true, "title": "MatchingVariableA", "type": "string" }, "MatchingVariableB": { "maxLength": 50, "required": true, "title": "MatchingVariableB", "type": "string" }, "Method": { "enum": [ "Equality", "Jaro", "Dice", "JaroWinkler", "Levenshtein", "3Grams", "Soundex", "NumericComparison", "NumericEuclideanDistance", "WindowEquality", "Inclusion3Grams" ], "required": true, "title": "Method" }, "Threshold": { "title": "Threshold", "type": "number", "default": 1 }, "Window": { "title": "Window", "type": "integer", "default": 1 } }, "type": "object" }, "type": "array" }, "options": { "type": "table", "showActionsColumn": false, "hideAddItemsBtn": true, "items": { "fields": { "Method": { "type": "select", "noneLabel": "", "removeDefaultNone": false }, "MatchingVariableA": { "type": "select", "noneLabel": "", "dataSource": "matchedVariables" }, "MatchingVariableB": { "type": "select", "noneLabel": "", "dataSource": "matchedVariables" } } }, "form": { "buttons": { "addRow": "addRow", "removeRow": "removeRow" } }, "view": { "templates": { "container-array-toolbar": "#addItemsBtn" } } }}'),
         ('2', 'THRESHOLD MATCHING', 'THRESHOLD MATCHING', 1, '{"data":[],"schema":{"name":"THRESHOLD MATCHING","type":"number", "minimum": 0.01,"maximum": 1}}'),
         ('3', 'THRESHOLD UNMATCHING', 'THRESHOLD UNMATCHING', 1, '{"data":[],"schema":{"name":"THRESHOLD UNMATCHING","type":"number", "minimum": 0.01,"maximum": 1}}');
+
+INSERT INTO is2.is2_parameter (`ID`, `NAME`, `DESCR`, `DEFAULT_VAL`, `JSON_TEMPLATE`)
+ VALUES (5, 'BLOCKING VARIABLES', 'BLOCKING VARIABLES', NULL, '{"data":[],"schema":{"type":"object", "properties": { "BLOCKING_A": { "type":"array", "title":"BLOCKING A","items": {"type": "string"} }, "BLOCKING_B": { "type":"array", "title":"BLOCKING B" ,"items": {"type": "string"}} }}, "options": {"fields":{"BLOCKING_A":{"type":"array",    "toolbarSticky": true,"items":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}},"BLOCKING_B":{"type":"array",   "toolbarSticky": true, "items":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}}}}}');
 
 -- 
 -- ROLE
@@ -243,7 +275,7 @@ INSERT INTO `is2_app_role` (`ID`, `NAME`, `CODE`, `DESCR`, `ORDER_CODE`, `CLS_DA
 		(3,'MATCHING B','X2','MATCHING VARIABLE IN DATASET B',3,1,NULL),
         (4,'CONTENGENCY TABLE','CT','CONTENGENCY TABLE',4,1,NULL),
         (5,'FELLEGI-SUNTER','FS','FELLEGI-SUNTER',2,1,NULL),
-		(6,'BLOCKING','B','SLICING DEL DATASET',7,1,NULL),
+		(6,'BLOCKING','B','SLICING DEL DATASET',7,2,5),
 		(7,'MATCHING TABLE','MT','MATCHING TABLE',10,1,NULL),
 		(8,'THRESHOLD MATCHING','TH','THRESHOLD MATCHING',9,2,2),
 		(9,'THRESHOLD UNMATCHING','TU','THRESHOLD UNMATCHING',10,2,3),
@@ -253,7 +285,8 @@ INSERT INTO `is2_app_role` (`ID`, `NAME`, `CODE`, `DESCR`, `ORDER_CODE`, `CLS_DA
 		(13,'RESIDUAL A','RA','RESIDUAL DATASET  A',6,1,NULL),
 		(14,'RESIDUAL B','RB','RESIDUAL DATASET  B',5,1,NULL),
 		(15,'DATA','MD','DATA',1,1,NULL),
-		(16,'RULESET','RS','RULESET',2,4,NULL);
+		(16,'RULESET','RS','RULESET',2,4,NULL),
+        (17,  'MARGINAL PROBABILITIES','MP', 'MARGINAL PROBABILITIES', 17, 1, NULL);
 
 -- 
 -- STEP INSTANCE SIGNATURE
@@ -278,11 +311,35 @@ INSERT INTO `is2_step_instance_signature` (`ID`, `STEP_INSTANCE_ID`, `APP_ROLE_I
         (179,14,16,1,1);
 
 
+
+
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (180, 1, 1, 15, 1);
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (181, 1, 2, 15, 1);
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (182, 1, 3, 15, 1);
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (183, 0, 7, 15, 2);
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (184, NULL, 11, 15, 2);
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (192, 1, 6, 15, 1);
+
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (185, 1, 2, 16, 1);
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (186, 1, 3, 16, 1);
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (187, 1, 5, 16, 1);
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (188, 0, 4, 16, 1);
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (189, NULL, 7, 16, 2);
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (190, 1, 8, 16, 1);
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (191, 1, 9, 16, 1);
+INSERT INTO is2.is2_step_instance_signature (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID)  VALUES (193, 1, 6, 16, 1);
+
+
+INSERT INTO is2.is2_step_instance_signature  (ID, REQUIRED, APP_ROLE_ID,STEP_INSTANCE_ID, CLS_TYPE_IO_ID) VALUES (194, NULL, 17, 12, 2);
+
 -- 
 --  MANY TO MANY RELATION -> PROCESS_STEP - PROCESS_STEP_INSTANCE
 -- 
 INSERT INTO `is2_link_step_instance` (`PROCESS_STEP_INSTANCE_ID`, `PROCESS_STEP_ID`) 
 	VALUES (11,70), (12,71), (13,72), (14,4);
+
+INSERT INTO is2.is2_link_step_instance VALUES (73, 15);
+INSERT INTO is2.is2_link_step_instance VALUES (75, 16);
 
 -- 
 --  MANY TO MANY RELATION -> BUSINESS_SERVICE - APP_ROLE
@@ -290,6 +347,8 @@ INSERT INTO `is2_link_step_instance` (`PROCESS_STEP_INSTANCE_ID`, `PROCESS_STEP_
 INSERT INTO `is2_link_business_service_app_role` (`BUSINESS_SERVICE_ID`, `APP_ROLE_ID`) 
 	VALUES (200,1), (200,2), (200,3), (200,4), (200,5), (200,6), (200,7), (200,8), (200,9), (200,10), (200,11), (200,12), (200,13), (200,14), (300,15), (300,16);
 
+
+INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 17);
 -- 
 -- 
 -- SECTION AUXILIARY

@@ -179,7 +179,7 @@ fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 	var_est <- data.frame(rep(nomimatvar, rep(2,length(nomimatvar))),rep(c("1","0"),length(nomimatvar)),mvar,uvar,rep(p,2*length(nomimatvar)),stringsAsFactors=FALSE)
 	names(var_est)=c("variable","comparison","m","u","p")
 	
-print(var_est)	
+
  roles <- list (FS=names(r_out),MP=names(var_est))
  rolesgroup <- list (FS= c("FS"), MP= c("MP"))
  
