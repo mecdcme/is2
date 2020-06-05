@@ -148,6 +148,8 @@ public class EngineRServe extends EngineR implements EngineService {
 																												// frame
 		}
 	}
+	
+	
 
 	public void bindInputColumnsParams(LinkedHashMap<String, ArrayList<String>> workset, String varR)
 			throws REngineException {
@@ -170,28 +172,76 @@ public class EngineRServe extends EngineR implements EngineService {
 			connection.eval(varR + " <- list(" + listaCampi + ")");
 		}
 	}
+	
+	//new parameter setter
+    public void bindInputParams(LinkedHashMap<String, ArrayList<String>> workset, String varR)
+            throws REngineException {
 
-	@Override
-	public void doAction() throws RserveException {
+        if (!workset.isEmpty()) {
+            List<String> keys = new ArrayList<>(workset.keySet());
+            String listaCampi = "";
+            int size = keys.size();
+            String key;
 
-		String fname = stepInstance.getMethod();
-		// mlest <- ml.est (workset, y=Y,";
-		// Aggiunto il workset e params nella lista degli argomenti della funzione (by
-		// paolinux)
-		command = RESULTSET + "  <- " + fname + "( " + WORKSET_IN + "," + ROLES_IN + ",";
-		if (!parametersMap.isEmpty()) {
-			command += PARAMETERS_IN + ",";
-		}
-		if (!rulesetMap.isEmpty()) {
-			command += RULESET + ",";
-		}
+            for (int i = 0; i < size; i++) {
+                key = keys.get(i);
+                String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
+                listaCampi += key + ",";
+                connection.assign(key, arrX);
+            }
+            
+            listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
+            
+            //connection.eval(varR + " <- list(" + listaCampi + ")");
+            connection.eval("set_param(" +varR + "," + listaCampi + ")");
+        }
+    }
+	
 
-		command = command.substring(0, command.length() - 1);
-		command += ")";
-		Logger.getRootLogger().debug("Eseguo " + command);
+	//@Override
+    public void doActionOld() throws RserveException {
 
-		connection.eval(command);
-	}
+        String fname = stepInstance.getMethod();
+        // mlest <- ml.est (workset, y=Y,";
+        // Aggiunto il workset e params nella lista degli argomenti della funzione (by
+        // paolinux)
+        command = RESULTSET + "  <- " + fname + "( " + WORKSET_IN + "," + ROLES_IN + ",";
+        if (!parametersMap.isEmpty()) {
+            command += PARAMETERS_IN + ",";
+        }
+        if (!rulesetMap.isEmpty()) {
+            command += RULESET + ",";
+        }
+        
+        command = command.substring(0, command.length() - 1);
+        command += ")";
+        Logger.getRootLogger().debug("Eseguo " + command);
+        
+        connection.eval(command);
+    }
+    
+    @Override
+    public void doAction() throws RserveException {
+
+        String fname = stepInstance.getMethod();
+        // mlest <- ml.est (workset, y=Y,";
+        // Aggiunto il workset e params nella lista degli argomenti della funzione (by
+        // paolinux)
+        command = OUT + "  <- is2.exec( " + WORKSET + "," + ROLES + ",";
+        if (!parametersMap.isEmpty()) {
+            command += PARAMETERS + ",";
+        }
+        command += fname + ",";
+        if (!rulesetMap.isEmpty()) {
+            command += RULESET + ",";
+        }
+        
+        command = command.substring(0, command.length() - 1);
+        command += ")";
+        Logger.getRootLogger().debug("Eseguo " + command);
+        
+        connection.eval(command);
+    }
 
 	// Assegna il ruolo selemix alle variabili del workset
 	public void setRoles(Map<String, ArrayList<String>> ruoliVariabileNome) throws RserveException {
@@ -206,6 +256,20 @@ public class EngineRServe extends EngineR implements EngineService {
 		connection.eval(ROLES_IN + " <-list(" + rolesList.substring(0, rolesList.length() - 1) + ")");
 	}
 
+	//adding new role setting by paolinux
+	public void setRole(Map<String, ArrayList<String>> ruoliVariabileNome) throws RserveException {
+        //StringBuilder rolesList = new StringBuilder();
+        Logger.getRootLogger().debug("Eseguo SetRuoli>");
+        for (Map.Entry<String, ArrayList<String>> entry : ruoliVariabileNome.entrySet()) {
+            String roleCode = entry.getKey();
+            ArrayList<String> nomeVariabiliList = entry.getValue();
+            //rolesList.append("'" + roleCode + "' = ").append(Utility.combineList2String4R(nomeVariabiliList)).append(",");
+            connection.eval("set_role(" +roleCode + "," + Utility.combineList2String4R(nomeVariabiliList) + ")");
+        }
+            //connection.eval(ROLES_IN + " <-list(" + rolesList.substring(0, rolesList.length() - 1) + ")");
+            
+    }
+	
 	public void getGenericOutput(Map<String, ArrayList<String>> genericHashMap, String varR, String tipoOutput)
 			throws RserveException, REXPMismatchException {
 		try {

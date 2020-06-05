@@ -31,7 +31,14 @@ import it.istat.is2.workflow.domain.StepInstance;
 @Service
 public interface EngineService {
 
-    //GENERIC INPUT
+    
+	//GENERIC BRIDGE 
+    public static final String WORKSET = "workset";
+    public static final String PARAMETERS = "ws_params";
+    public static final String ROLES = "roles";
+    public static final String OUT = "out";
+	
+	//GENERIC INPUT
     public static final String WORKSET_IN = "workset_in";
     public static final String PARAMETERS_IN = "params_in";
     public static final String ROLES_IN = "roles_in";
