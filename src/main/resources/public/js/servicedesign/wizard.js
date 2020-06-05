@@ -25,7 +25,7 @@ var _ctx = $("meta[name='ctx']").attr("content");
 
 $(document).ready(function() {
 	
-	showWizard();	
+	
 	 // Carica le combo
 	loadParentGsbpmProcess();
 	loadBusinessServices();
@@ -35,11 +35,21 @@ $(document).ready(function() {
 		loadSubGsbpmProcess();
 	});
 	
-	/*$(".next").click(function(){
-
-		current_fs = $(this).parent();
-		current_fs.show();
-	});*/
+	
+	$(".next").click(function(){
+		// selservice = 0: bservice, = 1: appservice, = 2: stepinstance, = 3: end 		
+		next_fs = $(this).parent().next();
+		var x = false;		
+		var ajaxError=false;		
+		$("#selservice").val($("fieldset").index(next_fs));		
+		// onclick
+		execute_switch($("#selservice").val());
+		
+	});
+	// onload	
+	
+	showWizard();
+	
 });
 
 function showWizard(){
@@ -48,31 +58,41 @@ function showWizard(){
 	var opacity;
 
 	$(".next").click(function(){
-
+		
 	current_fs = $(this).parent();
 	next_fs = $(this).parent().next();
 
-	//Add Class Active
-	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+	
 
-	//show the next fieldset
-	next_fs.show();
-	//hide the current fieldset with style
-	current_fs.animate({opacity: 0}, {
-	step: function(now) {
-	// for making fielset appear animation
-	opacity = 1 - now;
+	// check input errrors before proceed
+	var inputError = $("#inputerror").val();
+	if(inputError!="1"){
+		//alert(inputError);
+		//Add Class Active
+		$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+		//show the next fieldset
+		next_fs.show();
+		//hide the current fieldset with style
+		current_fs.animate({opacity: 0}, {
+		step: function(now) {
+		// for making fielset appear animation
+		opacity = 1 - now;
 
-	current_fs.css({
-	'display': 'none',
-	'position': 'relative'
+		current_fs.css({
+		'display': 'none',
+		'position': 'relative'
+		});
+		next_fs.css({'opacity': opacity});
+		},
+		duration: 600
+		});
+		
+		
+	}else{
+		//alert(inputError);
+	}
 	});
-	next_fs.css({'opacity': opacity});
-	},
-	duration: 600
-	});
-	});
-
+	
 	$(".previous").click(function(){
 
 	current_fs = $(this).parent();
@@ -243,21 +263,61 @@ function loadAppServices() {
 				}
 			});
 }
-function execute_switch(stepIndex){
-	switch (stepIndex) {
-		case 1:
+function validate_bs_and_send_req() {		
+	var bsname = $('#bs-name').val();
+	if (bsname.length < 1) {
+		$("#bs-name-error").text(_mandatory_name_field);
+		$("#inputerror").val(1);
+	} else {		
+		$("#inputerror").val(0);
+		//$("#bs-form").submit();
+	}
+}
+function validate_as_and_send_req() {	
+	var asname = $('#as-name').val();
+	if (asname.length < 1) {
+		$("#as-name-error").text(_mandatory_name_field);
+		$("#inputerror").val(1);
+	} else {
+		//$("#as-form").submit();
+		$("#inputerror").val(0);
+	}
+}
+function validate_si_and_send_req() {
+	var method = $('#si-method').val();
+	if (method.length < 1) {
+		$("#si-method-error").text(_mandatory_method_field);
+		$("#inputerror").val(1);		
+	} else {
+		//$("#si-form").submit();
+		$("#inputerror").val(0);
+	}
+}
+function execute_switch(stepIndex){	
+	switch (stepIndex*1) {
+	
+		case 0:
 			
-			alert("tab 1");
+			//alert("tab 1");
+		
+		break;
+		case 1:
+			//alert($("#selservice").val());
+			// velidate fields bservice
+			validate_bs_and_send_req();
+			//alert("tab 2");
 		
 		break;
 		case 2:
-			
-			alert("tab 2");
+			//alert($("#selservice").val());
+			validate_as_and_send_req();
+			//alert("tab 3");
 		
 		break;
 		case 3:
-			
-			alert("tab 3");
+			//alert($("#selservice").val());
+			validate_si_and_send_req();
+			//alert("tab 4");
 		
 		break;
 	}

@@ -31,7 +31,10 @@
 
 <link th:href="@{/css/businessdesign/wizard.css}" rel="stylesheet" />
 <script th:src="@{/js/servicedesign/wizard.js}"></script>
-
+<script th:inline="javascript">
+	var _mandatory_name_field = [[#{as.field.name.mandatory}]];
+	var _mandatory_method_field = [[#{si.field.method.mandatory}]];
+</script>
 
 </head>
 <body class="c-app">
@@ -87,6 +90,8 @@
 											<div class="row">
 												<div class="col-md-12 mx-0">
 													<form id="msform">
+														<input type="hidden" id="selservice" name="selected" value="0"/>
+														<input type="hidden" id="inputerror" name="inputerror" value="0"/>
 														<!-- progressbar -->
 														<ul id="progressbar">
 															<li class="active" id="account">Business Service</li>
@@ -95,7 +100,7 @@
 															<li id="confirm"><strong>Finish</strong></li>
 														</ul>
 														<!-- fieldsets -->
-														<fieldset>
+														<fieldset name="bservice">
 															<div class="form-card">
 																<h2 class="fs-title">Business Service</h2>
 																	<!-- form th:action="@{/newbservice}" id="bs-form"
@@ -147,7 +152,7 @@
 															<input type="button" name="next"
 																class="next action-button" value="Next Step" />
 														</fieldset>
-														<fieldset>
+														<fieldset name="appservice">
 															<div class="form-card">
 																<h2 class="fs-title">Application Service</h2>
 																<!-- form th:action="@{/newappservice}" id="as-form"
@@ -239,7 +244,7 @@
 															<input type="button" name="next"
 																class="next action-button" value="Next Step" />
 														</fieldset>
-														<fieldset>
+														<fieldset name="stepinstance">
 															<div class="form-card">
 																<h2 class="fs-title">Step Instance</h2>
 																
@@ -294,7 +299,7 @@
 															<input type="button" name="make_payment"
 																class="next action-button" value="Confirm" />
 														</fieldset>
-														<fieldset>
+														<fieldset name="success">
 															<div class="form-card">
 																<h2 class="fs-title text-center">Success !</h2>
 																<br>
