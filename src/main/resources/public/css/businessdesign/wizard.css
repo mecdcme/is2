@@ -1,6 +1,6 @@
 * {
     margin: 0;
-    padding: 0
+    /*padding: 0*/
 }
 
 html {
@@ -8,8 +8,8 @@ html {
 }
 
 #grad1 {
-    background-color: : #9C27B0;
-    background-image: linear-gradient(120deg, #FF4081, #81D4FA)
+    /*background-color: : #9C27B0;
+    background-image: linear-gradient(120deg, #FF4081, #81D4FA)*/
 }
 
 #msform {
@@ -49,7 +49,7 @@ html {
     text-align: left;
     color: #9E9E9E
 }
-
+/*
 #msform input,
 #msform textarea {
     padding: 0px 8px 4px 8px;
@@ -76,7 +76,7 @@ html {
     border-bottom: 2px solid skyblue;
     outline-width: 0
 }
-
+*/
 #msform .action-button {
     width: 100px;
     background: skyblue;
@@ -155,7 +155,7 @@ select.list-dt:focus {
     float: left;
     position: relative
 }
-
+/*
 #progressbar #account:before {
     font-family: FontAwesome;
     content: "\f023"
@@ -175,7 +175,26 @@ select.list-dt:focus {
     font-family: FontAwesome;
     content: "\f00c"
 }
+*/
+#progressbar #bservice:before {
+    font-family: FontAwesome;
+    content: "\f0e7"
+}
 
+#progressbar #appservice:before {
+    font-family: FontAwesome;
+    content: "\f013"
+}
+
+#progressbar #stepinstance:before {
+    font-family: FontAwesome;
+    content: "\f085"
+}
+
+#progressbar #confirm:before {
+    font-family: FontAwesome;
+    content: "\f00c"
+}
 #progressbar li:before {
     width: 50px;
     height: 50px;
