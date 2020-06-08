@@ -320,8 +320,7 @@ function validate_si_and_send_req() {
 		$("#inputerror").val(1);
 	} else {
 		$("#msform").submit();
-		$("#inputerror").val(0);
-		// saveAllData();
+		$("#inputerror").val(0);	
 	}
 }
 function execute_switch(stepIndex) {
