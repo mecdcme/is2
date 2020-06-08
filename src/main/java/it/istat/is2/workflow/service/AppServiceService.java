@@ -45,8 +45,9 @@ public class AppServiceService {
 		return (AppService) appServiceDao.findById(idappservice).orElse(null);
 	}
 
-	public void save(AppService appservice) {
-		appServiceDao.save(appservice);
+	public AppService save(AppService appservice) {
+		AppService as = appServiceDao.save(appservice);
+		return as;
 	}
 
 	public void deleteAppService(Long idappservice) {

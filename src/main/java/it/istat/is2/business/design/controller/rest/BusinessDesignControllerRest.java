@@ -11,22 +11,29 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import it.istat.is2.app.bean.NotificationMessage;
+import it.istat.is2.app.forms.UserCreateForm;
 import it.istat.is2.business.design.dto.ApplicationServiceDto;
 import it.istat.is2.business.design.dto.BusinessServiceDto;
 import it.istat.is2.business.design.dto.GsbpmProcessDto;
+import it.istat.is2.business.design.form.ServicesDesignForm;
 import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
 import it.istat.is2.workflow.domain.GsbpmProcess;
+import it.istat.is2.workflow.domain.StepInstance;
 import it.istat.is2.workflow.service.AppServiceService;
 import it.istat.is2.workflow.service.BusinessServiceService;
 import it.istat.is2.workflow.service.GsbpmProcessService;
+import it.istat.is2.workflow.service.StepInstanceService;
 
 @RestController
 public class BusinessDesignControllerRest {
@@ -36,6 +43,8 @@ public class BusinessDesignControllerRest {
     private BusinessServiceService businessServiceService;
 	@Autowired
 	private AppServiceService appServiceService;
+	@Autowired
+	private StepInstanceService stepInstanceService;
 	
 	@RequestMapping(value = "/loadGsbpmSubProcess/{idprocess}", method = RequestMethod.GET)
     public List<GsbpmProcessDto> loadGsbpmSubProcess(HttpServletRequest request, Model model,
@@ -144,5 +153,65 @@ public class BusinessDesignControllerRest {
 		redirectAttributes.addAttribute("param", 3);
 		return applicationDtoList;  
 	}
+	@PostMapping(value = "/saveallservices")	
+	public String saveAllServices(RedirectAttributes redirectAttributes, HttpSession session, Model model, @ModelAttribute("servicesDesignForm") ServicesDesignForm form) {
+		
+
+		BusinessService businessService = new BusinessService();
+		AppService appService = new AppService();
+		StepInstance stepInstance = new StepInstance();
+		
+		businessService.setName(form.getNameb());
+		businessService.setDescr(form.getDecriptionb());
+		
+		GsbpmProcess gsbpmProcess = new GsbpmProcess();
+		gsbpmProcess = gsbpmProcessService.findById(form.getGsbpmid());
+		businessService.setGsbpmProcess(gsbpmProcess);
+		
+		String rtnMessage = "success";
+		BusinessService bs = null;
+		AppService as = null;
+		try {
+			bs = businessServiceService.save(businessService);
+		}catch(Exception e) {
+			rtnMessage = e + "Impossibile inserire il Business Service.";
+		}
+		
+		appService.setName(form.getNamea());
+		appService.setDescr(form.getDecriptiona());
+		appService.setLanguage(form.getLanguage());
+		appService.setEngineType(form.getEngine());
+		appService.setSource(form.getSoucepath());
+		appService.setSourceCode(form.getSourcecode());
+		appService.setAuthor(form.getAuthor());
+		appService.setLicence(form.getLicence());
+		appService.setContact(form.getContact());
+
+		Long idbs = form.getIdbservice();
+		//BusinessService bs = businessServiceService.findBusinessServiceById(idbs);
+		appService.setBusinessService(bs);
+		
+		stepInstance.setMethod(form.getMethod());
+		stepInstance.setDescr(form.getDescriptions());
+		stepInstance.setLabel(form.getLabel());
+
+		try {
+			as = appServiceService.save(appService);
+		}catch(Exception e) {
+			rtnMessage = e + "Impossibile inserire l'Application Service.";
+		}
+		//AppService apps = appServiceService.findAppServiceById(form.getAppserviceid());
+		stepInstance.setAppService(as);
+
+		try {			
+			stepInstanceService.save(stepInstance);
+			
+		} catch (Exception e) {
+			rtnMessage = e + "Impossibile inserire la Step Instance.";
+		}		
+		return rtnMessage;
+		
+	}
+
 
 }

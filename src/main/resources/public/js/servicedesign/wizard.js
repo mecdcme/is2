@@ -138,7 +138,7 @@ function loadParentGsbpmProcess() {
 				success : function(data) {
 					var content = "<div class='form-group' id='select-gsbpm-1-div'>"
 							+ "<label class='control-label'>Processo gsbpm</label> "
-							+ "<select name='gsbpmid' id='select-gsbpm-1' title='Processo gsbpm' class='form-control'>";
+							+ "<select name='gsbpmidparent' id='select-gsbpm-1' title='Processo gsbpm' class='form-control'>";
 
 					"<div class='col-lg-4'><label class='control-label'>"
 							+ "<span id='step'>Business Steps:</span></label></div><div class='col-lg-8'>"
@@ -263,6 +263,28 @@ function loadAppServices() {
 				}
 			});
 }
+function saveAllData(){
+	$("#msform").submit(function(e) {
+
+	    e.preventDefault(); // avoid to execute the actual submit of the form.
+
+	    var form = $(this);
+	    var url = form.attr('action');
+
+	    $.ajax({
+	           type: "POST",
+	           url: url,
+	           data: form.serialize(), // serializes the form's elements.
+	           success: function(data)
+	           {
+	               alert(data); // show response from the php script.
+	           }
+	         });
+
+
+	});
+}
+
 function validate_bs_and_send_req() {		
 	var bsname = $('#bs-name').val();
 	if (bsname.length < 1) {
@@ -289,8 +311,9 @@ function validate_si_and_send_req() {
 		$("#si-method-error").text(_mandatory_method_field);
 		$("#inputerror").val(1);		
 	} else {
-		//$("#si-form").submit();
+		$("#msform").submit();
 		$("#inputerror").val(0);
+		//saveAllData();
 	}
 }
 function execute_switch(stepIndex){	
@@ -316,8 +339,7 @@ function execute_switch(stepIndex){
 		break;
 		case 3:
 			//alert($("#selservice").val());
-			validate_si_and_send_req();
-			//alert("tab 4");
+			validate_si_and_send_req();			
 		
 		break;
 	}

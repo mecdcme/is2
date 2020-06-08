@@ -90,7 +90,7 @@
 											<p>Fill all form field to go to next step</p>
 											<div class="row">
 												<div class="col-md-12 mx-0">
-													<form id="msform">
+													<form th:action="@{/saveallservices}" id="msform" method="post">
 														<input type="hidden" id="selservice" name="selected"
 															value="0" /> <input type="hidden" id="inputerror"
 															name="inputerror" value="0" />
@@ -111,7 +111,7 @@
 																	<label class="control-label"
 																		th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
 
-																	<input name="name" id="bs-name"
+																	<input name="nameb" id="bs-name"
 																		th:title="#{generic.label.name}" class="form-control"
 																		type="text" th:placeholder="#{generic.label.name}" />
 																	<span class="help-block"> <small
@@ -121,7 +121,7 @@
 																<div class="form-group">
 																	<label class="control-label"
 																		th:text="#{nuova.sessione.descr}"> <span>Descrizione</span>
-																	</label> <input name="description"
+																	</label> <input name="descriptionb"
 																		th:placeholder="#{generic.label.description}"
 																		th:title="#{generic.label.description}"
 																		class="form-control" type="text" /> <span
@@ -170,7 +170,7 @@
 																<div class="form-group">
 																	<label class="control-label"
 																		th:text="#{generic.label.name}+'*'"><span>Nome</span></label>
-																	<input name="name" id="as-name"
+																	<input name="namea" id="as-name"
 																		th:placeholder="#{generic.label.name}"
 																		th:title="#{generic.label.name}" class="form-control"
 																		type="text" /> <span class="help-block"> <small
@@ -180,7 +180,7 @@
 																<div class="form-group">
 																	<label class="control-label"
 																		th:text="#{nuova.sessione.descr}"> <span>Descrizione</span>
-																	</label> <input name="description"
+																	</label> <input name="descriptiona"
 																		th:placeholder="#{generic.label.description}"
 																		th:title="#{generic.label.description}"
 																		class="form-control" type="text" /> <span
@@ -292,7 +292,7 @@
 																<div class="form-group">
 																	<label class="control-label"
 																		th:text="#{generic.label.description}"> <span>Descrizione</span>
-																	</label> <input name="description"
+																	</label> <input name="descriptions"
 																		th:placeholder="#{generic.label.description}"
 																		th:title="#{generic.label.description}"
 																		class="form-control" type="text" /> <span
@@ -360,6 +360,7 @@
 
 						</div>
 					</div>
+				</div>
 			</main>
 
 

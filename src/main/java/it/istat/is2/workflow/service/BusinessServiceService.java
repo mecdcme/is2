@@ -60,8 +60,9 @@ public class BusinessServiceService {
     public BusinessService findBusinessServiceById(Long l) {
         return businessServiceDao.findById(l).orElse(null);
     }
-    public void save(BusinessService businessService) {
-        businessServiceDao.save(businessService);
+    public BusinessService save(BusinessService businessService) {
+    	BusinessService bs = businessServiceDao.save(businessService);
+        return bs;
     } 
 
     public List<BusinessService> findBusinessServiceByIdGsbpm(Long idGsbpm) {
