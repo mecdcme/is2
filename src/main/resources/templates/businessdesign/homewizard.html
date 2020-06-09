@@ -103,7 +103,24 @@
 														<!-- fieldsets -->
 														<fieldset name="bservice">
 															<div class="form-card">
-																<h2 class="fs-title">Business Service</h2>
+																<div class="row">
+																	<div class="col-lg-6">
+																		<h2 class="fs-title">Business Service</h2>
+																	</div>
+																		<label class="col-lg-2" for="functionList" th:text="#{bs.business.service.label}">B.S. list:</label>
+																		<div class="form-group">
+																			<div id="select-bservice-div">
+																				<label class="control-label"
+																					th:text="#{bs.business.service.select.label}"><span>Select
+																						Business Service</span> </label> <select name="idbservice"
+																					th:title="#{bs.business.service.select.label}"
+																					class="form-control">
+																					<option th:each="bService : ${listaBService}"
+																						th:value="${bService.id}" th:text="${bService.name}" />
+																				</select><span class="help-block"></span>
+																			</div>
+																		</div>
+																</div>
 																<!-- form th:action="@{/newbservice}" id="bs-form"
 																	class="form-horizontal" method="post"-->
 																<div class="form-group">
