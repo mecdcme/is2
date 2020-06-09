@@ -84,10 +84,9 @@
 										class="col-11 col-sm-9 col-md-7 col-lg-9 text-center p-0 mt-3 mb-2">
 										<div class="card px-0 pt-5 pb-0 mt-3 mb-3">
 											<h2>
-												<strong>Procedura guidata per la creazione di nuovi
-													servizi</strong>
+												<strong><span th:text="#{service.wizard.title}">Wizard to create new services</span></strong>
 											</h2>
-											<p>Fill all form field to go to next step</p>
+											<p th:text="#{service.fill.form.message}">Fill mandatory fields to go to next step</p>
 											<div class="row">
 												<div class="col-md-12 mx-0">
 													<form th:action="@{/saveallservices}" id="msform" method="post">
