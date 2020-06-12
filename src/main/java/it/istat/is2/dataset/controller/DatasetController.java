@@ -33,6 +33,9 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -59,11 +62,17 @@ import it.istat.is2.workflow.domain.DataTypeCls;
 import it.istat.is2.workflow.service.DataTypeService;
 import it.istat.is2.worksession.domain.WorkSession;
 import it.istat.is2.worksession.service.WorkSessionService;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Controller
+
 public class DatasetController {
 
+	  private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	
 	@Autowired
 	private DatasetService datasetService;
 	@Autowired
@@ -221,6 +230,7 @@ public class DatasetController {
 			sessionBean.getFile().add(form.getDescrizione());
 			session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			notificationService.addErrorMessage("Errore nel salvataggio del file.");
 			return "redirect:/sessione/mostradataset/" + idsessione;
 		}
