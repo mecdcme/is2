@@ -33,8 +33,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import org.hibernate.Session;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -111,6 +113,9 @@ public class WorkflowService {
 	private SqlGenericDao sqlGenericDao;
 	@Autowired
 	private WorkFlowBatchDao workFlowBatchDao;
+	
+	@Autowired
+	protected EntityManager em;
 
 	@Autowired
 	EngineFactory engineFactory;
@@ -214,8 +219,11 @@ public class WorkflowService {
 		List<StepRuntime> varList = dataProcessing.getStepRuntimes();
 		Workset workset = null;
 
+		Session session = em.unwrap(Session.class);
+
+		
 		for (int i = 0; i < form.getDataProcessing().length; i++) {
-			StepRuntime stepRuntime = new StepRuntime();
+			final StepRuntime stepRuntime = new StepRuntime();
 			stepRuntime.setDataProcessing(dataProcessing);
 			String idr = form.getRole()[i];
 			String nomeVar = form.getValue()[i];
@@ -250,6 +258,8 @@ public class WorkflowService {
 			stepRuntime.setWorkset(workset);
 
 			stepRuntimeDao.save(stepRuntime);
+			session.flush();
+			session.clear();
 		}
 	}
 

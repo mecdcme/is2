@@ -1588,7 +1588,7 @@ INSERT INTO is2.is2_app_role VALUES (2, 'X1', 'MATCHING A', 'MATCHING VARIABLE I
 INSERT INTO is2.is2_app_role VALUES (3, 'X2', 'MATCHING B', 'MATCHING VARIABLE IN DATASET B', 3, 1, NULL);
 INSERT INTO is2.is2_app_role VALUES (4, 'CT', 'CONTENGENCY TABLE', 'CONTENGENCY TABLE', 4, 1, NULL);
 INSERT INTO is2.is2_app_role VALUES (5, 'FS', 'FELLEGI-SUNTER', 'FELLEGI-SUNTER', 14, 1, NULL);
-INSERT INTO is2.is2_app_role VALUES (6, 'B', 'BLOCKING', 'SLICING DEL DATASET', 7, 2, 5);
+INSERT INTO is2.is2_app_role VALUES (6, 'B', 'BLOCKING', 'SLICING DEL DATASET', 7, 1, NULL);
 INSERT INTO is2.is2_app_role VALUES (7, 'MT', 'MATCHING TABLE', 'MATCHING TABLE', 8, 1, NULL);
 INSERT INTO is2.is2_app_role VALUES (8, 'TH', 'THRESHOLD MATCHING', 'THRESHOLD MATCHING', 9, 2, 2);
 INSERT INTO is2.is2_app_role VALUES (9, 'TU', 'THRESHOLD UNMATCHING', 'THRESHOLD UNMATCHING', 10, 2, 3);
@@ -1603,6 +1603,9 @@ INSERT INTO is2.is2_app_role VALUES (910, 'LP', 'LOADER PARAMETERS', 'LOADER PAR
 INSERT INTO is2.is2_app_role VALUES (950, 'MP', 'MAPPING PARAMETERS', 'MAPPING PARAMETERS', 5, 2, 950);
 
 INSERT INTO is2.is2_app_role VALUES (17, 'MP', 'MARGINAL PROBABILITIES', 'MARGINAL PROBABILITIES', 17, 1, NULL);
+
+INSERT INTO is2.is2_app_role VALUES (18, 'BA', 'BLOCKING A', 'SLICING DEL DATASET A', 18, 1, NULL);
+INSERT INTO is2.is2_app_role VALUES (19, 'BB', 'BLOCKING B', 'SLICING DEL DATASET B', 19, 1, NULL);
 
 --
 -- TOC entry 4907 (class 0 OID 25150)
@@ -1832,33 +1835,9 @@ INSERT INTO is2.is2_link_business_service_app_role VALUES (91, 950);
 
 INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 17);
 
+INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 18);
+INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 19);
 
-
-
---
--- TOC entry 4966 (class 0 OID 32783)
--- Dependencies: 349
--- Data for Name: is2_link_business_service_app_role_sav; Type: TABLE DATA; Schema: is2; Owner: -
---
-
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 1);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 2);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 3);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 4);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 5);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 6);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 7);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 8);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 9);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 10);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 11);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 12);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 13);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (200, 14);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (300, 15);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (300, 16);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (91, 910);
-INSERT INTO is2.is2_link_business_service_app_role_sav VALUES (95, 950);
 
 
 --
@@ -2038,7 +2017,10 @@ INSERT INTO is2.is2_step_instance_signature VALUES (181, 1, 2, 15, 1);
 INSERT INTO is2.is2_step_instance_signature VALUES (182, 1, 3, 15, 1);
 INSERT INTO is2.is2_step_instance_signature VALUES (183, 0, 7, 15, 2);
 INSERT INTO is2.is2_step_instance_signature VALUES (184, NULL, 11, 15, 2);
-INSERT INTO is2.is2_step_instance_signature VALUES (192, 1, 6, 15, 1);
+
+INSERT INTO is2.is2_step_instance_signature VALUES (195, 1, 18, 15, 1);
+INSERT INTO is2.is2_step_instance_signature VALUES (196, 1, 19, 15, 1);
+
 
 INSERT INTO is2.is2_step_instance_signature VALUES (185, 1, 2, 16, 1);
 INSERT INTO is2.is2_step_instance_signature VALUES (186, 1, 3, 16, 1);
@@ -2047,8 +2029,9 @@ INSERT INTO is2.is2_step_instance_signature VALUES (188, 0, 4, 16, 1);
 INSERT INTO is2.is2_step_instance_signature VALUES (189, NULL, 7, 16, 2);
 INSERT INTO is2.is2_step_instance_signature VALUES (190, 1, 8, 16, 1);
 INSERT INTO is2.is2_step_instance_signature VALUES (191, 1, 9, 16, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (193, 1, 6, 16, 1);
-
+ 
+INSERT INTO is2.is2_step_instance_signature VALUES (197, 1, 18, 16, 1);
+INSERT INTO is2.is2_step_instance_signature VALUES (198, 1, 19, 16, 1);
 
 INSERT INTO is2.is2_step_instance_signature VALUES (194, NULL, 17, 12, 2);
 

@@ -36,9 +36,10 @@ import java.util.StringTokenizer;
 import javax.script.ScriptException;
 
 import org.apache.log4j.Logger;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
 
@@ -59,6 +60,8 @@ import org.renjin.sexp.*;
 public class EngineREnjin extends EngineR implements EngineService {
 
 	RenjinScriptEngine engine;
+	@Autowired
+	private LogService logService;
 
 	final StringWriter logWriter = new StringWriter();
 	private final Map<String, Object> worksetOut;
@@ -86,6 +89,8 @@ public class EngineREnjin extends EngineR implements EngineService {
 		this.dataProcessing = dataProcessing;
 		this.stepInstance = stepInstance;
 		this.fileScriptR = stepInstance.getAppService().getSource();
+
+		logService.save("Engine REnjin Init for " + stepInstance.getMethod());
 
 		prepareEnv();
 		createConnection();
@@ -403,52 +408,60 @@ public class EngineREnjin extends EngineR implements EngineService {
 		// salva output su DB
 		for (Map.Entry<String, ?> entry : worksetOut.entrySet()) {
 			String nameOut = entry.getKey();
-			@SuppressWarnings("unchecked")
-			Map<String, ArrayList<String>> outContent = (Map<String, ArrayList<String>>) entry.getValue();
 
-			for (Map.Entry<String, ArrayList<String>> entryWS : outContent.entrySet()) {
-				String nomeW = entryWS.getKey();
-				ArrayList<String> value = entryWS.getValue();
-				StepRuntime stepVariable;
-				// String ruolo = ruoliOutputStepInversa.get(nomeW);
-				String ruolo = nameOut;
-				String ruoloGruppo = rolesGroupOut.get(ruolo);
-				if (ruolo == null) {
-					ruolo = ROLE_DEFAULT;
+			if (null != entry.getValue()) {
+			
+				try {
+					@SuppressWarnings("unchecked")
+				Map<String, ArrayList<String>> outContent = (Map<String, ArrayList<String>>) entry.getValue();
+
+				for (Map.Entry<String, ArrayList<String>> entryWS : outContent.entrySet()) {
+					String nomeW = entryWS.getKey();
+					ArrayList<String> value = entryWS.getValue();
+					StepRuntime stepVariable;
+					// String ruolo = ruoliOutputStepInversa.get(nomeW);
+					String ruolo = nameOut;
+					String ruoloGruppo = rolesGroupOut.get(ruolo);
+					if (ruolo == null) {
+						ruolo = ROLE_DEFAULT;
+					}
+					if (ruoloGruppo == null) {
+						ruoloGruppo = ROLE_DEFAULT;
+					}
+					AppRole sxRuolo = rolesMap.get(ruolo);
+					AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
+
+					stepVariable = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
+
+					if (stepVariable != null) { // update
+
+						stepVariable.getWorkset().setContents(value);
+						stepVariable.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+					} else {
+						stepVariable = new StepRuntime();
+						stepVariable.setDataProcessing(dataProcessing);
+						stepVariable.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+
+						stepVariable.setAppRole(sxRuolo);
+						stepVariable.setDataType(sxRuolo.getDataType());
+						stepVariable.setRoleGroup(sxRuoloGruppo);
+						stepVariable.setOrderCode(sxRuolo.getOrder());
+						Workset workset = new Workset();
+						workset.setName(nomeW.replaceAll("\\.", "_"));
+						workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
+						ArrayList<StepRuntime> l = new ArrayList<>();
+						l.add(stepVariable);
+						workset.setStepRuntimes(l);
+						workset.setContents(value);
+						workset.setContentSize(workset.getContents().size());
+						stepVariable.setWorkset(workset);
+					}
+
+						stepRuntimeDao.save(stepVariable);
+					}
+				} catch (Exception e) {
+					Logger.getRootLogger().debug(nameOut+ " " +e.getMessage());
 				}
-				if (ruoloGruppo == null) {
-					ruoloGruppo = ROLE_DEFAULT;
-				}
-				AppRole sxRuolo = rolesMap.get(ruolo);
-				AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
-
-				stepVariable = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
-
-				if (stepVariable != null) { // update
-
-					stepVariable.getWorkset().setContents(value);
-					stepVariable.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
-				} else {
-					stepVariable = new StepRuntime();
-					stepVariable.setDataProcessing(dataProcessing);
-					stepVariable.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
-
-					stepVariable.setAppRole(sxRuolo);
-					stepVariable.setDataType(sxRuolo.getDataType());
-					stepVariable.setRoleGroup(sxRuoloGruppo);
-					stepVariable.setOrderCode(sxRuolo.getOrder());
-					Workset workset = new Workset();
-					workset.setName(nomeW.replaceAll("\\.", "_"));
-					workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
-					ArrayList<StepRuntime> l = new ArrayList<>();
-					l.add(stepVariable);
-					workset.setStepRuntimes(l);
-					workset.setContents(value);
-					workset.setContentSize(workset.getContents().size());
-					stepVariable.setWorkset(workset);
-				}
-
-				stepRuntimeDao.save(stepVariable);
 			}
 		}
 

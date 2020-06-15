@@ -50,7 +50,7 @@ $(document).ready(function () {
                 + "<'row'<'col-sm-12'tr>>"
                 + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         paging: false,
-        rowReorder: true,
+        rowReorder: false,
         columnDefs: [
         	  { orderable: true, targets: [0,1,2] },
               { orderable: false, targets: '_all' }
