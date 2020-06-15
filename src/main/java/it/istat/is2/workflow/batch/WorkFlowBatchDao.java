@@ -16,6 +16,8 @@ public interface WorkFlowBatchDao extends CrudRepository<Batch, Long> {
 	
 	public List<Batch> findByIdSessione(Long idSessione);
 	
+	public List<Batch> findByIdSessioneAndIdElaborazione(@Param("idSessione")Long idSessione,@Param("idElaborazione")Long idElaborazione);
+	
 	public void deleteByJobInstanceId(@Param("jobInstanceId")Long jobInstanceId);
 	
 	@Query("SELECT batch FROM Batch batch WHERE batch.idElaborazione = :idElab")

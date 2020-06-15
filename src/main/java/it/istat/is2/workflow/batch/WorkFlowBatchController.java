@@ -84,17 +84,12 @@ public class WorkFlowBatchController {
 		return ResponseEntity.ok(logs);
 	}
 
-	@GetMapping("/batch/jobs")
-	public ResponseEntity<?> getJobs(HttpSession httpSession, Model model) {
-		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
-		List<Batch> batches;
-		if (sessionBean != null) {
-			batches = workFlowBatchService.findByIdSessione(sessionBean.getId());
-		} else {
-			batches = new ArrayList<>();
-		}
-		return ResponseEntity.ok(batches);
+	@GetMapping("/batch/jobs/{idSessione}/{idElaborazione}")
+	public ResponseEntity<?> getJobs(@PathVariable("idSessione") Long idSessione,@PathVariable("idElaborazione") Long idElaborazione) {
+	 
+ 
+		return ResponseEntity.ok( workFlowBatchService.findByIdSessioneAndIdElaborazione(idSessione,idElaborazione));
 
 	}
-
+	 
 }

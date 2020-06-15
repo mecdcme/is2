@@ -26,8 +26,10 @@ package it.istat.is2.app.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +50,8 @@ public class LogService {
     private LogDao logDao;
     @Autowired
     private HttpSession httpSession;
+    @Autowired
+	protected EntityManager em;
 
     public List<Log> findAll() {
         return (List<Log>) logDao.findAll();
@@ -95,7 +99,7 @@ public class LogService {
     public void save(String msg) {
 
         SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
-
+        Session session = em.unwrap(Session.class);
         Log log = new Log();
         if (sessionBean != null && sessionBean.getId()!=null ) {
             log.setWorkSession(new WorkSession(sessionBean.getId()));
@@ -107,6 +111,9 @@ public class LogService {
         log.setMsgTime(new Date());
 
         this.logDao.save(log);
+    	session.flush();
+		session.clear();
+        
     }
     
     public void save(String msg, String tipo) {

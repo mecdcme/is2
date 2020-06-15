@@ -60,6 +60,11 @@ public class WorkFlowBatchService {
 		return this.workFlowBatchDao.findByIdSessione(id);
 	}
 	
+	public List<Batch> findByIdSessioneAndIdElaborazione(Long idSess,Long idEl) {
+		return this.workFlowBatchDao.findByIdSessioneAndIdElaborazione(idSess,idEl);
+	}
+	
+	
 	public Optional<Batch> findById(Long id) {
 		return this.workFlowBatchDao.findById(id);
 	}

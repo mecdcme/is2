@@ -96,10 +96,11 @@ public class RelaisService {
 		ruoliVariabileNome.get(codeMatchingA).forEach((varname) -> {
 			variabileNomeListMA.add(varname);
 		});
+		logService.save("Matching variables dataset A: "+variabileNomeListMA);
 		ruoliVariabileNome.get(codeMatchingB).forEach((varname) -> {
 			variabileNomeListMB.add(varname);
 		});
-
+		logService.save("Matching variables dataset B: "+variabileNomeListMB);
 		ruoliVariabileNome.values().forEach((list) -> {
 			variabileNomeListOut.addAll(list);
 		});
@@ -125,25 +126,7 @@ public class RelaisService {
 		final Map<String, Integer> contengencyTable = Collections
 				.synchronizedMap(contingencyService.getEmptyContengencyTable());
 
-		/*
-		 * final String sortFieldA = variabileNomeListMA.get(0); final String sortFieldB
-		 * = variabileNomeListMB.get(0);
-		 * Utility.printNElementsInMapValues(worksetVariabili, 5);
-		 * Utility.sortDatasetInMapValues(worksetVariabili, variabileNomeListMA,
-		 * sortFieldA, IS2Const.SORT_ASC);
-		 * Utility.printNElementsInMapValues(worksetVariabili, 5);
-		 * Utility.sortDatasetInMapValues(worksetVariabili, variabileNomeListMB,
-		 * sortFieldB, IS2Const.SORT_ASC);
-		 * Utility.printNElementsInMapValues(worksetVariabili, 5);
-		 */
 		
-	//System.out.println("p: "+	System.getProperty("java.util.concurrent.ForkJoinPool.common.parallelism"));
-	//	System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
-	//	System.out.println("p: "+	System.getProperty("java.util.concurrent.ForkJoinPool.common.parallelism"));	
-		
-		 ForkJoinPool customThreadPool = new ForkJoinPool(20);
-		 
-		customThreadPool.submit(()->
 		IntStream.range(0, sizeA).parallel().forEach(innerIA -> {
 
 			final Map<String, String> valuesI = new HashMap<>();
@@ -153,15 +136,13 @@ public class RelaisService {
 				valuesI.put(varnameMA, worksetVariabili.get(varnameMA).get(innerIA));
 			});
 
-			 Instant start = Instant.now();
+	
 			IntStream.range(0, sizeB).forEach(innerIB -> {
 				variabileNomeListMB.forEach(varnameMB -> {
 					valuesI.put(varnameMB, worksetVariabili.get(varnameMB).get(innerIB));
 				});
 
 				String pattern = contingencyService.getPattern(valuesI);
-				// System.out.println(innerIA+" - "+ innerIB );
-
 				contengencyTableIA.put(pattern, contengencyTableIA.get(pattern) + 1);
 
 			});
@@ -170,12 +151,8 @@ public class RelaisService {
 						contengencyTable.get(e.getKey()) + contengencyTableIA.get(e.getKey())));
 			}
 
-		//	 System.out.println("innerIA " + innerIA + ":" + Thread.currentThread() +" time:  "+Duration.between(start, Instant.now()).getSeconds() );
 			
-		})
-		
-		).join()
-		;
+		});
 		contengencyTableOut.put("FREQUENCY", new ArrayList<>());
 		// write to worksetout
 		contengencyTable.forEach((key, value) -> {
@@ -523,21 +500,23 @@ public class RelaisService {
 		ruoliVariabileNome.get(codeMatchingA).forEach((varname) -> {
 			variabileNomeListMA.add(varname);
 		});
-		logService.save("Matching variables dataset A: "+variabileNomeListMA);
+		
 		
 		ruoliVariabileNome.get(codeMatchingB).forEach((varname) -> {
 			variabileNomeListMB.add(varname);
 		});
-		logService.save("Matching variables dataset B: "+variabileNomeListMB);
 		
 		ruoliVariabileNome.get(codeBlockingVariablesA).forEach((varname) -> {
 			blockingVariablesA.add(varname);
 		});
-		logService.save("Blocking variables dataset A: "+blockingVariablesA);
 		
 		ruoliVariabileNome.get(codeBlockingVariablesB).forEach((varname) -> {
 			blockingVariablesB.add(varname);
 		});
+		
+		logService.save("Matching variables dataset A: "+variabileNomeListMA);
+		logService.save("Matching variables dataset B: "+variabileNomeListMB);
+		logService.save("Blocking variables dataset A: "+blockingVariablesA);
 		logService.save("Blocking variables dataset B: "+blockingVariablesB);
 		
 		variabileNomeListOut.addAll(variabileNomeListMA);
@@ -630,15 +609,17 @@ public class RelaisService {
 	public Map<?, ?> resultTables(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
 			Map<String, ArrayList<String>> worksetIn, Map<String, String> parametriMap) throws Exception {
 
-		Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
-		Map<String, Map<?, ?>> worksetOut = new LinkedHashMap<>();
-		Map<String, ArrayList<String>> matchingTable = Collections.synchronizedMap(new LinkedHashMap<>());
-		Map<String, ArrayList<String>> possibleMatchingTable = Collections.synchronizedMap(new LinkedHashMap<>());
-		Map<String, ArrayList<String>> residualATable = new LinkedHashMap<>();
-		Map<String, ArrayList<String>> residualBTable = new LinkedHashMap<>();
-		Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
-		Map<String, String> rolesGroupOut = new HashMap<>();
+		final Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
+		final Map<String, Map<?, ?>> worksetOut = new LinkedHashMap<>();
+		final Map<String, ArrayList<String>> matchingTable = Collections.synchronizedMap(new LinkedHashMap<>());
+		final Map<String, ArrayList<String>> possibleMatchingTable = Collections.synchronizedMap(new LinkedHashMap<>());
+		final Map<String, ArrayList<String>> residualATable = new LinkedHashMap<>();
+		final Map<String, ArrayList<String>> residualBTable = new LinkedHashMap<>();
+		final Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
+		final Map<String, String> rolesGroupOut = new HashMap<>();
 
+		logService.save("Process Matching Tables  Starting...");
+		
 		// <codRuolo,[namevar1,namevar2..]
 		int indexItems = 0;
 		ArrayList<String> patternMatching = new ArrayList<>();
@@ -648,7 +629,10 @@ public class RelaisService {
 		String paramTU = parametriMap.get(params_ThresholdUnMatching);
 
 		checkThresholds(paramTM, paramTU);
-
+		
+		logService.save("Threshold Matching: "+paramTM);
+		logService.save("Threshold UnMatching: "+paramTU);
+		
 		// select pattern by P_POST value
 		for (String pPostVarname : ruoliVariabileNome.get(codeFS)) {
 
@@ -678,6 +662,9 @@ public class RelaisService {
 			}
 		}
 
+		logService.save("Pattern  Matching: "+patternMatching);
+		logService.save("Pattern  Possible Matching: "+patternPossibleMatching);
+		
 		ArrayList<String> variabileNomeListMA = new ArrayList<>();
 		ArrayList<String> variabileNomeListMB = new ArrayList<>();
 		ArrayList<String> variabileNomeListOut = new ArrayList<>();
@@ -688,7 +675,11 @@ public class RelaisService {
 		ruoliVariabileNome.get(codeMatchingB).forEach((varname) -> {
 			variabileNomeListMB.add(varname);
 		});
-
+		
+		logService.save("Matching variables dataset A: "+variabileNomeListMA);
+		logService.save("Matching variables dataset B: "+variabileNomeListMB);
+	 	
+	
 		variabileNomeListOut.addAll(variabileNomeListMA);
 		variabileNomeListOut.addAll(variabileNomeListMB);
 		variabileNomeListOut.add(codeP_POST);

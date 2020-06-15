@@ -3,8 +3,12 @@ var toggle = true;
 var stompClient = null;
 
 var pollLog, pollJob;
-
+var idDataProcessing,idWorkSession;
 $(document).ready(function() {
+
+	idDataProcessing=$('#idDataProcessing').val();
+	idWorkSession= $('#idWorkSession').val();
+	
 	pollLogs();
 	pollJobs();
 });
@@ -73,7 +77,7 @@ function pollJobs() {
 	$.ajax({
 		type : "GET",
 		contentType : "application/json",
-		url : _ctx + "/rest/batch/jobs",
+		url : _ctx + "/rest/batch/jobs/"+idWorkSession+"/"+idDataProcessing,
 		dataType : 'json',
 		cache : true,
 		success : function(data) {

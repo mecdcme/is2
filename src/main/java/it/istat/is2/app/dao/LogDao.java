@@ -23,19 +23,20 @@
  */
 package it.istat.is2.app.dao;
 
-import it.istat.is2.app.domain.Log;
-import it.istat.is2.worksession.domain.WorkSession;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import it.istat.is2.app.domain.Log;
+import it.istat.is2.worksession.domain.WorkSession;
+
 @Repository
-public interface LogDao extends CrudRepository<Log, Long> {
+public interface LogDao extends JpaRepository<Log, Long> {
 
     public void save(Optional<Log> log);
 
