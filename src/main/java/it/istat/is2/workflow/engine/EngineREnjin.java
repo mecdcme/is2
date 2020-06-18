@@ -36,13 +36,17 @@ import java.util.StringTokenizer;
 import javax.script.ScriptException;
 
 import org.apache.log4j.Logger;
+import org.renjin.script.RenjinScriptEngine;
+import org.renjin.script.RenjinScriptEngineFactory;
+import org.renjin.sexp.ListVector;
+import org.renjin.sexp.StringVector;
+import org.renjin.sexp.Vector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
-
 import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.DataProcessing;
 import it.istat.is2.workflow.domain.DataTypeCls;
@@ -51,10 +55,6 @@ import it.istat.is2.workflow.domain.StepInstanceSignature;
 import it.istat.is2.workflow.domain.StepRuntime;
 import it.istat.is2.workflow.domain.TypeIO;
 import it.istat.is2.workflow.domain.Workset;
-
-import org.renjin.script.RenjinScriptEngine;
-import org.renjin.script.RenjinScriptEngineFactory;
-import org.renjin.sexp.*;
 
 @Service
 public class EngineREnjin extends EngineR implements EngineService {
@@ -107,7 +107,7 @@ public class EngineREnjin extends EngineR implements EngineService {
 		// Create a Renjin engine:
 		engine = factory.getScriptEngine();
 		// set log
-
+		logWriter.getBuffer().delete(0, logWriter.getBuffer().length());
 		engine.getContext().setWriter(logWriter);
 		engine.eval("setwd('" + pathR + "')");
 		// engine.eval("source('libraries.R')");
@@ -220,7 +220,6 @@ public class EngineREnjin extends EngineR implements EngineService {
 			}
 		} catch (Exception e) {
 			Logger.getRootLogger().info("No such list:" + tipoOutput);
-			Logger.getRootLogger().debug(engine.eval("print(str(" + varR + "$" + tipoOutput + "))").toString());
 		}
 	}
 
@@ -244,8 +243,7 @@ public class EngineREnjin extends EngineR implements EngineService {
 			}
 		} catch (Exception e) {
 			Logger.getRootLogger().info("No such list:" + tipoOutput);
-			Logger.getRootLogger().debug(engine.eval("print(str(" + varR + "$" + tipoOutput + "))").toString());
-		}
+	 	}
 	}
 
 	public void getRolesGroup(LinkedHashMap<String, String> genericHashMap, String varR, String tipoOutput)
@@ -264,8 +262,7 @@ public class EngineREnjin extends EngineR implements EngineService {
 			}
 		} catch (Exception e) {
 			Logger.getRootLogger().info("No such list:" + tipoOutput);
-			Logger.getRootLogger().debug(engine.eval("print(str(" + varR + "$" + tipoOutput + "))").toString());
-		}
+ 		}
 	}
 
 	public void writeLogScriptR() throws ScriptException {
@@ -410,57 +407,57 @@ public class EngineREnjin extends EngineR implements EngineService {
 			String nameOut = entry.getKey();
 
 			if (null != entry.getValue()) {
-			
+
 				try {
 					@SuppressWarnings("unchecked")
-				Map<String, ArrayList<String>> outContent = (Map<String, ArrayList<String>>) entry.getValue();
+					Map<String, ArrayList<String>> outContent = (Map<String, ArrayList<String>>) entry.getValue();
 
-				for (Map.Entry<String, ArrayList<String>> entryWS : outContent.entrySet()) {
-					String nomeW = entryWS.getKey();
-					ArrayList<String> value = entryWS.getValue();
-					StepRuntime stepVariable;
-					// String ruolo = ruoliOutputStepInversa.get(nomeW);
-					String ruolo = nameOut;
-					String ruoloGruppo = rolesGroupOut.get(ruolo);
-					if (ruolo == null) {
-						ruolo = ROLE_DEFAULT;
-					}
-					if (ruoloGruppo == null) {
-						ruoloGruppo = ROLE_DEFAULT;
-					}
-					AppRole sxRuolo = rolesMap.get(ruolo);
-					AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
+					for (Map.Entry<String, ArrayList<String>> entryWS : outContent.entrySet()) {
+						String nomeW = entryWS.getKey();
+						ArrayList<String> value = entryWS.getValue();
+						StepRuntime stepVariable;
+						// String ruolo = ruoliOutputStepInversa.get(nomeW);
+						String ruolo = nameOut;
+						String ruoloGruppo = rolesGroupOut.get(ruolo);
+						if (ruolo == null) {
+							ruolo = ROLE_DEFAULT;
+						}
+						if (ruoloGruppo == null) {
+							ruoloGruppo = ROLE_DEFAULT;
+						}
+						AppRole sxRuolo = rolesMap.get(ruolo);
+						AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
 
-					stepVariable = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
+						stepVariable = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
 
-					if (stepVariable != null) { // update
+						if (stepVariable != null) { // update
 
-						stepVariable.getWorkset().setContents(value);
-						stepVariable.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
-					} else {
-						stepVariable = new StepRuntime();
-						stepVariable.setDataProcessing(dataProcessing);
-						stepVariable.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+							stepVariable.getWorkset().setContents(value);
+							stepVariable.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
+						} else {
+							stepVariable = new StepRuntime();
+							stepVariable.setDataProcessing(dataProcessing);
+							stepVariable.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
 
-						stepVariable.setAppRole(sxRuolo);
-						stepVariable.setDataType(sxRuolo.getDataType());
-						stepVariable.setRoleGroup(sxRuoloGruppo);
-						stepVariable.setOrderCode(sxRuolo.getOrder());
-						Workset workset = new Workset();
-						workset.setName(nomeW.replaceAll("\\.", "_"));
-						workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
-						ArrayList<StepRuntime> l = new ArrayList<>();
-						l.add(stepVariable);
-						workset.setStepRuntimes(l);
-						workset.setContents(value);
-						workset.setContentSize(workset.getContents().size());
-						stepVariable.setWorkset(workset);
-					}
+							stepVariable.setAppRole(sxRuolo);
+							stepVariable.setDataType(sxRuolo.getDataType());
+							stepVariable.setRoleGroup(sxRuoloGruppo);
+							stepVariable.setOrderCode(sxRuolo.getOrder());
+							Workset workset = new Workset();
+							workset.setName(nomeW.replaceAll("\\.", "_"));
+							workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
+							ArrayList<StepRuntime> l = new ArrayList<>();
+							l.add(stepVariable);
+							workset.setStepRuntimes(l);
+							workset.setContents(value);
+							workset.setContentSize(workset.getContents().size());
+							stepVariable.setWorkset(workset);
+						}
 
 						stepRuntimeDao.save(stepVariable);
 					}
 				} catch (Exception e) {
-					Logger.getRootLogger().debug(nameOut+ " " +e.getMessage());
+					Logger.getRootLogger().debug(nameOut + " " + e.getMessage());
 				}
 			}
 		}
@@ -470,6 +467,7 @@ public class EngineREnjin extends EngineR implements EngineService {
 			HashMap<String, String> ruoliOutputStepInversa = new HashMap<>();
 			for (Entry<String, Object> entry : rolesOut.entrySet()) {
 				String nomeR = entry.getKey();
+				@SuppressWarnings("unchecked")
 				ArrayList<String> value = (ArrayList<String>) entry.getValue();
 				value.forEach(nomevar -> ruoliOutputStepInversa.put(nomevar, nomeR));
 			}
@@ -516,102 +514,6 @@ public class EngineREnjin extends EngineR implements EngineService {
 				stepRuntimeDao.save(stepRuntime);
 			}
 		}
-	}
-
-	private void saveOutputDB_old() {
-		HashMap<String, String> ruoliOutputStepInversa = new HashMap<>();
-		for (Entry<String, Object> entry : rolesOut.entrySet()) {
-			String nomeR = entry.getKey();
-			ArrayList<String> value = (ArrayList<String>) entry.getValue();
-			value.forEach(nomevar -> ruoliOutputStepInversa.put(nomevar, nomeR));
-		}
-
-		// salva output su DB
-		for (Entry<String, Object> entry : worksetOut.entrySet()) {
-			String nomeW = entry.getKey();
-			ArrayList<String> value = (ArrayList<String>) entry.getValue();
-			StepRuntime stepRuntime;
-			String ruolo = ruoliOutputStepInversa.get(nomeW);
-			String ruoloGruppo = rolesGroupOut.get(ruolo);
-			if (ruolo == null) {
-				ruolo = ROLE_DEFAULT;
-			}
-			if (ruoloGruppo == null) {
-				ruoloGruppo = ROLE_DEFAULT;
-			}
-			AppRole sxRuolo = rolesMap.get(ruolo);
-			AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
-
-			stepRuntime = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
-
-			if (stepRuntime != null) { // update
-				stepRuntime.getWorkset().setContents(value);
-				stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
-			} else {
-				stepRuntime = new StepRuntime();
-				stepRuntime.setDataProcessing(dataProcessing);
-				stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
-				stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
-				stepRuntime.setAppRole(sxRuolo);
-				stepRuntime.setRoleGroup(sxRuoloGruppo);
-				stepRuntime.setOrderCode(sxRuolo.getOrder());
-				Workset workset = new Workset();
-				workset.setName(nomeW.replaceAll("\\.", "_"));
-				workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
-				ArrayList<StepRuntime> l = new ArrayList<>();
-				l.add(stepRuntime);
-				workset.setStepRuntimes(l);
-				workset.setContents(value);
-				workset.setContentSize(workset.getContents().size());
-				stepRuntime.setWorkset(workset);
-			}
-
-			stepRuntimeDao.save(stepRuntime);
-		}
-
-		// save output Parameter DB
-		for (Map.Entry<String, String> entry : parameterOut.entrySet()) {
-			String nomeW = entry.getKey();
-			String value = entry.getValue();
-			StepRuntime stepRuntime;
-			String ruolo = ruoliOutputStepInversa.get(nomeW);
-			String ruoloGruppo = rolesGroupOut.get(ruolo);
-			if (ruolo == null) {
-				ruolo = ROLE_DEFAULT;
-			}
-			if (ruoloGruppo == null) {
-				ruoloGruppo = ROLE_DEFAULT;
-			}
-			AppRole sxRuolo = rolesMap.get(ruolo);
-			AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
-
-			stepRuntime = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
-
-			if (stepRuntime != null) { // update
-				stepRuntime.getWorkset().setParamValue(value);
-				stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
-			} else {
-				stepRuntime = new StepRuntime();
-				stepRuntime.setDataProcessing(dataProcessing);
-				stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_OUTPUT));
-				stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
-				stepRuntime.setAppRole(sxRuolo);
-				stepRuntime.setRoleGroup(sxRuoloGruppo);
-				stepRuntime.setOrderCode(sxRuolo.getOrder());
-				Workset workset = new Workset();
-				workset.setName(nomeW.replaceAll("\\.", "_"));
-
-				ArrayList<StepRuntime> l = new ArrayList<>();
-				l.add(stepRuntime);
-				workset.setStepRuntimes(l);
-				workset.setParamValue(value);
-				workset.setContentSize(1);
-				workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_PARAMETER));
-				stepRuntime.setWorkset(workset);
-			}
-			stepRuntimeDao.save(stepRuntime);
-		}
-
 	}
 
 	@Override

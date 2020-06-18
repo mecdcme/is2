@@ -16,6 +16,7 @@ rm(list=ls())
 
 fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 
+
   
 
  ct <- roles$CT
@@ -115,6 +116,7 @@ fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 		 
 		 print(msg)
 		 print(msg2)
+		
 		 
 		 #default value to p for the marginal prob table
 		 p <- 0
@@ -185,6 +187,6 @@ fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
  
  fs_out<-list(FS=r_out,MP = var_est)
 
- result <-list( workset_out=fs_out, roles_out= roles, rolesgroup_out= rolesgroup,  log = stdout)
- 
+ result <-list( workset_out=fs_out, roles_out= roles, rolesgroup_out= rolesgroup,  log = '')
+
 }

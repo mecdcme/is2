@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.workflow.dao.BusinessProcessDao;
 import it.istat.is2.workflow.domain.DataProcessing;
@@ -40,6 +41,9 @@ public class WorkFlowBatchProcessor implements ItemReader<DataProcessing> {
 
     @Autowired
     EngineFactory engineFactory;
+    
+ 	@Autowired
+	private LogService logService;
 
 
     @Autowired
@@ -69,6 +73,7 @@ public class WorkFlowBatchProcessor implements ItemReader<DataProcessing> {
             engine.processOutput();
         } catch (Exception e) {
          	 Logger.getRootLogger().error(e.getMessage());
+         	logService.save("Error: " + e.getMessage());
              notificationService.addErrorMessage("Error: " + e.getMessage());
              throw (e);
         } finally {
