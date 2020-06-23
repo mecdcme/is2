@@ -134,28 +134,9 @@ $(document).ready(function () {
 
    checkedPrefix =  $('#check-prefix-dataset').prop('checked');
    $(".prefix").toggle(checkedPrefix); 
-    
+
 });
 
-var addRow = {
-    "title": "Add Row",
-    "click": function () {
-        var value = this.getValue();
-        value.push({});
-        this.setValue(value);
-    }
-};
-
-var removeRow = {
-    "title": "Remove Row",
-    "click": function () {
-        var value = this.getValue();
-        if (value.length > 0) {
-            value.pop();
-            this.setValue(value);
-        }
-    }
-};
 
 function openAddParameter(identifier) {
     var idParam = $(identifier).data('param-id');
@@ -172,6 +153,8 @@ function openAddParameter(identifier) {
             return eval('(' + value + ')');
         } else if (key === "dataSource") {
             return eval(value);
+        } else if (key === "postRender") {
+            return eval(value);    
         } else {
             return value;
         }
@@ -276,8 +259,11 @@ function openDlgModParametriWorkset(identifier) {
     var data = $(identifier).data('value-param');
     if (!data)
         data = "";
+    var postRender = jsontemplate["postRender"];
+    
+    if (!postRender) postRender="";// eval(postRender);
     $('#edit-parameters').val(idWorkset);
-    var dataContent = "{\"data\":" + JSON.stringify(data) + ",\"schema\":" + JSON.stringify(schema) + ",\"options\":" + JSON.stringify(options) + "}";
+    var dataContent = "{\"data\":" + JSON.stringify(data) + ",\"schema\":" + JSON.stringify(schema) + ",\"options\":" + JSON.stringify(options) + ",\"postRender\":" + JSON.stringify(postRender) + "}";
     $('#edit-param').empty();
     var jsonObj = JSON.parse(dataContent, function (key, value) {
         if (key === "addRow") {
@@ -285,6 +271,8 @@ function openDlgModParametriWorkset(identifier) {
         } else if (key === "removeRow") {
             return eval('(' + value + ')');
         } else if (key === "dataSource") {
+            return eval(value);
+        } else if (key === "postRender") {
             return eval(value);
         } else {
             return value;

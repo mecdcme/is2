@@ -62,20 +62,21 @@ public class ContingencyService {
 	private int[][] combinations;
 	private AbstractStringMetric[] metrics;
 
-
 	public void init(String stringJson) throws JSONException {
 		metricMatchingVariableVector = new MetricMatchingVariableVector();
-	  	JSONArray metricMatchingVariables = new JSONArray(stringJson) ;
+		JSONArray metricMatchingVariables = new JSONArray(stringJson);
 		for (int i = 0; i < metricMatchingVariables.length(); i++) {
 			JSONObject metricMatchingVariable = metricMatchingVariables.getJSONObject(i);
 			String matchingVariable = metricMatchingVariable.getString("MatchingVariable");
 			String matchingVariableA = metricMatchingVariable.getString("MatchingVariableA");
 			String matchingVariableB = metricMatchingVariable.getString("MatchingVariableB");
 			String method = metricMatchingVariable.getString("Method");
-			Float thresould = metricMatchingVariable.isNull("Threshold")? null :metricMatchingVariable.getFloat("Threshold");
-			Integer windowSize = metricMatchingVariable.isNull("WindowSize")? null :metricMatchingVariable.getInt("WindowSize");
+			Float thresould = metricMatchingVariable.isNull("Threshold") ? null
+					: metricMatchingVariable.getFloat("Threshold");
+			Integer windowSize = metricMatchingVariable.isNull("WindowSize") ? null
+					: metricMatchingVariable.getInt("WindowSize");
 			MetricMatchingVariable mm = new MetricMatchingVariable(matchingVariable, matchingVariableA,
-					matchingVariableB, method, thresould,windowSize);
+					matchingVariableB, method, thresould, windowSize);
 			metricMatchingVariableVector.add(mm);
 
 		}
@@ -109,9 +110,8 @@ public class ContingencyService {
 
 	}
 
-
 	public ArrayList<String> getNameMatchingVariables() {
-		 
+
 		ArrayList<String> ret = new ArrayList<>();
 		metricMatchingVariableVector.forEach(item -> {
 			ret.add(item.getMatchingVariable());
@@ -119,9 +119,8 @@ public class ContingencyService {
 		return ret;
 	}
 
-
 	public String getPattern(Map<String, String> valuesI) {
-		 
+
 		String pattern = "";
 
 		/* evaluation of patternd */
@@ -155,10 +154,10 @@ public class ContingencyService {
 		}
 		return pattern;
 	}
-	
+
 	public Map<String, Integer> getEmptyContengencyTable() {
-		 
-		Map<String, Integer> contengencyTable = new LinkedHashMap<String, Integer>() ;
+
+		Map<String, Integer> contengencyTable = new LinkedHashMap<String, Integer>();
 		int mask1 = (int) Math.pow(2, numVar);
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < mask1; i++) {
@@ -179,6 +178,35 @@ public class ContingencyService {
 		}
 
 		return contengencyTable;
+	}
+
+	public boolean isExactMatching(Map<String, String> valuesI) {
+
+		for (int ii = 0; ii < numVar; ii++) {
+			MetricMatchingVariable metricMatchingVariable = metricMatchingVariableVector.get(ii);
+			String matchingVariableNameVariableA = valuesI
+					.get(metricMatchingVariable.getMatchingVariableNameVariableA());
+			String matchingVariableNameVariableB = valuesI
+					.get(metricMatchingVariable.getMatchingVariableNameVariableB());
+
+			if (matchingVariableNameVariableA == null || matchingVariableNameVariableB == null
+					|| matchingVariableNameVariableA.equals("")) {
+
+				return false;
+			}
+			// Equality
+			else if (metrics[ii] == null) {
+				if (!matchingVariableNameVariableA.equals(matchingVariableNameVariableB))
+					return false;
+			} else {
+
+				if (metrics[ii].getSimilarity(matchingVariableNameVariableA,
+						matchingVariableNameVariableB) < metricMatchingVariable.getMetricThreshold().floatValue())
+
+					return false;
+			}
+		}
+		return true;
 	}
 
 }
