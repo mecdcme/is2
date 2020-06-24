@@ -27,9 +27,12 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -250,8 +253,9 @@ public class WorkflowController {
         SessionBean elaSession = new SessionBean(dataProcessing.getId(), dataProcessing.getName());
         session.setAttribute(IS2Const.SESSION_DATAPROCESSING, elaSession);
 
-        Map<Long, List<String>> matchedVariablesMap = new  HashMap<>();
-        List<String> matchedVariables = new  ArrayList<>();
+        final Map<Long, List<String>> matchedVariablesMap = new  HashMap<>();
+        final Map<String, Set<String>> matchedVariablesbyRoles = new  LinkedHashMap<>();
+        final List<String> matchedVariables = new  ArrayList<>();
         
         List<DatasetFile> datasetfiles = datasetService
                 .findDatasetFilesByIdWorkSession(dataProcessing.getWorkSession().getId());
@@ -268,8 +272,10 @@ public class WorkflowController {
         if (stepRList != null && stepRList.size() > 0) {
             for (StepRuntime stepRuntime : stepRList) {
             	
-            	matchedVariables.add(stepRuntime.getWorkset().getName());
-            	Long idDatasetCol=stepRuntime.getWorkset().getDatasetColumnId();
+            if(!matchedVariables.contains(stepRuntime.getWorkset().getName()))	 matchedVariables.add(stepRuntime.getWorkset().getName());
+           
+            matchedVariablesbyRoles.computeIfAbsent(stepRuntime.getAppRole().getCode(), v -> new LinkedHashSet<>()).add(stepRuntime.getWorkset().getName());
+             Long idDatasetCol=stepRuntime.getWorkset().getDatasetColumnId();
             	if(idDatasetCol!=null) {
             		String nameRole=stepRuntime.getAppRole().getName();
             		List<String> roles=matchedVariablesMap.get(idDatasetCol);
@@ -353,6 +359,8 @@ public class WorkflowController {
         model.addAttribute("showTabParam", showTabParam);
         model.addAttribute("matchedVariables", matchedVariables);
         model.addAttribute("matchedVariablesMap", matchedVariablesMap);
+        model.addAttribute("matchedVariablesbyRoles", matchedVariablesbyRoles);
+        
         
         
         return "workflow/edit";

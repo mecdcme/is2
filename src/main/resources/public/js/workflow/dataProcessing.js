@@ -28,6 +28,7 @@ var tmpVarSel = {};
 var checkedPrefix = false;
 var tabTemplate = "<li><a href='#{href}'><span class='prefix' style='#{prefixStyle}'>#{prefixTab}</span>#{label} @ <span title='#{roleName}'>#{roleCode}</span></a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
 
+var paramDialog='add';
 $(document).ready(function () {
 
     $("#contenuto_file").hide();
@@ -135,6 +136,14 @@ $(document).ready(function () {
    checkedPrefix =  $('#check-prefix-dataset').prop('checked');
    $(".prefix").toggle(checkedPrefix); 
 
+   
+   $('add-parametri-workset-modal').on('dialogclose', function(event) {
+	  alert("add"); 
+	});
+   $('mod-parametri-workset-modal').on('dialogclose', function(event) {
+	   alert("addddd"); 
+	});
+   
 });
 
 
@@ -160,6 +169,7 @@ function openAddParameter(identifier) {
         }
     });
     $('#add-param').alpaca(jsonObj);
+    paramDialog='add';
     $("#add-parametri-workset-modal").modal('show');
 }
 
@@ -280,6 +290,7 @@ function openDlgModParametriWorkset(identifier) {
     });
     $('#edit-param').alpaca(jsonObj);
     $("#idStepRunMod").val(idParam);
+    paramDialog='mod';
     $("#mod-parametri-workset-modal").modal("show");
 }
 

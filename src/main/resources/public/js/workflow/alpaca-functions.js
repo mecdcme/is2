@@ -61,7 +61,7 @@ function selectMethod(value) {
 
 function reduction() {
 
-var method=	 $(".div-alpaca ").filter(':visible').alpaca().getValue()["REDUCTION-METHOD"];
-if(method!=undefined) $("#REDUCTION-METHOD").val(method);
+//var method=	 $("#"+paramDialog+"-parametri-workset-modal").alpaca().getValue()["REDUCTION-METHOD"];
+//if(method) $("#REDUCTION-METHOD").val(method);
 $("#REDUCTION-METHOD").change();
 }

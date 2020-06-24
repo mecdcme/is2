@@ -7,13 +7,13 @@
 -- Data for Name: is2_parameter; Type: TABLE DATA; Schema: is2; Owner: -
 --
 
-INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template) VALUES (1, 'MATCHING VARIABLES', 'MATCHING VARIABLES', NULL, '{"data":[],"schema":{"items":{"properties":{"MatchingVariable":{"maxLength":50,"required":true,"title":"MatchingVariable","type":"string"},"MatchingVariableA":{"maxLength":50,"required":true,"title":"MatchingVariableA","type":"string"},"MatchingVariableB":{"maxLength":50,"required":true,"title":"MatchingVariableB","type":"string"},"Method":{"enum":["Equality","Jaro","Dice","JaroWinkler","Levenshtein","3Grams","Soundex","NumericComparison","NumericEuclideanDistance","WindowEquality","Inclusion3Grams"],"required":true,"title":"Method"},"Threshold":{"title":"Threshold","type":"number"},"Window":{"title":"Window","type":"integer"}},"type":"object"},"type":"array"},"options":{"type":"table","showActionsColumn":false,"hideAddItemsBtn":true,"items":{"fields":{"Method":{"type":"select","noneLabel":"","removeDefaultNone":false},"MatchingVariableA":{"type":"select","noneLabel":"","dataSource":"matchedVariables"},"MatchingVariableB":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}}},"form":{"buttons":{"addRow":"addRow","removeRow":"removeRow"}},"view":{"templates":{"container-array-toolbar":"#addItemsBtn"}}}}');
+INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template) VALUES (1, 'MATCHING VARIABLES', 'MATCHING VARIABLES', NULL, '{"data":[],"schema":{"items":{"properties":{"MatchingVariable":{"maxLength":50,"required":true,"title":"MatchingVariable","type":"string"},"MatchingVariableA":{"maxLength":50,"required":true,"title":"MatchingVariableA","type":"string"},"MatchingVariableB":{"maxLength":50,"required":true,"title":"MatchingVariableB","type":"string"},"Method":{"enum":["Equality","Jaro","Dice","JaroWinkler","Levenshtein","3Grams","Soundex","NumericComparison","NumericEuclideanDistance","WindowEquality","Inclusion3Grams"],"required":true,"title":"Method"},"Threshold":{"title":"Threshold","type":"number"},"Window":{"title":"Window","type":"integer"}},"type":"object"},"type":"array"},"options":{"type":"table","showActionsColumn":false,"hideAddItemsBtn":true,"items":{"fields":{"Method":{"type":"select","noneLabel":"","removeDefaultNone":false},"MatchingVariableA":{"type":"select","noneLabel":"","dataSource":"matchedVariablesbyRoles.X1"},"MatchingVariableB":{"type":"select","noneLabel":"","dataSource":"matchedVariablesbyRoles.X2"}}},"form":{"buttons":{"addRow":"addRow","removeRow":"removeRow"}},"view":{"templates":{"container-array-toolbar":"#addItemsBtn"}}}}');
 INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template) VALUES (2, 'THRESHOLD MATCHING', 'THRESHOLD MATCHING', '1', '{"data":[],"schema":{"name":"THRESHOLD MATCHING","type":"number", "minimum": 0.01,"maximum": 1}}');
 INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template)  VALUES (3, 'THRESHOLD UNMATCHING', 'THRESHOLD UNMATCHING', '1', '{"data":[],"schema":{"name":"THRESHOLD UNMATCHING","type":"number", "minimum": 0.01,"maximum": 1}}');
 
 INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template) VALUES (5, 'BLOCKING VARIABLES', 'BLOCKING VARIABLES', NULL, '{"data":[],"schema":{"type":"object", "properties": { "BLOCKING_A": { "type":"array", "title":"BLOCKING A","items": {"type": "string"} }, "BLOCKING_B": { "type":"array", "title":"BLOCKING B" ,"items": {"type": "string"}} }}, "options": {"fields":{"BLOCKING_A":{"type":"array",    "toolbarSticky": true,"items":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}},"BLOCKING_B":{"type":"array",   "toolbarSticky": true, "items":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}}}}}');
 
-INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template) VALUES (20, 'REDUCTION METHOD', 'REDUCTION METHOD', NULL, '{ "data": [], "schema": { "type": "object", "properties": { "REDUCTION-METHOD": { "type": "string", "enum": [ "DRLCartesianProduct",  "DRLBlockingVariables", "SORTING VARIABLES"  ] }, "BLOCKING VARIABLES": { "type": "object",  "hidden": true,  "name": "BLOCKING VARIABLES",  "title": "BLOCKING VARIABLES", "properties": {  "BLOCKING A": { "type": "array", "required": false, "title": "BLOCKING A", "items": {  "type": "string" }, "properties": {}  },  "BLOCKING B": { "type": "array", "required": false, "title": "BLOCKING B", "items": {  "type": "string" }, "properties": {}  } } }  } }, "options": { "fields": { "REDUCTION-METHOD": { "type": "select", "label": "REDUCTION METHOD",  "change": "selectMethod", "removeDefaultNone":true, "id": "REDUCTION-METHOD", "optionLabels": [  "CARTESIAN PRODUCT",  "BLOCKING VARIABLES",  "SORTING VARIABLES"  ]  }, "BLOCKING VARIABLES": { "type": "object", "label": "BLOCKING VARIABLES",  "fields":{ "BLOCKING A":{"type":"array","label": "BLOCKING A", "toolbarSticky": true,"items":{"type":"select","removeDefaultNone":true,"dataSource":"matchedVariables"}}, "BLOCKING B":{"type":"array","label": "BLOCKING B", "toolbarSticky": true, "items":{"type":"select","removeDefaultNone":true,"dataSource":"matchedVariables"}}} } } } , "postRender": "reduction"}');
+INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template) VALUES (20, 'REDUCTION METHOD', 'REDUCTION METHOD', NULL, '{ "data": [], "schema": { "type": "object", "properties": { "REDUCTION-METHOD": { "type": "string", "enum": [ "CartesianProduct", "BlockingVariables" ] }, "BLOCKING VARIABLES": { "type": "object", "hidden": true, "name": "BLOCKING VARIABLES", "properties": { "BLOCKING A": { "type": "array", "required": false, "title": "BLOCKING A", "items": { "type": "string" }, "properties": {} }, "BLOCKING B": { "type": "array", "required": false, "title": "BLOCKING B", "items": { "type": "string" }, "properties": {} } } } } }, "options": { "fields": { "REDUCTION-METHOD": { "type": "select", "label": "REDUCTION METHOD", "removeDefaultNone":true, "id": "REDUCTION-METHOD", "sort":false, "optionLabels": [ "CARTESIAN PRODUCT", "BLOCKING VARIABLES" ] }, "BLOCKING VARIABLES": { "type": "object", "fields":{ "BLOCKING A":{"label": "BLOCKING A", "type":"select", "multiple": true,"removeDefaultNone":true,"dataSource":"matchedVariablesbyRoles.X1"}, "BLOCKING B":{"label": "BLOCKING B", "type":"select","removeDefaultNone":true,"dataSource":"matchedVariablesbyRoles.X2"}} } } } , "postRender": "reduction" }');
 
 
 -- TOC entry 4938 (class 0 OID 25260)
@@ -22,8 +22,8 @@ INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template) VALU
 --
 
 INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (1, 'X', 'MATCHING VARIABLES', 'MATCHING VARAIBLES', 1, 2, 1);
-INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (2, 'X1', 'MATCHING A', 'MATCHING VARIABLE IN DATASET A', 2, 1, NULL);
-INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (3, 'X2', 'MATCHING B', 'MATCHING VARIABLE IN DATASET B', 3, 1, NULL);
+INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (2, 'X1', 'VARIABLES DATASET A', 'SELECTED VARIABLES IN DATASET A', 2, 1, NULL);
+INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (3, 'X2', 'VARIABLES DATASET B', 'SELECTED VARIABLES IN DATASET B', 3, 1, NULL);
 INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (4, 'CT', 'CONTENGENCY TABLE', 'CONTENGENCY TABLE', 4, 1, NULL);
 INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (5, 'FS', 'FELLEGI-SUNTER', 'FELLEGI-SUNTER', 14, 1, NULL);
 INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (6, 'B', 'BLOCKING', 'SLICING DEL DATASET', 7, 1, NULL);
@@ -74,10 +74,10 @@ INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent
 INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (71, 'Fellegi Sunter', 'Fellegi Sunter algorithm', 'FellegiSunter', 2, 1);
 INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (72, 'Matching Table', 'Matching records', 'MatchingTable', 3, 1);
 
-INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (5, 'Probabilistic Record Linkage Blocking', 'Probabilistic Record Linkage Blocking', 'PRLB', 1, NULL);
-INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (73, 'Contingency Table Blocking', 'Calculate contingency table Blocking', 'CrossTableBlocking', 1, 5);
+-- INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (5, 'Probabilistic Record Linkage Blocking', 'Probabilistic Record Linkage Blocking', 'PRLB', 1, NULL);
+-- INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (73, 'Contingency Table Blocking', 'Calculate contingency table Blocking', 'CrossTableBlocking', 1, 5);
 INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (74, 'Fellegi Sunter', 'Fellegi Sunter algorithm', 'FellegiSunter', 2, 5);
-INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (75, 'Matching Table Blocking', 'Matching records Blocking', 'MatchingTableBlocking', 3, 5);
+-- INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (75, 'Matching Table Blocking', 'Matching records Blocking', 'MatchingTableBlocking', 3, 5);
 
 INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (76, 'Deterministic Record Linkage', 'Deterministic Record Linkage', 'DRL', 1, 2);
 --
@@ -152,8 +152,8 @@ INSERT INTO is2.is2_process_step ( id, name, label, descr, business_service_id) 
 INSERT INTO is2.is2_process_step ( id, name, label, descr, business_service_id)  VALUES (71, 'Fellegi Sunter', 'FELLEGI_SUNTER','Fellegi Sunter algorithm', 200);
 INSERT INTO is2.is2_process_step ( id, name, label, descr, business_service_id)  VALUES (72, 'Matching Table','MATCHING_TABLE', 'Matching records', 200);
 
-INSERT INTO is2.is2_process_step  ( id, name, label, descr, business_service_id) VALUES (73, 'Contingency Table Blocking', 'CONTINGENCY_TABLE_BLOCKING','Calculate contingency table Blocking', 200);
-INSERT INTO is2.is2_process_step  ( id, name, label, descr, business_service_id) VALUES (75, 'Matching Table Blocking','MATCHING_TABLE_BLOCKING', 'Matching records Blocking', 200);
+-- INSERT INTO is2.is2_process_step  ( id, name, label, descr, business_service_id) VALUES (73, 'Contingency Table Blocking', 'CONTINGENCY_TABLE_BLOCKING','Calculate contingency table Blocking', 200);
+-- INSERT INTO is2.is2_process_step  ( id, name, label, descr, business_service_id) VALUES (75, 'Matching Table Blocking','MATCHING_TABLE_BLOCKING', 'Matching records Blocking', 200);
 INSERT INTO is2.is2_process_step  ( id, name, label, descr, business_service_id) VALUES (76, 'Deterministic Record Linkage','DETERMINISTIC_RECORD_LINKAGE', 'Deterministic Record Linkage unique step', 200);
 
 
@@ -167,9 +167,9 @@ INSERT INTO is2.is2_process_step  ( id, name, label, descr, business_service_id)
 INSERT INTO is2.is2_link_process_step VALUES (70, 70);
 INSERT INTO is2.is2_link_process_step VALUES (71, 71);
 INSERT INTO is2.is2_link_process_step VALUES (72, 72);
-INSERT INTO is2.is2_link_process_step VALUES (73, 73);
+-- INSERT INTO is2.is2_link_process_step VALUES (73, 73);
 INSERT INTO is2.is2_link_process_step VALUES (74, 71);
-INSERT INTO is2.is2_link_process_step VALUES (75, 75);
+-- INSERT INTO is2.is2_link_process_step VALUES (75, 75);
 INSERT INTO is2.is2_link_process_step VALUES (76, 76);
 
 
@@ -179,12 +179,12 @@ INSERT INTO is2.is2_link_process_step VALUES (76, 76);
 -- Data for Name: is2_step_instance; Type: TABLE DATA; Schema: is2; Owner: -
 --
 
-INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id) VALUES (11, 'contingencyTable', 'This function calculates the contingency Table', 'ContingencyTable', 250);
+INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id) VALUES (11, 'probabilisticContencyTable', 'This function calculates the contingency Table', 'ContingencyTable', 250);
 INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (12, 'fellegisunter', 'This function implements the Fellegi Sunter algorithm', 'FellegiSunter', 200);
-INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (13, 'resultTables', 'This function calculates the Matching Table', 'MatchingTable', 250);
+INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (13, 'probabilisticResultTables', 'This function calculates the Matching Table', 'MatchingTable', 250);
 
-INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (15, 'contingencyTableBlocking', 'This function calculates the contingency Table with Blocking variable', 'ContingencyTableBlocking', 250);
-INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (16, 'resultTablesBlocking', 'This function calculates the Matching Table with Blocking variable', 'MatchingTableBlocking', 250);
+-- INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (15, 'contingencyTableBlocking', 'This function calculates the contingency Table with Blocking variable', 'ContingencyTableBlocking', 250);
+-- INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (16, 'resultTablesBlocking', 'This function calculates the Matching Table with Blocking variable', 'MatchingTableBlocking', 250);
 INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (20, 'deterministicRecorgeLinkage', 'This function calculates the Matching Table with Deterministic Record Linkage', 'DeterministicRecordLinkage', 250);
 
 --
@@ -198,8 +198,8 @@ INSERT INTO is2.is2_link_step_instance VALUES (71, 12);
 INSERT INTO is2.is2_link_step_instance VALUES (72, 13);
 
 
-INSERT INTO is2.is2_link_step_instance VALUES (73, 15);
-INSERT INTO is2.is2_link_step_instance VALUES (75, 16);
+-- INSERT INTO is2.is2_link_step_instance VALUES (73, 15);
+-- INSERT INTO is2.is2_link_step_instance VALUES (75, 16);
 INSERT INTO is2.is2_link_step_instance VALUES (76, 20);
 
 
@@ -213,40 +213,45 @@ INSERT INTO is2.is2_link_step_instance VALUES (76, 20);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (166, 1, 1, 11, 1);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (154, 1, 2, 11, 1);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (155, 1, 3, 11, 1);
+INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (156, 1, 20, 11, 1);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (161, 0, 7, 11, 2);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (158, NULL, 11, 11, 2);
+
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (167, 1, 4, 12, 1);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (168, NULL, 5, 12, 2);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (169, 1, 2, 13, 1);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (170, 1, 3, 13, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (171, 1, 5, 13, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (172, 0, 4, 13, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (173, NULL, 7, 13, 2);
-INSERT INTO is2.is2_step_instance_signature VALUES (176, 1, 8, 13, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (177, 1, 9, 13, 1);
-
-INSERT INTO is2.is2_step_instance_signature VALUES (180, 1, 1, 15, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (181, 1, 2, 15, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (182, 1, 3, 15, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (183, 0, 7, 15, 2);
-INSERT INTO is2.is2_step_instance_signature VALUES (184, NULL, 11, 15, 2);
-
-INSERT INTO is2.is2_step_instance_signature VALUES (195, 1, 18, 15, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (196, 1, 19, 15, 1);
+INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (171, 1, 5, 13, 1);
+INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (172, 0, 4, 13, 1);
+INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (174, 1, 20, 13, 1);
 
 
-INSERT INTO is2.is2_step_instance_signature VALUES (185, 1, 2, 16, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (186, 1, 3, 16, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (187, 1, 5, 16, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (188, 0, 4, 16, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (189, NULL, 7, 16, 2);
-INSERT INTO is2.is2_step_instance_signature VALUES (190, 1, 8, 16, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (191, 1, 9, 16, 1);
+INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (173, NULL, 7, 13, 2);
+INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (176, 1, 8, 13, 1);
+INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (177, 1, 9, 13, 1);
+
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (180, 1, 1, 15, 1);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (181, 1, 2, 15, 1);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (182, 1, 3, 15, 1);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (183, 0, 7, 15, 2);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (184, NULL, 11, 15, 2);
+
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (195, 1, 18, 15, 1);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (196, 1, 19, 15, 1);
+
+
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (185, 1, 2, 16, 1);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (186, 1, 3, 16, 1);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (187, 1, 5, 16, 1);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (188, 0, 4, 16, 1);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (189, NULL, 7, 16, 2);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (190, 1, 8, 16, 1);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (191, 1, 9, 16, 1);
  
-INSERT INTO is2.is2_step_instance_signature VALUES (197, 1, 18, 16, 1);
-INSERT INTO is2.is2_step_instance_signature VALUES (198, 1, 19, 16, 1);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (197, 1, 18, 16, 1);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (198, 1, 19, 16, 1);
 
-INSERT INTO is2.is2_step_instance_signature VALUES (194, NULL, 17, 12, 2);
+INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (194, NULL, 17, 12, 2);
 
 
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (200, 1, 1, 20, 1);

@@ -28,6 +28,7 @@
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
         <script th:src="@{/js/vendors/table/datatables.min.js}"  type="text/javascript"></script>
         <script th:src="@{/js/vendors/alpaca/handlebars.min.js}"  type="text/javascript"></script>
+        <script th:src="@{/js/vendors/bootstrap-multiselect/bootstrap-multiselect.js}"  type="text/javascript"></script>
         <script th:src="@{/js/vendors/alpaca/alpaca.min.js}"  type="text/javascript"></script>
         <script th:src="@{/js/jquery-ui.min.js}" type="text/javascript"></script>
         <script th:src="@{/js/workflow/dataProcessing.js}"  type="text/javascript"></script>
@@ -42,6 +43,8 @@
                 _paramTemplateMap[replaceAll(_paramList[i].parameter.name," ","_")] = _paramList[i].parameter.jsonTemplate;
             }
             var matchedVariables = [[${matchedVariables}]];
+            var matchedVariablesbyRoles = [[${matchedVariablesbyRoles}]];
+            
             var _variable_btn = [[#{btn.title.bind}]];
             $(document).ready(function () {
                 setMenuActive([[${session.sessionBean.businessFunction.id}]], "pr");
@@ -61,6 +64,7 @@
             </div>
             {{/if}}
         </script>
+         <link th:href="@{/css/vendors/bootstrap-multiselect/bootstrap-multiselect.css}" rel="stylesheet" />
         <link th:href="@{/css/vendors/alpaca/alpaca.min.css}" rel="stylesheet" />
         <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet" />
         <link th:href="@{/css/jquery/jquery-ui.min.css}" rel="stylesheet" />
