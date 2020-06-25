@@ -1,6 +1,6 @@
 
 
-
+INSERT INTO is2.is2_business_service VALUES (200, 'Relais', 'Record Linkage at Istat',51);
 
 -- TOC entry 4938 (class 0 OID 25260)
 -- Dependencies: 259
@@ -76,17 +76,14 @@ INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent
 
 -- INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (5, 'Probabilistic Record Linkage Blocking', 'Probabilistic Record Linkage Blocking', 'PRLB', 1, NULL);
 -- INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (73, 'Contingency Table Blocking', 'Calculate contingency table Blocking', 'CrossTableBlocking', 1, 5);
-INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (74, 'Fellegi Sunter', 'Fellegi Sunter algorithm', 'FellegiSunter', 2, 5);
+--INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (74, 'Fellegi Sunter', 'Fellegi Sunter algorithm', 'FellegiSunter', 2, 5);
 -- INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (75, 'Matching Table Blocking', 'Matching records Blocking', 'MatchingTableBlocking', 3, 5);
 
 INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (76, 'Deterministic Record Linkage', 'Deterministic Record Linkage', 'DRL', 1, 2);
 --
--- TOC entry 4913 (class 0 OID 25174)
--- Dependencies: 234
--- Data for Name: is2_business_service; Type: TABLE DATA; Schema: is2; Owner: -
---
+ 
 
-INSERT INTO is2.is2_business_service VALUES (200, 'Relais', 'Record Linkage at Istat',51);
+
 
 
 
@@ -106,8 +103,8 @@ INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 7);
 INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 8);
 INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 9);
 INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 10);
-INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 11);
-INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 12);
+
+
 INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 13);
 INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 14);
 
@@ -128,7 +125,7 @@ INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 20);
 
 INSERT INTO is2.is2_link_function_process VALUES (1, 1);
 INSERT INTO is2.is2_link_function_process VALUES (1, 2);
-INSERT INTO is2.is2_link_function_process VALUES (1, 5);
+--INSERT INTO is2.is2_link_function_process VALUES (1, 5);
 
 
 --
@@ -168,7 +165,7 @@ INSERT INTO is2.is2_link_process_step VALUES (70, 70);
 INSERT INTO is2.is2_link_process_step VALUES (71, 71);
 INSERT INTO is2.is2_link_process_step VALUES (72, 72);
 -- INSERT INTO is2.is2_link_process_step VALUES (73, 73);
-INSERT INTO is2.is2_link_process_step VALUES (74, 71);
+--INSERT INTO is2.is2_link_process_step VALUES (74, 71);
 -- INSERT INTO is2.is2_link_process_step VALUES (75, 75);
 INSERT INTO is2.is2_link_process_step VALUES (76, 76);
 
