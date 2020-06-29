@@ -1,5 +1,3 @@
-
-
 INSERT INTO is2.is2_business_service VALUES (200, 'Relais', 'Record Linkage at Istat',51);
 
 -- TOC entry 4938 (class 0 OID 25260)
