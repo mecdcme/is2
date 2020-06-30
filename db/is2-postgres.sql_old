@@ -701,15 +701,6 @@ CREATE TABLE is2.is2_link_business_service_app_role (
 );
 
 
---
--- TOC entry 349 (class 1259 OID 32783)
--- Name: is2_link_business_service_app_role_sav; Type: TABLE; Schema: is2; Owner: -
---
-
-CREATE TABLE is2.is2_link_business_service_app_role_sav (
-    business_service_id integer,
-    app_role_id integer
-);
 
 
 --
@@ -865,19 +856,6 @@ CREATE SEQUENCE is2.is2_process_step_id_seq
 --
 
 ALTER SEQUENCE is2.is2_process_step_id_seq OWNED BY is2.is2_process_step.id;
-
-
---
--- TOC entry 348 (class 1259 OID 32774)
--- Name: is2_process_step_sav; Type: TABLE; Schema: is2; Owner: -
---
-
-CREATE TABLE is2.is2_process_step_sav (
-    id integer,
-    name character varying(100),
-    descr text,
-    business_service_id integer
-);
 
 
 --
@@ -1907,23 +1885,6 @@ INSERT INTO is2.is2_process_step VALUES (95, 'MAP','MAP', 'MAP ', 91);
 
 INSERT INTO is2.is2_process_step VALUES (73, 'Contingency Table Blocking', 'CONTINGENCY_TABLE_BLOCKING','Calculate contingency table Blocking', 200);
 INSERT INTO is2.is2_process_step VALUES (75, 'Matching Table Blocking','MATCHING_TABLE_BLOCKING', 'Matching records Blocking', 200);
-
---
--- TOC entry 4965 (class 0 OID 32774)
--- Dependencies: 348
--- Data for Name: is2_process_step_sav; Type: TABLE DATA; Schema: is2; Owner: -
---
-
-INSERT INTO is2.is2_process_step_sav VALUES (4, 'Data validation Van der Loo', 'Data validation Van der Loo', 300);
-INSERT INTO is2.is2_process_step_sav VALUES (70, 'Contingency Table', 'Calculate contingency table', 200);
-INSERT INTO is2.is2_process_step_sav VALUES (71, 'Fellegi Sunter', 'Fellegi Sunter algorithm', 200);
-INSERT INTO is2.is2_process_step_sav VALUES (72, 'Matching Table', 'Matching records', 200);
-INSERT INTO is2.is2_process_step_sav VALUES (91, 'LOAD', 'LOAD ', 91);
-INSERT INTO is2.is2_process_step_sav VALUES (92, 'STRUCTURIZE', 'STRUCTURIZE ', 92);
-INSERT INTO is2.is2_process_step_sav VALUES (93, 'CONTROL', 'CONTROL ', 93);
-INSERT INTO is2.is2_process_step_sav VALUES (94, 'FILTER', 'FILTER ', 94);
-INSERT INTO is2.is2_process_step_sav VALUES (95, 'MAP', 'MAP ', 95);
-
 
 --
 -- TOC entry 4942 (class 0 OID 25276)
