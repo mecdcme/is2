@@ -8,12 +8,11 @@
 DROP SCHEMA IF EXISTS is2 CASCADE;
 CREATE SCHEMA is2;
 
-DO $$
+DO '
 BEGIN
-   execute 'alter database '||current_database()||' set search_path to is2,public;';
+execute ''alter database ''||current_database()||'' set search_path to is2,public;'';
 END;
-$$
-;
+';
 
 set search_path to is2,public;
 
@@ -389,18 +388,6 @@ CREATE SEQUENCE is2.is2_business_service_id_seq
 --
 
 ALTER SEQUENCE is2.is2_business_service_id_seq OWNED BY is2.is2_business_service.id;
-
-
---
--- TOC entry 347 (class 1259 OID 32768)
--- Name: is2_business_service_sav; Type: TABLE; Schema: is2; Owner: -
---
-
-CREATE TABLE is2.is2_business_service_sav (
-    id integer,
-    name character varying(100),
-    descr text
-);
 
 
 --
@@ -1671,21 +1658,6 @@ INSERT INTO is2.is2_business_service VALUES (91, 'ARC loader', 'ARC file loader 
 
 
 --
--- TOC entry 4964 (class 0 OID 32768)
--- Dependencies: 347
--- Data for Name: is2_business_service_sav; Type: TABLE DATA; Schema: is2; Owner: -
---
-
-INSERT INTO is2.is2_business_service_sav VALUES (200, 'Relais', 'Record Linkage at Istat');
-INSERT INTO is2.is2_business_service_sav VALUES (300, 'Validate', 'R Data Validation');
-INSERT INTO is2.is2_business_service_sav VALUES (91, 'LOAD', 'LOAD ');
-INSERT INTO is2.is2_business_service_sav VALUES (92, 'STRUCTURIZE', 'STRUCTURIZE ');
-INSERT INTO is2.is2_business_service_sav VALUES (93, 'CONTROL', 'CONTROL ');
-INSERT INTO is2.is2_business_service_sav VALUES (94, 'FILTER', 'FILTER ');
-INSERT INTO is2.is2_business_service_sav VALUES (95, 'MAP', 'MAP ');
-
-
---
 -- TOC entry 4915 (class 0 OID 25182)
 -- Dependencies: 236
 -- Data for Name: is2_cls_data_type; Type: TABLE DATA; Schema: is2; Owner: -
@@ -2398,6 +2370,13 @@ ALTER TABLE ONLY is2.batch_step_execution_context
 
 ALTER TABLE ONLY is2.batch_step_execution
     ADD CONSTRAINT batch_step_execution_pkey PRIMARY KEY (step_execution_id);
+
+
+-- is2.is2_gsbpm_process
+
+ALTER TABLE ONLY is2.is2_gsbpm_process
+    ADD CONSTRAINT is2_gsbpm_process_pkey PRIMARY KEY (id);
+
 
 
 --
