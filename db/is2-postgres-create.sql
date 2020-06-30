@@ -8,12 +8,11 @@
 DROP SCHEMA IF EXISTS is2 CASCADE;
 CREATE SCHEMA is2;
 
-DO $$
+DO '
 BEGIN
-   execute 'alter database '||current_database()||' set search_path to is2,public;';
+execute ''alter database ''||current_database()||'' set search_path to is2,public;'';
 END;
-$$
-;
+';
 
 set search_path to is2,public;
 
@@ -390,19 +389,6 @@ CREATE SEQUENCE is2.is2_business_service_id_seq
 
 ALTER SEQUENCE is2.is2_business_service_id_seq OWNED BY is2.is2_business_service.id;
 
-
---
--- TOC entry 347 (class 1259 OID 32768)
--- Name: is2_business_service_sav; Type: TABLE; Schema: is2; Owner: -
---
-
-CREATE TABLE is2.is2_business_service_sav (
-    id integer,
-    name character varying(100),
-    descr text
-);
-
-
 --
 -- TOC entry 236 (class 1259 OID 25182)
 -- Name: is2_cls_data_type; Type: TABLE; Schema: is2; Owner: -
@@ -715,17 +701,6 @@ CREATE TABLE is2.is2_link_business_service_app_role (
 
 
 --
--- TOC entry 349 (class 1259 OID 32783)
--- Name: is2_link_business_service_app_role_sav; Type: TABLE; Schema: is2; Owner: -
---
-
-CREATE TABLE is2.is2_link_business_service_app_role_sav (
-    business_service_id integer,
-    app_role_id integer
-);
-
-
---
 -- TOC entry 253 (class 1259 OID 25240)
 -- Name: is2_link_function_process; Type: TABLE; Schema: is2; Owner: -
 --
@@ -878,19 +853,6 @@ CREATE SEQUENCE is2.is2_process_step_id_seq
 --
 
 ALTER SEQUENCE is2.is2_process_step_id_seq OWNED BY is2.is2_process_step.id;
-
-
---
--- TOC entry 348 (class 1259 OID 32774)
--- Name: is2_process_step_sav; Type: TABLE; Schema: is2; Owner: -
---
-
-CREATE TABLE is2.is2_process_step_sav (
-    id integer,
-    name character varying(100),
-    descr text,
-    business_service_id integer
-);
 
 
 --
@@ -1850,6 +1812,10 @@ ALTER TABLE ONLY is2.batch_step_execution_context
 ALTER TABLE ONLY is2.batch_step_execution
     ADD CONSTRAINT batch_step_execution_pkey PRIMARY KEY (step_execution_id);
 
+-- is2.is2_gsbpm_process
+
+ALTER TABLE ONLY is2.is2_gsbpm_process
+    ADD CONSTRAINT is2_gsbpm_process_pkey PRIMARY KEY (id);
 
 --
 -- TOC entry 4656 (class 2606 OID 25393)
