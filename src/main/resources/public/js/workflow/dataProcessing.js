@@ -712,7 +712,7 @@ $(function () {
         stop: function () {
             var result = $("#select-result").empty();
             variablesArr = new Array();
-            $(".ui-selected", this).each(function () {
+            $("li.ui-selected", this).each(function () {
                 var currSel = $(this).attr("value");
                 tmpArr = currSel.split('~');
                 variablesArr.push({'idVar': tmpArr[0], 'name': tmpArr[1], 'labelTab': tmpArr[2], 'prefixTab': tmpArr[3]});
