@@ -23,6 +23,7 @@
  */
 package it.istat.is2.app.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,98 +41,98 @@ import it.istat.is2.app.domain.Log;
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.worksession.domain.WorkSession;
 
-import java.util.ArrayList;
-
 @Service
 @Transactional
 public class LogService {
 
-    @Autowired
-    private LogDao logDao;
-    @Autowired
-    private HttpSession httpSession;
-    @Autowired
+	@Autowired
+	private LogDao logDao;
+	@Autowired
+	private HttpSession httpSession;
+	@Autowired
 	protected EntityManager em;
 
-    public List<Log> findAll() {
-        return (List<Log>) logDao.findAll();
-    }
+	public List<Log> findAll() {
+		return logDao.findAll();
+	}
 
-    public List<Log> findByIdSessione(Long idSessione) {
-       // return (List<Log>) this.logDao.findByIdSessioneAndTipoOrderByIdDesc(idSessione, IS2Const.OUTPUT_DEFAULT);
-        return (List<Log>) logDao.findByWorkSessionOrderByIdAsc(new WorkSession(idSessione));
-    }
+	public List<Log> findByIdSessione(Long idSessione) {
+		// return (List<Log>)
+		// this.logDao.findByIdSessioneAndTipoOrderByIdDesc(idSessione,
+		// IS2Const.OUTPUT_DEFAULT);
+		return logDao.findByWorkSessionOrderByIdAsc(new WorkSession(idSessione));
+	}
 
-    public List<Log> findByIdSessioneAndTipo(Long idSessione, String tipo) {
-        return (List<Log>) logDao.findByWorkSessionAndTypeOrderByIdAsc(new WorkSession(idSessione), tipo);
-    }
-        
-    public List<Log> findByIdSessione() {
-         SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
-         List<Log> logs;
-         if (sessionBean != null) {
-             logs = logDao.findByWorkSessionAndTypeOrderByIdDesc(new WorkSession(sessionBean.getId()),IS2Const.OUTPUT_DEFAULT);
-         } else{
-             logs = new ArrayList<>();
-         }
-        return logs;
-    }
-    
-    public List<Log> findByIdSessioneAndTipo(String tipo) {
-         SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
-         List<Log> logs;
-         if (sessionBean != null) {
-             logs = logDao.findByWorkSessionAndTypeOrderByIdAsc(new WorkSession(sessionBean.getId()),tipo);
-         } else{
-             logs = new ArrayList<>();
-         }
-        return logs;
-    }
-    
-    public void deleteByIdSessione(Long idSessione) {
-         logDao.deleteByWorkSession(idSessione);
-    }
-    
-    public int deleteByIdSessioneAndTipo(Long idSessione, String tipo) {
-        return logDao.deleteByWorkSessionAndType(idSessione, tipo);
-    }
-    
-    public void save(String msg) {
+	public List<Log> findByIdSessioneAndTipo(Long idSessione, String tipo) {
+		return logDao.findByWorkSessionAndTypeOrderByIdAsc(new WorkSession(idSessione), tipo);
+	}
 
-        SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
-        Session session = em.unwrap(Session.class);
-        Log log = new Log();
-        if (sessionBean != null && sessionBean.getId()!=null ) {
-            log.setWorkSession(new WorkSession(sessionBean.getId()));
-        } else{
-        	 log.setWorkSession(new WorkSession());
-        }
-        log.setMsg(msg);
-        log.setType(IS2Const.OUTPUT_DEFAULT);
-        log.setMsgTime(new Date());
+	public List<Log> findByIdSessione() {
+		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+		List<Log> logs;
+		if (sessionBean != null) {
+			logs = logDao.findByWorkSessionAndTypeOrderByIdDesc(new WorkSession(sessionBean.getId()),
+					IS2Const.OUTPUT_DEFAULT);
+		} else {
+			logs = new ArrayList<>();
+		}
+		return logs;
+	}
 
-        this.logDao.save(log);
-    	session.flush();
+	public List<Log> findByIdSessioneAndTipo(String tipo) {
+		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+		List<Log> logs;
+		if (sessionBean != null) {
+			logs = logDao.findByWorkSessionAndTypeOrderByIdAsc(new WorkSession(sessionBean.getId()), tipo);
+		} else {
+			logs = new ArrayList<>();
+		}
+		return logs;
+	}
+
+	public void deleteByIdSessione(Long idSessione) {
+		logDao.deleteByWorkSession(idSessione);
+	}
+
+	public int deleteByIdSessioneAndTipo(Long idSessione, String tipo) {
+		return logDao.deleteByWorkSessionAndType(idSessione, tipo);
+	}
+
+	public void save(String msg) {
+
+		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+		Session session = em.unwrap(Session.class);
+		Log log = new Log();
+		if (sessionBean != null && sessionBean.getId() != null) {
+			log.setWorkSession(new WorkSession(sessionBean.getId()));
+		} else {
+			log.setWorkSession(new WorkSession());
+		}
+		log.setMsg(msg);
+		log.setType(IS2Const.OUTPUT_DEFAULT);
+		log.setMsgTime(new Date());
+
+		this.logDao.save(log);
+		session.flush();
 		session.clear();
-        
-    }
-    
-    public void save(String msg, String tipo) {
 
-        SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+	}
 
-        Log log = new Log();
-        if (sessionBean != null) {
-            log.setWorkSession(new WorkSession(sessionBean.getId()));
-        } else{
-        	  log.setWorkSession(null);
-        }
-        log.setMsg(msg);
-        log.setType(tipo);
-        log.setMsgTime(new Date());
+	public void save(String msg, String tipo) {
 
-        logDao.save(log);
-    }
-    
-    
+		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+
+		Log log = new Log();
+		if (sessionBean != null) {
+			log.setWorkSession(new WorkSession(sessionBean.getId()));
+		} else {
+			log.setWorkSession(null);
+		}
+		log.setMsg(msg);
+		log.setType(tipo);
+		log.setMsgTime(new Date());
+
+		logDao.save(log);
+	}
+
 }

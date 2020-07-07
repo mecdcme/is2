@@ -41,10 +41,10 @@ import org.renjin.script.RenjinScriptEngineFactory;
 import org.renjin.sexp.ListVector;
 import org.renjin.sexp.StringVector;
 import org.renjin.sexp.Vector;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
-import it.istat.is2.app.service.LogService;
+
 import it.istat.is2.app.util.IS2Const;
 import it.istat.is2.app.util.Utility;
 import it.istat.is2.workflow.domain.AppRole;
@@ -60,8 +60,7 @@ import it.istat.is2.workflow.domain.Workset;
 public class EngineREnjin extends EngineR implements EngineService {
 
 	RenjinScriptEngine engine;
-	@Autowired
-	private LogService logService;
+	 
 
 	final StringWriter logWriter = new StringWriter();
 	private final Map<String, Object> worksetOut;
