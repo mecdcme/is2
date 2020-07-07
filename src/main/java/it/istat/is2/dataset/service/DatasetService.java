@@ -71,9 +71,9 @@ public class DatasetService {
 	protected EntityManager em;
 
 	@Transactional
-	public DatasetFile save(final HashMap<String, ArrayList<String>> campi,
-			final HashMap<Integer, String> valoriHeaderNum, final String labelFile, final Long tipoDato,
-			final String separatore, final String desc, final String idsessione) throws Exception {
+	public DatasetFile save(final Map<String, ArrayList<String>> campi, final Map<Integer, String> valoriHeaderNum,
+			final String labelFile, final Long tipoDato, final String separatore, final String desc,
+			final String idsessione) throws Exception {
 
 		Session session = em.unwrap(Session.class);
 
@@ -102,7 +102,7 @@ public class DatasetService {
 			dc.setContentSize(campi.get(kCampi).size());
 			ord += 1;
 			dc.setContents(campi.get(kCampi));
-	
+
 			dc.setDatasetFile(dFile);
 			datasetColumnDao.save(dc);
 			session.flush();
@@ -115,20 +115,14 @@ public class DatasetService {
 		return dFile;
 	}
 
-	public DatasetColumn salvaColonna(DatasetColumn dcol) throws Exception {
+	public DatasetColumn salvaColonna(DatasetColumn dcol) {
 
-		DatasetColumn dC;
-		try {
-			dC = datasetColumnDao.save(dcol);
-		} catch (Exception e) {
-			return null;
-		}
+		return datasetColumnDao.save(dcol);
 
-		return dC;
 	}
 
 	public List<DatasetFile> findAllDatasetFile() {
-		return (List<DatasetFile>) datasetFileDao.findAll();
+		return datasetFileDao.findAll();
 
 	}
 
@@ -203,14 +197,14 @@ public class DatasetService {
 
 	public List<DatasetColumn> findAllDatasetColumnQueryFilter(Long dFile, Integer rigaInf, Integer rigaSup,
 			String filterFieldName, String filterFieldValue, List<String> fieldSelect) {
-		List<DatasetColumn> dataList = datasetColumnDao.findDatasetColumnbyQueryFilter(dFile, rigaInf, rigaSup,
-				filterFieldName, filterFieldValue, fieldSelect);
-		return dataList;
+		return datasetColumnDao.findDatasetColumnbyQueryFilter(dFile, rigaInf, rigaSup, filterFieldName,
+				filterFieldValue, fieldSelect);
+
 	}
 
 	public List<StatisticalVariableCls> findAllVariabiliSum() {
-		Iterable<StatisticalVariableCls> variabileSum = variabileSumDao.findAllVariables();
-		return (List<StatisticalVariableCls>) variabileSum;
+		return variabileSumDao.findAllVariables();
+
 	}
 
 	public List<DatasetColumn> findByDatasetFile(DatasetFile idfile) {
