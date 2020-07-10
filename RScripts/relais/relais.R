@@ -16,15 +16,15 @@ rm(list=ls())
 
 fellegisunter <- function(workset, roles, wsparams=NULL, ...) {
 
+workset_ct=workset$CT
+	
+ct <- roles$CT
 
-  
-
- ct <- roles$CT
 
  nvar=length(ct)-1
- #yy <-  as.data.frame(matrix(as.numeric(workset[,ct]),ncol=length(ct),nrow=nrow(workset)))
- yy <- workset
- #print(workset)
+ #yy <-  as.data.frame(matrix(as.numeric(workset_ct[,ct]),ncol=length(ct),nrow=nrow(workset_ct)))
+ yy <- workset_ct
+
  colnames(yy)<- ct
  #print(yy)	 
 	muTableName="muTable"

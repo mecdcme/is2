@@ -93,7 +93,7 @@ public class EngineREnjin extends EngineR implements EngineService {
 
 		prepareEnv();
 		createConnection();
-		bindInputColumns(worksetVariables, WORKSET_IN);
+		bindInputColumnsMap(worksetVariables, WORKSET_IN);
 		bindInputColumnsParams(parametersMap, PARAMETERS_IN);
 		bindInputColumns(rulesetMap, RULESET);
 		setRoles(variablesRolesMap);
@@ -119,7 +119,7 @@ public class EngineREnjin extends EngineR implements EngineService {
 		// Do nothing
 	}
 
-	public void bindInputColumns(LinkedHashMap<String, ArrayList<String>> workset, String varR) throws ScriptException {
+	public void bindInputColumns(Map<String, List<String>> workset, String varR) throws ScriptException {
 
 		if (!workset.isEmpty()) {
 			List<String> keys = new ArrayList<>(workset.keySet());
@@ -149,7 +149,54 @@ public class EngineREnjin extends EngineR implements EngineService {
 		}
 	}
 
-	public void bindInputColumnsParams(LinkedHashMap<String, ArrayList<String>> workset, String varR)
+	public void bindInputColumnsMap(Map<String,  Map<String, List<String>>> worksetIn, String varR) throws ScriptException {
+
+		if (!worksetIn.isEmpty()) {
+			engine.eval(varR + " <- list()");
+			
+		worksetIn.forEach((keyW,workset) ->{
+			
+			
+			try {
+				engine.eval(keyW + " <- list() ");
+			
+			 
+			List<String> keys = new ArrayList<>(workset.keySet());
+			StringBuilder listaCampi = new StringBuilder();
+			int size = keys.size();
+			String key;
+
+			for (int i = 0; i < size; i++) {
+				key = keys.get(i);
+
+				String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
+				listaCampi.append(key + ",");
+				engine.put(key, arrX); // Create a string vector
+				try {
+					if (Utility.isNumericR(arrX)) {
+						engine.eval(key + " <- as.numeric(" + key + ")");
+					
+					}
+				} catch (Exception e) {
+					Logger.getRootLogger().error(e.getMessage());
+				}
+
+			}
+			engine.eval(keyW + " <- data.frame(" + listaCampi.substring(0, listaCampi.length() - 1) + ", stringsAsFactors = FALSE)");
+			
+	 
+			engine.eval(varR + "[['"+keyW + "']] <- "+keyW );
+	 		} catch (ScriptException e1) {
+				// TODO Auto-generated catch block
+			 throw new RuntimeException(e1);
+			}
+			
+		});																								// data
+	//	engine.eval(varR + " <- data.frame(" + listaCampi.substring(0, listaCampi.length() - 1) + ")");
+																									// frame
+		}
+	}
+	public void bindInputColumnsParams(Map<String, List<String>> workset, String varR)
 			throws ScriptException {
 
 		if (!workset.isEmpty()) {

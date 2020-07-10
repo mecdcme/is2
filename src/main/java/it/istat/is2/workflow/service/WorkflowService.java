@@ -248,6 +248,8 @@ public class WorkflowService {
 			}
 
 			stepRuntime.setAppRole(sxruolo);
+			stepRuntime.setRoleGroup(sxruolo);
+			 
 			stepRuntime.setOrderCode(sxruolo.getOrder());
 			stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
 			workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
@@ -337,6 +339,7 @@ public class WorkflowService {
 			StepRuntime stepRuntime = new StepRuntime();
 			stepRuntime.setDataProcessing(dataProcessing);
 			stepRuntime.setAppRole(sxruolo);
+			stepRuntime.setRoleGroup(sxruolo);
 			Workset workset = new Workset();
 			workset.setName(nomeparam.replaceAll(PATTERNNAME, "_"));
 			stepRuntime.setOrderCode(sxruolo.getOrder());
@@ -564,6 +567,7 @@ public class WorkflowService {
 					workset.setDatasetColumnId(dscolumn.getId());
 				}
 				stepRuntime.setAppRole(appRole);
+				stepRuntime.setRoleGroup(appRole);
 				stepRuntime.setOrderCode(appRole.getOrder());
 				stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_INPUT));
 				stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));

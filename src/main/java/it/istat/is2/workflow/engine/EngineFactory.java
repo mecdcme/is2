@@ -20,43 +20,42 @@
  */
 package it.istat.is2.workflow.engine;
 
-import it.istat.is2.app.util.IS2Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EngineFactory {
 
-    @Autowired
-    private EngineRServe engineRServe;
-    
-    @Autowired
-    private EngineREnjin engineREInjin;
-    
-    @Autowired
-    private EngineJava engineJava;
+	@Autowired
+	private EngineRServe engineRServe;
 
-    @Autowired
-    private EngineSQL engineSQL;
- 
-    public EngineService getEngine(String engineType) {
-        if (engineType == null) {
-            return null;
-        }
-        if (engineType.equalsIgnoreCase(IS2Const.ENGINE_RSERVE)) {
-            return engineRServe;
+	@Autowired
+	private EngineREnjin engineREInjin;
 
-        } else if (engineType.equalsIgnoreCase(IS2Const.ENGINE_RENJIN)) {
-            return engineREInjin;
+	@Autowired
+	private EngineJava engineJava;
 
-        } else if (engineType.equalsIgnoreCase(IS2Const.ENGINE_JAVA)) {
-            return engineJava;
+	@Autowired
+	private EngineSQL engineSQL;
 
-        } else if (engineType.equalsIgnoreCase(IS2Const.ENGINE_SQL)) {
-            return engineSQL;
-            
-        }
+	public EngineService getEngine(String engineType) {
+		if (engineType == null) {
+			return null;
+		}
+		if (engineType.equalsIgnoreCase(EngineService.ENGINE_RSERVE)) {
+			return engineRServe;
 
-        return null;
-    }
+		} else if (engineType.equalsIgnoreCase(EngineService.ENGINE_RENJIN)) {
+			return engineREInjin;
+
+		} else if (engineType.equalsIgnoreCase(EngineService.ENGINE_JAVA)) {
+			return engineJava;
+
+		} else if (engineType.equalsIgnoreCase(EngineService.ENGINE_SQL)) {
+			return engineSQL;
+
+		}
+
+		return null;
+	}
 }

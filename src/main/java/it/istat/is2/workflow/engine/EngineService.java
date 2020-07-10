@@ -31,41 +31,49 @@ import it.istat.is2.workflow.domain.StepInstance;
 @Service
 public interface EngineService {
 
-    
-	//GENERIC BRIDGE 
-    public static final String WORKSET = "workset";
-    public static final String PARAMETERS = "ws_params";
-    public static final String ROLES = "roles";
-    public static final String OUT = "out";
-	
-	//GENERIC INPUT
-    public static final String WORKSET_IN = "workset_in";
-    public static final String PARAMETERS_IN = "params_in";
-    public static final String ROLES_IN = "roles_in";
+	public static final String ENGINE_RSERVE = "RSERVE";
+	public static final String ENGINE_RENJIN = "RENJIN";
+	public static final String ENGINE_JAVA = "JAVA";
+	public static final String ENGINE_SQL = "SQL";
 
-    //GENERIC OUTPUT
-    public static final String WORKSET_OUT = "workset_out"; //Output container
-    public static final String PARAMETERS_OUT = "params_out";
-    public static final String REPORT_OUT = "report_out";
-    public static final String ROLES_OUT = "roles_out";
-    public static final String ROLES_GROUP_OUT = "rolesgroup_out";
-    public static final String RESULTSET = "resultset";
+	public static final String ENGINE_R_LIGHT = "R-LIGHT";
 
-    //RULESET
-    public static final String RULESET = "ruleset";
 
-    //DEFAULT VALUES
-    public static final String ROLE_DEFAULT = "N";
-    public static final String DEFAULT_NA = "NA"; //
 
-    public void init(DataProcessing dataProcessing, StepInstance stepInstance) throws Exception;
+	// GENERIC BRIDGE
+	public static final String WORKSET = "workset";
+	public static final String PARAMETERS = "ws_params";
+	public static final String ROLES = "roles";
+	public static final String OUT = "out";
 
-    public void init() throws Exception;
+	// GENERIC INPUT
+	public static final String WORKSET_IN = "workset_in";
+	public static final String PARAMETERS_IN = "params_in";
+	public static final String ROLES_IN = "roles_in";
 
-    public void doAction() throws Exception;
+	// GENERIC OUTPUT
+	public static final String WORKSET_OUT = "workset_out"; // Output container
+	public static final String PARAMETERS_OUT = "params_out";
+	public static final String REPORT_OUT = "report_out";
+	public static final String ROLES_OUT = "roles_out";
+	public static final String ROLES_GROUP_OUT = "rolesgroup_out";
+	public static final String RESULTSET = "resultset";
 
-    public void processOutput() throws Exception;
+	// RULESET
+	public static final String RULESET = "ruleset";
 
-    public void destroy();
+	// DEFAULT VALUES
+	public static final String ROLE_DEFAULT = "N";
+	public static final String DEFAULT_NA = "NA"; //
+
+	public void init(DataProcessing dataProcessing, StepInstance stepInstance) throws Exception;
+
+	public void init() throws Exception;
+
+	public void doAction() throws Exception;
+
+	public void processOutput() throws Exception;
+
+	public void destroy();
 
 }

@@ -2,6 +2,7 @@ package it.istat.is2.workflow.engine;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,9 @@ public class EngineR {
     protected StepInstance stepInstance;
     protected LinkedHashMap<String, ArrayList<StepRuntime>> dataMap;
     protected Map<String, AppRole> rolesMap;
-    protected LinkedHashMap<String, ArrayList<String>> parametersMap;
-    protected LinkedHashMap<String, ArrayList<String>> worksetVariables;
-    protected LinkedHashMap<String, ArrayList<String>> rulesetMap;
+    protected Map<String,  List<String>> parametersMap;
+    protected Map<String,  Map<String, List<String>>> worksetVariables;
+    protected Map<String, List<String>> rulesetMap;
 
     protected LinkedHashMap<String, ArrayList<String>> variablesRolesMap;
 

@@ -28,7 +28,6 @@ import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,7 +40,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.stream.IntStream;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -60,9 +58,6 @@ import it.istat.is2.workflow.domain.DataTypeCls;
 import it.istat.is2.workflow.domain.StepRuntime;
 
 public class Utility {
-
-	private static final String KEY_SEPARATOR = "@_@";
-
 	@SuppressWarnings("rawtypes")
 	public static String printJsonToHtml(String jsonString) {
 		StringBuffer ret = new StringBuffer();
@@ -382,10 +377,10 @@ public class Utility {
 		return tipoDato;
 	}
 
-	public static LinkedHashMap<String, ArrayList<String>> getMapWorkSetValues(
+	public static Map<String, List<String>> getMapWorkSetValues(
 			Map<String, ArrayList<StepRuntime>> dataMap, DataTypeCls dataType) {
 
-		LinkedHashMap<String, ArrayList<String>> ret = new LinkedHashMap<>();
+		 Map<String,  List<String>> ret = new LinkedHashMap<>();
 		for (Map.Entry<String, ArrayList<StepRuntime>> entry : dataMap.entrySet()) {
 			String nomeW = entry.getKey();
 			ArrayList<StepRuntime> stepRuntimes = entry.getValue();
@@ -405,6 +400,8 @@ public class Utility {
 		return ret;
 	}
 
+	 
+	
 	public static Map<String, ArrayList<StepRuntime>> getMapCodiceRuoloStepVariabili(List<StepRuntime> dataList) {
 
 		LinkedHashMap<String, ArrayList<StepRuntime>> ret = new LinkedHashMap<>();
@@ -541,10 +538,10 @@ public class Utility {
 	 * @param keySet
 	 * @return
 	 */
-	public static LinkedHashMap<String, ArrayList<String>> getMapWorkSetValuesInRoles(
+	public static Map<String,Map<String, List<String>>> getMapWorkSetValuesInRoles(
 			Map<String, ArrayList<StepRuntime>> dataMap, DataTypeCls dataType, Set<String> roles) {
 		// TODO Auto-generated method stub
-		LinkedHashMap<String, ArrayList<String>> ret = new LinkedHashMap<>();
+		Map<String,Map<String, List<String>>> ret = new LinkedHashMap<>();
 
 		for (Map.Entry<String, ArrayList<StepRuntime>> entry : dataMap.entrySet()) {
 			String nomeW = entry.getKey();
@@ -553,10 +550,11 @@ public class Utility {
 				StepRuntime stepRuntime = iterator.next();
 
 				String codeRole = stepRuntime.getAppRole().getCode();
+				String codeGroupRole = stepRuntime.getRoleGroup().getCode();
 				Long idTipoVar = stepRuntime.getWorkset().getDataType().getId();
 
 				if (roles.contains(codeRole) && idTipoVar.equals(dataType.getId())) {
-					ret.put(nomeW, (ArrayList<String>) stepRuntime.getWorkset().getContents());
+					ret.computeIfAbsent(codeGroupRole, k-> new LinkedHashMap<>()).put(nomeW, stepRuntime.getWorkset().getContents());
 				}
 			}
 		}
@@ -677,50 +675,8 @@ public class Utility {
 		}
 	}
 
-	public static Map<String, List<Integer>> blockVariablesIndexMapValues(final Map<String, List<String>> mapValues,
-			final List<String> fieldsBlock) {
-
-		final int CHUNK_SIZE = 100;
-
-		final Map<String, List<Integer>> mapIndex = Collections.synchronizedMap(new HashMap<>());
-		String fieldBlock = fieldsBlock.get(0);
-		int sizeList = mapValues.get(fieldBlock).size();
-		int partitionSize = (sizeList / CHUNK_SIZE) + ((sizeList % CHUNK_SIZE) == 0 ? 0 : 1);
-
-		IntStream.range(0, partitionSize).parallel().forEach(chunkIndex -> {
-			 
-			int inf = (chunkIndex * CHUNK_SIZE);
-			int sup = (chunkIndex == partitionSize - 1) ? sizeList - 1 : (inf + CHUNK_SIZE - 1);
-
-			final Map<String, List<Integer>> mapValueIndexesI = new HashMap<>();
-			IntStream.rangeClosed(inf, sup).forEach(innerIndex -> {
-			 	String keyValues = getKeyValues(innerIndex, mapValues, fieldsBlock);
-				mapValueIndexesI.computeIfAbsent(keyValues, v -> new ArrayList<>()).add(innerIndex);
-
-			});
-
-			synchronized (mapIndex) {
-				mapValueIndexesI.forEach((k, values) -> {
-					mapIndex.computeIfAbsent(k, v -> new ArrayList<>()).addAll(values);
-
-				});
-
-			}
-
-		});
-
-		return mapIndex;
-	}
-
-	public static String getKeyValues(final Integer index, final Map<String, List<String>> mapValues,
-			final List<String> fieldsBlock) {
-		final StringBuffer keyValues = new StringBuffer();
-		
-		fieldsBlock.forEach(field -> keyValues.append(mapValues.get(field).get(index)).append(KEY_SEPARATOR));
-		
-		keyValues.delete(keyValues.length() - KEY_SEPARATOR.length(), keyValues.length());
-		return keyValues.toString();
-	}
+	  
+	 
 
 	public static boolean isNullOrEmpty(final Collection<?> c) {
 		return c == null || c.isEmpty();

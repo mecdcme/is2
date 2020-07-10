@@ -55,7 +55,7 @@ public interface StepRuntimeDao extends CrudRepository<StepRuntime, Integer> {
 	List<StepRuntime> findByDataProcessingNoValues(@Param("elab") DataProcessing dataProcessing,
 			@Param("dataType") DataTypeCls dataTypeCls);
 	
-	@Query("SELECT new it.istat.is2.workflow.domain.StepRuntime(st.id, st.appRole, st.dataProcessing,st.typeIO,st.orderCode, st.workset.id, st.workset.datasetColumnId, st.workset.name,st.workset.contentSize,st.workset.paramValue) from StepRuntime st where st.dataProcessing=:elab and (:dataType IS NULL OR st.workset.dataType=:dataType) and st.typeIO=:typeIO and (:roleGroup IS NULL OR st.roleGroup=:roleGroup) ORDER BY st.orderCode ASC")
+	@Query("SELECT new it.istat.is2.workflow.domain.StepRuntime(st.id, st.appRole, st.dataProcessing,st.typeIO,st.orderCode, st.workset.id, st.workset.datasetColumnId, st.workset.name,st.workset.contentSize,st.workset.paramValue) from StepRuntime st where st.dataProcessing=:elab and (:dataType IS NULL OR st.workset.dataType=:dataType) and st.typeIO=:typeIO and (:roleGroup IS NULL OR st.roleGroup=:roleGroup) ORDER BY st.orderCode,st.id ASC")
 	List<StepRuntime> findByDataProcessingStatusNoValues(@Param("elab") DataProcessing dataProcessing,
 			@Param("dataType") DataTypeCls dataType, @Param("typeIO") TypeIO typeIO,@Param("roleGroup") AppRole appRole);
 	
