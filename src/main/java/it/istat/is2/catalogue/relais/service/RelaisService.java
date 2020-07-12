@@ -311,7 +311,7 @@ public class RelaisService {
 			final Map<String, Integer> contengencyTableIA = contingencyService.getEmptyContengencyTable();
 			
 			final Map<String, List<String>> coupledIndexByPatternIA = RelaisUtility
-					.getEmptyMapByKey(coupledIndexByPattern.keySet().stream(),PREFIX_PATTERN);
+					.getEmptyMapByKey(coupledIndexByPattern.keySet().stream(),"");
 			
 			// Dataset A
 			entry.getValue().forEach(innerIA -> {
@@ -331,7 +331,7 @@ public class RelaisService {
 						String pattern = contingencyService.getPattern(valuesI);
 						contengencyTableIA.put(pattern, contengencyTableIA.get(pattern) + 1);
 						if (Integer.parseInt(pattern) > 0)
-							coupledIndexByPatternIA.get(pattern).add((innerIA+1) + ";" + (innerIB+1));  // store no zero based
+							coupledIndexByPatternIA.get(PREFIX_PATTERN+pattern).add((innerIA+1) + ";" + (innerIB+1));  // store no zero based
 
 
 					});
@@ -364,7 +364,7 @@ public class RelaisService {
 		returnOut.put(EngineService.ROLES_OUT, rolesOut);
 
 		rolesOut.keySet().forEach(code -> {
-			rolesGroupOut.put(code, codContengencyTable);
+			rolesGroupOut.put(code, code);
 		});
 		returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
 
@@ -654,7 +654,7 @@ public class RelaisService {
 	}
 
 	public Map<?, ?> dRLBlockingVariables(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
-			Map<String, List<String>> worksetIn, Map<String, String> parametriMap) throws Exception {
+			Map<String, Map<String, List<String>>> worksetInn, Map<String, String> parametriMap) throws Exception {
 
 		final Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
 		final Map<String, Map<?, ?>> worksetOut = new LinkedHashMap<>();
@@ -709,9 +709,9 @@ public class RelaisService {
 
 		});
 
-		Map<String, List<Integer>> indexesBlockingVariableA = RelaisUtility.blockVariablesIndexMapValues(worksetIn,
+		Map<String, List<Integer>> indexesBlockingVariableA = RelaisUtility.blockVariablesIndexMapValues(worksetInn.get(codeMatchingA),
 				blockingVariablesA);
-		Map<String, List<Integer>> indexesBlockingVariableB = RelaisUtility.blockVariablesIndexMapValues(worksetIn,
+		Map<String, List<Integer>> indexesBlockingVariableB = RelaisUtility.blockVariablesIndexMapValues(worksetInn.get(codeMatchingB),
 				blockingVariablesB);
 
 		logService.save("Size Blocking dataset A: " + indexesBlockingVariableA.size());
@@ -734,14 +734,14 @@ public class RelaisService {
 				Map<String, String> valuesI = new HashMap<>();
 
 				variabileNomeListMA.forEach(varnameMA -> {
-					valuesI.put(varnameMA, worksetIn.get(varnameMA).get(innerIA));
+					valuesI.put(varnameMA, worksetInn.get(codeMatchingA).get(varnameMA).get(innerIA));
 				});
 
 				if (indexesBlockingVariableB.get(keyBlock) != null)
 					indexesBlockingVariableB.get(keyBlock).forEach(innerIB -> {
 
 						variabileNomeListMB.forEach(varnameMB -> {
-							valuesI.put(varnameMB, worksetIn.get(varnameMB).get(innerIB));
+							valuesI.put(varnameMB, worksetInn.get(codeMatchingB).get(varnameMB).get(innerIB));
 						});
 
 						if (contingencyService.isExactMatching(valuesI)) {
