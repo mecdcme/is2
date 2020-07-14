@@ -72,9 +72,9 @@ public class ContingencyService {
 			String matchingVariableB = metricMatchingVariable.getString("MatchingVariableB");
 			String method = metricMatchingVariable.getString("Method");
 			Float thresould = metricMatchingVariable.isNull("Threshold") ? null
-					: metricMatchingVariable.getFloat("Threshold");
+					: Float.parseFloat( metricMatchingVariable.getString("Threshold"));
 			Integer windowSize = metricMatchingVariable.isNull("WindowSize") ? null
-					: metricMatchingVariable.getInt("WindowSize");
+					: Integer.parseInt(metricMatchingVariable.getString("WindowSize"));
 			MetricMatchingVariable mm = new MetricMatchingVariable(matchingVariable, matchingVariableA,
 					matchingVariableB, method, thresould, windowSize);
 			metricMatchingVariableVector.add(mm);

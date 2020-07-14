@@ -52,15 +52,36 @@ public class WorkFlowBatchProcessor implements ItemReader<DataProcessing> {
     @Override
     public DataProcessing read()
             throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        DataProcessing elaborazione = workflowService.findDataProcessing(idElaborazione);
-        BusinessProcess businessProcess = businessProcessDao.findById(idBProc).orElse(new BusinessProcess());
+        final DataProcessing elaborazione = workflowService.findDataProcessing(idElaborazione);
+        final BusinessProcess businessProcess = businessProcessDao.findById(idBProc).orElse(new BusinessProcess());
+        System.out.println(businessProcess.getName());
+        businessProcess.getBusinessSteps().forEach(businessStep ->  {
+        	
+        	System.out.println(businessStep.getLabel());
+        	 businessStep.getStepInstances().forEach(stepInstance -> { 
+        		 System.out.println(stepInstance.getLabel());
+        		 try {
+					 doStep(elaborazione, stepInstance);
+				} catch (Exception e) {
+				 throw new RuntimeException(e);
+				}
+        	 });
+        
+        });
+        
+       /*
+       
         for (Iterator<?> iterator = businessProcess.getBusinessSteps().iterator(); iterator.hasNext();) {
             ProcessStep businessStep = (ProcessStep) iterator.next();
+            System.out.println(businessStep.getName());
+           
+            
+        
             for (Iterator<?> iteratorStep = businessStep.getStepInstances().iterator(); iteratorStep.hasNext();) {
                 StepInstance stepInstance = (StepInstance) iteratorStep.next();
                 elaborazione = doStep(elaborazione, stepInstance);
             }
-        }
+        }*/
         return null;
     }
 

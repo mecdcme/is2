@@ -24,7 +24,20 @@
 package it.istat.is2.workflow.domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -33,9 +46,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import it.istat.is2.workflow.domain.common.AbstractDomainObject;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -61,8 +71,9 @@ public class BusinessProcess extends AbstractDomainObject implements Serializabl
     private BusinessProcess businessProcessParent;
 
     @JsonBackReference
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.ALL},fetch=FetchType.EAGER)
     @JoinTable(name = "is2_link_process_step", joinColumns = @JoinColumn(name = "BUSINESS_PROCESS_ID"), inverseJoinColumns = @JoinColumn(name = "PROCESS_STEP_ID"))
+    @OrderBy(value="id")
     private List<ProcessStep> businessSteps;
     @JsonBackReference
     @OneToMany(mappedBy = "businessProcessParent")

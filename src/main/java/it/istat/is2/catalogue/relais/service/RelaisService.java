@@ -24,17 +24,15 @@
 package it.istat.is2.catalogue.relais.service;
 
 import java.lang.reflect.Method;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -112,8 +110,14 @@ public class RelaisService {
 			throw new IS2Exception(IS2ExceptionCodes.METHOD_NOT_FOUND);
 		final Method method = ReflectionUtils.findMethod(this.getClass(), dRLMethod, Long.class, Map.class, Map.class,
 				Map.class);
-		reductionJSONObject.keySet()
-				.forEach(keyStr -> parametriMap.put(keyStr, reductionJSONObject.get(keyStr).toString()));
+
+		Iterator<String> iterator = reductionJSONObject.keys();
+
+		while (iterator.hasNext()) {
+			String keyStr = iterator.next();
+
+			parametriMap.put(keyStr, reductionJSONObject.get(keyStr).toString());
+		}
 
 		return (Map<?, ?>) method.invoke(this, idelaborazione, ruoliVariabileNome, worksetIn, parametriMap);
 	}
@@ -169,15 +173,15 @@ public class RelaisService {
 		final Map<String, Integer> contengencyTable = Collections
 				.synchronizedMap(contingencyService.getEmptyContengencyTable());
 
-		final Map<String, List<String>> coupledIndexByPattern = RelaisUtility
-				.getEmptyMapByKey(contengencyTable.keySet().stream().filter(key -> Integer.parseInt(key) > 0),PREFIX_PATTERN);
+		final Map<String, List<String>> coupledIndexByPattern = RelaisUtility.getEmptyMapByKey(
+				contengencyTable.keySet().stream().filter(key -> Integer.parseInt(key) > 0), PREFIX_PATTERN);
 
 		IntStream.range(0, sizeA).parallel().forEach(innerIA -> {
 
 			final Map<String, String> valuesI = new HashMap<>();
 			final Map<String, Integer> contengencyTableIA = contingencyService.getEmptyContengencyTable();
 			final Map<String, List<String>> coupledIndexByPatternIA = RelaisUtility
-					.getEmptyMapByKey(coupledIndexByPattern.keySet().stream(),"");
+					.getEmptyMapByKey(coupledIndexByPattern.keySet().stream(), "");
 
 			variabileNomeListMA.forEach(varnameMA -> {
 				valuesI.put(varnameMA, worksetIn.get(codeMatchingA).get(varnameMA).get(innerIA));
@@ -191,7 +195,10 @@ public class RelaisService {
 				String pattern = contingencyService.getPattern(valuesI);
 				contengencyTableIA.put(pattern, contengencyTableIA.get(pattern) + 1);
 				if (Integer.parseInt(pattern) > 0)
-					coupledIndexByPatternIA.get(PREFIX_PATTERN+pattern).add((innerIA+1) + ";" + (innerIB+1));  // store no zero based
+					coupledIndexByPatternIA.get(PREFIX_PATTERN + pattern).add((innerIA + 1) + ";" + (innerIB + 1)); // store
+																													// no
+																													// zero
+																													// based
 
 			});
 			synchronized (contengencyTable) {
@@ -260,10 +267,10 @@ public class RelaisService {
 		});
 		logService.save("Matching variables dataset B: " + variabileNomeListMB);
 
-		blockingVariablesA
-				.addAll(RelaisUtility.getFieldsInParams(parametriMap.get(params_BlockingVariables), params_BlockingVariablesA));
-		blockingVariablesB
-				.addAll(RelaisUtility.getFieldsInParams(parametriMap.get(params_BlockingVariables), params_BlockingVariablesB));
+		blockingVariablesA.addAll(
+				RelaisUtility.getFieldsInParams(parametriMap.get(params_BlockingVariables), params_BlockingVariablesA));
+		blockingVariablesB.addAll(
+				RelaisUtility.getFieldsInParams(parametriMap.get(params_BlockingVariables), params_BlockingVariablesB));
 
 		logService.save("Blocking variables dataset A: " + blockingVariablesA);
 
@@ -297,22 +304,21 @@ public class RelaisService {
 				.blockVariablesIndexMapValues(worksetIn.get(codeMatchingB), blockingVariablesB);
 		logService.save("Size Blocking dataset A: " + indexesBlockingVariableA.size());
 		logService.save("Size Blocking dataset B: " + indexesBlockingVariableB.size());
-		
+
 		final Map<String, Integer> contengencyTable = Collections
 				.synchronizedMap(contingencyService.getEmptyContengencyTable());
-		
-		final Map<String, List<String>> coupledIndexByPattern = RelaisUtility
-				.getEmptyMapByKey(contengencyTable.keySet().stream().filter(key -> Integer.parseInt(key) > 0),PREFIX_PATTERN);
 
+		final Map<String, List<String>> coupledIndexByPattern = RelaisUtility.getEmptyMapByKey(
+				contengencyTable.keySet().stream().filter(key -> Integer.parseInt(key) > 0), PREFIX_PATTERN);
 
 		indexesBlockingVariableA.entrySet().parallelStream().forEach(entry -> {
 			String keyBlock = entry.getKey();
 
 			final Map<String, Integer> contengencyTableIA = contingencyService.getEmptyContengencyTable();
-			
+
 			final Map<String, List<String>> coupledIndexByPatternIA = RelaisUtility
-					.getEmptyMapByKey(coupledIndexByPattern.keySet().stream(),"");
-			
+					.getEmptyMapByKey(coupledIndexByPattern.keySet().stream(), "");
+
 			// Dataset A
 			entry.getValue().forEach(innerIA -> {
 
@@ -331,8 +337,8 @@ public class RelaisService {
 						String pattern = contingencyService.getPattern(valuesI);
 						contengencyTableIA.put(pattern, contengencyTableIA.get(pattern) + 1);
 						if (Integer.parseInt(pattern) > 0)
-							coupledIndexByPatternIA.get(PREFIX_PATTERN+pattern).add((innerIA+1) + ";" + (innerIB+1));  // store no zero based
-
+							coupledIndexByPatternIA.get(PREFIX_PATTERN + pattern)
+									.add((innerIA + 1) + ";" + (innerIB + 1)); // store no zero based
 
 					});
 
@@ -360,7 +366,7 @@ public class RelaisService {
 
 		rolesOut.put(codContengencyTable, new ArrayList<>(contengencyTableOut.keySet()));
 		rolesOut.put(codContengencyIndexTable, new ArrayList<>(coupledIndexByPattern.keySet()));
-		
+
 		returnOut.put(EngineService.ROLES_OUT, rolesOut);
 
 		rolesOut.keySet().forEach(code -> {
@@ -370,18 +376,14 @@ public class RelaisService {
 
 		worksetOut.put(codContengencyTable, contengencyTableOut);
 		worksetOut.put(codContengencyIndexTable, coupledIndexByPattern);
-		
+
 		returnOut.put(EngineService.WORKSET_OUT, worksetOut);
 		logService.save("Process Contingency Table Blocking End");
 		return returnOut;
 	}
 
-	
-	
-	
-	public Map<?, ?> probabilisticResultTables(Long idelaborazione,
-			Map<String, ArrayList<String>> ruoliVariabileNome, Map<String, Map<String, List<String>>> worksetInn,
-			Map<String, String> parametriMap) throws Exception {
+	public Map<?, ?> probabilisticResultTables(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+			Map<String, Map<String, List<String>>> worksetInn, Map<String, String> parametriMap) throws Exception {
 
 		final Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
 		final Map<String, Map<?, ?>> worksetOut = new LinkedHashMap<>();
@@ -404,8 +406,6 @@ public class RelaisService {
 
 		logService.save("Threshold Matching: " + paramTM);
 		logService.save("Threshold UnMatching: " + paramTU);
-
-		 
 
 		// select pattern by P_POST value
 		for (String pPostVarname : ruoliVariabileNome.get(codeFS)) {
@@ -464,7 +464,6 @@ public class RelaisService {
 		rolesOut.put(codResidualA, variabileNomeListMA);
 		rolesOut.put(codResidualB, variabileNomeListMB);
 
-
 		// final Map<String, ArrayList<String>> matchingTable =
 		// Collections.synchronizedMap(new LinkedHashMap<>());
 		// final Map<String, ArrayList<String>> possibleMatchingTable =
@@ -490,9 +489,7 @@ public class RelaisService {
 		return returnOut;
 	}
 
-	
-
-	private Map<String, ArrayList<String>> elaborateResultTable( Map<String, Map<String, List<String>>> worksetInn,
+	private Map<String, ArrayList<String>> elaborateResultTable(Map<String, Map<String, List<String>>> worksetInn,
 			ArrayList<String> variabileNomeListMA, ArrayList<String> variabileNomeListMB,
 			ArrayList<String> variabileNomeListOut, ArrayList<String> patternList,
 			Map<String, String> patternPPostValues) {
@@ -510,8 +507,7 @@ public class RelaisService {
 
 		patternList.forEach(pattern -> {
 
-			int sizeList = worksetInn.get(codContengencyIndexTable ).get(PREFIX_PATTERN+
-					pattern).size();
+			int sizeList = worksetInn.get(codContengencyIndexTable).get(PREFIX_PATTERN + pattern).size();
 			int partitionSize = (sizeList / CHUNK_SIZE) + ((sizeList % CHUNK_SIZE) == 0 ? 0 : 1);
 
 			IntStream.range(0, partitionSize).parallel().forEach(chunkIndex -> {
@@ -524,25 +520,27 @@ public class RelaisService {
 					resultMatchTableI.put(varname, new ArrayList<>());
 				});
 
-				
 				IntStream.rangeClosed(inf, sup).forEach(innerIndex -> {
 
-					String[] indexesArr = worksetInn.get(codContengencyIndexTable ).get(PREFIX_PATTERN+pattern).get(innerIndex).split(INDEX_SEPARATOR);
+					String[] indexesArr = worksetInn.get(codContengencyIndexTable).get(PREFIX_PATTERN + pattern)
+							.get(innerIndex).split(INDEX_SEPARATOR);
 					int innerIA = Integer.parseInt(indexesArr[0]);
 					int innerIB = Integer.parseInt(indexesArr[1]);
 
 					final Map<String, String> valuesI = new HashMap<>();
 
-					
 					valuesI.put(ROW_IA, Integer.toString(innerIA));
 					variabileNomeListMA.stream().filter(varname -> !ROW_IA.equals(varname)).forEach(varnameMA -> {
 
-						valuesI.put(varnameMA, worksetInn.get(codeMatchingA).get(varnameMA).get(innerIA-1));// to zero-based
+						valuesI.put(varnameMA, worksetInn.get(codeMatchingA).get(varnameMA).get(innerIA - 1));// to
+																												// zero-based
 					});
 
 					valuesI.put(ROW_IB, Integer.toString(innerIB));
 					variabileNomeListMB.stream().filter(varname -> !ROW_IB.equals(varname)).forEach(varnameMB -> {
-						valuesI.put(varnameMB,  worksetInn.get(codeMatchingB).get(varnameMB).get(innerIB-1));// get value zero-based
+						valuesI.put(varnameMB, worksetInn.get(codeMatchingB).get(varnameMB).get(innerIB - 1));// get
+																												// value
+																												// zero-based
 					});
 
 					valuesI.forEach((k, v) -> {
@@ -561,8 +559,6 @@ public class RelaisService {
 
 		return resultMatchTable;
 	}
-
-
 
 	public Map<?, ?> dRLCartesianProduct(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
 			Map<String, Map<String, List<String>>> worksetInn, Map<String, String> parametriMap) throws Exception {
@@ -680,8 +676,8 @@ public class RelaisService {
 			variabileNomeListMB.add(varname);
 		});
 
-		blockingVariablesA
-				.addAll(RelaisUtility.getFieldsInParams(parametriMap.get(params_BlockingVariables), params_BlockingVariablesA));
+		blockingVariablesA.addAll(
+				RelaisUtility.getFieldsInParams(parametriMap.get(params_BlockingVariables), params_BlockingVariablesA));
 
 		// ruoliVariabileNome.get(codeBlockingVariablesA).forEach((varname) -> {
 		// blockingVariablesA.add(varname);
@@ -690,8 +686,8 @@ public class RelaisService {
 		// ruoliVariabileNome.get(codeBlockingVariablesB).forEach((varname) -> {
 		// blockingVariablesB.add(varname);
 		// });
-		blockingVariablesB
-				.addAll(RelaisUtility.getFieldsInParams(parametriMap.get(params_BlockingVariables), params_BlockingVariablesB));
+		blockingVariablesB.addAll(
+				RelaisUtility.getFieldsInParams(parametriMap.get(params_BlockingVariables), params_BlockingVariablesB));
 
 		logService.save("Matching variables dataset A: " + variabileNomeListMA);
 		logService.save("Matching variables dataset B: " + variabileNomeListMB);
@@ -709,10 +705,10 @@ public class RelaisService {
 
 		});
 
-		Map<String, List<Integer>> indexesBlockingVariableA = RelaisUtility.blockVariablesIndexMapValues(worksetInn.get(codeMatchingA),
-				blockingVariablesA);
-		Map<String, List<Integer>> indexesBlockingVariableB = RelaisUtility.blockVariablesIndexMapValues(worksetInn.get(codeMatchingB),
-				blockingVariablesB);
+		Map<String, List<Integer>> indexesBlockingVariableA = RelaisUtility
+				.blockVariablesIndexMapValues(worksetInn.get(codeMatchingA), blockingVariablesA);
+		Map<String, List<Integer>> indexesBlockingVariableB = RelaisUtility
+				.blockVariablesIndexMapValues(worksetInn.get(codeMatchingB), blockingVariablesB);
 
 		logService.save("Size Blocking dataset A: " + indexesBlockingVariableA.size());
 		logService.save("Size Blocking dataset B: " + indexesBlockingVariableB.size());

@@ -75,10 +75,8 @@ INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent
 INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (71, 'Fellegi Sunter', 'Fellegi Sunter algorithm', 'FellegiSunter', 2, 1);
 INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (72, 'Matching Table', 'Matching records', 'MatchingTable', 3, 1);
 
--- INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (5, 'Probabilistic Record Linkage Blocking', 'Probabilistic Record Linkage Blocking', 'PRLB', 1, NULL);
--- INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (73, 'Contingency Table Blocking', 'Calculate contingency table Blocking', 'CrossTableBlocking', 1, 5);
--- INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (74, 'Fellegi Sunter', 'Fellegi Sunter algorithm', 'FellegiSunter', 2, 5);
--- INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (75, 'Matching Table Blocking', 'Matching records Blocking', 'MatchingTableBlocking', 3, 5);
+INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (5, 'Probabilistic Record Linkage Multi-Step', 'Probabilistic Record Linkage Multi-Step', 'PRL-MS', 1, NULL);
+INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (73, 'PRL multi-step', 'One process with all workflow steps  ', 'PRL Multi Step', 1, 5);
 
 INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (76, 'Deterministic Record Linkage', 'Deterministic Record Linkage', 'DRL', 1, 2);
 --
@@ -126,7 +124,7 @@ INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 21);
 
 INSERT INTO is2.is2_link_function_process VALUES (1, 1);
 INSERT INTO is2.is2_link_function_process VALUES (1, 2);
---INSERT INTO is2.is2_link_function_process VALUES (1, 5);
+-- INSERT INTO is2.is2_link_function_process VALUES (1, 5);
 
 
 --
@@ -150,8 +148,6 @@ INSERT INTO is2.is2_process_step ( id, name, label, descr, business_service_id) 
 INSERT INTO is2.is2_process_step ( id, name, label, descr, business_service_id)  VALUES (71, 'Fellegi Sunter', 'FELLEGI_SUNTER','Fellegi Sunter algorithm', 200);
 INSERT INTO is2.is2_process_step ( id, name, label, descr, business_service_id)  VALUES (72, 'Matching Table','MATCHING_TABLE', 'Matching records', 200);
 
--- INSERT INTO is2.is2_process_step  ( id, name, label, descr, business_service_id) VALUES (73, 'Contingency Table Blocking', 'CONTINGENCY_TABLE_BLOCKING','Calculate contingency table Blocking', 200);
--- INSERT INTO is2.is2_process_step  ( id, name, label, descr, business_service_id) VALUES (75, 'Matching Table Blocking','MATCHING_TABLE_BLOCKING', 'Matching records Blocking', 200);
 INSERT INTO is2.is2_process_step  ( id, name, label, descr, business_service_id) VALUES (76, 'Deterministic Record Linkage','DETERMINISTIC_RECORD_LINKAGE', 'Deterministic Record Linkage unique step', 200);
 
 
@@ -165,9 +161,11 @@ INSERT INTO is2.is2_process_step  ( id, name, label, descr, business_service_id)
 INSERT INTO is2.is2_link_process_step VALUES (70, 70);
 INSERT INTO is2.is2_link_process_step VALUES (71, 71);
 INSERT INTO is2.is2_link_process_step VALUES (72, 72);
--- INSERT INTO is2.is2_link_process_step VALUES (73, 73);
--- INSERT INTO is2.is2_link_process_step VALUES (74, 71);
--- INSERT INTO is2.is2_link_process_step VALUES (75, 75);
+
+INSERT INTO is2.is2_link_process_step VALUES (73, 70);
+INSERT INTO is2.is2_link_process_step VALUES (73, 71);
+INSERT INTO is2.is2_link_process_step VALUES (73, 72);
+
 INSERT INTO is2.is2_link_process_step VALUES (76, 76);
 
 
@@ -216,7 +214,7 @@ INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_ins
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (162, 0,21, 11, 2);
 
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (167, 1, 4, 12, 1);
-INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (168, NULL, 5, 12, 2);
+INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (168, 0, 5, 12, 2);
 
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (169, 1, 2, 13, 1);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (170, 1, 3, 13, 1);
@@ -226,7 +224,7 @@ INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_ins
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (175, 1, 21, 13, 1);
 
 
-INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (173, NULL, 7, 13, 2);
+INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (173, 0, 7, 13, 2);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (176, 1, 8, 13, 1);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (177, 1, 9, 13, 1);
 
@@ -251,7 +249,7 @@ INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_ins
 -- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (197, 1, 18, 16, 1);
 -- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (198, 1, 19, 16, 1);
 
-INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (194, NULL, 17, 12, 2);
+INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (194, 0, 17, 12, 2);
 
 
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (200, 1, 1, 20, 1);

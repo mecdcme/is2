@@ -52,7 +52,7 @@ public class ProcessStep extends AbstractDomainObject implements Serializable {
     @JoinColumn(name = "BUSINESS_SERVICE_ID")
     private BusinessService businessService;
     @JsonBackReference
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL},fetch=FetchType.EAGER)
     @JoinTable(name = "is2_link_step_instance", joinColumns = {
         @JoinColumn(name = "PROCESS_STEP_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "PROCESS_STEP_INSTANCE_ID")})
