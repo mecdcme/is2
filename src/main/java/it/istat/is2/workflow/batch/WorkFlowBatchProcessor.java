@@ -27,89 +27,72 @@ import it.istat.is2.workflow.service.WorkflowService;
 @StepScope
 public class WorkFlowBatchProcessor implements ItemReader<DataProcessing> {
 
-    @Value("#{jobParameters['idElaborazione']}")
-    private Long idElaborazione;
+	@Value("#{jobParameters['idElaborazione']}")
+	private Long idElaborazione;
 
-    @Value("#{jobParameters['idBProc']}")
-    private Long idBProc;
+	@Value("#{jobParameters['idBProc']}")
+	private Long idBProc;
 
-    @Autowired
-    BusinessProcessDao businessProcessDao;
+	@Autowired
+	BusinessProcessDao businessProcessDao;
 
-    @Autowired
-    private WorkflowService workflowService;
+	@Autowired
+	private WorkflowService workflowService;
 
-    @Autowired
-    EngineFactory engineFactory;
-    
- 	@Autowired
+	@Autowired
+	EngineFactory engineFactory;
+
+	@Autowired
 	private LogService logService;
 
-
-    @Autowired
+	@Autowired
 	private NotificationService notificationService;
 
-    @Override
-    public DataProcessing read()
-            throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        final DataProcessing elaborazione = workflowService.findDataProcessing(idElaborazione);
-        final BusinessProcess businessProcess = businessProcessDao.findById(idBProc).orElse(new BusinessProcess());
-        System.out.println(businessProcess.getName());
-        businessProcess.getBusinessSteps().forEach(businessStep ->  {
-        	
-        	System.out.println(businessStep.getLabel());
-        	 businessStep.getStepInstances().forEach(stepInstance -> { 
-        		 System.out.println(stepInstance.getLabel());
-        		 try {
-					 doStep(elaborazione, stepInstance);
+	@Override
+	public DataProcessing read()
+			throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+		final DataProcessing elaborazione = workflowService.findDataProcessing(idElaborazione);
+		final BusinessProcess businessProcess = businessProcessDao.findById(idBProc).orElse(new BusinessProcess());
+		businessProcess.getBusinessSteps().forEach(businessStep -> {
+
+			businessStep.getStepInstances().forEach(stepInstance -> {
+				try {
+					doStep(elaborazione, stepInstance);
 				} catch (Exception e) {
-				 throw new RuntimeException(e);
+					throw new RuntimeException(e);
 				}
-        	 });
-        
-        });
-        
-       /*
-       
-        for (Iterator<?> iterator = businessProcess.getBusinessSteps().iterator(); iterator.hasNext();) {
-            ProcessStep businessStep = (ProcessStep) iterator.next();
-            System.out.println(businessStep.getName());
-           
-            
-        
-            for (Iterator<?> iteratorStep = businessStep.getStepInstances().iterator(); iteratorStep.hasNext();) {
-                StepInstance stepInstance = (StepInstance) iteratorStep.next();
-                elaborazione = doStep(elaborazione, stepInstance);
-            }
-        }*/
-        return null;
-    }
+			});
 
-    public DataProcessing doStep(DataProcessing elaborazione, StepInstance stepInstance) throws Exception {
-        EngineService engine = engineFactory.getEngine(stepInstance.getAppService().getEngineType());
-       
-        try {
-            engine.init(elaborazione, stepInstance);
-            engine.doAction();
-            engine.processOutput();
-        } catch (Exception e) {
-         	 Logger.getRootLogger().error(e.getMessage());
-         	logService.save("Error: " + e.getMessage());
-             notificationService.addErrorMessage("Error: " + e.getMessage());
-             throw (e);
-        } finally {
-            engine.destroy();
-        }
+		});
 
-        return elaborazione;
-    }
+		return null;
+	}
 
-    public void setIdElaborazione(Long idElaborazione) {
-        this.idElaborazione = idElaborazione;
-    }
+	public DataProcessing doStep(DataProcessing elaborazione, StepInstance stepInstance) throws Exception {
+		EngineService engine = engineFactory.getEngine(stepInstance.getAppService().getEngineType());
 
-    public void setIdBProc(Long idBProc) {
-        this.idBProc = idBProc;
-    }
+		try {
+			engine.init(elaborazione, stepInstance);
+			engine.doAction();
+			engine.processOutput();
+		} catch (Exception e) {
+			Logger.getRootLogger().error(e.getMessage());
+			logService.save("Error: " + e.getMessage());
+			notificationService.addErrorMessage("Error: " + e.getMessage());
+			throw (e);
+		} finally {
+			engine.destroy();
+		}
+
+		return elaborazione;
+	}
+
+	public void setIdElaborazione(Long idElaborazione) {
+		this.idElaborazione = idElaborazione;
+	}
+
+	public void setIdBProc(Long idBProc) {
+		this.idBProc = idBProc;
+	}
 
 }
