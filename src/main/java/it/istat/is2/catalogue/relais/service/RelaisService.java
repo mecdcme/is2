@@ -80,6 +80,7 @@ public class RelaisService {
 	final static String VARIABLE_FREQUENCY = "FREQUENCY";
 	final static String ROW_IA = "ROW_A";
 	final static String ROW_IB = "ROW_B";
+	
 
 	@Autowired
 	private LogService logService;
