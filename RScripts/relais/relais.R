@@ -190,3 +190,119 @@ ct <- roles$CT
  result <-list( workset_out=fs_out, roles_out= roles, rolesgroup_out= rolesgroup,  log = '')
 
 }
+
+
+##################################################
+### function: lpreduction
+### phase: Matching consraint - apply a contraint to reduce the match pairs
+### parameter: ReducType ('1to1','1toN','Nto1')
+### input: Math_table  output: Match_table_reduced
+### packages required: lpSolve + slam
+##################################################
+
+library("lpSolve")
+library("slam")
+
+lpreduction <- function(workset, roles, wsparams=NULL, ...) {
+
+ print("read input");
+ workset_mt=workset$MT
+ mt <- roles$MT
+ ReducType <- '1to1'
+
+ print("start procedure");
+# command1: apply preliminary filter to input data
+filtered=workset_mt[,c("ROW_A","ROW_B","P_POST","R")] 
+
+# log
+dim(filtered)
+
+# command2: pre-processing input
+# count of unique dataset ID records
+n= length(unique(filtered[,1]))
+m= length(unique(filtered[,2])) 
+# add sequential keys for dataset records
+A=cbind(ROW_A=unique(filtered[,1]),A=1:n) 
+B=cbind(ROW_B=unique(filtered[,2]),B=1:m)
+filtered =merge(B, filtered)
+filtered =merge(A, filtered)
+dat=t(filtered)
+
+# command3: preparing constraint parameter
+if (ReducType=='1toN') {
+   constr <- matrix(c(as.numeric(dat[2,]),rep(1:ncol(dat)),rep(1,ncol(dat))),ncol=3)
+   #constr <- simple_triplet_matrix(as.numeric(dat[2,]), rep(1:ncol(dat)), rep(1,ncol(dat)), nrow=n, ncol=ncol(dat))     
+   diseq=rep('<=',n)  
+   ones=rep(1,n)  
+} else if (ReducType=='Nto1') {
+   constr <- matrix(c(as.numeric(dat[4,]),rep(1:ncol(dat)),rep(1,ncol(dat))),ncol=3)
+   #constr <- simple_triplet_matrix(as.numeric(dat[4,]), rep(1:ncol(dat)), rep(1,ncol(dat)), nrow=m, ncol=ncol(dat))     
+   diseq=rep('<=',m)  
+   ones=rep(1,m)
+} else {
+   constr <- matrix(c(as.numeric(dat[2,]),as.numeric(dat[4,])+n,rep(1:ncol(dat),2),rep(1,(2*ncol(dat)))),ncol=3)
+   #constr <- simple_triplet_matrix(c(as.numeric(dat[2,]),as.numeric(dat[4,])+n), rep(1:ncol(dat),2), rep(1,(2*ncol(dat))), nrow=(n+m), ncol=ncol(dat))     
+   diseq=rep('<=',m+n)  
+   ones=rep(1,m+n)
+}
+
+# command4: coefficients for target function 
+coeff=dat[6,]    
+
+ print("lp execution");
+# command5: LP execution  -- note: ROI.plugin.clp not available in renjin -- use: lpSolve
+# LP <- ROI::OP(as.numeric(coeff),
+#                         ROI::L_constraint(L = constr,  dir = diseq,  rhs = ones), max = TRUE)   
+#ret <- ROI::ROI_solve(x = LP, solver = "clp")
+
+ret=lp ("max", coeff, , diseq, ones, dense.const=constr)  
+
+# solution is primal infeasible
+# solving of ambiguous cases 
+if (ret$status$code==1) {
+  posit <- sum(ret$solution>1)
+  if (posit>0) {
+     coeff[which(ret$solution>1)] <- as.numeric(coeff[which(ret$solution>1)]) * 2^(posit:1)
+	 
+	 # command5bis: new LP execution -- use: lpSolve
+	 #LP <- ROI::OP(as.numeric(coeff),
+     #                    ROI::L_constraint(L = constr,  dir = diseq,  rhs = ones), max = TRUE)   
+     #ret <- ROI::ROI_solve(x = LP, solver = "clp")
+	 ret=lp ("max", coeff, , diseq, ones, dense.const=constr)  
+  }
+}
+
+# log
+ret$status
+
+# prepare the reduced set of pairs
+#if (ret$status$code==0) {
+#    reduc <- t(dat[c(1,3,5,6),solution(ret)>0.9])
+#} else {
+#    # if solution is infeasible still
+#    reduc <- t(dat[c(1,3,5,6),FALSE])
+#}
+
+# save the reduce table
+#reducPairs <- as.data.frame(reduc)
+
+#write.table(reducPairs , file = ReducedFile, sep = ";", row.names = FALSE, quote = FALSE, col.names = TRUE)
+
+ ###################################
+ 
+ # prepare the reduced set of pairs
+ if (ret$status$code==0) {
+     reduc <- workset_mt[solution(ret)>0.9,]
+ } else {
+     # if solution is infeasible still
+     reduc <- workset_mt[FALSE,]
+ }
+ 
+ roles <- list (MTR=names(reduc))
+ rolesgroup <- list (MTR= c("MTR"))
+ 
+ fs_out<-list(MTR=reduc)
+
+ result <-list( workset_out=fs_out, roles_out= roles, rolesgroup_out= rolesgroup,  log = '')
+
+}

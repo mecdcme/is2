@@ -152,6 +152,16 @@
 			<artifactId>jsonlite</artifactId>
 			<version>1.6-b1</version>
 		</dependency>
+  		<dependency>
+    		<groupId>org.renjin.cran</groupId>
+    		<artifactId>slam</artifactId>
+    		<version>0.1-43-b9</version>
+  		</dependency>
+  		<dependency>
+    		<groupId>org.renjin.cran</groupId>
+    		<artifactId>lpSolve</artifactId>
+    		<version>5.6.13.1-b1</version>
+ 		 </dependency>
  
 	</dependencies>
 

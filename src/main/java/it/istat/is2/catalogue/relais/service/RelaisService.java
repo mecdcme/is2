@@ -68,6 +68,7 @@ public class RelaisService {
 	final static String codResidualB = "RB";
 	final static String codeFS = "FS";
 	final static String codeP_POST = "P_POST";
+	final static String codeRATIO = "R";
 	final static String params_MatchingVariables = "MATCHING_VARIABLES";
 	final static String params_ThresholdMatching = "THRESHOLD_MATCHING";
 	final static String params_ThresholdUnMatching = "THRESHOLD_UNMATCHING";
@@ -400,6 +401,7 @@ public class RelaisService {
 		ArrayList<String> patternMatching = new ArrayList<>();
 		ArrayList<String> patternPossibleMatching = new ArrayList<>();
 		Map<String, String> patternPPostValues = new HashMap<>();
+		Map<String, String> patternRValues = new HashMap<>();
 		String paramTM = parametriMap.get(params_ThresholdMatching);
 		String paramTU = parametriMap.get(params_ThresholdUnMatching);
 
@@ -417,7 +419,9 @@ public class RelaisService {
 				for (String pPostValue : worksetInn.get(codeFS).get(pPostVarname)) {
 					if (Float.parseFloat(pPostValue) >= Float.parseFloat(paramTU)) {
 						StringBuffer pattern = new StringBuffer();
+						String RValue;
 
+						RValue= worksetInn.get(codeFS).get(codeRATIO).get(indexItems);
 						for (String ctVarname : ruoliVariabileNome.get(codContengencyTable)) {
 							if (!ctVarname.equals(VARIABLE_FREQUENCY)) {
 								String p = worksetInn.get(codeFS).get(ctVarname).get(indexItems);
@@ -431,6 +435,7 @@ public class RelaisService {
 							patternPossibleMatching.add(pattern.toString());
 						}
 						patternPPostValues.put(pattern.toString(), pPostValue);
+						patternRValues.put(pattern.toString(), RValue);
 					}
 					indexItems++;
 				}
@@ -459,6 +464,7 @@ public class RelaisService {
 		variabileNomeListOut.addAll(variabileNomeListMA);
 		variabileNomeListOut.addAll(variabileNomeListMB);
 		variabileNomeListOut.add(codeP_POST);
+		variabileNomeListOut.add(codeRATIO);
 
 		rolesOut.put(codMachingTable, variabileNomeListOut);
 		rolesOut.put(codPossibleMachingTable, variabileNomeListOut);
@@ -471,10 +477,10 @@ public class RelaisService {
 		// Collections.synchronizedMap(new LinkedHashMap<>());
 
 		final Map<String, ArrayList<String>> matchingTable = elaborateResultTable(worksetInn, variabileNomeListMA,
-				variabileNomeListMB, variabileNomeListOut, patternMatching, patternPPostValues);
+				variabileNomeListMB, variabileNomeListOut, patternMatching, patternPPostValues,patternRValues);
 		final Map<String, ArrayList<String>> possibleMatchingTable = elaborateResultTable(worksetInn,
 				variabileNomeListMA, variabileNomeListMB, variabileNomeListOut, patternPossibleMatching,
-				patternPPostValues);
+				patternPPostValues,patternRValues);
 
 		returnOut.put(EngineService.ROLES_OUT, rolesOut);
 		rolesOut.keySet().forEach(code -> {
@@ -493,7 +499,7 @@ public class RelaisService {
 	private Map<String, ArrayList<String>> elaborateResultTable(Map<String, Map<String, List<String>>> worksetInn,
 			ArrayList<String> variabileNomeListMA, ArrayList<String> variabileNomeListMB,
 			ArrayList<String> variabileNomeListOut, ArrayList<String> patternList,
-			Map<String, String> patternPPostValues) {
+			Map<String, String> patternPPostValues, Map <String, String> patternRValues) {
 
 		final Map<String, ArrayList<String>> resultMatchTable = Collections.synchronizedMap(new LinkedHashMap<>());
 
@@ -548,6 +554,7 @@ public class RelaisService {
 						resultMatchTableI.get(k).add(v);
 					});
 					resultMatchTableI.get(codeP_POST).add(patternPPostValues.get(pattern));
+					resultMatchTableI.get(codeRATIO).add(patternRValues.get(pattern));
 
 				});
 
