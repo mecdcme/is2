@@ -12,7 +12,7 @@ INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template)  VAL
 INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template) VALUES (5, 'BLOCKING VARIABLES', 'BLOCKING VARIABLES', NULL, '{"data":[],"schema":{"type":"object", "properties": { "BLOCKING_A": { "type":"array", "title":"BLOCKING A","items": {"type": "string"} }, "BLOCKING_B": { "type":"array", "title":"BLOCKING B" ,"items": {"type": "string"}} }}, "options": {"fields":{"BLOCKING_A":{"type":"array",    "toolbarSticky": true,"items":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}},"BLOCKING_B":{"type":"array",   "toolbarSticky": true, "items":{"type":"select","noneLabel":"","dataSource":"matchedVariables"}}}}}');
 
 INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template) VALUES (20, 'REDUCTION METHOD', 'REDUCTION METHOD', NULL, '{ "data": [], "schema": { "type": "object", "properties": { "REDUCTION-METHOD": { "type": "string", "enum": [ "CartesianProduct", "BlockingVariables" ] }, "BLOCKING VARIABLES": { "type": "object", "hidden": true, "name": "BLOCKING VARIABLES", "properties": { "BLOCKING A": { "type": "array", "required": false, "title": "BLOCKING A", "items": { "type": "string" }, "properties": {} }, "BLOCKING B": { "type": "array", "required": false, "title": "BLOCKING B", "items": { "type": "string" }, "properties": {} } } } } }, "options": { "fields": { "REDUCTION-METHOD": { "type": "select", "label": "REDUCTION METHOD", "removeDefaultNone":true, "id": "REDUCTION-METHOD", "sort":false, "optionLabels": [ "CARTESIAN PRODUCT", "BLOCKING VARIABLES" ] }, "BLOCKING VARIABLES": { "type": "object", "fields":{ "BLOCKING A":{"label": "BLOCKING A", "type":"select", "multiple": true,"removeDefaultNone":true,"dataSource":"matchedVariablesbyRoles.X1"}, "BLOCKING B":{"label": "BLOCKING B", "type":"select","removeDefaultNone":true,"dataSource":"matchedVariablesbyRoles.X2"}} } } } , "postRender": "reduction" }');
-INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template) VALUES (21, 'INDEXES MATCHED', 'INDEXES MATCHED', NULL, NULL);
+-- INSERT INTO is2.is2_parameter (id, name, descr, default_val, json_template) VALUES (21, 'INDEXES MATCHED', 'INDEXES MATCHED', NULL, NULL);
 
 
 -- TOC entry 4938 (class 0 OID 25260)
@@ -40,7 +40,7 @@ INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID
 
 INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (20, 'RM', 'REDUCTION METHOD', 'METHOD OF REDUCTION OF THE SEARCH SPACE', 20, 2,20 );
 
-INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (21, 'CIT','INDEXES MATCHED', 'INDEX ROWS MATCHED CONTENGENCY TABLE', 21, 1,21 );
+-- INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (21, 'CIT','INDEXES MATCHED', 'INDEX ROWS MATCHED CONTENGENCY TABLE', 21, 1,21 );
 INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (22, 'MTR', 'MATCHING TABLE REDUCED', 'MATCHING TABLE WITH CONSTRAINT', 22, 1, NULL);
 
 --
@@ -115,7 +115,7 @@ INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 18);
 INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 19);
 
 INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 20);
-INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 21);
+-- INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 21);
 
 INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 22);
 
@@ -127,7 +127,7 @@ INSERT INTO is2.is2_link_business_service_app_role VALUES (200, 22);
 
 INSERT INTO is2.is2_link_function_process VALUES (1, 1);
 INSERT INTO is2.is2_link_function_process VALUES (1, 2);
--- INSERT INTO is2.is2_link_function_process VALUES (1, 5);
+INSERT INTO is2.is2_link_function_process VALUES (1, 5);
 
 
 --
@@ -218,7 +218,7 @@ INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_ins
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (155, 1, 3, 11, 1);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (156, 1, 20, 11, 1);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (161, 0, 7, 11, 2);
-INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (162, 0,21, 11, 2);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (162, 0,21, 11, 2);
 
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (167, 1, 4, 12, 1);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (168, 0, 5, 12, 2);
@@ -228,7 +228,7 @@ INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_ins
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (171, 1, 5, 13, 1);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (172, 0, 4, 13, 1);
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (174, 1, 20, 13, 1);
-INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (175, 1, 21, 13, 1);
+-- INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (175, 1, 21, 13, 1);
 
 
 INSERT INTO is2.is2_step_instance_signature (id, required, app_role_id, step_instance_id, cls_type_io_id) VALUES (173, 0, 7, 13, 2);

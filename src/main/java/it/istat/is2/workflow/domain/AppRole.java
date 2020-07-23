@@ -39,7 +39,7 @@ import java.util.List;
 @Entity
 @Table(name = "IS2_APP_ROLE")
 @NamedQuery(name = "AppRole.findAll", query = "SELECT s FROM AppRole s")
-public class AppRole  extends AbstractDomainObject implements Serializable {
+public class AppRole  extends AbstractDomainObject  {
 
     private static final long serialVersionUID = 1L;
 
@@ -104,5 +104,11 @@ public class AppRole  extends AbstractDomainObject implements Serializable {
 		result = prime * result + ((code == null) ? 0 : code.hashCode());
 		return result;
 	}
-
+	
+	@Override
+    public int compareTo(AbstractDomainObject abstractDomainObject) {
+       
+        return this.order.intValue() -((AppRole)abstractDomainObject).getOrder().intValue();
+ 
+    }
 }

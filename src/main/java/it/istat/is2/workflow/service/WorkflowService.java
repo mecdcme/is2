@@ -24,6 +24,7 @@
 package it.istat.is2.workflow.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -113,7 +114,7 @@ public class WorkflowService {
 	private SqlGenericDao sqlGenericDao;
 	@Autowired
 	private WorkFlowBatchDao workFlowBatchDao;
-	
+
 	@Autowired
 	protected EntityManager em;
 
@@ -221,7 +222,6 @@ public class WorkflowService {
 
 		Session session = em.unwrap(Session.class);
 
-		
 		for (int i = 0; i < form.getDataProcessing().length; i++) {
 			final StepRuntime stepRuntime = new StepRuntime();
 			stepRuntime.setDataProcessing(dataProcessing);
@@ -249,7 +249,7 @@ public class WorkflowService {
 
 			stepRuntime.setAppRole(sxruolo);
 			stepRuntime.setRoleGroup(sxruolo);
-			 
+
 			stepRuntime.setOrderCode(sxruolo.getOrder());
 			stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
 			workset.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
@@ -418,7 +418,7 @@ public class WorkflowService {
 				ret2.add(sxappRoles);
 			}
 		}
-
+		Collections.sort(ret2);
 		return ret2;
 	}
 
