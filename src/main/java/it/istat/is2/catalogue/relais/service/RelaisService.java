@@ -66,9 +66,14 @@ public class RelaisService {
 	final static String codPossibleMachingTable = "PM";
 	final static String codResidualA = "RA";
 	final static String codResidualB = "RB";
+	final static String codQualityIndicators = "QI";
 	final static String codeFS = "FS";
 	final static String codeP_POST = "P_POST";
 	final static String codeRATIO = "R";
+	final static String codeOUT = "OUTPUTS";
+	final static String codePREC = "PRECISION";
+	final static String codeREC = "RECALL";
+	final static String codeTHR = "THRESHOLD";
 	final static String params_MatchingVariables = "MATCHING_VARIABLES";
 	final static String params_ThresholdMatching = "THRESHOLD_MATCHING";
 	final static String params_ThresholdUnMatching = "THRESHOLD_UNMATCHING";
@@ -403,6 +408,7 @@ public class RelaisService {
 		final Map<String, ArrayList<String>> residualATable = new LinkedHashMap<>();
 		final Map<String, ArrayList<String>> residualBTable = new LinkedHashMap<>();
 		final Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
+		final Map<String, ArrayList<String>> qualityIndicators = new LinkedHashMap<>();
 		final Map<String, String> rolesGroupOut = new HashMap<>();
 
 		logService.save("Process Matching Tables Blocking Starting...");
@@ -415,6 +421,7 @@ public class RelaisService {
 		final Map<String, String> patternRValues = new HashMap<>();
 		final String paramTM = parametriMap.get(params_ThresholdMatching);
 		final String paramTU = parametriMap.get(params_ThresholdUnMatching);
+		float mprec=1f, pprec=1f, mrec=0f, prec=0f;
 
 		checkThresholds(paramTM, paramTU);
 
@@ -432,6 +439,9 @@ public class RelaisService {
 						StringBuffer pattern = new StringBuffer();
 						
 						String RValue= worksetInn.get(codeFS).get(codeRATIO).get(indexItems);
+						float cprec = Float.parseFloat(worksetInn.get(codeFS).get(codePREC).get(indexItems));
+						float crec = Float.parseFloat(worksetInn.get(codeFS).get(codeREC).get(indexItems));
+						
 						for (String ctVarname : ruoliVariabileNome.get(codContengencyTable)) {
 							if (!ctVarname.equals(VARIABLE_FREQUENCY)) {
 								String p = worksetInn.get(codeFS).get(ctVarname).get(indexItems);
@@ -441,8 +451,14 @@ public class RelaisService {
 
 						if (Float.parseFloat(pPostValue) >= Float.parseFloat(paramTM)) {
 							patternMatching.add(pattern.toString());
+							if (cprec<mprec) mprec=cprec;
+							if (cprec<pprec) pprec=cprec;
+							if (crec>mrec) mrec=crec;
+							if (crec>prec) prec=crec;
 						} else {
 							patternPossibleMatching.add(pattern.toString());
+							if (cprec<pprec) pprec=cprec;
+							if (crec>prec) prec=crec;
 						}
 						patternPPostValues.put(pattern.toString(), pPostValue);
 						patternRValues.put(pattern.toString(), RValue);
@@ -487,11 +503,18 @@ public class RelaisService {
 		variabileNomeListOut.addAll(variabileNomeListMB);
 		variabileNomeListOut.add(codeP_POST);
 		variabileNomeListOut.add(codeRATIO);
-
+		
+		final ArrayList<String> variableQuality = new ArrayList<>();
+		variableQuality.add(codeOUT);
+		variableQuality.add(codeTHR);
+		variableQuality.add(codePREC);
+		variableQuality.add(codeREC);
+		
 		rolesOut.put(codMachingTable, variabileNomeListOut);
 		rolesOut.put(codPossibleMachingTable, variabileNomeListOut);
 		rolesOut.put(codResidualA, variabileNomeListMA);
 		rolesOut.put(codResidualB, variabileNomeListMB);
+		rolesOut.put(codQualityIndicators, variableQuality);
 
 		contingencyService.init(parametriMap.get(params_MatchingVariables));
 		variabileNomeListOut.forEach(varname -> {
@@ -563,6 +586,15 @@ public class RelaisService {
 			}
 
 		});
+		
+		/*load quality indicators */
+		logService.save("Quality Indicators ("+codQualityIndicators+ ") :"+String.valueOf(mprec)+" "+String.valueOf(mrec));
+		
+		qualityIndicators.put(codeOUT, new ArrayList<>(List.of("MATCHES","MATCHES+POSSIBLE")));
+		qualityIndicators.put(codeTHR, new ArrayList<>(List.of(paramTM,paramTU)));
+		qualityIndicators.put(codePREC, new ArrayList<>(List.of(String.valueOf(mprec), String.valueOf(pprec))));
+		qualityIndicators.put(codeREC, new ArrayList<>(List.of(String.valueOf(mrec), String.valueOf(prec))));
+		
 		returnOut.put(EngineService.ROLES_OUT, rolesOut);
 		rolesOut.keySet().forEach(code -> {
 			rolesGroupOut.put(code, code);
@@ -573,6 +605,8 @@ public class RelaisService {
 		worksetOut.put(codResidualA, residualATable);
 		worksetOut.put(codPossibleMachingTable, possibleMatchingTable);
 		worksetOut.put(codMachingTable, matchingTable);
+		worksetOut.put(codQualityIndicators, qualityIndicators);
+		
 		returnOut.put(EngineService.WORKSET_OUT, worksetOut);
 		return returnOut;
 	}
@@ -587,6 +621,7 @@ public class RelaisService {
 		final Map<String, ArrayList<String>> possibleMatchingTable = Collections.synchronizedMap(new LinkedHashMap<>());
 		final Map<String, ArrayList<String>> residualATable = new LinkedHashMap<>();
 		final Map<String, ArrayList<String>> residualBTable = new LinkedHashMap<>();
+		final Map<String, ArrayList<String>> qualityIndicators = new LinkedHashMap<>();
 		final Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
 		final Map<String, String> rolesGroupOut = new HashMap<>();
 
@@ -600,6 +635,7 @@ public class RelaisService {
 		final Map<String, String> patternRValues = new HashMap<>();
 		String paramTM = parametriMap.get(params_ThresholdMatching);
 		String paramTU = parametriMap.get(params_ThresholdUnMatching);
+		float mprec=1f, pprec=1f, mrec=0f, prec=0f;
 
 		checkThresholds(paramTM, paramTU);
 
@@ -615,6 +651,8 @@ public class RelaisService {
 				for (String pPostValue : worksetInn.get(codeFS).get(pPostVarname)) {
 					if (Float.parseFloat(pPostValue) >= Float.parseFloat(paramTU)) {
 						StringBuffer pattern = new StringBuffer();
+						float cprec = Float.parseFloat(worksetInn.get(codeFS).get(codePREC).get(indexItems));
+						float crec = Float.parseFloat(worksetInn.get(codeFS).get(codeREC).get(indexItems));
 						
 						String RValue= worksetInn.get(codeFS).get(codeRATIO).get(indexItems);
 						for (String ctVarname : ruoliVariabileNome.get(codContengencyTable)) {
@@ -626,8 +664,14 @@ public class RelaisService {
 
 						if (Float.parseFloat(pPostValue) >= Float.parseFloat(paramTM)) {
 							patternMatching.add(pattern.toString());
+							if (cprec<mprec) mprec=cprec;
+							if (cprec<pprec) pprec=cprec;
+							if (crec>mrec) mrec=crec;
+							if (crec>prec) prec=crec;
 						} else {
 							patternPossibleMatching.add(pattern.toString());
+							if (cprec<pprec) pprec=cprec;
+							if (crec>prec) prec=crec;
 						}
 						patternPPostValues.put(pattern.toString(), pPostValue);
 						patternRValues.put(pattern.toString(), RValue);
@@ -661,10 +705,17 @@ public class RelaisService {
 		variabileNomeListOut.add(codeP_POST);
 		variabileNomeListOut.add(codeRATIO);
 
+		final ArrayList<String> variableQuality = new ArrayList<>();
+		variableQuality.add(codeOUT);
+		variableQuality.add(codeTHR);
+		variableQuality.add(codePREC);
+		variableQuality.add(codeREC);
+		
 		rolesOut.put(codMachingTable, variabileNomeListOut);
 		rolesOut.put(codPossibleMachingTable, variabileNomeListOut);
 		rolesOut.put(codResidualA, variabileNomeListMA);
 		rolesOut.put(codResidualB, variabileNomeListMB);
+		rolesOut.put(codQualityIndicators, variableQuality);
 
 		String firstFiledMA = ruoliVariabileNome.get(codeMatchingA).get(0);
 		String firstFiledMB = ruoliVariabileNome.get(codeMatchingB).get(0);
@@ -731,16 +782,26 @@ public class RelaisService {
 
 		});
 
+		/*load quality indicators */
+		logService.save("Quality Indicators ("+codQualityIndicators+ ") :"+String.valueOf(mprec)+" "+String.valueOf(mrec));
+		
+		qualityIndicators.put(codeOUT, new ArrayList<>(List.of("MATCHES","MATCHES+POSSIBLE")));
+		qualityIndicators.put(codeTHR, new ArrayList<>(List.of(paramTM,paramTU)));
+		qualityIndicators.put(codePREC, new ArrayList<>(List.of(String.valueOf(mprec), String.valueOf(pprec))));
+		qualityIndicators.put(codeREC, new ArrayList<>(List.of(String.valueOf(mrec), String.valueOf(prec))));
+
 		returnOut.put(EngineService.ROLES_OUT, rolesOut);
 		rolesOut.keySet().forEach(code -> {
 			rolesGroupOut.put(code, code);
 		});
 		returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
-
+		
 		worksetOut.put(codResidualB, residualBTable);
 		worksetOut.put(codResidualA, residualATable);
 		worksetOut.put(codPossibleMachingTable, possibleMatchingTable);
 		worksetOut.put(codMachingTable, matchingTable);
+		worksetOut.put(codQualityIndicators, qualityIndicators);
+		
 		returnOut.put(EngineService.WORKSET_OUT, worksetOut);
 		return returnOut;
 	}
@@ -754,6 +815,7 @@ public class RelaisService {
 		final Map<String, ArrayList<String>> residualATable = new LinkedHashMap<>();
 		final Map<String, ArrayList<String>> residualBTable = new LinkedHashMap<>();
 		final Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
+		final Map<String, ArrayList<String>> qualityIndicators = new LinkedHashMap<>();
 		final Map<String, String> rolesGroupOut = new HashMap<>();
 
 		logService.save("Process Matching Tables  Starting...");
@@ -764,6 +826,7 @@ public class RelaisService {
 		final ArrayList<String> patternPossibleMatching = new ArrayList<>();
 		final Map<String, String> patternPPostValues = new HashMap<>();
 		final Map<String, String> patternRValues = new HashMap<>();
+		float mprec=1f, pprec=1f, mrec=0f, prec=0f;
 		
 		String paramTM = parametriMap.get(params_ThresholdMatching);
 		String paramTU = parametriMap.get(params_ThresholdUnMatching);
@@ -782,6 +845,8 @@ public class RelaisService {
 				for (String pPostValue : worksetInn.get(codeFS).get(pPostVarname)) {
 					if (Float.parseFloat(pPostValue) >= Float.parseFloat(paramTU)) {
 						StringBuffer pattern = new StringBuffer();
+						float cprec = Float.parseFloat(worksetInn.get(codeFS).get(codePREC).get(indexItems));
+						float crec = Float.parseFloat(worksetInn.get(codeFS).get(codeREC).get(indexItems));
 						
 						String RValue= worksetInn.get(codeFS).get(codeRATIO).get(indexItems);
 						for (String ctVarname : ruoliVariabileNome.get(codContengencyTable)) {
@@ -793,8 +858,14 @@ public class RelaisService {
 
 						if (Float.parseFloat(pPostValue) >= Float.parseFloat(paramTM)) {
 							patternMatching.add(pattern.toString());
+							if (cprec<mprec) mprec=cprec;
+							if (cprec<pprec) pprec=cprec;
+							if (crec>mrec) mrec=crec;
+							if (crec>prec) prec=crec;
 						} else {
 							patternPossibleMatching.add(pattern.toString());
+							if (cprec<pprec) pprec=cprec;
+							if (crec>prec) prec=crec;
 						}
 						patternPPostValues.put(pattern.toString(), pPostValue);
 						patternRValues.put(pattern.toString(), RValue);
@@ -827,11 +898,18 @@ public class RelaisService {
 		variabileNomeListOut.addAll(variabileNomeListMB);
 		variabileNomeListOut.add(codeP_POST);
 		variabileNomeListOut.add(codeRATIO);
+		
+		final ArrayList<String> variableQuality = new ArrayList<>();
+		variableQuality.add(codeOUT);
+		variableQuality.add(codeTHR);
+		variableQuality.add(codePREC);
+		variableQuality.add(codeREC);
 
 		rolesOut.put(codMachingTable, variabileNomeListOut);
 		rolesOut.put(codPossibleMachingTable, variabileNomeListOut);
 		rolesOut.put(codResidualA, variabileNomeListMA);
 		rolesOut.put(codResidualB, variabileNomeListMB);
+		rolesOut.put(codQualityIndicators, variableQuality);
 
 
 		// final Map<String, ArrayList<String>> matchingTable =
@@ -845,6 +923,15 @@ public class RelaisService {
 				variabileNomeListMA, variabileNomeListMB, variabileNomeListOut, patternPossibleMatching,
 				patternPPostValues,patternRValues);
 
+		/*load quality indicators */
+		
+		logService.save("Quality Indicators :"+String.valueOf(mprec)+" "+String.valueOf(mrec));
+		
+		qualityIndicators.put(codeOUT, new ArrayList<>(List.of("MATCHES","MATCHES+POSSIBLE")));
+		qualityIndicators.put(codeTHR, new ArrayList<>(List.of(paramTM,paramTU)));
+		qualityIndicators.put(codePREC, new ArrayList<>(List.of(String.valueOf(mprec), String.valueOf(pprec))));
+		qualityIndicators.put(codeREC, new ArrayList<>(List.of(String.valueOf(mrec), String.valueOf(prec))));
+		
 		returnOut.put(EngineService.ROLES_OUT, rolesOut);
 		rolesOut.keySet().forEach(code -> {
 			rolesGroupOut.put(code, code);
@@ -855,6 +942,8 @@ public class RelaisService {
 		worksetOut.put(codResidualA, residualATable);
 		worksetOut.put(codPossibleMachingTable, possibleMatchingTable);
 		worksetOut.put(codMachingTable, matchingTable);
+		worksetOut.put(codQualityIndicators, qualityIndicators);
+		
 		returnOut.put(EngineService.WORKSET_OUT, worksetOut);
 		return returnOut;
 	}

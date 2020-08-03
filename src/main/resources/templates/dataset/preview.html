@@ -37,6 +37,7 @@
         <script th:src="@{/js/vendors/devextreme/jszip.min.js}"></script>
         <script th:src="@{/js/vendors/devextreme/dx.all.js}"></script>
         <script th:src="@{/js/dataset/dx_preview.js}"></script>
+     <!--       <script th:src="@{/js/dataset/datasetpreview.js}"></script> -->
         <link th:href="@{/css/vendors/devextreme/dx.common.css}" rel="stylesheet" />
         <link th:href="@{/css/vendors/devextreme/dx.coreui3.css}" rel="stylesheet" />
         <style>
@@ -79,8 +80,8 @@
                         </li>
                     </ol>
                     <!-- Right navigation menu -->
-                    <div class="c-header-nav d-md-down-none mfe-2">
-                        <a href="#" class="c-header-nav-link" title="Preprocessing">
+                    <div class="c-header-nav d-md-down-none mfe-2 dropdown">
+               <!--       <a href="#" class="c-header-nav-link" data-toggle="dropdown" title="Preprocessing">
                             <i class="fa fa-cog"></i>&nbsp;<span th:text="#{dataset.nuovaVariabile}"></span>
                         </a>
                         <ul class="dropdown-menu" >
@@ -96,7 +97,7 @@
                         <a class="c-header-nav-link" id="btn_metadati" th:title="#{dataset.link.classification.title}" th:href="@{'/metadatiDataset/'+${idfile}}">
                             <i class="fa fa-pencil-square-o"></i>&nbsp;<span th:text="#{sessionewf.metadati}"></span>
                         </a>
-                        <a class="c-header-nav-link" th:title="#{close.data.link.title}" th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}">
+                    -->        <a class="c-header-nav-link" th:title="#{close.data.link.title}" th:href="@{'/sessione/mostradataset/'+${session.sessionBean.id}}">
                             <i class="fa fa-close"></i>&nbsp;<span th:text="#{Layout.Close}"></span>
                         </a>
                     </div>
