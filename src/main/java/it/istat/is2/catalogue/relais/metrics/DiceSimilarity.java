@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 public final class DiceSimilarity extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 0.00000034457142857142857142857142857146f;
 
@@ -35,7 +35,7 @@ public final class DiceSimilarity extends AbstractStringMetric implements Serial
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {

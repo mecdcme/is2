@@ -10,9 +10,9 @@ import it.istat.is2.catalogue.relais.metrics.utility.TokeniserWhitespace;
 
 import java.util.ArrayList;
 
-public final class BlockDistance extends AbstractStringMetric implements Serializable  {
+public final class BlockDistance extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 6.4457142857142857142857142857146e-5f;
 
@@ -35,7 +35,7 @@ public final class BlockDistance extends AbstractStringMetric implements Seriali
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null; 
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {
@@ -48,7 +48,7 @@ public final class BlockDistance extends AbstractStringMetric implements Seriali
         final ArrayList<String> str1Tokens = tokeniser.tokenizeToArrayList(string1);
         final ArrayList<String> str2Tokens = tokeniser.tokenizeToArrayList(string2);
 
-        final float totalPossible = (float)(str1Tokens.size() + str2Tokens.size());
+        final float totalPossible = (float) (str1Tokens.size() + str2Tokens.size());
 
         final float totalDistance = getUnNormalisedSimilarity(string1, string2);
         return (totalPossible - totalDistance) / totalPossible;

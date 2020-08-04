@@ -6,12 +6,13 @@
 package it.istat.is2.graph.bean;
 
 import java.util.List;
+
 import lombok.Data;
 
 @Data
 public class Coordinate {
-    
+
     private List<String> x;
     private List<String> y;
-    
+
 }

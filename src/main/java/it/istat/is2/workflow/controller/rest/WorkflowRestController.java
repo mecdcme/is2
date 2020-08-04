@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -66,9 +66,9 @@ public class WorkflowRestController {
 
     @RequestMapping(value = "/worksetvalori/{idelaborazione}/{typeIO}/{groupRole}/{paramsFilter:.+}", method = RequestMethod.GET)
     public String loadDatasetValoriWorkset(HttpServletRequest request, Model model,
-            @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("typeIO") Integer typeIO,@PathVariable("groupRole") Integer groupRole,
-            @PathVariable("paramsFilter") String paramsFilter, @RequestParam("length") Integer length,
-            @RequestParam("start") Integer start, @RequestParam("draw") Integer draw) throws IOException, JSONException {
+                                           @PathVariable("idelaborazione") Long idelaborazione, @PathVariable("typeIO") Integer typeIO, @PathVariable("groupRole") Integer groupRole,
+                                           @PathVariable("paramsFilter") String paramsFilter, @RequestParam("length") Integer length,
+                                           @RequestParam("start") Integer start, @RequestParam("draw") Integer draw) throws IOException, JSONException {
 
         HashMap<String, String> parameters = null;
         String noparams = "noparams";
@@ -86,14 +86,14 @@ public class WorkflowRestController {
                 parameters.put(nomeValore.get(0), nomeValore.get(1));
             }
         }
-        String dtb = workflowService.loadWorkSetValoriByDataProcessing(idelaborazione, typeIO,groupRole, length, start, draw, parameters);
+        String dtb = workflowService.loadWorkSetValoriByDataProcessing(idelaborazione, typeIO, groupRole, length, start, draw, parameters);
 
         return dtb;
     }
 
     @RequestMapping(value = "/loadBProcess/{idfunction}", method = RequestMethod.GET)
     public List<BusinessProcess> loadComboBProcess(HttpServletRequest request, Model model,
-            @PathVariable("idfunction") Long idfunction) throws IOException {
+                                                   @PathVariable("idfunction") Long idfunction) throws IOException {
 
         List<BusinessProcess> listaProcess = businessProcessService.findBProcessByIdFunction(idfunction);
 
@@ -102,7 +102,7 @@ public class WorkflowRestController {
 
     @RequestMapping(value = "/loadBSteps/{idprocess}", method = RequestMethod.GET)
     public List<ProcessStep> loadComboBSteps(HttpServletRequest request, Model model,
-            @PathVariable("idprocess") Long idprocess) throws IOException {
+                                             @PathVariable("idprocess") Long idprocess) throws IOException {
 
         List<ProcessStep> listaBStep = businessStepService.findBStepByIdProcess(idprocess);
 
@@ -111,7 +111,7 @@ public class WorkflowRestController {
 
     @RequestMapping(value = "/loadVarsByStep/{idelab}/{idstep}", method = RequestMethod.GET)
     public List<StepRuntime> loadVarsByStep(HttpServletRequest request, Model model,
-            @PathVariable("idelab") Long idelab, @PathVariable("idstep") Integer idstep) throws IOException {
+                                            @PathVariable("idelab") Long idelab, @PathVariable("idstep") Integer idstep) throws IOException {
 
         List<StepRuntime> listaVarAssociate = stepVariableService.findBStepByIdProcess(idelab, idstep);
 
@@ -120,28 +120,28 @@ public class WorkflowRestController {
 
     @RequestMapping(value = "/download/workset/{tipoFile}/{idelab}/{groupRole}", method = RequestMethod.GET)
     public void downloadWorkset(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("tipoFile") String tipoFile, @PathVariable("idelab") Long idelab,@PathVariable("groupRole") Long groupRole) throws Exception {
+                                @PathVariable("tipoFile") String tipoFile, @PathVariable("idelab") Long idelab, @PathVariable("groupRole") Long groupRole) throws Exception {
 
 
         String fileName = "";
         String contentType = "";
-        String outputName =  workflowService.getAppRoleNameById(groupRole);
+        String outputName = workflowService.getAppRoleNameById(groupRole);
         switch (tipoFile) {
-        case "csv":
-            fileName = outputName+".csv";
-            contentType = "text/csv";
-            break;
-        case "pdf":
-            fileName = outputName+".pdf";
-            contentType = "application/pdf";
-            break;
-        case "excel":
-            fileName = outputName+".xlsx";
-            contentType = "application/vnd.ms-excel";
-            break;
-    }
-        Map<String, List<String>> dataMap = workflowService.loadWorkSetValoriByDataProcessingRoleGroupMap(idelab,groupRole);
-        
+            case "csv":
+                fileName = outputName + ".csv";
+                contentType = "text/csv";
+                break;
+            case "pdf":
+                fileName = outputName + ".pdf";
+                contentType = "application/pdf";
+                break;
+            case "excel":
+                fileName = outputName + ".xlsx";
+                contentType = "application/vnd.ms-excel";
+                break;
+        }
+        Map<String, List<String>> dataMap = workflowService.loadWorkSetValoriByDataProcessingRoleGroupMap(idelab, groupRole);
+
         response.setHeader("charset", "utf-8");
         response.setHeader("Content-Type", contentType);
         response.setHeader("Content-disposition", "attachment; filename=" + fileName);
@@ -150,7 +150,7 @@ public class WorkflowRestController {
 
     @RequestMapping(value = "/updaterowlist", method = RequestMethod.POST)
     public String updateOrdineRighe(HttpServletRequest request, Model model,
-            @RequestParam("ordineIds") String ordineIds) throws IOException {
+                                    @RequestParam("ordineIds") String ordineIds) throws IOException {
 
         StringTokenizer stringTokenizerElements = new StringTokenizer(ordineIds, "|");
         String element = null;
@@ -164,7 +164,7 @@ public class WorkflowRestController {
                 ordine = stringTokenizerValues.nextElement().toString();
                 idstepvar = stringTokenizerValues.nextElement().toString();
             }
-            Integer idstep =Integer.parseInt(idstepvar);
+            Integer idstep = Integer.parseInt(idstepvar);
             Short ordineS = Short.parseShort(ordine);
             stepVariable = stepVariableService.findById(idstep);
             stepVariable.setOrderCode(ordineS);
@@ -174,5 +174,5 @@ public class WorkflowRestController {
         return "success";
     }
 
-    
+
 }

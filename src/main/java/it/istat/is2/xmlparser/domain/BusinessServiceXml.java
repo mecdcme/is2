@@ -20,9 +20,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -177,14 +177,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "name",
-    "descr",
-    "appServiceXml"
+        "name",
+        "descr",
+        "appServiceXml"
 })
 @XmlRootElement(name = "Business_Service_Xml")
 public class BusinessServiceXml {
@@ -198,11 +196,9 @@ public class BusinessServiceXml {
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getName() {
         return name;
@@ -210,11 +206,9 @@ public class BusinessServiceXml {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setName(String value) {
         this.name = value;
@@ -222,11 +216,9 @@ public class BusinessServiceXml {
 
     /**
      * Gets the value of the descr property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getDescr() {
         return descr;
@@ -234,11 +226,9 @@ public class BusinessServiceXml {
 
     /**
      * Sets the value of the descr property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDescr(String value) {
         this.descr = value;
@@ -246,11 +236,9 @@ public class BusinessServiceXml {
 
     /**
      * Gets the value of the appServiceXml property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BusinessServiceXml.AppServiceXml }
-     *     
+     *
+     * @return possible object is
+     * {@link BusinessServiceXml.AppServiceXml }
      */
     public BusinessServiceXml.AppServiceXml getAppServiceXml() {
         return appServiceXml;
@@ -258,11 +246,9 @@ public class BusinessServiceXml {
 
     /**
      * Sets the value of the appServiceXml property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BusinessServiceXml.AppServiceXml }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link BusinessServiceXml.AppServiceXml }
      */
     public void setAppServiceXml(BusinessServiceXml.AppServiceXml value) {
         this.appServiceXml = value;
@@ -271,9 +257,9 @@ public class BusinessServiceXml {
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     *
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -416,16 +402,14 @@ public class BusinessServiceXml {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "name",
-        "descr",
-        "source",
-        "language",
-        "instances"
+            "name",
+            "descr",
+            "source",
+            "language",
+            "instances"
     })
     public static class AppServiceXml {
 
@@ -442,11 +426,9 @@ public class BusinessServiceXml {
 
         /**
          * Gets the value of the name property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getName() {
             return name;
@@ -454,11 +436,9 @@ public class BusinessServiceXml {
 
         /**
          * Sets the value of the name property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setName(String value) {
             this.name = value;
@@ -466,11 +446,9 @@ public class BusinessServiceXml {
 
         /**
          * Gets the value of the descr property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getDescr() {
             return descr;
@@ -478,11 +456,9 @@ public class BusinessServiceXml {
 
         /**
          * Sets the value of the descr property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setDescr(String value) {
             this.descr = value;
@@ -490,11 +466,9 @@ public class BusinessServiceXml {
 
         /**
          * Gets the value of the source property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getSource() {
             return source;
@@ -502,11 +476,9 @@ public class BusinessServiceXml {
 
         /**
          * Sets the value of the source property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setSource(String value) {
             this.source = value;
@@ -514,11 +486,9 @@ public class BusinessServiceXml {
 
         /**
          * Gets the value of the language property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getLanguage() {
             return language;
@@ -526,11 +496,9 @@ public class BusinessServiceXml {
 
         /**
          * Sets the value of the language property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setLanguage(String value) {
             this.language = value;
@@ -538,11 +506,9 @@ public class BusinessServiceXml {
 
         /**
          * Gets the value of the instances property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link BusinessServiceXml.AppServiceXml.Instances }
-         *     
+         *
+         * @return possible object is
+         * {@link BusinessServiceXml.AppServiceXml.Instances }
          */
         public BusinessServiceXml.AppServiceXml.Instances getInstances() {
             return instances;
@@ -550,11 +516,9 @@ public class BusinessServiceXml {
 
         /**
          * Sets the value of the instances property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link BusinessServiceXml.AppServiceXml.Instances }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link BusinessServiceXml.AppServiceXml.Instances }
          */
         public void setInstances(BusinessServiceXml.AppServiceXml.Instances value) {
             this.instances = value;
@@ -563,9 +527,9 @@ public class BusinessServiceXml {
 
         /**
          * <p>Java class for anonymous complex type.
-         * 
+         *
          * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
+         *
          * <pre>
          * &lt;complexType>
          *   &lt;complexContent>
@@ -694,12 +658,10 @@ public class BusinessServiceXml {
          *   &lt;/complexContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "stepInstanceXml"
+                "stepInstanceXml"
         })
         public static class Instances {
 
@@ -708,25 +670,23 @@ public class BusinessServiceXml {
 
             /**
              * Gets the value of the stepInstanceXml property.
-             * 
+             *
              * <p>
              * This accessor method returns a reference to the live list,
              * not a snapshot. Therefore any modification you make to the
              * returned list will be present inside the JAXB object.
              * This is why there is not a <CODE>set</CODE> method for the stepInstanceXml property.
-             * 
+             *
              * <p>
              * For example, to add a new item, do as follows:
              * <pre>
              *    getStepInstanceXml().add(newItem);
              * </pre>
-             * 
-             * 
+             *
+             *
              * <p>
              * Objects of the following type(s) are allowed in the list
              * {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml }
-             * 
-             * 
              */
             public List<BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml> getStepInstanceXml() {
                 if (stepInstanceXml == null) {
@@ -738,9 +698,9 @@ public class BusinessServiceXml {
 
             /**
              * <p>Java class for anonymous complex type.
-             * 
+             *
              * <p>The following schema fragment specifies the expected content contained within this class.
-             * 
+             *
              * <pre>
              * &lt;complexType>
              *   &lt;complexContent>
@@ -859,15 +819,13 @@ public class BusinessServiceXml {
              *   &lt;/complexContent>
              * &lt;/complexType>
              * </pre>
-             * 
-             * 
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
-                "method",
-                "descr",
-                "label",
-                "signature"
+                    "method",
+                    "descr",
+                    "label",
+                    "signature"
             })
             public static class StepInstanceXml {
 
@@ -882,11 +840,9 @@ public class BusinessServiceXml {
 
                 /**
                  * Gets the value of the method property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *
+                 * @return possible object is
+                 * {@link String }
                  */
                 public String getMethod() {
                     return method;
@@ -894,11 +850,9 @@ public class BusinessServiceXml {
 
                 /**
                  * Sets the value of the method property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *
+                 * @param value allowed object is
+                 *              {@link String }
                  */
                 public void setMethod(String value) {
                     this.method = value;
@@ -906,11 +860,9 @@ public class BusinessServiceXml {
 
                 /**
                  * Gets the value of the descr property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *
+                 * @return possible object is
+                 * {@link String }
                  */
                 public String getDescr() {
                     return descr;
@@ -918,11 +870,9 @@ public class BusinessServiceXml {
 
                 /**
                  * Sets the value of the descr property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *
+                 * @param value allowed object is
+                 *              {@link String }
                  */
                 public void setDescr(String value) {
                     this.descr = value;
@@ -930,11 +880,9 @@ public class BusinessServiceXml {
 
                 /**
                  * Gets the value of the label property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *
+                 * @return possible object is
+                 * {@link String }
                  */
                 public String getLabel() {
                     return label;
@@ -942,11 +890,9 @@ public class BusinessServiceXml {
 
                 /**
                  * Sets the value of the label property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *
+                 * @param value allowed object is
+                 *              {@link String }
                  */
                 public void setLabel(String value) {
                     this.label = value;
@@ -954,11 +900,9 @@ public class BusinessServiceXml {
 
                 /**
                  * Gets the value of the signature property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature }
-                 *     
+                 *
+                 * @return possible object is
+                 * {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature }
                  */
                 public BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature getSignature() {
                     return signature;
@@ -966,11 +910,9 @@ public class BusinessServiceXml {
 
                 /**
                  * Sets the value of the signature property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature }
-                 *     
+                 *
+                 * @param value allowed object is
+                 *              {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature }
                  */
                 public void setSignature(BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature value) {
                     this.signature = value;
@@ -979,9 +921,9 @@ public class BusinessServiceXml {
 
                 /**
                  * <p>Java class for anonymous complex type.
-                 * 
+                 *
                  * <p>The following schema fragment specifies the expected content contained within this class.
-                 * 
+                 *
                  * <pre>
                  * &lt;complexType>
                  *   &lt;complexContent>
@@ -1087,14 +1029,12 @@ public class BusinessServiceXml {
                  *   &lt;/complexContent>
                  * &lt;/complexType>
                  * </pre>
-                 * 
-                 * 
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "", propOrder = {
-                    "parameters",
-                    "inputVariables",
-                    "outputVariables"
+                        "parameters",
+                        "inputVariables",
+                        "outputVariables"
                 })
                 public static class Signature {
 
@@ -1107,11 +1047,9 @@ public class BusinessServiceXml {
 
                     /**
                      * Gets the value of the parameters property.
-                     * 
-                     * @return
-                     *     possible object is
-                     *     {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.Parameters }
-                     *     
+                     *
+                     * @return possible object is
+                     * {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.Parameters }
                      */
                     public BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.Parameters getParameters() {
                         return parameters;
@@ -1119,11 +1057,9 @@ public class BusinessServiceXml {
 
                     /**
                      * Sets the value of the parameters property.
-                     * 
-                     * @param value
-                     *     allowed object is
-                     *     {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.Parameters }
-                     *     
+                     *
+                     * @param value allowed object is
+                     *              {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.Parameters }
                      */
                     public void setParameters(BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.Parameters value) {
                         this.parameters = value;
@@ -1131,11 +1067,9 @@ public class BusinessServiceXml {
 
                     /**
                      * Gets the value of the inputVariables property.
-                     * 
-                     * @return
-                     *     possible object is
-                     *     {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables }
-                     *     
+                     *
+                     * @return possible object is
+                     * {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables }
                      */
                     public BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables getInputVariables() {
                         return inputVariables;
@@ -1143,11 +1077,9 @@ public class BusinessServiceXml {
 
                     /**
                      * Sets the value of the inputVariables property.
-                     * 
-                     * @param value
-                     *     allowed object is
-                     *     {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables }
-                     *     
+                     *
+                     * @param value allowed object is
+                     *              {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables }
                      */
                     public void setInputVariables(BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables value) {
                         this.inputVariables = value;
@@ -1155,11 +1087,9 @@ public class BusinessServiceXml {
 
                     /**
                      * Gets the value of the outputVariables property.
-                     * 
-                     * @return
-                     *     possible object is
-                     *     {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables }
-                     *     
+                     *
+                     * @return possible object is
+                     * {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables }
                      */
                     public BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables getOutputVariables() {
                         return outputVariables;
@@ -1167,11 +1097,9 @@ public class BusinessServiceXml {
 
                     /**
                      * Sets the value of the outputVariables property.
-                     * 
-                     * @param value
-                     *     allowed object is
-                     *     {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables }
-                     *     
+                     *
+                     * @param value allowed object is
+                     *              {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables }
                      */
                     public void setOutputVariables(BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables value) {
                         this.outputVariables = value;
@@ -1180,9 +1108,9 @@ public class BusinessServiceXml {
 
                     /**
                      * <p>Java class for anonymous complex type.
-                     * 
+                     *
                      * <p>The following schema fragment specifies the expected content contained within this class.
-                     * 
+                     *
                      * <pre>
                      * &lt;complexType>
                      *   &lt;complexContent>
@@ -1219,12 +1147,10 @@ public class BusinessServiceXml {
                      *   &lt;/complexContent>
                      * &lt;/complexType>
                      * </pre>
-                     * 
-                     * 
                      */
                     @XmlAccessorType(XmlAccessType.FIELD)
                     @XmlType(name = "", propOrder = {
-                        "inputVariable"
+                            "inputVariable"
                     })
                     public static class InputVariables {
 
@@ -1233,25 +1159,23 @@ public class BusinessServiceXml {
 
                         /**
                          * Gets the value of the inputVariable property.
-                         * 
+                         *
                          * <p>
                          * This accessor method returns a reference to the live list,
                          * not a snapshot. Therefore any modification you make to the
                          * returned list will be present inside the JAXB object.
                          * This is why there is not a <CODE>set</CODE> method for the inputVariable property.
-                         * 
+                         *
                          * <p>
                          * For example, to add a new item, do as follows:
                          * <pre>
                          *    getInputVariable().add(newItem);
                          * </pre>
-                         * 
-                         * 
+                         *
+                         *
                          * <p>
                          * Objects of the following type(s) are allowed in the list
                          * {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables.InputVariable }
-                         * 
-                         * 
                          */
                         public List<BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables.InputVariable> getInputVariable() {
                             if (inputVariable == null) {
@@ -1263,9 +1187,9 @@ public class BusinessServiceXml {
 
                         /**
                          * <p>Java class for anonymous complex type.
-                         * 
+                         *
                          * <p>The following schema fragment specifies the expected content contained within this class.
-                         * 
+                         *
                          * <pre>
                          * &lt;complexType>
                          *   &lt;complexContent>
@@ -1292,13 +1216,11 @@ public class BusinessServiceXml {
                          *   &lt;/complexContent>
                          * &lt;/complexType>
                          * </pre>
-                         * 
-                         * 
                          */
                         @XmlAccessorType(XmlAccessType.FIELD)
                         @XmlType(name = "", propOrder = {
-                            "required",
-                            "role"
+                                "required",
+                                "role"
                         })
                         public static class InputVariable {
 
@@ -1309,11 +1231,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Gets the value of the required property.
-                             * 
-                             * @return
-                             *     possible object is
-                             *     {@link String }
-                             *     
+                             *
+                             * @return possible object is
+                             * {@link String }
                              */
                             public String getRequired() {
                                 return required;
@@ -1321,11 +1241,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Sets the value of the required property.
-                             * 
-                             * @param value
-                             *     allowed object is
-                             *     {@link String }
-                             *     
+                             *
+                             * @param value allowed object is
+                             *              {@link String }
                              */
                             public void setRequired(String value) {
                                 this.required = value;
@@ -1333,11 +1251,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Gets the value of the role property.
-                             * 
-                             * @return
-                             *     possible object is
-                             *     {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables.InputVariable.Role }
-                             *     
+                             *
+                             * @return possible object is
+                             * {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables.InputVariable.Role }
                              */
                             public BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables.InputVariable.Role getRole() {
                                 return role;
@@ -1345,11 +1261,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Sets the value of the role property.
-                             * 
-                             * @param value
-                             *     allowed object is
-                             *     {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables.InputVariable.Role }
-                             *     
+                             *
+                             * @param value allowed object is
+                             *              {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables.InputVariable.Role }
                              */
                             public void setRole(BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.InputVariables.InputVariable.Role value) {
                                 this.role = value;
@@ -1358,9 +1272,9 @@ public class BusinessServiceXml {
 
                             /**
                              * <p>Java class for anonymous complex type.
-                             * 
+                             *
                              * <p>The following schema fragment specifies the expected content contained within this class.
-                             * 
+                             *
                              * <pre>
                              * &lt;complexType>
                              *   &lt;complexContent>
@@ -1376,16 +1290,14 @@ public class BusinessServiceXml {
                              *   &lt;/complexContent>
                              * &lt;/complexType>
                              * </pre>
-                             * 
-                             * 
                              */
                             @XmlAccessorType(XmlAccessType.FIELD)
                             @XmlType(name = "", propOrder = {
-                                "code",
-                                "name",
-                                "descr",
-                                "order",
-                                "clsDataType"
+                                    "code",
+                                    "name",
+                                    "descr",
+                                    "order",
+                                    "clsDataType"
                             })
                             public static class Role {
 
@@ -1403,11 +1315,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Gets the value of the code property.
-                                 * 
-                                 * @return
-                                 *     possible object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @return possible object is
+                                 * {@link String }
                                  */
                                 public String getCode() {
                                     return code;
@@ -1415,11 +1325,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Sets the value of the code property.
-                                 * 
-                                 * @param value
-                                 *     allowed object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @param value allowed object is
+                                 *              {@link String }
                                  */
                                 public void setCode(String value) {
                                     this.code = value;
@@ -1427,11 +1335,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Gets the value of the name property.
-                                 * 
-                                 * @return
-                                 *     possible object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @return possible object is
+                                 * {@link String }
                                  */
                                 public String getName() {
                                     return name;
@@ -1439,11 +1345,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Sets the value of the name property.
-                                 * 
-                                 * @param value
-                                 *     allowed object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @param value allowed object is
+                                 *              {@link String }
                                  */
                                 public void setName(String value) {
                                     this.name = value;
@@ -1451,11 +1355,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Gets the value of the descr property.
-                                 * 
-                                 * @return
-                                 *     possible object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @return possible object is
+                                 * {@link String }
                                  */
                                 public String getDescr() {
                                     return descr;
@@ -1463,11 +1365,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Sets the value of the descr property.
-                                 * 
-                                 * @param value
-                                 *     allowed object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @param value allowed object is
+                                 *              {@link String }
                                  */
                                 public void setDescr(String value) {
                                     this.descr = value;
@@ -1475,7 +1375,6 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Gets the value of the order property.
-                                 * 
                                  */
                                 public short getOrder() {
                                     return order;
@@ -1483,7 +1382,6 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Sets the value of the order property.
-                                 * 
                                  */
                                 public void setOrder(short value) {
                                     this.order = value;
@@ -1491,11 +1389,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Gets the value of the clsDataType property.
-                                 * 
-                                 * @return
-                                 *     possible object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @return possible object is
+                                 * {@link String }
                                  */
                                 public String getClsDataType() {
                                     return clsDataType;
@@ -1503,11 +1399,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Sets the value of the clsDataType property.
-                                 * 
-                                 * @param value
-                                 *     allowed object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @param value allowed object is
+                                 *              {@link String }
                                  */
                                 public void setClsDataType(String value) {
                                     this.clsDataType = value;
@@ -1522,9 +1416,9 @@ public class BusinessServiceXml {
 
                     /**
                      * <p>Java class for anonymous complex type.
-                     * 
+                     *
                      * <p>The following schema fragment specifies the expected content contained within this class.
-                     * 
+                     *
                      * <pre>
                      * &lt;complexType>
                      *   &lt;complexContent>
@@ -1561,12 +1455,10 @@ public class BusinessServiceXml {
                      *   &lt;/complexContent>
                      * &lt;/complexType>
                      * </pre>
-                     * 
-                     * 
                      */
                     @XmlAccessorType(XmlAccessType.FIELD)
                     @XmlType(name = "", propOrder = {
-                        "outputVariable"
+                            "outputVariable"
                     })
                     public static class OutputVariables {
 
@@ -1575,25 +1467,23 @@ public class BusinessServiceXml {
 
                         /**
                          * Gets the value of the outputVariable property.
-                         * 
+                         *
                          * <p>
                          * This accessor method returns a reference to the live list,
                          * not a snapshot. Therefore any modification you make to the
                          * returned list will be present inside the JAXB object.
                          * This is why there is not a <CODE>set</CODE> method for the outputVariable property.
-                         * 
+                         *
                          * <p>
                          * For example, to add a new item, do as follows:
                          * <pre>
                          *    getOutputVariable().add(newItem);
                          * </pre>
-                         * 
-                         * 
+                         *
+                         *
                          * <p>
                          * Objects of the following type(s) are allowed in the list
                          * {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables.OutputVariable }
-                         * 
-                         * 
                          */
                         public List<BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables.OutputVariable> getOutputVariable() {
                             if (outputVariable == null) {
@@ -1605,9 +1495,9 @@ public class BusinessServiceXml {
 
                         /**
                          * <p>Java class for anonymous complex type.
-                         * 
+                         *
                          * <p>The following schema fragment specifies the expected content contained within this class.
-                         * 
+                         *
                          * <pre>
                          * &lt;complexType>
                          *   &lt;complexContent>
@@ -1634,13 +1524,11 @@ public class BusinessServiceXml {
                          *   &lt;/complexContent>
                          * &lt;/complexType>
                          * </pre>
-                         * 
-                         * 
                          */
                         @XmlAccessorType(XmlAccessType.FIELD)
                         @XmlType(name = "", propOrder = {
-                            "required",
-                            "role"
+                                "required",
+                                "role"
                         })
                         public static class OutputVariable {
 
@@ -1651,11 +1539,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Gets the value of the required property.
-                             * 
-                             * @return
-                             *     possible object is
-                             *     {@link String }
-                             *     
+                             *
+                             * @return possible object is
+                             * {@link String }
                              */
                             public String getRequired() {
                                 return required;
@@ -1663,11 +1549,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Sets the value of the required property.
-                             * 
-                             * @param value
-                             *     allowed object is
-                             *     {@link String }
-                             *     
+                             *
+                             * @param value allowed object is
+                             *              {@link String }
                              */
                             public void setRequired(String value) {
                                 this.required = value;
@@ -1675,11 +1559,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Gets the value of the role property.
-                             * 
-                             * @return
-                             *     possible object is
-                             *     {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables.OutputVariable.Role }
-                             *     
+                             *
+                             * @return possible object is
+                             * {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables.OutputVariable.Role }
                              */
                             public BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables.OutputVariable.Role getRole() {
                                 return role;
@@ -1687,11 +1569,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Sets the value of the role property.
-                             * 
-                             * @param value
-                             *     allowed object is
-                             *     {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables.OutputVariable.Role }
-                             *     
+                             *
+                             * @param value allowed object is
+                             *              {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables.OutputVariable.Role }
                              */
                             public void setRole(BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.OutputVariables.OutputVariable.Role value) {
                                 this.role = value;
@@ -1700,9 +1580,9 @@ public class BusinessServiceXml {
 
                             /**
                              * <p>Java class for anonymous complex type.
-                             * 
+                             *
                              * <p>The following schema fragment specifies the expected content contained within this class.
-                             * 
+                             *
                              * <pre>
                              * &lt;complexType>
                              *   &lt;complexContent>
@@ -1718,16 +1598,14 @@ public class BusinessServiceXml {
                              *   &lt;/complexContent>
                              * &lt;/complexType>
                              * </pre>
-                             * 
-                             * 
                              */
                             @XmlAccessorType(XmlAccessType.FIELD)
                             @XmlType(name = "", propOrder = {
-                                "code",
-                                "name",
-                                "descr",
-                                "order",
-                                "clsDataType"
+                                    "code",
+                                    "name",
+                                    "descr",
+                                    "order",
+                                    "clsDataType"
                             })
                             public static class Role {
 
@@ -1745,11 +1623,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Gets the value of the code property.
-                                 * 
-                                 * @return
-                                 *     possible object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @return possible object is
+                                 * {@link String }
                                  */
                                 public String getCode() {
                                     return code;
@@ -1757,11 +1633,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Sets the value of the code property.
-                                 * 
-                                 * @param value
-                                 *     allowed object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @param value allowed object is
+                                 *              {@link String }
                                  */
                                 public void setCode(String value) {
                                     this.code = value;
@@ -1769,11 +1643,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Gets the value of the name property.
-                                 * 
-                                 * @return
-                                 *     possible object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @return possible object is
+                                 * {@link String }
                                  */
                                 public String getName() {
                                     return name;
@@ -1781,11 +1653,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Sets the value of the name property.
-                                 * 
-                                 * @param value
-                                 *     allowed object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @param value allowed object is
+                                 *              {@link String }
                                  */
                                 public void setName(String value) {
                                     this.name = value;
@@ -1793,11 +1663,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Gets the value of the descr property.
-                                 * 
-                                 * @return
-                                 *     possible object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @return possible object is
+                                 * {@link String }
                                  */
                                 public String getDescr() {
                                     return descr;
@@ -1805,11 +1673,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Sets the value of the descr property.
-                                 * 
-                                 * @param value
-                                 *     allowed object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @param value allowed object is
+                                 *              {@link String }
                                  */
                                 public void setDescr(String value) {
                                     this.descr = value;
@@ -1817,7 +1683,6 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Gets the value of the order property.
-                                 * 
                                  */
                                 public short getOrder() {
                                     return order;
@@ -1825,7 +1690,6 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Sets the value of the order property.
-                                 * 
                                  */
                                 public void setOrder(short value) {
                                     this.order = value;
@@ -1833,11 +1697,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Gets the value of the clsDataType property.
-                                 * 
-                                 * @return
-                                 *     possible object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @return possible object is
+                                 * {@link String }
                                  */
                                 public String getClsDataType() {
                                     return clsDataType;
@@ -1845,11 +1707,9 @@ public class BusinessServiceXml {
 
                                 /**
                                  * Sets the value of the clsDataType property.
-                                 * 
-                                 * @param value
-                                 *     allowed object is
-                                 *     {@link String }
-                                 *     
+                                 *
+                                 * @param value allowed object is
+                                 *              {@link String }
                                  */
                                 public void setClsDataType(String value) {
                                     this.clsDataType = value;
@@ -1864,9 +1724,9 @@ public class BusinessServiceXml {
 
                     /**
                      * <p>Java class for anonymous complex type.
-                     * 
+                     *
                      * <p>The following schema fragment specifies the expected content contained within this class.
-                     * 
+                     *
                      * <pre>
                      * &lt;complexType>
                      *   &lt;complexContent>
@@ -1890,12 +1750,10 @@ public class BusinessServiceXml {
                      *   &lt;/complexContent>
                      * &lt;/complexType>
                      * </pre>
-                     * 
-                     * 
                      */
                     @XmlAccessorType(XmlAccessType.FIELD)
                     @XmlType(name = "", propOrder = {
-                        "parameterXml"
+                            "parameterXml"
                     })
                     public static class Parameters {
 
@@ -1904,25 +1762,23 @@ public class BusinessServiceXml {
 
                         /**
                          * Gets the value of the parameterXml property.
-                         * 
+                         *
                          * <p>
                          * This accessor method returns a reference to the live list,
                          * not a snapshot. Therefore any modification you make to the
                          * returned list will be present inside the JAXB object.
                          * This is why there is not a <CODE>set</CODE> method for the parameterXml property.
-                         * 
+                         *
                          * <p>
                          * For example, to add a new item, do as follows:
                          * <pre>
                          *    getParameterXml().add(newItem);
                          * </pre>
-                         * 
-                         * 
+                         *
+                         *
                          * <p>
                          * Objects of the following type(s) are allowed in the list
                          * {@link BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.Parameters.ParameterXml }
-                         * 
-                         * 
                          */
                         public List<BusinessServiceXml.AppServiceXml.Instances.StepInstanceXml.Signature.Parameters.ParameterXml> getParameterXml() {
                             if (parameterXml == null) {
@@ -1934,9 +1790,9 @@ public class BusinessServiceXml {
 
                         /**
                          * <p>Java class for anonymous complex type.
-                         * 
+                         *
                          * <p>The following schema fragment specifies the expected content contained within this class.
-                         * 
+                         *
                          * <pre>
                          * &lt;complexType>
                          *   &lt;complexContent>
@@ -1950,14 +1806,12 @@ public class BusinessServiceXml {
                          *   &lt;/complexContent>
                          * &lt;/complexType>
                          * </pre>
-                         * 
-                         * 
                          */
                         @XmlAccessorType(XmlAccessType.FIELD)
                         @XmlType(name = "", propOrder = {
-                            "name",
-                            "descr",
-                            "_default"
+                                "name",
+                                "descr",
+                                "_default"
                         })
                         public static class ParameterXml {
 
@@ -1970,11 +1824,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Gets the value of the name property.
-                             * 
-                             * @return
-                             *     possible object is
-                             *     {@link String }
-                             *     
+                             *
+                             * @return possible object is
+                             * {@link String }
                              */
                             public String getName() {
                                 return name;
@@ -1982,11 +1834,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Sets the value of the name property.
-                             * 
-                             * @param value
-                             *     allowed object is
-                             *     {@link String }
-                             *     
+                             *
+                             * @param value allowed object is
+                             *              {@link String }
                              */
                             public void setName(String value) {
                                 this.name = value;
@@ -1994,11 +1844,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Gets the value of the descr property.
-                             * 
-                             * @return
-                             *     possible object is
-                             *     {@link String }
-                             *     
+                             *
+                             * @return possible object is
+                             * {@link String }
                              */
                             public String getDescr() {
                                 return descr;
@@ -2006,11 +1854,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Sets the value of the descr property.
-                             * 
-                             * @param value
-                             *     allowed object is
-                             *     {@link String }
-                             *     
+                             *
+                             * @param value allowed object is
+                             *              {@link String }
                              */
                             public void setDescr(String value) {
                                 this.descr = value;
@@ -2018,11 +1864,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Gets the value of the default property.
-                             * 
-                             * @return
-                             *     possible object is
-                             *     {@link String }
-                             *     
+                             *
+                             * @return possible object is
+                             * {@link String }
                              */
                             public String getDefault() {
                                 return _default;
@@ -2030,11 +1874,9 @@ public class BusinessServiceXml {
 
                             /**
                              * Sets the value of the default property.
-                             * 
-                             * @param value
-                             *     allowed object is
-                             *     {@link String }
-                             *     
+                             *
+                             * @param value allowed object is
+                             *              {@link String }
                              */
                             public void setDefault(String value) {
                                 this._default = value;

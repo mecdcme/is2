@@ -8,10 +8,10 @@ import it.istat.is2.workflow.domain.DataProcessing;
 
 public class WorkFlowBatchWriter implements ItemWriter<DataProcessing> {
 
-	@Override
-	public void write(List<? extends DataProcessing> items) throws Exception {
-		
-	}
+    @Override
+    public void write(List<? extends DataProcessing> items) throws Exception {
+
+    }
 
 
 }

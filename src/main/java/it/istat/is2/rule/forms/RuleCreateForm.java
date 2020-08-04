@@ -7,11 +7,12 @@ package it.istat.is2.rule.forms;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import lombok.Data;
 
 @Data
 public class RuleCreateForm {
-    
+
     @NotNull
     private Integer ruleId;
     @NotNull
@@ -24,5 +25,5 @@ public class RuleCreateForm {
     @NotNull
     private Short classificazione;
 
-    
+
 }

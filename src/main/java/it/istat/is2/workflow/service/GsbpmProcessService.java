@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import it.istat.is2.workflow.dao.GsbpmProcessDao;
 import it.istat.is2.workflow.domain.GsbpmProcess;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -38,8 +39,8 @@ public class GsbpmProcessService {
 
     @Autowired
     GsbpmProcessDao gsbpmProcessDao;
-    
-    public GsbpmProcess findById(Long sbpmProcessId){
+
+    public GsbpmProcess findById(Long sbpmProcessId) {
         return gsbpmProcessDao.findById(sbpmProcessId).orElse(null);
     }
 
@@ -50,19 +51,19 @@ public class GsbpmProcessService {
     public List<GsbpmProcess> findAllSubProcesses() {
         return gsbpmProcessDao.findAllSubProcesses();
     }
-    
+
     public List<GsbpmProcess> findSubProcessesByGsbpmParentProcess(GsbpmProcess gsbpmProcess) {
         return gsbpmProcessDao.findSubProcessesByGsbpmParentProcess(gsbpmProcess);
     }
 
-    public Integer getGsbpmRows(){
+    public Integer getGsbpmRows() {
         return gsbpmProcessDao.getGsbpmRows();
     }
-    
-    public Integer getGsbpmColumns(){
+
+    public Integer getGsbpmColumns() {
         return gsbpmProcessDao.getGsbpmColumns();
     }
-    
+
     public HashMap<String, GsbpmProcess> getGsbpmMatrix() {
 
         HashMap<String, GsbpmProcess> matrix = new LinkedHashMap<>();

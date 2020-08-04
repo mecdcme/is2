@@ -6,7 +6,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.*;
 
 public final class SmithWaterman extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 1.61e-4f;
 
@@ -59,7 +59,7 @@ public final class SmithWaterman extends AbstractStringMetric implements Seriali
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {
@@ -79,19 +79,19 @@ public final class SmithWaterman extends AbstractStringMetric implements Seriali
         }
 
         if (maxValue == 0) {
-            return 1.0f; 
+            return 1.0f;
         } else {
             return (smithWaterman / maxValue);
         }
     }
 
     public float getUnNormalisedSimilarity(final String s, final String t) {
-        final float[][] d; 
-        final int n; 
-        final int m; 
-        int i; 
-        int j; 
-        float cost; 
+        final float[][] d;
+        final int n;
+        final int m;
+        int i;
+        int j;
+        float cost;
 
         n = s.length();
         m = t.length();

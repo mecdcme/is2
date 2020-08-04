@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public final class TokeniserWhitespace implements InterfaceTokeniser, Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private InterfaceTermHandler stopWordHandler = new DummyStopTermHandler();
 
@@ -45,7 +45,7 @@ public final class TokeniserWhitespace implements InterfaceTokeniser, Serializab
                 }
             }
             final String term = input.substring(curPos, nextGapPos);
-            if(!stopWordHandler.isWord(term) && !term.trim().equals("")) {
+            if (!stopWordHandler.isWord(term) && !term.trim().equals("")) {
                 returnVect.add(term);
             }
             curPos = nextGapPos;

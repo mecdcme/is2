@@ -7,10 +7,10 @@ package it.istat.is2.app.bean;
 
 import java.io.Serializable;
 import java.util.List;
+
 import lombok.Data;
 
 /**
- *
  * @author mbruno
  */
 @Data

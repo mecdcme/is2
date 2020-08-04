@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public final class TokeniserQGram3Extended implements InterfaceTokeniser, Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private InterfaceTermHandler stopWordHandler = new DummyStopTermHandler();
 
@@ -35,7 +35,7 @@ public final class TokeniserQGram3Extended implements InterfaceTokeniser, Serial
         final int length = adjustedString.length() - 2;
         while (curPos < length) {
             final String term = adjustedString.substring(curPos, curPos + 3);
-            if(!stopWordHandler.isWord(term)) {
+            if (!stopWordHandler.isWord(term)) {
                 returnVect.add(term);
             }
             curPos++;

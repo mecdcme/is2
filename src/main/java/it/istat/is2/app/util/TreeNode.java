@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -45,27 +45,27 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         return childNode;
     }
 
-	@Override
-	public Iterator<TreeNode<T>> iterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Iterator<TreeNode<T>> iterator() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public T getData() {
-		return data;
-	}
+    public T getData() {
+        return data;
+    }
 
-	public List<TreeNode<T>> getChildren() {
-		return children;
-	}
+    public List<TreeNode<T>> getChildren() {
+        return children;
+    }
 
-	public void setChildren(List<TreeNode<T>> children) {
-		this.children = children;
-	}
+    public void setChildren(List<TreeNode<T>> children) {
+        this.children = children;
+    }
 
-	public void setData(T data) {
-		this.data = data;
-	}
+    public void setData(T data) {
+        this.data = data;
+    }
 
     // other features ...
 

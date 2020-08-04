@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -38,7 +38,6 @@ import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
 
 
-
 @Controller
 public class GraphController {
 
@@ -46,7 +45,7 @@ public class GraphController {
     private DatasetService datasetService;
     @Autowired
     ServletContext context;
- 
+
 
     @GetMapping("/graph/home/{idfile}")
     public String caricaMetadati(Model model, @PathVariable("idfile") Long idfile) {
@@ -54,7 +53,7 @@ public class GraphController {
         DatasetFile dfile = datasetService.findDataSetFile(idfile);
 
         List<DatasetColumn> colonne = datasetService.findAllNameColum(idfile);
-        
+
         model.addAttribute("colonne", colonne);
         model.addAttribute("idfile", idfile);
         model.addAttribute("dfile", dfile);
@@ -66,8 +65,8 @@ public class GraphController {
     public String caricaGraph(Model model, @PathVariable("idfile") Long idfile) {
 
         @SuppressWarnings("unused")
-		DatasetFile dfile = datasetService.findDataSetFile(idfile);
- 
+        DatasetFile dfile = datasetService.findDataSetFile(idfile);
+
         return "dataset/graph3";
     }
 }

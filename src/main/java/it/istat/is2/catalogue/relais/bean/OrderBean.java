@@ -7,24 +7,24 @@ import lombok.Setter;
 @Setter
 public class OrderBean implements Comparable<OrderBean> {
 
-	int index;
-	String value;
+    int index;
+    String value;
 
-	public OrderBean(int index, String value) {
-		this.index = index;
-		this.value = value;
-	}
-	
-@Override
-	public int compareTo(OrderBean e) {
-	//	return (this.value.compareToIgnoreCase(e.getValue()) == 0) ? this.value.compareToIgnoreCase(e.getValue())
-	//			: Integer.compare(this.index, e.getIndex());
-	return this.value.compareToIgnoreCase(e.getValue());
-	}
+    public OrderBean(int index, String value) {
+        this.index = index;
+        this.value = value;
+    }
+
+    @Override
+    public int compareTo(OrderBean e) {
+        //	return (this.value.compareToIgnoreCase(e.getValue()) == 0) ? this.value.compareToIgnoreCase(e.getValue())
+        //			: Integer.compare(this.index, e.getIndex());
+        return this.value.compareToIgnoreCase(e.getValue());
+    }
 
 
-@Override
-public String toString() {
-	return "OrderBean [index=" + index + ", value=" + value + "]";
-}
+    @Override
+    public String toString() {
+        return "OrderBean [index=" + index + ", value=" + value + "]";
+    }
 }

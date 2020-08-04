@@ -35,61 +35,61 @@ import it.istat.is2.app.util.IS2Const;
 @RestController
 public class WorkFlowBatchController {
 
-	@Autowired
-	JobLauncher jobLauncher;
-	@Autowired
-	private NotificationService notificationService;
-	@Autowired
-	private MessageSource messages;
-	@Autowired
-	Job doBusinessProc;
-	@Autowired
-	LogService logService;
-	@Autowired
-	WorkFlowBatchService workFlowBatchService;
+    @Autowired
+    JobLauncher jobLauncher;
+    @Autowired
+    private NotificationService notificationService;
+    @Autowired
+    private MessageSource messages;
+    @Autowired
+    Job doBusinessProc;
+    @Autowired
+    LogService logService;
+    @Autowired
+    WorkFlowBatchService workFlowBatchService;
 
-	@Autowired
-	JobOperator jobOperator;
+    @Autowired
+    JobOperator jobOperator;
 
-	@Autowired
-	JobRepository jobRepository;
+    @Autowired
+    JobRepository jobRepository;
 
-	@RequestMapping(value = "/batch/{idElaborazione}/{idBProc}", method = RequestMethod.GET)
-	public ResponseEntity<?> doBatch(HttpSession session, Model model,
-			@PathVariable("idElaborazione") Long idElaborazione, @PathVariable("idBProc") Long idBProc)
-			throws NoSuchJobException {
-		notificationService.removeAllMessages();
-		JobParameters jobParameters = new JobParametersBuilder().addLong("idElaborazione", idElaborazione)
-				.addLong("idBProc", idBProc).addLong("time", System.currentTimeMillis()).toJobParameters();
-		try {
-			jobLauncher.run(doBusinessProc, jobParameters);
-			notificationService.addInfoMessage(
-					messages.getMessage("generic.process.start", null, LocaleContextHolder.getLocale()));
-		} catch (Exception e) {
-			logService.save(e.getMessage());
-		}
+    @RequestMapping(value = "/batch/{idElaborazione}/{idBProc}", method = RequestMethod.GET)
+    public ResponseEntity<?> doBatch(HttpSession session, Model model,
+                                     @PathVariable("idElaborazione") Long idElaborazione, @PathVariable("idBProc") Long idBProc)
+            throws NoSuchJobException {
+        notificationService.removeAllMessages();
+        JobParameters jobParameters = new JobParametersBuilder().addLong("idElaborazione", idElaborazione)
+                .addLong("idBProc", idBProc).addLong("time", System.currentTimeMillis()).toJobParameters();
+        try {
+            jobLauncher.run(doBusinessProc, jobParameters);
+            notificationService.addInfoMessage(
+                    messages.getMessage("generic.process.start", null, LocaleContextHolder.getLocale()));
+        } catch (Exception e) {
+            logService.save(e.getMessage());
+        }
 
-		return ResponseEntity.ok(notificationService.getNotificationMessages());
-	}
+        return ResponseEntity.ok(notificationService.getNotificationMessages());
+    }
 
-	@GetMapping("/batch/logs")
-	public ResponseEntity<?> getLogs(HttpSession httpSession, Model model) {
-		SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
-		List<Log> logs;
-		if (sessionBean != null) {
-			logs = logService.findByIdSessione(sessionBean.getId());
-		} else {
-			logs = new ArrayList<>();
-		}
-		return ResponseEntity.ok(logs);
-	}
+    @GetMapping("/batch/logs")
+    public ResponseEntity<?> getLogs(HttpSession httpSession, Model model) {
+        SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+        List<Log> logs;
+        if (sessionBean != null) {
+            logs = logService.findByIdSessione(sessionBean.getId());
+        } else {
+            logs = new ArrayList<>();
+        }
+        return ResponseEntity.ok(logs);
+    }
 
-	@GetMapping("/batch/jobs/{idSessione}/{idElaborazione}")
-	public ResponseEntity<?> getJobs(@PathVariable("idSessione") Long idSessione,@PathVariable("idElaborazione") Long idElaborazione) {
-	 
- 
-		return ResponseEntity.ok( workFlowBatchService.findByIdSessioneAndIdElaborazione(idSessione,idElaborazione));
+    @GetMapping("/batch/jobs/{idSessione}/{idElaborazione}")
+    public ResponseEntity<?> getJobs(@PathVariable("idSessione") Long idSessione, @PathVariable("idElaborazione") Long idElaborazione) {
 
-	}
-	 
+
+        return ResponseEntity.ok(workFlowBatchService.findByIdSessioneAndIdElaborazione(idSessione, idElaborazione));
+
+    }
+
 }

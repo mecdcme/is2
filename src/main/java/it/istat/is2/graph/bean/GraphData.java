@@ -7,11 +7,12 @@ package it.istat.is2.graph.bean;
 
 import java.util.List;
 import java.util.Map;
+
 import lombok.Data;
 
 @Data
 public class GraphData {
-    
+
     private Map<String, List<String>> filter;
     private Map<String, List<String>> xAxis;
     private Map<String, List<String>> yAxis;

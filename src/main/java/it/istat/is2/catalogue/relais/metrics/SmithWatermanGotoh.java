@@ -10,7 +10,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.SubCost5_3_Minus3;
 
 public final class SmithWatermanGotoh extends SmithWatermanGotohWindowedAffine implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private final float ESTIMATEDTIMINGCONST = 2.2e-5f;
 
     public SmithWatermanGotoh() {
@@ -38,7 +38,7 @@ public final class SmithWatermanGotoh extends SmithWatermanGotohWindowedAffine i
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {

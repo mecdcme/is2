@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -70,200 +70,200 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 public class DatasetController {
 
-	  private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	
-	@Autowired
-	private DatasetService datasetService;
-	@Autowired
-	ServletContext context;
-	@Autowired
-	private NotificationService notificationService;
-	@Autowired
-	private MessageSource messages;
-	@Autowired
-	private WorkSessionService workSessionService;
-	@Autowired
-	private DataTypeService dataTypeService;
-	@Autowired
-	private LogService logService;
 
-	@GetMapping("/viewDataset/{idfile}")
-	public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Long idfile) {
+    @Autowired
+    private DatasetService datasetService;
+    @Autowired
+    ServletContext context;
+    @Autowired
+    private NotificationService notificationService;
+    @Autowired
+    private MessageSource messages;
+    @Autowired
+    private WorkSessionService workSessionService;
+    @Autowired
+    private DataTypeService dataTypeService;
+    @Autowired
+    private LogService logService;
 
-		notificationService.removeAllMessages();
+    @GetMapping("/viewDataset/{idfile}")
+    public String caricafile(HttpSession session, Model model, @PathVariable("idfile") Long idfile) {
 
-		DatasetFile dfile = datasetService.findDataSetFile(idfile);
-		List<DatasetColumn> colonne = datasetService.findAllNameColum(idfile);
-		List<StatisticalVariableCls> variabiliSum = datasetService.findAllVariabiliSum();
-		Integer numRighe = dfile.getTotalRows();
+        notificationService.removeAllMessages();
 
-		SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-		List<DatasetFile> files = null;
-		if (sessionBean != null) {
-			files = datasetService.findDatasetFilesByIdWorkSession(sessionBean.getId());
-		}
+        DatasetFile dfile = datasetService.findDataSetFile(idfile);
+        List<DatasetColumn> colonne = datasetService.findAllNameColum(idfile);
+        List<StatisticalVariableCls> variabiliSum = datasetService.findAllVariabiliSum();
+        Integer numRighe = dfile.getTotalRows();
 
-		model.addAttribute("colonne", colonne);
-		model.addAttribute("idfile", idfile);
-		model.addAttribute("variabili", variabiliSum);
-		model.addAttribute("dfile", dfile);
-		model.addAttribute("numRighe", numRighe.toString());
-		model.addAttribute("files", files);
+        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+        List<DatasetFile> files = null;
+        if (sessionBean != null) {
+            files = datasetService.findDatasetFilesByIdWorkSession(sessionBean.getId());
+        }
 
-		return "dataset/preview";
-	}
+        model.addAttribute("colonne", colonne);
+        model.addAttribute("idfile", idfile);
+        model.addAttribute("variabili", variabiliSum);
+        model.addAttribute("dfile", dfile);
+        model.addAttribute("numRighe", numRighe.toString());
+        model.addAttribute("files", files);
 
-	@GetMapping("/metadatiDataset/{idfile}")
-	public String caricaMetadati(Model model, @PathVariable("idfile") Long idfile) {
+        return "dataset/preview";
+    }
 
-		DatasetFile dfile = datasetService.findDataSetFile(idfile);
+    @GetMapping("/metadatiDataset/{idfile}")
+    public String caricaMetadati(Model model, @PathVariable("idfile") Long idfile) {
 
-		List<DatasetColumn> colonne = datasetService.findAllNameColum(idfile);
-		List<StatisticalVariableCls> variabiliSum = datasetService.findAllVariabiliSum();
+        DatasetFile dfile = datasetService.findDataSetFile(idfile);
 
-		model.addAttribute("colonne", colonne);
-		model.addAttribute("idfile", idfile);
-		model.addAttribute("variabili", variabiliSum);
-		model.addAttribute("dfile", dfile);
+        List<DatasetColumn> colonne = datasetService.findAllNameColum(idfile);
+        List<StatisticalVariableCls> variabiliSum = datasetService.findAllVariabiliSum();
 
-		return "dataset/metadata";
-	}
+        model.addAttribute("colonne", colonne);
+        model.addAttribute("idfile", idfile);
+        model.addAttribute("variabili", variabiliSum);
+        model.addAttribute("dfile", dfile);
 
-	@GetMapping(value = "/sessione/mostradataset/{id}")
-	public String viewDataset(HttpSession session, Model model, @PathVariable("id") Long id) {
+        return "dataset/metadata";
+    }
 
-		List<Log> logs = logService.findByIdSessione(id);
+    @GetMapping(value = "/sessione/mostradataset/{id}")
+    public String viewDataset(HttpSession session, Model model, @PathVariable("id") Long id) {
 
-		WorkSession sessionelv = workSessionService.getSessione(id);
-		if (sessionelv.getDatasetFiles() != null && !sessionelv.getDatasetFiles().isEmpty()) {
-			session.setAttribute(IS2Const.SESSION_DATASET, true);
-		}
+        List<Log> logs = logService.findByIdSessione(id);
 
-		List<DatasetFile> datasetList = sessionelv.getDatasetFiles();
-		List<DataTypeCls> fileTypeList = new ArrayList<>();
-		fileTypeList.add(dataTypeService.findById(IS2Const.DATA_TYPE_VARIABLE));
+        WorkSession sessionelv = workSessionService.getSessione(id);
+        if (sessionelv.getDatasetFiles() != null && !sessionelv.getDatasetFiles().isEmpty()) {
+            session.setAttribute(IS2Const.SESSION_DATASET, true);
+        }
 
-		String etichetta = null;
-		if (datasetList != null && datasetList.size() > 0) {
-			etichetta = "DS" + Integer.toString(datasetList.size() + 1);
-		} else {
-			etichetta = "DS1";
-		}
+        List<DatasetFile> datasetList = sessionelv.getDatasetFiles();
+        List<DataTypeCls> fileTypeList = new ArrayList<>();
+        fileTypeList.add(dataTypeService.findById(IS2Const.DATA_TYPE_VARIABLE));
 
-		model.addAttribute("fileTypeList", fileTypeList);
-		model.addAttribute("datasetList", datasetList);
-		model.addAttribute("logs", logs);
-		model.addAttribute("etichetta", etichetta);
-		return "dataset/list";
-	}
+        String etichetta = null;
+        if (datasetList != null && datasetList.size() > 0) {
+            etichetta = "DS" + Integer.toString(datasetList.size() + 1);
+        } else {
+            etichetta = "DS1";
+        }
 
-	@PostMapping(value = "/associaVarSum")
-	public String caricaMetadati(Model model, String idfile, String idvar, String filtro, String idsum) {
+        model.addAttribute("fileTypeList", fileTypeList);
+        model.addAttribute("datasetList", datasetList);
+        model.addAttribute("logs", logs);
+        model.addAttribute("etichetta", etichetta);
+        return "dataset/list";
+    }
 
-		DatasetFile dfile = datasetService.findDataSetFile(Long.valueOf(idfile));
-		DatasetColumn dcol = datasetService.findOneColonna(Long.parseLong(idvar));
-		StatisticalVariableCls sum = new StatisticalVariableCls(Integer.parseInt(idsum));
+    @PostMapping(value = "/associaVarSum")
+    public String caricaMetadati(Model model, String idfile, String idvar, String filtro, String idsum) {
 
-		dcol.setVariabileType(sum);
+        DatasetFile dfile = datasetService.findDataSetFile(Long.valueOf(idfile));
+        DatasetColumn dcol = datasetService.findOneColonna(Long.parseLong(idvar));
+        StatisticalVariableCls sum = new StatisticalVariableCls(Integer.parseInt(idsum));
 
-		try {
-			datasetService.salvaColonna(dcol);
-			notificationService
-					.addInfoMessage(messages.getMessage("generic.save.success", null, LocaleContextHolder.getLocale()));
-		} catch (Exception e) {
-			notificationService.addErrorMessage("Errore: ", e.getMessage());
+        dcol.setVariabileType(sum);
 
-		}
+        try {
+            datasetService.salvaColonna(dcol);
+            notificationService
+                    .addInfoMessage(messages.getMessage("generic.save.success", null, LocaleContextHolder.getLocale()));
+        } catch (Exception e) {
+            notificationService.addErrorMessage("Errore: ", e.getMessage());
 
-		List<DatasetColumn> colonne = datasetService.findAllNameColum(Long.parseLong(idfile));
-		List<StatisticalVariableCls> variabiliSum = datasetService.findAllVariabiliSum();
+        }
 
-		model.addAttribute("colonne", colonne);
-		model.addAttribute("idfile", idfile);
-		model.addAttribute("dfile", dfile);
-		model.addAttribute("variabili", variabiliSum);
+        List<DatasetColumn> colonne = datasetService.findAllNameColum(Long.parseLong(idfile));
+        List<StatisticalVariableCls> variabiliSum = datasetService.findAllVariabiliSum();
 
-		return "dataset/metadata";
-	}
+        model.addAttribute("colonne", colonne);
+        model.addAttribute("idfile", idfile);
+        model.addAttribute("dfile", dfile);
+        model.addAttribute("variabili", variabiliSum);
 
-	@PostMapping(value = "/loadInputData")
-	public String loadInputData(HttpSession session, HttpServletRequest request, Model model,
-			@AuthenticationPrincipal Principal user, @ModelAttribute("inputFormBean") InputFormBean form)
-			throws IOException {
+        return "dataset/metadata";
+    }
 
-		notificationService.removeAllMessages();
+    @PostMapping(value = "/loadInputData")
+    public String loadInputData(HttpSession session, HttpServletRequest request, Model model,
+                                @AuthenticationPrincipal Principal user, @ModelAttribute("inputFormBean") InputFormBean form)
+            throws IOException {
 
-		String labelFile = form.getLabelFile();
-		Long tipoDato = form.getFileType();
-		String separatore = form.getDelimiter();
-		String idsessione = form.getIdsessione();
+        notificationService.removeAllMessages();
 
-		File f = FileHandler.convertMultipartFileToFile(form.getFileName());
-		String pathTmpFile = f.getAbsolutePath().replace("\\", "/");
+        String labelFile = form.getLabelFile();
+        Long tipoDato = form.getFileType();
+        String separatore = form.getDelimiter();
+        String idsessione = form.getIdsessione();
 
-		HashMap<Integer, String> valoriHeaderNum = null;
-		try {
-			valoriHeaderNum = FileHandler.getCampiHeaderNumIndex(pathTmpFile, separatore.toCharArray()[0]);
-		} catch (Exception e) {
-			notificationService.addErrorMessage(
-					messages.getMessage("file.read.error", null, LocaleContextHolder.getLocale()), e.getMessage());
-			return "redirect:/sessione/mostradataset/" + idsessione;
-		}
+        File f = FileHandler.convertMultipartFileToFile(form.getFileName());
+        String pathTmpFile = f.getAbsolutePath().replace("\\", "/");
 
-		HashMap<String, ArrayList<String>> campiL = null;
-		try {
-			campiL = FileHandler.getArrayListFromCsv2(pathTmpFile, form.getNumeroCampi(), separatore.toCharArray()[0],
-					valoriHeaderNum);
-		} catch (Exception e) {
-			notificationService.addErrorMessage(
-					messages.getMessage("file.read.error", null, LocaleContextHolder.getLocale()), e.getMessage());
-		}
+        HashMap<Integer, String> valoriHeaderNum = null;
+        try {
+            valoriHeaderNum = FileHandler.getCampiHeaderNumIndex(pathTmpFile, separatore.toCharArray()[0]);
+        } catch (Exception e) {
+            notificationService.addErrorMessage(
+                    messages.getMessage("file.read.error", null, LocaleContextHolder.getLocale()), e.getMessage());
+            return "redirect:/sessione/mostradataset/" + idsessione;
+        }
 
-		try {
-			datasetService.save(campiL, valoriHeaderNum, labelFile, tipoDato, separatore, form.getDescrizione(),
-					idsessione);
-			logService.save("File " + labelFile + " salvato con successo");
-			notificationService
-					.addInfoMessage(messages.getMessage("generic.save.success", null, LocaleContextHolder.getLocale()));
-			SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-			sessionBean.getFile().add(form.getDescrizione());
-			session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			notificationService.addErrorMessage("Errore nel salvataggio del file.");
-			return "redirect:/sessione/mostradataset/" + idsessione;
-		}
+        HashMap<String, ArrayList<String>> campiL = null;
+        try {
+            campiL = FileHandler.getArrayListFromCsv2(pathTmpFile, form.getNumeroCampi(), separatore.toCharArray()[0],
+                    valoriHeaderNum);
+        } catch (Exception e) {
+            notificationService.addErrorMessage(
+                    messages.getMessage("file.read.error", null, LocaleContextHolder.getLocale()), e.getMessage());
+        }
 
-		return "redirect:/sessione/mostradataset/" + idsessione;
-	}
+        try {
+            datasetService.save(campiL, valoriHeaderNum, labelFile, tipoDato, separatore, form.getDescrizione(),
+                    idsessione);
+            logService.save("File " + labelFile + " salvato con successo");
+            notificationService
+                    .addInfoMessage(messages.getMessage("generic.save.success", null, LocaleContextHolder.getLocale()));
+            SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+            sessionBean.getFile().add(form.getDescrizione());
+            session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            notificationService.addErrorMessage("Errore nel salvataggio del file.");
+            return "redirect:/sessione/mostradataset/" + idsessione;
+        }
 
-	@GetMapping(value = "/deleteDataset/{datasetid}")
-	public String deleteDataset(HttpSession session, Model model,
-			@PathVariable("datasetid") Long idDataset) {
+        return "redirect:/sessione/mostradataset/" + idsessione;
+    }
 
-		notificationService.removeAllMessages();
+    @GetMapping(value = "/deleteDataset/{datasetid}")
+    public String deleteDataset(HttpSession session, Model model,
+                                @PathVariable("datasetid") Long idDataset) {
 
-		WorkSession sessionelv = workSessionService.getSessioneByIdFile(idDataset);
-		datasetService.deleteDataset(idDataset);
-		logService.save("File " + idDataset + " eliminato con successo");
-		notificationService.addInfoMessage("Eliminazione avvenuta con successo");
+        notificationService.removeAllMessages();
 
-		return "redirect:/sessione/mostradataset/" + sessionelv.getId();
-	}
+        WorkSession sessionelv = workSessionService.getSessioneByIdFile(idDataset);
+        datasetService.deleteDataset(idDataset);
+        logService.save("File " + idDataset + " eliminato con successo");
+        notificationService.addInfoMessage("Eliminazione avvenuta con successo");
 
-	@PostMapping(value = "/dataset/loadtable")
-	public String loadDatasetFromTable(HttpSession session, HttpServletRequest request, Model model,
-			@ModelAttribute("idsessione") String idsessione, @RequestParam("dbschema") String dbschema,
-			@RequestParam("tablename") String tablename, @RequestParam("fields") String[] fields) throws IOException {
-		notificationService.removeAllMessages();
-		try {
-			datasetService.loadDatasetFromTable(idsessione, dbschema, tablename, fields);
-			logService.save("Table " + tablename + " loaded");
-			notificationService.addInfoMessage("Table " + tablename + " loaded");
-		} catch (Exception e) {
-			notificationService.addErrorMessage("Error: " + e.getMessage());
-		}
-		return "redirect:/sessione/mostradataset/" + idsessione;
-	}
+        return "redirect:/sessione/mostradataset/" + sessionelv.getId();
+    }
+
+    @PostMapping(value = "/dataset/loadtable")
+    public String loadDatasetFromTable(HttpSession session, HttpServletRequest request, Model model,
+                                       @ModelAttribute("idsessione") String idsessione, @RequestParam("dbschema") String dbschema,
+                                       @RequestParam("tablename") String tablename, @RequestParam("fields") String[] fields) throws IOException {
+        notificationService.removeAllMessages();
+        try {
+            datasetService.loadDatasetFromTable(idsessione, dbschema, tablename, fields);
+            logService.save("Table " + tablename + " loaded");
+            notificationService.addInfoMessage("Table " + tablename + " loaded");
+        } catch (Exception e) {
+            notificationService.addErrorMessage("Error: " + e.getMessage());
+        }
+        return "redirect:/sessione/mostradataset/" + idsessione;
+    }
 }

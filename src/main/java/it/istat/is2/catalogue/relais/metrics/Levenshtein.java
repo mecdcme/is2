@@ -9,7 +9,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.SubCost01;
 
 public final class Levenshtein extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 1.8e-4f;
 
@@ -27,7 +27,7 @@ public final class Levenshtein extends AbstractStringMetric implements Serializa
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {
@@ -44,7 +44,7 @@ public final class Levenshtein extends AbstractStringMetric implements Serializa
         }
 
         if (maxLen == 0) {
-            return 1.0f; 
+            return 1.0f;
         } else {
             return 1.0f - (levensteinDistance / maxLen);
         }
@@ -52,12 +52,12 @@ public final class Levenshtein extends AbstractStringMetric implements Serializa
     }
 
     public float getUnNormalisedSimilarity(final String s, final String t) {
-        final float[][] d; 
-        final int n; 
-        final int m; 
-        int i; 
-        int j; 
-        float cost; 
+        final float[][] d;
+        final int n;
+        final int m;
+        int i;
+        int j;
+        float cost;
 
         n = s.length();
         m = t.length();

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public final class SubCost1_Minus2 extends AbstractSubstitutionCost implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public final String getShortDescriptionString() {
         return "SubCost1_Minus2";

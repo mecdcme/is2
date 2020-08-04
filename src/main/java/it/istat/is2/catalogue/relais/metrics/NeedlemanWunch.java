@@ -9,7 +9,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.SubCost01;
 
 public final class NeedlemanWunch extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 1.842e-4f;
 
@@ -62,7 +62,7 @@ public final class NeedlemanWunch extends AbstractStringMetric implements Serial
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {
@@ -92,7 +92,7 @@ public final class NeedlemanWunch extends AbstractStringMetric implements Serial
         }
 
         if (maxValue == 0) {
-            return 1.0f; 
+            return 1.0f;
         } else {
             return 1.0f - (needlemanWunch / maxValue);
         }
@@ -100,12 +100,12 @@ public final class NeedlemanWunch extends AbstractStringMetric implements Serial
     }
 
     public float getUnNormalisedSimilarity(final String s, final String t) {
-        final float[][] d; 
-        final int n; 
-        final int m; 
-        int i; 
-        int j; 
-        float cost; 
+        final float[][] d;
+        final int n;
+        final int m;
+        int i;
+        int j;
+        float cost;
 
         n = s.length();
         m = t.length();
@@ -116,7 +116,7 @@ public final class NeedlemanWunch extends AbstractStringMetric implements Serial
             return n;
         }
 
-       
+
         d = new float[n + 1][m + 1];
 
         for (i = 0; i <= n; i++) {

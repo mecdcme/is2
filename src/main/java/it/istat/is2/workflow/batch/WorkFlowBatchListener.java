@@ -25,12 +25,11 @@ public class WorkFlowBatchListener extends JobExecutionListenerSupport {
     @Autowired
     private HttpSession httpSession;
 
- 
 
     @Override
     public void beforeJob(JobExecution jobExecution) {
-    	JobParameters params = jobExecution.getJobParameters();
-    	SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
+        JobParameters params = jobExecution.getJobParameters();
+        SessionBean sessionBean = (SessionBean) httpSession.getAttribute(IS2Const.SESSION_BEAN);
         String msg = "Job for elaborazione[" + params.getLong("idElaborazione") + "] and " + " process["
                 + params.getLong("idBProc") + "] " + BatchStatus.STARTED.name();
         try {
@@ -57,8 +56,8 @@ public class WorkFlowBatchListener extends JobExecutionListenerSupport {
         logService.save(msg);
     }
 
-    private Batch save(JobExecution jobExecution, SessionBean sessionBean,  JobParameters params,
-            String msg) throws Exception {
+    private Batch save(JobExecution jobExecution, SessionBean sessionBean, JobParameters params,
+                       String msg) throws Exception {
         Batch batch = workFlowBatchService.findById(jobExecution.getJobId()).orElse(new Batch());
         batch.setIdElaborazione(params.getLong("idElaborazione"));
         batch.setIdProcesso(params.getLong("idBProc"));

@@ -2,7 +2,7 @@ package it.istat.is2.catalogue.relais.metrics.utility;
 
 public final class DummyStopTermHandler implements InterfaceTermHandler {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public void addWord(final String termToAdd) {
     }

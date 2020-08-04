@@ -6,7 +6,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.AbstractStringMetric;
 
 public final class NumericComparison extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 1e-4f;
 
@@ -23,7 +23,7 @@ public final class NumericComparison extends AbstractStringMetric implements Ser
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {
@@ -31,20 +31,20 @@ public final class NumericComparison extends AbstractStringMetric implements Ser
     }
 
     public float getSimilarity(final String string1, final String string2) {
-        float fstring1=0, fstring2=0, max=0, NumComp=0;
+        float fstring1 = 0, fstring2 = 0, max = 0, NumComp = 0;
         try {
             fstring1 = Float.valueOf(string1);
             fstring2 = Float.valueOf(string2);
-            if ((fstring1*fstring2)<0)
+            if ((fstring1 * fstring2) < 0)
                 return 0;
-            
-            if (Math.abs(fstring2)>Math.abs(fstring1))
+
+            if (Math.abs(fstring2) > Math.abs(fstring1))
                 max = Math.abs(fstring2);
             else
                 max = Math.abs(fstring1);
-            
-            NumComp = (1-Math.abs(fstring2-fstring1)/max);
-            
+
+            NumComp = (1 - Math.abs(fstring2 - fstring1) / max);
+
             return NumComp;
         } catch (Exception e) {
             return 0;
@@ -52,16 +52,16 @@ public final class NumericComparison extends AbstractStringMetric implements Ser
     }
 
     public float getUnNormalisedSimilarity(final String string1, final String string2) {
-        float fstring1=0, fstring2=0, NumComp=0;
+        float fstring1 = 0, fstring2 = 0, NumComp = 0;
         try {
             fstring1 = Float.valueOf(string1);
             fstring2 = Float.valueOf(string2);
-            NumComp = Math.abs(fstring2-fstring1);
-            
+            NumComp = Math.abs(fstring2 - fstring1);
+
             return NumComp;
         } catch (Exception e) {
             return 0;
         }
     }
-    
+
 }

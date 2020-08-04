@@ -18,11 +18,11 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "IS2_DATA_BRIDGE")
-public class DataBridge extends AbstractDomainObject  implements Serializable {
+public class DataBridge extends AbstractDomainObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-   
+
+
     @Column(name = "VALUE")
     private String value;
     @Column(name = "TYPE")
@@ -30,6 +30,5 @@ public class DataBridge extends AbstractDomainObject  implements Serializable {
     @Column(name = "BRIDGE_NAME")
     private String bridgeName;
 
-  
 
 }

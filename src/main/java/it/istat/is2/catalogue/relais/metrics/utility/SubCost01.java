@@ -1,9 +1,10 @@
 package it.istat.is2.catalogue.relais.metrics.utility;
+
 import java.io.Serializable;
 
 final public class SubCost01 extends AbstractSubstitutionCost implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public final String getShortDescriptionString() {
         return "SubCost01";

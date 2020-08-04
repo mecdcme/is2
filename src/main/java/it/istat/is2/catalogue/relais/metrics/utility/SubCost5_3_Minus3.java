@@ -7,7 +7,7 @@ import java.util.Set;
 @SuppressWarnings("unchecked")
 public final class SubCost5_3_Minus3 extends AbstractSubstitutionCost implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private static final int CHAR_EXACT_MATCH_SCORE = +5;
 
@@ -18,7 +18,7 @@ public final class SubCost5_3_Minus3 extends AbstractSubstitutionCost implements
     static private final Set<Character>[] approx;
 
     static {
-        approx = new Set[7] ;
+        approx = new Set[7];
         approx[0] = new HashSet<Character>();
         approx[0].add('d');
         approx[0].add('t');

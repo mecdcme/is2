@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -24,9 +24,11 @@
 package it.istat.is2.worksession.controller;
 
 import it.istat.is2.app.bean.BusinessFunctionBean;
+
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -65,191 +67,191 @@ import java.util.ArrayList;
 @Controller
 public class WorkSessionController {
 
-	@Autowired
-	private WorkSessionService workSessionService;
-	@Autowired
-	private NotificationService notificationService;
-	@Autowired
-	private DataProcessingService dataProcessingService;
-	@Autowired
-	private BusinessProcessService businessProcessService;
-	@Autowired
-	private BusinessFunctionService businessFunctionService;
-	@Autowired
-	private LogService logService;
-	@Autowired
-	private MessageSource messages;
+    @Autowired
+    private WorkSessionService workSessionService;
+    @Autowired
+    private NotificationService notificationService;
+    @Autowired
+    private DataProcessingService dataProcessingService;
+    @Autowired
+    private BusinessProcessService businessProcessService;
+    @Autowired
+    private BusinessFunctionService businessFunctionService;
+    @Autowired
+    private LogService logService;
+    @Autowired
+    private MessageSource messages;
 
-	@GetMapping(value = "/sessione/mostraSessioni/{idBusinessFunction}")
-	public String mostraSessioni(HttpSession session, Model model, @AuthenticationPrincipal Principal user,
-			@PathVariable("idBusinessFunction") Long idBusinessFunction,
-			@ModelAttribute("message") NotificationMessage messsage) {
-		notificationService.removeAllMessages();
-		notificationService.addMessage(messsage);
+    @GetMapping(value = "/sessione/mostraSessioni/{idBusinessFunction}")
+    public String mostraSessioni(HttpSession session, Model model, @AuthenticationPrincipal Principal user,
+                                 @PathVariable("idBusinessFunction") Long idBusinessFunction,
+                                 @ModelAttribute("message") NotificationMessage messsage) {
+        notificationService.removeAllMessages();
+        notificationService.addMessage(messsage);
 
-		SessionBean sessionBean = new SessionBean();
-		BusinessFunction businessFunction = businessFunctionService.findBFunctionById(idBusinessFunction);
-		BusinessFunctionBean businessFunctionBean = new BusinessFunctionBean(businessFunction.getId(),
-				businessFunction.getName());
-		sessionBean.setBusinessFunction(businessFunctionBean);
-		session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+        SessionBean sessionBean = new SessionBean();
+        BusinessFunction businessFunction = businessFunctionService.findBFunctionById(idBusinessFunction);
+        BusinessFunctionBean businessFunctionBean = new BusinessFunctionBean(businessFunction.getId(),
+                businessFunction.getName());
+        sessionBean.setBusinessFunction(businessFunctionBean);
+        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
-		List<WorkSession> listasessioni = workSessionService.getSessioneList(user.getName(), idBusinessFunction);
-		model.addAttribute("listasessioni", listasessioni);
+        List<WorkSession> listasessioni = workSessionService.getSessioneList(user.getName(), idBusinessFunction);
+        model.addAttribute("listasessioni", listasessioni);
 
-		return "worksession/list";
-	}
+        return "worksession/list";
+    }
 
-	@PostMapping(value = "/sessione/nuovasessione")
-	public String nuovaSessione(HttpSession session, RedirectAttributes ra, Model model,
-			@AuthenticationPrincipal Principal user, @RequestParam("descrizione") String descrizione,
-			@RequestParam("nome") String nome, @RequestParam("idBusinessFunction") Long idBusinessFunction) {
-		notificationService.removeAllMessages();
-		NotificationMessage message;
-		try {
-			WorkSession workSession = workSessionService.newWorkSession(user.getName(), descrizione, nome,
-					idBusinessFunction);
-			message = new NotificationMessage(NotificationMessage.TYPE_SUCCESS,
-					messages.getMessage("session.created.success", new Object[] { workSession.getName() },
-							LocaleContextHolder.getLocale()));
+    @PostMapping(value = "/sessione/nuovasessione")
+    public String nuovaSessione(HttpSession session, RedirectAttributes ra, Model model,
+                                @AuthenticationPrincipal Principal user, @RequestParam("descrizione") String descrizione,
+                                @RequestParam("nome") String nome, @RequestParam("idBusinessFunction") Long idBusinessFunction) {
+        notificationService.removeAllMessages();
+        NotificationMessage message;
+        try {
+            WorkSession workSession = workSessionService.newWorkSession(user.getName(), descrizione, nome,
+                    idBusinessFunction);
+            message = new NotificationMessage(NotificationMessage.TYPE_SUCCESS,
+                    messages.getMessage("session.created.success", new Object[]{workSession.getName()},
+                            LocaleContextHolder.getLocale()));
 
-		} catch (Exception e) {
-			message = new NotificationMessage(NotificationMessage.TYPE_ERROR,
-					messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
-					e.getMessage());
-		}
-		ra.addFlashAttribute("message", message);
-		return "redirect:/sessione/mostraSessioni/" + idBusinessFunction;
-	}
+        } catch (Exception e) {
+            message = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+                    messages.getMessage("session.created.error", null, LocaleContextHolder.getLocale()),
+                    e.getMessage());
+        }
+        ra.addFlashAttribute("message", message);
+        return "redirect:/sessione/mostraSessioni/" + idBusinessFunction;
+    }
 
-	@GetMapping(value = "/sessione/apriseselab/{idSessione}/{idElaborazione}")
-	public String apriSesElab(HttpSession session, Model model, @AuthenticationPrincipal Principal user,
-			@PathVariable("idSessione") Long idSessione, @PathVariable("idElaborazione") Long idElaborazione) {
+    @GetMapping(value = "/sessione/apriseselab/{idSessione}/{idElaborazione}")
+    public String apriSesElab(HttpSession session, Model model, @AuthenticationPrincipal Principal user,
+                              @PathVariable("idSessione") Long idSessione, @PathVariable("idElaborazione") Long idElaborazione) {
 
-		WorkSession workSession = workSessionService.getSessione(idSessione);
-		if (workSession.getDatasetFiles() != null) {
-			session.setAttribute(IS2Const.SESSION_DATASET, true);
-		}
-		session.setAttribute(IS2Const.SESSION_BEAN, new SessionBean(idSessione, workSession.getName()));
+        WorkSession workSession = workSessionService.getSessione(idSessione);
+        if (workSession.getDatasetFiles() != null) {
+            session.setAttribute(IS2Const.SESSION_DATASET, true);
+        }
+        session.setAttribute(IS2Const.SESSION_BEAN, new SessionBean(idSessione, workSession.getName()));
 
-		return "redirect:/ws/home/" + idElaborazione;
-	}
+        return "redirect:/ws/home/" + idElaborazione;
+    }
 
-	@GetMapping(value = "/sessione/apri/{id}")
-	public String apriSessione(HttpSession session, Model model, @PathVariable("id") Long id) {
+    @GetMapping(value = "/sessione/apri/{id}")
+    public String apriSessione(HttpSession session, Model model, @PathVariable("id") Long id) {
 
-		// notificationService.removeAllMessages();
+        // notificationService.removeAllMessages();
 
-		List<Log> logs = logService.findByIdSessione(id);
+        List<Log> logs = logService.findByIdSessione(id);
 
-		WorkSession workSession = workSessionService.getSessione(id);
-		SessionBean sessionBean;
+        WorkSession workSession = workSessionService.getSessione(id);
+        SessionBean sessionBean;
 
-		List<DataProcessing> listaElaborazioni = dataProcessingService.getDataProcessingList(workSession);
-		List<BusinessProcess> processesList = businessProcessService
-				.findBProcessByIdFunction(workSession.getBusinessFunction().getId());
+        List<DataProcessing> listaElaborazioni = dataProcessingService.getDataProcessingList(workSession);
+        List<BusinessProcess> processesList = businessProcessService
+                .findBProcessByIdFunction(workSession.getBusinessFunction().getId());
 
-		sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-		sessionBean.setId(id);
-		sessionBean.setName(workSession.getName());
+        sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+        sessionBean.setId(id);
+        sessionBean.setName(workSession.getName());
 
-		List<String> files;
-		List<String> rulesets;
+        List<String> files;
+        List<String> rulesets;
 
-		if (workSession.getBusinessFunction().getViewDataType()
-				.contains(new ViewDataType(IS2Const.VIEW_DATATYPE_DATASET))) {
-			files = new ArrayList<String>();
-			if (workSession.getDatasetFiles() != null) {
-				session.setAttribute(IS2Const.SESSION_DATASET, true);
-				for (DatasetFile datasetFile : workSession.getDatasetFiles()) {
-					files.add(datasetFile.getFileName());
-				}
-			}
-			sessionBean.setFile(files);
-		}
-		if (workSession.getBusinessFunction().getViewDataType()
-				.contains(new ViewDataType(IS2Const.VIEW_DATATYPE_RULESET))) {
-			rulesets = new ArrayList<String>();
-			if (workSession.getRuleSets() != null) {
-				for (Ruleset ruleset : workSession.getRuleSets()) {
-					rulesets.add(ruleset.getFileName());
-				}
-			}
-			sessionBean.setRuleset(rulesets);
-		}
+        if (workSession.getBusinessFunction().getViewDataType()
+                .contains(new ViewDataType(IS2Const.VIEW_DATATYPE_DATASET))) {
+            files = new ArrayList<String>();
+            if (workSession.getDatasetFiles() != null) {
+                session.setAttribute(IS2Const.SESSION_DATASET, true);
+                for (DatasetFile datasetFile : workSession.getDatasetFiles()) {
+                    files.add(datasetFile.getFileName());
+                }
+            }
+            sessionBean.setFile(files);
+        }
+        if (workSession.getBusinessFunction().getViewDataType()
+                .contains(new ViewDataType(IS2Const.VIEW_DATATYPE_RULESET))) {
+            rulesets = new ArrayList<String>();
+            if (workSession.getRuleSets() != null) {
+                for (Ruleset ruleset : workSession.getRuleSets()) {
+                    rulesets.add(ruleset.getFileName());
+                }
+            }
+            sessionBean.setRuleset(rulesets);
+        }
 
-		session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
+        session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
 
-		model.addAttribute("processesList", processesList);
-		model.addAttribute("listaElaborazioni", listaElaborazioni);
-		model.addAttribute("logs", logs);
+        model.addAttribute("processesList", processesList);
+        model.addAttribute("listaElaborazioni", listaElaborazioni);
+        model.addAttribute("logs", logs);
 
-		return "worksession/home";
-	}
+        return "worksession/home";
+    }
 
-	@PostMapping(value = "/sessione/nuovoworkingset")
-	public String nuovoWorkingSet(HttpSession session, RedirectAttributes ra, Model model,
-			@AuthenticationPrincipal Principal user,
-			@ModelAttribute("elaborazioneFormBean") ElaborazioneFormBean form) {
-		notificationService.removeAllMessages();
+    @PostMapping(value = "/sessione/nuovoworkingset")
+    public String nuovoWorkingSet(HttpSession session, RedirectAttributes ra, Model model,
+                                  @AuthenticationPrincipal Principal user,
+                                  @ModelAttribute("elaborazioneFormBean") ElaborazioneFormBean form) {
+        notificationService.removeAllMessages();
 
-		session.setAttribute(IS2Const.WORKINGSET, "workingset");
-		WorkSession workSession = workSessionService.getSessione(form.getIdsessione());
-		try {
-			DataProcessing elaborazione = new DataProcessing();
-			elaborazione.setWorkSession(workSession);
-			elaborazione.setDescr(form.getDescrizione());
-			elaborazione.setName(form.getNome());
-			elaborazione.setLastUpdate(new Date());
-			elaborazione.setBusinessProcess(businessProcessService.findBProcessById(form.getIdfunzione()));
+        session.setAttribute(IS2Const.WORKINGSET, "workingset");
+        WorkSession workSession = workSessionService.getSessione(form.getIdsessione());
+        try {
+            DataProcessing elaborazione = new DataProcessing();
+            elaborazione.setWorkSession(workSession);
+            elaborazione.setDescr(form.getDescrizione());
+            elaborazione.setName(form.getNome());
+            elaborazione.setLastUpdate(new Date());
+            elaborazione.setBusinessProcess(businessProcessService.findBProcessById(form.getIdfunzione()));
 
-			dataProcessingService.saveDataProcessing(elaborazione);
+            dataProcessingService.saveDataProcessing(elaborazione);
 
-			notificationService.addInfoMessage(
-					messages.getMessage("creation.process.success", null, LocaleContextHolder.getLocale()));
+            notificationService.addInfoMessage(
+                    messages.getMessage("creation.process.success", null, LocaleContextHolder.getLocale()));
 
-			logService.save("Elaborazione " + elaborazione.getName() + " creata con successo");
+            logService.save("Elaborazione " + elaborazione.getName() + " creata con successo");
 
-		} catch (Exception e) {
+        } catch (Exception e) {
 
-			notificationService.addErrorMessage(
-					messages.getMessage("process.create.error", null, LocaleContextHolder.getLocale()), e.getMessage());
-		}
+            notificationService.addErrorMessage(
+                    messages.getMessage("process.create.error", null, LocaleContextHolder.getLocale()), e.getMessage());
+        }
 
-		return "redirect:/sessione/apri/" + workSession.getId();
-	}
+        return "redirect:/sessione/apri/" + workSession.getId();
+    }
 
-	@GetMapping(value = "/sessione/workingset/{id}")
-	public String workingSet(HttpSession session, Model model, @PathVariable("id") Long id) {
-		session.setAttribute(IS2Const.WORKINGSET, "workingset");
-		return "elaborazione/nuovo_ws";
-	}
+    @GetMapping(value = "/sessione/workingset/{id}")
+    public String workingSet(HttpSession session, Model model, @PathVariable("id") Long id) {
+        session.setAttribute(IS2Const.WORKINGSET, "workingset");
+        return "elaborazione/nuovo_ws";
+    }
 
-	@GetMapping(value = "/sessione/chiudisessione/{idBusinessFunction}")
-	public String chiudiSessione(HttpSession session, @PathVariable("idBusinessFunction") Long idBusinessFunction) {
-		session.removeAttribute(IS2Const.SESSION_BEAN);
-		session.removeAttribute(IS2Const.SESSION_DATASET);
-		session.removeAttribute(IS2Const.SESSION_DATAPROCESSING);
-		return "redirect:/sessione/mostraSessioni/" + idBusinessFunction;
-	}
+    @GetMapping(value = "/sessione/chiudisessione/{idBusinessFunction}")
+    public String chiudiSessione(HttpSession session, @PathVariable("idBusinessFunction") Long idBusinessFunction) {
+        session.removeAttribute(IS2Const.SESSION_BEAN);
+        session.removeAttribute(IS2Const.SESSION_DATASET);
+        session.removeAttribute(IS2Const.SESSION_DATAPROCESSING);
+        return "redirect:/sessione/mostraSessioni/" + idBusinessFunction;
+    }
 
-	@GetMapping(value = "/sessione/elimina/{idsessione}")
-	public String eliminaWS(HttpSession session, Model model, RedirectAttributes ra,
-			@PathVariable("idsessione") Long idsessione) {
-		notificationService.removeAllMessages();
-		NotificationMessage message;
-		WorkSession workSession = workSessionService.getSessione(idsessione);
-		if (workSessionService.deleteWorkSession(idsessione)) {
-			message = new NotificationMessage(NotificationMessage.TYPE_SUCCESS,
-					messages.getMessage("session.removed.success", new Object[] { workSession.getName() },
-							LocaleContextHolder.getLocale()));
-		} else {
-			message = new NotificationMessage(NotificationMessage.TYPE_ERROR,
-					messages.getMessage("session.removed.success", null, LocaleContextHolder.getLocale()));
-		}
-		SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
-		session.removeAttribute(IS2Const.SESSION_DATAPROCESSING);
-		ra.addFlashAttribute("message", message);
-		return "redirect:/sessione/mostraSessioni/" + sessionBean.getBusinessFunction().getId();
-	}
+    @GetMapping(value = "/sessione/elimina/{idsessione}")
+    public String eliminaWS(HttpSession session, Model model, RedirectAttributes ra,
+                            @PathVariable("idsessione") Long idsessione) {
+        notificationService.removeAllMessages();
+        NotificationMessage message;
+        WorkSession workSession = workSessionService.getSessione(idsessione);
+        if (workSessionService.deleteWorkSession(idsessione)) {
+            message = new NotificationMessage(NotificationMessage.TYPE_SUCCESS,
+                    messages.getMessage("session.removed.success", new Object[]{workSession.getName()},
+                            LocaleContextHolder.getLocale()));
+        } else {
+            message = new NotificationMessage(NotificationMessage.TYPE_ERROR,
+                    messages.getMessage("session.removed.success", null, LocaleContextHolder.getLocale()));
+        }
+        SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
+        session.removeAttribute(IS2Const.SESSION_DATAPROCESSING);
+        ra.addFlashAttribute("message", message);
+        return "redirect:/sessione/mostraSessioni/" + sessionBean.getBusinessFunction().getId();
+    }
 }

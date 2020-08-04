@@ -3,7 +3,7 @@ package it.istat.is2.catalogue.relais.metrics.utility;
 final public class MathFuncs {
 
     public static float max3(final float x, final float y, final float z) {
-        return Math.max(x, Math.max(y, z) );
+        return Math.max(x, Math.max(y, z));
     }
 
     public static float max4(final float w, final float x, final float y, final float z) {

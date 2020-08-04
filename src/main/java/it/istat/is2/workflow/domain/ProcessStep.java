@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -25,6 +25,7 @@ package it.istat.is2.workflow.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,21 +46,21 @@ public class ProcessStep extends AbstractDomainObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name="LABEL")
+    @Column(name = "LABEL")
     private String label;
     @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "BUSINESS_SERVICE_ID")
     private BusinessService businessService;
     @JsonBackReference
-    @ManyToMany(cascade = {CascadeType.ALL},fetch=FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(name = "is2_link_step_instance", joinColumns = {
-        @JoinColumn(name = "PROCESS_STEP_ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "PROCESS_STEP_INSTANCE_ID")})
-    
+            @JoinColumn(name = "PROCESS_STEP_ID")}, inverseJoinColumns = {
+            @JoinColumn(name = "PROCESS_STEP_INSTANCE_ID")})
+
     private List<StepInstance> stepInstances;
-    
-    
+
+
     @ManyToMany(mappedBy = "businessSteps")
     private List<BusinessProcess> businessProcesses;
 
@@ -70,6 +71,6 @@ public class ProcessStep extends AbstractDomainObject implements Serializable {
         super();
         this.id = id;
     }
-    
-  
+
+
 }

@@ -27,72 +27,72 @@ import it.istat.is2.workflow.service.WorkflowService;
 @StepScope
 public class WorkFlowBatchProcessor implements ItemReader<DataProcessing> {
 
-	@Value("#{jobParameters['idElaborazione']}")
-	private Long idElaborazione;
+    @Value("#{jobParameters['idElaborazione']}")
+    private Long idElaborazione;
 
-	@Value("#{jobParameters['idBProc']}")
-	private Long idBProc;
+    @Value("#{jobParameters['idBProc']}")
+    private Long idBProc;
 
-	@Autowired
-	BusinessProcessDao businessProcessDao;
+    @Autowired
+    BusinessProcessDao businessProcessDao;
 
-	@Autowired
-	private WorkflowService workflowService;
+    @Autowired
+    private WorkflowService workflowService;
 
-	@Autowired
-	EngineFactory engineFactory;
+    @Autowired
+    EngineFactory engineFactory;
 
-	@Autowired
-	private LogService logService;
+    @Autowired
+    private LogService logService;
 
-	@Autowired
-	private NotificationService notificationService;
+    @Autowired
+    private NotificationService notificationService;
 
-	@Override
-	public DataProcessing read()
-			throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-		final DataProcessing elaborazione = workflowService.findDataProcessing(idElaborazione);
-		final BusinessProcess businessProcess = businessProcessDao.findById(idBProc).orElse(new BusinessProcess());
-		businessProcess.getBusinessSteps().forEach(businessStep -> {
+    @Override
+    public DataProcessing read()
+            throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+        final DataProcessing elaborazione = workflowService.findDataProcessing(idElaborazione);
+        final BusinessProcess businessProcess = businessProcessDao.findById(idBProc).orElse(new BusinessProcess());
+        businessProcess.getBusinessSteps().forEach(businessStep -> {
 
-			businessStep.getStepInstances().forEach(stepInstance -> {
-				try {
-					doStep(elaborazione, stepInstance);
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			});
+            businessStep.getStepInstances().forEach(stepInstance -> {
+                try {
+                    doStep(elaborazione, stepInstance);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
-		});
+        });
 
-		return null;
-	}
+        return null;
+    }
 
-	public DataProcessing doStep(DataProcessing elaborazione, StepInstance stepInstance) throws Exception {
-		EngineService engine = engineFactory.getEngine(stepInstance.getAppService().getEngineType());
+    public DataProcessing doStep(DataProcessing elaborazione, StepInstance stepInstance) throws Exception {
+        EngineService engine = engineFactory.getEngine(stepInstance.getAppService().getEngineType());
 
-		try {
-			engine.init(elaborazione, stepInstance);
-			engine.doAction();
-			engine.processOutput();
-		} catch (Exception e) {
-			Logger.getRootLogger().error(e.getMessage());
-			logService.save("Error: " + e.getMessage());
-			notificationService.addErrorMessage("Error: " + e.getMessage());
-			throw (e);
-		} finally {
-			engine.destroy();
-		}
+        try {
+            engine.init(elaborazione, stepInstance);
+            engine.doAction();
+            engine.processOutput();
+        } catch (Exception e) {
+            Logger.getRootLogger().error(e.getMessage());
+            logService.save("Error: " + e.getMessage());
+            notificationService.addErrorMessage("Error: " + e.getMessage());
+            throw (e);
+        } finally {
+            engine.destroy();
+        }
 
-		return elaborazione;
-	}
+        return elaborazione;
+    }
 
-	public void setIdElaborazione(Long idElaborazione) {
-		this.idElaborazione = idElaborazione;
-	}
+    public void setIdElaborazione(Long idElaborazione) {
+        this.idElaborazione = idElaborazione;
+    }
 
-	public void setIdBProc(Long idBProc) {
-		this.idBProc = idBProc;
-	}
+    public void setIdBProc(Long idBProc) {
+        this.idBProc = idBProc;
+    }
 
 }

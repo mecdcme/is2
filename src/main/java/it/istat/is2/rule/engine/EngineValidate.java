@@ -6,6 +6,7 @@
 package it.istat.is2.rule.engine;
 
 import it.istat.is2.app.service.LogService;
+
 import static it.istat.is2.app.util.IS2Const.OUTPUT_R;
 
 import java.util.Arrays;
@@ -34,7 +35,7 @@ public class EngineValidate {
     public static final String VALIDATE_SRC = "validate.R";
     public static final String FUNCTION_DETECT_INFEASIBLE = "is2_detect_infeasible";
     public static final String PREFIX_FUNCTION = "is2_";
-    
+
     @Value("${serverR.host}")
     private String serverRHost;
     @Value("${serverR.port}")
@@ -43,12 +44,12 @@ public class EngineValidate {
     private String pathR;
     private RConnection connection;
     private RList out;
-    
+
 
     @Autowired
     private LogService logService;
 
-    public void connect() throws  RserveException {
+    public void connect() throws RserveException {
 
         logService.save("Connecting to R server...");
 
@@ -70,13 +71,13 @@ public class EngineValidate {
         logService.save("Validate R script loaded");
     }
 
-    public Map<String,List<String>> detectInfeasibleRules(String[]input, String[]inputNames) throws  REXPMismatchException, REngineException {
-    	 
-    	String[] result;
+    public Map<String, List<String>> detectInfeasibleRules(String[] input, String[] inputNames) throws REXPMismatchException, REngineException {
+
+        String[] result;
         String[] rlog;
         String[] validates;
-        Map<String,List<String>>  ret=new HashMap<>();       
-        
+        Map<String, List<String>> ret = new HashMap<>();
+
         connection.assign(INPUT, input);
         connection.assign(INPUT_NAMES, inputNames);
         connection.eval(INPUT + " <- data.frame(rule=" + INPUT + ")");
@@ -87,13 +88,13 @@ public class EngineValidate {
         rlog = out.at("log").asStrings();
         ret.put("infeasibleRules", Arrays.asList(result));
         ret.put("validatesRules", Arrays.asList(validates));
-        
-        for(int i = 0; i < rlog.length; i++){
-             logService.save(rlog[i], OUTPUT_R);
+
+        for (int i = 0; i < rlog.length; i++) {
+            logService.save(rlog[i], OUTPUT_R);
         }
-        
+
         logService.save("Script completed!");
-        
+
         return ret;
     }
 
@@ -104,31 +105,31 @@ public class EngineValidate {
         logService.save("Connection to R server closed!");
     }
 
-	
-	public Map<String, Object> runFunction(String functionName, String[] input, String[] inputNames) throws REngineException, REXPMismatchException {
-		
-		 String[] rlog;
-        Map<String,Object>  ret=new HashMap<>();       
-        
+
+    public Map<String, Object> runFunction(String functionName, String[] input, String[] inputNames) throws REngineException, REXPMismatchException {
+
+        String[] rlog;
+        Map<String, Object> ret = new HashMap<>();
+
         connection.assign(INPUT, input);
         connection.assign(INPUT_NAMES, inputNames);
         connection.eval(INPUT + " <- data.frame(rule=" + INPUT + ")");
-        out = connection.eval(PREFIX_FUNCTION+ functionName + "(" + INPUT + ", " + INPUT_NAMES + ")").asList();
+        out = connection.eval(PREFIX_FUNCTION + functionName + "(" + INPUT + ", " + INPUT_NAMES + ")").asList();
 
         for (@SuppressWarnings("unchecked")
-		Iterator<String> iterator = out.keySet().iterator(); iterator.hasNext();) {
-			     	String key = iterator.next();
-			     	 ret.put(key, out.at(key).asNativeJavaObject());
-			
-		}
-        rlog = out.at("log").asStrings();
-           for(int i = 0; i < rlog.length; i++){
-             logService.save(rlog[i], OUTPUT_R);
+             Iterator<String> iterator = out.keySet().iterator(); iterator.hasNext(); ) {
+            String key = iterator.next();
+            ret.put(key, out.at(key).asNativeJavaObject());
+
         }
-        
+        rlog = out.at("log").asStrings();
+        for (int i = 0; i < rlog.length; i++) {
+            logService.save(rlog[i], OUTPUT_R);
+        }
+
         logService.save("Script completed!");
-        
+
         return ret;
-	}
+    }
 
 }

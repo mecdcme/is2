@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -24,6 +24,7 @@
 package it.istat.is2.workflow.service;
 
 import it.istat.is2.workflow.dao.AppServiceDao;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ import it.istat.is2.workflow.domain.AppService;
 import it.istat.is2.workflow.domain.BusinessService;
 import it.istat.is2.workflow.domain.GsbpmProcess;
 import it.istat.is2.workflow.domain.StepInstance;
+
 import java.util.ArrayList;
 
 @Service
@@ -43,7 +45,7 @@ public class BusinessServiceService {
 
     @Autowired
     BusinessServiceDao businessServiceDao;
-    
+
     @Autowired
     GsbpmProcessDao gsbpmProcessDao;
 
@@ -60,15 +62,16 @@ public class BusinessServiceService {
     public BusinessService findBusinessServiceById(Long l) {
         return businessServiceDao.findById(l).orElse(null);
     }
+
     public BusinessService save(BusinessService businessService) {
-    	BusinessService bs = businessServiceDao.save(businessService);
+        BusinessService bs = businessServiceDao.save(businessService);
         return bs;
-    } 
+    }
 
     public List<BusinessService> findBusinessServiceByIdGsbpm(Long idGsbpm) {
         List<BusinessService> businessServices = null;
         GsbpmProcess gsbpmProcess = gsbpmProcessDao.findById(idGsbpm).orElse(null);
-        if(gsbpmProcess != null){
+        if (gsbpmProcess != null) {
             businessServices = businessServiceDao.findByGsbpmProcess(gsbpmProcess);
         }
         return businessServices;
@@ -86,7 +89,7 @@ public class BusinessServiceService {
             }
         }
 
-         return stepInstances;
+        return stepInstances;
     }
 
     public List<AppService> findAppServices(Long idBusinessService) {
@@ -97,10 +100,12 @@ public class BusinessServiceService {
         }
         return appServiceList;
     }
-    public void deleteBusinessServiceById(Long  idbs){
-    	businessServiceDao.deleteById(idbs);    	
+
+    public void deleteBusinessServiceById(Long idbs) {
+        businessServiceDao.deleteById(idbs);
     }
-    public void deleteBusinessService(BusinessService bs){    	
-    	businessServiceDao.delete(bs);
+
+    public void deleteBusinessService(BusinessService bs) {
+        businessServiceDao.delete(bs);
     }
 }

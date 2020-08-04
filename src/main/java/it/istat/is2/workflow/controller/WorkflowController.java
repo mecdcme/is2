@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -36,6 +36,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -187,7 +188,7 @@ public class WorkflowController {
 
     @GetMapping(value = "/eliminaAssociazione/{dataProcessingId}/{idvar}")
     public String eliminaAssociazioneVar(HttpSession session, Model model,
-            @PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("idvar") Integer idvar) {
+                                         @PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("idvar") Integer idvar) {
         notificationService.removeAllMessages();
 
         StepRuntime stepRuntime = stepRuntimeservice.findById(idvar);
@@ -207,7 +208,7 @@ public class WorkflowController {
 
     @GetMapping(value = "/cleanallworkset/{dataProcessingId}/{flagIO}")
     public String cleanAllWorkset(HttpSession session, Model model, RedirectAttributes ra,
-            @PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("flagIO") Short flagIO) {
+                                  @PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("flagIO") Short flagIO) {
         notificationService.removeAllMessages();
 
         try {
@@ -223,7 +224,7 @@ public class WorkflowController {
 
     @GetMapping(value = "/eliminaParametro/{dataProcessingId}/{idparametro}")
     public String eliminaParametro(HttpSession session, Model model, RedirectAttributes ra,
-            @PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("idparametro") Integer idparametro) {
+                                   @PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("idparametro") Integer idparametro) {
         notificationService.removeAllMessages();
 
         StepRuntime stepRuntime = stepRuntimeservice.findById(idparametro);
@@ -233,10 +234,10 @@ public class WorkflowController {
             Workset workset = (Workset) listaVars.get(0).getWorkset();
             workflowService.deleteWorkset(workset);
         } else {
-        	stepRuntimeservice.removeStepRuntimeById(idparametro);
+            stepRuntimeservice.removeStepRuntimeById(idparametro);
         }
 
-        
+
         notificationService.addInfoMessage("Il parametro è stato eliminato");
         ra.addFlashAttribute("showTabParam", true);
         return "redirect:/ws/editworkingset/" + dataProcessingId;
@@ -244,7 +245,7 @@ public class WorkflowController {
 
     @GetMapping(value = "/editworkingset/{dataProcessingId}")
     public String editWorkingSet(HttpSession session, Model model, @ModelAttribute("showTabParam") String showTabParam,
-            @PathVariable("dataProcessingId") Long dataProcessingId) {
+                                 @PathVariable("dataProcessingId") Long dataProcessingId) {
 
         session.setAttribute(IS2Const.WORKINGSET, "workingset");
 
@@ -253,10 +254,10 @@ public class WorkflowController {
         SessionBean elaSession = new SessionBean(dataProcessing.getId(), dataProcessing.getName());
         session.setAttribute(IS2Const.SESSION_DATAPROCESSING, elaSession);
 
-        final Map<Long, List<String>> matchedVariablesMap = new  HashMap<>();
-        final Map<String, Set<String>> matchedVariablesbyRoles = new  LinkedHashMap<>();
-        final List<String> matchedVariables = new  ArrayList<>();
-        
+        final Map<Long, List<String>> matchedVariablesMap = new HashMap<>();
+        final Map<String, Set<String>> matchedVariablesbyRoles = new LinkedHashMap<>();
+        final List<String> matchedVariables = new ArrayList<>();
+
         List<DatasetFile> datasetfiles = datasetService
                 .findDatasetFilesByIdWorkSession(dataProcessing.getWorkSession().getId());
 
@@ -271,18 +272,19 @@ public class WorkflowController {
                 new DataTypeCls(IS2Const.DATA_TYPE_VARIABLE));
         if (stepRList != null && stepRList.size() > 0) {
             for (StepRuntime stepRuntime : stepRList) {
-            	
-            if(!matchedVariables.contains(stepRuntime.getWorkset().getName()))	 matchedVariables.add(stepRuntime.getWorkset().getName());
-           
-            matchedVariablesbyRoles.computeIfAbsent(stepRuntime.getAppRole().getCode(), v -> new LinkedHashSet<>()).add(stepRuntime.getWorkset().getName());
-             Long idDatasetCol=stepRuntime.getWorkset().getDatasetColumnId();
-            	if(idDatasetCol!=null) {
-            		String nameRole=stepRuntime.getAppRole().getName();
-            		List<String> roles=matchedVariablesMap.get(idDatasetCol);
-            		if(roles==null) roles=new ArrayList<String>();
-            		roles.add(nameRole);
-            		matchedVariablesMap.put(idDatasetCol,roles);
-            	}
+
+                if (!matchedVariables.contains(stepRuntime.getWorkset().getName()))
+                    matchedVariables.add(stepRuntime.getWorkset().getName());
+
+                matchedVariablesbyRoles.computeIfAbsent(stepRuntime.getAppRole().getCode(), v -> new LinkedHashSet<>()).add(stepRuntime.getWorkset().getName());
+                Long idDatasetCol = stepRuntime.getWorkset().getDatasetColumnId();
+                if (idDatasetCol != null) {
+                    String nameRole = stepRuntime.getAppRole().getName();
+                    List<String> roles = matchedVariablesMap.get(idDatasetCol);
+                    if (roles == null) roles = new ArrayList<String>();
+                    roles.add(nameRole);
+                    matchedVariablesMap.put(idDatasetCol, roles);
+                }
             }
         }
 
@@ -360,16 +362,15 @@ public class WorkflowController {
         model.addAttribute("matchedVariables", matchedVariables);
         model.addAttribute("matchedVariablesMap", matchedVariablesMap);
         model.addAttribute("matchedVariablesbyRoles", matchedVariablesbyRoles);
-        
-        
-        
+
+
         return "workflow/edit";
 
     }
 
     @PostMapping(value = "/associaVariabiliRuolo")
     public String associaVariabiliRuolo(HttpServletResponse response, Model model,
-            @RequestBody AssociazioneVarRoleBean[] associazioneVarRoleBean) throws IOException {
+                                        @RequestBody AssociazioneVarRoleBean[] associazioneVarRoleBean) throws IOException {
         DataProcessing elaborazione = workflowService
                 .findDataProcessing(associazioneVarRoleBean[0].getIdElaborazione());
 
@@ -387,7 +388,7 @@ public class WorkflowController {
 
     @GetMapping(value = {"/dataview/{idelab}/{tipoIO}/{outRole}", "/dataview/{idelab}/{tipoIO}"})
     public String viewDataOut(HttpSession session, Model model, @PathVariable("idelab") Long dataProcessingId,
-            @PathVariable("tipoIO") Short tipoIO, @PathVariable("outRole") Optional<Long> outRole) {
+                              @PathVariable("tipoIO") Short tipoIO, @PathVariable("outRole") Optional<Long> outRole) {
         notificationService.removeAllMessages();
 
         List<StepRuntime> stepRList = new ArrayList<>();
@@ -435,7 +436,7 @@ public class WorkflowController {
 
     @GetMapping(value = "/elimina/{dataProcessingId}/{idsessione}")
     public String eliminaWS(HttpSession session, Model model, @AuthenticationPrincipal Principal user,
-            @PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("idsessione") Long idsessione) {
+                            @PathVariable("dataProcessingId") Long dataProcessingId, @PathVariable("idsessione") Long idsessione) {
         notificationService.removeAllMessages();
 
         try {
@@ -458,7 +459,7 @@ public class WorkflowController {
 
     @RequestMapping(value = "/associavariabile", method = RequestMethod.POST)
     public String associavariabileWS(HttpSession session, Model model,
-            @ModelAttribute("associazioneVarFormBean") MappingVarsFormBean form) {
+                                     @ModelAttribute("associazioneVarFormBean") MappingVarsFormBean form) {
         DataProcessing dataProcessing = workflowService.findDataProcessing(Long.parseLong(form.getDataProcessing()[0]));
         workflowService.creaAssociazioni(form, dataProcessing);
         model.addAttribute("dataProcessing", dataProcessing);
@@ -469,8 +470,8 @@ public class WorkflowController {
 
     @RequestMapping(value = "/associavariabileSum/{idvar}/{idvarsum}", method = RequestMethod.POST)
     public String associavariabileSum(HttpSession session, Model model, @RequestParam("idvar") Long idVar,
-            @RequestParam("idvarsum") Long idVarSum,
-            @ModelAttribute("associazioneVarFormBean") MappingVarsFormBean form) {
+                                      @RequestParam("idvarsum") Long idVarSum,
+                                      @ModelAttribute("associazioneVarFormBean") MappingVarsFormBean form) {
         DataProcessing dataProcessing = workflowService.findDataProcessing(Long.parseLong(form.getDataProcessing()[0]));
         workflowService.creaAssociazioni(form, dataProcessing);
         model.addAttribute("dataProcessing", dataProcessing);
@@ -481,7 +482,7 @@ public class WorkflowController {
 
     @RequestMapping(value = "/updateassociavariabile", method = RequestMethod.POST)
     public String updateAssociavariabileWS(HttpSession session, Model model,
-            @ModelAttribute("associazioneVarFormBean") MappingVarsFormBean form) {
+                                           @ModelAttribute("associazioneVarFormBean") MappingVarsFormBean form) {
         DataProcessing dataProcessing = workflowService.findDataProcessing(Long.parseLong(form.getDataProcessing()[0]));
         workflowService.updateAssociazione(form, dataProcessing);
         model.addAttribute("dataProcessing", dataProcessing);
@@ -492,8 +493,8 @@ public class WorkflowController {
 
     @RequestMapping(value = "/assegnaparametri", method = RequestMethod.POST)
     public String assegnaparametriWS(HttpSession session, Model model, RedirectAttributes ra,
-            @RequestParam("dataProcessingId") Long dataProcessingId, @RequestParam("parametri") String parametri,
-            @RequestParam("valoreParam") String valoreParam) {
+                                     @RequestParam("dataProcessingId") Long dataProcessingId, @RequestParam("parametri") String parametri,
+                                     @RequestParam("valoreParam") String valoreParam) {
 
         MappingVarsFormBean form2 = new MappingVarsFormBean();
         String[] dataProcessingIdList = {dataProcessingId + ""};
@@ -513,8 +514,8 @@ public class WorkflowController {
 
     @RequestMapping(value = "modificaparametro", method = RequestMethod.POST)
     public String modificaparametro(HttpSession session, Model model, RedirectAttributes ra,
-            @RequestParam("dataProcessingId") Long dataProcessingId, @RequestParam("parametri") String parametri,
-            @RequestParam("valoreParam") String valoreParam, @RequestParam("idStepRunMod") String idStepRunMod) {
+                                    @RequestParam("dataProcessingId") Long dataProcessingId, @RequestParam("parametri") String parametri,
+                                    @RequestParam("valoreParam") String valoreParam, @RequestParam("idStepRunMod") String idStepRunMod) {
 
         MappingVarsFormBean form2 = new MappingVarsFormBean();
         String[] dataProcessingIdList = {dataProcessingId + ""};
@@ -537,7 +538,7 @@ public class WorkflowController {
 
     @RequestMapping(value = "/setruleset", method = RequestMethod.POST)
     public String setRuleset(HttpSession session, Model model, RedirectAttributes ra,
-            @RequestParam("dataProcessingId") Long dataProcessingId, @RequestParam("idRuleset") Integer idRuleset) {
+                             @RequestParam("dataProcessingId") Long dataProcessingId, @RequestParam("idRuleset") Integer idRuleset) {
 
         DataProcessing dataProcessing = workflowService.findDataProcessing(dataProcessingId);
         try {

@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -44,21 +44,23 @@ public class BusinessFunctionService {
     public BusinessFunction findBFunctionById(long idfunction) {
         return businessFunctionDao.findById(idfunction).orElse(null);
     }
+
     public BusinessFunction updateBFunction(BusinessFunction function) {
-    	 
-    	return businessFunctionDao.save(function);
+
+        return businessFunctionDao.save(function);
     }
+
     public BusinessFunction deleteBFunction(BusinessFunction funzione) {
-    	
-    	businessFunctionDao.delete(funzione);
-    	
-    	return funzione;
+
+        businessFunctionDao.delete(funzione);
+
+        return funzione;
     }
 
-	public BusinessFunction findBFunctionByName(String name) {
-		
-		return businessFunctionDao.findBFunctionByName(name);
-	}
+    public BusinessFunction findBFunctionByName(String name) {
 
-	
+        return businessFunctionDao.findBFunctionByName(name);
+    }
+
+
 }

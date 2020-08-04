@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -44,33 +44,36 @@ public class BusinessProcessService {
         businessFunctions.add(new BusinessFunction(idfunction));
         return businessProcessDao.findByBusinessFunctionsIn(businessFunctions);
     }
-    
+
     public BusinessProcess findBProcessById(long idprocess) {
         return businessProcessDao.findById(idprocess).orElse(null);
     }
-    public List<BusinessProcess>  findAllProcesses() {
+
+    public List<BusinessProcess> findAllProcesses() {
         return businessProcessDao.findAllProcesses();
     }
-	
-    public List<BusinessProcess>  findAllSubProcesses() {
+
+    public List<BusinessProcess> findAllSubProcesses() {
         return businessProcessDao.findAllSubProcesses();
     }
-	public List<BusinessProcess> findAll() {
-		return businessProcessDao.findAll();
-	}
-	public BusinessProcess updateBProcess(BusinessProcess process) {
-   	 
-    	return businessProcessDao.save(process);
+
+    public List<BusinessProcess> findAll() {
+        return businessProcessDao.findAll();
     }
 
-	public void deleteBProcess(BusinessProcess process) {
-		// TODO Auto-generated method stub
-		businessProcessDao.delete(process);
-	}
+    public BusinessProcess updateBProcess(BusinessProcess process) {
 
-	public BusinessProcess findBProcessByName(String name) {
-		
-		return businessProcessDao.findBProcessByName(name);
-	}
+        return businessProcessDao.save(process);
+    }
+
+    public void deleteBProcess(BusinessProcess process) {
+        // TODO Auto-generated method stub
+        businessProcessDao.delete(process);
+    }
+
+    public BusinessProcess findBProcessByName(String name) {
+
+        return businessProcessDao.findBProcessByName(name);
+    }
 }
 

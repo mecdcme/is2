@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public final class AffineGap5_1 extends AbstractAffineGapCost implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public final String getShortDescriptionString() {
         return "AffineGap5_1";

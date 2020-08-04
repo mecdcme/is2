@@ -37,181 +37,186 @@ import it.istat.is2.workflow.service.StepInstanceService;
 
 @RestController
 public class BusinessDesignControllerRest {
-	@Autowired
+    @Autowired
     private GsbpmProcessService gsbpmProcessService;
-	@Autowired
+    @Autowired
     private BusinessServiceService businessServiceService;
-	@Autowired
-	private AppServiceService appServiceService;
-	@Autowired
-	private StepInstanceService stepInstanceService;
-	
-	@RequestMapping(value = "/loadGsbpmSubProcess/{idprocess}", method = RequestMethod.GET)
+    @Autowired
+    private AppServiceService appServiceService;
+    @Autowired
+    private StepInstanceService stepInstanceService;
+
+    @RequestMapping(value = "/loadGsbpmSubProcess/{idprocess}", method = RequestMethod.GET)
     public List<GsbpmProcessDto> loadGsbpmSubProcess(HttpServletRequest request, Model model,
-            @PathVariable("idprocess") Long idprocess) throws IOException {
+                                                     @PathVariable("idprocess") Long idprocess) throws IOException {
 
-		GsbpmProcess gsbpmProcess = gsbpmProcessService.findById(idprocess);
-		List<GsbpmProcess> listaGsbpmSubProcess = gsbpmProcessService.findSubProcessesByGsbpmParentProcess(gsbpmProcess);
-		
-		ArrayList<GsbpmProcessDto> processDtoList = new ArrayList<GsbpmProcessDto>();
-		GsbpmProcessDto processDto;
-		Iterator<GsbpmProcess> iterator = listaGsbpmSubProcess.iterator();
-		GsbpmProcess gsbpmp = new GsbpmProcess();
-		while(iterator.hasNext()) {
-			gsbpmp = iterator.next();
-			processDto = new GsbpmProcessDto();
-			processDto.setId(Long.toString(gsbpmp.getId()));
-			processDto.setName(gsbpmp.getName());
-			processDto.setDescr(gsbpmp.getDescr());
-			processDtoList.add(processDto);
-		}			
-        return processDtoList;   
+        GsbpmProcess gsbpmProcess = gsbpmProcessService.findById(idprocess);
+        List<GsbpmProcess> listaGsbpmSubProcess = gsbpmProcessService.findSubProcessesByGsbpmParentProcess(gsbpmProcess);
+
+        ArrayList<GsbpmProcessDto> processDtoList = new ArrayList<GsbpmProcessDto>();
+        GsbpmProcessDto processDto;
+        Iterator<GsbpmProcess> iterator = listaGsbpmSubProcess.iterator();
+        GsbpmProcess gsbpmp = new GsbpmProcess();
+        while (iterator.hasNext()) {
+            gsbpmp = iterator.next();
+            processDto = new GsbpmProcessDto();
+            processDto.setId(Long.toString(gsbpmp.getId()));
+            processDto.setName(gsbpmp.getName());
+            processDto.setDescr(gsbpmp.getDescr());
+            processDtoList.add(processDto);
+        }
+        return processDtoList;
     }
-	@RequestMapping(value = "/loadGsbpmParentProcess", method = RequestMethod.GET)
-    public List<GsbpmProcessDto> loadGsbpmParentProcess(HttpServletRequest request, Model model) 
-    		throws IOException {
+
+    @RequestMapping(value = "/loadGsbpmParentProcess", method = RequestMethod.GET)
+    public List<GsbpmProcessDto> loadGsbpmParentProcess(HttpServletRequest request, Model model)
+            throws IOException {
 
 
-		List<GsbpmProcess> listaGsbpmParentProcess = gsbpmProcessService.findAllProcesses();
-		ArrayList<GsbpmProcessDto> processDtoList = new ArrayList<GsbpmProcessDto>();
-		GsbpmProcessDto processDto;
-		Iterator<GsbpmProcess> iterator = listaGsbpmParentProcess.iterator();
-		GsbpmProcess gsbpmp = new GsbpmProcess();
-		while(iterator.hasNext()) {
-			gsbpmp = iterator.next();
-			processDto = new GsbpmProcessDto();
-			processDto.setId(Long.toString(gsbpmp.getId()));
-			processDto.setName(gsbpmp.getName());
-			processDto.setDescr(gsbpmp.getDescr());
-			processDtoList.add(processDto);
-		}			
-        return processDtoList;   
+        List<GsbpmProcess> listaGsbpmParentProcess = gsbpmProcessService.findAllProcesses();
+        ArrayList<GsbpmProcessDto> processDtoList = new ArrayList<GsbpmProcessDto>();
+        GsbpmProcessDto processDto;
+        Iterator<GsbpmProcess> iterator = listaGsbpmParentProcess.iterator();
+        GsbpmProcess gsbpmp = new GsbpmProcess();
+        while (iterator.hasNext()) {
+            gsbpmp = iterator.next();
+            processDto = new GsbpmProcessDto();
+            processDto.setId(Long.toString(gsbpmp.getId()));
+            processDto.setName(gsbpmp.getName());
+            processDto.setDescr(gsbpmp.getDescr());
+            processDtoList.add(processDto);
+        }
+        return processDtoList;
     }
-	@RequestMapping(value = "/loadstep1", method = RequestMethod.GET)
-	public String loadBusinessServices(HttpSession session, Model model) {
 
-		List<GsbpmProcess> listaGsbpmParentProcess = gsbpmProcessService.findAllProcesses();
-		GsbpmProcess gsbpmProcess = listaGsbpmParentProcess.get(0);
+    @RequestMapping(value = "/loadstep1", method = RequestMethod.GET)
+    public String loadBusinessServices(HttpSession session, Model model) {
 
-		List<GsbpmProcess> listaGsbpmSubProcess = gsbpmProcessService
-				.findSubProcessesByGsbpmParentProcess(gsbpmProcess);
+        List<GsbpmProcess> listaGsbpmParentProcess = gsbpmProcessService.findAllProcesses();
+        GsbpmProcess gsbpmProcess = listaGsbpmParentProcess.get(0);
 
-		ArrayList<GsbpmProcess> listaAllGsbpmProcess = new ArrayList<GsbpmProcess>();
-		listaAllGsbpmProcess.addAll(listaGsbpmParentProcess);
-		listaAllGsbpmProcess.addAll(listaGsbpmSubProcess);
+        List<GsbpmProcess> listaGsbpmSubProcess = gsbpmProcessService
+                .findSubProcessesByGsbpmParentProcess(gsbpmProcess);
 
-		model.addAttribute("listaGsbpmParentProcess", listaGsbpmParentProcess);
+        ArrayList<GsbpmProcess> listaAllGsbpmProcess = new ArrayList<GsbpmProcess>();
+        listaAllGsbpmProcess.addAll(listaGsbpmParentProcess);
+        listaAllGsbpmProcess.addAll(listaGsbpmSubProcess);
 
-		model.addAttribute("listaGsbpmSubProcess", listaGsbpmSubProcess);
-		model.addAttribute("businessService", "null");
-		
-		
-		return "businessdesign/homewizard.html";
+        model.addAttribute("listaGsbpmParentProcess", listaGsbpmParentProcess);
 
-	}
-	@RequestMapping(value = "/loadbusinessservices", method = RequestMethod.GET)	
-	public ArrayList<BusinessServiceDto> loadBusinessServices(RedirectAttributes redirectAttributes, HttpSession session, Model model) {
-		
-		List<BusinessService> listaBusinessService = businessServiceService.findBusinessServices();
-		BusinessService bservice = new BusinessService();
-		BusinessServiceDto businessServiceDto;
-		ArrayList<BusinessServiceDto> businessDtoList = new ArrayList<BusinessServiceDto>();
-		
-		Iterator<BusinessService> iterator = listaBusinessService.iterator();
-		while(iterator.hasNext()) {
-			bservice = iterator.next();
-			businessServiceDto = new BusinessServiceDto();
-			businessServiceDto.setId(bservice.getId().toString());
-			businessServiceDto.setName(bservice.getName());
-			businessServiceDto.setDescr(bservice.getDescr());
-			businessDtoList.add(businessServiceDto);
-		}		
+        model.addAttribute("listaGsbpmSubProcess", listaGsbpmSubProcess);
+        model.addAttribute("businessService", "null");
 
-		
-		redirectAttributes.addAttribute("param", 2);
-		return businessDtoList;  
-	}
-	@RequestMapping(value = "/loadapplicationservices", method = RequestMethod.GET)	
-	public ArrayList<ApplicationServiceDto> loadApplicationServices(RedirectAttributes redirectAttributes, HttpSession session, Model model) {
-		
-		List<AppService> listaAppService = appServiceService.findAllAppService();
-		AppService appservice = new AppService();
-		ApplicationServiceDto applicationServiceDto;
-		ArrayList<ApplicationServiceDto> applicationDtoList = new ArrayList<ApplicationServiceDto>();
-		
-		Iterator<AppService> iterator = listaAppService.iterator();
-		while(iterator.hasNext()) {
-			appservice = iterator.next();
-			applicationServiceDto = new ApplicationServiceDto();
-			applicationServiceDto.setId(appservice.getId().toString());
-			applicationServiceDto.setName(appservice.getName());
-			applicationServiceDto.setDescr(appservice.getDescr());
-			applicationDtoList.add(applicationServiceDto);
-		}		
 
-		
-		redirectAttributes.addAttribute("param", 3);
-		return applicationDtoList;  
-	}
-	@PostMapping(value = "/saveallservices")	
-	public String saveAllServices(RedirectAttributes redirectAttributes, HttpSession session, Model model, @ModelAttribute("servicesDesignForm") ServicesDesignForm form) {
-		
+        return "businessdesign/homewizard.html";
 
-		BusinessService businessService = new BusinessService();
-		AppService appService = new AppService();
-		StepInstance stepInstance = new StepInstance();
-		
-		businessService.setName(form.getNameb());
-		businessService.setDescr(form.getDecriptionb());
-		
-		GsbpmProcess gsbpmProcess = new GsbpmProcess();
-		gsbpmProcess = gsbpmProcessService.findById(form.getGsbpmid());
-		businessService.setGsbpmProcess(gsbpmProcess);
-		
-		String rtnMessage = "success";
-		BusinessService bs = null;
-		AppService as = null;
-		try {
-			bs = businessServiceService.save(businessService);
-		}catch(Exception e) {
-			rtnMessage = e + "Impossibile inserire il Business Service.";
-		}
-		
-		appService.setName(form.getNamea());
-		appService.setDescr(form.getDecriptiona());
-		appService.setLanguage(form.getLanguage());
-		appService.setEngineType(form.getEngine());
-		appService.setSource(form.getSoucepath());
-		appService.setSourceCode(form.getSourcecode());
-		appService.setAuthor(form.getAuthor());
-		appService.setLicence(form.getLicence());
-		appService.setContact(form.getContact());
+    }
 
-		Long idbs = form.getIdbservice();
-		//BusinessService bs = businessServiceService.findBusinessServiceById(idbs);
-		appService.setBusinessService(bs);
-		
-		stepInstance.setMethod(form.getMethod());
-		stepInstance.setDescr(form.getDescriptions());
-		stepInstance.setLabel(form.getLabel());
+    @RequestMapping(value = "/loadbusinessservices", method = RequestMethod.GET)
+    public ArrayList<BusinessServiceDto> loadBusinessServices(RedirectAttributes redirectAttributes, HttpSession session, Model model) {
 
-		try {
-			as = appServiceService.save(appService);
-		}catch(Exception e) {
-			rtnMessage = e + "Impossibile inserire l'Application Service.";
-		}
-		//AppService apps = appServiceService.findAppServiceById(form.getAppserviceid());
-		stepInstance.setAppService(as);
+        List<BusinessService> listaBusinessService = businessServiceService.findBusinessServices();
+        BusinessService bservice = new BusinessService();
+        BusinessServiceDto businessServiceDto;
+        ArrayList<BusinessServiceDto> businessDtoList = new ArrayList<BusinessServiceDto>();
 
-		try {			
-			stepInstanceService.save(stepInstance);
-			
-		} catch (Exception e) {
-			rtnMessage = e + "Impossibile inserire la Step Instance.";
-		}		
-		return rtnMessage;
-		
-	}
+        Iterator<BusinessService> iterator = listaBusinessService.iterator();
+        while (iterator.hasNext()) {
+            bservice = iterator.next();
+            businessServiceDto = new BusinessServiceDto();
+            businessServiceDto.setId(bservice.getId().toString());
+            businessServiceDto.setName(bservice.getName());
+            businessServiceDto.setDescr(bservice.getDescr());
+            businessDtoList.add(businessServiceDto);
+        }
+
+
+        redirectAttributes.addAttribute("param", 2);
+        return businessDtoList;
+    }
+
+    @RequestMapping(value = "/loadapplicationservices", method = RequestMethod.GET)
+    public ArrayList<ApplicationServiceDto> loadApplicationServices(RedirectAttributes redirectAttributes, HttpSession session, Model model) {
+
+        List<AppService> listaAppService = appServiceService.findAllAppService();
+        AppService appservice = new AppService();
+        ApplicationServiceDto applicationServiceDto;
+        ArrayList<ApplicationServiceDto> applicationDtoList = new ArrayList<ApplicationServiceDto>();
+
+        Iterator<AppService> iterator = listaAppService.iterator();
+        while (iterator.hasNext()) {
+            appservice = iterator.next();
+            applicationServiceDto = new ApplicationServiceDto();
+            applicationServiceDto.setId(appservice.getId().toString());
+            applicationServiceDto.setName(appservice.getName());
+            applicationServiceDto.setDescr(appservice.getDescr());
+            applicationDtoList.add(applicationServiceDto);
+        }
+
+
+        redirectAttributes.addAttribute("param", 3);
+        return applicationDtoList;
+    }
+
+    @PostMapping(value = "/saveallservices")
+    public String saveAllServices(RedirectAttributes redirectAttributes, HttpSession session, Model model, @ModelAttribute("servicesDesignForm") ServicesDesignForm form) {
+
+
+        BusinessService businessService = new BusinessService();
+        AppService appService = new AppService();
+        StepInstance stepInstance = new StepInstance();
+
+        businessService.setName(form.getNameb());
+        businessService.setDescr(form.getDecriptionb());
+
+        GsbpmProcess gsbpmProcess = new GsbpmProcess();
+        gsbpmProcess = gsbpmProcessService.findById(form.getGsbpmid());
+        businessService.setGsbpmProcess(gsbpmProcess);
+
+        String rtnMessage = "success";
+        BusinessService bs = null;
+        AppService as = null;
+        try {
+            bs = businessServiceService.save(businessService);
+        } catch (Exception e) {
+            rtnMessage = e + "Impossibile inserire il Business Service.";
+        }
+
+        appService.setName(form.getNamea());
+        appService.setDescr(form.getDecriptiona());
+        appService.setLanguage(form.getLanguage());
+        appService.setEngineType(form.getEngine());
+        appService.setSource(form.getSoucepath());
+        appService.setSourceCode(form.getSourcecode());
+        appService.setAuthor(form.getAuthor());
+        appService.setLicence(form.getLicence());
+        appService.setContact(form.getContact());
+
+        Long idbs = form.getIdbservice();
+        //BusinessService bs = businessServiceService.findBusinessServiceById(idbs);
+        appService.setBusinessService(bs);
+
+        stepInstance.setMethod(form.getMethod());
+        stepInstance.setDescr(form.getDescriptions());
+        stepInstance.setLabel(form.getLabel());
+
+        try {
+            as = appServiceService.save(appService);
+        } catch (Exception e) {
+            rtnMessage = e + "Impossibile inserire l'Application Service.";
+        }
+        //AppService apps = appServiceService.findAppServiceById(form.getAppserviceid());
+        stepInstance.setAppService(as);
+
+        try {
+            stepInstanceService.save(stepInstance);
+
+        } catch (Exception e) {
+            rtnMessage = e + "Impossibile inserire la Step Instance.";
+        }
+        return rtnMessage;
+
+    }
 
 
 }

@@ -7,8 +7,9 @@ import it.istat.is2.catalogue.relais.metrics.utility.MongeElkan;
 
 public final class ChapmanMatchingSoundex extends MongeElkan implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-   public ChapmanMatchingSoundex() {
+    private static final long serialVersionUID = 1L;
+
+    public ChapmanMatchingSoundex() {
         super(new Soundex());
     }
 
@@ -25,7 +26,7 @@ public final class ChapmanMatchingSoundex extends MongeElkan implements Serializ
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
 }

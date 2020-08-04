@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -43,11 +43,11 @@ public class StepRuntime implements Serializable {
     private Integer id;
     @Column(name = "ORDER_CODE")
     private Short orderCode;
-    
+
     @ManyToOne
     @JoinColumn(name = "CLS_TYPE_IO_ID")
     private TypeIO typeIO;
-    
+
     @ManyToOne
     @JoinColumn(name = "APP_ROLE_ID")
     private AppRole appRole;
@@ -63,7 +63,7 @@ public class StepRuntime implements Serializable {
     @ManyToOne
     @JoinColumn(name = "DATA_PROCESSING_ID")
     private DataProcessing dataProcessing;
-     
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "WORKSET_ID")
     private Workset workset;
@@ -71,7 +71,7 @@ public class StepRuntime implements Serializable {
     @OneToOne
     @JoinColumn(name = "STEP_INSTANCE_SIGNATURE_ID")
     private StepInstanceSignature stepInstanceSignature;
-    
+
     public StepRuntime() {
     }
 
@@ -80,8 +80,8 @@ public class StepRuntime implements Serializable {
         this.id = id;
     }
 
-    public StepRuntime(Integer id, AppRole appRole, DataProcessing dataProcessing,  TypeIO typeIO, Short order,
-            Long idw,   Long idDsCol, String nomeW, Integer valoriSizeW,String paramValue) {
+    public StepRuntime(Integer id, AppRole appRole, DataProcessing dataProcessing, TypeIO typeIO, Short order,
+                       Long idw, Long idDsCol, String nomeW, Integer valoriSizeW, String paramValue) {
         super();
         this.id = id;
         this.appRole = appRole;
@@ -89,7 +89,7 @@ public class StepRuntime implements Serializable {
         this.typeIO = typeIO;
         this.orderCode = order;
 
-        
+
         Workset ws = new Workset();
         ws.setId(idw);
         ws.setName(nomeW);
@@ -98,8 +98,8 @@ public class StepRuntime implements Serializable {
         ws.setContents(new ArrayList<>());
         ws.setParamValue(paramValue);
         ws.setDatasetColumnId(idDsCol);
-        this.workset =ws;
-        
+        this.workset = ws;
+
     }
 
 }

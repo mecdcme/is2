@@ -25,24 +25,24 @@ public class EngineR {
     StepRuntimeDao stepRuntimeDao;
     @Autowired
     LogService logService;
-    
+
     @Value("${path.script.R}")
     protected String pathR;
-    
+
     protected String fileScriptR;
     protected String command;
     protected DataProcessing dataProcessing;
     protected StepInstance stepInstance;
     protected LinkedHashMap<String, ArrayList<StepRuntime>> dataMap;
     protected Map<String, AppRole> rolesMap;
-    protected Map<String,  List<String>> parametersMap;
-    protected Map<String,  Map<String, List<String>>> worksetVariables;
+    protected Map<String, List<String>> parametersMap;
+    protected Map<String, Map<String, List<String>>> worksetVariables;
     protected Map<String, List<String>> rulesetMap;
 
     protected LinkedHashMap<String, ArrayList<String>> variablesRolesMap;
 
 
     protected LinkedHashMap<String, String> parameterOut;
-   
+
     protected LinkedHashMap<String, String> rolesGroupOut;
 }

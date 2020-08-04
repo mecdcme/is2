@@ -6,10 +6,10 @@
 package it.istat.is2.app.bean;
 
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
- *
  * @author mbruno
  */
 @Data
@@ -21,19 +21,19 @@ public class BusinessFunctionBean implements Serializable {
     private String name;
     private String description;
     boolean hasRuleSet;
-    
-    public BusinessFunctionBean(Long id, String name){
+
+    public BusinessFunctionBean(Long id, String name) {
         this.id = id;
         this.name = name;
     }
-    
-    public BusinessFunctionBean(Long id, String name, boolean hasRuleset){
+
+    public BusinessFunctionBean(Long id, String name, boolean hasRuleset) {
         this.id = id;
         this.name = name;
         this.hasRuleSet = hasRuleset;
     }
-    
-    public BusinessFunctionBean(Long id, String name, String description, boolean hasRuleset){
+
+    public BusinessFunctionBean(Long id, String name, String description, boolean hasRuleset) {
         this.id = id;
         this.name = name;
         this.description = description;

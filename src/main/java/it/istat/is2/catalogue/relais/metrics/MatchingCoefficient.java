@@ -9,7 +9,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.TokeniserWhitespace;
 
 public final class MatchingCoefficient extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 2.0e-4f;
 
@@ -32,7 +32,7 @@ public final class MatchingCoefficient extends AbstractStringMetric implements S
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {
@@ -67,7 +67,7 @@ public final class MatchingCoefficient extends AbstractStringMetric implements S
                 totalFound++;
             }
         }
-        return (float)totalFound;
+        return (float) totalFound;
     }
 }
 

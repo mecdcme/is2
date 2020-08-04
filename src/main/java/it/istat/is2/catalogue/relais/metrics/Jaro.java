@@ -6,7 +6,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.*;
 
 public final class Jaro extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private final float ESTIMATEDTIMINGCONST = 4.12e-5f;
 
     public Jaro() {
@@ -21,7 +21,7 @@ public final class Jaro extends AbstractStringMetric implements Serializable {
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {
@@ -71,7 +71,7 @@ public final class Jaro extends AbstractStringMetric implements Serializable {
                 if (copy.charAt(j) == ch) {
                     foundIt = true;
                     returnCommons.append(ch);
-                    copy.setCharAt(j, (char)0);
+                    copy.setCharAt(j, (char) 0);
                 }
             }
         }

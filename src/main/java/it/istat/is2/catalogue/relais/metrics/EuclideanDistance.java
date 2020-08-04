@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public final class EuclideanDistance extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 7.4457142857142857142857142857146e-5f;
 
@@ -35,7 +35,7 @@ public final class EuclideanDistance extends AbstractStringMetric implements Ser
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {
@@ -47,7 +47,7 @@ public final class EuclideanDistance extends AbstractStringMetric implements Ser
     public float getSimilarity(final String string1, final String string2) {
         final ArrayList<String> str1Tokens = tokeniser.tokenizeToArrayList(string1);
         final ArrayList<String> str2Tokens = tokeniser.tokenizeToArrayList(string2);
-        float totalPossible = (float) Math.sqrt((str1Tokens.size()*str1Tokens.size()) + (float)(str2Tokens.size()*str2Tokens.size()));
+        float totalPossible = (float) Math.sqrt((str1Tokens.size() * str1Tokens.size()) + (float) (str2Tokens.size() * str2Tokens.size()));
         final float totalDistance = getUnNormalisedSimilarity(string1, string2);
         return (totalPossible - totalDistance) / totalPossible;
     }

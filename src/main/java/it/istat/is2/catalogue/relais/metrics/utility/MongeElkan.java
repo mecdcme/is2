@@ -8,7 +8,7 @@ import it.istat.is2.catalogue.relais.metrics.SmithWatermanGotoh;
 
 public class MongeElkan extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 0.0344f;
 
@@ -17,7 +17,7 @@ public class MongeElkan extends AbstractStringMetric implements Serializable {
     private final AbstractStringMetric internalStringMetric;
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public MongeElkan() {

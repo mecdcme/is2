@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class SmithWatermanGotohWindowedAffine extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 4.5e-5f;
 
@@ -87,7 +87,7 @@ public class SmithWatermanGotohWindowedAffine extends AbstractStringMetric imple
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {
@@ -107,19 +107,19 @@ public class SmithWatermanGotohWindowedAffine extends AbstractStringMetric imple
         }
 
         if (maxValue == 0) {
-            return 1.0f; 
+            return 1.0f;
         } else {
             return (smithWatermanGotoh / maxValue);
         }
     }
 
     public float getUnNormalisedSimilarity(final String s, final String t) {
-        final float[][] d; 
-        final int n; 
-        final int m; 
-        int i; 
-        int j; 
-        float cost; 
+        final float[][] d;
+        final int n;
+        final int m;
+        int i;
+        int j;
+        float cost;
 
         n = s.length();
         m = t.length();
@@ -141,7 +141,7 @@ public class SmithWatermanGotohWindowedAffine extends AbstractStringMetric imple
                         cost);
             } else {
                 float maxGapCost = 0.0f;
-                int windowStart = i-windowSize;
+                int windowStart = i - windowSize;
                 if (windowStart < 1) {
                     windowStart = 1;
                 }
@@ -164,7 +164,7 @@ public class SmithWatermanGotohWindowedAffine extends AbstractStringMetric imple
                         cost);
             } else {
                 float maxGapCost = 0.0f;
-                int windowStart = j-windowSize;
+                int windowStart = j - windowSize;
                 if (windowStart < 1) {
                     windowStart = 1;
                 }
@@ -186,14 +186,14 @@ public class SmithWatermanGotohWindowedAffine extends AbstractStringMetric imple
 
                 float maxGapCost1 = 0.0f;
                 float maxGapCost2 = 0.0f;
-                int windowStart = i-windowSize;
+                int windowStart = i - windowSize;
                 if (windowStart < 1) {
                     windowStart = 1;
                 }
                 for (int k = windowStart; k < i; k++) {
                     maxGapCost1 = Math.max(maxGapCost1, d[i - k][j] - gGapFunc.getCost(s, i - k, i));
                 }
-                windowStart = j-windowSize;
+                windowStart = j - windowSize;
                 if (windowStart < 1) {
                     windowStart = 1;
                 }
@@ -210,7 +210,7 @@ public class SmithWatermanGotohWindowedAffine extends AbstractStringMetric imple
             }
         }
 
-     return maxSoFar;
+        return maxSoFar;
     }
 }
 

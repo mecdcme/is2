@@ -9,7 +9,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.TokeniserQGram3Extended;
 
 public final class QGramsDistance extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 1.34e-4f;
 
@@ -32,7 +32,7 @@ public final class QGramsDistance extends AbstractStringMetric implements Serial
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {

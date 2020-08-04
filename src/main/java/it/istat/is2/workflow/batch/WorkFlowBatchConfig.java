@@ -36,72 +36,72 @@ import it.istat.is2.workflow.domain.DataProcessing;
 @PropertySource("classpath:application.properties")
 public class WorkFlowBatchConfig extends DefaultBatchConfigurer implements BatchConfigurer {
 
-	@Autowired
-	public JobBuilderFactory jobs;
+    @Autowired
+    public JobBuilderFactory jobs;
 
-	@Autowired
-	public StepBuilderFactory steps;
+    @Autowired
+    public StepBuilderFactory steps;
 
-	@Autowired
-	private WorkFlowBatchProcessor workFlowBatchProcessor;
+    @Autowired
+    private WorkFlowBatchProcessor workFlowBatchProcessor;
 
-	@Override
-	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		super.setDataSource(dataSource);
-	}
+    @Override
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        super.setDataSource(dataSource);
+    }
 
-	@Bean
-	public Job doBusinessProc() {
-		return (Job) jobs.get("doBusinessProc").listener(listener()).flow(doStep()).end().build();
-	}
+    @Bean
+    public Job doBusinessProc() {
+        return (Job) jobs.get("doBusinessProc").listener(listener()).flow(doStep()).end().build();
+    }
 
-	@Bean
-	public Step doStep() {
-		return steps.get("doStep").<DataProcessing, DataProcessing>chunk(1).reader(workFlowBatchProcessor)
-				.writer(new WorkFlowBatchWriter()).build();
-	}
+    @Bean
+    public Step doStep() {
+        return steps.get("doStep").<DataProcessing, DataProcessing>chunk(1).reader(workFlowBatchProcessor)
+                .writer(new WorkFlowBatchWriter()).build();
+    }
 
-	@Bean
-	public JobExecutionListener listener() {
-		return new WorkFlowBatchListener();
-	}
+    @Bean
+    public JobExecutionListener listener() {
+        return new WorkFlowBatchListener();
+    }
 
-	@Bean
-	public ApplicationListener<ContextRefreshedEvent> resumeJobsListener(@Autowired JobOperator jobOperator,
-			@Autowired JobRepository jobRepository, @Autowired JobExplorer jobExplorer) {
-		// restart jobs that failed due to
-		return event -> {
-			Date jvmStartTime = new Date(ManagementFactory.getRuntimeMXBean().getStartTime());
-			// for each job
-			for (String jobName : jobExplorer.getJobNames()) {
-				// get latest job instance
-				for (JobInstance instance : jobExplorer.getJobInstances(jobName, 0, 2)) {
-					// for each of the executions
-					for (JobExecution execution : jobExplorer.getJobExecutions(instance)) {
-						if (execution.getStatus().equals(BatchStatus.STARTED)
-								&& execution.getCreateTime().before(jvmStartTime)) {
-							// this job is broken and must be restarted
-							execution.setEndTime(new Date());
-							execution.setStatus(BatchStatus.FAILED);
-							execution.setExitStatus(ExitStatus.FAILED);
-							for (StepExecution se : execution.getStepExecutions()) {
-								if (se.getStatus().equals(BatchStatus.STARTED)) {
-									se.setEndTime(new Date());
-									se.setStatus(BatchStatus.FAILED);
-									se.setExitStatus(ExitStatus.FAILED);
-									jobRepository.update(se);
-								}
-							}
-							try {
-								jobRepository.update(execution);
-							} catch (Exception e) {
-								Logger.getRootLogger().error(e.getMessage());
-							}
-						}
-					}
-				}
-			}
-		};
-	}
+    @Bean
+    public ApplicationListener<ContextRefreshedEvent> resumeJobsListener(@Autowired JobOperator jobOperator,
+                                                                         @Autowired JobRepository jobRepository, @Autowired JobExplorer jobExplorer) {
+        // restart jobs that failed due to
+        return event -> {
+            Date jvmStartTime = new Date(ManagementFactory.getRuntimeMXBean().getStartTime());
+            // for each job
+            for (String jobName : jobExplorer.getJobNames()) {
+                // get latest job instance
+                for (JobInstance instance : jobExplorer.getJobInstances(jobName, 0, 2)) {
+                    // for each of the executions
+                    for (JobExecution execution : jobExplorer.getJobExecutions(instance)) {
+                        if (execution.getStatus().equals(BatchStatus.STARTED)
+                                && execution.getCreateTime().before(jvmStartTime)) {
+                            // this job is broken and must be restarted
+                            execution.setEndTime(new Date());
+                            execution.setStatus(BatchStatus.FAILED);
+                            execution.setExitStatus(ExitStatus.FAILED);
+                            for (StepExecution se : execution.getStepExecutions()) {
+                                if (se.getStatus().equals(BatchStatus.STARTED)) {
+                                    se.setEndTime(new Date());
+                                    se.setStatus(BatchStatus.FAILED);
+                                    se.setExitStatus(ExitStatus.FAILED);
+                                    jobRepository.update(se);
+                                }
+                            }
+                            try {
+                                jobRepository.update(execution);
+                            } catch (Exception e) {
+                                Logger.getRootLogger().error(e.getMessage());
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    }
 }

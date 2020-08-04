@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -28,11 +28,13 @@ import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.graph.bean.Coordinate;
 import it.istat.is2.graph.bean.GraphData;
 import it.istat.is2.graph.bean.Point;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,7 +81,7 @@ public class GraphControllerRest {
 
     @GetMapping(value = "/rest/graph/getData/{filters}/{xAxis}/{yAxis}")
     public GraphData getData(HttpServletRequest request, @PathVariable("filters") List<Integer> filters,
-            @PathVariable("xAxis") List<Integer> xAxis, @PathVariable("yAxis") List<Integer> yAxis) {
+                             @PathVariable("xAxis") List<Integer> xAxis, @PathVariable("yAxis") List<Integer> yAxis) {
 
         Map<String, List<String>> filterData = new HashMap<>();
         for (Integer filter : filters) {
@@ -88,13 +90,13 @@ public class GraphControllerRest {
             }
         }
         Map<String, List<String>> xData = new HashMap<>();
-        for (Integer x: xAxis) {
+        for (Integer x : xAxis) {
             if (x > 0) {
                 xData.put(datasetService.findOneColonna(Long.valueOf(x)).getName(), datasetService.findOneColonna(Long.valueOf(x)).getContents());
             }
         }
         Map<String, List<String>> yData = new HashMap<>();
-        for (Integer y: yAxis) {
+        for (Integer y : yAxis) {
             if (y > 0) {
                 yData.put(datasetService.findOneColonna(Long.valueOf(y)).getName(), datasetService.findOneColonna(Long.valueOf(y)).getContents());
             }

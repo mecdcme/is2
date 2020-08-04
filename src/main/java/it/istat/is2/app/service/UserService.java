@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -48,6 +48,7 @@ public class UserService {
     public List<User> findAll() {
         return (List<User>) this.userDao.findAll();
     }
+
     public List<UserRole> findAllRoles() {
         return (List<UserRole>) this.userRolesDao.findAll();
     }
@@ -74,17 +75,17 @@ public class UserService {
     }
 
     public User update(UserCreateForm uf) throws Exception {
-        User user =  userDao.findById(uf.getId()).orElse(null);
+        User user = userDao.findById(uf.getId()).orElse(null);
         if (user == null) {
             throw new Exception("User not found");
         }
         user.setEmail(uf.getEmail());
         user.setName(uf.getName());
-        user.setSurname(uf.getSurname());  
+        user.setSurname(uf.getSurname());
         UserRole ur = new UserRole(uf.getRole());
         user.setRole(ur);
         userDao.save(user);
-        
+
         return user;
     }
 

@@ -6,17 +6,17 @@
 package it.istat.is2.app.bean;
 
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
- *
  * @author mbruno
  */
 @Data
-public class ProcessStepBean implements Serializable{
-    
+public class ProcessStepBean implements Serializable {
+
     private static final long serialVersionUID = -5161466911184225333L;
-    
+
     private Long id;
     private String name;
 
@@ -24,7 +24,6 @@ public class ProcessStepBean implements Serializable{
         this.id = id;
         this.name = name;
     }
-    
-    
-    
+
+
 }

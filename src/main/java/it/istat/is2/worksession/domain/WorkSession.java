@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -47,6 +47,7 @@ import it.istat.is2.workflow.domain.DataProcessing;
 import it.istat.is2.workflow.domain.BusinessFunction;
 
 import javax.persistence.Temporal;
+
 import lombok.Data;
 
 @Data
@@ -71,11 +72,11 @@ public class WorkSession implements Serializable {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
-    
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "BUSINESS_FUNCTION_ID", nullable = false)
     private BusinessFunction businessFunction;
-    
+
     @OneToMany(mappedBy = "workSession", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DataProcessing> dataProcessings;
 
@@ -85,9 +86,9 @@ public class WorkSession implements Serializable {
     @OneToMany(mappedBy = "workSession", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ruleset> ruleSets;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER,mappedBy="workSession", orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "workSession", orphanRemoval = true)
     private List<Log> logs;
-    
+
 
     public WorkSession(Long id) {
         super();

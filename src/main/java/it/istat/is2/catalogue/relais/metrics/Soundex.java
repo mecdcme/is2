@@ -6,7 +6,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.AbstractStringMetric;
 
 public final class Soundex extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 0.00052f;
 
@@ -31,14 +31,14 @@ public final class Soundex extends AbstractStringMetric implements Serializable 
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {
         final float str1Length = string1.length();
         final float str2Length = string2.length();
         final String testString = "abcdefghijklmnopq";
-        return ((str1Length + str2Length) * ESTIMATEDTIMINGCONST) + internalStringMetric.getSimilarityTimingEstimated(testString.substring(0,SOUNDEXLENGTH),testString.substring(0,SOUNDEXLENGTH));
+        return ((str1Length + str2Length) * ESTIMATEDTIMINGCONST) + internalStringMetric.getSimilarityTimingEstimated(testString.substring(0, SOUNDEXLENGTH), testString.substring(0, SOUNDEXLENGTH));
     }
 
     public float getSimilarity(final String string1, final String string2) {
@@ -73,8 +73,8 @@ public final class Soundex extends AbstractStringMetric implements Serializable 
         wordString = wordString.toUpperCase();
 
         wordStr = wordString;
-        wordStr = wordStr.replaceAll("[^A-Z]", " "); 
-        wordStr = wordStr.replaceAll("\\s+", "");   
+        wordStr = wordStr.replaceAll("[^A-Z]", " ");
+        wordStr = wordStr.replaceAll("\\s+", "");
 
         if (wordStr.length() == 0) {
             return ("");
@@ -82,8 +82,8 @@ public final class Soundex extends AbstractStringMetric implements Serializable 
 
         firstLetter = wordStr.charAt(0);
 
-        if(wordStr.length() > (SOUNDEXLENGTH*4)+1) {
-            wordStr = "-" + wordStr.substring(1,SOUNDEXLENGTH*4);
+        if (wordStr.length() > (SOUNDEXLENGTH * 4) + 1) {
+            wordStr = "-" + wordStr.substring(1, SOUNDEXLENGTH * 4);
         } else {
             wordStr = "-" + wordStr.substring(1);
         }
@@ -97,7 +97,7 @@ public final class Soundex extends AbstractStringMetric implements Serializable 
 
         wsLen = wordStr.length();
         lastChar = '-';
-        tmpStr = "-";     
+        tmpStr = "-";
         for (int i = 1; i < wsLen; i++) {
             curChar = wordStr.charAt(i);
             if (curChar != lastChar) {
@@ -106,11 +106,11 @@ public final class Soundex extends AbstractStringMetric implements Serializable 
             }
         }
         wordStr = tmpStr;
-        wordStr = wordStr.substring(1);          
-        wordStr = wordStr.replaceAll("0", "");  
-        wordStr += "000000000000000000";            
-        wordStr = firstLetter + wordStr;      
-        wordStr = wordStr.substring(0, soundExLen); 
+        wordStr = wordStr.substring(1);
+        wordStr = wordStr.replaceAll("0", "");
+        wordStr += "000000000000000000";
+        wordStr = firstLetter + wordStr;
+        wordStr = wordStr.substring(0, soundExLen);
         return (wordStr);
     }
 }

@@ -7,12 +7,13 @@ package it.istat.is2.app.bean;
 
 import java.util.List;
 import java.util.Map;
+
 import lombok.Data;
 
 @Data
 public class DatasetDx {
-    
+
     List<String> columns;
     List<Map<String, String>> data;
-    
+
 }

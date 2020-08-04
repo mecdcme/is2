@@ -23,5 +23,5 @@ import lombok.Setter;
 public class ParameterType extends AbstractDomainObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
- 
+
 }

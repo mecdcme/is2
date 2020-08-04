@@ -1,13 +1,13 @@
 /**
  * Copyright 2019 ISTAT
- *
+ * <p>
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence. You may
  * obtain a copy of the Licence at:
- *
+ * <p>
  * http://ec.europa.eu/idabc/eupl5
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -39,6 +39,7 @@ import javax.persistence.JoinColumn;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import it.istat.is2.app.domain.converter.ListToStringConverter;
@@ -63,12 +64,12 @@ public class DatasetColumn implements Serializable {
     private Short orderCode;
     @Column(name = "CONTENT_SIZE")
     private Integer contentSize;
-    
+
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "CONTENT")
     @Convert(converter = ListToStringConverter.class)
     private List<String> contents;
-    
+
     @ManyToOne
     @JoinColumn(name = "DATASET_FILE_ID")
     @JsonBackReference
@@ -87,7 +88,7 @@ public class DatasetColumn implements Serializable {
         this.id = id;
     }
 
-    public DatasetColumn(Long id, String nome, Short order,  DatasetFile datasetFile, StatisticalVariableCls tipoVariabile) {
+    public DatasetColumn(Long id, String nome, Short order, DatasetFile datasetFile, StatisticalVariableCls tipoVariabile) {
         super();
         this.id = id;
         this.name = nome;

@@ -7,7 +7,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.MathFuncs;
 
 public final class JaroWinkler extends AbstractStringMetric implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 4.342e-5f;
 
@@ -30,7 +30,7 @@ public final class JaroWinkler extends AbstractStringMetric implements Serializa
     }
 
     public String getSimilarityExplained(String string1, String string2) {
-        return null;  
+        return null;
     }
 
     public float getSimilarityTimingEstimated(final String string1, final String string2) {
@@ -57,7 +57,7 @@ public final class JaroWinkler extends AbstractStringMetric implements Serializa
                 return i;
             }
         }
-        return n; 
+        return n;
     }
 }
 
