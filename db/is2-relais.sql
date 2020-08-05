@@ -78,8 +78,8 @@ INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent
 INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (72, 'Matching Table', 'Matching records', 'MatchingTable', 3, 1);
 INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (77, 'Matching constraint', 'Constraint apply on matches', 'MatchingTableReduced', 4, 1);
 
-INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (5, 'Probabilistic Record Linkage Multi-Step', 'Probabilistic Record Linkage Multi-Step', 'PRL-MS', 1, NULL);
-INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (73, 'PRL multi-step', 'One process with all workflow steps  ', 'PRL Multi Step', 1, 5);
+INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (5, 'Probabilistic Record Linkage Batch', 'Probabilistic Record Linkage Batch', 'PRL batch', 1, NULL);
+INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (73, 'PRL batch', 'One process with all workflow steps  ', 'PRL batch', 1, 5);
 
 INSERT INTO is2.is2_business_process (id, name, descr, label, order_code, parent)  VALUES (76, 'Deterministic Record Linkage', 'Deterministic Record Linkage', 'DRL', 1, 2);
 --
@@ -182,14 +182,14 @@ INSERT INTO is2.is2_link_process_step VALUES (76, 76);
 -- Data for Name: is2_step_instance; Type: TABLE DATA; Schema: is2; Owner: -
 --
 
-INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id) VALUES (11, 'probabilisticContencyTable', 'This function calculates the contingency Table', 'ContingencyTable', 250);
+INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id) VALUES (11, 'probabilisticContingencyTable', 'This function calculates the contingency Table', 'ContingencyTable', 250);
 INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (12, 'fellegisunter', 'This function implements the Fellegi Sunter algorithm', 'FellegiSunter', 200);
 INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (13, 'probabilisticResultTables', 'This function calculates the Matching Table', 'MatchingTable', 250);
 INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (14, 'lpreduction', 'This function implements tha constrint on matches', 'MatchingTableReduced', 200);
 
 -- INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (15, 'contingencyTableBlocking', 'This function calculates the contingency Table with Blocking variable', 'ContingencyTableBlocking', 250);
 -- INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (16, 'resultTablesBlocking', 'This function calculates the Matching Table with Blocking variable', 'MatchingTableBlocking', 250);
-INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (20, 'deterministicRecorgeLinkage', 'This function calculates the Matching Table with Deterministic Record Linkage', 'DeterministicRecordLinkage', 250);
+INSERT INTO is2.is2_step_instance (id, method, descr, label, app_service_id)  VALUES (20, 'deterministicRecordLinkage', 'This function calculates the Matching Table with Deterministic Record Linkage', 'DeterministicRecordLinkage', 250);
 
 --
 -- TOC entry 4935 (class 0 OID 25249)
