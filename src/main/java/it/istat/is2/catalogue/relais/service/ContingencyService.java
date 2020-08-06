@@ -137,7 +137,7 @@ public class ContingencyService {
                     .get(metricMatchingVariable.getMatchingVariableNameVariableB()));
 
             if (matchingVariableA == null || matchingVariableB == null
-                    || matchingVariableA.equals("")) {
+                    || matchingVariableA.length()==0) {
 
                 pattern.append("0");
             }
@@ -193,7 +193,7 @@ public class ContingencyService {
                     .get(metricMatchingVariable.getMatchingVariableNameVariableB());
 
             if (matchingVariableNameVariableA == null || matchingVariableNameVariableB == null
-                    || matchingVariableNameVariableA.equals("")) {
+                    || matchingVariableNameVariableA.trim().length()==0) {
 
                 return false;
             }
