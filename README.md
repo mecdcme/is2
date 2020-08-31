@@ -62,7 +62,6 @@ based Applications, with an embedded Tomcat, that you can "just run".
 java –jar is2.jar
 ```
 
-
 Dockerize the PostgreSQL database
 ```
 docker build -t mecdcme/is2-postgres . -f db.Dockerfile
