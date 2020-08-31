@@ -45,7 +45,6 @@ After DB installation, you need to increase the `max_allowed_packet` parameter  
 ```
 max_allowed_packet=256M
 ```
-
 From your IDE select and open the unzipped maven project.
 As a first step check the content of the application.properties file, located in the path `Other Sources > src/main/resources`:
 
