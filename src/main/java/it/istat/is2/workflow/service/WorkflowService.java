@@ -588,19 +588,16 @@ public class WorkflowService {
             for (StepRuntime step : list) {
                 if (flagIO.equals(Short.valueOf("0")) || step.getTypeIO().equals(new TypeIO(flagIO))) {
                     stepRuntimeDao.findById(step.getId()).ifPresent(sr -> {
-                        System.out.println(sr.getWorkset().getStepRuntimes().size());
-
+                       
                         Workset workset = sr.getWorkset();
                         workset.getStepRuntimes().remove(sr);
                         stepRuntimeDao.delete(sr);
-                        System.out.println(workset.getStepRuntimes().size());
-                        if (workset.getStepRuntimes().size() == 0)
+                         if (workset.getStepRuntimes().size() == 0)
                             workSetDao.delete(sr.getWorkset());
                         else
                             workSetDao.save(sr.getWorkset());
 
-                        System.out.println(sr.getWorkset().getStepRuntimes().size());
-                    });
+                     });
 
                 }
             }

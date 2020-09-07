@@ -639,7 +639,7 @@ public class Utility {
         }
 
         Collections.sort(valuesElements);
-        System.out.println(valuesElements.size());
+       
         datasetFields.stream().forEach(fields -> {
             final List<String> valuesOrdered = new ArrayList<>();
             // indexArraySortedList.forEach(index ->
