@@ -3,9 +3,9 @@
 [![Docker hub](https://img.shields.io/docker/cloud/automated/mecdcme/is2-postgres.svg?label=is2-postgres%20docker)](https://hub.docker.com/r/mecdcme/is2-postgres)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mecdcme_is2&metric=alert_status)](https://sonarcloud.io/dashboard?id=mecdcme_is2)
 # IS2
-A runtime environment to execute statistical services. IS2 is a workbench that offers a set of tools for data analysis and processing. 
+A runtime environment to execute statistical services. IS2 is a workbench that offers a set of tools for data analysis and processing.
 
-Among the tools for data processing and integration, the workbench allows to perform the probabilistic record linkage  applying the Fellegi-Sunter method (**RELAIS statistical service**). 
+Among the tools for data processing and integration, the workbench allows to perform the probabilistic record linkage  applying the Fellegi-Sunter method (**RELAIS statistical service**) 
 ## What you’ll need
 In order to build the IS2 application, your environment should fulfill the following requirements:
 
@@ -13,6 +13,7 @@ In order to build the IS2 application, your environment should fulfill the follo
 * JDK 11 or later; 
 * Maven 3.0+;
 * Mysql Server 8.0 or later;
+* PostgreSQL 9.6 or later  
 
 ## What you’ll build
 Istat has realized a generalized environment (Istat Statistical Service - IS2) that allows to select statistical services from a catalogue and execute them through a web application (IS2 workbench).
