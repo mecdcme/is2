@@ -7,162 +7,162 @@
 -- 
 -- BUSINESS_PROCESS
 -- 
---INSERT INTO is2_business_process (ID, NAME, DESCR, LABEL, PARENT, ORDER_CODE) VALUES (80,'Selezione errori influenti','Esegue la stima, predizione e valuta gli errori influenti in due processi successivi','Selezione2P',NULL,1);
---INSERT INTO is2_business_process (ID, NAME, DESCR, LABEL, PARENT, ORDER_CODE) VALUES (110,'Stima e predizione modello','Escuzione del processo di stima e predizione del modello','Estimates',80,1);
-INSERT INTO is2_business_process (ID, NAME, DESCR, LABEL, PARENT, ORDER_CODE) VALUES (130,'Identificazione errori influenti','Esecuzione del processo di identificazione errori influenti','Selection',80,2);
+INSERT INTO is2.is2_business_process (ID, NAME, DESCR, LABEL, PARENT, ORDER_CODE) VALUES (80,'Selezione errori influenti','Esegue la stima, predizione e valuta gli errori influenti in due processi successivi','Selezione2P',NULL,1);
+INSERT INTO is2.is2_business_process (ID, NAME, DESCR, LABEL, PARENT, ORDER_CODE) VALUES (110,'Stima e predizione modello','Escuzione del processo di stima e predizione del modello','Estimates',80,1);
+INSERT INTO is2.is2_business_process (ID, NAME, DESCR, LABEL, PARENT, ORDER_CODE) VALUES (130,'Identificazione errori influenti','Esecuzione del processo di identificazione errori influenti','Selection',80,2);
 
 -- 
 -- BUSINESS SERVICE
 -- 
-INSERT INTO is2_business_service (ID, NAME, DESCR, GSBPM_PROCESS_ID) VALUES	(100,'Selective editing','Selective editing is a general approach for the detection of influential errors. It is based on the idea of looking for influential errors with respect to the main results in order to focus the most accurate treatment on the corresponding subset of units to limit the costs of interactive editing, while maintaining the desired level of quality of estimates [GSDEM 2.0]', 53) ;
+INSERT INTO is2.is2_business_service (ID, NAME, DESCR, GSBPM_PROCESS_ID) VALUES	(100,'Selective editing','Selective editing is a general approach for the detection of influential errors. It is based on the idea of looking for influential errors with respect to the main results in order to focus the most accurate treatment on the corresponding subset of units to limit the costs of interactive editing, while maintaining the desired level of quality of estimates [GSDEM 2.0]', 53) ;
 
 -- 
 -- PROCESS_STEP
 -- 
-INSERT INTO is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (10,'MLEST','This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the true data for all units that were used for the estimation','MLEST',100);
-INSERT INTO is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (15,'MLEST_STRATA','MLEST with stratification','MLEST_STRATA', 100);
-INSERT INTO is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (20,'PREDY','On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates','PREDY',100);
-INSERT INTO is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (25,'PREDY_STRATA','PREDY with stratification','PREDY_STRATA',100);
-INSERT INTO is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (30,'SELEDIT','This function performs Selective Editing. On the basis of a set of observed data and the corresponding predictions for the true data, it selects the units required for interactive editing','SELEDIT',100);
-INSERT INTO is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (35,'SELEDIT_STRATA','SELEDIT with stratification','SELEDIT_STRATA',100);
--- INSERT INTO is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (40,'OUTL','Scelta Outlier',100);
--- INSERT INTO is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (50,'MOD','Imposta Modello',100);
+INSERT INTO is2.is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (10,'MLEST','This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the true data for all units that were used for the estimation','MLEST',100);
+INSERT INTO is2.is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (15,'MLEST_STRATA','MLEST with stratification','MLEST_STRATA', 100);
+INSERT INTO is2.is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (20,'PREDY','On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates','PREDY',100);
+INSERT INTO is2.is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (25,'PREDY_STRATA','PREDY with stratification','PREDY_STRATA',100);
+INSERT INTO is2.is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (30,'SELEDIT','This function performs Selective Editing. On the basis of a set of observed data and the corresponding predictions for the true data, it selects the units required for interactive editing','SELEDIT',100);
+INSERT INTO is2.is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (35,'SELEDIT_STRATA','SELEDIT with stratification','SELEDIT_STRATA',100);
+-- INSERT INTO is2.is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (40,'OUTL','Scelta Outlier',100);
+-- INSERT INTO is2.is2_process_step (ID, NAME, DESCR, LABEL, BUSINESS_SERVICE_ID) VALUES (50,'MOD','Imposta Modello',100);
 
 
 -- 
 -- MANY TO MANY RELATION -> BUSINESS_FUNCTION - BUSINESS_PROCESS
 -- 
-INSERT INTO is2_business_function (ID, NAME, DESCR, LABEL, ACTIVE) VALUES (2,	'Selective Editing', 'Outlier and Influential errors detection', 'SMX',	1);
-INSERT INTO is2_link_function_process (BUSINESS_FUNCTION_ID, BUSINESS_PROCESS_ID) VALUES (2,80);
+INSERT INTO is2.is2_business_function (ID, NAME, DESCR, LABEL, ACTIVE) VALUES (2,	'Selective Editing', 'Outlier and Influential errors detection', 'SMX',	1);
+INSERT INTO is2.is2_link_function_process (BUSINESS_FUNCTION_ID, BUSINESS_PROCESS_ID) VALUES (2,80);
 
 -- 
 -- MANY TO MANY RELATION -> BUSINESS_PROCESS - PROCESS_STEP
 -- 
-INSERT INTO is2_link_process_step (BUSINESS_PROCESS_ID, PROCESS_STEP_ID) VALUES (110,10),(130,30);
+INSERT INTO is2.is2_link_process_step (BUSINESS_PROCESS_ID, PROCESS_STEP_ID) VALUES (110,10),(130,30);
 
 -- 
 -- MANY TO MANY RELATION -> BUSINESS_FUNCTION - VIEW_DATA_TYPE
 -- 
-INSERT INTO is2_link_function_view_data_type (BUSINESS_FUNCTION_ID, VIEW_DATA_TYPE_ID) 
+INSERT INTO is2.is2_link_function_view_data_type (BUSINESS_FUNCTION_ID, VIEW_DATA_TYPE_ID) 
 	VALUES (2,1);
 
 
 -- 
 -- APPLICATION SERVICE
 -- 
-INSERT INTO is2_app_service (ID, NAME, DESCR, IMPLEMENTATION_LANGUAGE, ENGINE, SOURCE_PATH, SOURCE_CODE, AUTHOR, LICENCE,CONTACT,BUSINESS_SERVICE_ID) 
+INSERT INTO is2.is2_app_service (ID, NAME, DESCR, IMPLEMENTATION_LANGUAGE, ENGINE, SOURCE_PATH, SOURCE_CODE, AUTHOR, LICENCE,CONTACT,BUSINESS_SERVICE_ID) 
 	VALUES 
 		(100,'SeleMix','Selemix is an R package to treat quantitative data, which aims to identify a set of units affected by errors which potentially influence the estimates of interest (selective editing)','R','RSERVE','selemix/IS2_selemix.r','','Istat','EUPL1.1','Maria Teresa Buglielli (bugliell@istat.it)',100);
 
 -- 
 -- STEP INSTANCES
 -- 
-INSERT INTO is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (1,'ml_est','This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the “true” data for all units that were used for the estimation','MLEST',100);
-INSERT INTO is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (2,'pred.y','On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates','PREDY',100);
-INSERT INTO is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (3,'sel_edit','This function performs Selective Editing. On the basis of a set of observed data and the corresponding predictions for the true data, it selects the units required for interactive editing','SELEDIT',100);
--- INSERT INTO is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (4,'is2_strata_mlest','MLEST with stratification','MLEST_STRATA',100);
--- INSERT INTO is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (5,'is2_strata_ypred','PREDY with stratification','PREDY_STRATA',100);
--- INSERT INTO is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (6,'is2_strata_seledit','SELEDIT with stratification','SELEDIT_STRATA',100);
--- INSERT INTO is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (4,'is2_modest','Valutazione del modello','MODEL',100);
--- INSERT INTO is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (5,'is2_selpairs','Generazione Grafico','GRAPH',100);
+INSERT INTO is2.is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (1,'is2_mlest','This function performs the maximum likelihood estimates of the parameters of a contamination model by ECM algorithm and it provides the expected values of the “true” data for all units that were used for the estimation','MLEST',100);
+INSERT INTO is2.is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (2,'is2_ypred','On the basis of a set of contamination model parameters, and a set of observed data, it calculates the expected values of the corresponding real data. Missing values for the variables response as well as are allowed, but not for covariates','PREDY',100);
+INSERT INTO is2.is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (3,'is2_seledit','This function performs Selective Editing. On the basis of a set of observed data and the corresponding predictions for the true data, it selects the units required for interactive editing','SELEDIT',100);
+-- INSERT INTO is2.is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (4,'is2_strata_mlest','MLEST with stratification','MLEST_STRATA',100);
+-- INSERT INTO is2.is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (5,'is2_strata_ypred','PREDY with stratification','PREDY_STRATA',100);
+-- INSERT INTO is2.is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (6,'is2_strata_seledit','SELEDIT with stratification','SELEDIT_STRATA',100);
+-- INSERT INTO is2.is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (4,'is2_modest','Valutazione del modello','MODEL',100);
+-- INSERT INTO is2.is2_step_instance (ID, METHOD, DESCR, LABEL, APP_SERVICE_ID) VALUES (5,'is2_selpairs','Generazione Grafico','GRAPH',100);
 
 -- 
 -- PARAMETERS
 -- 
-INSERT INTO is2_parameter (ID, NAME, DESCR, DEFAULT_VAL, JSON_TEMPLATE)  VALUES (101,'MODEL','DATA MODEL',NULL,'{ data: [], schema: { type: array, items: { type: object, properties: { layer: { title: Layer, type: string }, N: { title: N, type: number }, is.conv: { title: conv, type: boolean }, lambda: { title: lambda, type: number }, w: { title: w, type: number }, B: { title: B, type: string }, bic_norm: { title: bic_norm, type: string }, bic_mix: { title: bic_mix, type: string }, aic_norm: { title: aic_norm, type: string }, aic_mix: { title: aic_mix, type: string }, sigma: { title: sigma, type: number } } } }, options: { type: table, showActionsColumn: false }}');
-INSERT INTO is2_parameter (ID, NAME, DESCR, DEFAULT_VAL, JSON_TEMPLATE)  VALUES (102,'INPUT_PARAMETERS','INPUT PARAMETERS',NULL,'{data: [],schema: { properties: {graph: {required: true,title: Graph,description: Activates graphic output,type: number,default: 0,minimum: 0.01,maximum: 10},model: {required: true,title: Model,description: Data Distribution: LN lognormal / N Normal,default: LN},tot: {title: Tot,description: Estimates of originals vector for the target variables},t.sel: {title: t.sel,description: Optional vector of threshold values for selective edinting on the target variables},t.outl: {required: true,title: t.outl,description: Threshold value for posterior probabilities of identifying outliers,type: number,default: 0.05,minimum: 0.01,maximum: 10},eps: {required: true,title: eps,description: Tolerance for the log-likelihood convergence,type: number,default: 0.0000001,minimum: 0.0000001,maximum: 1},lambda.fix: {required: true,title: lambda.fix,description: TRUE if w is known,type: number,default: 0,maximum: 1 },w.fix: {required: true,title: w.fix,description: TRUE if w is known,type: number,default: 0,minimum: 0.01,maximum: 1}},type: object }}');
-INSERT INTO is2_parameter (ID, NAME, DESCR, DEFAULT_VAL, JSON_TEMPLATE)  VALUES (103,'OUTPUT_PARAMETERS','OUTPUT PARAMETERS - INFO REPORT',NULL,NULL);
+INSERT INTO is2.is2_parameter (ID, NAME, DESCR, DEFAULT_VAL, JSON_TEMPLATE)  VALUES (101,'MODEL','DATA MODEL',NULL,'{ data: [], schema: { type: array, items: { type: object, properties: { layer: { title: Layer, type: string }, N: { title: N, type: number }, is.conv: { title: conv, type: boolean }, lambda: { title: lambda, type: number }, w: { title: w, type: number }, B: { title: B, type: string }, bic_norm: { title: bic_norm, type: string }, bic_mix: { title: bic_mix, type: string }, aic_norm: { title: aic_norm, type: string }, aic_mix: { title: aic_mix, type: string }, sigma: { title: sigma, type: number } } } }, options: { type: table, showActionsColumn: false }}');
+INSERT INTO is2.is2_parameter (ID, NAME, DESCR, DEFAULT_VAL, JSON_TEMPLATE)  VALUES (102,'INPUT_PARAMETERS','INPUT PARAMETERS',NULL,'{data: [],schema: { properties: {graph: {required: true,title: Graph,description: Activates graphic output,type: number,default: 0,minimum: 0.01,maximum: 10},model: {required: true,title: Model,description: Data Distribution: LN lognormal / N Normal,default: LN},tot: {title: Tot,description: Estimates of originals vector for the target variables},t.sel: {title: t.sel,description: Optional vector of threshold values for selective edinting on the target variables},t.outl: {required: true,title: t.outl,description: Threshold value for posterior probabilities of identifying outliers,type: number,default: 0.05,minimum: 0.01,maximum: 10},eps: {required: true,title: eps,description: Tolerance for the log-likelihood convergence,type: number,default: 0.0000001,minimum: 0.0000001,maximum: 1},lambda.fix: {required: true,title: lambda.fix,description: TRUE if w is known,type: number,default: 0,maximum: 1 },w.fix: {required: true,title: w.fix,description: TRUE if w is known,type: number,default: 0,minimum: 0.01,maximum: 1}},type: object }}');
+INSERT INTO is2.is2_parameter (ID, NAME, DESCR, DEFAULT_VAL, JSON_TEMPLATE)  VALUES (103,'OUTPUT_PARAMETERS','OUTPUT PARAMETERS - INFO REPORT',NULL,NULL);
  
 -- 
 -- ROLES
 -- 
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (100,'SKIP','N','VARIABILE NON UTILIZZATA',100,1,NULL);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (101,'IDENTIFICATIVO','I','CHIAVE OSSERVAZIONE',1,1,NULL);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (102,'TARGET','Y','VARIABILE DI OGGETTO DI ANALISI',3,1,NULL);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (103,'COVARIATA','X','VARIABILE INDIPENDENTE',4,1,NULL);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (104,'PREDIZIONE','P','VARIABILE DI PREDIZIONE',5,1,NULL);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (105,'OUTLIER','O','FLAG OUTLIER',6,1,NULL);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (106,'PESO','W','PESO CAMPIONARIO',7,1,NULL);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (107,'ERRORI INFLUENTI','E','ERRORE INFLUENTE',10,1,NULL);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (108,'RANKING','R','INFLUENCE RANKING',11,1,NULL);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (109,'OUTPUT','T','VARIABILE DI OUTPUT',20,1,NULL);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (110,'STRATO','S','PARTIZIONAMENTO DEL DATASET',2,1,NULL);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (111,'PARAMETRI','Z','PARAMETRI DI INPUT',997,2,102);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (112,'MODELLO','M','MODELLO DATI',998,2,101);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (113,'SCORE','F','INFLUENCE SCORE',12,1,NULL);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (114,'INFO','G','PARAMETRI OUT - INFO RIEPILOGO',999,2,103);
-INSERT INTO is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (115,'CONVERGENZA','V','VARIABILE DI CONVERGENZA',6,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (100,'SKIP','N','VARIABILE NON UTILIZZATA',100,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (101,'IDENTIFICATIVO','I','CHIAVE OSSERVAZIONE',1,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (102,'TARGET','Y','VARIABILE DI OGGETTO DI ANALISI',3,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (103,'COVARIATA','X','VARIABILE INDIPENDENTE',4,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (104,'PREDIZIONE','P','VARIABILE DI PREDIZIONE',5,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (105,'OUTLIER','O','FLAG OUTLIER',6,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (106,'PESO','W','PESO CAMPIONARIO',7,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (107,'ERRORI INFLUENTI','E','ERRORE INFLUENTE',10,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (108,'RANKING','R','INFLUENCE RANKING',11,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (109,'OUTPUT','T','VARIABILE DI OUTPUT',20,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (110,'STRATO','S','PARTIZIONAMENTO DEL DATASET',2,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (111,'PARAMETRI','Z','PARAMETRI DI INPUT',997,2,102);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (112,'MODELLO','M','MODELLO DATI',998,2,101);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (113,'SCORE','F','INFLUENCE SCORE',12,1,NULL);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (114,'INFO','G','PARAMETRI OUT - INFO RIEPILOGO',999,2,103);
+INSERT INTO is2.is2_app_role (ID, NAME, CODE, DESCR, ORDER_CODE, CLS_DATA_TYPE_ID,PARAMETER_ID) VALUES (115,'CONVERGENZA','V','VARIABILE DI CONVERGENZA',6,1,NULL);
 
 -- 
 -- STEP INSTANCE SIGNATURE
 -- 
 
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (1,1,102,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (2,1,103,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (3,1,105,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (4,1,104,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (5,1,110,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (6,1,111,1,0);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (7,1,112,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (1,1,102,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (2,1,103,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (3,1,105,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (4,1,104,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (5,1,110,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (6,1,111,1,0);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (7,1,112,2,1);
 
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (55,1,115,2,0);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (8,2,102,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (9,2,103,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (10,2,105,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (11,2,104,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (12,2,110,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (13,2,111,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (14,2,112,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (15,3,102,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (17,3,104,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (18,3,110,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (19,3,111,1,0);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (56,3,115,1,0);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (20,3,107,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (21,3,108,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (22,3,113,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (23,4,102,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (24,4,103,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (25,4,111,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (26,4,112,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (27,1,114,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (28,2,114,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (29,3,114,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (30,4,114,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (31,7,111,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (32,7,110,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (33,7,104,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (34,7,105,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (35,7,103,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (36,7,102,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (37,7,114,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (38,9,102,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (39,9,113,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (40,9,114,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (41,9,111,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (42,9,110,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (43,9,104,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (44,9,108,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (45,9,107,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (46,8,114,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (47,8,103,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (48,8,105,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (49,8,104,2,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (50,8,110,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (51,8,111,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (52,8,102,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (53,8,112,1,1);
-INSERT INTO is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (54,8,111,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (55,1,115,2,0);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (8,2,102,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (9,2,103,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (10,2,105,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (11,2,104,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (12,2,110,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (13,2,111,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (14,2,112,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (15,3,102,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (17,3,104,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (18,3,110,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (19,3,111,1,0);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (56,3,115,1,0);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (20,3,107,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (21,3,108,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (22,3,113,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (23,4,102,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (24,4,103,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (25,4,111,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (26,4,112,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (27,1,114,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (28,2,114,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (29,3,114,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (30,4,114,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (31,7,111,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (32,7,110,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (33,7,104,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (34,7,105,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (35,7,103,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (36,7,102,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (37,7,114,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (38,9,102,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (39,9,113,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (40,9,114,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (41,9,111,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (42,9,110,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (43,9,104,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (44,9,108,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (45,9,107,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (46,8,114,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (47,8,103,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (48,8,105,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (49,8,104,2,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (50,8,110,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (51,8,111,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (52,8,102,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (53,8,112,1,1);
+INSERT INTO is2.is2_step_instance_signature (ID, STEP_INSTANCE_ID, APP_ROLE_ID, CLS_TYPE_IO_ID, REQUIRED) VALUES (54,8,111,1,1);
 
 -- 
 --  MANY TO MANY RELATION -> PROCESS_STEP - PROCESS_STEP_INSTANCE
 -- 
-INSERT INTO is2_link_step_instance (PROCESS_STEP_ID,PROCESS_STEP_INSTANCE_ID) VALUES (10,1),(20,2),(30,3),(40,2),(50,4),(25,8),(35,9),(15,7);
+INSERT INTO is2.is2_link_step_instance (PROCESS_STEP_ID,PROCESS_STEP_INSTANCE_ID) VALUES (10,1),(20,2),(30,3),(40,2),(50,4),(25,8),(35,9),(15,7);
 
 -- 
 --  MANY TO MANY RELATION -> BUSINESS_SERVICE - APP_ROLE
 -- 
-INSERT INTO is2_link_business_service_app_role (BUSINESS_SERVICE_ID, APP_ROLE_ID) 
+INSERT INTO is2.is2_link_business_service_app_role (BUSINESS_SERVICE_ID, APP_ROLE_ID) 
 	VALUES (100,100),(100,101),(100,102),(100,103),(100,104),(100,105),(100,106),(100,107),(100,108),(100,109),(100,110),(100,111),(100,112),(100,113),(100,114),(100,115);
 
 
