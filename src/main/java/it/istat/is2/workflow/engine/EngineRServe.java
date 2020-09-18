@@ -237,8 +237,8 @@ public class EngineRServe extends EngineR implements EngineService {
         }
     }
 
-    // @Override
-    public void doActionOld() throws RserveException {
+    @Override
+    public void doAction() throws RserveException {
 
         String fname = stepInstance.getMethod();
         // mlest <- ml.est (workset, y=Y,";
@@ -259,8 +259,8 @@ public class EngineRServe extends EngineR implements EngineService {
         connection.eval(command);
     }
 
-    @Override
-    public void doAction() throws RserveException {
+    //@Override
+    public void doAction_new() throws RserveException {
 
         String fname = stepInstance.getMethod();
         // mlest <- ml.est (workset, y=Y,";
