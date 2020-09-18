@@ -32,6 +32,7 @@ INSERT INTO `is2_process_step` (`ID`, `NAME`, `DESCR`, `LABEL`, `BUSINESS_SERVIC
 -- 
 -- MANY TO MANY RELATION -> BUSINESS_FUNCTION - BUSINESS_PROCESS
 -- 
+INSERT INTO `is2_business_function` (`ID`, `NAME`, `DESCR`, `LABEL`, `ACTIVE`) VALUES (2,	"Selective Editing", "Outlier and Influential errors detection", "SMX",	1);
 INSERT INTO `is2_link_function_process` (`BUSINESS_FUNCTION_ID`, `BUSINESS_PROCESS_ID`) VALUES (2,80);
 
 -- 
