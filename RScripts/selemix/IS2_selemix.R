@@ -239,14 +239,59 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
 
 #funzione stima generica 
 is2_mlest <- function( workset, roles, wsparams=NULL,...) {
-  if(is.null(roles$S)){
-    print('call is2_mlest_nolayer')
-    return (is2_mlest_nolayer(workset, roles, wsparams))
+  
+  #imposta il modello
+  #set_role("models", c("B","sigma","lambda","w","layer") )
+  #set_role("model", c("B","sigma","lambda","w") )
+  n=length(get_role("Y"))
+  if(n>1) set_role("P",list(paste("ypred",seq(1:n),sep=""))) 
+  else set_role("P","ypred")
+  set_role("O","outlier")
+  
+  #init
+  strata <- NULL
+  ws <- workset
+  result <- NULL
+  
+  #system.time(
+  #  if(is.null(roles$S)){
+  #    print('call is2_mlest_nolayer')
+  #    wtf <- (is2_mlest_nolayer(workset, roles, wsparams))
+  #  }
+  #  else
+  #  {	  
+  #    print('call is2_mlest_layer')
+  #    wtf <- (is2_mlest_layer(workset, roles, wsparams))
+  #  }
+  #)
+  
+  #stratification
+  if(!is.null(get_role("S"))) {
+    strata <- as.factor(workset[,roles$S])
+    ws <- split(workset, strata)
   }
-  else
-  {	  print('call is2_mlest_layer')
-    return (is2_mlest_layer(workset, roles, wsparams))
-  }
+  
+  system.time({
+    print('call generic executor')
+    out <- is2.exec(ws, roles, wsparams, "ml.est")
+    model <- get_subset(out, ls=c("B","sigma","lambda","w","layer"))
+    report <- get_subset(out, ls=c("B","sigma","lambda","w"), except=TRUE) 
+    workset_out <- rebuild(get_output(out, strata.len(ws)), workset)
+  })
+  
+  #impostazione dei ruoli di uscita
+  set_role("P",match_var_names(workset_out, "ypred"))
+  set_role("O","outlier" )
+  #set_role("bridge",c("model","report","workset") )
+  
+  result[[IS2_WORKSET_OUT]]     <- workset_out
+  result[[IS2_ROLES_OUT]]       <- lapply(roles, function(item) {item} )
+  result[[IS2_ROLES_GROUP_OUT]] <- NULL
+  result[[IS2_PARAMS_OUT]]      <- list("Contamination Model" = toJSON(model, auto_unbox = TRUE))
+  result[[IS2_REPORT_OUT]]      <- list("Output Parameters" = toJSON(report, auto_unbox = TRUE))
+  result[[IS2_LOG]]             <- NULL
+  
+  return(result)
 }
 
 
@@ -470,3 +515,508 @@ is2_seledit <- function( workset, roles, wsparams=NULL,...) {
   }
 }
 
+#attempt merging IS3
+
+#Load libraries and capabilities
+check_package <- function(i)     
+  #  require returns TRUE invisibly if it was able to load package
+  if( ! require( i , character.only = TRUE ) ){
+    #  If package was not able to be loaded then re-install
+    install.packages( i , dependencies = TRUE )
+    #  Load package after installing
+    require( i , character.only = TRUE )
+  }
+
+
+# Check load and then try/install packages
+check_list <- c("SeleMix" , "jsonlite" , "dplyr", "data.table") 
+lapply(check_list, check_package)
+
+
+library("SeleMix")
+library("jsonlite")
+library("dplyr")
+library("data.table")
+
+#SCRIPT con esecuzione SEQUENZIALE
+#ho eliminato parallel perché su windows mclapply non funziona
+#check_package("parallel")
+#numCores <- detectCores()
+#Per ripristinare la funzionalità parallela su LINUX sostituire lapply(...) con mclapply( ..., mc.cores = numCores)
+
+
+#IS2 Selemix roles per reference
+#1	ID            	I	CHIAVE OSSERVAZIONE
+#2	TARGET			    Y	VARIABILE DI OGGETTO DI ANALISI
+#3	COVARIATA		    X	VARIABILE INDIPENDENTE
+#4	PREDIZIONE			P	VARIABILE DI PREDIZIONE
+#5	OUTLIER			    O	FLAG OUTLIER
+#7	ERRORE			    E	ERRORE INFLUENTE
+#9	OUTPUT			    T	VARIABILE DI OUTPUT
+#10	STRATO			    S	PARTIZIONAMENTO DEL DATASET
+#11	PARAMETRI		    Z	PARAMETRI DI ESERCIZIO
+#12	MODELLO			    M	MODELLO DATI
+#14	REPORT			    G	REPORT
+#15	CONVERGENZA	    V	FLAG CONVERGENZA
+
+
+#[IS2 bridge] Global output variables
+wsparams <- list()
+roles <- list()
+out <- NULL
+
+
+
+#reminder environment should be set by external action.
+
+#questa e' ancora work in progress, ma visto come sta andando, forse non serve se si decide di inviare parametri e ruoli da java tramite get/set
+
+
+set_param <- function( a, b ) { 
+  tryCatch( wsparams[[a]] <<- b ,
+            
+            error=function(cond) {
+              
+              print(cond)
+              return(NA)
+            })
+}
+
+set_role <- function( a, b ) { 
+  tryCatch( roles[[a]] <<- b ,
+            
+            error=function(cond) {
+              
+              print(cond)
+              return(NA)
+            })
+}
+
+#questa pure Ã¨ ancora work in progress
+#serve per settare parametri con struttura complessa
+#diventa inutile se facciamo get/set tramite json e non dobbiamo ricostruire piÃ¹ nulla
+set_model <- function( a, b ) { # set a matrix parameter
+  
+  #to do: migliorare la funzione per il modello. CosÃ¬ Ã¨ troppo generica
+  #warning: propedeutica per y.pred()
+  
+  tryCatch( if(is.matrix(b)) wsparams[[a]] <<-  sapply(b, function (t) {  matrix(as.numeric(t), nrows = length(t), ncols=length(b))}  )
+            #sarebbe meglio dimensionare secondo le dimensioni del target e covar
+            else wsparams[[a]] <<- sapply(b, function(t) {as.numeric(t) })
+            ,
+            
+            error=function(cond) {
+              
+              print(cond)
+              return(NA)
+            })
+}
+
+#get("target") deve restituire la colonna del target
+
+
+get_param <- function( a ) { # ... accepts any arguments
+  out <- NULL
+  try( out <- wsparams[[a]] )
+  return(out)
+  
+}
+
+get_role <- function( a ) { # ... accepts any arguments
+  
+  out <- NULL
+  try( out <- roles[[as.character(a)]] )
+  return(out)
+  
+}
+
+get_var <- function(ws, a ) { # ... accepts any arguments
+  
+  if(!is.data.frame(ws)) lapply(ws, function(t) { t[, roles[[a]] ] })
+  else ws[, roles[[a]]]
+  
+}
+
+
+
+#calcola la nunghezza dei tronconi di una lista di liste e/o data frame
+len <- function(l) {  
+  
+  if(is.list(l)&&!is.data.frame(l)) lapply(l, function(t) {max(unlist(lapply (t, function(p) { length(p) }))) }) 
+  else   length(l)
+}
+
+#work in progress.
+#to do: completamento della gestione dei parametri di ambiente in base a input e ruoli
+set_input <- function( workset, roles, wsparams) { # ... accepts any arguments
+  
+  #set environment dimensions
+  set_param("nrows",nrow(workset))
+  set_param("ncols",ncol(workset))
+  set_param("nx",length(wsparams[["X"]]))
+  set_param("ny",length(wsparams[["Y"]]))
+  strata <<- as.factor(workset[,get_role("S")])
+  
+  
+  #split workset into strata
+  workset <<- split(workset, as.factor(workset[,roles[["S"]]])) #stratificazione dataset
+  wsparams["nstrata"] <<- length(workset) #numero strati = numero troconi del workset
+  
+  #lista delle lunghezze dei tronconi
+  set_param("lenws", lapply(workset, function(t) {max(unlist(lapply (t, function(p) { length(p) }))) }) )
+  
+  
+}
+
+# Desume il numero di righe degli strati dalla lunghezza massima degli oggetti dello strato
+# ATTE: può fallire in caso di strati esigui e presenza di altri parametri multidimensionali nello strato stesso
+strata.len <- function( out) { 
+  
+  #lista di liste
+  #lunghezza dei tronconi di dataset
+  return( lapply(out, function(t) {max(unlist(lapply (t, function(p) { length(p) }))) })  )
+  
+  
+}
+
+#estrae la parte di dataset prevalente per tentare di ricostruire una lista di dataset
+get_output <- function( out, lenws = strata.len(out)) { 
+  
+  outvars <-  lapply(seq_along(lenws), function(p)  {  out[[p]][sapply(out[[p]], function(t) {length(t) == lenws[[p]]  })]  })
+  #outvars <-  as.data.frame(rbindlist(lapply(outvars, as.data.frame),fill=TRUE))
+  return(outvars)
+  
+}
+
+rebuild <- function( out, ws=NULL) { # se viene specificato il dataset di origine, tenta di unirlo al'output
+  #riassembla il dataset completo riunendo prima gli strati in un unico data frame
+  
+  #matrice semplice
+  if(is.matrix(out)) out <- as.data.frame(out)
+  
+  #lista di matrici
+  if(is.list(out)&&(is.matrix(out[[1]]))) { 
+    print("Stratifierd Matricial output")
+    out <- as.data.frame(rbindlist(lapply(out, as.data.frame),use.names=TRUE, fill=TRUE))
+  }
+  
+  #lista di liste
+  if(!is.data.frame(out))  {
+    print("List of list")
+    out <- rbindlist(get_output(out) ,use.names=TRUE, fill = TRUE)
+    
+  } 
+  
+  
+  #E' possibile connettere l'input all'output con merge o rcbind
+  if(!is.null(ws)) { 
+    if(!is.data.frame(ws)) ws <- rbindlist(ws, fill=TRUE, use.names=TRUE)
+    if(length(intersect(names(out),names(ws) ))) {
+      print("merging")
+      out <- merge(ws,out, all.x=TRUE, all.y = TRUE, by=names(ws))} #tenta il merge se ci sono variabili in comune
+    else {
+      print("binding")
+      out <- bind_cols(ws,out) }
+  }
+  
+  return(as.data.frame(out))
+}
+
+get_output_par <- function( out, lenws = strata.len(out)) { 
+  
+  
+  #lenws <- lapply(out, function(t) {length(t[[1]]) })  #lunghezza dei tronconi di dataset in base al primo elemento
+  #outpars <-  lapply(seq_along(lenws), function(p)  {  out[[p]][sapply(out[[p]], function(t) {length(t) != lenws[[p]] })]  })
+  outpars <-  lapply(seq_along(lenws), function(p)  {  out[[p]][sapply(out[[p]], function(t) {length(t) != out[[p]]$nrow })]  })
+  
+  return(outpars)
+}
+
+compact_par <- function(ls) { #combines list of lists with same structure
+  #init
+  tmp <- ls[[1]]
+  l = length(tmp)
+  lapply(seq_along(ls), function(i) { 
+    
+    #combina i componenti per nome
+    #if(i>1) tmp <<- Map(rbind, tmp, ls[[i]])
+    
+    #ATTENZIONE patch temporanea (devo scartare tutti gli elementi incompatibili o rbind non funzionerà)
+    if(i>1&&l==length(ls[[i]])) tmp <<- Map(rbind, tmp, ls[[i]])  
+  })
+  
+  tmp <- as.data.frame(tmp)
+  return(tmp)
+  
+}
+
+
+#parm <- formals(name) #get a list of function input parameters
+#verifica della presenza dei parametri della funzione per evitare errori nel passaggio  
+#rende la lista dei parametri di input compatibile con la signature della funzione fname
+match_function_par <- function( fname, parlist) parlist[intersect(names(parlist), names(formals(fname)))]
+
+#unisce due liste in base ai nomi. 
+#NON TRANSITIVA: Se ci sono due nomi uguali prende quelli di a. 
+union_list <- function( a, b) a[union(names(a), names(b))]
+
+
+
+#cerca i nomi delle variabili (ad es tutte le ypred)
+match_var_names <- function( x, what ) {
+  
+  y<-names(x)
+  res <- y[startsWith(y,what)]
+  
+  if(!length(res)>0) 
+    for(i in x) 
+      if(is.list(i)) res <- match_var_names(i, what) 
+  
+  return(res)
+}
+
+cat_lst <- function( ... ) {
+  l = args()
+  keys <- unique(unlist(lapply(l, names)))
+  setNames(do.call(mapply, c(FUN=c, lapply(l, `[`, keys))), keys)
+}
+
+#stima parallela con stratificazione
+is2.ml.est <- function(workset, roles, params, fname=ml.est) { #temporaneamente inserieco ml.est di default
+  
+  #controllo della lista dei parametri input
+  parlist <- append( list( y = substitute(t[, roles[["Y"]]]), x = substitute(t[, roles[["X"]]]), ypred = substitute(t[, roles[["P"]]]) ), params)
+  
+  #controllo della lista dei parametri input
+  parlist <- match_function_par(fname, parlist)
+  
+  print("Exec funcion ")
+  print(parlist)
+  
+  if(is.null(roles[["S"]])) {
+    
+    #esecuzione non stratificata
+    out <- do.call(fname, list( y=workset[, roles$Y],  x=workset[, roles$X],  unlist(parlist)))
+  }
+  else {
+    
+    #esecuzione stratificata
+    #stratificazione dataset se non gia' eseguita  
+    if(is.data.frame(workset))  workset <- split(workset, as.factor(workset[,roles[["S"]]]))  
+    #out <- lapply(workset, function(t) { fname(y=t[, roles$Y],  x=t[, roles$X], unlist(parlist)) })
+    #out <- lapply(workset, function(t) { fname(y=t[, roles$Y],  x=t[, roles$X], t.outl=get_param("t.outl")  ) })
+    out <- lapply(ws, function(t) {  
+      par <- lapply(parlist, function(item) {if(is.language(item)) as.numeric(eval(item)) else item } )
+      do.call(fname,par,quote = TRUE)
+    })
+    
+  }
+  
+  return(out) #lascia il workset splittato
+  
+}
+
+
+#stima con stratificazione
+is2.sel.edit <- function(workset, roles, params, fname=sel.edit) { #temporaneamente inserieco ml.est di default
+  
+  #print(as.list( match.call() ) ) #lista dei parametri
+  
+  #controllo della lista dei parametri input
+  parlist <- match_function_par(fname, params)
+  
+  if(is.null(roles[["S"]])) {
+    
+    #esecuzione non stratificata
+    print("Stima semplice")
+    out <- do.call(fname, list( y=as.matrix(workset[, roles$Y]),  ypred=as.matrix(workset[, roles$P])))
+  }
+  else {
+    
+    #esecuzione stratificata
+    print("Stima stratificata")
+    if(is.data.frame(workset))  workset <- split(workset, as.factor(workset[,roles[["S"]]]))  #stratificazione dataset se non giÃ  eseguita
+    out <- lapply(workset, function(t) { fname(y=as.matrix(t[, roles$Y]),  ypred=as.matrix(t[, roles$P])) })
+    
+  }
+  
+  return(out) #lascia il workset splittato
+  
+}
+
+
+stratify <- function(dataset, role = NULL) { 
+  
+  if(!is.data.frame(dataset)) return (dataset)
+  else {
+    if(!is.null(role)) return (split(dataset, as.factor(dataset[,role])))
+    else return(list(a=dataset))
+  }
+  
+  
+}
+
+#esecuzione generica (differenzia tra caso stratificato e non)  
+is2.exec.fname <- function(workset, roles, params, fname) { 
+  
+  #i ruoli vanno ridefiniti per poter essere valutati a runtime all'interno della chiamata do.call
+  #fac simile (istruzione non utilizzata, valida solo per reference)
+  parlist <- list( y = substitute(t[, roles[["Y"]]]), x = substitute(t[, roles[["X"]]]), ypred = substitute(t[, roles[["P"]]]))
+  
+  #controllo della lista dei parametri input
+  parlist <- match_function_par(fname, params)
+  
+  if(is.null(roles[["S"]])) {
+    
+    #esecuzione non stratificata
+    print("Esecuzione senza strati")
+    t<-workset
+    parlist <- lapply(parlist3, function(item) {if(is.language(item)) as.numeric(eval(item)) else item } )
+    out <- do.call(fname, parlist)
+  }
+  else {
+    
+    #esecuzione stratificata
+    print("Esecuzione stratificata")
+    
+    if(is.data.frame(workset))  workset <- split(workset, as.factor(workset[,roles[["S"]]]))  #stratificazione dataset se non gia' eseguita
+    out <- lapply(ws, function(t) {  
+      parlist <- lapply(parlist, function(item) {if(is.language(item)) as.numeric(eval(item)) else item } )
+      do.call(fname,parlist,quote = TRUE)
+    })
+    
+  }
+  
+  return(out) #lascia il workset splittato
+  
+}
+
+#esecuzione generica (esegue anche un solo strato o zero come se fosse stratificato)  
+is2.exec <- function(workset, roles, params, fname) { 
+  
+  #i ruoli vanno ridefiniti per poter essere valutati a runtime all'interno della chiamata do.call
+  #fac simile (istruzione di default per la formattazione dri ruoli di input)
+  parlist <- list( y = substitute(t[, roles[["Y"]]]), x = substitute(t[, roles[["X"]]]), ypred = substitute(t[, roles[["P"]]]))
+  
+  #controllo della lista dei parametri input
+  parlist <- match_function_par(fname, append(params,parlist))
+  
+  
+  print("Esecuzione funzione generalizzata")
+  print(parlist)
+  
+  #stratificazione dataset se non gia' eseguita
+  ws <- stratify(workset,roles[["S"]])
+  
+  out <- lapply(seq_along(ws), function(p) {  
+    
+    t <- ws[[p]] #t non è più indice ma l'elemento effettivo
+    n=NROW(t)
+    
+    
+    par <- lapply(parlist, function(item) {if(is.language(item)) as.numeric(eval(item)) else item } )
+    
+    outmp <- tryCatch( 
+      {
+        do.call(fname,par,quote = TRUE)
+      }  
+      , 
+      error=function(cond) {
+        print(paste("Error: layer ",p, " rows:" ,NROW(t) ))
+        print(cond)
+        
+        #return(NULL)
+      })#end tryCatch
+    
+    #try(outmp<-as.data.frame(outmp), silent = TRUE)
+    if(is.matrix(outmp)) outmp <- as.data.frame(outmp)
+    parm = c(outmp[sapply(outmp, function(q) {length(q) != n  })], layer=p, nrow = n )
+    wout = cbind(t,outmp[sapply(outmp, function(q) {length(q) == n  })] )
+    #list(out=wout, par=parm) #produce un alberatura
+    c(wout, parm) #produce una lista di liste
+    
+  }) #end lapply
+  return(out) #lascia il workset splittato
+  
+}
+
+
+#TO DO Analisi dell'OUTPUT ed estrazione dei parametri dalle funzioni di libreria
+
+
+#estrae i parametri di input
+inquire_fname <- function(fname) { 
+  parm <- formals(fname)
+  return(parm)
+  
+}
+
+#estrae i parametri di output [tentative]
+inquire_out <- function(out) {
+  parm <- names(out[[1]])
+  return(parm)
+  
+}
+
+
+#estrae modello e parametri
+get_subset <- function(ws, df=ws, ls=NULL, str=NULL, except = FALSE) {
+  
+  #se si tratta di una lista (di data frame), converte in data frame
+  if(!is.data.frame(ws))   ws <- compact_par(get_output_par(ws, strata.len(df)))
+  
+  #se la lista del subset non è specificata restituisce tutto il data frame
+  if(!is.null(ls)) {
+    #Estrae il subset o la rimanenza secondo i nomi spefificati in ls
+    if(except) ws<-unique(ws[, !names(ws) %in% ls ])
+    else ws<-unique(ws[, names(ws) %in% ls ]) 
+  }
+  
+  #unlist residual nested lists
+  ws <- lapply(ws, function(t) {
+    if(is.list(t)) array(unlist(t), dim=length(t))
+    else t
+  })
+  
+  ws <- as.data.frame(ws)
+  
+  #inserisce lo strato (se presente)
+  if(!is.null(str)) {
+    n <- c(names(ws), paste(get_role("S")))
+    ws <- cbind(ws, tmp=levels(str))
+    names(ws) <- n
+  }
+  
+  return(ws)
+}
+
+
+
+find_duplicates <- function (ws, x) {
+  tryCatch( {
+    n_occur <- data.frame(table(ws[[x]])) #conteggio frequenze
+    n_occur[n_occur$Freq > 1,]                     #freq>1 -> sequenze ripetute
+    return (ws[ws[[x]] %in% n_occur$Var1[n_occur$Freq > 1],]) #estrazione righe con id duplicato
+  },
+  error=function(cond) {
+    print(cond)
+    return(NULL)
+  })#end tryCatch
+  
+}
+
+
+#rewrites write.csv to account for missing columns
+write_csv <- function(x, file, header, f = write.csv, ...){
+  # create and open the file connection
+  datafile <- file(file, open = 'wt')
+  # close on exit 
+  on.exit(close(datafile))
+  # if a header is defined, write it to the file (@CarlWitthoft's suggestion)
+  if(!missing(header)) {
+    writeLines(header,con=datafile, sep='\t')
+    writeLines('', con=datafile, sep='\n')
+  }
+  # write the file using the defined function and required addition arguments  
+  f(x, datafile,...)
+}
