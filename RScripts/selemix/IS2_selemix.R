@@ -37,6 +37,35 @@
 #15	CONVERGENZA	    V	FLAG CONVERGENZA
 
 
+
+
+#Load libraries and capabilities
+check_package <- function(i)     
+  #  require returns TRUE invisibly if it was able to load package
+  if( ! require( i , character.only = TRUE ) ){
+    #  If package was not able to be loaded then re-install
+    install.packages( i , dependencies = TRUE )
+    #  Load package after installing
+    require( i , character.only = TRUE )
+  }
+
+
+# Check load and then try/install packages
+check_list <- c("SeleMix" , "jsonlite" , "dplyr", "data.table") 
+lapply(check_list, check_package)
+print('Packages loaded')
+
+#library("SeleMix")
+#library("jsonlite")
+#library("dplyr")
+#library("data.table")
+
+
+#[IS2 bridge] Global output variables
+wsparams <- list()
+roles <- list()
+out <- NULL
+
 #[IS2 bridge] Global output variables
 IS2_WORKSET_OUT     <- "workset_out"
 IS2_ROLES_OUT       <- "roles_out"
@@ -58,10 +87,16 @@ IS2_SELEMIX_COVARIATE  <- "X"
 IS2_SELEMIX_STRATA     <- "STRATA"
 IS2_SELEMIX_CONVERGENCE <- "CONV"
 
+print('Bridge Set')
 
-library("SeleMix")
-library("jsonlite")
+#########################
+# Model and Prediction 
+########################
 
+#dummy function
+is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
+  return (NULL)
+}
 
 #stima completa con layer
 is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
@@ -240,6 +275,12 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
 #funzione stima generica 
 is2_mlest <- function( workset, roles, wsparams=NULL,...) {
   
+   print('workset')
+  print(workset)
+   print('roles')
+  print(roles)
+   print('wsparams')
+  print(wsparams)
   #imposta il modello
   #set_role("models", c("B","sigma","lambda","w","layer") )
   #set_role("model", c("B","sigma","lambda","w") )
@@ -297,7 +338,7 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
 
 
 #########################
-#editing selettivo 
+# Selective Editing
 ########################
 
 #stima completa con layer
@@ -515,61 +556,9 @@ is2_seledit <- function( workset, roles, wsparams=NULL,...) {
   }
 }
 
-#attempt merging IS3
-
-#Load libraries and capabilities
-check_package <- function(i)     
-  #  require returns TRUE invisibly if it was able to load package
-  if( ! require( i , character.only = TRUE ) ){
-    #  If package was not able to be loaded then re-install
-    install.packages( i , dependencies = TRUE )
-    #  Load package after installing
-    require( i , character.only = TRUE )
-  }
-
-
-# Check load and then try/install packages
-check_list <- c("SeleMix" , "jsonlite" , "dplyr", "data.table") 
-lapply(check_list, check_package)
-
-
-library("SeleMix")
-library("jsonlite")
-library("dplyr")
-library("data.table")
-
-#SCRIPT con esecuzione SEQUENZIALE
-#ho eliminato parallel perché su windows mclapply non funziona
-#check_package("parallel")
-#numCores <- detectCores()
-#Per ripristinare la funzionalità parallela su LINUX sostituire lapply(...) con mclapply( ..., mc.cores = numCores)
-
-
-#IS2 Selemix roles per reference
-#1	ID            	I	CHIAVE OSSERVAZIONE
-#2	TARGET			    Y	VARIABILE DI OGGETTO DI ANALISI
-#3	COVARIATA		    X	VARIABILE INDIPENDENTE
-#4	PREDIZIONE			P	VARIABILE DI PREDIZIONE
-#5	OUTLIER			    O	FLAG OUTLIER
-#7	ERRORE			    E	ERRORE INFLUENTE
-#9	OUTPUT			    T	VARIABILE DI OUTPUT
-#10	STRATO			    S	PARTIZIONAMENTO DEL DATASET
-#11	PARAMETRI		    Z	PARAMETRI DI ESERCIZIO
-#12	MODELLO			    M	MODELLO DATI
-#14	REPORT			    G	REPORT
-#15	CONVERGENZA	    V	FLAG CONVERGENZA
-
-
-#[IS2 bridge] Global output variables
-wsparams <- list()
-roles <- list()
-out <- NULL
-
-
-
-#reminder environment should be set by external action.
-
-#questa e' ancora work in progress, ma visto come sta andando, forse non serve se si decide di inviare parametri e ruoli da java tramite get/set
+#########################
+# IS3 Utilities
+########################
 
 
 set_param <- function( a, b ) { 
@@ -646,27 +635,6 @@ len <- function(l) {
   else   length(l)
 }
 
-#work in progress.
-#to do: completamento della gestione dei parametri di ambiente in base a input e ruoli
-set_input <- function( workset, roles, wsparams) { # ... accepts any arguments
-  
-  #set environment dimensions
-  set_param("nrows",nrow(workset))
-  set_param("ncols",ncol(workset))
-  set_param("nx",length(wsparams[["X"]]))
-  set_param("ny",length(wsparams[["Y"]]))
-  strata <<- as.factor(workset[,get_role("S")])
-  
-  
-  #split workset into strata
-  workset <<- split(workset, as.factor(workset[,roles[["S"]]])) #stratificazione dataset
-  wsparams["nstrata"] <<- length(workset) #numero strati = numero troconi del workset
-  
-  #lista delle lunghezze dei tronconi
-  set_param("lenws", lapply(workset, function(t) {max(unlist(lapply (t, function(p) { length(p) }))) }) )
-  
-  
-}
 
 # Desume il numero di righe degli strati dalla lunghezza massima degli oggetti dello strato
 # ATTE: può fallire in caso di strati esigui e presenza di altri parametri multidimensionali nello strato stesso
@@ -780,6 +748,11 @@ cat_lst <- function( ... ) {
   keys <- unique(unlist(lapply(l, names)))
   setNames(do.call(mapply, c(FUN=c, lapply(l, `[`, keys))), keys)
 }
+
+#########################
+# Rewriting SELEMIX functions
+########################
+
 
 #stima parallela con stratificazione
 is2.ml.est <- function(workset, roles, params, fname=ml.est) { #temporaneamente inserieco ml.est di default
@@ -1020,3 +993,5 @@ write_csv <- function(x, file, header, f = write.csv, ...){
   # write the file using the defined function and required addition arguments  
   f(x, datafile,...)
 }
+
+   print('End laod File')

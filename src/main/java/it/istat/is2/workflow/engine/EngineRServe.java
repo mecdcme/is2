@@ -87,7 +87,7 @@ public class EngineRServe extends EngineR implements EngineService {
         this.fileScriptR = stepInstance.getAppService().getSource();
 
         prepareEnv();
-        createConnection(null, 0);
+        createConnection();
         bindInputColumnsMap(worksetVariables, WORKSET_IN);
         bindInputColumnsParams(parametersMap, PARAMETERS_IN);
         bindInputColumns(rulesetMap, RULESET);
@@ -95,16 +95,16 @@ public class EngineRServe extends EngineR implements EngineService {
 
     }
 
-    private void createConnection(String server, int port) throws RserveException {
+    private void createConnection() throws RserveException {
         // Create a connection to Rserve instance running on default port 6311
-        if (port == 0) {
-            port = 6311;
+        if (serverRPort == 0) {
+        	serverRPort = 6311;
         }
 
-        if (server == null) {
+        if ( serverRHost == null||serverRHost.isEmpty()) {
             connection = new RConnection();
         } else {
-            connection = new RConnection(server, port);
+            connection = new RConnection(serverRHost, serverRPort);
         }
         connection.eval("setwd('" + pathR + "')");
         connection.eval("source('" + fileScriptR + "')");
@@ -173,7 +173,7 @@ public class EngineRServe extends EngineR implements EngineService {
                         try {
                             if (Utility.isNumericR(arrX)) {
                                 connection.eval(key + " <- as.numeric(" + key + ")");
-                                connection.eval("list.append(" + keyW + "," + key);
+                                connection.eval("list.append(" + keyW + "," + key + ")");
                             }
                         } catch (Exception e) {
                             Logger.getRootLogger().error(e.getMessage());
@@ -181,7 +181,7 @@ public class EngineRServe extends EngineR implements EngineService {
 
                     }
                     // engine.eval(keyW + " <- as.numeric(" + key + ")");
-                    connection.eval("list.append(" + varR + "," + keyW);
+                    connection.eval("list.append(" + varR + "," + keyW+ ")");
                 } catch (REngineException e1) {
                     // TODO Auto-generated catch block
                     throw new RuntimeException(e1);
