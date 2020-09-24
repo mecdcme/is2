@@ -154,6 +154,33 @@ public class EngineRServe extends EngineR implements EngineService {
             connection.eval(varR + " <- list()");
 
             worksetIn.forEach((keyW, workset) -> {
+            try {
+              	bindInputColumns(workset, keyW);
+              	//connection.eval("print(str("+keyW+"))");
+              	//connection.eval(varR + "[["+ keyW +"]] <- "+ keyW );
+              	connection.eval(varR + "<- c("+ varR +","+ keyW +")");
+	            } catch (REngineException e1) {
+	                throw new RuntimeException(e1);
+	            }
+            
+            }); // data
+            //connection.eval("as.data.frame("+varR+")");
+            connection.eval(varR+"<-do.call(cbind.data.frame,"+varR+")");
+            connection.eval("print(\"BICol result is:\")");
+            connection.eval("print(str("+varR+"))");
+            // engine.eval(varR + " <- data.frame(" + listaCampi.substring(0,
+            // listaCampi.length() - 1) + ")");
+            // frame
+        }
+    }
+
+    public void bindInputColumnsMap_OLD(Map<String, Map<String, List<String>>> worksetIn, String varR)
+            throws REngineException {
+
+        if (!worksetIn.isEmpty()) {
+            connection.eval(varR + " <- list()");
+
+            worksetIn.forEach((keyW, workset) -> {
 
                 try {
                     connection.eval(keyW + " <- list() ");
@@ -192,7 +219,8 @@ public class EngineRServe extends EngineR implements EngineService {
             // frame
         }
     }
-
+    
+    
     public void bindInputColumnsParams(Map<String, List<String>> workset, String varR) throws REngineException {
 
         if (!workset.isEmpty()) {

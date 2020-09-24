@@ -280,7 +280,7 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
     return(NULL)
   }
   else { print('workset')
-    print(head(workset))
+    #print(head(workset))
      print('roles')
     print(roles)
      print('wsparams')
@@ -884,8 +884,8 @@ is2.exec <- function(workset, roles, params, fname) {
   parlist <- match_function_par(fname, append(params,parlist))
   
   
-  print("Esecuzione funzione generalizzata")
-  print(parlist)
+  #print("Esecuzione funzione generalizzata")
+  #print(parlist)
   
   #stratificazione dataset se non gia' eseguita
   ws <- stratify(workset,roles[["S"]])
@@ -895,9 +895,10 @@ is2.exec <- function(workset, roles, params, fname) {
     t <- ws[[p]] #t non è più indice ma l'elemento effettivo
     n=NROW(t)
     
-    
+    #print("parameter discovery")
     par <- lapply(parlist, function(item) {if(is.language(item)) as.numeric(eval(item)) else item } )
     
+    #print("call funzione ")
     outmp <- tryCatch( 
       {
         do.call(fname,par,quote = TRUE)
@@ -910,12 +911,17 @@ is2.exec <- function(workset, roles, params, fname) {
         #return(NULL)
       })#end tryCatch
     
+    #print("Sistemazione out")
+    
     #try(outmp<-as.data.frame(outmp), silent = TRUE)
     if(is.matrix(outmp)) outmp <- as.data.frame(outmp)
     parm = c(outmp[sapply(outmp, function(q) {length(q) != n  })], layer=p, nrow = n )
     wout = cbind(t,outmp[sapply(outmp, function(q) {length(q) == n  })] )
     #list(out=wout, par=parm) #produce un alberatura
     c(wout, parm) #produce una lista di liste
+    
+    #print("fine ciclo")
+    
     
   }) #end lapply
   return(out) #lascia il workset splittato
