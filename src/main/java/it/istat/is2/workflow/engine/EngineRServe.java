@@ -173,7 +173,7 @@ public class EngineRServe extends EngineR implements EngineService {
                         try {
                             if (Utility.isNumericR(arrX)) {
                                 connection.eval(key + " <- as.numeric(" + key + ")");
-                                connection.eval("list.append(" + keyW + "," + key + ")");
+                                connection.eval("append(" + keyW + "," + key + ")");
                             }
                         } catch (Exception e) {
                             Logger.getRootLogger().error(e.getMessage());
@@ -181,7 +181,7 @@ public class EngineRServe extends EngineR implements EngineService {
 
                     }
                     // engine.eval(keyW + " <- as.numeric(" + key + ")");
-                    connection.eval("list.append(" + varR + "," + keyW+ ")");
+                    connection.eval("append(" + varR + "," + keyW+ ")");
                 } catch (REngineException e1) {
                     // TODO Auto-generated catch block
                     throw new RuntimeException(e1);

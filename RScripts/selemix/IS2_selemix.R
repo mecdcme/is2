@@ -275,12 +275,17 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
 #funzione stima generica 
 is2_mlest <- function( workset, roles, wsparams=NULL,...) {
   
-   print('workset')
-  print(workset)
-   print('roles')
-  print(roles)
-   print('wsparams')
-  print(wsparams)
+  if(length(workset)==0) { 
+    print("empty workset")
+    return(NULL)
+  }
+  else { print('workset')
+    print(head(workset))
+     print('roles')
+    print(roles)
+     print('wsparams')
+    print(wsparams)
+  }
   #imposta il modello
   #set_role("models", c("B","sigma","lambda","w","layer") )
   #set_role("model", c("B","sigma","lambda","w") )
@@ -702,6 +707,10 @@ get_output_par <- function( out, lenws = strata.len(out)) {
 
 compact_par <- function(ls) { #combines list of lists with same structure
   #init
+  if(length(ls)==0) { 
+    print("empty subset")
+    return(NULL)
+  }
   tmp <- ls[[1]]
   l = length(tmp)
   lapply(seq_along(ls), function(i) { 
@@ -935,9 +944,11 @@ inquire_out <- function(out) {
 #estrae modello e parametri
 get_subset <- function(ws, df=ws, ls=NULL, str=NULL, except = FALSE) {
   
+  print("Controllo data list")
   #se si tratta di una lista (di data frame), converte in data frame
   if(!is.data.frame(ws))   ws <- compact_par(get_output_par(ws, strata.len(df)))
   
+  print("Controllo ls")
   #se la lista del subset non è specificata restituisce tutto il data frame
   if(!is.null(ls)) {
     #Estrae il subset o la rimanenza secondo i nomi spefificati in ls
@@ -945,12 +956,14 @@ get_subset <- function(ws, df=ws, ls=NULL, str=NULL, except = FALSE) {
     else ws<-unique(ws[, names(ws) %in% ls ]) 
   }
   
+  print("unlist nested lists")
   #unlist residual nested lists
   ws <- lapply(ws, function(t) {
     if(is.list(t)) array(unlist(t), dim=length(t))
     else t
   })
   
+  print("Adding stratification info")
   ws <- as.data.frame(ws)
   
   #inserisce lo strato (se presente)
@@ -960,6 +973,7 @@ get_subset <- function(ws, df=ws, ls=NULL, str=NULL, except = FALSE) {
     names(ws) <- n
   }
   
+  print("Output formatted successfully")
   return(ws)
 }
 
