@@ -140,7 +140,7 @@ public class EngineRServe extends EngineR implements EngineService {
                 }
 
             }
-            connection.eval(varR + " <- data.frame(" + listaCampi.substring(0, listaCampi.length() - 1) + ")"); // Create
+            connection.eval(varR + " <- data.frame(" + listaCampi.substring(0, listaCampi.length() - 1) + ")"); // Create 
             // a
             // data
             // frame

@@ -94,7 +94,7 @@ print('Bridge Set')
 ########################
 
 #dummy function
-is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
+is2_mlest_layer_nolayer <- function( workset, roles, wsparams=NULL,...) {
   return (NULL)
 }
 
@@ -677,21 +677,29 @@ rebuild <- function( out, ws=NULL) { # se viene specificato il dataset di origin
   if(!is.data.frame(out))  {
     print("List of list")
     out <- rbindlist(get_output(out) ,use.names=TRUE, fill = TRUE)
-    
   } 
   
-  
   #E' possibile connettere l'input all'output con merge o rcbind
-  if(!is.null(ws)) { 
+  if(!is.null(ws)) tryCatch( {
     if(!is.data.frame(ws)) ws <- rbindlist(ws, fill=TRUE, use.names=TRUE)
     if(length(intersect(names(out),names(ws) ))) {
       print("merging")
       out <- merge(ws,out, all.x=TRUE, all.y = TRUE, by=names(ws))} #tenta il merge se ci sono variabili in comune
     else {
       print("binding")
-      out <- bind_cols(ws,out) }
+      if(nrow(ws)==nrow(out)) out <- bind_cols(ws,out)
+      print("bound")
+    }
   }
+  #, 
+  #error=function(cond) {
+  #  print("escape route")
+  #  return(as.data.frame(out1))
+  #}
+  )#end tryCatch 
   
+  print("rebuilt")
+  print(str(out))
   return(as.data.frame(out))
 }
 
@@ -898,7 +906,7 @@ is2.exec <- function(workset, roles, params, fname) {
     #print("parameter discovery")
     par <- lapply(parlist, function(item) {if(is.language(item)) as.numeric(eval(item)) else item } )
     
-    #print("call funzione ")
+    print(paste("Strata #",as.character(p)))
     outmp <- tryCatch( 
       {
         do.call(fname,par,quote = TRUE)
