@@ -4,7 +4,7 @@ checkAndInstall <- function(mypkg){
 
   } 
 
-options(repos = "http://cran.r-project.org")
+options(repos = "https://cran.mirror.garr.it/CRAN/")
 
 print("Loading libraries...")
 
