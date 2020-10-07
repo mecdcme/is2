@@ -51,7 +51,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.renjin.sexp.Vector;
 
-import it.istat.is2.catalogue.relais.bean.OrderBean;
 import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.BusinessProcess;
 import it.istat.is2.workflow.domain.DataTypeCls;
