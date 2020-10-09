@@ -119,7 +119,8 @@ public class RelaisService {
 			throw new IS2Exception(IS2ExceptionCodes.METHOD_NOT_FOUND);
 		final Method method = ReflectionUtils.findMethod(this.getClass(), dRLMethod, Long.class, Map.class, Map.class,
 				Map.class);
-
+		if (method == null)
+			throw new NullPointerException(dRLMethod + " function not Found");
 		Iterator<String> iterator = reductionJSONObject.keys();
 
 		while (iterator.hasNext()) {
