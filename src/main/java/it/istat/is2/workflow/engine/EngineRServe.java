@@ -174,7 +174,7 @@ public class EngineRServe extends EngineR implements EngineService {
         }
     }
 
-    public void bindInputColumnsMap_OLD(Map<String, Map<String, List<String>>> worksetIn, String varR)
+    public void bindInputColumnsMapOLD(Map<String, Map<String, List<String>>> worksetIn, String varR)
             throws REngineException {
 
         if (!worksetIn.isEmpty()) {
@@ -288,7 +288,7 @@ public class EngineRServe extends EngineR implements EngineService {
     }
 
     //@Override
-    public void doAction_new() throws RserveException {
+    public void doActionNew() throws RserveException {
 
         String fname = stepInstance.getMethod();
         // mlest <- ml.est (workset, y=Y,";
