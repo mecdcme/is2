@@ -2,8 +2,6 @@ package it.istat.is2.app.bean;
 
 import java.io.Serializable;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.Data;
 
 @Data
