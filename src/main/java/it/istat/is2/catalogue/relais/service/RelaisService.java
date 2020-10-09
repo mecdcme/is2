@@ -96,21 +96,21 @@ public class RelaisService {
 
 	public Map<?, ?> probabilisticContingencyTable(Long idelaborazione,
 			Map<String, ArrayList<String>> ruoliVariabileNome, Map<String, Map<String, List<String>>> worksetIn,
-			Map<String, String> parametriMap) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, IS2Exception  {
+			Map<String, String> parametriMap) throws IllegalAccessException, InvocationTargetException, IS2Exception {
 
 		return callGenericMethod("pRLContingencyTable", idelaborazione, ruoliVariabileNome, worksetIn, parametriMap);
 	}
-
-	public Map<?, ?> deterministicRecordLinkage(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
-			Map<String, Map<String, List<String>>> worksetIn, Map<String, String> parametriMap) throws Exception {
+	@SuppressWarnings("rawtypes")
+	public Map deterministicRecordLinkage(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+			Map<String, Map<String, List<String>>> worksetIn, Map<String, String> parametriMap)
+			throws IllegalAccessException, InvocationTargetException, IS2Exception {
 
 		return callGenericMethod("dRL", idelaborazione, ruoliVariabileNome, worksetIn, parametriMap);
 	}
-
-	private Map<?, ?> callGenericMethod(String prefixMethod, Long idelaborazione,
+	@SuppressWarnings("rawtypes")
+	private Map callGenericMethod(String prefixMethod, Long idelaborazione,
 			Map<String, ArrayList<String>> ruoliVariabileNome, Map<String, Map<String, List<String>>> worksetIn,
-			Map<String, String> parametriMap) throws IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, IS2Exception, NullPointerException {
+			Map<String, String> parametriMap) throws IllegalAccessException, InvocationTargetException, IS2Exception {
 
 		final String jsonString = parametriMap.get(params_ReductionMethod);
 		final JSONObject reductionJSONObject = new JSONObject(jsonString);
@@ -129,10 +129,10 @@ public class RelaisService {
 			parametriMap.put(keyStr, reductionJSONObject.get(keyStr).toString());
 		}
 
-		return (Map<?, ?>) method.invoke(this, idelaborazione, ruoliVariabileNome, worksetIn, parametriMap);
+		return (Map) method.invoke(this, idelaborazione, ruoliVariabileNome, worksetIn, parametriMap);
 	}
-
-	public Map<?, ?> pRLContingencyTableCartesianProduct(Long idelaborazione,
+	@SuppressWarnings("rawtypes")
+	public Map pRLContingencyTableCartesianProduct(Long idelaborazione,
 			Map<String, List<String>> ruoliVariabileNome, Map<String, Map<String, List<String>>> worksetIn,
 			Map<String, String> parametriMap) throws Exception {
 
@@ -187,7 +187,7 @@ public class RelaisService {
 
 			final Map<String, String> valuesI = new HashMap<>();
 			final Map<String, Integer> contingencyTableIA = contingencyService.getEmptyContingencyTable();
-		
+
 			variabileNomeListMA.forEach(varnameMA -> {
 				valuesI.put(varnameMA, worksetIn.get(codeMatchingA).get(varnameMA).get(innerIA));
 			});
@@ -199,13 +199,13 @@ public class RelaisService {
 
 				String pattern = contingencyService.getPattern(valuesI);
 				contingencyTableIA.put(pattern, contingencyTableIA.get(pattern) + 1);
-		
+
 			});
 			synchronized (contingencyTable) {
 				contingencyTableIA.entrySet().stream().forEach(e -> contingencyTable.put(e.getKey(),
 						contingencyTable.get(e.getKey()) + contingencyTableIA.get(e.getKey())));
 			}
-			});
+		});
 		contingencyTableOut.put(VARIABLE_FREQUENCY, new ArrayList<>());
 
 		contingencyTable.forEach((key, value) -> {
@@ -225,14 +225,15 @@ public class RelaisService {
 		returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
 
 		worksetOut.put(codContingencyTable, contingencyTableOut);
-	
+
 		returnOut.put(EngineService.WORKSET_OUT, worksetOut);
 
 		return returnOut;
 	}
 
 	// parallel blocking
-	public Map<?, ?> pRLContingencyTableBlockingVariables(Long idelaborazione,
+	@SuppressWarnings("rawtypes")
+	public Map pRLContingencyTableBlockingVariables(Long idelaborazione,
 			Map<String, List<String>> ruoliVariabileNome, Map<String, Map<String, List<String>>> worksetIn,
 			Map<String, String> parametriMap) throws Exception {
 
@@ -328,7 +329,7 @@ public class RelaisService {
 				contengencyTableIA.entrySet().stream().forEach(e -> contengencyTable.put(e.getKey(),
 						contengencyTable.get(e.getKey()) + contengencyTableIA.get(e.getKey())));
 			}
-			});
+		});
 		contengencyTableOut.put(VARIABLE_FREQUENCY, new ArrayList<>());
 
 		contengencyTable.forEach((key, value) -> {
@@ -354,15 +355,17 @@ public class RelaisService {
 		return returnOut;
 	}
 
-	public Map<?, ?> probabilisticResultTables(final Long idelaborazione,
+	@SuppressWarnings("rawtypes")
+	public Map probabilisticResultTables(final Long idelaborazione,
 			final Map<String, ArrayList<String>> ruoliVariabileNome,
 			final Map<String, Map<String, List<String>>> worksetIn, final Map<String, String> parametriMap)
-			throws Exception {
+			throws IllegalAccessException, InvocationTargetException, IS2Exception {
 
 		return callGenericMethod("pRLResultTables", idelaborazione, ruoliVariabileNome, worksetIn, parametriMap);
 	}
 
-	public Map<?, ?> pRLResultTablesBlockingVariables(final Long idelaborazione,
+	@SuppressWarnings("rawtypes")
+	public Map pRLResultTablesBlockingVariables(final Long idelaborazione,
 			final Map<String, ArrayList<String>> ruoliVariabileNome,
 			final Map<String, Map<String, List<String>>> worksetInn, final Map<String, String> parametriMap)
 			throws Exception {
@@ -587,7 +590,8 @@ public class RelaisService {
 		return returnOut;
 	}
 
-	public Map<?, ?> pRLResultTablesCartesianProduct(final Long idelaborazione,
+	@SuppressWarnings("rawtypes")
+	public Map pRLResultTablesCartesianProduct(final Long idelaborazione,
 			final Map<String, ArrayList<String>> ruoliVariabileNome,
 			final Map<String, Map<String, List<String>>> worksetInn, final Map<String, String> parametriMap)
 			throws Exception {
@@ -789,7 +793,8 @@ public class RelaisService {
 		return returnOut;
 	}
 
-	public Map<?, ?> pRLResultTablesCartesianProduct_canc(final Long idelaborazione,
+	@SuppressWarnings("rawtypes")
+	public Map pRLResultTablesCartesianProduct_canc(final Long idelaborazione,
 			final Map<String, ArrayList<String>> ruoliVariabileNome,
 			final Map<String, Map<String, List<String>>> worksetInn, final Map<String, String> parametriMap)
 			throws Exception {
@@ -937,9 +942,9 @@ public class RelaisService {
 		return returnOut;
 	}
 
-	public Map<?, ?> probabilisticResultTablesByIndex(Long idelaborazione,
-			Map<String, ArrayList<String>> ruoliVariabileNome, Map<String, Map<String, List<String>>> worksetInn,
-			Map<String, String> parametriMap) throws Exception {
+	@SuppressWarnings("rawtypes")
+	public Map probabilisticResultTablesByIndex(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+			Map<String, Map<String, List<String>>> worksetInn, Map<String, String> parametriMap) throws Exception {
 
 		final Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
 		final Map<String, Map<?, ?>> worksetOut = new LinkedHashMap<>();
@@ -1193,7 +1198,8 @@ public class RelaisService {
 		return resultMatchTable;
 	}
 
-	public Map<?, ?> dRLCartesianProduct(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+	@SuppressWarnings("rawtypes")
+	public Map dRLCartesianProduct(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
 			Map<String, Map<String, List<String>>> worksetInn, Map<String, String> parametriMap) throws Exception {
 
 		final Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
@@ -1281,8 +1287,8 @@ public class RelaisService {
 		return returnOut;
 
 	}
-
-	public Map<?, ?> dRLBlockingVariables(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+	@SuppressWarnings("rawtypes")
+	public Map dRLBlockingVariables(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
 			Map<String, Map<String, List<String>>> worksetInn, Map<String, String> parametriMap) throws Exception {
 
 		final Map<String, Map<?, ?>> returnOut = new LinkedHashMap<>();
