@@ -13,15 +13,21 @@ import java.util.stream.Stream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import it.istat.is2.app.util.IS2Exception;
+import it.istat.is2.app.util.IS2ExceptionCodes;
 import it.istat.is2.catalogue.relais.bean.OrderBean;
 
 public class RelaisUtility {
+
+	private RelaisUtility() {
+		throw new IllegalStateException("RelaisUtility class");
+	}
 
 	private static final String KEY_SEPARATOR = "@_@";
 
 	public static Map<String, List<String>> getEmptyMapByKey(Stream<String> keys, String prefixKey) {
 
-		final Map<String, List<String>> valuesMap = new LinkedHashMap<String, List<String>>();
+		final Map<String, List<String>> valuesMap = new LinkedHashMap<>();
 		keys.forEach(key -> valuesMap.put(prefixKey + key, new ArrayList<>()));
 		return valuesMap;
 	}
@@ -63,7 +69,7 @@ public class RelaisUtility {
 
 	public static String getKeyValues(final Integer index, final Map<String, List<String>> mapValues,
 			final List<String> fieldsBlock) {
-		final StringBuffer keyValues = new StringBuffer();
+		final StringBuilder keyValues = new StringBuilder();
 
 		fieldsBlock.forEach(field -> keyValues.append(mapValues.get(field).get(index)).append(KEY_SEPARATOR));
 
@@ -79,7 +85,7 @@ public class RelaisUtility {
 		return m == null || m.isEmpty();
 	}
 
-	public static List<String> getFieldsInParams(String jsonString, String fieldName) throws Exception {
+	public static List<String> getFieldsInParams(String jsonString, String fieldName) throws IS2Exception {
 		List<String> ret = new ArrayList<>();
 		try {
 			JSONObject jSONObject = new JSONObject(jsonString);
@@ -90,7 +96,7 @@ public class RelaisUtility {
 
 		} catch (Exception e) {
 
-			throw new Exception("Error parsing parameter " + fieldName);
+			throw new IS2Exception(IS2ExceptionCodes.ERROR_PARAMETERS ,"Error parsing parameter " + fieldName);
 		}
 
 		return ret;
@@ -109,8 +115,7 @@ public class RelaisUtility {
 
 		datasetFields.stream().forEach(fields -> {
 			final List<String> valuesOrdered = new ArrayList<>();
-				// indexArraySortedList.forEach(index ->
-			// valuesOrdered.add(mapValues.get(fields).get(index)));
+
 			for (OrderBean indexElement : valuesElements) {
 				valuesOrdered.add(mapValues.get(fields).get(indexElement.getIndex()));
 			}
@@ -119,26 +124,6 @@ public class RelaisUtility {
 		});
 		valuesElements.clear();
 		return mapValues;
-	}
-
-	public static void printNElementsInMapValues(final Map<String, List<String>> mapValues, int nValues) {
-
-		List<String> keys = new ArrayList<>(mapValues.keySet());
-		keys.forEach(key -> {
-			System.out.print(key + ";");
-
-		});
-		System.out.println();
-		int[] position = new int[] { 0 };
-		while (position[0] < nValues) {
-
-			keys.forEach(key -> {
-				System.out.print(mapValues.get(key).get(position[0]) + ";");
-
-			});
-			position[0]++;
-			System.out.println();
-		}
 	}
 
 }
