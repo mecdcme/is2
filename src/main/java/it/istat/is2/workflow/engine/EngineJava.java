@@ -70,13 +70,13 @@ public class EngineJava implements EngineService {
 	private Map<String, AppRole> ruoliAllMap;
 	private Map<String, Map<String, List<String>>> worksetInput;
 	private Map<String, String> parametriMap;
-	private Map<String, Map<?, ?>> worksetOut = new LinkedHashMap<>();
-	private Map<String, Map<?, ?>> parametriOutput = new LinkedHashMap<>();
-	private Map<String, Map<?, ?>> resultOut = new LinkedHashMap<>();
-	private LinkedHashMap<String, ArrayList<String>> ruoliVariabileNome;
+	private Map<String, Map<?, ?>> worksetOut = new HashMap<>();
+	private Map<String, Map<?, ?>> parametriOutput = new HashMap<>();
+	private Map<String, Map<?, ?>> resultOut = new HashMap<>();
+	private Map<String, ArrayList<String>> ruoliVariabileNome;
 
-	private LinkedHashMap<String, ArrayList<String>> ruoliOutputStep = new LinkedHashMap<String, ArrayList<String>>();
-	private HashMap<String, String> ruoliGruppoOutputStep;
+	private Map<String, ArrayList<String>> ruoliOutputStep = new HashMap<String, ArrayList<String>>();
+	private Map<String, String> ruoliGruppoOutputStep;
 
 	public EngineJava() {
 		super();
@@ -115,8 +115,8 @@ public class EngineJava implements EngineService {
 
 		worksetOut = (Map<String, Map<?, ?>>) resultOut.get(WORKSET_OUT);
 		parametriOutput = (Map<String, Map<?, ?>>) resultOut.get(PARAMETERS_OUT);
-		ruoliOutputStep = (LinkedHashMap<String, ArrayList<String>>) resultOut.get(ROLES_OUT);
-		ruoliGruppoOutputStep = (LinkedHashMap<String, String>) resultOut.get(ROLES_GROUP_OUT);
+		ruoliOutputStep = (HashMap<String, ArrayList<String>>) resultOut.get(ROLES_OUT);
+		ruoliGruppoOutputStep = (HashMap<String, String>) resultOut.get(ROLES_GROUP_OUT);
 
 	}
 
