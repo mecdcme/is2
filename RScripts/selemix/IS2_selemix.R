@@ -53,7 +53,7 @@ check_package <- function(i)
 # Check load and then try/install packages
 check_list <- c("SeleMix" , "jsonlite" , "dplyr", "data.table") 
 lapply(check_list, check_package)
-print('Packages loaded')
+#print('Packages loaded')
 
 #library("SeleMix")
 #library("jsonlite")
@@ -87,14 +87,14 @@ IS2_SELEMIX_COVARIATE  <- "X"
 IS2_SELEMIX_STRATA     <- "STRATA"
 IS2_SELEMIX_CONVERGENCE <- "CONV"
 
-print('Bridge Set')
+#print('Bridge Set')
 
 #########################
 # Model and Prediction 
 ########################
 
 #dummy function
-is2_mlest_layer_nolayer <- function( workset, roles, wsparams=NULL,...) {
+is2_mlest_nolayer <- function( workset, roles, wsparams=NULL,...) {
   return (NULL)
 }
 
@@ -103,12 +103,12 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
 
   
   #Output variables
-  result          <- list()
-  workset_out     <- data.frame()
-  roles_out       <- list() 
-  rolesgroup_out  <- list()
-  params_out      <- list()
-  report_out      <- list() 
+  if(!exists("result"))          result <- list()
+  if(!exists("workset_out"))     workset_out <- data.frame()
+  if(!exists("roles_out"))       roles_out <- list() 
+  if(!exists("rolesgroup_out"))  rolesgroup_out  <- list()
+  if(!exists("params_out"))      params_out <- list()
+  if(!exists("report_out"))      report_out <- list() 
   
   #Create log
   stdout <- vector('character')
@@ -138,23 +138,32 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   }
   
   #Set input variables
-  s <- workset[[roles$STRATA]]
+  if( !is.null(get_role("STRATA"))) {
+    print("strata found")
+    s <- workset[[roles$STRATA]]
+  }
+  else{
+    print("strata NOT found")
+    s <- workset
+  }
   layers <- sort(unique(s))
+  n_layers <- length(layers)
   mod <- list()
   outvars<- data.frame()
   predname <- c()
   n_outlier <- 0
   n_layers_conv <- 0
-  n_layers <- length(layers)
+  
+  #print("checkpoint 1")
   
   for(index in 1:length(layers) ){
-    rm(workset_layer)
-    rm(est)
-    rm(x)
-    rm(y)
-    rm(s1)
-    rm(outprediction)
-    rm(predname)
+    if(exists("workset_layer")) rm(workset_layer)
+    if(exists("est")) rm(est)
+    if(exists("x")) rm(x)
+    if(exists("y")) rm(y)
+    if(exists("s1")) rm(s1)
+    if(exists("outprediction")) rm(outprediction)
+    if(exists("predname")) rm(predname)
     
     layer<- as.character(layers[index])
     workset_layer <- workset[workset[roles$STRATA]==layer, , drop = TRUE ]
@@ -174,6 +183,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
     }
     est<-NA
     #Execute ml.est
+    #print("running strata")
     run <- tryCatch(
       {
         est <- ml.est(y=y, x=x, model = model, lambda= as.numeric(lambda), w = as.numeric(w), lambda.fix=lambda.fix, w.fix=w.fix, eps=as.numeric(eps), max.iter=as.numeric(max.iter), t.outl= as.numeric(t.outl), graph=FALSE)
@@ -217,8 +227,8 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
         print(cond)
         return(NA)
       })
-    if(is.na(run)){
-      
+    if(length(run)==0 ){  #& is.na(run)
+      print("n.a detected")
       outvars <- data.frame(matrix(NA, ncol = 3+NCOL(y), nrow = NROW(y)))
       outvars$conv <- rep(FALSE, NROW(y))
       colnames(outvars) <- c(predname,"conv","tau","outlier","pattern")
@@ -230,6 +240,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
     }
   }#for
   
+  #print("output")
   params_out <- list("Contamination Model" = toJSON(mod, auto_unbox = TRUE))
   
   
@@ -243,17 +254,17 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   roles_out [[IS2_SELEMIX_REPORT]]  <- c("Report")
   
   
-  roles_out [[IS2_SELEMIX_COVARIATA]]       <- c(roles$X)
+  roles_out [[IS2_SELEMIX_COVARIATE]]       <- c(roles$X)
   roles_out [[IS2_SELEMIX_TARGET]]          <- c(roles$Y)
-  roles_out [[IS2_SELEMIX_STRATO]]          <- c(roles$STRATA)
-  roles_out [[IS2_SELEMIX_PREDIZIONE]]      <- c(predname)
-  roles_out [[IS2_SELEMIX_CONVERGENZA]]     <- c("conv")
+  roles_out [[IS2_SELEMIX_STRATA]]          <- c(roles$STRATA)
+  roles_out [[IS2_SELEMIX_PREDICTION]]      <- c(predname)
+  roles_out [[IS2_SELEMIX_CONVERGENCE]]     <- c("conv")
   roles_out [[IS2_SELEMIX_OUTPUT_VARIABLES]]<- c(names(outvars))
   
   rolesgroup_out [[IS2_SELEMIX_MODEL]]    <- c(IS2_SELEMIX_MODEL)
   rolesgroup_out [[IS2_SELEMIX_REPORT]]   <- c(IS2_SELEMIX_REPORT)
 
-  rolesgroup_out [[IS2_SELEMIX_PREDIZIONE]] <- c(IS2_SELEMIX_COVARIATA,IS2_SELEMIX_TARGET,IS2_SELEMIX_STRATO,IS2_SELEMIX_PREDIZIONE,IS2_SELEMIX_CONVERGENZA,IS2_SELEMIX_OUTPUT_VARIABLES,IS2_SELEMIX_OUTLIER)
+  rolesgroup_out [[IS2_SELEMIX_PREDICTION]] <- c(IS2_SELEMIX_COVARIATE,IS2_SELEMIX_TARGET,IS2_SELEMIX_STRATA,IS2_SELEMIX_PREDICTION,IS2_SELEMIX_CONVERGENCE,IS2_SELEMIX_OUTPUT_VARIABLES,IS2_SELEMIX_OUTLIER)
   
   #Output
   result[[IS2_WORKSET_OUT]]     <- workset_out
@@ -273,70 +284,86 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
 }
 
 #funzione stima generica 
-is2_mlest <- function( workset, roles, wsparams=NULL,...) {
+ml_est <- function( workset, roles, wsparams=NULL,...) {
   
-  if(length(workset)==0) { 
-    print("empty workset")
-    return(NULL)
-  }
-  else { print('workset')
-    #print(head(workset))
-     print('roles')
-    print(roles)
-     print('wsparams')
-    print(wsparams)
-  }
+  #Create log
+  stdout <- vector('character')
+  #con <- textConnection('stdout', 'wr', local = TRUE)
+  #sink(con)
+  
+  if(length(workset)==0) stop("empty workset")
   #imposta il modello
-  #set_role("models", c("B","sigma","lambda","w","layer") )
-  #set_role("model", c("B","sigma","lambda","w") )
   n=length(get_role("Y"))
-  if(n>1) set_role("P",list(paste("ypred",seq(1:n),sep=""))) 
-  else set_role("P","ypred")
-  set_role("O","outlier")
+  set_role("OUT_PAR", c("n.outlier","is.conv","n.iter","sing","bic.aic", "msg", "model") )
+  set_role("MODEL", c("B","sigma","lambda","w") )
+  
+  
+  #impostazione dei ruoli di uscita
+  predname <-  ifelse(n>1 ,list(paste("YPRED",seq(1:n),sep="")) , set_role("PRED","YPRED"))
+  set_role("OUTLIERS","OUTLIER")
+  set_role("OUTVARS", c("TAU",get_role("OUTLIERS"),"PATTERN") )
+  set_role("MDLOUT","Contamination Model")
+  set_role("REP","Report")
+  set_role("PRED",predname)
+  set_role("CONV","conv")
+  rolesgroup_out <- list( MDLOUT ="MDLOUT", REP = "REP",   PRED = c ("X","Y","STRATA","PRED","CONV","OUTVARS","OUTLIERS"))
+  
   
   #init
   strata <- NULL
-  ws <- workset
   result <- NULL
+  nlayers <- 1
   
-  #system.time(
-  #  if(is.null(roles$S)){
-  #    print('call is2_mlest_nolayer')
-  #    wtf <- (is2_mlest_nolayer(workset, roles, wsparams))
-  #  }
-  #  else
-  #  {	  
-  #    print('call is2_mlest_layer')
-  #    wtf <- (is2_mlest_layer(workset, roles, wsparams))
-  #  }
-  #)
-  
-  #stratification
-  if(!is.null(get_role("S"))) {
-    strata <- as.factor(workset[,roles$S])
-    ws <- split(workset, strata)
-  }
-  
-  system.time({
-    print('call generic executor')
-    out <- is2.exec(ws, roles, wsparams, "ml.est")
-    model <- get_subset(out, ls=c("B","sigma","lambda","w","layer"))
-    report <- get_subset(out, ls=c("B","sigma","lambda","w"), except=TRUE) 
-    workset_out <- rebuild(get_output(out, strata.len(ws)), workset)
-  })
-  
-  #impostazione dei ruoli di uscita
-  set_role("P",match_var_names(workset_out, "ypred"))
-  set_role("O","outlier" )
-  #set_role("bridge",c("model","report","workset") )
-  
+  tryCatch ({
+    #print('call generic executor')
+    tree <- is2_ml_est(workset, roles, wsparams, "ml.est")
+    #print(str(tree))
+    workset_out <- rbindlist( lapply(tree, function(p)  {  #per ogni strato
+       #print(str(p))
+      t <- p$out
+      if(is.list(t)) unlist(t)
+      t <- as.data.frame(t)
+       })  
+    )
+    #print(str(workset_out))
+    model_out <- rbindlist( lapply(tree, function(p)  {  #per ogni strato
+      #print(str(p))
+      t <- p$model
+      if(is.list(t)) unlist(t)
+      t <- as.data.frame(t)
+      
+    })  
+    )
+    #print(str(model_out))
+    report_out <- rbindlist( lapply(tree, function(p)  {  #per ogni strato
+      #print(str(p))
+      t <- p$par
+      if(is.list(t)) unlist(t)
+      t <- as.data.frame(t)
+      
+    })  
+    )
+    #print(str(model_out))
+    
   result[[IS2_WORKSET_OUT]]     <- workset_out
   result[[IS2_ROLES_OUT]]       <- lapply(roles, function(item) {item} )
-  result[[IS2_ROLES_GROUP_OUT]] <- NULL
-  result[[IS2_PARAMS_OUT]]      <- list("Contamination Model" = toJSON(model, auto_unbox = TRUE))
-  result[[IS2_REPORT_OUT]]      <- list("Output Parameters" = toJSON(report, auto_unbox = TRUE))
-  result[[IS2_LOG]]             <- NULL
+  result[[IS2_ROLES_GROUP_OUT]] <- rolesgroup_out
+  result[[IS2_PARAMS_OUT]]      <- list("Contamination Model" = toJSON(model_out, auto_unbox = TRUE))
+  #result[[IS2_PARAMS_OUT]]      <- model_out
+  result[["Strata_Info"]] <- list("Output Parameters" = toJSON(report_out, auto_unbox = TRUE))
+  #result[["Strata_Info"]] <- report_out
+  result[[IS2_REPORT_OUT]]      <- list("Report" =  toJSON( list(
+                                       n.outlier = print(sum(workset_out[workset_out$OUTLIER == 1, "OUTLIER"], na.rm=TRUE))
+                                      ,Layers = get_param("nlayers")
+                                      ,Covergent_layers = get_param("NUM_CONV_LAYERS")
+                                      ) , auto_unbox = TRUE
+                                    ) 
+                                  )
+  result[[IS2_LOG]]             <- stdout
   
+  })
+  print("Execution ended successfully. Result follows:")
+  print(str(result))
   return(result)
 }
 
@@ -375,7 +402,7 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
   
   
   #Set variables
-  s <- workset[[roles$S]]
+  s <- workset[[roles$STRATA]]
   layers <- sort(unique(s))
   n_error <- 0
   predname <- c()
@@ -386,11 +413,11 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
     
     layer <- as.character(layers[index])
     workset_layer <-
-      workset[workset[roles$S] == layer , , drop = TRUE]
+      workset[workset[roles$STRATA] == layer , , drop = TRUE]
     y <- workset_layer[roles$Y]
-    ypred <- workset_layer[roles$P]
-    s1 <- workset_layer[roles$S]
-    out_layer<- workset_layer[roles$O]
+    ypred <- workset_layer[roles$PRED]
+    s1 <- workset_layer[roles$STRATA]
+    out_layer<- workset_layer[roles$OUTLIERS]
     workset_layer_conv <- workset_layer[roles$V]
     nr<-0
     if(NROW(workset_layer_conv)>1) 
@@ -463,7 +490,7 @@ is2_seledit_layer <- function(workset, roles, wsparams = NULL, ...) {
   roles_out      <- list (E = "sel", R = "rank",  F = "global.score")
   rolesgroup_out <- list (E = "E", G = "G")
   
-  roles_out [[IS2_SELEMIX_ERROR]]      <-   c(roles$X,roles$Y, roles$P, roles$S,roles$V, "sel",  "rank", "global.score")
+  roles_out [[IS2_SELEMIX_ERROR]]      <-   c(roles$X,roles$Y, roles$PRED, roles$STRATA,roles$V, "sel",  "rank", "global.score")
   rolesgroup_out [[IS2_SELEMIX_ERROR]] <- c("E", "R","F")
   
   
@@ -532,7 +559,7 @@ is2_seledit_nolayer <- function( workset, roles, wsparams=NULL,...) {
   rolesgroup_out <- list (E="E",G="G")
   
   roles_out [[IS2_SELEMIX_ERROR]]      <- c(roles$X,roles$Y,predname)
-  rolesgroup_out [[IS2_SELEMIX_ERROR]] <- c("P", "O")
+  rolesgroup_out [[IS2_SELEMIX_ERROR]] <- c("PRED", "O")
   
   #Output
   result[[IS2_WORKSET_OUT]]     <- workset_out
@@ -552,7 +579,7 @@ is2_seledit_nolayer <- function( workset, roles, wsparams=NULL,...) {
 
 #editing selettivo generica 
 is2_seledit <- function( workset, roles, wsparams=NULL,...) {
-  if(is.null(roles$S)){
+  if(is.null(roles$STRATA)){
     return (is2_seledit_nolayer(workset, roles, wsparams))
   }
   else
@@ -580,34 +607,11 @@ set_role <- function( a, b ) {
   tryCatch( roles[[a]] <<- b ,
             
             error=function(cond) {
-              
+              print("Set error: ")
               print(cond)
               return(NA)
             })
 }
-
-#questa pure Ã¨ ancora work in progress
-#serve per settare parametri con struttura complessa
-#diventa inutile se facciamo get/set tramite json e non dobbiamo ricostruire piÃ¹ nulla
-set_model <- function( a, b ) { # set a matrix parameter
-  
-  #to do: migliorare la funzione per il modello. CosÃ¬ Ã¨ troppo generica
-  #warning: propedeutica per y.pred()
-  
-  tryCatch( if(is.matrix(b)) wsparams[[a]] <<-  sapply(b, function (t) {  matrix(as.numeric(t), nrows = length(t), ncols=length(b))}  )
-            #sarebbe meglio dimensionare secondo le dimensioni del target e covar
-            else wsparams[[a]] <<- sapply(b, function(t) {as.numeric(t) })
-            ,
-            
-            error=function(cond) {
-              
-              print(cond)
-              return(NA)
-            })
-}
-
-#get("target") deve restituire la colonna del target
-
 
 get_param <- function( a ) { # ... accepts any arguments
   out <- NULL
@@ -624,15 +628,6 @@ get_role <- function( a ) { # ... accepts any arguments
   
 }
 
-get_var <- function(ws, a ) { # ... accepts any arguments
-  
-  if(!is.data.frame(ws)) lapply(ws, function(t) { t[, roles[[a]] ] })
-  else ws[, roles[[a]]]
-  
-}
-
-
-
 #calcola la nunghezza dei tronconi di una lista di liste e/o data frame
 len <- function(l) {  
   
@@ -642,7 +637,7 @@ len <- function(l) {
 
 
 # Desume il numero di righe degli strati dalla lunghezza massima degli oggetti dello strato
-# ATTE: può fallire in caso di strati esigui e presenza di altri parametri multidimensionali nello strato stesso
+# ATTE: puo' fallire in caso di strati esigui e presenza di altri parametri multidimensionali nello strato stesso
 strata.len <- function( out) { 
   
   #lista di liste
@@ -669,37 +664,37 @@ rebuild <- function( out, ws=NULL) { # se viene specificato il dataset di origin
   
   #lista di matrici
   if(is.list(out)&&(is.matrix(out[[1]]))) { 
-    print("Stratifierd Matricial output")
+    #print("Stratifierd Matricial output")
     out <- as.data.frame(rbindlist(lapply(out, as.data.frame),use.names=TRUE, fill=TRUE))
   }
   
   #lista di liste
   if(!is.data.frame(out))  {
-    print("List of list")
+    #print("List of list")
     out <- rbindlist(get_output(out) ,use.names=TRUE, fill = TRUE)
   } 
   
-  #E' possibile connettere l'input all'output con merge o rcbind
-  if(!is.null(ws)) tryCatch( {
-    if(!is.data.frame(ws)) ws <- rbindlist(ws, fill=TRUE, use.names=TRUE)
-    if(length(intersect(names(out),names(ws) ))) {
-      print("merging")
-      out <- merge(ws,out, all.x=TRUE, all.y = TRUE, by=names(ws))} #tenta il merge se ci sono variabili in comune
-    else {
-      print("binding")
-      if(nrow(ws)==nrow(out)) out <- bind_cols(ws,out)
-      print("bound")
-    }
-  }
-  #, 
-  #error=function(cond) {
-  #  print("escape route")
-  #  return(as.data.frame(out1))
-  #}
-  )#end tryCatch 
+  # #E' possibile connettere l'input all'output con merge o rcbind
+  # if(!is.null(ws)) tryCatch( {
+  #   if(!is.data.frame(ws)) ws <- rbindlist(ws, fill=TRUE, use.names=TRUE)
+  #   if(length(intersect(names(out),names(ws) ))) {
+  #     #print("merging")
+  #     out <- merge(ws,out, all.x=TRUE, all.y = TRUE, by=unique(names(ws)))} #tenta il merge se ci sono variabili in comune
+  #   else {
+  #     #print("binding")
+  #     if(nrow(ws)==nrow(out)) out <- bind_cols(ws,out)
+  #     #print("bound")
+  #   }
+  # }
+  # #, 
+  # #error=function(cond) {
+  # #  print("escape route")
+  # #  return(as.data.frame(out1))
+  # #}
+  # )#end tryCatch 
   
-  print("rebuilt")
-  print(str(out))
+  #print("rebuilt")
+  #print(str(out))
   return(as.data.frame(out))
 }
 
@@ -716,8 +711,7 @@ get_output_par <- function( out, lenws = strata.len(out)) {
 compact_par <- function(ls) { #combines list of lists with same structure
   #init
   if(length(ls)==0) { 
-    print("empty subset")
-    return(NULL)
+    stop("empty subset")
   }
   tmp <- ls[[1]]
   l = length(tmp)
@@ -726,7 +720,7 @@ compact_par <- function(ls) { #combines list of lists with same structure
     #combina i componenti per nome
     #if(i>1) tmp <<- Map(rbind, tmp, ls[[i]])
     
-    #ATTENZIONE patch temporanea (devo scartare tutti gli elementi incompatibili o rbind non funzionerà)
+    #ATTENZIONE patch temporanea (devo scartare tutti gli elementi incompatibili o rbind non funzionerï¿½)
     if(i>1&&l==length(ls[[i]])) tmp <<- Map(rbind, tmp, ls[[i]])  
   })
   
@@ -744,8 +738,6 @@ match_function_par <- function( fname, parlist) parlist[intersect(names(parlist)
 #unisce due liste in base ai nomi. 
 #NON TRANSITIVA: Se ci sono due nomi uguali prende quelli di a. 
 union_list <- function( a, b) a[union(names(a), names(b))]
-
-
 
 #cerca i nomi delle variabili (ad es tutte le ypred)
 match_var_names <- function( x, what ) {
@@ -775,15 +767,15 @@ cat_lst <- function( ... ) {
 is2.ml.est <- function(workset, roles, params, fname=ml.est) { #temporaneamente inserieco ml.est di default
   
   #controllo della lista dei parametri input
-  parlist <- append( list( y = substitute(t[, roles[["Y"]]]), x = substitute(t[, roles[["X"]]]), ypred = substitute(t[, roles[["P"]]]) ), params)
+  parlist <- append( list( y = substitute(t[, roles[["Y"]]]), x = substitute(t[, roles[["X"]]]), ypred = substitute(t[, roles[["PRED"]]]) ), params)
   
   #controllo della lista dei parametri input
   parlist <- match_function_par(fname, parlist)
   
-  print("Exec funcion ")
-  print(parlist)
+  #print("Exec funcion ")
+  #print(parlist)
   
-  if(is.null(roles[["S"]])) {
+  if(is.null(roles[["STRATA"]])) {
     
     #esecuzione non stratificata
     out <- do.call(fname, list( y=workset[, roles$Y],  x=workset[, roles$X],  unlist(parlist)))
@@ -792,7 +784,7 @@ is2.ml.est <- function(workset, roles, params, fname=ml.est) { #temporaneamente 
     
     #esecuzione stratificata
     #stratificazione dataset se non gia' eseguita  
-    if(is.data.frame(workset))  workset <- split(workset, as.factor(workset[,roles[["S"]]]))  
+    if(is.data.frame(workset))  workset <- split(workset, as.factor(workset[,roles[["STRATA"]]]))  
     #out <- lapply(workset, function(t) { fname(y=t[, roles$Y],  x=t[, roles$X], unlist(parlist)) })
     #out <- lapply(workset, function(t) { fname(y=t[, roles$Y],  x=t[, roles$X], t.outl=get_param("t.outl")  ) })
     out <- lapply(ws, function(t) {  
@@ -815,18 +807,18 @@ is2.sel.edit <- function(workset, roles, params, fname=sel.edit) { #temporaneame
   #controllo della lista dei parametri input
   parlist <- match_function_par(fname, params)
   
-  if(is.null(roles[["S"]])) {
+  if(is.null(roles[["STRATA"]])) {
     
     #esecuzione non stratificata
     print("Stima semplice")
-    out <- do.call(fname, list( y=as.matrix(workset[, roles$Y]),  ypred=as.matrix(workset[, roles$P])))
+    out <- do.call(fname, list( y=as.matrix(workset[, roles$Y]),  ypred=as.matrix(workset[, roles$PRED])))
   }
   else {
     
     #esecuzione stratificata
     print("Stima stratificata")
-    if(is.data.frame(workset))  workset <- split(workset, as.factor(workset[,roles[["S"]]]))  #stratificazione dataset se non giÃ  eseguita
-    out <- lapply(workset, function(t) { fname(y=as.matrix(t[, roles$Y]),  ypred=as.matrix(t[, roles$P])) })
+    if(is.data.frame(workset))  workset <- split(workset, as.factor(workset[,roles[["STRATA"]]]))  #stratificazione dataset se non giÃ  eseguita
+    out <- lapply(workset, function(t) { fname(y=as.matrix(t[, roles$Y]),  ypred=as.matrix(t[, roles$PRED])) })
     
   }
   
@@ -835,15 +827,28 @@ is2.sel.edit <- function(workset, roles, params, fname=sel.edit) { #temporaneame
 }
 
 
-stratify <- function(dataset, role = NULL) { 
+stratify <- function(dataset, role = get_role("STRATA")) { 
   
+  if(is.null(role)) {
+    print(paste("STRATA NOT detected: "))
+    return(list(a=dataset))
+  }else {
+    ws <- split(dataset, as.factor(dataset[,role]))
+    set_param("nlayers", nlayers <- length(ws))
+    print(paste("STRATA detected: ",role," with ",nlayers," layers"))
+    return(ws)
+  }
+}
+
+
+
+stratify_old <- function(dataset, role = NULL) { 
+
   if(!is.data.frame(dataset)) return (dataset)
   else {
     if(!is.null(role)) return (split(dataset, as.factor(dataset[,role])))
     else return(list(a=dataset))
   }
-  
-  
 }
 
 #esecuzione generica (differenzia tra caso stratificato e non)  
@@ -851,12 +856,12 @@ is2.exec.fname <- function(workset, roles, params, fname) {
   
   #i ruoli vanno ridefiniti per poter essere valutati a runtime all'interno della chiamata do.call
   #fac simile (istruzione non utilizzata, valida solo per reference)
-  parlist <- list( y = substitute(t[, roles[["Y"]]]), x = substitute(t[, roles[["X"]]]), ypred = substitute(t[, roles[["P"]]]))
+  parlist <- list( y = substitute(t[, roles[["Y"]]]), x = substitute(t[, roles[["X"]]]), ypred = substitute(t[, roles[["PRED"]]]))
   
   #controllo della lista dei parametri input
   parlist <- match_function_par(fname, params)
   
-  if(is.null(roles[["S"]])) {
+  if(is.null(roles[["STRATA"]])) {
     
     #esecuzione non stratificata
     print("Esecuzione senza strati")
@@ -869,7 +874,7 @@ is2.exec.fname <- function(workset, roles, params, fname) {
     #esecuzione stratificata
     print("Esecuzione stratificata")
     
-    if(is.data.frame(workset))  workset <- split(workset, as.factor(workset[,roles[["S"]]]))  #stratificazione dataset se non gia' eseguita
+    if(is.data.frame(workset))  workset <- split(workset, as.factor(workset[,roles[["STRATA"]]]))  #stratificazione dataset se non gia' eseguita
     out <- lapply(ws, function(t) {  
       parlist <- lapply(parlist, function(item) {if(is.language(item)) as.numeric(eval(item)) else item } )
       do.call(fname,parlist,quote = TRUE)
@@ -886,7 +891,7 @@ is2.exec <- function(workset, roles, params, fname) {
   
   #i ruoli vanno ridefiniti per poter essere valutati a runtime all'interno della chiamata do.call
   #fac simile (istruzione di default per la formattazione dri ruoli di input)
-  parlist <- list( y = substitute(t[, roles[["Y"]]]), x = substitute(t[, roles[["X"]]]), ypred = substitute(t[, roles[["P"]]]))
+  parlist <- list( y = substitute(t[, roles[["Y"]]]), x = substitute(t[, roles[["X"]]]), ypred = substitute(t[, roles[["PRED"]]]))
   
   #controllo della lista dei parametri input
   parlist <- match_function_par(fname, append(params,parlist))
@@ -896,11 +901,11 @@ is2.exec <- function(workset, roles, params, fname) {
   #print(parlist)
   
   #stratificazione dataset se non gia' eseguita
-  ws <- stratify(workset,roles[["S"]])
+  ws <- stratify(workset,roles[["STRATA"]])
   
   out <- lapply(seq_along(ws), function(p) {  
     
-    t <- ws[[p]] #t non è più indice ma l'elemento effettivo
+    t <- ws[[p]] #t non ï¿½ piï¿½ indice ma l'elemento effettivo
     n=NROW(t)
     
     #print("parameter discovery")
@@ -936,21 +941,109 @@ is2.exec <- function(workset, roles, params, fname) {
   
 }
 
-
-#TO DO Analisi dell'OUTPUT ed estrazione dei parametri dalle funzioni di libreria
-
-
-#estrae i parametri di input
-inquire_fname <- function(fname) { 
-  parm <- formals(fname)
-  return(parm)
+#esecuzione generica (esegue anche un solo strato o zero come se fosse stratificato)  
+is2_ml_est <- function(workset, roles, params, fname="ml.est") { 
   
-}
-
-#estrae i parametri di output [tentative]
-inquire_out <- function(out) {
-  parm <- names(out[[1]])
-  return(parm)
+  #i ruoli vanno ridefiniti per poter essere valutati a runtime all'interno della chiamata do.call
+  #fac simile (istruzione di default per la formattazione dri ruoli di input)
+  parlist <- list( y = substitute(t[, roles[["Y"]]]), x = substitute(t[, roles[["X"]]]), ypred = substitute(t[, roles[["PRED"]]]))
+  #controllo della lista dei parametri input
+  parlist <- match_function_par(fname, append(params,parlist))
+  
+  
+  #print("Esecuzione funzione generalizzata")
+  #print(parlist)
+  
+  #prapare new columns and counters
+  workset$layer <- 0
+  workset$nrows <- 0
+  workset$conv <- FALSE
+  
+  conv_layers <- 0
+  
+  #stratificazione dataset se non gia' eseguita
+  #print("Stratificazione")
+  ws <- stratify(workset)
+  wm <- list()
+  wr <- list()
+  
+  print("Esecuzione funzione")
+  out <- lapply(seq_along(ws), function(p) {  
+    
+    t <- ws[[p]] #t non ï¿½ piï¿½ indice ma l'elemento effettivo
+    t$nrows <- nr <- NROW(t)
+    t$layer <- as.character(p)
+    strata <- get_role("STRATA")
+    strataval <- ifelse(!is.null(strata), unique(t[,strata]), "" )
+    #print("parameter discovery")
+    par <- lapply(parlist, function(item) {if(is.language(item)) as.numeric(eval(item)) else item } )
+    
+    print(paste("Strata #",as.character(p)," nrows = ", nr))
+    tryCatch( 
+      {
+        tmp <- do.call(fname,par,quote = TRUE)
+        
+        # print(names(tmp))
+        # print(c(get_role("PRED"),get_role("OUTVARS")))
+        t$conv <- tmp$is.conv 
+        if(tmp$is.conv) conv_layers <- conv_layers+1
+        t$YPRED <- tmp$ypred
+        t$TAU <- tmp$tau
+        t$PATTERN <- tmp$pattern
+        t$OUTLIER <- tmp$outlier
+        #sistemazione modello dati
+        m <- list()
+        m$B <- tmp$B      
+        m$sigma <- tmp$sigma
+        m$lambda <- tmp$lambda
+        m$w <- tmp$w
+        m$strata <- strataval
+        wm <- c(wm,m)
+        #sistemazione report
+        r <- list()
+        r$n.outlier <- tmp$n.outlier
+        r$is.conv <-  tmp$is.conv
+        r$n.iter <- tmp$n.iter
+        r$sing <- tmp$sing
+        r$bic.aic <- tmp$bic.aic
+        r$msg <- tmp$msg
+        r$model <- tmp$model
+        r$strata <- strataval
+        wr <- c(wr,r)
+      }  
+      , 
+      error=function(cond) {
+        t$YPRED = NA
+        t$TAU = NA
+        t$PATTERN = NA
+        t$OUTLIER = NA
+        
+        # m <- list()
+        # m$B <- tmp$B      
+        # m$sigma <- tmp$sigma
+        # m$lambda <- tmp$lambda
+        # m$w <- tmp$w
+        # r <- list()
+        # r$outlier <- tmp$outlier 
+        # r$n.outlier <- tmp$n.outlier
+        # r$pattern <- tmp$pattern
+        # r$is.conv <-  tmp$is.conv
+        # r$n.iter <- tmp$n.iter
+        # r$sing <- tmp$sing
+        # r$bic.aic <- tmp$bic.aic
+        # r$msg <- tmp$msg
+        # r$model <- tmp$model
+        # wm <- c(wm,m)
+        # wr <- c(wr,r)
+        
+        #print(paste("Error: layer ",p, " rows:" ,NROW(t) ))
+        print(cond)
+      })#end tryCatch
+    
+    list(out=t, par=wr, model=wm) #produce un alberatura
+  }) #end lapply
+  set_param("NUM_CONV_LAYERS", conv_layers)
+  return(out) #lascia il workset splittato
   
 }
 
@@ -958,40 +1051,38 @@ inquire_out <- function(out) {
 #estrae modello e parametri
 get_subset <- function(ws, df=ws, ls=NULL, str=NULL, except = FALSE) {
   
-  print("Controllo data list")
+  #print("Controllo data list")
   #se si tratta di una lista (di data frame), converte in data frame
   if(!is.data.frame(ws))   ws <- compact_par(get_output_par(ws, strata.len(df)))
   
-  print("Controllo ls")
-  #se la lista del subset non è specificata restituisce tutto il data frame
+  #print("Controllo ls")
+  #se la lista del subset non ï¿½ specificata restituisce tutto il data frame
   if(!is.null(ls)) {
     #Estrae il subset o la rimanenza secondo i nomi spefificati in ls
     if(except) ws<-unique(ws[, !names(ws) %in% ls ])
     else ws<-unique(ws[, names(ws) %in% ls ]) 
   }
   
-  print("unlist nested lists")
+  #print("unlist nested lists")
   #unlist residual nested lists
   ws <- lapply(ws, function(t) {
     if(is.list(t)) array(unlist(t), dim=length(t))
     else t
   })
   
-  print("Adding stratification info")
+  #print("Adding stratification info")
   ws <- as.data.frame(ws)
   
   #inserisce lo strato (se presente)
   if(!is.null(str)) {
-    n <- c(names(ws), paste(get_role("S")))
+    n <- c(names(ws), paste(get_role("STRATA")))
     ws <- cbind(ws, tmp=levels(str))
     names(ws) <- n
   }
   
-  print("Output formatted successfully")
+  #print("Output formatted successfully")
   return(ws)
 }
-
-
 
 find_duplicates <- function (ws, x) {
   tryCatch( {
@@ -1022,4 +1113,4 @@ write_csv <- function(x, file, header, f = write.csv, ...){
   f(x, datafile,...)
 }
 
-   print('End laod File')
+#print('End of File')
