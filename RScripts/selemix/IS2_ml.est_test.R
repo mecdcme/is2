@@ -33,7 +33,7 @@ set_param("model","LN")
 
 #esecuzione stratificazione
 system.time(
-  out <- ml_est(workset, roles, wsparams)
+  out <-is2_mlest(workset, roles, wsparams)
 )
 #output file dati
 #write.csv2(out, "output.csv", row.names=FALSE)

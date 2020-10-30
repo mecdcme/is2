@@ -163,8 +163,8 @@ public class EngineRServe extends EngineR implements EngineService {
             
             }); 
             connection.eval(varR+"<-do.call(cbind.data.frame,"+varR+")");
-            connection.eval("print(\"BICol result is:\")");
-            connection.eval("print(str("+varR+"))");
+            //connection.eval("print(\"BICol result is:\")");
+            //connection.eval("print(str("+varR+"))");
          }
     }
 
@@ -579,7 +579,7 @@ public class EngineRServe extends EngineR implements EngineService {
             if (ruoloGruppo == null) {
                 ruoloGruppo = ROLE_DEFAULT;
             }
-            AppRole sxRuolo = rolesMap.get(ruolo);
+            AppRole sxRuolo = rolesMap.get(ruolo) != null ? rolesMap.get(ruolo) : rolesMap.get(ROLE_DEFAULT);
             AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
 
             stepRuntime = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
