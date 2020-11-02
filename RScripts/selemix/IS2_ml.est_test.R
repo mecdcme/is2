@@ -7,7 +7,7 @@ setwd("D:/Eclipse/git/is2/RScripts/selemix") #impostate la directory di lavoro
 debugSource('is2_selemix.r')
 
 
-set<-1
+set<-0
 #simul azione input ruoli
 if(set==0) {
   #simulazione input workset
@@ -47,3 +47,5 @@ parameters <- out$Strata_Info
 #nrow(workset[workset$tau > get_param("t.outl"), ]) #809 (prende anche gli NA)
 #print(sum(workset[, "outlier"], na.rm=FALSE)) 
 #nrow(unique(workset[is.na(workset$layer), c("Gruppi","layer")]))
+
+close_log()

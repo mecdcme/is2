@@ -22,6 +22,25 @@
 #  @version 1.0.0
 #
 
+#
+init_log <- function() {
+  con <- file("log.txt")
+  sink(con, append=TRUE)
+  sink(con, append=TRUE, type="message")
+}
+close_log <- function() {
+  # Restore output to console
+  if(exists("con"))
+  {
+    sink() 
+    sink(type="message")
+  
+    # And look at the log...
+    close(con)
+    cat(readLines("test.log"), sep="\n")
+  }
+}
+#init_log()
 
 
 #Load libraries and capabilities
@@ -98,7 +117,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
   #Create log
   stdout <- vector('character')
   con <- textConnection('stdout', 'wr', local = TRUE)
-  #sink(con)
+  sink(con)
   
   #Set default parameters
   model="LN"
@@ -272,7 +291,7 @@ is2_mlest_layer <- function( workset, roles, wsparams=NULL,...) {
 is2_mlest <- function( workset, roles, wsparams=NULL,...) {
   
   #Create log
-  stdout <- vector('character')
+  #stdout <- vector('character')
   #con <- textConnection('stdout', 'wr', local = TRUE)
   #sink(con)
   
@@ -302,8 +321,9 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
   workset$layer <- 0
   workset$nrows <- 0
   workset$conv <- FALSE
-  workset <- stratify(workset,roles$STRATA)
   nlayers <- 1
+  workset <- stratify(workset,roles$STRATA)
+  
   
   tryCatch ({
     #print('call generic executor')
@@ -315,7 +335,7 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
       if(is.list(t)) unlist(t)
       t <- as.data.frame(t)
        })  
-    )
+    ,fill=TRUE)
     #print(str(workset_out))
     model_out <- rbindlist( lapply(tree, function(p)  {  #per ogni strato
       #print(str(p))
@@ -324,7 +344,7 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
       t <- as.data.frame(t)
       
     })  
-    )
+    ,fill=TRUE)
     #print(str(model_out))
     par_out <- rbindlist( lapply(tree, function(p)  {  #per ogni strato
       #print(str(p))
@@ -333,7 +353,7 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
       t <- as.data.frame(t)
       
     })  
-    )
+    ,fill=TRUE)
     #print(str(model_out))
     
     #temporaneo, tolgo modello e par out
@@ -383,7 +403,9 @@ is2_mlest <- function( workset, roles, wsparams=NULL,...) {
   
   })
   print("Execution ended successfully. Result follows:")
-  print(str(result))
+  #print(str(result))
+  #sink(con)
+  #close(con)
   return(result)
 }
 
@@ -812,14 +834,16 @@ is2_sel_edit <- function(workset, roles, params, fname=sel.edit) { #temporaneame
 
 
 stratify <- function(dataset, role = get_role("STRATA")) { 
-  print(cat("Stratify by ",role))
+  #print(cat("Stratify by ",role))
 	print("--------------------------")
   if(is.null(role)) {
     print(paste("Stratify::STRATA NOT detected: "))
+    set_param("nlayers", 1)
     return(list(a=dataset))
   }else {
     ws <- split(dataset, as.factor(dataset[,role]))
-    set_param("nlayers", nlayers <- length(ws))
+    nlayers <- length(ws)
+    set_param("nlayers", nlayers)
     print(paste("STRATA detected: ",role," with ",nlayers," layers"))
     return(ws)
   }
@@ -849,8 +873,13 @@ is2_ml_est <- function(ws, roles, params, fname="ml.est") {
   
   #stratificazione dataset se non gia' eseguita
   #print("Stratificazione")
-  print( roles$STRATA )
+  #print( roles$STRATA )
   #ws <- stratify(workset)
+  if(is.null(roles$STRATA)&&is.data.frame(ws)) {
+    print( "Reseting strata to full dataset" ) 
+    ws <- list(a=ws)
+    set_param("nlayer",nlayers <- 1)
+  }
   
   #TEMPORANEO (riduce gli strati)
   # ws[3:length(ws)] <- NULL
