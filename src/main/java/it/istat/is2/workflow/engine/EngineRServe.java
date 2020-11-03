@@ -113,7 +113,7 @@ public class EngineRServe extends EngineR implements EngineService {
 
     public void closeConnection() {
         if (connection != null) {
-            connection.close();
+        	connection.close();
         }
     }
 
@@ -231,7 +231,8 @@ public class EngineRServe extends EngineR implements EngineService {
             }
 
             listaCampi = listaCampi.substring(0, listaCampi.length() - 1);
-
+            //bisogna ritornare i campi da json altrimenti esplode qui
+            //connection.eval(varR + " <- list(" + listaCampi + ")");
             connection.eval(varR + " <- list(" + listaCampi + ")");
         }
     }
@@ -277,7 +278,7 @@ public class EngineRServe extends EngineR implements EngineService {
         command = command.substring(0, command.length() - 1);
         command += ")";
         Logger.getRootLogger().debug("Eseguo " + command);
-
+        
         connection.eval(command);
     }
 
@@ -535,8 +536,8 @@ public class EngineRServe extends EngineR implements EngineService {
                 ruoloGruppo = ROLE_DEFAULT;
             }
             AppRole sxRuolo = rolesMap.get(ruolo) != null ? rolesMap.get(ruolo) : rolesMap.get(ROLE_DEFAULT);
-            AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
-
+            AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo) != null ? rolesMap.get(ruoloGruppo) : rolesMap.get(ROLE_DEFAULT);
+            
             stepRuntime = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
 
             if (stepRuntime != null) { // update
@@ -580,8 +581,8 @@ public class EngineRServe extends EngineR implements EngineService {
                 ruoloGruppo = ROLE_DEFAULT;
             }
             AppRole sxRuolo = rolesMap.get(ruolo) != null ? rolesMap.get(ruolo) : rolesMap.get(ROLE_DEFAULT);
-            AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo);
-
+            AppRole sxRuoloGruppo = rolesMap.get(ruoloGruppo) != null ? rolesMap.get(ruoloGruppo) : rolesMap.get(ROLE_DEFAULT);
+            
             stepRuntime = Utility.retrieveStepRuntime(dataMap, nomeW, sxRuolo);
 
             if (stepRuntime != null) { // update

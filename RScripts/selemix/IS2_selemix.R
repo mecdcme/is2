@@ -24,6 +24,7 @@
 #
 
 stdout <- vector('character')
+params_in <- list() 
 init_log <- function() {
   #stdout <<- vector('character')
   con <<- textConnection('stdout', 'wr', local = TRUE)
@@ -111,8 +112,8 @@ is2_mlest <- function( workset, roles, wsparams=NULL, fname = "ml.est", ...) {
   set_role("MODEL", c("B","sigma","lambda","w") )
   predname <-  ifelse(n>1 ,list(paste("YPRED",seq(1:n),sep="")) , set_role("PRED","YPRED"))
   set_role("OUTLIERS","OUTLIER")
-  set_role("OUTVARS", c("TAU",get_role("OUTLIERS"),"PATTERN") )
-  set_role("MDLOUT","Contamination Model")
+  set_role("OUTVARS", c("TAU",get_role("OUTLIERS"),"PATTERN","layer","nrows") )
+  set_role("MDLOUT","Contamination_Model")
   set_role("REP","Report")
   set_role("PRED",predname)
   set_role("CONV","conv")
@@ -143,14 +144,14 @@ is2_mlest <- function( workset, roles, wsparams=NULL, fname = "ml.est", ...) {
     #print(str(workset_out))
 	print("Binding model")
     model_out <- rbindlist( lapply(tree, function(p)  {  #per ogni strato
-        print(str(p))
+        #print(str(p))
         t <- p$model
         if(is.list(t)) unlist(t)
         t <- as.data.frame(t)
       })  
       ,fill=TRUE
     )
-    print(str(model_out))
+    #print(str(model_out))
 	print("Binding report")
 	par_out <- rbindlist( lapply(tree, function(p)  {  #per ogni strato
         #print(str(p))
@@ -160,21 +161,21 @@ is2_mlest <- function( workset, roles, wsparams=NULL, fname = "ml.est", ...) {
       })  
       ,fill=TRUE
     )
-    print(str(model_out))
+    #print(str(model_out))
 	print("Formatting output")
   #formatting output
-  params_out <- list("Contamination Model" = toJSON(model_out, auto_unbox = TRUE, na = "string", pretty = TRUE))
+  params_out <- list("Contamination_Model" = toJSON(model_out, auto_unbox = TRUE, na = "string", pretty = TRUE))
   params_strata <- list("Strata INFO" = toJSON(par_out, auto_unbox = TRUE, na = "string", pretty = TRUE))
   n_outlier = sum(workset_out[workset_out$OUTLIER == 1, "OUTLIER"], na.rm=TRUE)
   n_layers = get_param("nlayers")
   n_layers_conv = get_param("NUM_CONV_LAYERS")
-  report <- list(n.outlier = n_outlier, "Layers"=n_layers ,"Convergent layers"=n_layers_conv)
+  report <- list(n.outlier = n_outlier, "Layers"=n_layers ,"Convergent_layers"=n_layers_conv)
   report_out <- list(Report = toJSON(report, auto_unbox = TRUE, na = "string", pretty = TRUE))  
   
   #roles out
   roles_out <- list()
   roles_out [[IS2_SELEMIX_OUTLIER]] <- get_role("OUTLIERS")
-  roles_out [[IS2_SELEMIX_MODEL]]   <- c("Contamination Model")
+  roles_out [[IS2_SELEMIX_MODEL]]   <- c("Contamination_Model")
   roles_out [[IS2_SELEMIX_REPORT]]  <- c("Report")
   roles_out [["AGGREGATES"]]		<- c("Strata INFO")
   roles_out [[IS2_SELEMIX_COVARIATE]]       <- c(roles$X)
@@ -189,7 +190,7 @@ is2_mlest <- function( workset, roles, wsparams=NULL, fname = "ml.est", ...) {
   rolesgroup_out <- list()
   rolesgroup_out [[IS2_SELEMIX_MODEL]]    <- c(IS2_SELEMIX_MODEL)
   rolesgroup_out [[IS2_SELEMIX_REPORT]]   <- c(IS2_SELEMIX_REPORT)
-  rolesgroup_out [[IS2_SELEMIX_PREDICTION]] <- c(IS2_SELEMIX_COVARIATE,IS2_SELEMIX_TARGET,IS2_SELEMIX_STRATA,IS2_SELEMIX_PREDICTION,IS2_SELEMIX_CONVERGENCE,IS2_SELEMIX_OUTPUT_VARIABLES,IS2_SELEMIX_OUTLIER)
+  rolesgroup_out [[IS2_SELEMIX_PREDICTION]] <- c(IS2_SELEMIX_COVARIATE,IS2_SELEMIX_TARGET,IS2_SELEMIX_STRATA,IS2_SELEMIX_PREDICTION,IS2_SELEMIX_CONVERGENCE,IS2_SELEMIX_OUTPUT_VARIABLES,IS2_SELEMIX_OUTLIER,IS2_SELEMIX_OUTPUT_VARIABLES)
   rolesgroup_out [["AGGREGATES"]]   <- c("AGGREGATES")
   
   #Output
@@ -202,7 +203,7 @@ is2_mlest <- function( workset, roles, wsparams=NULL, fname = "ml.est", ...) {
   result[[IS2_LOG]]             <- stdout
   
   })
-  print("Execution ended successfully.")
+  print(paste(fname," execution ended successfully."))
   #print(str(result))
   # sink(con)
   # sink(con, type="message")
@@ -233,12 +234,20 @@ is2_seledit <- function( workset, roles, wsparams=NULL, fname = "sel.edit", ...)
   
   #preset out roles
   if(is.null(get_role("PRED"))) {
+	print(paste("resetting prediction column dimension ",n))
     predname <-  ifelse(n>1 ,list(paste("YPRED",seq(1:n),sep="")) , "YPRED")
     set_role("PRED",predname)
   }
   np=length(get_role("PRED"))
   set_role("REP","Report")
-  if(n!=np) stop("Model mismatch")
+  if(n!=np) {
+#	  print(names(workset))
+#	  print(str(roles))
+#	  print(str(wsparams))
+#	  print("-----------")
+	  warning("Model mismatch")
+	  #stop("Model mismatch")
+  }
   #init
   result <- NULL
   #insert new columns
@@ -261,7 +270,7 @@ is2_seledit <- function( workset, roles, wsparams=NULL, fname = "sel.edit", ...)
       })  
       ,fill=TRUE
     )
-  	print(str(workset_out))
+  	#print(str(workset_out))
   }, 	error=function(cond) {
     print(cond)
   })#end tryCatch
@@ -269,7 +278,7 @@ is2_seledit <- function( workset, roles, wsparams=NULL, fname = "sel.edit", ...)
     
     #formatting output
     n_error = 0
-    print(head(workset_out$sel))
+    #print(head(workset_out$sel))
     n_error = sum(workset_out[workset_out$sel == 1, "sel"], na.rm=TRUE)
     report <- list(n.error = n_error)
     report_out <- list(Report = toJSON(report, auto_unbox = TRUE))
@@ -289,8 +298,8 @@ is2_seledit <- function( workset, roles, wsparams=NULL, fname = "sel.edit", ...)
     result[[IS2_LOG]]             <- stdout
     
   
-  print("Execution ended successfully.")
-  print(str(result))
+  print(paste(fname," execution ended successfully."))
+  #print(str(result))
   # sink(con)
   # sink(con, type="message")
   # close(con)
@@ -470,20 +479,6 @@ cat_lst <- function( ... ) {
 }
 
 
-stratify_old <- function(dataset, r = get_role("STRATA")) { 
-  if(is.null(r)) {
-    print(paste("Stratify::STRATA NOT detected: "))
-    set_param("nlayers", 1)
-    return(list(a=dataset))
-  }else {
-    ws <- split(dataset, as.factor(dataset[,r]))
-    nlayers <- length(ws)
-    set_param("nlayers", nlayers)
-    print(paste("STRATA detected: ",r," with ",nlayers," layers"))
-    return(ws)
-  }
-}
-
 stratify <- function(dataset, r = get_role("STRATA")) { 
   strata <- NULL
   set_param("nlayers", 1)
@@ -534,20 +529,23 @@ is2_exec <- function(ws, roles, params, fname="ml.est") {
   #try( strataval <- unique(t[,strata]), silent = TRUE)
   par <- lapply(parlist, function(item) {if(is.language(item)) as.numeric(eval(item)) else item } )
   print(paste("Layer: ",as.character(p)," nrows = ", nr))
-	print(paste("Strata: ",strata," strata :", strataval))
-    tryCatch({
+	#print(paste("Strata: ",strata," strata :", strataval))
+    tmp <- NULL
+	tryCatch({
         tmp <- do.call(fname,par,quote = TRUE)
-	}, 	error=function(cond) {
-#		if(fname=="ml.est") {
-#			t$YPRED = NA
-#	        t$TAU = NA
-#	        t$PATTERN = NA
-#	        t$OUTLIER = NA
-#		}
+	}
+	, 	error=function(cond) {
+		if(fname=="ml.est") {
+			t$YPRED = NA
+	        t$TAU = NA
+	        t$PATTERN = NA
+	        t$OUTLIER = NA			
+		}
 		
 	print(paste("Error: layer ",p))
 	print(cond)
-	})#end tryCatch
+	}
+	)#end tryCatch
 	
 	#sistemazione out
         #il risultato � una matrice
@@ -563,7 +561,7 @@ is2_exec <- function(ws, roles, params, fname="ml.est") {
           if(tmp$is.conv) {
           conv_layers <- 1+as.numeric(get_param("NUM_CONV_LAYERS"))
           set_param("NUM_CONV_LAYERS",conv_layers)
-          print(paste("layer ",strataval," #convergenti: ",conv_layers))
+          #print(paste("layer ",strataval," #convergenti: ",conv_layers))
           
         }
         t$YPRED <- tmp$ypred
@@ -593,8 +591,9 @@ is2_exec <- function(ws, roles, params, fname="ml.est") {
         }
         
 
-	  print(paste("Combining in a list ",fname,"'s output"))
-    list(out=t, par=wr, model=wm) #produce un alberatura
+	  #print(paste("Combining in a list ",fname,"'s output"))
+       #produce un alberatura
+		list(out=t, par=wr, model=wm)
   }) #end lapply
   
   #set_param("NUM_CONV_LAYERS", conv_layers)
@@ -667,3 +666,21 @@ write_csv <- function(x, file, header, f = write.csv, ...){
   # write the file using the defined function and required addition arguments  
   f(x, datafile,...)
 }
+
+
+#rewrites list for input
+relist <- function( ...){
+  lst <- list(...)
+  ls <- lapply(lst,function(p) 
+    tryCatch({
+      fromJSON(p, flatten=TRUE)
+    },
+    error=function(cond) {
+      p
+    })#end tryCatch
+  )
+  print(ls)
+  return(ls)
+}
+
+

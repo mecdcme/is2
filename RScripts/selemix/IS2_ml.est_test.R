@@ -45,8 +45,9 @@ workset <-as.data.frame(out$workset_out)
 model <- fromJSON( as.character(out$params_out ))
 parameters <- fromJSON(as.character(out$AGGREGATES))
 #output file dati
-#write.csv2(workset, "output.csv", row.names=FALSE)
-
+write.csv2(workset, "output.mlest.csv", row.names=FALSE)
+write.csv2(model, "output.model.csv", row.names=FALSE)
+write.csv2(parameters, "output.parameters.csv", row.names=FALSE)
 
 print("Esecuzione SEL EDIT")
 #---- selezione
@@ -58,6 +59,7 @@ system.time(
   out <-is2_seledit(workset, roles, wsparams)
 )
 output <-as.data.frame(out$workset_out)
+write.csv2(output, "output.seledit.csv", row.names=FALSE)
 
 #--- Finalyze
 close_log()
