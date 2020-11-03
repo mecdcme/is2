@@ -7,8 +7,9 @@ setwd("D:/Eclipse/git/is2/RScripts/selemix") #impostate la directory di lavoro
 debugSource('is2_selemix.r')
 
 
-set<-0
-#simul azione input ruoli
+set<-1
+#simulazione input ruoli
+print("SET RUOLI E DATASET")
 if(set==0) {
   #simulazione input workset
   workset <- read.delim("dati1.csv", header=TRUE, sep=";")
@@ -25,27 +26,38 @@ if(set==0) {
 #simulazione input parametri
 set_param("t.outl", 0.5)
 set_param("model","LN")
+#set_role("STRATA","ciao")
 
 #system.time( 
 #  out1 <- is2_mlest_layer(workset, roles, wsparams)
 #)
 #272,8s
 
-#esecuzione stratificazione
+#esecuzione ml.est
+print("Esecuzione ML EST")
 system.time(
   out <-is2_mlest(workset, roles, wsparams)
 )
-#output file dati
-#write.csv2(out, "output.csv", row.names=FALSE)
-#View(out)
 
 #sum example (conta del numero di outlier totali)
-workset <- out$workset_out
-model <- out$params_out
-parameters <- out$Strata_Info
-#print(sum(workset[workset$outlier == 1, "outlier"], na.rm=TRUE)) #808 (senza NA)
-#nrow(workset[workset$tau > get_param("t.outl"), ]) #809 (prende anche gli NA)
-#print(sum(workset[, "outlier"], na.rm=FALSE)) 
-#nrow(unique(workset[is.na(workset$layer), c("Gruppi","layer")]))
+workset <-as.data.frame(out$workset_out)
+#print(names(workset))
+model <- fromJSON( as.character(out$params_out ))
+parameters <- fromJSON(as.character(out$AGGREGATES))
+#output file dati
+#write.csv2(workset, "output.csv", row.names=FALSE)
 
+
+print("Esecuzione SEL EDIT")
+#---- selezione
+set_role("Y","FNM_g_2017")
+set_role("STRATA","MESE")
+#set_role("PRED","predict")
+#esecuzione ml.est
+system.time(
+  out <-is2_seledit(workset, roles, wsparams)
+)
+output <-as.data.frame(out$workset_out)
+
+#--- Finalyze
 close_log()
