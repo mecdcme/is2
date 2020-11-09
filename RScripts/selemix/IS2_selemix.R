@@ -60,8 +60,24 @@ check_package <- function(i)
   }
 
 
+parallel_init <- function()  
+  if(.Platform$OS.type == "unix")
+  {
+    library(doParallel)
+    numCores <- detectCores()
+    cl <- parallel::makeCluster(numCores)
+    doParallel::registerDoParallel(cl)
+    print(paste("Parallal enabled. Numero di core: ",numCores))
+    return(numCores)
+  } else {
+    print("Parallel trhread mode unavailable. Numero di core reset to 1")
+    return(1)
+  }
+
+
+
 # Check load and then try/install packages
-check_list <- c("SeleMix" , "jsonlite" , "dplyr", "data.table") 
+check_list <- c("SeleMix" , "jsonlite" , "dplyr", "data.table", "doParallel", "foreach") 
 lapply(check_list, check_package)
 #print('Packages loaded')
 
@@ -80,14 +96,14 @@ IS2_LOG             <- "log"
 
 
 #IS2 Selemix roles
-IS2_SELEMIX_PREDICTION <- "PRED"
+IS2_SELEMIX_PREDICTION <- "ypred"
 IS2_SELEMIX_OUTPUT_VARIABLES <- "OUTVARS"
 IS2_SELEMIX_OUTLIER    <- "OUTLIERS"
 IS2_SELEMIX_MODEL      <- "MDLOUT"
 IS2_SELEMIX_REPORT     <- "REP"
 IS2_SELEMIX_ERROR      <- "INFLS"
-IS2_SELEMIX_TARGET     <- "Y"
-IS2_SELEMIX_COVARIATE  <- "X"
+IS2_SELEMIX_TARGET     <- "y"
+IS2_SELEMIX_COVARIATE  <- "x"
 IS2_SELEMIX_STRATA     <- "STRATA"
 IS2_SELEMIX_CONVERGENCE <- "CONV"
 
@@ -106,16 +122,16 @@ is2_mlest <- function( workset, roles, wsparams=NULL, fname = "ml.est", ...) {
   # sink(con, append=TRUE, type="message")
   
   #set model
-  n=length(get_role("Y"))
+  n=length(get_role("y"))
   #preset out roles
   set_role("AGGREGATES", c("n.outlier","is.conv","n.iter","sing","bic.aic", "msg", "model") )
-  set_role("MODEL", c("B","sigma","lambda","w") )
-  predname <-  ifelse(n>1 ,list(paste("YPRED",seq(1:n),sep="")) , set_role("PRED","YPRED"))
+  set_role("c_model", c("B","sigma","lambda","w") )
+  predname <-  ifelse(n>1 ,list(paste("ypred",seq(1:n),sep="")) , set_role("ypred","ypred"))
   set_role("OUTLIERS","OUTLIER")
   set_role("OUTVARS", c("TAU",get_role("OUTLIERS"),"PATTERN","layer","nrows") )
   set_role("MDLOUT","Contamination_Model")
   set_role("REP","Report")
-  set_role("PRED",predname)
+  set_role("ypred",predname)
   set_role("CONV","conv")
   #init
   strata <- NULL
@@ -178,8 +194,8 @@ is2_mlest <- function( workset, roles, wsparams=NULL, fname = "ml.est", ...) {
   roles_out [[IS2_SELEMIX_MODEL]]   <- c("Contamination_Model")
   roles_out [[IS2_SELEMIX_REPORT]]  <- c("Report")
   roles_out [["AGGREGATES"]]		<- c("Strata INFO")
-  roles_out [[IS2_SELEMIX_COVARIATE]]       <- c(roles$X)
-  roles_out [[IS2_SELEMIX_TARGET]]          <- c(roles$Y)
+  roles_out [[IS2_SELEMIX_COVARIATE]]       <- c(roles$x)
+  roles_out [[IS2_SELEMIX_TARGET]]          <- c(roles$y)
   roles_out [[IS2_SELEMIX_STRATA]]          <- c(roles$STRATA)
   roles_out [[IS2_SELEMIX_PREDICTION]]      <- c(predname)
   roles_out [[IS2_SELEMIX_CONVERGENCE]]     <- c("conv")
@@ -230,15 +246,15 @@ is2_seledit <- function( workset, roles, wsparams=NULL, fname = "sel.edit", ...)
   # sink(con, append=TRUE, type="message")
   
   #set model
-  n=length(get_role("Y"))
+  n=length(get_role("y"))
   
   #preset out roles
-  if(is.null(get_role("PRED"))) {
+  if(is.null(get_role("ypred"))) {
 	print(paste("resetting prediction column dimension ",n))
-    predname <-  ifelse(n>1 ,list(paste("YPRED",seq(1:n),sep="")) , "YPRED")
-    set_role("PRED",predname)
+    predname <-  ifelse(n>1 ,list(paste("ypred",seq(1:n),sep="")) , "ypred")
+    set_role("ypred",predname)
   }
-  np=length(get_role("PRED"))
+  np=length(get_role("ypred"))
   set_role("REP","Report")
   if(n!=np) {
 #	  print(names(workset))
@@ -287,7 +303,7 @@ is2_seledit <- function( workset, roles, wsparams=NULL, fname = "sel.edit", ...)
     roles_out      <- list (E = "sel", R = "rank",  F = "global.score")
     rolesgroup_out <- list (E = "E", G = "G")
     
-    roles_out [[IS2_SELEMIX_ERROR]]      <-   c(roles$X,roles$Y, roles$PRED, roles$STRATA, roles$CONV, "sel",  "rank", "global.score")
+    roles_out [[IS2_SELEMIX_ERROR]]      <-   c(roles$x,roles$y, roles$ypred, roles$STRATA, roles$CONV, "sel",  "rank", "global.score")
     rolesgroup_out [[IS2_SELEMIX_ERROR]] <- c("E", "R","F")
     
     #Output
@@ -499,9 +515,12 @@ stratify <- function(dataset, r = get_role("STRATA")) {
 is2_exec <- function(ws, roles, params, fname="ml.est") { 
   
   print(paste("Esecuzione funzione generalizzata ",fname))
+  
+  nCores <- parallel_init()
+  
   #i ruoli vanno ridefiniti per poter essere valutati a runtime all'interno della chiamata do.call
   #fac simile (istruzione di default per la formattazione dri ruoli di input)
-  parlist <- list( y = substitute(t[, roles[["Y"]]]), x = substitute(t[, roles[["X"]]]), ypred = substitute(t[, roles[["PRED"]]]))
+  parlist <- list( y = substitute(t[, roles[["y"]]]), x = substitute(t[, roles[["x"]]]), ypred = substitute(t[, roles[["ypred"]]]))
   #controllo della lista dei parametri input
   parlist <- match_function_par(fname, append(params,parlist))
   
@@ -511,15 +530,9 @@ is2_exec <- function(ws, roles, params, fname="ml.est") {
     ws<-list(a=ws)
   } #permette di essere trattato come una lista intera
   
-  #TEMPORANEO (riduce gli strati)
-  # ws[3:length(ws)] <- NULL
-  # set_param("nlayers", nlayers <- 2)
-  # 
-  #--------------------------
-  
   wm <- list()
   wr <- list()
-  out <- lapply(seq_along(ws), function(p) {  
+  out <- mclapply(seq_along(ws), function(p) {  
     
   t <- ws[[p]] #t non e' indice ma l'elemento effettivo
   t$nrows <- nr <- NROW(t)
@@ -536,7 +549,7 @@ is2_exec <- function(ws, roles, params, fname="ml.est") {
 	}
 	, 	error=function(cond) {
 		if(fname=="ml.est") {
-			t$YPRED = NA
+			t$ypred = NA
 	        t$TAU = NA
 	        t$PATTERN = NA
 	        t$OUTLIER = NA			
@@ -564,7 +577,7 @@ is2_exec <- function(ws, roles, params, fname="ml.est") {
           #print(paste("layer ",strataval," #convergenti: ",conv_layers))
           
         }
-        t$YPRED <- tmp$ypred
+        t$ypred <- tmp$ypred
         t$TAU <- tmp$tau
         t$PATTERN <- tmp$pattern
         t$OUTLIER <- tmp$outlier
@@ -596,6 +609,7 @@ is2_exec <- function(ws, roles, params, fname="ml.est") {
 		list(out=t, par=wr, model=wm)
   }) #end lapply
   
+  if(nCores>1) stopImplicitCluster()
   #set_param("NUM_CONV_LAYERS", conv_layers)
   return(out) #lascia il workset splittato
   

@@ -13,14 +13,14 @@ print("SET RUOLI E DATASET")
 if(set==0) {
   #simulazione input workset
   workset <- read.delim("dati1.csv", header=TRUE, sep=";")
-  set_role("X","FN_p_9_2016")
-  set_role("Y","FN_g_9_2017")
+  set_role("x","FN_p_9_2016")
+  set_role("y","FN_g_9_2017")
   set_role("STRATA","Gruppi")
 } else  {
   #simulazione input workset
   workset <- read.delim("data.csv", header=TRUE, sep=";")
-  set_role("Y","FNM_g_2017")
-  set_role("X","FNM_p_2016")
+  set_role("y","FNM_g_2017")
+  set_role("x","FNM_p_2016")
   set_role("STRATA","MESE")
 }
 #simulazione input parametri
@@ -51,9 +51,9 @@ write.csv2(parameters, "output.parameters.csv", row.names=FALSE)
 
 print("Esecuzione SEL EDIT")
 #---- selezione
-set_role("Y","FNM_g_2017")
+set_role("y","FNM_g_2017")
 set_role("STRATA","MESE")
-#set_role("PRED","predict")
+#set_role("ypred","predict")
 #esecuzione ml.est
 system.time(
   out <-is2_seledit(workset, roles, wsparams)
