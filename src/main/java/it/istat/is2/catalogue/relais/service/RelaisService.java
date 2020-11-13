@@ -26,6 +26,7 @@ package it.istat.is2.catalogue.relais.service;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -569,10 +570,10 @@ public class RelaisService {
 		logService.save("Quality Indicators (" + codQualityIndicators + ") :" + String.valueOf(mprec) + " "
 				+ String.valueOf(mrec));
 
-		qualityIndicators.put(codeOUT, new ArrayList<>(List.of("MATCHES", "MATCHES+POSSIBLE")));
-		qualityIndicators.put(codeTHR, new ArrayList<>(List.of(paramTM, paramTU)));
-		qualityIndicators.put(codePREC, new ArrayList<>(List.of(String.valueOf(mprec), String.valueOf(pprec))));
-		qualityIndicators.put(codeREC, new ArrayList<>(List.of(String.valueOf(mrec), String.valueOf(prec))));
+		qualityIndicators.put(codeOUT, new ArrayList<>(Arrays.asList("MATCHES", "MATCHES+POSSIBLE")));
+		qualityIndicators.put(codeTHR, new ArrayList<>(Arrays.asList(paramTM, paramTU)));
+		qualityIndicators.put(codePREC, new ArrayList<>(Arrays.asList(String.valueOf(mprec), String.valueOf(pprec))));
+		qualityIndicators.put(codeREC, new ArrayList<>(Arrays.asList(String.valueOf(mrec), String.valueOf(prec))));
 
 		returnOut.put(EngineService.ROLES_OUT, rolesOut);
 		rolesOut.keySet().forEach(code -> {
@@ -772,10 +773,10 @@ public class RelaisService {
 		logService.save("Quality Indicators (" + codQualityIndicators + ") :" + String.valueOf(mprec) + " "
 				+ String.valueOf(mrec));
 
-		qualityIndicators.put(codeOUT, new ArrayList<>(List.of("MATCHES", "MATCHES+POSSIBLE")));
-		qualityIndicators.put(codeTHR, new ArrayList<>(List.of(paramTM, paramTU)));
-		qualityIndicators.put(codePREC, new ArrayList<>(List.of(String.valueOf(mprec), String.valueOf(pprec))));
-		qualityIndicators.put(codeREC, new ArrayList<>(List.of(String.valueOf(mrec), String.valueOf(prec))));
+		qualityIndicators.put(codeOUT, new ArrayList<>(Arrays.asList("MATCHES", "MATCHES+POSSIBLE")));
+		qualityIndicators.put(codeTHR, new ArrayList<>(Arrays.asList(paramTM, paramTU)));
+		qualityIndicators.put(codePREC, new ArrayList<>(Arrays.asList(String.valueOf(mprec), String.valueOf(pprec))));
+		qualityIndicators.put(codeREC, new ArrayList<>(Arrays.asList(String.valueOf(mrec), String.valueOf(prec))));
 
 		returnOut.put(EngineService.ROLES_OUT, rolesOut);
 		rolesOut.keySet().forEach(code -> {
@@ -921,10 +922,10 @@ public class RelaisService {
 
 		logService.save("Quality Indicators :" + String.valueOf(mprec) + " " + String.valueOf(mrec));
 
-		qualityIndicators.put(codeOUT, new ArrayList<>(List.of("MATCHES", "MATCHES+POSSIBLE")));
-		qualityIndicators.put(codeTHR, new ArrayList<>(List.of(paramTM, paramTU)));
-		qualityIndicators.put(codePREC, new ArrayList<>(List.of(String.valueOf(mprec), String.valueOf(pprec))));
-		qualityIndicators.put(codeREC, new ArrayList<>(List.of(String.valueOf(mrec), String.valueOf(prec))));
+		qualityIndicators.put(codeOUT, new ArrayList<>(Arrays.asList("MATCHES", "MATCHES+POSSIBLE")));
+		qualityIndicators.put(codeTHR, new ArrayList<>(Arrays.asList(paramTM, paramTU)));
+		qualityIndicators.put(codePREC, new ArrayList<>(Arrays.asList(String.valueOf(mprec), String.valueOf(pprec))));
+		qualityIndicators.put(codeREC, new ArrayList<>(Arrays.asList(String.valueOf(mrec), String.valueOf(prec))));
 
 		returnOut.put(EngineService.ROLES_OUT, rolesOut);
 		rolesOut.keySet().forEach(code -> {
