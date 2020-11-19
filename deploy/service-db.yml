@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: is2-db
+spec:
+  ports:
+    - name: postgres
+      targetPort: 5432
+      port: 5432
+  selector:
+    app: is2-db

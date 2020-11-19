@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: is2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: is2
+  template:
+    metadata:
+      labels:
+        app: is2
+    spec:
+      containers:
+      - name: is2
+        image: mecdcme/is2
+        env:
+          - name: SPRING_DATASOURCE_URL
+            value: "jdbc:postgresql://is2-db:5432/postgres?currentSchema=is2"
+          - name: SPRING_DATASOURCE_USERNAME
+            value: "postgres"
+          - name: SPRING_DATASOURCE_PASSWORD
+            value: "toto"
+          - name: SPRING_DATASOURCE_DRIVERCLASSNAME
+            value: "org.postgresql.Driver"
+          - name: SPRING_DATASOURCE_PLATFORM
+            value: "postgresql"
+        ports:
+        - containerPort: 8080

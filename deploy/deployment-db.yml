@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: is2-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: is2-db
+  template:
+    metadata:
+      labels:
+        app: is2-db
+    spec:
+      initContainers:
+          - name: download-sql
+            image: curlimages/curl
+            command: ["curl"]
+            args: ["-o","/dump/init.sql","https://raw.githubusercontent.com/mecdcme/is2/master/db/is2-dump.sql"]
+            volumeMounts:
+              - mountPath: /dump
+                name: dump
+      containers:
+      - name: is2-db
+        image: postgres:11
+        env:
+            - name: POSTGRES_PASSWORD
+              value: toto
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+              - mountPath: /docker-entrypoint-initdb.d
+                name: dump
+      volumes:
+        - emptyDir: {}
+          name: dump
