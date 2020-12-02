@@ -13,22 +13,21 @@ import java.util.stream.Stream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import it.istat.is2.app.util.IS2Exception;
-import it.istat.is2.app.util.IS2ExceptionCodes;
-import it.istat.is2.catalogue.relais.bean.OrderBean;
-
 public class RelaisUtility {
-
-	private RelaisUtility() {
-		throw new IllegalStateException("RelaisUtility class");
-	}
 
 	private static final String KEY_SEPARATOR = "@_@";
 
 	public static Map<String, List<String>> getEmptyMapByKey(Stream<String> keys, String prefixKey) {
 
-		final Map<String, List<String>> valuesMap = new LinkedHashMap<>();
+		final Map<String, List<String>> valuesMap = new LinkedHashMap<String, List<String>>();
 		keys.forEach(key -> valuesMap.put(prefixKey + key, new ArrayList<>()));
+		return valuesMap;
+	}
+
+	public static Map<String, StringBuilder> getEmptyMapByKeyStringB(Stream<String> keys, String prefixKey) {
+
+		final Map<String, StringBuilder> valuesMap = new LinkedHashMap<String, StringBuilder>();
+		keys.forEach(key -> valuesMap.put(prefixKey + key, new StringBuilder()));
 		return valuesMap;
 	}
 
@@ -69,7 +68,7 @@ public class RelaisUtility {
 
 	public static String getKeyValues(final Integer index, final Map<String, List<String>> mapValues,
 			final List<String> fieldsBlock) {
-		final StringBuilder keyValues = new StringBuilder();
+		final StringBuffer keyValues = new StringBuffer();
 
 		fieldsBlock.forEach(field -> keyValues.append(mapValues.get(field).get(index)).append(KEY_SEPARATOR));
 
@@ -85,7 +84,7 @@ public class RelaisUtility {
 		return m == null || m.isEmpty();
 	}
 
-	public static List<String> getFieldsInParams(String jsonString, String fieldName) throws IS2Exception {
+	public static List<String> getFieldsInParams(String jsonString, String fieldName) throws Exception {
 		List<String> ret = new ArrayList<>();
 		try {
 			JSONObject jSONObject = new JSONObject(jsonString);
@@ -96,34 +95,43 @@ public class RelaisUtility {
 
 		} catch (Exception e) {
 
-			throw new IS2Exception(IS2ExceptionCodes.ERROR_PARAMETERS ,"Error parsing parameter " + fieldName);
+			throw new Exception("Error parsing parameter " + fieldName);
 		}
 
 		return ret;
 
 	}
+	
+	public static int getIntField(String jsonString, String fieldName) throws Exception {
+		Integer field = 0;
+		try {
+			
+			JSONObject jSONObject = new JSONObject(jsonString);
+			field = (Integer) jSONObject.get(fieldName);
 
-	public static Map<String, List<String>> sortDatasetInMapValues(final Map<String, List<String>> mapValues,
-			final List<String> datasetFields, final String fieldSort, final String sortAsc) {
+		} catch (Exception e) {
 
-		List<OrderBean> valuesElements = new ArrayList<>();
-		for (int i = 0; i < mapValues.get(fieldSort).size(); i++) {
-			valuesElements.add(new OrderBean(i, mapValues.get(fieldSort).get(i)));
+			throw new Exception("Error parsing parameter " + fieldName);
 		}
 
-		Collections.sort(valuesElements);
+		return field.intValue();
 
-		datasetFields.stream().forEach(fields -> {
-			final List<String> valuesOrdered = new ArrayList<>();
+	}
+	
+	public static String getStringField(String jsonString, String fieldName) throws Exception {
+		String field = "";
+		try {
+			
+			JSONObject jSONObject = new JSONObject(jsonString);
+			field = (String) jSONObject.get(fieldName);
 
-			for (OrderBean indexElement : valuesElements) {
-				valuesOrdered.add(mapValues.get(fields).get(indexElement.getIndex()));
-			}
-			mapValues.replace(fields, valuesOrdered);
+		} catch (Exception e) {
 
-		});
-		valuesElements.clear();
-		return mapValues;
+			throw new Exception("Error parsing parameter " + fieldName);
+		}
+
+		return field;
+
 	}
 
 }

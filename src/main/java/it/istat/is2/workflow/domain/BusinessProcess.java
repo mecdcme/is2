@@ -77,6 +77,7 @@ public class BusinessProcess extends AbstractDomainObject implements Serializabl
     private List<ProcessStep> businessSteps;
     @JsonBackReference
     @OneToMany(mappedBy = "businessProcessParent")
+    @OrderBy("order")
     private List<BusinessProcess> businessSubProcesses = new ArrayList<>();
 
 

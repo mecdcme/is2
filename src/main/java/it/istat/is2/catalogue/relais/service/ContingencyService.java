@@ -23,25 +23,19 @@
  */
 package it.istat.is2.catalogue.relais.service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
-import it.istat.is2.catalogue.relais.metrics.DiceSimilarity;
-import it.istat.is2.catalogue.relais.metrics.Jaro;
-import it.istat.is2.catalogue.relais.metrics.JaroWinkler;
-import it.istat.is2.catalogue.relais.metrics.Levenshtein;
-import it.istat.is2.catalogue.relais.metrics.QGramsDistance;
-import it.istat.is2.catalogue.relais.metrics.Soundex;
-import it.istat.is2.catalogue.relais.metrics.added.NumericComparison;
-import it.istat.is2.catalogue.relais.metrics.added.NumericEuclideanDistance;
-import it.istat.is2.catalogue.relais.metrics.added.QGramsInclusion;
-import it.istat.is2.catalogue.relais.metrics.added.WindowEquality;
+import it.istat.is2.catalogue.relais.metrics.*;
+import it.istat.is2.catalogue.relais.metrics.added.*;
 import it.istat.is2.catalogue.relais.metrics.dataStructure.MetricMatchingVariable;
 import it.istat.is2.catalogue.relais.metrics.dataStructure.MetricMatchingVariableVector;
 import it.istat.is2.catalogue.relais.metrics.utility.AbstractStringMetric;
@@ -53,7 +47,8 @@ import lombok.Data;
  */
 @Data
 @Component
-public class ContingencyService {
+public class ContingencyService implements Serializable {
+    private static final long serialVersionUID = -4825885817709343718L;
     private final int DIMMAX = 100000;
     private String blockingKey;
     private MetricMatchingVariableVector metricMatchingVariableVector;
@@ -62,7 +57,7 @@ public class ContingencyService {
     private int[][] combinations;
     private AbstractStringMetric[] metrics;
 
-    public void init(String stringJson) throws JSONException {
+    public void init(String stringJson,Map <String, List<String>> dsa,Map <String, List<String>> dsb) throws JSONException {
         metricMatchingVariableVector = new MetricMatchingVariableVector();
         JSONArray metricMatchingVariables = new JSONArray(stringJson);
         for (int i = 0; i < metricMatchingVariables.length(); i++) {
@@ -84,28 +79,36 @@ public class ContingencyService {
         this.numVar = metricMatchingVariableVector.size();
         metrics = new AbstractStringMetric[numVar];
         for (int ind = 0; ind < numVar; ind++) {
-            if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Equality"))
-                metrics[ind] = null;
-            else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Jaro"))
-                metrics[ind] = new Jaro();
-            else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Dice"))
-                metrics[ind] = new DiceSimilarity();
-            else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("JaroWinkler"))
-                metrics[ind] = new JaroWinkler();
-            else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Levenshtein"))
-                metrics[ind] = new Levenshtein();
-            else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("3Grams"))
-                metrics[ind] = new QGramsDistance();
-            else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Soundex"))
-                metrics[ind] = new Soundex();
-            else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("NumericComparison"))
-                metrics[ind] = new NumericComparison();
-            else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("NumericEuclideanDistance"))
-                metrics[ind] = new NumericEuclideanDistance();
-            else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("WindowEquality"))
-                metrics[ind] = new WindowEquality(metricMatchingVariableVector.get(ind));
-            else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Inclusion3Grams"))
-                metrics[ind] = new QGramsInclusion();
+        	if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Equality"))
+				metrics[ind] = null;
+			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Jaro"))
+				metrics[ind] = new Jaro();
+			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Dice"))
+				metrics[ind] = new DiceSimilarity();
+			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("JaroWinkler"))
+				metrics[ind] = new JaroWinkler();
+			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Levenshtein"))
+				metrics[ind] = new Levenshtein();
+			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("3Grams"))
+				metrics[ind] = new QGramsDistance();
+			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Soundex"))
+				metrics[ind] = new Soundex();
+			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("NumericComparison"))
+				metrics[ind] = new NumericComparison();
+			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("NumericEuclideanDistance"))
+				metrics[ind] = new NumericEuclideanDistance();
+			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("WindowEquality"))
+				metrics[ind] = new WindowEquality(metricMatchingVariableVector.get(ind));
+			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Inclusion3Grams"))
+				metrics[ind] = new QGramsInclusion();
+			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("SimHash"))
+				metrics[ind] = new Simhash();
+			else if (metricMatchingVariableVector.get(ind).getComparisonFunction().equals("Weighed3Grams")) {
+				metrics[ind] = new Likeness();
+				metrics[ind].prepareMap(dsa.get(metricMatchingVariableVector.get(ind).getMatchingVariableNameVariableA()));
+				metrics[ind].prepareMap(dsb.get(metricMatchingVariableVector.get(ind).getMatchingVariableNameVariableB()));
+			}
+         
         }
 
     }
@@ -121,11 +124,12 @@ public class ContingencyService {
 
     public String getPattern(Map<String, String> valuesI) {
 
-        StringBuilder pattern = new StringBuilder("");
+        StringBuilder pattern = new StringBuilder();
 
         /* evaluation of pattern */
 
         for (int ii = 0; ii < numVar; ii++) {
+
             StringBuilder matchingVariableA = new StringBuilder();
             StringBuilder matchingVariableB = new StringBuilder();
 
@@ -143,13 +147,14 @@ public class ContingencyService {
             }
             // Equality
             else if (metrics[ii] == null) {
-                if (matchingVariableA.equals(matchingVariableB))
+                if (matchingVariableA.compareTo(matchingVariableB)==0)
                     pattern.append("1");
                 else
                     pattern.append("0");
             } else {
-                if (metrics[ii].getSimilarity(matchingVariableA.toString(),
-                        matchingVariableB.toString()) >= metricMatchingVariable.getMetricThreshold().floatValue())
+
+                if (metrics[ii].getSimilarity(matchingVariableA,
+                        matchingVariableB) >= metricMatchingVariable.getMetricThreshold().floatValue())
                     pattern.append("1");
                 else
                     pattern.append("0");
@@ -175,37 +180,35 @@ public class ContingencyService {
                 }
                 mask = mask >> 1;
             }
-
             contingencyTable.put(sb.substring(1), 0);
-
         }
-
         return contingencyTable;
     }
 
     public boolean isExactMatching(Map<String, String> valuesI) {
 
         for (int ii = 0; ii < numVar; ii++) {
+
+            StringBuilder matchingVariableA = new StringBuilder();
+            StringBuilder matchingVariableB = new StringBuilder();
+
             MetricMatchingVariable metricMatchingVariable = metricMatchingVariableVector.get(ii);
-            String matchingVariableNameVariableA = valuesI
-                    .get(metricMatchingVariable.getMatchingVariableNameVariableA());
-            String matchingVariableNameVariableB = valuesI
-                    .get(metricMatchingVariable.getMatchingVariableNameVariableB());
+            matchingVariableA.append(valuesI
+                    .get(metricMatchingVariable.getMatchingVariableNameVariableA()));
+            matchingVariableB.append(valuesI
+                    .get(metricMatchingVariable.getMatchingVariableNameVariableB()));
 
-            if (matchingVariableNameVariableA == null || matchingVariableNameVariableB == null
-                    || matchingVariableNameVariableA.trim().length()==0) {
-
+            if (matchingVariableA == null || matchingVariableB == null
+                    || matchingVariableA.length()==0) {
                 return false;
             }
             // Equality
             else if (metrics[ii] == null) {
-                if (!matchingVariableNameVariableA.equals(matchingVariableNameVariableB))
+                if (matchingVariableA.compareTo(matchingVariableB)!=0)
                     return false;
             } else {
-
-                if (metrics[ii].getSimilarity(matchingVariableNameVariableA,
-                        matchingVariableNameVariableB) < metricMatchingVariable.getMetricThreshold().floatValue())
-
+                if (metrics[ii].getSimilarity(matchingVariableA,
+                        matchingVariableB) < metricMatchingVariable.getMetricThreshold().floatValue())
                     return false;
             }
         }

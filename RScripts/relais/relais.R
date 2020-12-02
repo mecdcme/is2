@@ -10,7 +10,6 @@ rm(list=ls())
 #percorso_fail=path del file contenete le condizionate alla variabile latente, nel caso di stima ** non affidabile** del modello
 #eps,iter parametri del modello EM con valori di default
 
-
 #percorso_fail="FSFail.Rout"
 #percorso_allert="FSAllert.Rout"
 
@@ -200,8 +199,6 @@ ct <- roles$CT
 ### packages required: lpSolve + slam
 ##################################################
 
-library("lpSolve")
-library("slam")
 
 lpreduction <- function(workset, roles, wsparams=NULL, ...) {
 
@@ -305,4 +302,82 @@ ret$status
 
  result <-list( workset_out=fs_out, roles_out= roles, rolesgroup_out= rolesgroup,  log = '')
 
+}
+
+mufrommarginals <- function(workset, roles, wsparams=NULL, ...) {
+
+ mp_var=workset$MPV
+ mp_comp <- workset$MPC
+ mp_m <- workset$MPM
+ mp_u <- workset$MPU
+ conting <- workset$CT
+ 
+ mfreq <- as.numeric(wsparams$P)
+ print(c("P=",mfreq))
+ 
+ var_mp <- sort(unique(mp_var[,1]))
+ nomimatvar <- names(conting)[-ncol(conting)]
+ var_ct <- sort(nomimatvar)
+ 
+ if (!all(var_mp==var_ct)) {
+
+		#Error message and stop elab
+		 print("ERROR: the variables in Contingency Table do not match the variables in Marginal Probabilities")
+		 
+		 print(var_ct)
+		 print(var_mp)
+
+	} else {
+ 
+ nvar=length(var_ct)
+
+ margins <- data.frame(mp_var,mp_comp,mp_m,mp_u)
+ names(margins)<-c("VARIABLE","COMPARISON","M","U")
+ 
+ m_att <- rep(1,2^nvar)
+ u_att <- rep(1,2^nvar)
+ #mfreq <- rep(mfreq,2^nvar)
+ 
+ for (j in 1:2^nvar)
+   for (i in 1:nvar) {
+       m_att[j]<- m_att[j] * (margins[margins$VARIABLE==nomimatvar[i] & margins$COMPARISON==conting[j,i],3])
+       u_att[j]<- u_att[j] * (margins[margins$VARIABLE==nomimatvar[i] & margins$COMPARISON==conting[j,i],4])
+   }
+   
+ r_att <- m_att/u_att
+ p_post <- m_att*mfreq/(m_att*mfreq+u_att*(1-mfreq))
+ fm_obs <- conting$FREQUENCY*p_post
+ fu_obs <- conting$FREQUENCY*(1-p_post)
+ 
+ fm_obs=round(fm_obs, digits=5)
+ fu_obs=round(fu_obs, digits=5)
+ m_att=round(m_att, digits=5)
+ u_att=round(u_att, digits=5)
+ r_att=round(r_att, digits=5)
+ p_post=round(p_post, digits=5)
+   
+ r_out <- cbind(conting[,1:nvar],fm_obs,fu_obs,m_att,u_att,r_att,p_post)
+ 
+ r_out <- r_out [order(r_out$r_att , decreasing = FALSE ),]
+
+ prec_oss <- rep(0,2^nvar)
+ recl_oss <- rep(0,2^nvar)
+ for (j in 1:2^nvar) {
+   prec_oss[j] <- sum(r_out$fm_obs[j:2^nvar])/(sum(r_out$fm_obs[j:2^nvar])+sum(r_out$fu_obs[j:2^nvar]))
+   recl_oss[j] <- sum(r_out$fm_obs[j:2^nvar])/sum(r_out$fm_obs)
+ }
+ prec_oss=round(prec_oss, digits=5)
+ recl_oss=round(recl_oss, digits=5)
+
+ r_out <- cbind(r_out,prec_oss,recl_oss)
+ names(r_out)[-(1:nvar)] <- c("F_M","F_U","M","U","R","P_POST","PRECISION","RECALL")
+ 
+ outroles <- list (FS=names(r_out))
+ outrolesgroup <- list (FS= c("FS"))
+ 
+ outworksets<-list(FS=r_out)
+
+ result <-list( workset_out=outworksets, roles_out= outroles, rolesgroup_out= outrolesgroup,  log = '')
+ 
+ }
 }

@@ -1,9 +1,15 @@
 package it.istat.is2.catalogue.relais.metrics.dataStructure;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class MetricMatchingVariable {
+public class MetricMatchingVariable implements Serializable {
+    /**
+     *
+     */
+    private static final long serialVersionUID = -3572357492452271885L;
     private String matchingVariable;
     private String matchingVariableNameVariableA;
     private String matchingVariableNameVariableB;

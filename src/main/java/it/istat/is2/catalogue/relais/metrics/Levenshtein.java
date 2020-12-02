@@ -9,7 +9,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.SubCost01;
 
 public final class Levenshtein extends AbstractStringMetric implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 1.8e-4f;
 
@@ -26,17 +26,17 @@ public final class Levenshtein extends AbstractStringMetric implements Serializa
         return "Implements the basic Levenshtein algorithm providing a similarity measure between two strings";
     }
 
-    public String getSimilarityExplained(String string1, String string2) {
-        return null;
+    public String getSimilarityExplained(StringBuilder string1, StringBuilder string2) {
+        return null;  
     }
 
-    public float getSimilarityTimingEstimated(final String string1, final String string2) {
+    public float getSimilarityTimingEstimated(final StringBuilder string1, final StringBuilder string2) {
         final float str1Length = string1.length();
         final float str2Length = string2.length();
         return (str1Length * str2Length) * ESTIMATEDTIMINGCONST;
     }
 
-    public float getSimilarity(final String string1, final String string2) {
+    public float getSimilarity(final StringBuilder string1, final StringBuilder string2) {
         final float levensteinDistance = getUnNormalisedSimilarity(string1, string2);
         float maxLen = string1.length();
         if (maxLen < string2.length()) {
@@ -44,20 +44,20 @@ public final class Levenshtein extends AbstractStringMetric implements Serializa
         }
 
         if (maxLen == 0) {
-            return 1.0f;
+            return 1.0f; 
         } else {
             return 1.0f - (levensteinDistance / maxLen);
         }
 
     }
 
-    public float getUnNormalisedSimilarity(final String s, final String t) {
-        final float[][] d;
-        final int n;
-        final int m;
-        int i;
-        int j;
-        float cost;
+    public float getUnNormalisedSimilarity(final StringBuilder s, final StringBuilder t) {
+        final float[][] d; 
+        final int n; 
+        final int m; 
+        int i; 
+        int j; 
+        float cost; 
 
         n = s.length();
         m = t.length();

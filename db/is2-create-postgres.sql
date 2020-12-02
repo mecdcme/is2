@@ -114,7 +114,8 @@ CREATE TABLE is2.is2_app_role (
     descr text,
     order_code integer,
     cls_data_type_id integer,
-    parameter_id integer
+    parameter_id integer,
+    hidden character(1)
 );
 
 CREATE SEQUENCE is2.is2_app_role_id_seq

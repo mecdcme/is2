@@ -10,7 +10,7 @@ public final class SubCost1_Minus2 extends AbstractSubstitutionCost implements S
         return "SubCost1_Minus2";
     }
 
-    public final float getCost(final String str1, final int string1Index, final String str2, final int string2Index) {
+    public final float getCost(final StringBuilder str1, final int string1Index, final StringBuilder str2, final int string2Index) {
         if (str1.length() <= string1Index || string1Index < 0) {
             return 0;
         }

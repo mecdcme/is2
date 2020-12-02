@@ -29,7 +29,7 @@ public final class TokeniserWhitespace implements InterfaceTokeniser, Serializab
         this.stopWordHandler = stopWordHandler;
     }
 
-    public final ArrayList<String> tokenizeToArrayList(final String input) {
+    public final ArrayList<String> tokenizeToArrayList(final StringBuilder input) {
         final ArrayList<String> returnVect = new ArrayList<String>();
         int curPos = 0;
         while (curPos < input.length()) {
@@ -39,7 +39,7 @@ public final class TokeniserWhitespace implements InterfaceTokeniser, Serializab
             }
             int nextGapPos = input.length();
             for (int i = 0; i < delimiters.length(); i++) {
-                final int testPos = input.indexOf(delimiters.charAt(i), curPos);
+                final int testPos = input.indexOf(delimiters.substring(i,i+1), curPos);
                 if (testPos < nextGapPos && testPos != -1) {
                     nextGapPos = testPos;
                 }
@@ -54,7 +54,7 @@ public final class TokeniserWhitespace implements InterfaceTokeniser, Serializab
         return returnVect;
     }
 
-    public Set<String> tokenizeToSet(final String input) {
+    public Set<String> tokenizeToSet(final StringBuilder input) {
         final Set<String> returnSet = new HashSet<String>();
         returnSet.addAll(tokenizeToArrayList(input));
         return returnSet;

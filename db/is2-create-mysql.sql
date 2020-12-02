@@ -424,6 +424,7 @@ CREATE TABLE `is2_app_role` (
   `ORDER_CODE` 				INT NULL,
   `CLS_DATA_TYPE_ID` 	INT NULL,
   `PARAMETER_ID` 		INT NULL,
+  `HIDDEN` 				CHAR(1) NULL,
   PRIMARY KEY (`ID`),
   CONSTRAINT `fk_is2_app_role_is2_data_type` FOREIGN KEY (`CLS_DATA_TYPE_ID`)
 	REFERENCES `is2_cls_data_type` (`ID`)

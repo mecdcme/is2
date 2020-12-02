@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 public final class DiceSimilarity extends AbstractStringMetric implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 0.00000034457142857142857142857142857146f;
 
@@ -34,17 +34,17 @@ public final class DiceSimilarity extends AbstractStringMetric implements Serial
         return "Implements the DiceSimilarity algorithm providing a similarity measure between two strings using the vector space of present terms";
     }
 
-    public String getSimilarityExplained(String string1, String string2) {
-        return null;
+    public String getSimilarityExplained(StringBuilder string1, StringBuilder string2) {
+        return null;  
     }
 
-    public float getSimilarityTimingEstimated(final String string1, final String string2) {
+    public float getSimilarityTimingEstimated(final StringBuilder string1, final StringBuilder string2) {
         final float str1Length = string1.length();
         final float str2Length = string2.length();
         return (str1Length + str2Length) * ((str1Length + str2Length) * ESTIMATEDTIMINGCONST);
     }
 
-    public float getSimilarity(final String string1, final String string2) {
+    public float getSimilarity(final StringBuilder string1, final StringBuilder string2) {
         final ArrayList<String> str1Tokens = tokeniser.tokenizeToArrayList(string1);
         final ArrayList<String> str2Tokens = tokeniser.tokenizeToArrayList(string2);
 
@@ -61,7 +61,7 @@ public final class DiceSimilarity extends AbstractStringMetric implements Serial
         return (2.0f * commonTerms) / (termsInString1 + termsInString2);
     }
 
-    public float getUnNormalisedSimilarity(String string1, String string2) {
+    public float getUnNormalisedSimilarity(StringBuilder string1, StringBuilder string2) {
         return getSimilarity(string1, string2);
     }
 }

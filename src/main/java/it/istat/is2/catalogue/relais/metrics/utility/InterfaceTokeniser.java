@@ -13,8 +13,8 @@ public interface InterfaceTokeniser {
 
     public void setStopWordHandler(InterfaceTermHandler stopWordHandler);
 
-    public ArrayList<String> tokenizeToArrayList(String input);
+    public ArrayList<String> tokenizeToArrayList(StringBuilder input);
 
-    public Set<String> tokenizeToSet(String input);
+    public Set<String> tokenizeToSet(StringBuilder input);
 }
 
