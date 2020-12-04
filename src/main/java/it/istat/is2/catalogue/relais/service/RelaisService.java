@@ -145,6 +145,7 @@ public class RelaisService {
 			parametriMap.put(keyStr, reductionJSONObject.get(keyStr).toString());
 		}
 
+		if (method == null) throw new Exception("Relais.Service-method not found");
 		return (Map<?, ?>) method.invoke(this, idelaborazione, ruoliVariabileNome, worksetIn, parametriMap);
 	}
 

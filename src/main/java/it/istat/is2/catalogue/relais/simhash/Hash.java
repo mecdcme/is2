@@ -92,21 +92,22 @@ public class Hash {
     
  }
  
- public void evalHashBit() {
+ @SuppressWarnings("deprecation")
+public void evalHashBit() {
    
    rowDim = gramDim*bitDim;
    hashbit = new double[grams.length][rowDim];
-   int currCode;
+   double currCode;
    
    for (int gramx=0;(gramx<grams.length) && (weigs[gramx]>0);gramx++) {
       for (int charx=0;charx<gramDim;charx++) {
-         currCode=(new Character(grams[gramx].charAt(charx))).hashCode();
+         currCode=(double)(new Character(grams[gramx].charAt(charx))).hashCode();
          for (int ix=0;ix<bitDim;ix++) {
-             if (Math.pow(2,bitDim-1-ix)>currCode) {
+             if (Math.pow(2d,(double)(bitDim-1-ix))>currCode) {
                 hashbit[gramx][(charx*bitDim)+ix] = -1;
              } else {
                 hashbit[gramx][(charx*bitDim)+ix] = weigs[gramx];
-                currCode=currCode - (int) Math.pow(2,bitDim-1-ix);
+                currCode=currCode - (double) Math.pow(2d,(double)(bitDim-1-ix));
              }
              //System.out.print(" "+(hashbit[gramx][(charx*bitDim)+ix]+1));
          }

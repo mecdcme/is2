@@ -29,12 +29,12 @@ public final class  WindowEquality extends AbstractStringMetric implements Seria
     @Override
    public float getSimilarity(StringBuilder string1, StringBuilder string2) {
        
-        if((string1==null)||(string1.equals("")))
+        if((string1==null)||(string1.length()==0))
         {
             
             return 0;
         }
-        else if ((string2== null)||(string2.equals("")))
+        else if ((string2== null)||(string2.length()==0))
             
         {
             
@@ -81,7 +81,5 @@ public final class  WindowEquality extends AbstractStringMetric implements Seria
         else 
             return 0;
     }
-
-           
     
 }

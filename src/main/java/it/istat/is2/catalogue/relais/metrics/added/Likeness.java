@@ -122,9 +122,13 @@ public final class Likeness extends AbstractStringMetric implements Serializable
 
         }
 
-        float retval = ((float) similar/(float)(similar+difference));
+        float retval = 0f;
+        if ((similar+difference)>0f) 
+           retval = ((float) similar/(float)(similar+difference));
+        
         return (retval);
     }
+
 }
 
 
