@@ -74,7 +74,7 @@ public final class Soundex extends AbstractStringMetric implements Serializable 
             return (wordtoSB);
         }
 
-        //wordString = wordString.toUpperCase();
+     
 
         wordStr = wordString.toString().toUpperCase();
         wordStr = wordStr.replaceAll("[^A-Z]", " "); 
