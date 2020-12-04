@@ -2320,7 +2320,7 @@ public class RelaisService {
 						if (h1.ds != h2.ds || dedup) {
 							// confronti++;
 							if (inv == 0)
-								dist = Simhash.hashdist(h1.hashcode, h2.hashcode);
+								dist = Simhash.hashdist(h1.hashcodeRec, h2.hashcodeRec);
 							else
 								dist = Simhash.hashdist(h1.hashinvert, h2.hashinvert);
 
