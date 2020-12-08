@@ -143,7 +143,7 @@ public class PostgreSQLSqlGenericDao extends SqlGenericDao {
     public List<String> findTablesDB(String tableSchema) {
 
         Query q = em.createNativeQuery(
-                "SELECT table_name FROM information_schema.tables WHERE table_schema = :table_schema");
+                "SELECT table_name FROM information_schema.tables WHERE LOWER (table_schema) = LOWER (:table_schema)");
         q.setParameter("table_schema", tableSchema);
         @SuppressWarnings("unchecked")
         List<String> resultList = (List<String>) q.getResultList();
@@ -154,7 +154,7 @@ public class PostgreSQLSqlGenericDao extends SqlGenericDao {
     public List<String> findFieldsTableDB(String tableSchema, String tableName) {
 
         Query q = em.createNativeQuery(
-                "SELECT COLUMN_NAME  FROM information_schema.columns  WHERE table_schema = :table_schema  AND table_name=:table_name");
+                "SELECT COLUMN_NAME  FROM information_schema.columns  WHERE LOWER (table_schema) = LOWER (:table_schema)  AND LOWER(table_name)=LOWER(:table_name)");
         q.setParameter("table_schema", tableSchema);
         q.setParameter("table_name", tableName);
         @SuppressWarnings("unchecked")
