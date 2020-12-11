@@ -84,10 +84,10 @@ public abstract class SqlGenericDao {
     public List<String> loadFieldValuesTable(String dbschema, String tablename, String field) {
 
         String table = dbschema + "." + tablename;
-        String query = "SELECT  ?  FROM (%s)";
-        String sql = String.format(query, table);
+        String query = "SELECT  %s  FROM %s";
+        String sql = String.format(query, field,table);
         Query q = em.createNativeQuery(sql);
-        q.setParameter(1, field);
+       
 
         return q.getResultList();
 

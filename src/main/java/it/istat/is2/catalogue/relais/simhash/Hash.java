@@ -4,8 +4,8 @@ import java.security.*;
 import java.util.*;
 
 public class Hash {
-  public int gramDim;
-  public int bitDim=8;
+  private int gramDim;
+  private int bitDim=8;
   public String inputString;
   String[] grams;
   int[] weigs;
@@ -44,18 +44,7 @@ public class Hash {
  }
  
  public void setString(String input) {
-    /* inputString = soloAlfanumerici(input.toUpperCase());
-    if (inputString.length()<gramDim) {
-       grams = new String[1];
-       grams[0] = input;
-	   weigs[0] = 1;
-    } 
-    else { 
-       String[] appo =	new String[inputString.length()+1-gramDim];
-
-       for (int ix=0; ix<=inputString.length()-gramDim; ix++) {
-           appo[ix]=inputString.substring(ix,ix+gramDim);
-       } */
+  
      String[] appo;
     appo = getGrams(input,gramDim);
     if (appo.length == 1) {
@@ -109,10 +98,10 @@ public void evalHashBit() {
                 hashbit[gramx][(charx*bitDim)+ix] = weigs[gramx];
                 currCode=currCode - (double) Math.pow(2d,(double)(bitDim-1-ix));
              }
-             //System.out.print(" "+(hashbit[gramx][(charx*bitDim)+ix]+1));
+            
          }
       }
-      //System.out.println();
+      
    }
     
  }
@@ -127,11 +116,9 @@ public void evalHashBit() {
    MessageDigest m = MessageDigest.getInstance("MD5");
    
    for (int gramx=0;(gramx<grams.length) && (weigs[gramx]>0);gramx++) {
-      //System.out.println(gramx+" : "+grams[gramx]+" "+weigs[gramx]);
-      byte[] digest = m.digest(grams[gramx].getBytes());
+       byte[] digest = m.digest(grams[gramx].getBytes());
    
-      /* if is udìsed tf-idf weights the log-formula is used else only the frequency in the string */
-      if (!useWgs)
+       if (!useWgs)
           dw = (double) weigs[gramx];
       else {
            if (grWgs.containsKey(grams[gramx]))
@@ -140,8 +127,6 @@ public void evalHashBit() {
 		throw new Exception("weight for '"+grams[gramx]+"' gram not found");
 	   }
       }
-      /*TESTRELAIS if (weigs[gramx]>1) System.out.println(gramx+"."+grams[gramx]+"-"+" "+dw+" : "+weigs[gramx]+" "+grWgs.get(grams[gramx])+" "+totrec+" * "+(1 + Math.log(weigs[gramx])));*/
-           
       for (int digx=0; digx<digest.length; digx++) {
 	     // precedente formato "%1$#"+bitDim+"s" nuovo "%1$"+bitDim+"s" mod 11/10 
          appoex = String.format("%1$"+bitDim+"s",Integer.toBinaryString(digest[digx] < 0 ? 256+digest[digx] : digest[digx]));
@@ -152,10 +137,8 @@ public void evalHashBit() {
                 hashbit[gramx][(digx*bitDim)+ix] = -dw;
              }
          }
-		 /*test System.out.print(appoex);*/
+		
       }
-      /*TESTRELAIS if (weigs[gramx]>1) System.out.println(gramx+"."+grams[gramx]+"-"+" "+dw+" : "+weigs[gramx]+" "+grWgs.get(grams[gramx])+" "+totrec+" * "+((double)(totrec/ Double.parseDouble(grWgs.get(grams[gramx]).toString()))));*/
-       /*test System.out.println(" : "+grams[gramx]+" w "+weigs[gramx]);*/
    }
  }
  
