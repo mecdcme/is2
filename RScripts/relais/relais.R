@@ -372,12 +372,12 @@ mufrommarginals <- function(workset, roles, wsparams=NULL, ...) {
  r_out <- cbind(r_out,prec_oss,recl_oss)
  names(r_out)[-(1:nvar)] <- c("F_M","F_U","M","U","R","P_POST","PRECISION","RECALL")
  
- outroles <- list (FS=names(r_out))
- outrolesgroup <- list (FS= c("FS"))
+ outroles <- list (FS=names(r_out), MP=names(margins))
+ outrolesgroup <- list (FS= c("FS"), MP=c("MP"))
  
- outworksets<-list(FS=r_out)
+ outworksets<-list(FS=r_out, MP=margins)
 
  result <-list( workset_out=outworksets, roles_out= outroles, rolesgroup_out= outrolesgroup,  log = '')
- 
+
  }
 }
