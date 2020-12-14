@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: is2
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+    - hosts:
+        - is2.i3s-test.insee.io
+  rules:
+    - host: is2.i3s-test.insee.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: is2
+              servicePort: http

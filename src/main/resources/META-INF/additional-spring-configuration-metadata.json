@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "arc.webservice.uri",
+  "type": "java.lang.String",
+  "description": "ARC webservice url"
+}]}

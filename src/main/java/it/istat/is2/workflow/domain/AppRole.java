@@ -48,6 +48,8 @@ public class AppRole extends AbstractDomainObject {
     private String code;
     @Column(name = "ORDER_CODE")
     private Short order;
+    @Column(name = "HIDDEN")
+    private String hidden;
 
     @ManyToOne
     @JoinColumn(name = "CLS_DATA_TYPE_ID")

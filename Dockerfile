@@ -5,7 +5,7 @@ COPY src /usr/src/app/src
 COPY pom.xml /usr/src/app
 RUN mvn -f /usr/src/app/pom.xml clean package
 
-FROM openjdk:11-jdk-slim
+FROM openjdk:11.0.9.1-jre-slim
 
 COPY --from=build /usr/src/app/target/is2.jar /usr/app/is2.jar
 RUN mkdir -p /usr/app/is2/RScripts

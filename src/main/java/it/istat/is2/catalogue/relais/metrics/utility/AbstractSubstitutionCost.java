@@ -4,7 +4,7 @@ public abstract class AbstractSubstitutionCost implements InterfaceSubstitutionC
 
     public abstract String getShortDescriptionString();
 
-    public abstract float getCost(String str1, int string1Index, String str2, int string2Index);
+    public abstract float getCost(StringBuilder str1, int string1Index, StringBuilder str2, int string2Index);
 
     public abstract float getMaxCost();
 

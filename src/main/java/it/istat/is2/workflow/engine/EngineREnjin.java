@@ -203,16 +203,18 @@ public class EngineREnjin extends EngineR implements EngineService {
         if (!workset.isEmpty()) {
             List<String> keys = new ArrayList<>(workset.keySet());
             StringBuilder listaCampi = new StringBuilder();
+            StringBuilder nomeCampi = new StringBuilder();
             int size = keys.size();
             String key;
             for (int i = 0; i < size; i++) {
                 key = keys.get(i);
                 String[] arrX = workset.get(key).toArray(new String[workset.get(key).size()]);
                 listaCampi.append(key + ",");
+                nomeCampi.append("\""+key+"\",");
                 engine.put(key, arrX);
             }
-
             engine.eval(varR + " <- list(" + listaCampi.substring(0, listaCampi.length() - 1) + ")");
+            engine.eval("names("+varR + ") <- c(" + nomeCampi.substring(0, nomeCampi.length() - 1) + ")"); 
 
         }
     }

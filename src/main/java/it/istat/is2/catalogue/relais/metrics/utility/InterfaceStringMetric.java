@@ -6,11 +6,11 @@ public interface InterfaceStringMetric {
 
     public String getLongDescriptionString();
 
-    public long getSimilarityTimingActual(String string1, String string2);
+    public long getSimilarityTimingActual(final StringBuilder string1, final StringBuilder string2);
 
-    public float getSimilarityTimingEstimated(String string1, String string2);
+    public float getSimilarityTimingEstimated(final StringBuilder string1, final StringBuilder string2);
 
-    public float getSimilarity(String string1, String string2);
+    public float getSimilarity(final StringBuilder string1, final StringBuilder string2);
 
-    public String getSimilarityExplained(String string1, String string2);
+    public String getSimilarityExplained(final StringBuilder string1, final StringBuilder string2);
 }

@@ -50,7 +50,7 @@ public final class SubCost5_3_Minus3 extends AbstractSubstitutionCost implements
         return "SubCost5_3_Minus3";
     }
 
-    public final float getCost(final String str1, final int string1Index, final String str2, final int string2Index) {
+    public final float getCost(final StringBuilder str1, final int string1Index, final StringBuilder str2, final int string2Index) {
         if (str1.length() <= string1Index || string1Index < 0) {
             return CHAR_MISMATCH_MATCH_SCORE;
         }

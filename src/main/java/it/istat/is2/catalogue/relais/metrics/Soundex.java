@@ -6,7 +6,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.AbstractStringMetric;
 
 public final class Soundex extends AbstractStringMetric implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 0.00052f;
 
@@ -30,34 +30,37 @@ public final class Soundex extends AbstractStringMetric implements Serializable 
         return "Implements the Soundex algorithm providing a similarity measure between two soundex codes";
     }
 
-    public String getSimilarityExplained(String string1, String string2) {
-        return null;
+    public String getSimilarityExplained(StringBuilder string1, StringBuilder string2) {
+        return null;  
     }
 
-    public float getSimilarityTimingEstimated(final String string1, final String string2) {
+    public float getSimilarityTimingEstimated(final StringBuilder string1, final StringBuilder string2) {
         final float str1Length = string1.length();
         final float str2Length = string2.length();
         final String testString = "abcdefghijklmnopq";
-        return ((str1Length + str2Length) * ESTIMATEDTIMINGCONST) + internalStringMetric.getSimilarityTimingEstimated(testString.substring(0, SOUNDEXLENGTH), testString.substring(0, SOUNDEXLENGTH));
+        final StringBuilder strA = new StringBuilder(testString.substring(0,SOUNDEXLENGTH));
+        final StringBuilder strB = new StringBuilder(testString.substring(0,SOUNDEXLENGTH));
+        return ((str1Length + str2Length) * ESTIMATEDTIMINGCONST) + internalStringMetric.getSimilarityTimingEstimated(strA,strB);
     }
 
-    public float getSimilarity(final String string1, final String string2) {
-        final String soundex1 = calcSoundEx(string1, SOUNDEXLENGTH);
-        final String soundex2 = calcSoundEx(string2, SOUNDEXLENGTH);
+    public float getSimilarity(final StringBuilder string1, final StringBuilder string2) {
+        final StringBuilder soundex1 = calcSoundEx(string1, SOUNDEXLENGTH);
+        final StringBuilder soundex2 = calcSoundEx(string2, SOUNDEXLENGTH);
         return internalStringMetric.getSimilarity(soundex1, soundex2);
     }
 
-    public float getUnNormalisedSimilarity(String string1, String string2) {
+    public float getUnNormalisedSimilarity(StringBuilder string1, StringBuilder string2) {
         return internalStringMetric.getUnNormalisedSimilarity(string1, string2);
     }
 
-    private static String calcSoundEx(String wordString, int soundExLen) {
+    private static StringBuilder calcSoundEx(StringBuilder wordString, int soundExLen) {
         String tmpStr;
         String wordStr;
         char curChar;
         char lastChar;
         final int wsLen;
         final char firstLetter;
+        StringBuilder wordtoSB;
 
         if (soundExLen > 10) {
             soundExLen = 10;
@@ -67,23 +70,25 @@ public final class Soundex extends AbstractStringMetric implements Serializable 
         }
 
         if (wordString.length() == 0) {
-            return ("");
+        	wordtoSB = new StringBuilder("");
+            return (wordtoSB);
         }
 
-        wordString = wordString.toUpperCase();
+     
 
-        wordStr = wordString;
-        wordStr = wordStr.replaceAll("[^A-Z]", " ");
-        wordStr = wordStr.replaceAll("\\s+", "");
+        wordStr = wordString.toString().toUpperCase();
+        wordStr = wordStr.replaceAll("[^A-Z]", " "); 
+        wordStr = wordStr.replaceAll("\\s+", "");   
 
         if (wordStr.length() == 0) {
-            return ("");
+        	wordtoSB = new StringBuilder("");
+            return (wordtoSB);
         }
 
         firstLetter = wordStr.charAt(0);
 
-        if (wordStr.length() > (SOUNDEXLENGTH * 4) + 1) {
-            wordStr = "-" + wordStr.substring(1, SOUNDEXLENGTH * 4);
+        if(wordStr.length() > (SOUNDEXLENGTH*4)+1) {
+            wordStr = "-" + wordStr.substring(1,SOUNDEXLENGTH*4);
         } else {
             wordStr = "-" + wordStr.substring(1);
         }
@@ -97,7 +102,7 @@ public final class Soundex extends AbstractStringMetric implements Serializable 
 
         wsLen = wordStr.length();
         lastChar = '-';
-        tmpStr = "-";
+        tmpStr = "-";     
         for (int i = 1; i < wsLen; i++) {
             curChar = wordStr.charAt(i);
             if (curChar != lastChar) {
@@ -106,11 +111,12 @@ public final class Soundex extends AbstractStringMetric implements Serializable 
             }
         }
         wordStr = tmpStr;
-        wordStr = wordStr.substring(1);
-        wordStr = wordStr.replaceAll("0", "");
-        wordStr += "000000000000000000";
-        wordStr = firstLetter + wordStr;
-        wordStr = wordStr.substring(0, soundExLen);
-        return (wordStr);
+        wordStr = wordStr.substring(1);          
+        wordStr = wordStr.replaceAll("0", "");  
+        wordStr += "000000000000000000";            
+        wordStr = firstLetter + wordStr;      
+        wordStr = wordStr.substring(0, soundExLen); 
+        wordtoSB = new StringBuilder(wordStr);
+        return (wordtoSB);
     }
 }

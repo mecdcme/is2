@@ -9,7 +9,7 @@ import it.istat.is2.catalogue.relais.metrics.utility.TokeniserQGram3Extended;
 
 public final class QGramsDistance extends AbstractStringMetric implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
     private final float ESTIMATEDTIMINGCONST = 1.34e-4f;
 
@@ -31,17 +31,17 @@ public final class QGramsDistance extends AbstractStringMetric implements Serial
         return "Implements the Q Grams Distance algorithm providing a similarity measure between two strings using the qGram approach check matching qGrams/possible matching qGrams";
     }
 
-    public String getSimilarityExplained(String string1, String string2) {
-        return null;
+    public String getSimilarityExplained(StringBuilder string1, StringBuilder string2) {
+        return null;  
     }
 
-    public float getSimilarityTimingEstimated(final String string1, final String string2) {
+    public float getSimilarityTimingEstimated(final StringBuilder string1, final StringBuilder string2) {
         final float str1Length = string1.length();
         final float str2Length = string2.length();
         return (str1Length * str2Length) * ESTIMATEDTIMINGCONST;
     }
 
-    public float getSimilarity(final String string1, final String string2) {
+    public float getSimilarity(final StringBuilder string1, final StringBuilder string2) {
         final ArrayList<String> str1Tokens = tokeniser.tokenizeToArrayList(string1);
         final ArrayList<String> str2Tokens = tokeniser.tokenizeToArrayList(string2);
 
@@ -54,7 +54,7 @@ public final class QGramsDistance extends AbstractStringMetric implements Serial
         }
     }
 
-    public float getUnNormalisedSimilarity(String string1, String string2) {
+    public float getUnNormalisedSimilarity(StringBuilder string1, StringBuilder string2) {
         final ArrayList<String> str1Tokens = tokeniser.tokenizeToArrayList(string1);
         final ArrayList<String> str2Tokens = tokeniser.tokenizeToArrayList(string2);
 

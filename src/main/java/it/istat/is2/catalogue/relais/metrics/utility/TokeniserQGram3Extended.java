@@ -23,7 +23,7 @@ public final class TokeniserQGram3Extended implements InterfaceTokeniser, Serial
         return "";
     }
 
-    public final ArrayList<String> tokenizeToArrayList(final String input) {
+    public final ArrayList<String> tokenizeToArrayList(final StringBuilder input) {
         final ArrayList<String> returnVect = new ArrayList<String>();
         final StringBuffer adjustedString = new StringBuffer();
         adjustedString.append(QGRAMSTARTPADDING);
@@ -52,7 +52,7 @@ public final class TokeniserQGram3Extended implements InterfaceTokeniser, Serial
         this.stopWordHandler = stopWordHandler;
     }
 
-    public Set<String> tokenizeToSet(final String input) {
+    public Set<String> tokenizeToSet(final StringBuilder input) {
         final Set<String> returnSet = new HashSet<String>();
         returnSet.addAll(tokenizeToArrayList(input));
         return returnSet;

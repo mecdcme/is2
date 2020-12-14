@@ -10,7 +10,7 @@ final public class SubCost01 extends AbstractSubstitutionCost implements Seriali
         return "SubCost01";
     }
 
-    public final float getCost(final String str1, final int string1Index, final String str2, final int string2Index) {
+    public final float getCost(final StringBuilder str1, final int string1Index, final StringBuilder str2, final int string2Index) {
         if (str1.charAt(string1Index) == str2.charAt(string2Index)) {
             return 0.0f;
         } else {
