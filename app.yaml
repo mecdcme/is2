@@ -9,5 +9,6 @@ env_variables:
     SPRING_DATASOURCE_PASSWORD: postgres
     SPRING_DATASOURCE_DRIVERCLASSNAME: org.postgresql.Driver
     SPRING_DATASOURCE_PLATFORM: postgresql
+    ARC_WEBSERVICE_URI: http://localhost:28080/arc-ws
 
   
