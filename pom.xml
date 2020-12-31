@@ -133,16 +133,19 @@
 			<artifactId>postgres-socket-factory</artifactId>
 			<version>1.0.15</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-text</artifactId>
+		    <version>1.9</version>
+		</dependency>
 		<!-- Renjin -->
 		<!-- https://mvnrepository.com/artifact/org.netlib/netlib-java -->
-	<dependency>
+		<dependency>
 			<groupId>org.renjin</groupId>
 			<artifactId>renjin-script-engine</artifactId>
 			<version>RELEASE</version>
-			</dependency>
-		
-
- 	<dependency>
+		</dependency>
+	 	<dependency>
 			<groupId>org.renjin.cran</groupId>
 			<artifactId>SeleMix</artifactId>
 			<version>1.0.1-b16</version>

@@ -23,17 +23,24 @@
  */
 package it.istat.is2.catalogue.arc.service;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+
+import it.istat.is2.catalogue.arc.service.pojo.ExecuteParameterPojo;
+import it.istat.is2.catalogue.arc.service.pojo.ExecuteQueryPojo;
+import it.istat.is2.catalogue.arc.service.view.ReturnView;
 import it.istat.is2.workflow.engine.EngineService;
 
 
@@ -44,52 +51,115 @@ import it.istat.is2.workflow.engine.EngineService;
 @Component
 public class LoadService {
 
-    @Value("${arc.webservice.uri}")
-    private String arcWsUri;
 	
     final int stepService = 250;
     final int sizeFlushed = 20;
 
     final String params_LP="LP";
     final String params_DATA="DATA";
+    
+    @Autowired
+    private WsSender send;
 
 
     public Map<?, ?> arcLoader(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
-            Map<String, ArrayList<String>> worksetVariabili, Map<String, String> parametriMap) throws Exception {
+    		Map<String, Map<String, List<String>>> worksetVariabili, Map<String, String> parametriMap) throws Exception {
     	
-    	final Map<String, Map<?, ?>> returnOut = new HashMap<>();
-    	
-    	System.out.println(arcWsUri);
-    	
-    	URL url = new URL(arcWsUri+"/hello");
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		String charset = "UTF-8";
+		final Map<String, Map<?, ?>> returnOut = new HashMap<>();
+		final Map<String, Map<?, ?>> worksetOut = new HashMap<>();
 		
-		conn.setDoOutput(true);
-		conn.setRequestMethod("GET");
-		conn.setRequestProperty("Accept-Charset", charset);
-		conn.setRequestProperty("Content-Type", "application/json; utf-8"); 
 		
-		if (conn.getResponseCode() != 200) {
-			
-//			throw new RuntimeException("Failed : HTTP error code : "
-//				+ conn.getResponseCode());
-			
-			return null;
 
-		}
-
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-				(conn.getInputStream())));
-
-		String output;
-
-		while ((output = br.readLine()) != null) {
-			System.out.println(output);
-		}
-
-		conn.disconnect();
+		final Map<String, ArrayList<String>> contingencyTableOut = new LinkedHashMap<>();
+		final Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
+		final Map<String, String> rolesGroupOut = new HashMap<>();
+		
+		
+		
+    	System.out.println(idelaborazione);
     	
+    	
+    	
+    	System.out.println(ruoliVariabileNome);
+    	System.out.println(worksetVariabili);
+    	
+    	
+    	
+
+    	System.out.println(parametriMap.get("LOADER_PARAMETERS"));
+    	
+    	System.out.println("********");
+    	System.out.println(worksetVariabili.get("DS1").get("DS"));
+
+
+    	send.setId(idelaborazione);
+
+    	send.setRulesForSandbox();
+    	
+    	send.setRulesForModel();
+    	send.setRulesForNorm();
+    	send.setRulesForCalendar();
+    	send.setRulesForRuleset();
+    	send.setRulesForLoad(new JSONArray(parametriMap.get("LOADER_PARAMETERS")));
+
+    	
+    	send.sendEnvBuilder();
+
+    	
+    	ExecuteParameterPojo e;
+    	
+    	e=new ExecuteParameterPojo();
+    	e.sandbox=send.getSandbox();
+    	e.targetPhase="0";
+    	
+    	send.sendExecuteService(idelaborazione, e);
+    	send.sendResetService(idelaborazione, e);
+
+    	
+    	e=new ExecuteParameterPojo();
+    	e.sandbox=send.getSandbox();
+    	e.targetPhase="1";
+    	e.fileName=send.getNamespace()+"-ds1.csv";
+    	e.fileContent=send.datasetToCsv(worksetVariabili, "DS1");
+    	send.sendExecuteService(idelaborazione, e);
+
+    	
+    	e=new ExecuteParameterPojo();
+    	e.sandbox=send.getSandbox();
+    	e.targetPhase="2";
+    	
+    	e.queries=new ArrayList<ExecuteQueryPojo>();
+    	
+    	ExecuteQueryPojo query=new ExecuteQueryPojo("1", "q1", "select * from chargement_ok_child_cfd5d19739b29b0515f05d84ac93bf5ef6c46de3", null);
+    	e.queries.add(query);
+    	
+    	JSONObject j=send.sendExecuteService(idelaborazione, e);
+
+    	ReturnView r= new ObjectMapper().readValue(j.toString(), ReturnView.class);
+    	
+    	r.getDataSetView().get(0).getContent().keySet().forEach(k->contingencyTableOut.put(k,(ArrayList<String>) r.getDataSetView().get(0).getContent().get(k).data));
+    	
+//    	contingencyTableOut.put("COL1",
+//		new ArrayList<String>(Arrays.asList("a","b","c"))
+//		);
+    	
+    	rolesOut.put("LOK1",new ArrayList<String>(contingencyTableOut.keySet()));
+    	returnOut.put(EngineService.ROLES_OUT, rolesOut);
+    	
+    	rolesOut.keySet().forEach(code -> {
+			rolesGroupOut.put(code, code);
+		});
+		returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
+
+    	worksetOut.put("LOK1", contingencyTableOut);
+		returnOut.put(EngineService.WORKSET_OUT, worksetOut);
+
+
+		
+    	
+//    	
+//    	System.out.println(send.datasetToCsv(worksetVariabili, "DS1"));
+//    	
 //
 //    	  Map<String, Map<?, ?>> returnOut = new HashMap<>();
 //          Map<String, Map<?, ?>> worksetOut = new HashMap<>();
@@ -174,9 +244,9 @@ public class LoadService {
 //        worksetOut.put("LOV", contengencyTableOut);
 //        returnOut.put(IS2Const.WF_OUTPUT_WORKSET, worksetOut);
 //                
-		returnOut.put(EngineService.ROLES_GROUP_OUT, new HashMap<String,String>());
-
-		returnOut.put(EngineService.WORKSET_OUT, new HashMap<String,String>());
+//		returnOut.put(EngineService.ROLES_GROUP_OUT, new HashMap<String,String>());
+//
+//		returnOut.put(EngineService.WORKSET_OUT, new HashMap<String,String>());
 
 		
 		return returnOut;

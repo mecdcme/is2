@@ -4,9 +4,11 @@ INSERT INTO is2.is2_parameter VALUES (910, 'LOADER_PARAMETERS', 'LOADER_PARAMETE
 INSERT INTO is2.is2_parameter VALUES (950, 'MAPPING_PARAMETERS', 'MAPPING_PARAMETERS', NULL, '{ "data":[], "schema":{  "items":{  "properties":{  "VariableName":{  "maxLength":50, "required":true, "title":"Variable Name", "type":"string" } ,"VariableType":{  "enum":["bigint","bigint[]","boolean","date","date[]","float","float[]","interval","text","text[]","timestamp without time zone" ], "required":true, "title":"Variable Type" } ,"Expression":{  "maxLength":100000, "required":true, "title":"Expression", "type":"string" } ,"TargetTables":{  "maxLength":100000, "required":true, "title":"Target tables", "type":"string" } }, "type":"object" }, "type":"array" }, "options":{  "type":"table", "showActionsColumn":true, "hideAddItemsBtn":false, "items":{  "fields":{  "VariableType":{  "type":"select", "noneLabel":"", "removeDefaultNone":false } } }, "form":{  "buttons":{  "addRow":"addRow" } }, "view":{  "templates":{  "container-array-toolbar":"#addItemsBtn" } } }}');
 
 
+
 INSERT INTO is2.is2_app_role(ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID) VALUES (910, 'LP', 'LOADER PARAMETERS', 'LOADER PARAMETERS', 1, 2, 910);
 INSERT INTO is2.is2_app_role(ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID) VALUES (950, 'MP', 'MAPPING PARAMETERS', 'MAPPING PARAMETERS', 5, 2, 950);
-
+INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (911, 'DS1', 'DATASET 1', 'SELECTED VARIABLES IN DATASET 1', 2, 1, NULL);
+INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (912, 'LOK1', 'LOAD OK DS1', 'LOAD OK DS1 TABLE', 4, 1, NULL);
 
 
 INSERT INTO is2_app_service (ID, NAME, DESCR, IMPLEMENTATION_LANGUAGE, ENGINE,SOURCE_PATH, SOURCE_CODE, AUTHOR, LICENCE,CONTACT,BUSINESS_SERVICE_ID) 
@@ -27,8 +29,8 @@ INSERT INTO is2.is2_business_process VALUES (95, 'MAP', 'MAP ', 'PARC-05', 6, 9)
 
 INSERT INTO is2.is2_link_business_service_app_role VALUES (91, 910);
 INSERT INTO is2.is2_link_business_service_app_role VALUES (91, 950);
-
-
+INSERT INTO is2.is2_link_business_service_app_role VALUES (91, 911);
+INSERT INTO is2.is2_link_business_service_app_role VALUES (91, 912);
 
 INSERT INTO is2.is2_link_function_process VALUES (4, 9);
 
@@ -47,6 +49,8 @@ INSERT INTO is2.is2_step_instance VALUES (95, 'arcMapping', 'ARC Mapping service
 
 INSERT INTO is2.is2_step_instance_signature VALUES (910, 1, 910, 91, 1);
 INSERT INTO is2.is2_step_instance_signature VALUES (950, 1, 950, 95, 1);
+INSERT INTO is2.is2_step_instance_signature (id,required,app_role_id,step_instance_id,cls_type_io_id) VALUES (911, 1, 911, 91, 1);
+INSERT INTO is2.is2_step_instance_signature (id,required,app_role_id,step_instance_id,cls_type_io_id) VALUES (912, 1, 912, 91, 2);
 
 INSERT INTO is2.is2_link_process_step VALUES (91, 91);
 INSERT INTO is2.is2_link_process_step VALUES (95, 95);
