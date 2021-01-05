@@ -4,8 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,10 +29,7 @@ import it.istat.is2.catalogue.arc.service.pojo.Record;
 import it.istat.is2.catalogue.arc.service.pojo.SetRulesPojo;
 
 @Component
-public class WsSender {
-
-	
-	public static final String prefixNamespace="is2@";
+public class WsSender extends Constants {
 		
 
     @Value("${arc.webservice.uri}")
@@ -40,9 +40,7 @@ public class WsSender {
 	private String namespace;
 
 	private String sandbox;
-
-    /** Comma character. */
-    private static final String CSV_DELIMITER = ",";
+    
 	
 	public WsSender()
 	{
@@ -151,6 +149,20 @@ public class WsSender {
 		sendSetRules(this.id, rules);
 	}
 	
+    public static String tableOfIdSource(String tableName, String idSource)
+    {
+    	String hashText="";
+        MessageDigest m;
+		try {
+			m = MessageDigest.getInstance("SHA1");
+			m.update(idSource.getBytes(),0,idSource.length());
+			hashText=String.format("%1$032x",new BigInteger(1,m.digest()));
+		} catch (NoSuchAlgorithmException e) {
+			return null;
+		}
+        return tableName + "_"+CHILD_TABLE_TOKEN+"_" + hashText;
+    }
+	
 	public List<String> extractJson(JSONArray j,String key)
 	{
 		return IntStream.range(0,j.length()).mapToObj(i->j.getJSONObject(i).has(key)?j.getJSONObject(i).getString(key):null).collect(Collectors.toList());
@@ -194,6 +206,7 @@ public class WsSender {
 				{
 					csv.append(CSV_DELIMITER);
 				}
+
 				csv.append(StringEscapeUtils
 					    .escapeCsv(j.get(dataSet).get(k).get(i)));
 			}
@@ -256,17 +269,22 @@ public class WsSender {
 	
 	public JSONObject sendEnvBuilder()
 	{
-		return send("execute/service/build/"+this.sandbox,null);
-  }
+		return send("execute/service/build/"+this.sandbox+"/",null);
+	}
 	
-	
-	public JSONObject sendExecuteService(Long idelaborazione, ExecuteParameterPojo parameters)
+	public JSONObject sendEnvSynchronize()
+	{
+		System.out.println(this.sandbox);
+		return send("execute/service/synchonize/"+this.sandbox+"/",null);
+	}
+
+	public JSONObject sendExecuteService(ExecuteParameterPojo parameters)
 	{
 	
 		return send("execute/service",parameters);
 	}
 	
-	public JSONObject sendResetService(Long idelaborazione, ExecuteParameterPojo parameters)
+	public JSONObject sendResetService(ExecuteParameterPojo parameters)
 	{
 	
 		return send("reset/service",parameters);
@@ -276,7 +294,7 @@ public class WsSender {
 	
 	public JSONObject sendSetRules(Long idelaborazione, SetRulesPojo rules)
 	{
-		return send("setRules/arc_bas"+idelaborazione,rules);
+		return send("setRules",rules);
 	}
 
 	public Long getId() {
@@ -285,7 +303,7 @@ public class WsSender {
 
 	public void setId(Long id) {
 		this.id = id;
-		this.namespace= prefixNamespace + this.id;
+		this.namespace= NAMESPACE_PREFIX + this.id;
 		this.sandbox= "arc.bas" + (1000 + this.id);
 	}
 
@@ -304,8 +322,17 @@ public class WsSender {
 	public void setSandbox(String sandbox) {
 		this.sandbox = sandbox;
 	}
+
+	public String getFilename(int datasetId) {
+		return getNamespace()+"-ds"+datasetId+".csv";
+	}
+
+	public String getHashFilename(String parentTable, int datasetId) {
+		return tableOfIdSource(parentTable, "DEFAULT_"+getFilename(datasetId));
+	}
 	
-	
-	
+	public String getHashFilename(TraitementPhase phase, int datasetId) {
+		return tableOfIdSource(phase.toString().toLowerCase()+"_ok", "DEFAULT_"+getFilename(datasetId));
+	}
 	
 }

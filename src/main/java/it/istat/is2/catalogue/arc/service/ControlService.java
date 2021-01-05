@@ -24,6 +24,7 @@
 package it.istat.is2.catalogue.arc.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -46,7 +47,7 @@ import it.istat.is2.workflow.engine.EngineService;
  *
  */
 @Component
-public class LoadService extends Constants {
+public class ControlService extends Constants {
 
 	final int stepService = 250;
 	final int sizeFlushed = 20;
@@ -57,7 +58,7 @@ public class LoadService extends Constants {
 	@Autowired
 	private WsSender send;
 
-	public Map<?, ?> arcLoader(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+	public Map<?, ?> arcControl(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
 			Map<String, Map<String, List<String>>> worksetVariabili, Map<String, String> parametriMap)
 			throws Exception {
 
@@ -66,6 +67,8 @@ public class LoadService extends Constants {
 
 		final Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
 		final Map<String, String> rolesGroupOut = new HashMap<>();
+
+		System.out.println("ARC CONTROL");
 
 		System.out.println(idelaborazione);
 
@@ -80,51 +83,46 @@ public class LoadService extends Constants {
 		send.setId(idelaborazione);
 
 		// database build
-		send.sendEnvBuilder();
-
-		// send the core rules to ARC
-		send.setRulesForSandbox();
-		send.setRulesForModel();
-		send.setRulesForNorm();
-		send.setRulesForCalendar();
-		send.setRulesForRuleset();
+		send.sendEnvSynchronize();
 
 		// send the load rules to arc
-		send.setRulesForLoad(new JSONArray(parametriMap.get("LOADER_PARAMETERS")));
+		send.setRulesForLoad(new JSONArray(parametriMap.get("CONTROL_PARAMETERS")));
 
-		// send the initialization phase for a clean start
-		send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.INITIALISATION));
+		send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.NORMAGE));
 
-		// reset the sandbox to destroy older arc instance
-		send.sendResetService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.INITIALISATION));
-
-		// iterate on dataset to load them one by one with ARC and produce and store
-		// each output
-		for (String dataset : worksetVariabili.keySet()) {
+		List<ExecuteQueryPojo> ep = new ArrayList<ExecuteQueryPojo>();
+		for (String dataset : ruoliVariabileNome.keySet()) {
+			
+			System.out.println(dataset);
 			if (dataset.startsWith(DATASET_IDENTIFIER)) {
-				int datasetId;
 
+				int datasetId;
 				datasetId = Integer.parseInt(dataset.replace(DATASET_IDENTIFIER, ""));
 
-				// send the file to ARC
-				send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.RECEPTION,
-						send.getFilename(datasetId), send.datasetToCsv(worksetVariabili, DATASET_IDENTIFIER + datasetId)));
+				ep.add(new ExecuteQueryPojo(datasetId + "", "q" + datasetId,
+						"select * from " + send.getHashFilename(TraitementPhase.CONTROLE, datasetId), null));
 
-				// load the file in ARC
-				JSONObject j;
-				j= send.sendExecuteService(
-						new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.CHARGEMENT, new ExecuteQueryPojo(
-								"1", "q1", "select * from " + send.getHashFilename(TraitementPhase.CHARGEMENT, datasetId), null)));
+				System.out.println("select * from " + send.getHashFilename(TraitementPhase.CONTROLE, datasetId));
+			}
+		}
+
+		JSONObject j;
+		j = send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.CONTROLE, ep));
+		
+		for (String dataset : ruoliVariabileNome.keySet()) {
+			if (dataset.startsWith(DATASET_IDENTIFIER)) {
+
+				int datasetId;
+				datasetId = Integer.parseInt(dataset.replace(DATASET_IDENTIFIER, ""));
 
 				ReturnView r = new ObjectMapper().readValue(j.toString(), ReturnView.class);
 
 				Map<String, ArrayList<String>> tableOut = new LinkedHashMap<>();
 
-				// store output sent by ARC in IS2
-				r.getDataSetView().get(0).getContent().keySet().forEach(
-						k -> tableOut.put(k, (ArrayList<String>) r.getDataSetView().get(0).getContent().get(k).data));
+				r.getDataSetView().get(datasetId-1).getContent().keySet().forEach(
+						k -> tableOut.put(k, (ArrayList<String>) r.getDataSetView().get(datasetId-1).getContent().get(k).data));
 
-				rolesOut.put(LOAD_OUTPUT_CODE + datasetId, new ArrayList<String>(tableOut.keySet()));
+				rolesOut.put(CONTROL_OUTPUT_CODE + datasetId, new ArrayList<String>(tableOut.keySet()));
 				returnOut.put(EngineService.ROLES_OUT, rolesOut);
 
 				rolesOut.keySet().forEach(code -> {
@@ -132,10 +130,9 @@ public class LoadService extends Constants {
 				});
 				returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
 
-				worksetOut.put(LOAD_OUTPUT_CODE + datasetId, tableOut);
+				worksetOut.put(CONTROL_OUTPUT_CODE + datasetId, tableOut);
 
 				returnOut.put(EngineService.WORKSET_OUT, worksetOut);
-
 			}
 		}
 

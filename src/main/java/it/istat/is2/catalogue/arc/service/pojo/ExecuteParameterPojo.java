@@ -1,6 +1,11 @@
 package it.istat.is2.catalogue.arc.service.pojo;
 
+import java.util.Arrays;
 import java.util.List;
+
+import com.kenai.jffi.Array;
+
+import it.istat.is2.catalogue.arc.service.TraitementPhase;
 
 /**
  * Parameters for ARC steps execution
@@ -41,7 +46,42 @@ public class ExecuteParameterPojo {
 
 
 	
+	public ExecuteParameterPojo() {
+		super();
+	}
 	
+	
+	public ExecuteParameterPojo(String sandbox, TraitementPhase targetPhase) {
+		super();
+		this.sandbox = sandbox;
+		this.targetPhase = targetPhase.toString();
+	}
+	
+	public ExecuteParameterPojo(String sandbox, TraitementPhase targetPhase, ExecuteQueryPojo...queries) {
+		super();
+		this.sandbox = sandbox;
+		this.targetPhase = targetPhase.toString();
+		this.queries=Arrays.asList(queries);
+	}
+
+	public ExecuteParameterPojo(String sandbox, TraitementPhase targetPhase, List<ExecuteQueryPojo> queries) {
+		super();
+		this.sandbox = sandbox;
+		this.targetPhase = targetPhase.toString();
+		this.queries=queries;
+	}
+
+	public ExecuteParameterPojo(String sandbox, TraitementPhase targetPhase, String fileName, String fileContent) {
+		super();
+		this.fileName = fileName;
+		this.fileContent = fileContent;
+		this.sandbox = sandbox;
+		this.targetPhase = targetPhase.toString();
+	}
+
+
+
+
 	public String getSandbox() {
 		return sandbox;
 	}
