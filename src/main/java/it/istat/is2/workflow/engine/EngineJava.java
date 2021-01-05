@@ -88,6 +88,12 @@ public class EngineJava implements EngineService {
 		// Create a connection to Rserve instance running on default port 6311
 		this.dataProcessing = elaborazione;
 		this.stepInstance = stepInstance;
+		
+		this.worksetOut = new HashMap<>();
+		this.parametriOutput = new HashMap<>();
+		this.resultOut = new HashMap<>();
+		this.ruoliOutputStep = new HashMap<String, ArrayList<String>>();
+
 		prepareEnv();
 	}
 
@@ -140,6 +146,8 @@ public class EngineJava implements EngineService {
 				listv.add(sxStepPattern.getAppRole().getCode());
 				ruoliInputStep.put(sxStepPattern.getAppRole().getCode(), listv);
 			} else if (sxStepPattern.getTypeIO().equals(new TypeIO(IS2Const.TYPE_IO_OUTPUT))) {
+				System.out.println(ruoliOutputStep);
+				System.out.println(sxStepPattern.getAppRole().getCode());
 				ArrayList<String> listv = ruoliOutputStep.get(sxStepPattern.getAppRole().getCode());
 				if (listv == null) {
 					listv = new ArrayList<>();
