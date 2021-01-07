@@ -14,6 +14,7 @@ public class Constants {
 
 	public static final String LOAD_OUTPUT_CODE="LOK";
 	public static final String CONTROL_OUTPUT_CODE="COK";
+	public static final String FILTER_OUTPUT_CODE="FOK";
 
 	
 }

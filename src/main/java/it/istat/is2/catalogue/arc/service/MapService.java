@@ -27,8 +27,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import it.istat.is2.catalogue.arc.service.pojo.ExecuteParameterPojo;
+import it.istat.is2.catalogue.arc.service.pojo.ExecuteQueryPojo;
+import it.istat.is2.catalogue.arc.service.view.ReturnView;
 import it.istat.is2.workflow.engine.EngineService;
 
 /**
@@ -36,56 +47,95 @@ import it.istat.is2.workflow.engine.EngineService;
  *
  */
 @Component
-public class MapService {
+public class MapService extends Constants {
 
-    final int stepService = 250;
-    final int sizeFlushed = 20;
+	final int stepService = 250;
+	final int sizeFlushed = 20;
 
-    final String params_MP = "MP";
-    final String params_DATA = "LOV";
+	final String params_LP = "LP";
+	final String params_DATA = "DATA";
 
-    public Map<?, ?> arcMapping(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome, Map<String, ArrayList<String>> worksetVariabili,
-            Map<String, String> parametriMap) throws Exception {
+	@Autowired
+	private WsSender send;
 
-        Map<String, Map<?, ?>> returnOut = new HashMap<>();
-        Map<String, Map<?, ?>> worksetOut = new HashMap<>();
-        Map<String, ArrayList<String>> contengencyTableOut = new LinkedHashMap<>();
-        Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
-        Map<String, String> rolesGroupOut = new HashMap<>();
+	public Map<?, ?> arcMapping (Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+			Map<String, Map<String, List<String>>> worksetVariabili, Map<String, String> parametriMap)
+			throws Exception {
 
-        System.out.println(idelaborazione);
+		final Map<String, Map<?, ?>> returnOut = new HashMap<>();
+		final Map<String, Map<?, ?>> worksetOut = new HashMap<>();
 
-        System.out.println(ruoliVariabileNome);
+		final Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
+		final Map<String, String> rolesGroupOut = new HashMap<>();
 
-        System.out.println(worksetVariabili);
+		System.out.println("ARC MAPPING");
 
-        System.out.println(parametriMap);
-        // write to worksetout
-        System.out.println("worksetVariabili");
-        worksetVariabili.forEach((key, value) -> {
-            System.out.println(key);
-            System.out.println(value);
+		System.out.println(idelaborazione);
 
-        });
-        System.out.println(worksetVariabili.get(params_DATA));
+		System.out.println(ruoliVariabileNome);
+		System.out.println(worksetVariabili);
 
-        System.out.println(parametriMap.get(params_MP));
+		System.out.println(parametriMap);
+		System.out.println(parametriMap.get("MAPPING_PARAMETERS"));
 
-        contengencyTableOut.put("COL2", new ArrayList<String>(Arrays.asList("d", "e", "f")));
+		System.out.println("********");
 
-        rolesOut.put("MOV", new ArrayList<String>(contengencyTableOut.keySet()));
-        returnOut.put(EngineService.ROLES_OUT, rolesOut);
 
-        rolesOut.keySet().forEach(code -> {
-            rolesGroupOut.put(code, "MOV");
-        });
+		send.setId(idelaborazione);
 
-        returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
+		// database build
+		send.sendEnvSynchronize();
 
-        worksetOut.put("MOV", contengencyTableOut);
-        returnOut.put(EngineService.WORKSET_OUT, worksetOut);
+		// send the load rules to arc
+		send.setRulesForLoad(new JSONArray(parametriMap.get("MAPPING_PARAMETERS")));
 
-        return returnOut;
-    }
+		send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.NORMAGE));
+
+		List<ExecuteQueryPojo> ep = new ArrayList<ExecuteQueryPojo>();
+		for (String dataset : ruoliVariabileNome.keySet()) {
+			
+			System.out.println(dataset);
+			if (dataset.startsWith(DATASET_IDENTIFIER)) {
+
+				int datasetId;
+				datasetId = Integer.parseInt(dataset.replace(DATASET_IDENTIFIER, ""));
+
+				ep.add(new ExecuteQueryPojo(datasetId + "", "q" + datasetId,
+						"select * from " + send.getHashFilename(TraitementPhase.FILTRAGE, "OK", datasetId), null));
+			}
+		}
+
+		JSONObject j;
+		j = send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.FILTRAGE, ep));
+		
+		for (String dataset : ruoliVariabileNome.keySet()) {
+			if (dataset.startsWith(DATASET_IDENTIFIER)) {
+
+				int datasetId;
+				datasetId = Integer.parseInt(dataset.replace(DATASET_IDENTIFIER, ""));
+
+				ReturnView r = new ObjectMapper().readValue(j.toString(), ReturnView.class);
+
+				Map<String, ArrayList<String>> tableOut = new LinkedHashMap<>();
+
+				r.getDataSetView().get(datasetId-1).getContent().keySet().forEach(
+						k -> tableOut.put(k, (ArrayList<String>) r.getDataSetView().get(datasetId-1).getContent().get(k).data));
+
+				rolesOut.put(FILTER_OUTPUT_CODE + datasetId, new ArrayList<String>(tableOut.keySet()));
+				returnOut.put(EngineService.ROLES_OUT, rolesOut);
+
+				rolesOut.keySet().forEach(code -> {
+					rolesGroupOut.put(code, code);
+				});
+				returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
+
+				worksetOut.put(FILTER_OUTPUT_CODE + datasetId, tableOut);
+
+				returnOut.put(EngineService.WORKSET_OUT, worksetOut);
+			}
+		}
+
+		return returnOut;
+	}
 
 }

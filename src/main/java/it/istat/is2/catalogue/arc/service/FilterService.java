@@ -47,7 +47,7 @@ import it.istat.is2.workflow.engine.EngineService;
  *
  */
 @Component
-public class ControlService extends Constants {
+public class FilterService extends Constants {
 
 	final int stepService = 250;
 	final int sizeFlushed = 20;
@@ -58,7 +58,7 @@ public class ControlService extends Constants {
 	@Autowired
 	private WsSender send;
 
-	public Map<?, ?> arcControl(Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
+	public Map<?, ?> arcFilter (Long idelaborazione, Map<String, ArrayList<String>> ruoliVariabileNome,
 			Map<String, Map<String, List<String>>> worksetVariabili, Map<String, String> parametriMap)
 			throws Exception {
 
@@ -68,42 +68,45 @@ public class ControlService extends Constants {
 		final Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
 		final Map<String, String> rolesGroupOut = new HashMap<>();
 
-		System.out.println("ARC CONTROL");
+		System.out.println("ARC FILTER");
 
 		System.out.println(idelaborazione);
 
 		System.out.println(ruoliVariabileNome);
 		System.out.println(worksetVariabili);
 
-		System.out.println(parametriMap.get("LOADER_PARAMETERS"));
+		System.out.println(parametriMap);
+		System.out.println(parametriMap.get("FILTER_PARAMETERS"));
 
 		System.out.println("********");
-		System.out.println(worksetVariabili.get("DS1"));
+
 
 		send.setId(idelaborazione);
 
-		// send the load rules to arc
-		send.setRulesForControl(new JSONArray(parametriMap.get("CONTROL_PARAMETERS")));
-
-		// synchronize rules
+		// database build
 		send.sendEnvSynchronize();
-		
+
+		// send the load rules to arc
+		send.setRulesForFilter(new JSONArray(parametriMap.get("FILTER_PARAMETERS")));
+
 		send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.NORMAGE));
 
 		List<ExecuteQueryPojo> ep = new ArrayList<ExecuteQueryPojo>();
 		for (String dataset : ruoliVariabileNome.keySet()) {
+			
+			System.out.println(dataset);
 			if (dataset.startsWith(DATASET_IDENTIFIER)) {
 
 				int datasetId;
 				datasetId = Integer.parseInt(dataset.replace(DATASET_IDENTIFIER, ""));
 
 				ep.add(new ExecuteQueryPojo(datasetId + "", "q" + datasetId,
-						send.buildReturnQuery(TraitementPhase.CONTROLE, "KO", datasetId), null));
+						"select * from " + send.getHashFilename(TraitementPhase.FILTRAGE, "OK", datasetId), null));
 			}
 		}
 
 		JSONObject j;
-		j = send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.CONTROLE, ep));
+		j = send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.FILTRAGE, ep));
 		
 		for (String dataset : ruoliVariabileNome.keySet()) {
 			if (dataset.startsWith(DATASET_IDENTIFIER)) {
@@ -118,7 +121,7 @@ public class ControlService extends Constants {
 				r.getDataSetView().get(datasetId-1).getContent().keySet().forEach(
 						k -> tableOut.put(k, (ArrayList<String>) r.getDataSetView().get(datasetId-1).getContent().get(k).data));
 
-				rolesOut.put(CONTROL_OUTPUT_CODE + datasetId, new ArrayList<String>(tableOut.keySet()));
+				rolesOut.put(FILTER_OUTPUT_CODE + datasetId, new ArrayList<String>(tableOut.keySet()));
 				returnOut.put(EngineService.ROLES_OUT, rolesOut);
 
 				rolesOut.keySet().forEach(code -> {
@@ -126,7 +129,7 @@ public class ControlService extends Constants {
 				});
 				returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
 
-				worksetOut.put(CONTROL_OUTPUT_CODE + datasetId, tableOut);
+				worksetOut.put(FILTER_OUTPUT_CODE + datasetId, tableOut);
 
 				returnOut.put(EngineService.WORKSET_OUT, worksetOut);
 			}

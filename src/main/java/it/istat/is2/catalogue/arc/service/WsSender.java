@@ -149,6 +149,48 @@ public class WsSender extends Constants {
 		sendSetRules(this.id, rules);
 	}
 	
+	public void setRulesForControl(JSONArray j)
+	{
+
+		SetRulesPojo rules=new SetRulesPojo();
+		
+		rules.targetRule="control";
+
+		rules.content= new HashMap<String, Record>();
+		rules.content.put("id_norme", new Record("text",  new ArrayList<String>( Arrays.asList(this.namespace))));
+		rules.content.put("periodicite", new Record("text",  new ArrayList<String>( Arrays.asList("A"))));
+		rules.content.put("validite_inf", new Record("date",  new ArrayList<String>( Arrays.asList("2021-01-01"))));
+		rules.content.put("validite_sup", new Record("date",  new ArrayList<String>( Arrays.asList("2100-01-01"))));
+		rules.content.put("version", new Record("text",  new ArrayList<String>( Arrays.asList(this.namespace))));
+		rules.content.put("id_classe", new Record("text",  extractJson(j,"ControlType")));
+		rules.content.put("rubrique_pere", new Record("text",  extractJson(j,"TargetColumnMain")));
+		rules.content.put("rubrique_fils", new Record("text",  extractJson(j,"TargetColumnChild")));
+		rules.content.put("borne_inf", new Record("text",  extractJson(j,"MinValue")));
+		rules.content.put("borne_sup", new Record("text",  extractJson(j,"MaxValue")));
+		rules.content.put("condition", new Record("text",  extractJson(j,"SQLCheck")));
+		rules.content.put("pre_action", new Record("text",  extractJson(j,"SQLUpdateBeforeCheck")));
+		rules.content.put("commentaire", new Record("text",  extractJson(j,"Comments")));
+		sendSetRules(this.id, rules);
+	}
+	
+	public void setRulesForFilter(JSONArray j)
+	{
+
+		SetRulesPojo rules=new SetRulesPojo();
+		
+		rules.targetRule="filter";
+
+		rules.content= new HashMap<String, Record>();
+		rules.content.put("id_norme", new Record("text",  new ArrayList<String>( Arrays.asList(this.namespace))));
+		rules.content.put("periodicite", new Record("text",  new ArrayList<String>( Arrays.asList("A"))));
+		rules.content.put("validite_inf", new Record("date",  new ArrayList<String>( Arrays.asList("2021-01-01"))));
+		rules.content.put("validite_sup", new Record("date",  new ArrayList<String>( Arrays.asList("2100-01-01"))));
+		rules.content.put("version", new Record("text",  new ArrayList<String>( Arrays.asList(this.namespace))));
+		rules.content.put("expr_regle_filtre", new Record("text",  extractJson(j,"sqlExpression")));
+		rules.content.put("commentaire", new Record("text",  extractJson(j,"Comments")));
+		sendSetRules(this.id, rules);
+	}
+	
     public static String tableOfIdSource(String tableName, String idSource)
     {
     	String hashText="";
@@ -187,7 +229,8 @@ public class WsSender extends Constants {
 			{
 				csv.append(CSV_DELIMITER);
 			}
-			csv.append(k);
+			csv.append(k.replaceFirst("^"+dataSet+"_", ""));
+			System.out.println(k.replaceFirst("^"+dataSet+"_", ""));
 		}
 		
 		// body
@@ -331,8 +374,17 @@ public class WsSender extends Constants {
 		return tableOfIdSource(parentTable, "DEFAULT_"+getFilename(datasetId));
 	}
 	
-	public String getHashFilename(TraitementPhase phase, int datasetId) {
-		return tableOfIdSource(phase.toString().toLowerCase()+"_ok", "DEFAULT_"+getFilename(datasetId));
+	public String getHashFilename(TraitementPhase phase, String state, int datasetId) {
+		return tableOfIdSource(phase.toString().toLowerCase()+"_"+state, "DEFAULT_"+getFilename(datasetId));
+	}
+	
+	/**
+	 * complex query as we are not sure the target table exists
+	 * @return
+	 */
+	public String buildReturnQuery(TraitementPhase phase, String state, int datasetId)
+	{
+		return "do $$ begin create temporary table temp_is2 as select * from " + getHashFilename(phase, state, datasetId)+" ; exception when others then create temporary table temp_is2 as select 'NO DATA' as info; end; $$; select * from temp_is2; drop table temp_is2;";
 	}
 	
 }

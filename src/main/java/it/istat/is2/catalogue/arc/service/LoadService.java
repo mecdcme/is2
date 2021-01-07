@@ -114,7 +114,7 @@ public class LoadService extends Constants {
 				JSONObject j;
 				j= send.sendExecuteService(
 						new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.CHARGEMENT, new ExecuteQueryPojo(
-								"1", "q1", "select * from " + send.getHashFilename(TraitementPhase.CHARGEMENT, datasetId), null)));
+								"1", "q1", "select * from " + send.getHashFilename(TraitementPhase.CHARGEMENT, "OK", datasetId), null)));
 
 				ReturnView r = new ObjectMapper().readValue(j.toString(), ReturnView.class);
 
