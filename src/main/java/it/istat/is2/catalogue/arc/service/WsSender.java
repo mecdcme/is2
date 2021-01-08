@@ -137,11 +137,11 @@ public class WsSender extends Constants {
 		rules.targetRule="load";
 
 		rules.content= new HashMap<String, Record>();
-		rules.content.put("id_norme", new Record("text",  new ArrayList<String>( Arrays.asList(this.namespace))));
-		rules.content.put("periodicite", new Record("text",  new ArrayList<String>( Arrays.asList("A"))));
-		rules.content.put("validite_inf", new Record("date",  new ArrayList<String>( Arrays.asList("2021-01-01"))));
-		rules.content.put("validite_sup", new Record("date",  new ArrayList<String>( Arrays.asList("2100-01-01"))));
-		rules.content.put("version", new Record("text",  new ArrayList<String>( Arrays.asList(this.namespace))));
+		rules.content.put("id_norme", new Record("text", duplicateValueJsonSize(j,this.namespace)));
+		rules.content.put("periodicite", new Record("text", duplicateValueJsonSize(j,"A")));
+		rules.content.put("validite_inf", new Record("date", duplicateValueJsonSize(j,"2021-01-01")));
+		rules.content.put("validite_sup", new Record("date", duplicateValueJsonSize(j,"2100-01-01")));
+		rules.content.put("version", new Record("text",  duplicateValueJsonSize(j,this.namespace)));
 		rules.content.put("type_fichier", new Record("text", extractJson(j,"FileType")));
 		rules.content.put("delimiter", new Record("text", new ArrayList<String>( Arrays.asList(CSV_DELIMITER))));		
 		rules.content.put("format", new Record("text", extractJson(j,"Format")));		
@@ -157,11 +157,11 @@ public class WsSender extends Constants {
 		rules.targetRule="control";
 
 		rules.content= new HashMap<String, Record>();
-		rules.content.put("id_norme", new Record("text",  new ArrayList<String>( Arrays.asList(this.namespace))));
-		rules.content.put("periodicite", new Record("text",  new ArrayList<String>( Arrays.asList("A"))));
-		rules.content.put("validite_inf", new Record("date",  new ArrayList<String>( Arrays.asList("2021-01-01"))));
-		rules.content.put("validite_sup", new Record("date",  new ArrayList<String>( Arrays.asList("2100-01-01"))));
-		rules.content.put("version", new Record("text",  new ArrayList<String>( Arrays.asList(this.namespace))));
+		rules.content.put("id_norme", new Record("text", duplicateValueJsonSize(j,this.namespace)));
+		rules.content.put("periodicite", new Record("text", duplicateValueJsonSize(j,"A")));
+		rules.content.put("validite_inf", new Record("date", duplicateValueJsonSize(j,"2021-01-01")));
+		rules.content.put("validite_sup", new Record("date", duplicateValueJsonSize(j,"2100-01-01")));
+		rules.content.put("version", new Record("text",  duplicateValueJsonSize(j,this.namespace)));
 		rules.content.put("id_classe", new Record("text",  extractJson(j,"ControlType")));
 		rules.content.put("rubrique_pere", new Record("text",  extractJson(j,"TargetColumnMain")));
 		rules.content.put("rubrique_fils", new Record("text",  extractJson(j,"TargetColumnChild")));
@@ -181,15 +181,77 @@ public class WsSender extends Constants {
 		rules.targetRule="filter";
 
 		rules.content= new HashMap<String, Record>();
-		rules.content.put("id_norme", new Record("text",  new ArrayList<String>( Arrays.asList(this.namespace))));
-		rules.content.put("periodicite", new Record("text",  new ArrayList<String>( Arrays.asList("A"))));
-		rules.content.put("validite_inf", new Record("date",  new ArrayList<String>( Arrays.asList("2021-01-01"))));
-		rules.content.put("validite_sup", new Record("date",  new ArrayList<String>( Arrays.asList("2100-01-01"))));
-		rules.content.put("version", new Record("text",  new ArrayList<String>( Arrays.asList(this.namespace))));
+		rules.content.put("id_norme", new Record("text", duplicateValueJsonSize(j,this.namespace)));
+		rules.content.put("periodicite", new Record("text", duplicateValueJsonSize(j,"A")));
+		rules.content.put("validite_inf", new Record("date", duplicateValueJsonSize(j,"2021-01-01")));
+		rules.content.put("validite_sup", new Record("date", duplicateValueJsonSize(j,"2100-01-01")));
+		rules.content.put("version", new Record("text",  duplicateValueJsonSize(j,this.namespace)));
 		rules.content.put("expr_regle_filtre", new Record("text",  extractJson(j,"sqlExpression")));
 		rules.content.put("commentaire", new Record("text",  extractJson(j,"Comments")));
 		sendSetRules(this.id, rules);
 	}
+	
+	public JSONArray reworkJsonForMapping(JSONArray j)
+	{
+		
+		for (int i=0;i<j.length();i++)
+		{
+			if (j.getJSONObject(i).getString("sqlExpression").startsWith("{:pk"))
+			{
+				j.getJSONObject(i).put("sqlExpression", j.getJSONObject(i).getString("sqlExpression").replace("{pk:","{pk:mapping_"+this.namespace+"_").replace("}","_ok}"));
+			}
+			j.getJSONObject(i).put("targetTables", "mapping_"+this.namespace+"_"+j.getJSONObject(i).getString("targetTables")+"_ok");
+		}
+		return j;
+	}
+	
+	public void setRulesForMapping(JSONArray j)
+	{
+	
+		SetRulesPojo rules=new SetRulesPojo();
+		
+		rules.targetRule="map";
+
+		rules.content= new HashMap<String, Record>();
+		rules.content.put("id_norme", new Record("text", duplicateValueJsonSize(j,this.namespace)));
+		rules.content.put("periodicite", new Record("text", duplicateValueJsonSize(j,"A")));
+		rules.content.put("validite_inf", new Record("date", duplicateValueJsonSize(j,"2021-01-01")));
+		rules.content.put("validite_sup", new Record("date", duplicateValueJsonSize(j,"2100-01-01")));
+		rules.content.put("version", new Record("text",  duplicateValueJsonSize(j,this.namespace)));
+		rules.content.put("variable_sortie", new Record("text", extractJson(j,"targetVariableName")));
+		rules.content.put("expr_regle_col", new Record("text", extractJson(j,"sqlExpression")));
+		sendSetRules(this.id, rules);
+	}
+
+	public void setRulesForModelTables(JSONArray j)
+	{
+
+		SetRulesPojo rules=new SetRulesPojo();
+		
+		rules.targetRule="model_tables";
+
+		rules.content= new HashMap<String, Record>();
+		rules.content.put("id_famille", new Record("text", duplicateValueJsonSize(j,this.namespace)));
+		rules.content.put("nom_table_metier", new Record("text",  extractJson(j,"targetTables") ));
+		sendSetRules(this.id, rules);
+	}
+
+	public void setRulesForModelVariables(JSONArray j)
+	{
+
+		SetRulesPojo rules=new SetRulesPojo();
+		
+		rules.targetRule="model_variables";
+
+		rules.content= new HashMap<String, Record>();
+		rules.content.put("id_famille", new Record("text", duplicateValueJsonSize(j,this.namespace)));
+		rules.content.put("nom_table_metier", new Record("text", extractJson(j,"targetTables")));
+		rules.content.put("nom_variable_metier", new Record("text", extractJson(j,"targetVariableName")));
+		rules.content.put("type_variable_metier", new Record("text", extractJson(j,"targetVariableType")));
+
+		sendSetRules(this.id, rules);
+	}
+
 	
     public static String tableOfIdSource(String tableName, String idSource)
     {
@@ -208,6 +270,11 @@ public class WsSender extends Constants {
 	public List<String> extractJson(JSONArray j,String key)
 	{
 		return IntStream.range(0,j.length()).mapToObj(i->j.getJSONObject(i).has(key)?j.getJSONObject(i).getString(key):null).collect(Collectors.toList());
+	}
+	
+	public List<String> duplicateValueJsonSize(JSONArray j,String value)
+	{
+		return IntStream.range(0,j.length()).mapToObj(i->value).collect(Collectors.toList());
 	}
 
 	public String datasetToCsv(Map<String, Map<String, List<String>>> j, String dataSet)
@@ -369,13 +436,17 @@ public class WsSender extends Constants {
 	public String getFilename(int datasetId) {
 		return getNamespace()+"-ds"+datasetId+".csv";
 	}
+	
+	public String getFilenameInWareHouse(int datasetId) {
+		return "DEFAULT_"+getNamespace()+"-ds"+datasetId+".csv";
+	}
 
 	public String getHashFilename(String parentTable, int datasetId) {
-		return tableOfIdSource(parentTable, "DEFAULT_"+getFilename(datasetId));
+		return tableOfIdSource(parentTable, getFilenameInWareHouse(datasetId));
 	}
 	
 	public String getHashFilename(TraitementPhase phase, String state, int datasetId) {
-		return tableOfIdSource(phase.toString().toLowerCase()+"_"+state, "DEFAULT_"+getFilename(datasetId));
+		return tableOfIdSource(phase.toString().toLowerCase()+"_"+state, getFilenameInWareHouse(datasetId));
 	}
 	
 	/**
@@ -384,7 +455,12 @@ public class WsSender extends Constants {
 	 */
 	public String buildReturnQuery(TraitementPhase phase, String state, int datasetId)
 	{
-		return "do $$ begin create temporary table temp_is2 as select * from " + getHashFilename(phase, state, datasetId)+" ; exception when others then create temporary table temp_is2 as select 'NO DATA' as info; end; $$; select * from temp_is2; drop table temp_is2;";
+		return buildReturnQuery(getHashFilename(phase, state, datasetId));
+	}
+	
+	public String buildReturnQuery(String tablename)
+	{
+		return "do $$ begin create temporary table temp_is2 as select * from " + tablename +" ; exception when others then create temporary table temp_is2 as select ; end; $$; select * from temp_is2; drop table temp_is2;";
 	}
 	
 }

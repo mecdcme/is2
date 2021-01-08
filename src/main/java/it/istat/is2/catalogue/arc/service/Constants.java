@@ -9,12 +9,16 @@ public class Constants {
 
     protected static final String DATASET_IDENTIFIER="DS";
     		
-	public static final String NAMESPACE_PREFIX="is2@";
+	public static final String NAMESPACE_PREFIX="is2_";
 		
 
-	public static final String LOAD_OUTPUT_CODE="LOK";
-	public static final String CONTROL_OUTPUT_CODE="COK";
-	public static final String FILTER_OUTPUT_CODE="FOK";
+	public static final String LOAD_OUTPUT_CODE="L";
+	public static final String CONTROL_OUTPUT_CODE="C";
+	public static final String FILTER_OUTPUT_CODE="F";
+	public static final String MAPPING_OUTPUT_CODE="M";
+
+	public static final String OK="OK";
+	public static final String KO="KO";
 
 	
 }

@@ -38,6 +38,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.istat.is2.catalogue.arc.service.pojo.ExecuteParameterPojo;
 import it.istat.is2.catalogue.arc.service.pojo.ExecuteQueryPojo;
+import it.istat.is2.catalogue.arc.service.view.DataSetView;
 import it.istat.is2.catalogue.arc.service.view.ReturnView;
 import it.istat.is2.workflow.engine.EngineService;
 
@@ -100,6 +101,8 @@ public class LoadService extends Constants {
 
 		// iterate on dataset to load them one by one with ARC and produce and store
 		// each output
+		List<ExecuteQueryPojo> ep = new ArrayList<ExecuteQueryPojo>();
+
 		for (String dataset : worksetVariabili.keySet()) {
 			if (dataset.startsWith(DATASET_IDENTIFIER)) {
 				int datasetId;
@@ -110,33 +113,36 @@ public class LoadService extends Constants {
 				send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.RECEPTION,
 						send.getFilename(datasetId), send.datasetToCsv(worksetVariabili, DATASET_IDENTIFIER + datasetId)));
 
-				// load the file in ARC
-				JSONObject j;
-				j= send.sendExecuteService(
-						new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.CHARGEMENT, new ExecuteQueryPojo(
-								"1", "q1", "select * from " + send.getHashFilename(TraitementPhase.CHARGEMENT, "OK", datasetId), null)));
-
-				ReturnView r = new ObjectMapper().readValue(j.toString(), ReturnView.class);
-
-				Map<String, ArrayList<String>> tableOut = new LinkedHashMap<>();
-
-				// store output sent by ARC in IS2
-				r.getDataSetView().get(0).getContent().keySet().forEach(
-						k -> tableOut.put(k, (ArrayList<String>) r.getDataSetView().get(0).getContent().get(k).data));
-
-				rolesOut.put(LOAD_OUTPUT_CODE + datasetId, new ArrayList<String>(tableOut.keySet()));
-				returnOut.put(EngineService.ROLES_OUT, rolesOut);
-
-				rolesOut.keySet().forEach(code -> {
-					rolesGroupOut.put(code, code);
-				});
-				returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
-
-				worksetOut.put(LOAD_OUTPUT_CODE + datasetId, tableOut);
-
-				returnOut.put(EngineService.WORKSET_OUT, worksetOut);
-
+				ep.add(new ExecuteQueryPojo(datasetId+"", LOAD_OUTPUT_CODE + OK + datasetId,
+						send.buildReturnQuery(TraitementPhase.CHARGEMENT, "OK", datasetId), null));
 			}
+		}
+
+		// load the file in ARC
+		JSONObject j;
+		j= send.sendExecuteService(
+				new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.CHARGEMENT, ep ));
+
+		ReturnView r = new ObjectMapper().readValue(j.toString(), ReturnView.class);
+
+		for (DataSetView dsv: r.getDataSetView())
+		{
+			Map<String, ArrayList<String>> tableOut = new LinkedHashMap<>();
+			dsv.getContent().keySet().forEach(
+					k -> tableOut.put(k, (ArrayList<String>) dsv.getContent().get(k).data));
+
+			
+			rolesOut.put(dsv.getDatasetName(), new ArrayList<String>(tableOut.keySet()));
+			returnOut.put(EngineService.ROLES_OUT, rolesOut);
+
+			rolesOut.keySet().forEach(code -> {
+				rolesGroupOut.put(code, code);
+			});
+			returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
+
+			worksetOut.put(dsv.getDatasetName(), tableOut);
+
+			returnOut.put(EngineService.WORKSET_OUT, worksetOut);
 		}
 
 		return returnOut;

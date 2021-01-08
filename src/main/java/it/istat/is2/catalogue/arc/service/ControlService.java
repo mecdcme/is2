@@ -39,6 +39,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.istat.is2.catalogue.arc.service.pojo.ExecuteParameterPojo;
 import it.istat.is2.catalogue.arc.service.pojo.ExecuteQueryPojo;
+import it.istat.is2.catalogue.arc.service.view.DataSetView;
 import it.istat.is2.catalogue.arc.service.view.ReturnView;
 import it.istat.is2.workflow.engine.EngineService;
 
@@ -88,6 +89,10 @@ public class ControlService extends Constants {
 		// synchronize rules
 		send.sendEnvSynchronize();
 		
+		// back to previous phase
+		send.sendResetService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.NORMAGE));
+		
+		// structurize
 		send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.NORMAGE));
 
 		List<ExecuteQueryPojo> ep = new ArrayList<ExecuteQueryPojo>();
@@ -97,39 +102,37 @@ public class ControlService extends Constants {
 				int datasetId;
 				datasetId = Integer.parseInt(dataset.replace(DATASET_IDENTIFIER, ""));
 
-				ep.add(new ExecuteQueryPojo(datasetId + "", "q" + datasetId,
+				ep.add(new ExecuteQueryPojo(datasetId+"", CONTROL_OUTPUT_CODE + OK + datasetId,
+						send.buildReturnQuery(TraitementPhase.CONTROLE, "OK", datasetId), null));
+				
+				ep.add(new ExecuteQueryPojo(datasetId+"", CONTROL_OUTPUT_CODE + KO + datasetId,
 						send.buildReturnQuery(TraitementPhase.CONTROLE, "KO", datasetId), null));
 			}
 		}
 
 		JSONObject j;
 		j = send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.CONTROLE, ep));
-		
-		for (String dataset : ruoliVariabileNome.keySet()) {
-			if (dataset.startsWith(DATASET_IDENTIFIER)) {
+				
+		ReturnView r = new ObjectMapper().readValue(j.toString(), ReturnView.class);
 
-				int datasetId;
-				datasetId = Integer.parseInt(dataset.replace(DATASET_IDENTIFIER, ""));
+		for (DataSetView dsv: r.getDataSetView())
+		{
+			Map<String, ArrayList<String>> tableOut = new LinkedHashMap<>();
+			dsv.getContent().keySet().forEach(
+					k -> tableOut.put(k, (ArrayList<String>) dsv.getContent().get(k).data));
 
-				ReturnView r = new ObjectMapper().readValue(j.toString(), ReturnView.class);
+			
+			rolesOut.put(dsv.getDatasetName(), new ArrayList<String>(tableOut.keySet()));
+			returnOut.put(EngineService.ROLES_OUT, rolesOut);
 
-				Map<String, ArrayList<String>> tableOut = new LinkedHashMap<>();
+			rolesOut.keySet().forEach(code -> {
+				rolesGroupOut.put(code, code);
+			});
+			returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
 
-				r.getDataSetView().get(datasetId-1).getContent().keySet().forEach(
-						k -> tableOut.put(k, (ArrayList<String>) r.getDataSetView().get(datasetId-1).getContent().get(k).data));
+			worksetOut.put(dsv.getDatasetName(), tableOut);
 
-				rolesOut.put(CONTROL_OUTPUT_CODE + datasetId, new ArrayList<String>(tableOut.keySet()));
-				returnOut.put(EngineService.ROLES_OUT, rolesOut);
-
-				rolesOut.keySet().forEach(code -> {
-					rolesGroupOut.put(code, code);
-				});
-				returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
-
-				worksetOut.put(CONTROL_OUTPUT_CODE + datasetId, tableOut);
-
-				returnOut.put(EngineService.WORKSET_OUT, worksetOut);
-			}
+			returnOut.put(EngineService.WORKSET_OUT, worksetOut);
 		}
 
 		return returnOut;

@@ -25,7 +25,9 @@ package it.istat.is2.catalogue.arc.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.istat.is2.catalogue.arc.service.pojo.ExecuteParameterPojo;
 import it.istat.is2.catalogue.arc.service.pojo.ExecuteQueryPojo;
+import it.istat.is2.catalogue.arc.service.view.DataSetView;
 import it.istat.is2.catalogue.arc.service.view.ReturnView;
 import it.istat.is2.workflow.engine.EngineService;
 
@@ -68,7 +71,7 @@ public class MapService extends Constants {
 		final Map<String, ArrayList<String>> rolesOut = new LinkedHashMap<>();
 		final Map<String, String> rolesGroupOut = new HashMap<>();
 
-		System.out.println("ARC MAPPING");
+		System.out.println("ARC MAP");
 
 		System.out.println(idelaborazione);
 
@@ -83,59 +86,65 @@ public class MapService extends Constants {
 
 		send.setId(idelaborazione);
 
-		// database build
-		send.sendEnvSynchronize();
-
 		// send the load rules to arc
-		send.setRulesForLoad(new JSONArray(parametriMap.get("MAPPING_PARAMETERS")));
+		JSONArray jsonRules=send.reworkJsonForMapping(new JSONArray(parametriMap.get("MAPPING_PARAMETERS")));
+		send.setRulesForModelTables(jsonRules);
+		send.setRulesForModelVariables(jsonRules);
+		send.setRulesForMapping(jsonRules);
+		
+		// synchronize rules
+		send.sendEnvSynchronize();
+		
+		// back to previous phase
+		send.sendResetService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.MAPPING));
 
-		send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.NORMAGE));
-
+		// the distint output tables will have to be queried for each dataset
+		List<String> distinctTables=new ArrayList<String>(new HashSet<String>(send.extractJson(jsonRules,"targetTables")));
+		Collections.sort(distinctTables);
+		
+		
 		List<ExecuteQueryPojo> ep = new ArrayList<ExecuteQueryPojo>();
 		for (String dataset : ruoliVariabileNome.keySet()) {
-			
-			System.out.println(dataset);
 			if (dataset.startsWith(DATASET_IDENTIFIER)) {
 
 				int datasetId;
 				datasetId = Integer.parseInt(dataset.replace(DATASET_IDENTIFIER, ""));
 
-				ep.add(new ExecuteQueryPojo(datasetId + "", "q" + datasetId,
-						"select * from " + send.getHashFilename(TraitementPhase.FILTRAGE, "OK", datasetId), null));
+				for (int i=0;i<distinctTables.size();i++)
+				{
+					ep.add(new ExecuteQueryPojo(datasetId+"", MAPPING_OUTPUT_CODE + OK + datasetId+"_"+i,
+						"select * from "+distinctTables.get(i)+" where id_source='"+send.getFilenameInWareHouse(datasetId)+"'", null));
+				}
 			}
 		}
 
 		JSONObject j;
-		j = send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.FILTRAGE, ep));
-		
-		for (String dataset : ruoliVariabileNome.keySet()) {
-			if (dataset.startsWith(DATASET_IDENTIFIER)) {
+		j = send.sendExecuteService(new ExecuteParameterPojo(send.getSandbox(), TraitementPhase.MAPPING, ep));
+				
+		ReturnView r = new ObjectMapper().readValue(j.toString(), ReturnView.class);
 
-				int datasetId;
-				datasetId = Integer.parseInt(dataset.replace(DATASET_IDENTIFIER, ""));
+		for (DataSetView dsv: r.getDataSetView())
+		{
+			System.out.println(dsv.getContent());
+			
+			Map<String, ArrayList<String>> tableOut = new LinkedHashMap<>();
+			dsv.getContent().keySet().forEach(
+					k -> tableOut.put(k, (ArrayList<String>) dsv.getContent().get(k).data));
 
-				ReturnView r = new ObjectMapper().readValue(j.toString(), ReturnView.class);
+			
+			rolesOut.put(dsv.getDatasetName(), new ArrayList<String>(tableOut.keySet()));
+			returnOut.put(EngineService.ROLES_OUT, rolesOut);
 
-				Map<String, ArrayList<String>> tableOut = new LinkedHashMap<>();
+			rolesOut.keySet().forEach(code -> {
+				rolesGroupOut.put(code, code);
+			});
+			returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
 
-				r.getDataSetView().get(datasetId-1).getContent().keySet().forEach(
-						k -> tableOut.put(k, (ArrayList<String>) r.getDataSetView().get(datasetId-1).getContent().get(k).data));
+			worksetOut.put(dsv.getDatasetName(), tableOut);
 
-				rolesOut.put(FILTER_OUTPUT_CODE + datasetId, new ArrayList<String>(tableOut.keySet()));
-				returnOut.put(EngineService.ROLES_OUT, rolesOut);
-
-				rolesOut.keySet().forEach(code -> {
-					rolesGroupOut.put(code, code);
-				});
-				returnOut.put(EngineService.ROLES_GROUP_OUT, rolesGroupOut);
-
-				worksetOut.put(FILTER_OUTPUT_CODE + datasetId, tableOut);
-
-				returnOut.put(EngineService.WORKSET_OUT, worksetOut);
-			}
+			returnOut.put(EngineService.WORKSET_OUT, worksetOut);
 		}
 
 		return returnOut;
 	}
-
 }
