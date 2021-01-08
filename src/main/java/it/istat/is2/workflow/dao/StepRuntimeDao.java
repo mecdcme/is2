@@ -64,7 +64,7 @@ public interface StepRuntimeDao extends CrudRepository<StepRuntime, Integer> {
     List<StepRuntime> findStepRuntimes(@Param("dataProcessing") DataProcessing dataProcessing,
                                        @Param("dataType") DataTypeCls dataType);
 
-    @Query("SELECT distinct sr from AppRole sr,StepRuntime st where st.dataProcessing.id=:elab and (:dataType IS NULL OR  st.workset.dataType=:dataType) and st.typeIO=:typeIO and st.roleGroup=sr and sr.hidden IS NULL")
+    @Query("SELECT distinct sr from AppRole sr,StepRuntime st where st.dataProcessing.id=:elab and (:dataType IS NULL OR  st.workset.dataType=:dataType) and st.typeIO=:typeIO and st.roleGroup=sr and sr.hidden IS NULL order by sr.order")
     List<AppRole> getOutputRoleGroupsStepRuntimes(@Param("elab") Long idDataProcessing, @Param("dataType") DataTypeCls dataTypeCls, @Param("typeIO") TypeIO typeIO);
 
 }
