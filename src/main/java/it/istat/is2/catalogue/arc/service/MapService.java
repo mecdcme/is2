@@ -112,7 +112,7 @@ public class MapService extends Constants {
 
 				for (int i=0;i<distinctTables.size();i++)
 				{
-					ep.add(new ExecuteQueryPojo(datasetId+"", MAPPING_OUTPUT_CODE + OK + datasetId+"_"+i,
+					ep.add(new ExecuteQueryPojo(datasetId+"", MAPPING_OUTPUT_CODE + OK + datasetId+"_"+(i+1),
 						"select * from "+distinctTables.get(i)+" where id_source='"+send.getFilenameInWareHouse(datasetId)+"'", null));
 				}
 			}
