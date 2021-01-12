@@ -1,3 +1,6 @@
+-- server side utf8. Windows compatibility
+update pg_database set encoding = pg_char_to_encoding('UTF8'):
+
 --
 -- PostgreSQL database dump
 -- Dumped from database version 11.5
