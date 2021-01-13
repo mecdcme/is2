@@ -191,9 +191,28 @@ public class WsSender extends Constants {
 		sendSetRules(this.id, rules);
 	}
 	
+	public JSONArray explodeJsonForMapping(JSONArray j)
+	{
+		JSONArray jNew=new JSONArray();
+		
+		
+		for (int i=0;i<j.length();i++)
+		{
+			for (String t : j.getJSONObject(i).getString("targetTables").split(","))
+			{
+				JSONObject jj=new JSONObject();
+				jj.put("targetVariableName",j.getJSONObject(i).getString("targetVariableName"));
+				jj.put("targetVariableType",j.getJSONObject(i).getString("targetVariableType"));
+				jj.put("sqlExpression",j.getJSONObject(i).getString("sqlExpression"));
+				jj.put("targetTables",t);
+				jNew.put(jj);
+			}
+		}
+		return jNew;
+	}
+	
 	public JSONArray reworkJsonForMapping(JSONArray j)
 	{
-		
 		for (int i=0;i<j.length();i++)
 		{
 			if (j.getJSONObject(i).getString("sqlExpression").startsWith("{:pk"))
