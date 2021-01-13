@@ -122,7 +122,7 @@ for i in 1..nb_dataset loop
 for j in 1..nb_mapping_tables loop
 --delete from is2.is2_app_role where id=start+(i-1)*nb_mapping_tables+j;
 o:=o+1;
-INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (start+(i-1)*nb_mapping_tables+j, ''MOK''||i||''_''||j, ''DATASET''||i||''_MAPPING_TABLE''||i, ''DATASET''||i||''_MAPPING_TABLE''||i, o, 1, NULL);
+INSERT INTO is2.is2_app_role (ID, CODE, NAME, DESCR, ORDER_CODE,CLS_DATA_TYPE_ID, PARAMETER_ID)  VALUES (start+(i-1)*nb_mapping_tables+j, ''MOK''||i||''_''||j, ''DATASET''||i||''_MAPPING_TABLE''||j, ''DATASET''||i||''_MAPPING_TABLE''||j, o, 1, NULL);
 INSERT INTO is2.is2_link_business_service_app_role VALUES (91, start+(i-1)*nb_mapping_tables+j);
 INSERT INTO is2.is2_step_instance_signature (id,required,app_role_id,step_instance_id,cls_type_io_id) VALUES (start+(i-1)*nb_mapping_tables+j, 0, start+(i-1)*nb_mapping_tables+j, 95, 2);
 
