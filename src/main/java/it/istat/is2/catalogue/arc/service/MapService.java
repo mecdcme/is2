@@ -87,7 +87,7 @@ public class MapService extends Constants {
 		send.setId(idelaborazione);
 
 		// send the load rules to arc
-		JSONArray jsonRules=send.reworkJsonForMapping(new JSONArray(parametriMap.get("MAPPING_PARAMETERS")));
+		JSONArray jsonRules=send.reworkJsonForMapping(send.explodeJsonForMapping(new JSONArray(parametriMap.get("MAPPING_PARAMETERS"))));
 		send.setRulesForModelTables(jsonRules);
 		send.setRulesForModelVariables(jsonRules);
 		send.setRulesForMapping(jsonRules);
