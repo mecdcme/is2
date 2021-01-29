@@ -18,6 +18,8 @@ services:
     image: mecdcme/is2-postgres:latest
     environment:
       - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
   adminer:
     image: adminer
     restart: always
