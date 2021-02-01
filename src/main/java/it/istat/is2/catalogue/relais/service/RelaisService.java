@@ -1182,7 +1182,8 @@ public class RelaisService {
 							}
 						}
 
-						if (worksetInn.get(codContingencyIndexTable).get(PREFIX_PATTERN + pattern).get(0)
+						if (!worksetInn.get(codContingencyIndexTable).get(PREFIX_PATTERN + pattern).isEmpty()
+								&& worksetInn.get(codContingencyIndexTable).get(PREFIX_PATTERN + pattern).get(0)
 								.equals(NOT_AV)) {
 							logService.save("ERROR: The number of pairs with '" + pattern
 									+ "' pattern is too large to enter into a solution");
