@@ -181,7 +181,7 @@
 				<configuration>
 					<!--Xmx to specify the maximum heap size, -Xms to specify the initial 
 						Java heap size -->
-					<jvmArguments>-Xms512m -Xmx1g</jvmArguments>
+					<jvmArguments>-Xms1024m -Xmx2048m</jvmArguments>
 				</configuration>
 			</plugin>
 			<plugin>

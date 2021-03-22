@@ -199,7 +199,7 @@ public class RelaisService {
 			nameMatchingVariables.add(metricsm.getMatchingVariable());
 		});
 
-		final Map<String, Integer> contingencyTable = Collections
+		final Map<String, Long> contingencyTable = Collections
 				.synchronizedMap(contingencyService.getEmptyContingencyTable());
 
 		final Map<String, List<String>> coupledIndexByPattern = RelaisUtility
@@ -216,7 +216,7 @@ public class RelaisService {
 			int inf = (chunkIndex * CHUNK_SIZE);
 			int sup = (chunkIndex == partitionSize - 1) ? sizeA - 1 : (inf + CHUNK_SIZE - 1);
 
-			final Map<String, Integer> contingencyTableIA = contingencyService.getEmptyContingencyTable();
+			final Map<String, Long> contingencyTableIA = contingencyService.getEmptyContingencyTable();
 			final Map<String, List<String>> coupledIndexByPatternIA = RelaisUtility
 					.getEmptyMapByKey(coupledIndexByPattern.keySet().stream(), "");
 
@@ -234,7 +234,7 @@ public class RelaisService {
 					});
 
 					String pattern = contingencyService.getPattern(valuesI);
-					int freq = contingencyTableIA.get(pattern);
+					long freq = contingencyTableIA.get(pattern);
 					contingencyTableIA.put(pattern, freq + 1);
 
 					if (freq < MAXINDEXNUM) {
@@ -345,7 +345,7 @@ public class RelaisService {
 			nameMatchingVariables.add(metricsm.getMatchingVariable());
 		});
 
-		final Map<String, Integer> contingencyTable = Collections
+		final Map<String, Long> contingencyTable = Collections
 				.synchronizedMap(contingencyService.getEmptyContingencyTable());
 
 		final Map<String, StringBuilder> coupledIndexByPattern = RelaisUtility.getEmptyMapByKeyStringB(
@@ -354,7 +354,7 @@ public class RelaisService {
 		IntStream.range(0, sizeA).parallel().forEach(innerIA -> {
 
 			final Map<String, String> valuesI = new HashMap<>();
-			final Map<String, Integer> contingencyTableIA = contingencyService.getEmptyContingencyTable();
+			final Map<String, Long> contingencyTableIA = contingencyService.getEmptyContingencyTable();
 			final Map<String, StringBuilder> coupledIndexByPatternIA = RelaisUtility
 					.getEmptyMapByKeyStringB(coupledIndexByPattern.keySet().stream(), "");
 
@@ -482,7 +482,7 @@ public class RelaisService {
 		logService.save("Size Blocking dataset A: " + indexesBlockingVariableA.size());
 		logService.save("Size Blocking dataset B: " + indexesBlockingVariableB.size());
 
-		final Map<String, Integer> contingencyTable = Collections
+		final Map<String, Long> contingencyTable = Collections
 				.synchronizedMap(contingencyService.getEmptyContingencyTable());
 
 		final Map<String, List<String>> coupledIndexByPattern = RelaisUtility
@@ -494,7 +494,7 @@ public class RelaisService {
 		indexesBlockingVariableA.entrySet().parallelStream().forEach(entry -> {
 			String keyBlock = entry.getKey();
 
-			final Map<String, Integer> contingencyTableIA = contingencyService.getEmptyContingencyTable();
+			final Map<String, Long> contingencyTableIA = contingencyService.getEmptyContingencyTable();
 			final Map<String, List<String>> coupledIndexByPatternIA = RelaisUtility
 					.getEmptyMapByKey(coupledIndexByPattern.keySet().stream(), "");
 
@@ -514,7 +514,7 @@ public class RelaisService {
 						});
 
 						String pattern = contingencyService.getPattern(valuesI);
-						int freq = contingencyTableIA.get(pattern);
+						long freq = contingencyTableIA.get(pattern);
 						contingencyTableIA.put(pattern, freq + 1);
 
 						if (freq < MAXINDEXNUM)
@@ -2007,7 +2007,7 @@ public class RelaisService {
 			throw new Exception("Error parsing SORTING VARAIABLES");
 		}
 
-		final Map<String, Integer> contingencyTable = Collections
+		final Map<String, Long> contingencyTable = Collections
 				.synchronizedMap(contingencyService.getEmptyContingencyTable());
 
 		final Map<String, List<String>> coupledIndexByPattern = RelaisUtility
@@ -2062,7 +2062,7 @@ public class RelaisService {
 			}
 		}
 
-		int freq;
+		long freq;
 
 		// contingency evaluation
 		for (Integer[] curr : listPairs) {
@@ -2186,7 +2186,7 @@ public class RelaisService {
 			throw new Exception("Error parsing Shingling VARAIABLES");
 		}
 
-		final Map<String, Integer> contingencyTable = Collections
+		final Map<String, Long> contingencyTable = Collections
 				.synchronizedMap(contingencyService.getEmptyContingencyTable());
 
 		final Map<String, List<String>> coupledIndexByPattern = RelaisUtility
@@ -2361,7 +2361,7 @@ public class RelaisService {
 					h.progres(gradino, inv);
 			}
 
-		int freq;
+		long freq;
 		ArrayList<String> notAv = new ArrayList<String>();
 		notAv.add(NOT_AV);
 

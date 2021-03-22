@@ -163,9 +163,9 @@ public class ContingencyService implements Serializable {
         return pattern.toString();
     }
 
-    public Map<String, Integer> getEmptyContingencyTable() {
+    public Map<String, Long> getEmptyContingencyTable() {
 
-        Map<String, Integer> contingencyTable = new LinkedHashMap<String, Integer>();
+        Map<String, Long> contingencyTable = new LinkedHashMap<String, Long>();
         int mask1 = (int) Math.pow(2, numVar);
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < mask1; i++) {
@@ -180,7 +180,7 @@ public class ContingencyService implements Serializable {
                 }
                 mask = mask >> 1;
             }
-            contingencyTable.put(sb.substring(1), 0);
+            contingencyTable.put(sb.substring(1), 0L);
         }
         return contingencyTable;
     }
