@@ -40,6 +40,7 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
     @Configuration
+    @ConditionalOnProperty("keycloak.realm")
     public static class KeycloakConfig extends KeycloakAutoConfiguration {
         // Force Keycloak autoconfiguration (disabled by default In IS2Application)
     }
