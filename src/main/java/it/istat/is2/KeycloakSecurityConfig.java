@@ -73,7 +73,7 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     
      /** Tells Keycloak to use application.properties instead of keycloak.json to find its config. */
     @Bean
-    public KeycloakSpringBootConfigResolver KeycloakConfigResolver() {
+    public KeycloakSpringBootConfigResolver keycloakConfigResolver() {
         return new KeycloakSpringBootConfigResolver();
     }
 
