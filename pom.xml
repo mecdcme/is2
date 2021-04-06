@@ -119,7 +119,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-batch</artifactId>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>org.springframework.batch</groupId>
 			<artifactId>spring-batch-test</artifactId>
 			<scope>test</scope>
@@ -134,9 +134,9 @@
 			<version>1.0.15</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-text</artifactId>
-		    <version>1.9</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.9</version>
 		</dependency>
 		<!-- Renjin -->
 		<!-- https://mvnrepository.com/artifact/org.netlib/netlib-java -->
@@ -145,18 +145,22 @@
 			<artifactId>renjin-script-engine</artifactId>
 			<version>RELEASE</version>
 		</dependency>
-	 	<dependency>
+		<dependency>
 			<groupId>org.renjin.cran</groupId>
 			<artifactId>SeleMix</artifactId>
 			<version>1.0.1-b16</version>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>org.renjin.cran</groupId>
 			<artifactId>jsonlite</artifactId>
 			<version>1.6-b1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.3.8</version>
+		</dependency>
 
- 
 	</dependencies>
 
 	<!-- Renjin repository -->
@@ -170,7 +174,7 @@
 			<id>central</id>
 			<url>https://repo1.maven.org/maven2/</url>
 		</repository>
-		 
+
 	</repositories>
 
 	<build>

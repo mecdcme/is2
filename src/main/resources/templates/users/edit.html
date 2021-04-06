@@ -25,7 +25,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <head th:include="layout :: site-head" th:remove="tag"/> 
-        <script th:src="@{/js/user.js}"></script>
+        <script th:src="@{/js/user/user.js}"></script>
     </head>
     <body class="c-app">
         <div th:replace="layout :: site-aside"></div>
@@ -128,7 +128,7 @@
                                                         <div class="col-md-9">
                                                             <span class="error text-danger"
                                                                   th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
-                                                            <input class="form-control" type="text" th:field="*{role}"
+                                                            <input class="form-control" type="text" th:field="*{roleName}" 
                                                                    readonly="readonly" sec:authorize="!hasAuthority('ADMIN')" />
 
                                                             <select th:field="*{role}" name="role"

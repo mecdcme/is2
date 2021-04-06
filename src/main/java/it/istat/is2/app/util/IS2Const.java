@@ -59,5 +59,8 @@ public interface IS2Const {
 
     public static final String ROLE_NAME_RULESET = "RULESET";
     public static final String SORT_ASC = "ASC";
+    
+    public static final Short USER_ROLE_ADMIN = 1;
+    public static final Short USER_ROLE_USER = 2;
 
 }
