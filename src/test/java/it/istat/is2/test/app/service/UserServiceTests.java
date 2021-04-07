@@ -62,6 +62,7 @@ public class UserServiceTests extends TestBase {
         form.setName("name");
         form.setSurname("surname");
         form.setRole((short)1);
+        form.setRoleName("ROLE_ADMIN");
 
         when(userDao.findById(id)).thenReturn(Optional.of(new User(id, "email")));
 
