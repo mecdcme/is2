@@ -24,6 +24,7 @@
 package it.istat.is2.workflow.controller;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,6 +65,7 @@ import it.istat.is2.app.service.DataProcessingService;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
+import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.rule.domain.Ruleset;
@@ -185,6 +187,8 @@ public class WorkflowController {
 
         return "workflow/home";
     }
+    
+    
 
     @GetMapping(value = "/eliminaAssociazione/{dataProcessingId}/{idvar}")
     public String eliminaAssociazioneVar(HttpSession session, Model model,
@@ -416,6 +420,60 @@ public class WorkflowController {
 
         return "workflow/view_data";
 
+    }
+    
+ // TEST: Metodo per scaricare uno zip contenente i file csv che racchiudono l'intero output
+    @GetMapping(value = "/downloadzipfile/{id}")
+    public String downloadZipFile(HttpSession session, HttpServletResponse response, Model model, @PathVariable("id") Long dataProcessingId) {
+        notificationService.removeAllMessages();
+        AppRole currentGroup;
+        Short outRole = IS2Const.TYPE_IO_OUTPUT;
+        Long outr = (long)outRole;
+        TypeIO typeIO = new TypeIO(outRole);
+        
+        
+        List<AppRole> outputObjects = workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId, typeIO, null);
+        currentGroup = appRoleService.findRuolo(outr);
+        
+        
+        
+        
+        String[] paths = new String[outputObjects.size()];
+        int i=0;
+        for (AppRole outputObject : outputObjects) {
+        	Long outputRole = outputObject.getId();
+        	
+        	
+        	Map<String, List<String>> dataMap = workflowService.loadWorkSetValoriByDataProcessingRoleGroupMap(dataProcessingId, outputRole);
+
+//            response.setHeader("charset", "utf-8");
+//            response.setHeader("Content-Type", contentType);
+//            response.setHeader("Content-disposition", "attachment; filename=" + fileName);
+            try {
+				
+				paths[i] = Utility.writeObjectToCSV2(outputObject.getId(), response.getWriter(), dataMap);
+				i++;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        Utility.zipFiles(paths);
+        
+        
+//        if (outRole.isPresent()) {
+//            currentGroup = appRoleService.findRuolo(outRole.get());
+//        } else {
+//            currentGroup = outputObjects.get(0);
+//        }
+        
+        
+        
+       
+
+
+
+        return "workflow/home";
     }
 
     @GetMapping(value = "/chiudiElab/{id}")

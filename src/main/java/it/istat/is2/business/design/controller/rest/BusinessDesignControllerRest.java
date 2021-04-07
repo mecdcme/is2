@@ -67,7 +67,13 @@ public class BusinessDesignControllerRest {
         }
         return processDtoList;
     }
-
+    @RequestMapping(value = "/getSelectedBusinessService/{idbservice}", method = RequestMethod.GET)
+    public BusinessService getSelectedBusinessService(HttpServletRequest request, Model model,
+            @PathVariable("idbservice") Long idbservice) throws IOException {		
+		
+		BusinessService bs = businessServiceService.findBusinessServiceById(idbservice);			
+        return bs;   
+    }
     @RequestMapping(value = "/loadGsbpmParentProcess", method = RequestMethod.GET)
     public List<GsbpmProcessDto> loadGsbpmParentProcess(HttpServletRequest request, Model model)
             throws IOException {

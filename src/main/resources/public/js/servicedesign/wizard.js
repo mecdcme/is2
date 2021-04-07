@@ -29,6 +29,10 @@ $(document).ready(function() {
 	loadParentGsbpmProcess();
 	loadBusinessServices();
 	loadAppServices();
+	loadBusinessServicesList();
+	$("#select-bservice-list-div").change(function() {
+		// todo
+	});
 	$("#preparing-select-js-parent").change(function() {
 		var sel_process = $("#select-gsbpm-1 :selected").val();
 		loadSubGsbpmProcess();
@@ -68,7 +72,44 @@ $(document).ready(function() {
 	});
 
 });
+function fillBusinessServiceFields() {
+	var selectedBsId = $("#select-bserv-list").val();
+	
+	$
+			.ajax({
+				url : _ctx + "/getSelectedBusinessService/"+selectedBsId,
+				type : "GET",
+				dataType : "JSON",
+				success : function(data) {
+					//TODO
+					$("#bs-name").val();
+					var content = "<div class='form-group' id='select-gsbpm-1-div'>"
+							+ "<label class='control-label'>Processo gsbpm</label> "
+							+ "<select name='gsbpmidparent' id='select-gsbpm-1' title='Processo gsbpm' class='form-control'>";
 
+					"<div class='col-lg-4'><label class='control-label'>"
+							+ "<span id='step'>Business Steps:</span></label></div><div class='col-lg-8'>"
+							+ "<select id='sel_step' name='step' class='form-control'>";
+
+					$(jQuery.parseJSON(JSON.stringify(data))).each(
+							function() {
+
+								var id = this.id;
+								var name = this.name;
+								content += "<option value='" + id + "'>" + name
+										+ "</option>";
+							});
+
+					content += "</select><span class='help-block'></span></div>";
+					$("#preparing-select-js-parent").html(content);
+					loadSubGsbpmProcess();
+
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alert('Error loading data');
+				}
+			});
+}
 function showWizard() {
 
 	var current_fs, next_fs, previous_fs; // fieldsets
@@ -230,8 +271,7 @@ function loadBusinessServices() {
 				type : "GET",
 				dataType : "JSON",
 				success : function(data) {
-					var content = "<div class='form-group' id='select-bservice-div'>"
-							+ "<label class='control-label'>Associa Business Service</label> "
+					var content = "<label class='control-label'>Associa Business Service</label> "
 							+ "<select name='bsid' id='select-bserv' title='Business service' class='form-control'>";
 
 					"<div class='col-lg-4'><label class='control-label'>"
@@ -247,8 +287,40 @@ function loadBusinessServices() {
 										+ "</option>";
 							});
 
-					content += "</select><span class='help-block'></span></div>";
+					content += "</select><span class='help-block'></span>";
 					$("#select-bservice-div").html(content);
+
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alert('Error loading data');
+				}
+			});
+}
+function loadBusinessServicesList() {
+	$
+			.ajax({
+				url : _ctx + "/loadbusinessservices",
+				type : "GET",
+				dataType : "JSON",
+				success : function(data) {
+					var content = "<label class='control-label'>Lista Business Service</label> "
+							+ "<select name='bsidlist' id='select-bserv-list' title='Business service' class='form-control'>";
+
+					"<div class='col-lg-4'><label class='control-label'>"
+							+ "<span id='bservlist'>Business Service:</span></label></div><div class='col-lg-8'>"
+							+ "<select id='sel_bserv_list' name='bservlist' class='form-control'>";
+
+					$(jQuery.parseJSON(JSON.stringify(data))).each(
+							function() {
+
+								var id = this.id;
+								var name = this.name;
+								content += "<option value='" + id + "'>" + name
+										+ "</option>";
+							});
+
+					content += "</select><span class='help-block'></span>";
+					$("#select-bservice-list-div").html(content);
 
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
