@@ -22,9 +22,7 @@
  * @version 1.0
  */
 package it.istat.is2.workflow.controller;
-
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,10 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -111,6 +107,7 @@ public class WorkflowController {
     private RuleService ruleService;
     @Autowired
     private LogService logService;
+    
 
     @GetMapping(value = "/home/{id}")
     public String homeWS(HttpSession session, Model model, @PathVariable("id") Long id) {
@@ -422,18 +419,20 @@ public class WorkflowController {
 
     }
     
- // TEST: Metodo per scaricare uno zip contenente i file csv che racchiudono l'intero output
-    @GetMapping(value = "/downloadzipfile/{id}")
-    public String downloadZipFile(HttpSession session, HttpServletResponse response, Model model, @PathVariable("id") Long dataProcessingId) {
+ // TEST: Metodo per scaricare uno zip contenente i file csv che racchiudono l'intero output   
+    @RequestMapping(value="/downloadzipfile/{id}")
+    //@GetMapping(value = "/downloadzipfile/{id}")
+    public void downloadZipFile(HttpSession session, HttpServletResponse response, Model model, @PathVariable("id") Long dataProcessingId) {
         notificationService.removeAllMessages();
-        AppRole currentGroup;
+        //AppRole currentGroup;
         Short outRole = IS2Const.TYPE_IO_OUTPUT;
-        Long outr = (long)outRole;
+        //Long outr = (long)outRole;
         TypeIO typeIO = new TypeIO(outRole);
         
+      
         
         List<AppRole> outputObjects = workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId, typeIO, null);
-        currentGroup = appRoleService.findRuolo(outr);
+        //currentGroup = appRoleService.findRuolo(outr);
         
         
         
@@ -443,37 +442,25 @@ public class WorkflowController {
         for (AppRole outputObject : outputObjects) {
         	Long outputRole = outputObject.getId();
         	
-        	
+        	//setting headers  
+            response.setContentType("application/octet-stream");           
+            response.setHeader("Content-disposition", "attachment; filename=dataset.zip");
+            response.setStatus(HttpServletResponse.SC_OK);
+            
         	Map<String, List<String>> dataMap = workflowService.loadWorkSetValoriByDataProcessingRoleGroupMap(dataProcessingId, outputRole);
 
-//            response.setHeader("charset", "utf-8");
-//            response.setHeader("Content-Type", contentType);
-//            response.setHeader("Content-disposition", "attachment; filename=" + fileName);
             try {
 				
-				paths[i] = Utility.writeObjectToCSV2(outputObject.getId(), response.getWriter(), dataMap);
+				paths[i] = Utility.writeObjectToCSV2(outputObject.getName(), dataMap);
 				i++;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        }
-        Utility.zipFiles(paths);
+        }       
         
+        Utility.zipFiles(response, paths);
         
-//        if (outRole.isPresent()) {
-//            currentGroup = appRoleService.findRuolo(outRole.get());
-//        } else {
-//            currentGroup = outputObjects.get(0);
-//        }
-        
-        
-        
-       
-
-
-
-        return "workflow/home";
     }
 
     @GetMapping(value = "/chiudiElab/{id}")

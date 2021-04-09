@@ -23,22 +23,10 @@
  */
 package it.istat.is2.app.util;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,13 +40,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.log4j.Logger;
@@ -68,8 +52,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.renjin.sexp.Vector;
-
-import it.istat.is2.app.bean.BusinessProcessBean;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.util.StreamUtils;
 import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.BusinessProcess;
 import it.istat.is2.workflow.domain.DataTypeCls;
@@ -490,29 +474,6 @@ public class Utility {
 
     }
 
-    public static void filesToZip(HttpServletResponse response, File... files) throws IOException {
-        // Create a buffer for reading the files
-        byte[] buf = new byte[1024];
-        // create the ZIP file
-        ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
-        // compress the files
-        for(int i=0; i<files.length; i++) {
-            FileInputStream in = new FileInputStream(files[i].getName());
-            // add ZIP entry to output stream
-            out.putNextEntry(new ZipEntry(files[i].getName()));
-            // transfer bytes from the file to the ZIP file
-            int len;
-            while((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            // complete the entry
-            out.closeEntry();
-            in.close();
-        }
-        // complete the ZIP file
-        out.close();
-    }
-    // Metodo copia originale
     public static void writeObjectToCSV(PrintWriter writer, Map<String, List<String>> dataMap) throws IOException {
         ArrayList<String> header = new ArrayList<String>();
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL);
@@ -545,11 +506,12 @@ public class Utility {
 
         }
     }
-    // Metodo TEST
-    public static String writeObjectToCSV2(Long id, PrintWriter writer, Map<String, List<String>> dataMap) throws IOException {
+    // Method copy with String returned to build a zip
+    public static String writeObjectToCSV2(String name, Map<String, List<String>> dataMap) throws IOException {
         ArrayList<String> header = new ArrayList<String>();
-        String savePath = "C:\\Users\\Renzo\\eclipse-workspace\\is2\\data\\";
-        String outputFile = savePath+"csv" + id + ".txt";
+        
+        String savePath = System.getProperty("java.io.tmpdir");         
+        String outputFile = savePath + name + ".txt";
         CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(outputFile), CSVFormat.EXCEL);
         try {
             String wi = "";
@@ -571,6 +533,7 @@ public class Utility {
                 }
 
                 csvPrinter.printRecord(data);
+                
             }
             csvPrinter.flush();
             csvPrinter.close();
@@ -581,32 +544,30 @@ public class Utility {
         }
         return outputFile;
     }
-    // TEST to zip files
-    public static void zipFiles(String... filePaths) {
-        try {
-            File firstFile = new File(filePaths[0]);
-            String zipFileName = firstFile.getName().concat(".zip");
- 
-            FileOutputStream fos = new FileOutputStream(zipFileName);
-            ZipOutputStream zos = new ZipOutputStream(fos);
- 
-            for (String aFile : filePaths) {
-                zos.putNextEntry(new ZipEntry(new File(aFile).getName()));
- 
-                byte[] bytes = Files.readAllBytes(Paths.get(aFile));
-                zos.write(bytes, 0, bytes.length);
-                zos.closeEntry();
-            }
- 
-            zos.close();
- 
-        } catch (FileNotFoundException ex) {
-            System.err.println("A file does not exist: " + ex);
-        } catch (IOException ex) {
-            System.err.println("I/O error: " + ex);
-        }
-    }
 
+    // Method to zip output datasets
+    public static void zipFiles(HttpServletResponse response, String... filePaths) {   	
+    	
+        try (ZipOutputStream zippedOut = new ZipOutputStream(response.getOutputStream())) {
+            for (int i=0; i<filePaths.length; i++) {
+            	String fileName = filePaths[i];
+                FileSystemResource resource = new FileSystemResource(fileName);
+
+                ZipEntry e = new ZipEntry(resource.getFilename());
+                // Configure the zip entry, the properties of the file
+                e.setSize(resource.contentLength());
+                e.setTime(System.currentTimeMillis());
+                // etc.
+                zippedOut.putNextEntry(e);
+                // And the content of the resource:
+                StreamUtils.copy(resource.getInputStream(), zippedOut);
+                zippedOut.closeEntry();
+            }
+            zippedOut.finish();
+        } catch (Exception e) {
+            // Exception handling goes here
+        }    	
+    }
 
     public static String string(ArrayList<String> values) throws JSONException {
         String value = "";
