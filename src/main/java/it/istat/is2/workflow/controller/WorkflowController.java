@@ -419,48 +419,37 @@ public class WorkflowController {
 
     }
     
- // TEST: Metodo per scaricare uno zip contenente i file csv che racchiudono l'intero output   
-    @RequestMapping(value="/downloadzipfile/{id}")
-    //@GetMapping(value = "/downloadzipfile/{id}")
+    // Method that allows to download all the csv output files in a single file zip
+    @GetMapping(value = "/downloadzipfile/{id}")
     public void downloadZipFile(HttpSession session, HttpServletResponse response, Model model, @PathVariable("id") Long dataProcessingId) {
         notificationService.removeAllMessages();
-        //AppRole currentGroup;
-        Short outRole = IS2Const.TYPE_IO_OUTPUT;
-        //Long outr = (long)outRole;
-        TypeIO typeIO = new TypeIO(outRole);
         
-      
+        Short outRole = IS2Const.TYPE_IO_OUTPUT;        
+        TypeIO typeIO = new TypeIO(outRole);        
+        List<AppRole> outputObjects = workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId, typeIO, null);       
+              
+        //setting headers  
+        response.setContentType("application/octet-stream");           
+        response.setHeader("Content-disposition", "attachment; filename=dataset.zip");
+        response.setStatus(HttpServletResponse.SC_OK);
         
-        List<AppRole> outputObjects = workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId, typeIO, null);
-        //currentGroup = appRoleService.findRuolo(outr);
-        
-        
-        
-        
-        String[] paths = new String[outputObjects.size()];
+        String[] paths = new String[outputObjects.size()];        
         int i=0;
         for (AppRole outputObject : outputObjects) {
-        	Long outputRole = outputObject.getId();
-        	
-        	//setting headers  
-            response.setContentType("application/octet-stream");           
-            response.setHeader("Content-disposition", "attachment; filename=dataset.zip");
-            response.setStatus(HttpServletResponse.SC_OK);
-            
+        	Long outputRole = outputObject.getId();        	
         	Map<String, List<String>> dataMap = workflowService.loadWorkSetValoriByDataProcessingRoleGroupMap(dataProcessingId, outputRole);
 
-            try {
-				
+            try {				
 				paths[i] = Utility.writeObjectToCSV2(outputObject.getName(), dataMap);
 				i++;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				notificationService.addErrorMessage(
+	                messages.getMessage("dataset.csv.download.error", null, LocaleContextHolder.getLocale()),
+	                e.getMessage());
 			}
         }       
         
-        Utility.zipFiles(response, paths);
-        
+        Utility.zipFiles(response, paths);        
     }
 
     @GetMapping(value = "/chiudiElab/{id}")
