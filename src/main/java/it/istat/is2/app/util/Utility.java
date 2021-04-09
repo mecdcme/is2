@@ -542,6 +542,10 @@ public class Utility {
             csvPrinter.close();
 
         }
+        finally{
+        	if (csvPrinter!=null)
+        		csvPrinter.close();
+        }
         return outputFile;
     }
 
