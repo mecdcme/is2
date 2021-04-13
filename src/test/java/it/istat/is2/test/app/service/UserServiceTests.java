@@ -67,7 +67,7 @@ public class UserServiceTests extends TestBase {
         when(userDao.findById(id)).thenReturn(Optional.of(new User(id, "email")));
 
         // Act
-        User user = userService.update(form,email);
+        User user = userService.update(form);
 
         // Assert
         assertNotNull(user);
@@ -89,7 +89,7 @@ public class UserServiceTests extends TestBase {
         when(userDao.findById(id)).thenReturn(null);
 
         // Act
-        User user = userService.update(form,form.getEmail());
+        User user = userService.update(form);
 
         // Assert
         assertNull(user);

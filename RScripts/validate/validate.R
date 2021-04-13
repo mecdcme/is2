@@ -107,39 +107,40 @@ is2_detect_infeasible <- function(input, inputNames){
   return(output)
 }
 
-is2_validate_confront <- function(workset=Workset, rules=Ruleset,md=MD,rs=RS,...){
- 
-    #print(str(workset))
-    #print(str(rules))
-    
-    colnames(rules)<- tolower(rs)
-    rules$rule<-toupper(rules$rule)
-	stdout <- vector('character')
-	con <- textConnection('stdout', 'wr', local = TRUE)
-	sink(con)
-	
-	#print(rules)
-    #print(workset)
+is2_validate_confront <- function(workset=Workset, roles=roles,rules=RS,...){
+    stdout <- vector('character')
+    con <- textConnection('stdout', 'wr', local = TRUE)
+    # print( workset )
+    # print(rules)
+    # print(roles)
+    colnames(rules)<- tolower(colnames(rules))
+	colnames(workset)<- tolower(colnames(workset))
+    print(rules)
     v <- validator(.data=rules)
-    
-    # print('---------------v ------')
-     print(v)
-    # print(str(workset))
+    print(v)
+	
     cf <- confront(workset, v)
-    print('--------------- summary(cf) ------')
+	res<-cbind(workset,as.data.frame(values(cf)))
+	print(head(res))
+	roles_out <- list (MD=names(res))
+	rolesgroup<-list (MD= c("MD"))
+	
+	print('--------------- summary(cf) ------')
     print(summary(cf))
     print('--------------- aggregate(cf) ------')
-	 print(aggregate(cf))
+	print(aggregate(cf))
 	head(aggregate(cf,by="record"))
 	sort(cf)
 	head(values(cf))
-	head(cbind(data,values(cf)))
+	
 	print('----head(cf)---')
 	print(head(cf))
- 
+	print('----values(cf)---')
+	print(values(cf))
+	 sink()
+   	close(con)
 	
- 	sink()
-  	close(con)
-	output <- list(out = cf, "log" = stdout)
-  	return(output)
+	result <- list(workset_out = res, roles_out= roles_out, rolesgroup_out= rolesgroup, log = stdout)
+	
+  	return(result)
 }

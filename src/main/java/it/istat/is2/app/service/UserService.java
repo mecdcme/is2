@@ -97,6 +97,22 @@ public class UserService {
 
 		return user;
 	}
+	public User update(UserCreateForm uf) throws Exception {
+		User user = userDao.findById(uf.getId()).orElse(null);
+		if (user == null) {
+			throw new Exception("User not found");
+		}
+		user.setEmail(uf.getEmail());
+		user.setName(uf.getName());
+		user.setSurname(uf.getSurname());
+
+	 	UserRole ur = new UserRole(uf.getRole());
+			user.setRole(ur);
+		 
+		userDao.save(user);
+
+		return user;
+	}
 
 	public User updatePasswordByEmail(String email, String password) throws Exception {
 		User user = userDao.findByEmail(email);

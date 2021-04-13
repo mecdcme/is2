@@ -236,7 +236,7 @@
                                                     <tr th:each="rulesetRole,stats: ${rulesetRoleList}" th:unless="${(rulesetRoleList == null) or (rulesetRoleList.size() == 0) }">
                                                         <td><span th:text="${stats.index+1}"></span></td>
                                                         <td th:text="${rulesetRole.name}"></td>
-                                                        <th:block th:if="${stepRuntimesRulesetMap.get(rulesetRole.name)}" th:with="stepP=${stepRuntimesRulesetMap.get(rulesetRole.name)}">
+                                                        <th:block th:if="${stepRuntimesRulesetMap.get(rulesetRole.code)}" th:with="stepP=${stepRuntimesRulesetMap.get(rulesetRole.code)}">
                                                             <td><span th:text="${stepP.workset.paramValue}"></span></td>
                                                             <td th:text="${stepP.appRole.descr}"></td>
                                                             <td th:text="${stepP.typeIO.name}"></td>
@@ -252,7 +252,7 @@
                                                                 </a>
                                                             </td>
                                                         </th:block>
-                                                        <th:block th:unless="${stepRuntimesRulesetMap.get(rulesetRole.name)}">
+                                                        <th:block th:unless="${stepRuntimesRulesetMap.get(rulesetRole.code)}">
                                                             <td>&nbsp;</td>
                                                             <td>&nbsp;</td>
                                                             <td>&nbsp;</td>

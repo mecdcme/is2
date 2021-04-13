@@ -70,6 +70,7 @@ public class Ruleset implements Serializable {
 
     @OneToMany(mappedBy = "ruleset", cascade = CascadeType.ALL)
     @JsonBackReference
+    @OrderBy("id")
     private List<Rule> rules;
 
     public Ruleset() {

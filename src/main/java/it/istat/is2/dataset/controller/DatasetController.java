@@ -142,7 +142,7 @@ public class DatasetController {
 
         List<DatasetFile> datasetList = sessionelv.getDatasetFiles();
         List<DataTypeCls> fileTypeList = new ArrayList<>();
-        fileTypeList.add(dataTypeService.findById(IS2Const.DATA_TYPE_VARIABLE));
+        fileTypeList.addAll(dataTypeService.findListTipoDato());
 
         String etichetta = null;
         if (datasetList != null && datasetList.size() > 0) {
