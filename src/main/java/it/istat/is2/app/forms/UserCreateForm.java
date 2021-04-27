@@ -53,7 +53,8 @@ public class UserCreateForm {
     @NotNull
     private Short role;
 
-
+    private String roleName;
+    
     public String toString() {
         return "Person(Email: " + this.email + ", Nome: " + this.name + ", Surname: " + this.surname + ")";
     }

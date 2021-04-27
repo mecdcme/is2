@@ -24,9 +24,12 @@
 package it.istat.is2.app.controller.rest;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
+
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -46,130 +49,140 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.istat.is2.app.bean.NotificationMessage;
 import it.istat.is2.app.domain.User;
+import it.istat.is2.app.dto.UserDTO;
 import it.istat.is2.app.forms.UserCreateForm;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.service.UserService;
 
-
 @RestController
 public class UserRestController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @Autowired
-    private NotificationService notificationService;
+	@Autowired
+	private NotificationService notificationService;
 
-    @Autowired
-    MessageSource messages;
+	@Autowired
+	MessageSource messages;
 
-    @GetMapping("/users")
-    public List<User> userslist(Model model) {
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/users")
+	public List<UserDTO> userslist(Model model) {
 
-        List<User> users = userService.findAll();
-        return users;
-    }
+		final ModelMapper modelMapper = new ModelMapper();
+		List<UserDTO> users = new ArrayList<>();
+		this.userService.findAll().forEach(element -> users.add(modelMapper.map(element, UserDTO.class)));
+		return users;
+	}
 
-    @GetMapping("/users/{id}")
-    public User getUser(@PathVariable("id") Long id) {
+	@GetMapping("/users/{id}")
+	public UserDTO getUser(@PathVariable("id") Long id) {
+		final ModelMapper modelMapper = new ModelMapper();
+		User user = userService.findOne(id);
+		return modelMapper.map(user, UserDTO.class);
+	}
 
-        User user = userService.findOne(id);
-        return user;
-    }
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/users")
+	public List<NotificationMessage> newUser(@Valid @ModelAttribute("userCreateForm") UserCreateForm form,
+			BindingResult bindingResult) {
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/users")
-    public List<NotificationMessage> newUser(@Valid @ModelAttribute("userCreateForm") UserCreateForm form,
-                                             BindingResult bindingResult) {
+		notificationService.removeAllMessages();
+		if (!bindingResult.hasErrors()) {
+			try {
+				userService.create(form);
+				notificationService
+						.addInfoMessage(messages.getMessage("user.created", null, LocaleContextHolder.getLocale()));
+			} catch (Exception e) {
+				notificationService.addErrorMessage("Error: " + e.getMessage());
+			}
+		} else {
 
-        notificationService.removeAllMessages();
-        if (!bindingResult.hasErrors()) {
-            try {
-                userService.create(form);
-                notificationService.addInfoMessage(messages.getMessage("user.created", null, LocaleContextHolder.getLocale()));
-            } catch (Exception e) {
-                notificationService.addErrorMessage("Error: " + e.getMessage());
-            }
-        } else {
+			List<FieldError> errors = bindingResult.getFieldErrors();
+			for (FieldError error : errors) {
+				notificationService.addErrorMessage(error.getField() + " - " + error.getDefaultMessage());
+			}
+		}
+		return notificationService.getNotificationMessages();
+	}
 
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error : errors) {
-                notificationService.addErrorMessage(error.getField() + " - " + error.getDefaultMessage());
-            }
-        }
-        return notificationService.getNotificationMessages();
-    }
+	@PreAuthorize("hasRole('ADMIN')")
+	@PutMapping("/users")
+	public List<NotificationMessage> updateUser(@Valid @ModelAttribute("userCreateForm") UserCreateForm form,
+			BindingResult bindingResult,Principal principa) {
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/users")
-    public List<NotificationMessage> updateUser(@Valid @ModelAttribute("userCreateForm") UserCreateForm form,
-                                                BindingResult bindingResult) {
+		notificationService.removeAllMessages();
+		if (!bindingResult.hasErrors()) {
 
-        notificationService.removeAllMessages();
-        if (!bindingResult.hasErrors()) {
+			try {
+				userService.update(form,principa.getName());
+				notificationService
+						.addInfoMessage(messages.getMessage("user.updated", null, LocaleContextHolder.getLocale()));
+			} catch (Exception e) {
+				notificationService.addErrorMessage("Error: " + e.getMessage());
+			}
+		} else {
+			List<FieldError> errors = bindingResult.getFieldErrors();
+			for (FieldError error : errors) {
+				notificationService.addErrorMessage(error.getField() + " - " + error.getDefaultMessage());
+			}
+		}
+		return notificationService.getNotificationMessages();
+	}
 
-            try {
-                userService.update(form);
-                notificationService.addInfoMessage(messages.getMessage("user.updated", null, LocaleContextHolder.getLocale()));
-            } catch (Exception e) {
-                notificationService.addErrorMessage("Error: " + e.getMessage());
-            }
-        } else {
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error : errors) {
-                notificationService.addErrorMessage(error.getField() + " - " + error.getDefaultMessage());
-            }
-        }
-        return notificationService.getNotificationMessages();
-    }
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/users/{id}")
+	public List<NotificationMessage> deleteUser(@PathVariable("id") Long id) {
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/users/{id}")
-    public List<NotificationMessage> deleteUser(@PathVariable("id") Long id) {
+		notificationService.removeAllMessages();
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        notificationService.removeAllMessages();
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (id.compareTo(user.getId()) == 0) {
+			notificationService
+					.addErrorMessage(messages.getMessage("user.error.delete", null, LocaleContextHolder.getLocale()));
+		} else {
+			try {
+				userService.delete(id);
+				notificationService
+						.addInfoMessage(messages.getMessage("user.deleted", null, LocaleContextHolder.getLocale()));
 
-        if (id.compareTo(user.getId()) == 0) {
-            notificationService.addErrorMessage(messages.getMessage("user.error.delete", null, LocaleContextHolder.getLocale()));
-        } else {
-            try {
-                userService.delete(id);
-                notificationService.addInfoMessage(messages.getMessage("user.deleted", null, LocaleContextHolder.getLocale()));
+			} catch (Exception e) {
+				notificationService.addErrorMessage("Error: " + e.getMessage());
+			}
+		}
+		return notificationService.getNotificationMessages();
+	}
 
-            } catch (Exception e) {
-                notificationService.addErrorMessage("Error: " + e.getMessage());
-            }
-        }
-        return notificationService.getNotificationMessages();
-    }
+	@PostMapping(value = "/users/reset_password")
+	public List<NotificationMessage> updateMyPassword(@RequestParam("passw") String password, Principal principal) {
 
-    @PostMapping(value = "/users/reset_password")
-    public List<NotificationMessage> updateMyPassword(@RequestParam("passw") String password, Principal principal) {
+		String email = principal.getName(); // get logged in username
+		notificationService.removeAllMessages();
+		try {
+			userService.updatePasswordByEmail(email, password);
+			notificationService.addInfoMessage(
+					messages.getMessage("user.password.updated", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			notificationService.addErrorMessage("Error: " + e.getMessage());
+		}
+		return notificationService.getNotificationMessages();
+	}
 
-        String email = principal.getName(); // get logged in username
-        notificationService.removeAllMessages();
-        try {
-            userService.updatePasswordByEmail(email, password);
-            notificationService.addInfoMessage(messages.getMessage("user.password.updated", null, LocaleContextHolder.getLocale()));
-        } catch (Exception e) {
-            notificationService.addErrorMessage("Error: " + e.getMessage());
-        }
-        return notificationService.getNotificationMessages();
-    }
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping(value = "/users/reset_password/{id}")
+	public List<NotificationMessage> updatePassword(@RequestParam("passw") String password,
+			@PathVariable("id") String id) {
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(value = "/users/reset_password/{id}")
-    public List<NotificationMessage> updatePassword(@RequestParam("passw") String password, @PathVariable("id") String id) {
-
-        notificationService.removeAllMessages();
-        try {
-            userService.updatePasswordById(Long.parseLong(id), password);
-            notificationService.addInfoMessage(messages.getMessage("user.password.updated", null, LocaleContextHolder.getLocale()));
-        } catch (Exception e) {
-            notificationService.addErrorMessage("Error: " + e.getMessage());
-        }
-        return notificationService.getNotificationMessages();
-    }
+		notificationService.removeAllMessages();
+		try {
+			userService.updatePasswordById(Long.parseLong(id), password);
+			notificationService.addInfoMessage(
+					messages.getMessage("user.password.updated", null, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			notificationService.addErrorMessage("Error: " + e.getMessage());
+		}
+		return notificationService.getNotificationMessages();
+	}
 
 }

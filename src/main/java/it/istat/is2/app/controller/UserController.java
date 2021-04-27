@@ -24,6 +24,7 @@
 package it.istat.is2.app.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ import javax.validation.Valid;
 
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.MessageSource;
@@ -45,10 +47,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import it.istat.is2.app.domain.User;
 import it.istat.is2.app.domain.UserRole;
+import it.istat.is2.app.dto.UserDTO;
+import it.istat.is2.app.dto.UserRoleDTO;
 import it.istat.is2.app.forms.LoginForm;
 import it.istat.is2.app.forms.UserCreateForm;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.service.UserService;
+import it.istat.is2.app.util.IS2Const;
 
 @Controller
 public class UserController {
@@ -67,6 +72,12 @@ public class UserController {
         return "login";
     }
 
+    @GetMapping(value = "/users/logout")
+    public String logout() {
+        notificationService.addInfoMessage(messages.getMessage("user.logout", null, LocaleContextHolder.getLocale()));
+        return "redirect:/";
+    }
+    
     /**
      * Registers the user if they are authentified with Keycloak
      * but not registered in IS2.
@@ -87,16 +98,10 @@ public class UserController {
                 userForm.setSurname(token.getFamilyName());
                 userForm.setEmail(email);
                 userForm.setPassword("password");
-                userForm.setRole((short)2);
+                userForm.setRole(IS2Const.USER_ROLE_USER);
                 userService.create(userForm);
             }
         }
-        return "redirect:/";
-    }
-
-    @GetMapping(value = "/users/logout")
-    public String logout() {
-        notificationService.addInfoMessage(messages.getMessage("user.logout", null, LocaleContextHolder.getLocale()));
         return "redirect:/";
     }
 
@@ -120,6 +125,7 @@ public class UserController {
         userf.setName(user.getName());
 
         userf.setRole(user.getRole().getId());
+        userf.setRoleName(user.getRole().getRole().replace("ROLE_", ""));
         userf.setId(user.getId());
         model.addAttribute("userCreateForm", userf);
 
@@ -131,7 +137,7 @@ public class UserController {
 
     @PostMapping(value = "/users/edituser")
     public String editUser(Model model, @Valid @ModelAttribute("userCreateForm") UserCreateForm form,
-                           BindingResult bindingResult) {
+                           BindingResult bindingResult, Principal principal) {
         notificationService.removeAllMessages();
         List<UserRole> allRoles = userService.findAllRoles();
         model.addAttribute("allRoles", allRoles);
@@ -141,7 +147,7 @@ public class UserController {
         }
 
         try {
-            userService.update(form);
+            userService.update(form,principal.getName());
             notificationService
                     .addInfoMessage(messages.getMessage("user.updated", null, LocaleContextHolder.getLocale()));
         } catch (Exception e) {
@@ -150,7 +156,8 @@ public class UserController {
         }
         return "users/edit";
     }
-
+    
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/users/newuser")
     public String handleUserCreateForm(Model model, @Valid @ModelAttribute("userCreateForm") UserCreateForm form,
                                        BindingResult bindingResult) {
@@ -177,11 +184,18 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/users/userlist")
     public String userslist(Model model) {
-        List<User> users = userService.findAll();
-        model.addAttribute("users", users);
-        List<UserRole> allRoles = userService.findAllRoles();
-        model.addAttribute("allRoles", allRoles);
+    	
+    	final ModelMapper modelMapper = new ModelMapper();
+    	List<UserDTO> usersDTO = new ArrayList<>();
+		this.userService.findAll().forEach(element -> usersDTO.add(modelMapper.map(element, UserDTO.class)));
+      
+        model.addAttribute("users", usersDTO);
+        List<UserRoleDTO> allRolesDTO = new ArrayList<>();
+        userService.findAllRoles().forEach(element -> allRolesDTO.add(modelMapper.map(element, UserRoleDTO.class)));
+        
+        model.addAttribute("allRoles", allRolesDTO);
 
         return "users/list";
     }
 }
+

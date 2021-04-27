@@ -627,6 +627,7 @@ public class WorkflowService {
         StepRuntime stepRuntimeID = new StepRuntime();
         stepRuntimeID.setDataProcessing(dataProcessing);
         stepRuntimeID.setAppRole(appRole);
+        stepRuntimeID.setRoleGroup(appRole);
         stepRuntimeID.setOrderCode(Short.valueOf("1"));
         stepRuntimeID.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
         stepRuntimeID.setTypeIO(new TypeIO(IS2Const.TYPE_IO_INPUT));
@@ -646,6 +647,7 @@ public class WorkflowService {
         StepRuntime stepRuntime = new StepRuntime();
         stepRuntime.setDataProcessing(dataProcessing);
         stepRuntime.setAppRole(appRole);
+        stepRuntime.setRoleGroup(appRole);
         stepRuntime.setOrderCode(Short.valueOf("2"));
         stepRuntime.setDataType(new DataTypeCls(IS2Const.DATA_TYPE_RULESET));
         stepRuntime.setTypeIO(new TypeIO(IS2Const.TYPE_IO_INPUT));

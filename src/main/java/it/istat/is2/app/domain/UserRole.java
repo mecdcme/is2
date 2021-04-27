@@ -46,6 +46,8 @@ public class UserRole implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Short id;
+    
+  
     @Column(name = "ROLE")
     private String role;
 
@@ -78,5 +80,10 @@ public class UserRole implements Serializable {
         super();
 
     }
+
+	@Override
+	public String toString() {
+		return role;
+	}
 
 }

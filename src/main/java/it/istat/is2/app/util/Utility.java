@@ -23,6 +23,7 @@
  */
 package it.istat.is2.app.util;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
@@ -39,7 +40,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.log4j.Logger;
@@ -49,7 +52,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.renjin.sexp.Vector;
-
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.util.StreamUtils;
 import it.istat.is2.workflow.domain.AppRole;
 import it.istat.is2.workflow.domain.BusinessProcess;
 import it.istat.is2.workflow.domain.DataTypeCls;
@@ -501,6 +505,72 @@ public class Utility {
             csvPrinter.close();
 
         }
+    }
+    // Method copy with String returned to build a zip
+    public static String writeObjectToCSV2(String name, Map<String, List<String>> dataMap) throws IOException {
+        ArrayList<String> header = new ArrayList<String>();
+        
+        String savePath = System.getProperty("java.io.tmpdir");         
+        String outputFile = savePath + name + ".txt";
+        CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(outputFile), CSVFormat.EXCEL);
+        try {
+            String wi = "";
+            for (Iterator<String> iterator = dataMap.keySet().iterator(); iterator.hasNext(); ) {
+                wi = iterator.next();
+                header.add(wi);
+            }
+
+            csvPrinter.printRecord(header);
+
+            int size = dataMap.get(wi).size();
+
+            for (int i = 0; i < size; i++) {
+                List<String> data = new ArrayList<>();
+                for (Iterator<String> iterator = dataMap.keySet().iterator(); iterator.hasNext(); ) {
+                    wi = iterator.next();
+                    data.add(dataMap.get(wi).get(i));
+
+                }
+
+                csvPrinter.printRecord(data);
+                
+            }
+            csvPrinter.flush();
+            csvPrinter.close();
+        } catch (Exception e) {
+            csvPrinter.flush();
+            csvPrinter.close();
+
+        }
+        finally{
+        	if (csvPrinter!=null)
+        		csvPrinter.close();
+        }
+        return outputFile;
+    }
+
+    // Method to zip output datasets
+    public static void zipFiles(HttpServletResponse response, String... filePaths) {   	
+    	
+        try (ZipOutputStream zippedOut = new ZipOutputStream(response.getOutputStream())) {
+            for (int i=0; i<filePaths.length; i++) {
+            	String fileName = filePaths[i];
+                FileSystemResource resource = new FileSystemResource(fileName);
+
+                ZipEntry e = new ZipEntry(resource.getFilename());
+                // Configure the zip entry, the properties of the file
+                e.setSize(resource.contentLength());
+                e.setTime(System.currentTimeMillis());
+                // etc.
+                zippedOut.putNextEntry(e);
+                // And the content of the resource:
+                StreamUtils.copy(resource.getInputStream(), zippedOut);
+                zippedOut.closeEntry();
+            }
+            zippedOut.finish();
+        } catch (Exception e) {
+            // Exception handling goes here
+        }    	
     }
 
     public static String string(ArrayList<String> values) throws JSONException {

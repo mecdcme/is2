@@ -138,7 +138,7 @@ function edit_user(id) {
             $('[name="surname"]').val(data.surname);
             $('[name="email"]').val(data.email);
             $('[name="email"]').prop("readonly", true);
-            $('[name="role"] option[value=' + data.role.role + ']').prop('selected', true);
+            $('[name="role"] option[value=' + data.role.id + ']').prop('selected', true);
             $('#modal_user').modal('show');
             $('#modal_user .modal-title').html('<i class="fa  fa-edit "></i> ' + _text_editUser);
             $('#btnSave').attr('disabled', false); // set button enable

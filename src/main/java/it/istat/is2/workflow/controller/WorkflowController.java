@@ -22,7 +22,6 @@
  * @version 1.0
  */
 package it.istat.is2.workflow.controller;
-
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -33,10 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -64,6 +61,7 @@ import it.istat.is2.app.service.DataProcessingService;
 import it.istat.is2.app.service.LogService;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.util.IS2Const;
+import it.istat.is2.app.util.Utility;
 import it.istat.is2.dataset.domain.DatasetFile;
 import it.istat.is2.dataset.service.DatasetService;
 import it.istat.is2.rule.domain.Ruleset;
@@ -109,6 +107,7 @@ public class WorkflowController {
     private RuleService ruleService;
     @Autowired
     private LogService logService;
+    
 
     @GetMapping(value = "/home/{id}")
     public String homeWS(HttpSession session, Model model, @PathVariable("id") Long id) {
@@ -185,6 +184,8 @@ public class WorkflowController {
 
         return "workflow/home";
     }
+    
+    
 
     @GetMapping(value = "/eliminaAssociazione/{dataProcessingId}/{idvar}")
     public String eliminaAssociazioneVar(HttpSession session, Model model,
@@ -416,6 +417,39 @@ public class WorkflowController {
 
         return "workflow/view_data";
 
+    }
+    
+    // Method that allows to download all the csv output files in a single file zip
+    @GetMapping(value = "/downloadzipfile/{id}")
+    public void downloadZipFile(HttpSession session, HttpServletResponse response, Model model, @PathVariable("id") Long dataProcessingId) {
+        notificationService.removeAllMessages();
+        
+        Short outRole = IS2Const.TYPE_IO_OUTPUT;        
+        TypeIO typeIO = new TypeIO(outRole);        
+        List<AppRole> outputObjects = workflowService.getOutputRoleGroupsStepRuntimes(dataProcessingId, typeIO, null);       
+              
+        //setting headers  
+        response.setContentType("application/octet-stream");           
+        response.setHeader("Content-disposition", "attachment; filename=dataset.zip");
+        response.setStatus(HttpServletResponse.SC_OK);
+        
+        String[] paths = new String[outputObjects.size()];        
+        int i=0;
+        for (AppRole outputObject : outputObjects) {
+        	Long outputRole = outputObject.getId();        	
+        	Map<String, List<String>> dataMap = workflowService.loadWorkSetValoriByDataProcessingRoleGroupMap(dataProcessingId, outputRole);
+
+            try {				
+				paths[i] = Utility.writeObjectToCSV2(outputObject.getName(), dataMap);
+				i++;
+			} catch (IOException e) {
+				notificationService.addErrorMessage(
+	                messages.getMessage("dataset.csv.download.error", null, LocaleContextHolder.getLocale()),
+	                e.getMessage());
+			}
+        }       
+        
+        Utility.zipFiles(response, paths);        
     }
 
     @GetMapping(value = "/chiudiElab/{id}")
