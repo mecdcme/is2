@@ -144,3 +144,42 @@ is2_validate_confront <- function(workset=Workset, roles=roles,rules=RS,...){
 	
   	return(result)
 }
+
+
+is2_validate_confront1 <- function(workset=Workset, rules=Ruleset,rs=RS,...){
+ 
+    print(str(workset))
+    print(str(rules))
+	print(str(rs))
+    
+    colnames(rules)<- tolower(rs)
+    rules$rule<-toupper(rules$rule)
+	stdout <- vector('character')
+	con <- textConnection('stdout', 'wr', local = TRUE)
+	sink(con)
+	
+	#print(rules)
+    #print(workset)
+    v <- validator(.data=rules)
+    
+    # print('---------------v ------')
+     print(v)
+    # print(str(workset))
+    cf <- confront(workset, v)
+    print('--------------- summary(cf) ------')
+    print(summary(cf))
+    print('--------------- aggregate(cf) ------')
+	 print(aggregate(cf))
+	head(aggregate(cf,by="record"))
+	sort(cf)
+	head(values(cf))
+	head(cbind(data,values(cf)))
+	print('----head(cf)---')
+	print(head(cf))
+ 
+	
+ 	sink()
+  	close(con)
+	output <- list(out = cf, "log" = stdout)
+  	return(output)
+}
