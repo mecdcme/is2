@@ -23,8 +23,18 @@
  */
 package it.istat.is2.app.controller;
 
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.representations.AccessToken;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,11 +53,7 @@ import it.istat.is2.app.forms.LoginForm;
 import it.istat.is2.app.forms.UserCreateForm;
 import it.istat.is2.app.service.NotificationService;
 import it.istat.is2.app.service.UserService;
-
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import javax.validation.Valid;
+import it.istat.is2.app.util.IS2Const;
 
 @Controller
 public class UserController {
@@ -69,6 +75,33 @@ public class UserController {
     @GetMapping(value = "/users/logout")
     public String logout() {
         notificationService.addInfoMessage(messages.getMessage("user.logout", null, LocaleContextHolder.getLocale()));
+        return "redirect:/";
+    }
+    
+    /**
+     * Registers the user if they are authentified with Keycloak
+     * but not registered in IS2.
+     */
+    @ConditionalOnProperty("keycloak.realm")
+    @GetMapping("/registerKeycloakUser")
+    public String keycloakLogin(HttpServletRequest request){
+        KeycloakSecurityContext keycloakContext = 
+            (KeycloakSecurityContext) request.getAttribute(
+                KeycloakSecurityContext.class.getName());
+        AccessToken token = keycloakContext.getToken();
+        if (token != null){
+            String email = token.getEmail();
+            User user = userService.findByEmail(email);
+            if (user == null){
+                UserCreateForm userForm = new UserCreateForm();
+                userForm.setName(token.getGivenName());
+                userForm.setSurname(token.getFamilyName());
+                userForm.setEmail(email);
+                userForm.setPassword("password");
+                userForm.setRole(IS2Const.USER_ROLE_USER);
+                userService.create(userForm);
+            }
+        }
         return "redirect:/";
     }
 
@@ -165,3 +198,4 @@ public class UserController {
         return "users/list";
     }
 }
+
