@@ -115,7 +115,7 @@ public class DatasetControllerRest {
         try {
             dcol = datasetService.salvaColonna(dcol);
         } catch (Exception e) {
-            notificationService.addErrorMessage("Errore: ", e.getMessage());
+            notificationService.addErrorMessage("Error: ", e.getMessage());
         }
         return ResponseEntity.ok(dcol);
     }

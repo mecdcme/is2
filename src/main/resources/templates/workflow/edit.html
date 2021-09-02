@@ -50,6 +50,13 @@
                 setMenuActive([[${session.sessionBean.businessFunction.id}]], "pr");
                 if (showTabParam) showPanel('parametri');
             });
+            
+            Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
+                return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+            });
+            Handlebars.registerHelper('ifNotEquals', function(arg1, arg2, options) {
+                return !(arg1 == arg2) ? options.fn(this) : options.inverse(this);
+            });
         </script>
         <script type="text/x-handlebars-template" id="addItemsBtn">
             {{#if options.hideAddItemsBtn}}
@@ -64,6 +71,66 @@
             </div>
             {{/if}}
         </script>
+        
+<script type="text/x-handlebars-template" id="rowItemBtn">
+
+    <div class="text-center alpaca-array-actionbar alpaca-array-actionbar-{{actionbarStyle}} btn-group" data-alpaca-array-actionbar-parent-field-id="{{parentFieldId}}" data-alpaca-array-actionbar-field-id="{{fieldId}}" data-alpaca-array-actionbar-item-index="{{itemIndex}}">
+         {{#each actions}}
+          {{#ifEquals this.action "remove"}}
+          <button class="alpaca-array-actionbar-action {{../view.styles.smallButton}}" data-alpaca-array-actionbar-action="{{action}}">
+              {{#if this.iconClass}}
+              <i class="{{this.iconClass}}"></i>
+              {{/if}}
+              {{#if label}}{{{label}}}{{/if}}
+          </button>
+          {{/ifEquals}}
+        {{/each}}
+    </div>
+
+</script>
+<script type="text/x-handlebars-template" id="tableTemplate">
+
+    <div>
+
+        {{#arrayToolbar}}{{/arrayToolbar}}
+
+        <table>
+
+            <!-- table headers -->
+            <thead>
+                <tr>
+
+                    {{#if options.dragRows}}
+                    <!-- hidden column storing sort order -->
+                    <th class="alpaca-table-reorder-index-header"></th>
+                    <!-- draggable -->
+                    <th class="alpaca-table-reorder-draggable-header"></th>
+                    {{/if}}
+
+                    {{#each headers}}
+                    <th data-header-id="{{id}}" {{#if hidden}}class="alpaca-table-column-hidden"{{/if}}>{{{title}}}</th>
+                    {{/each}}
+
+                    {{#if options.showActionsColumn}}
+                        <th>&nbsp;</th>
+                    {{/if}}
+                </tr>
+            </thead>
+
+            <!-- table body -->
+            <tbody>
+            {{#each items}}
+
+                {{#item "tr"}}{{/item}}
+
+            {{/each}}
+            </tbody>
+
+        </table>
+
+    </div>
+
+</script>
          <link th:href="@{/css/vendors/bootstrap-multiselect/bootstrap-multiselect.css}" rel="stylesheet" />
         <link th:href="@{/css/vendors/alpaca/alpaca.min.css}" rel="stylesheet" />
         <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet" />
@@ -549,7 +616,7 @@
                                 </button>
                                 <button id="btn_dlg_mod_assoc_param" type="button"
                                         class="btn btn-primary " onclick="modificaParam()"
-                                        data-dismiss="modal">Save</button>
+                                        >Save</button>
                             </div>
                         </div>
                     </form>

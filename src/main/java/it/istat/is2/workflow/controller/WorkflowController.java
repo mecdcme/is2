@@ -430,7 +430,7 @@ public class WorkflowController {
               
         //setting headers  
         response.setContentType("application/octet-stream");           
-        response.setHeader("Content-disposition", "attachment; filename=dataset.zip");
+        response.setHeader("Content-disposition", "attachment; filename=output.zip");
         response.setStatus(HttpServletResponse.SC_OK);
         
         String[] paths = new String[outputObjects.size()];        
@@ -486,7 +486,8 @@ public class WorkflowController {
         List<WorkSession> listasessioni = workSessionService.getSessioneList(user.getName());
         model.addAttribute("listasessioni", listasessioni);
 
-        logService.save("Elaborazione " + dataProcessingId + " Eliminata con successo");
+        logService.save(
+                messages.getMessage("process.removed.message", null, LocaleContextHolder.getLocale()));
 
         return "redirect:/sessione/apri/" + idsessione;
     }

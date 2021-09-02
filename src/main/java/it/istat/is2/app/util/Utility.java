@@ -511,7 +511,7 @@ public class Utility {
         ArrayList<String> header = new ArrayList<String>();
         
         String savePath = System.getProperty("java.io.tmpdir");         
-        String outputFile = savePath + name + ".txt";
+        String outputFile = savePath + name + ".cvs";
         CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(outputFile), CSVFormat.EXCEL);
         try {
             String wi = "";
@@ -549,7 +549,7 @@ public class Utility {
         return outputFile;
     }
 
-    // Method to zip output datasets
+ 
     public static void zipFiles(HttpServletResponse response, String... filePaths) {   	
     	
         try (ZipOutputStream zippedOut = new ZipOutputStream(response.getOutputStream())) {
@@ -558,18 +558,18 @@ public class Utility {
                 FileSystemResource resource = new FileSystemResource(fileName);
 
                 ZipEntry e = new ZipEntry(resource.getFilename());
-                // Configure the zip entry, the properties of the file
+                
                 e.setSize(resource.contentLength());
                 e.setTime(System.currentTimeMillis());
-                // etc.
+               
                 zippedOut.putNextEntry(e);
-                // And the content of the resource:
+                 
                 StreamUtils.copy(resource.getInputStream(), zippedOut);
                 zippedOut.closeEntry();
             }
             zippedOut.finish();
         } catch (Exception e) {
-            // Exception handling goes here
+             
         }    	
     }
 
@@ -607,7 +607,7 @@ public class Utility {
      */
     public static Map<String, Map<String, List<String>>> getMapWorkSetValuesInRoles(
             Map<String, ArrayList<StepRuntime>> dataMap, DataTypeCls dataType, Set<String> roles) {
-        // TODO Auto-generated method stub
+         
         Map<String, Map<String, List<String>>> ret = new LinkedHashMap<>();
 
         for (Map.Entry<String, ArrayList<StepRuntime>> entry : dataMap.entrySet()) {
@@ -653,7 +653,7 @@ public class Utility {
 
     public static Map<String, String> getMapWorkSetValuesParams(Map<String, ArrayList<StepRuntime>> dataMap,
                                                                 DataTypeCls dataType) {
-        // TODO Auto-generated method stub
+        
         HashMap<String, String> ret = new HashMap<>();
         for (Map.Entry<String, ArrayList<StepRuntime>> entry : dataMap.entrySet()) {
             String nomeW = entry.getKey();
@@ -675,7 +675,7 @@ public class Utility {
     }
 
     public static ArrayList<String> toArrayListofString(Vector values) {
-        // TODO Auto-generated method stub
+      
         ArrayList<String> ret = new ArrayList<String>();
         for (int i = 0; i < values.length(); i++) {
             Object elem = values.getElementAsObject(i);

@@ -26,23 +26,21 @@
     <head>
         <head th:include="layout :: site-head" th:remove="tag" />
         <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
-        <script th:src="@{/js/plotly/plotly-latest.min.js}"></script>
-        <script th:src="@{/js/jquery-ui.min.js}"></script>        
+        <script th:src="@{/js/vendors/plotly/plotly-latest.min.js}"></script>
+         <script th:src="@{/js/jquery-ui.min.js}"></script>        
         <script th:src="@{/js/graph.js}"></script>
         <script th:inline="javascript">
             var _idfile = [[${idfile}]];
-            $(document).ready(function () {
-            setMenuActive([[${session.sessioneBean.businessFunction.id}]]);
-            });
+   
         </script>
-        <link th:href="@{/css/table/datatables.css}" rel="stylesheet"/>
+        <link th:href="@{/css/vendors/table/datatables.css}" rel="stylesheet"/>
     </head>
-    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-        <header th:replace="layout :: site-header"></header>
+    <body class="c-app">
+        <div th:replace="layout :: site-aside"></div>
+        <div th:replace="layout :: site-modals"></div>
         <!-- Body -->
-        <div class="app-body">
-            <aside th:replace="layout :: site-modals"></aside>
-            <aside th:replace="layout :: site-aside"></aside>
+        <div class="c-wrapper">
+     
             <!-- Main container -->
             <main class="main">
                 <!-- Breadcrumb-->
@@ -50,7 +48,7 @@
                     <li class="breadcrumb-item">
                         <a th:if="${session.sessioneBean}" title="chiudi sessione lavoro workflow" th:href="@{'/sessione/apri/'+${session.sessioneBean.id}}">
                             <span>
-                                <span th:text="${session.sessioneBean.nome}"></span>
+                                <span th:text="${session.sessioneBean.name}"></span>
                             </span>
                         </a>
                     </li>
@@ -63,7 +61,7 @@
                     </li>
                     <li class="breadcrumb-item">
                         <a class="" title="chiudi sessione lavoro workflow" th:href="@{'/viewDataset/'+${idfile}}">
-                            <span th:text="${dfile.nomeFile}"></span>
+                            <span th:text="${dfile.fileName}"></span>
                         </a>
                     </li>
                     <li class="breadcrumb-item active">
@@ -112,7 +110,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr th:each="cols: ${colonne}" th:unless="${(colonne == null) or (colonne.size() == 0) }">
-                                                            <td><span th:value="${cols.id}" th:text="${cols.nome}"></span></td>
+                                                            <td><span th:value="${cols.id}" th:text="${cols.name}"></span></td>
                                                         </tr>
                                                         <tr><td colspan="3" class="drop-row round-cell" style="display: none;"></td></tr>
                                                     </tbody>

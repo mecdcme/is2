@@ -222,8 +222,8 @@ public class DatasetController {
 
         try {
             datasetService.save(campiL, valoriHeaderNum, labelFile, tipoDato, separatore, form.getDescrizione(),
-                    idsessione);
-            logService.save("File " + labelFile + " salvato con successo");
+                    idsessione);  
+            logService.save(messages.getMessage("file.load.ok", new Object[]{labelFile}, LocaleContextHolder.getLocale()));
             notificationService
                     .addInfoMessage(messages.getMessage("generic.save.success", null, LocaleContextHolder.getLocale()));
             SessionBean sessionBean = (SessionBean) session.getAttribute(IS2Const.SESSION_BEAN);
@@ -231,7 +231,7 @@ public class DatasetController {
             session.setAttribute(IS2Const.SESSION_BEAN, sessionBean);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            notificationService.addErrorMessage("Errore nel salvataggio del file.");
+            notificationService.addErrorMessage(messages.getMessage("upload.error.modal.title", null, LocaleContextHolder.getLocale()));
             return "redirect:/sessione/mostradataset/" + idsessione;
         }
 
@@ -246,8 +246,8 @@ public class DatasetController {
 
         WorkSession sessionelv = workSessionService.getSessioneByIdFile(idDataset);
         datasetService.deleteDataset(idDataset);
-        logService.save("File " + idDataset + " eliminato con successo");
-        notificationService.addInfoMessage("Eliminazione avvenuta con successo");
+        logService.save(messages.getMessage("file.removed.ok", new Object[]{idDataset}, LocaleContextHolder.getLocale()));
+        notificationService.addInfoMessage(messages.getMessage("file.removed.ok", new Object[]{idDataset}, LocaleContextHolder.getLocale()));
 
         return "redirect:/sessione/mostradataset/" + sessionelv.getId();
     }

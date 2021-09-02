@@ -207,10 +207,9 @@ public class WorkSessionController {
 
             dataProcessingService.saveDataProcessing(elaborazione);
 
-            notificationService.addInfoMessage(
-                    messages.getMessage("creation.process.success", null, LocaleContextHolder.getLocale()));
+            notificationService.addInfoMessage(messages.getMessage("creation.process.success", null, LocaleContextHolder.getLocale()));
 
-            logService.save("Elaborazione " + elaborazione.getName() + " creata con successo");
+            logService.save(messages.getMessage("creation.process.success", null, LocaleContextHolder.getLocale()));
 
         } catch (Exception e) {
 

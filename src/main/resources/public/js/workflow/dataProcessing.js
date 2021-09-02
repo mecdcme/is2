@@ -647,9 +647,12 @@ function inserisciParams() {
 }
 
 function modificaParam() {
+	if($('#edit-param').alpaca().form||$('#edit-param').alpaca().form.isFormValid()){
     var value = JSON.stringify($('#edit-param').alpaca().getValue());
     $("#valoreParamMod").val(value);
     $("#formModAssociaParam").submit();
+}
+else return false;
 }
 
 function mostraDialogEliminaAssociazione(idelab, idstepVar, nomestepvar) {

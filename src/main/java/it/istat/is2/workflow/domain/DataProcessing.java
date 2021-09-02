@@ -70,7 +70,7 @@ public class DataProcessing extends AbstractDomainObject implements Serializable
     private BusinessProcess businessProcess;
 
     @OneToMany(mappedBy = "dataProcessing", cascade = CascadeType.ALL)
-    @OrderBy(value = "orderCode ASC")
+    @OrderBy(value = "orderCode ASC, id ASC")
     private List<StepRuntime> stepRuntimes;
 
     public DataProcessing(Long id) {
