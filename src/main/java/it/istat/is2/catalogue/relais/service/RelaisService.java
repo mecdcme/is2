@@ -71,6 +71,7 @@ public class RelaisService {
 	final static String codResidualB = "RB";
 	final static String codQualityIndicators = "QI";
 	final static String codeFS = "FS";
+	final static String codePATTERN = "COMPARISON_PATTERN";
 	final static String codeP_POST = "P_POST";
 	final static String codeRATIO = "R";
 	final static String codeOUT = "OUTPUTS";
@@ -100,8 +101,8 @@ public class RelaisService {
 	final static String codeBlockingVariablesB = "BB";
 	final static String params_ReductionMethod = "REDUCTION_METHOD";
 	final static String VARIABLE_FREQUENCY = "FREQUENCY";
-	final static String ROW_IA = "ROW_A";
-	final static String ROW_IB = "ROW_B";
+	final static String ROW_IA = "ROW_DS1";
+	final static String ROW_IB = "ROW_DS2";
 
 	@Autowired
 	private LogService logService;
@@ -1238,6 +1239,7 @@ public class RelaisService {
 
 		variabileNomeListOut.addAll(variabileNomeListMA);
 		variabileNomeListOut.addAll(variabileNomeListMB);
+		variabileNomeListOut.add(codePATTERN);
 		variabileNomeListOut.add(codeP_POST);
 		variabileNomeListOut.add(codeRATIO);
 
@@ -1476,6 +1478,7 @@ public class RelaisService {
 					valuesI.forEach((k, v) -> {
 						resultMatchTableI.get(k).add(v);
 					});
+					resultMatchTableI.get(codePATTERN).add(pattern);
 					resultMatchTableI.get(codeP_POST).add(patternPPostValues.get(pattern));
 					resultMatchTableI.get(codeRATIO).add(patternRValues.get(pattern));
 
@@ -1830,6 +1833,7 @@ public class RelaisService {
 
 		variabileNomeListOut.addAll(variabileNomeListMA);
 		variabileNomeListOut.addAll(variabileNomeListMB);
+		variabileNomeListOut.add(codePATTERN);
 		variabileNomeListOut.add(codeP_POST);
 		variabileNomeListOut.add(codeRATIO);
 
@@ -1856,7 +1860,7 @@ public class RelaisService {
 			float ppost = Float.parseFloat(matches.get(codeP_POST).get(innerIndex));
 			sortlist.add(new ReducElem(1, innerIndex, ppost));
 		}
-		Collections.sort(sortlist);
+		Collections.sort(sortlist,Collections.reverseOrder());
 		int reducsize = 0;
 		/* IntStream.rangeClosed(0, size).forEach(innerIndex -> */
 		for (ReducElem curr : sortlist) {
@@ -1887,7 +1891,7 @@ public class RelaisService {
 			float ppost = Float.parseFloat(pmatches.get(codeP_POST).get(innerIndex));
 			sortlist.add(new ReducElem(2, innerIndex, ppost));
 		}
-		Collections.sort(sortlist);
+		Collections.sort(sortlist,Collections.reverseOrder());
 
 		reducsize = 0;
 		/* IntStream.rangeClosed(0, size).forEach(innerIndex -> */
@@ -2472,13 +2476,11 @@ public class RelaisService {
 		int size = matches.get(ROW_IA).size();
 
 		for (int innerIndex = 0; innerIndex < size; innerIndex++) {
-			System.out.println("Insert key"+matches.get(ROW_IA).get(innerIndex));
 			KeyA.put(matches.get(ROW_IA).get(innerIndex), matches.get(ROW_IB).get(innerIndex));
 			KeyB.put(matches.get(ROW_IB).get(innerIndex), matches.get(ROW_IA).get(innerIndex));
 		}
 
 		int ressize = 0;
-
 		int dimset = worksetIn.get(codeMatchingA).get(variabileNomeListMA.get(0)).size();
 
 		for (int innerIndex = 0; innerIndex < dimset; innerIndex++) {
